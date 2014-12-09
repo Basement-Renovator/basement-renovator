@@ -409,6 +409,7 @@ class Entity(QGraphicsItem):
 		# Creeper special case
 		if self.entity['Type'] in [240, 241, 242]: 
 			# Calculate the nearest edge, draw an arrow to it, and rotate the image to match 
+# right, left, top, down
 			pass
 
 		if self.entity['pixmap']:
