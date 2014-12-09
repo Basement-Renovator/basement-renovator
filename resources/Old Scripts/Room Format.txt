@@ -1,0 +1,41 @@
+Room Format:
+
+Header:
+	u32 	# of room entries
+
+Room Entry:
+	u32		Room Type, observed values: 18, 1
+	u32		Variant:  observed values, 6, 1, 0
+	u8		Unknown, observed values: 1 (difficulty?)
+	u16		Length of room name string
+	x		Room name
+	float	Unknown, observed values: 1.0
+
+	u8		Room Width: 13 or ?
+	u8		Room Height: 7 or ?
+	u8		Number of Door Entries
+	u16		Number of Entity Entries
+
+
+Door Entry
+	s16		x position
+	s16		y position
+	u8		boolean: door exists
+
+	Note: only known values for doors so far are (6,-1), (13,3), (6,7), and (-1,3). Unknown if other values will work as expected.
+
+Entity Entries
+	s16		x position
+	s16		y position
+	u8		Number of entities at position
+	
+	u16		Entity type
+	u16		Entity variant
+	u16		Unknown, (subtype?)
+	float	Unknown, observed values: 1.0
+
+
+
+
+
+
