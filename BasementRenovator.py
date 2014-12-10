@@ -23,6 +23,8 @@
 #		Application Icons
 #		Name View/ Sort Orders for Palette
 #
+#		Fix Background Rendering bugs for super secret room hardcoded areas
+#
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -325,32 +327,18 @@ class Entity(QGraphicsItem):
 		self.entity['boss'] = en.get('Boss')
 		self.entity['champion'] = en.get('Champion')
 
-		if self.entity['Type'] is 5 and self.entity['Variant'] in [100,150]:
-			if self.entity['Variant'] is 100:
-				i = QImage()
-				i.load('resources/Entities/5.100.0 - Collectible.png')
+		if self.entity['Type'] is 5 and self.entity['Variant'] is 100:
+			i = QImage()
+			i.load('resources/Entities/5.100.0 - Collectible.png')
 
-				d = QImage()
-				d.load(en.get('Image'))
+			d = QImage()
+			d.load(en.get('Image'))
 
-				p = QPainter(i)
-				p.drawImage(0,0,d)
-				p.end()
+			p = QPainter(i)
+			p.drawImage(0,0,d)
+			p.end()
 
-				self.entity['pixmap'] = QPixmap.fromImage(i)
-
-			elif self.entity['Variant'] is 150:
-				i = QImage()
-				i.load('resources/Entities/5.150.0 - Shop Item.png')
-
-				d = QImage()
-				d.load(en.get('Image'))
-
-				p = QPainter(d)
-				p.drawImage(0,0,i)
-				p.end()
-
-				self.entity['pixmap'] = QPixmap.fromImage(d)
+			self.entity['pixmap'] = QPixmap.fromImage(i)
 
 		else:
 			self.entity['pixmap'] = QPixmap()
@@ -374,9 +362,9 @@ class Entity(QGraphicsItem):
 			y = int((y + (self.SNAP_TO/2)) / self.SNAP_TO) * self.SNAP_TO
 
 			if x < 0: x = 0
-			if x >= (self.SNAP_TO * w): x = (self.SNAP_TO * w)
+			if x >= (self.SNAP_TO * (w-1)): x = (self.SNAP_TO * (w-1))
 			if y < 0: y = 0
-			if y >= (self.SNAP_TO * h): y = (self.SNAP_TO * h)
+			if y >= (self.SNAP_TO * (h-1)): y = (self.SNAP_TO * (h-1))
 
 			if x != currentX or y != currentY:
 				self.entity['X'] = int(x/self.SNAP_TO)
@@ -406,16 +394,49 @@ class Entity(QGraphicsItem):
 		painter.setBrush(Qt.Dense5Pattern)
 		painter.setPen(QPen(Qt.white))
 
+<<<<<<< Updated upstream
 		# Creeper special case
 		if self.entity['Type'] in [240, 241, 242]: 
 			# Calculate the nearest edge, draw an arrow to it, and rotate the image to match 
 # right, left, top, down
 			pass
 
+=======
+>>>>>>> Stashed changes
 		if self.entity['pixmap']:
 			x = -(self.entity['pixmap'].width() -26) / 2
 			y = -(self.entity['pixmap'].height()-26) / 2
-			painter.drawPixmap(x,y,self.entity['pixmap'])
+			
+			# Creeper special case
+			if self.entity['Type'] in [240, 241, 242]: 
+				w = self.scene().roomWidth -1
+				h = self.scene().roomHeight-1
+				ex = self.entity['X']
+				ey = self.entity['Y']
+
+				distances = [w - ex, ex, ey, h - ey]
+				closest = min(distances)
+				direction = distances.index(closest)
+
+				painter.setPen(QPen(QColor(220,220,180), 2, Qt.DashDotLine))
+
+				if direction == 0: # Right
+					painter.drawLine(26,13, closest*26+26, 13)
+
+				elif direction == 1: # Left
+					painter.drawLine(0,13, -closest*26, 13)
+
+				elif direction == 2: # Top
+					painter.drawLine(13,0, 13, -closest*26)
+
+				elif direction == 3: # Bottom
+					painter.drawLine(13,26, 13, closest*26+26)
+				
+				painter.drawPixmap(x,y,self.entity['pixmap'])
+
+			# Most Painting
+			else:
+				painter.drawPixmap(x,y,self.entity['pixmap'])
 
 		else:
 			painter.drawRect(0, 0, 26, 26)

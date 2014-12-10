@@ -123,249 +123,249 @@
 	<entity Group="Tears" ID="9" Image="resources/Entities/9.0.2 - Fire.png" Kind="Stage" Name="Fire" Subtype="0" Variant="2" />
 	<entity Group="Tears" ID="9" Image="resources/Entities/9.0.3 - Puke.png" Kind="Stage" Name="Puke" Subtype="0" Variant="3" />
 
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.0.0 - Frowning Gaper.png" Kind="Enemies" Name="Frowning Gaper" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.1.0 - Gaper.png" Kind="Enemies" Name="Gaper" Subtype="0" Variant="1" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.2.0 - Sleepy Gaper.png" Kind="Enemies" Name="Sleepy Gaper" Subtype="0" Variant="2" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="11" Image="resources/Entities/11.0.0 - Gusher.png" Kind="Enemies" Name="Gusher" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="11" Image="resources/Entities/11.1.0 - Pacer.png" Kind="Enemies" Name="Pacer" Subtype="0" Variant="1" />
-	<entity BaseHP="10" Champion="1" Group="Maws" ID="12" Image="resources/Entities/12.0.0 - Horf.png" Kind="Enemies" Name="Horf" Subtype="0" Variant="0" />
-	<entity BaseHP="3" Group="Flies" ID="13" Image="resources/Entities/13.0.0 - Fly.png" Kind="Enemies" Name="Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="8" Champion="1" Group="Flies" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Kind="Enemies" Name="Pooter" Subtype="0" Variant="0" />
-	<entity BaseHP="8" Champion="1" Group="Flies" ID="14" Image="resources/Entities/14.1.0 - Super Pooter.png" Kind="Enemies" Name="Super Pooter" Subtype="0" Variant="1" />
-	<entity BaseHP="15" Champion="1" Group="Blobs" ID="15" Image="resources/Entities/15.0.0 - Clotty.png" Kind="Enemies" Name="Clotty" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Champion="1" Group="Blobs" ID="15" Image="resources/Entities/15.1.0 - Clot.png" Kind="Enemies" Name="Clot" Subtype="0" Variant="1" />
-	<entity BaseHP="15" Champion="1" Group="Blobs" ID="15" Image="resources/Entities/15.2.0 - I.Blob.png" Kind="Enemies" Name="I.Blob" Subtype="0" Variant="2" />
-	<entity BaseHP="13" Champion="1" Group="Mulligans" ID="16" Image="resources/Entities/16.0.0 - Mulligan.png" Kind="Enemies" Name="Mulligan" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Champion="1" Group="Mulligans" ID="16" Image="resources/Entities/16.1.0 - Mulligoon.png" Kind="Enemies" Name="Mulligoon" Subtype="0" Variant="1" />
-	<entity BaseHP="13" Champion="1" Group="Mulligans" ID="16" Image="resources/Entities/16.2.0 - Mulliboom.png" Kind="Enemies" Name="Mulliboom" Subtype="0" Variant="2" />
-	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.0.0 - Shopkeeper.png" Kind="Stage" Name="Shopkeeper" Subtype="0" Variant="0" />
-	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.1.0 - Secret Room Keeper.png" Kind="Stage" Name="Secret Room Keeper" Subtype="0" Variant="1" />
-	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.2.0 - Error Room Keeper.png" Kind="Stage" Name="Error Room Keeper" Subtype="0" Variant="2" />
-	<entity BaseHP="5" Group="Flies" ID="18" Image="resources/Entities/18.0.0 - Attack Fly.png" Kind="Enemies" Name="Attack Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="22" Boss="1" Group="Boss Rooms" ID="19" Image="resources/Entities/19.0.0 - Larry Jr..png" Kind="Bosses" Name="Larry Jr." Subtype="0" Variant="0" />
-	<entity BaseHP="22" Boss="1" Group="Boss Rooms" ID="19" Image="resources/Entities/19.1.0 - The Hollow.png" Kind="Bosses" Name="The Hollow" Subtype="0" Variant="1" />
-	<entity BaseHP="250" Boss="1" Group="Boss Rooms" ID="20" Image="resources/Entities/20.0.0 - Monstro.png" Kind="Bosses" Name="Monstro" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Champion="1" Group="Worms" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Mulligans" ID="22" Image="resources/Entities/22.0.0 - Hive.png" Kind="Enemies" Name="Hive" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Kind="Enemies" Name="Charger" Subtype="0" Variant="0" />
-	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.0.0 - Globin.png" Kind="Enemies" Name="Globin" Subtype="0" Variant="0" />
-	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.1.0 - Gazing Globin.png" Kind="Enemies" Name="Gazing Globin" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.0.0 - Boom Fly.png" Kind="Enemies" Name="Boom Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.1.0 - Red Boom Fly.png" Kind="Enemies" Name="Red Boom Fly" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.0.0 - Maw.png" Kind="Enemies" Name="Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.1.0 - Red Maw.png" Kind="Enemies" Name="Red Maw" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.2.0 - Psychic Maw.png" Kind="Enemies" Name="Psychic Maw" Subtype="0" Variant="2" />
-	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.0.0 - Host.png" Kind="Enemies" Name="Host" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.1.0 - Red Host.png" Kind="Enemies" Name="Red Host" Subtype="0" Variant="1" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="28" Image="resources/Entities/28.0.0 - Chub.png" Kind="Bosses" Name="Chub" Subtype="0" Variant="0" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="28" Image="resources/Entities/28.1.0 - C.H.A.D..png" Kind="Bosses" Name="C.H.A.D." Subtype="0" Variant="1" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="28" Image="resources/Entities/28.2.0 - The Carrion Queen.png" Kind="Bosses" Name="The Carrion Queen" Subtype="0" Variant="2" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="29" Image="resources/Entities/29.0.0 - Hopper.png" Kind="Enemies" Name="Hopper" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Spiders" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Kind="Enemies" Name="Trite" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Kind="Enemies" Name="Boil" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.1.0 - Gut.png" Kind="Enemies" Name="Gut" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.2.0 - Sack.png" Kind="Enemies" Name="Sack" Subtype="0" Variant="2" />
-	<entity BaseHP="10" Champion="1" Group="Worms" ID="31" Image="resources/Entities/31.0.0 - Spitty.png" Kind="Enemies" Name="Spitty" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Organs" ID="32" Image="resources/Entities/32.0.0 - Brain.png" Kind="Enemies" Name="Brain" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="10" Image="resources/Entities/10.0.0 - Frowning Gaper.png" Kind="Enemies" Name="Frowning Gaper" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="10" Image="resources/Entities/10.1.0 - Gaper.png" Kind="Enemies" Name="Gaper" Subtype="0" Variant="1" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="10" Image="resources/Entities/10.2.0 - Sleepy Gaper.png" Kind="Enemies" Name="Sleepy Gaper" Subtype="0" Variant="2" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="11" Image="resources/Entities/11.0.0 - Gusher.png" Kind="Enemies" Name="Gusher" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="11" Image="resources/Entities/11.1.0 - Pacer.png" Kind="Enemies" Name="Pacer" Subtype="0" Variant="1" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="12" Image="resources/Entities/12.0.0 - Horf.png" Kind="Enemies" Name="Horf" Subtype="0" Variant="0" />
+	<entity BaseHP="3" Group="All" ID="13" Image="resources/Entities/13.0.0 - Fly.png" Kind="Enemies" Name="Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="8" Champion="1" Group="All" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Kind="Enemies" Name="Pooter" Subtype="0" Variant="0" />
+	<entity BaseHP="8" Champion="1" Group="All" ID="14" Image="resources/Entities/14.1.0 - Super Pooter.png" Kind="Enemies" Name="Super Pooter" Subtype="0" Variant="1" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="15" Image="resources/Entities/15.0.0 - Clotty.png" Kind="Enemies" Name="Clotty" Subtype="0" Variant="0" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="15" Image="resources/Entities/15.1.0 - Clot.png" Kind="Enemies" Name="Clot" Subtype="0" Variant="1" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="15" Image="resources/Entities/15.2.0 - I.Blob.png" Kind="Enemies" Name="I.Blob" Subtype="0" Variant="2" />
+	<entity BaseHP="13" Champion="1" Group="All" ID="16" Image="resources/Entities/16.0.0 - Mulligan.png" Kind="Enemies" Name="Mulligan" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Champion="1" Group="All" ID="16" Image="resources/Entities/16.1.0 - Mulligoon.png" Kind="Enemies" Name="Mulligoon" Subtype="0" Variant="1" />
+	<entity BaseHP="13" Champion="1" Group="All" ID="16" Image="resources/Entities/16.2.0 - Mulliboom.png" Kind="Enemies" Name="Mulliboom" Subtype="0" Variant="2" />
+	<entity BaseHP="5" Group="All" ID="17" Image="resources/Entities/17.0.0 - Shopkeeper.png" Kind="Enemies" Name="Shopkeeper" Subtype="0" Variant="0" />
+	<entity BaseHP="5" Group="All" ID="17" Image="resources/Entities/17.1.0 - Secret Room Keeper.png" Kind="Enemies" Name="Secret Room Keeper" Subtype="0" Variant="1" />
+	<entity BaseHP="5" Group="All" ID="17" Image="resources/Entities/17.2.0 - Error Room Keeper.png" Kind="Enemies" Name="Error Room Keeper" Subtype="0" Variant="2" />
+	<entity BaseHP="5" Group="All" ID="18" Image="resources/Entities/18.0.0 - Attack Fly.png" Kind="Enemies" Name="Attack Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="22" Boss="1" Group="All" ID="19" Image="resources/Entities/19.0.0 - Larry Jr..png" Kind="Bosses" Name="Larry Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="22" Boss="1" Group="All" ID="19" Image="resources/Entities/19.1.0 - The Hollow.png" Kind="Bosses" Name="The Hollow" Subtype="0" Variant="1" />
+	<entity BaseHP="250" Boss="1" Group="All" ID="20" Image="resources/Entities/20.0.0 - Monstro.png" Kind="Bosses" Name="Monstro" Subtype="0" Variant="0" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="22" Image="resources/Entities/22.0.0 - Hive.png" Kind="Enemies" Name="Hive" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Kind="Enemies" Name="Charger" Subtype="0" Variant="0" />
+	<entity BaseHP="33" Champion="1" Group="All" ID="24" Image="resources/Entities/24.0.0 - Globin.png" Kind="Enemies" Name="Globin" Subtype="0" Variant="0" />
+	<entity BaseHP="33" Champion="1" Group="All" ID="24" Image="resources/Entities/24.1.0 - Gazing Globin.png" Kind="Enemies" Name="Gazing Globin" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="25" Image="resources/Entities/25.0.0 - Boom Fly.png" Kind="Enemies" Name="Boom Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="25" Image="resources/Entities/25.1.0 - Red Boom Fly.png" Kind="Enemies" Name="Red Boom Fly" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="26" Image="resources/Entities/26.0.0 - Maw.png" Kind="Enemies" Name="Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="26" Image="resources/Entities/26.1.0 - Red Maw.png" Kind="Enemies" Name="Red Maw" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="26" Image="resources/Entities/26.2.0 - Psychic Maw.png" Kind="Enemies" Name="Psychic Maw" Subtype="0" Variant="2" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="27" Image="resources/Entities/27.0.0 - Host.png" Kind="Enemies" Name="Host" Subtype="0" Variant="0" />
+	<entity BaseHP="15" Champion="1" Group="All" ID="27" Image="resources/Entities/27.1.0 - Red Host.png" Kind="Enemies" Name="Red Host" Subtype="0" Variant="1" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="28" Image="resources/Entities/28.0.0 - Chub.png" Kind="Bosses" Name="Chub" Subtype="0" Variant="0" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="28" Image="resources/Entities/28.1.0 - C.H.A.D..png" Kind="Bosses" Name="C.H.A.D." Subtype="0" Variant="1" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="28" Image="resources/Entities/28.2.0 - The Carrion Queen.png" Kind="Bosses" Name="The Carrion Queen" Subtype="0" Variant="2" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="29" Image="resources/Entities/29.0.0 - Hopper.png" Kind="Enemies" Name="Hopper" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Kind="Enemies" Name="Trite" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Kind="Enemies" Name="Boil" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="30" Image="resources/Entities/30.1.0 - Gut.png" Kind="Enemies" Name="Gut" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="30" Image="resources/Entities/30.2.0 - Sack.png" Kind="Enemies" Name="Sack" Subtype="0" Variant="2" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="31" Image="resources/Entities/31.0.0 - Spitty.png" Kind="Enemies" Name="Spitty" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="32" Image="resources/Entities/32.0.0 - Brain.png" Kind="Enemies" Name="Brain" Subtype="0" Variant="0" />
 	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire Place" Subtype="0" Variant="0" />
 	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire Place" Subtype="0" Variant="1" />
 	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.2.0 - Blue Fire Place.png" Kind="Stage" Name="Blue Fire Place" Subtype="0" Variant="2" />
 	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.3.0 - Purple Fire Place.png" Kind="Stage" Name="Purple Fire Place" Subtype="0" Variant="3" />
-	<entity BaseHP="25" Champion="1" Group="Gapers" ID="34" Image="resources/Entities/34.0.0 - Leaper.png" Kind="Enemies" Name="Leaper" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Maws" ID="35" Image="resources/Entities/35.0.0 - Mr. Maw Body.png" Kind="Enemies" Name="Mr. Maw Body" Subtype="0" Variant="0" />
-	<entity BaseHP="595" Boss="1" Group="Boss Rooms" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Babies" ID="38" Image="resources/Entities/38.0.0 - Baby.png" Kind="Enemies" Name="Baby" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Babies" ID="38" Image="resources/Entities/38.1.0 - Angelic Baby.png" Kind="Enemies" Name="Angelic Baby" Subtype="0" Variant="1" />
-	<entity BaseHP="25" Boss="1" Champion="1" Group="The Sins" ID="38" Image="resources/Entities/38.2.0 - Ultra Pride Baby.png" Kind="Bosses" Name="Ultra Pride Baby" Subtype="0" Variant="2" />
-	<entity BaseHP="25" Champion="1" Group="Vises" ID="39" Image="resources/Entities/39.0.0 - Vis.png" Kind="Enemies" Name="Vis" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Vises" ID="39" Image="resources/Entities/39.1.0 - Double Vis.png" Kind="Enemies" Name="Double Vis" Subtype="0" Variant="1" />
-	<entity BaseHP="25" Champion="1" Group="Vises" ID="39" Image="resources/Entities/39.2.0 - Chubber.png" Kind="Enemies" Name="Chubber" Subtype="0" Variant="2" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Down)" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Left)" Subtype="1" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Up)" Subtype="2" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Right)" Subtype="3" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Knights" ID="41" Image="resources/Entities/41.0.0 - Knight.png" Kind="Enemies" Name="Knight" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Knights" ID="41" Image="resources/Entities/41.1.0 - Selfless Knight.png" Kind="Enemies" Name="Selfless Knight" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.1.0 - Vomit Grimace.png" Kind="Enemies" Name="Vomit Grimace" Subtype="0" Variant="1" />
-	<entity BaseHP="632.5" Boss="1" Group="Boss Rooms" ID="43" Image="resources/Entities/43.0.0 - Monstro II.png" Kind="Bosses" Name="Monstro II" Subtype="0" Variant="0" />
-	<entity BaseHP="632.5" Boss="1" Group="Boss Rooms" ID="43" Image="resources/Entities/43.1.0 - Gish.png" Kind="Bosses" Name="Gish" Subtype="0" Variant="1" />
-	<entity BaseHP="100" Group="Spikes" ID="44" Image="resources/Entities/44.0.0 - Poky.png" Kind="Enemies" Name="Poky" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="44" Image="resources/Entities/44.1.0 - Slide.png" Kind="Enemies" Name="Slide" Subtype="0" Variant="1" />
-	<entity BaseHP="645" Boss="1" Group="Boss Rooms" ID="45" Image="resources/Entities/45.0.0 - Mom.png" Kind="Bosses" Name="Mom" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="46" Image="resources/Entities/46.0.0 - Sloth.png" Kind="Bosses" Name="Sloth" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="46" Image="resources/Entities/46.1.0 - Super Sloth.png" Kind="Bosses" Name="Super Sloth" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="46" Image="resources/Entities/46.2.0 - Ultra Pride.png" Kind="Bosses" Name="Ultra Pride" Subtype="0" Variant="2" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="47" Image="resources/Entities/47.0.0 - Lust.png" Kind="Bosses" Name="Lust" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="47" Image="resources/Entities/47.1.0 - Super Lust.png" Kind="Bosses" Name="Super Lust" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="48" Image="resources/Entities/48.0.0 - Wrath.png" Kind="Bosses" Name="Wrath" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="48" Image="resources/Entities/48.1.0 - Super Wrath.png" Kind="Bosses" Name="Super Wrath" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="49" Image="resources/Entities/49.0.0 - Gluttony.png" Kind="Bosses" Name="Gluttony" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="49" Image="resources/Entities/49.1.0 - Super Gluttony.png" Kind="Bosses" Name="Super Gluttony" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="50" Image="resources/Entities/50.0.0 - Greed.png" Kind="Bosses" Name="Greed" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="50" Image="resources/Entities/50.1.0 - Super Greed.png" Kind="Bosses" Name="Super Greed" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="51" Image="resources/Entities/51.0.0 - Envy.png" Kind="Bosses" Name="Envy" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Champion="1" Group="The Sins" ID="51" Image="resources/Entities/51.1.0 - Super Envy.png" Kind="Bosses" Name="Super Envy" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="52" Image="resources/Entities/52.0.0 - Pride.png" Kind="Bosses" Name="Pride" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="The Sins" ID="52" Image="resources/Entities/52.1.0 - Super Pride.png" Kind="Bosses" Name="Super Pride" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Twins" ID="53" Image="resources/Entities/53.0.0 - Dople.png" Kind="Enemies" Name="Dople" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Twins" ID="53" Image="resources/Entities/53.1.0 - Evil Twin.png" Kind="Enemies" Name="Evil Twin" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Gapers" ID="54" Image="resources/Entities/54.0.0 - Flaming Hopper.png" Kind="Enemies" Name="Flaming Hopper" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Worms" ID="55" Image="resources/Entities/55.0.0 - Leech.png" Kind="Enemies" Name="Leech" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Worms" ID="55" Image="resources/Entities/55.1.0 - Kamikaze Leech.png" Kind="Enemies" Name="Kamikaze Leech" Subtype="0" Variant="1" />
-	<entity BaseHP="25" Champion="1" Group="Worms" ID="55" Image="resources/Entities/55.2.0 - Holy Leech.png" Kind="Enemies" Name="Holy Leech" Subtype="0" Variant="2" />
-	<entity BaseHP="30" Champion="1" Group="Lumps" ID="56" Image="resources/Entities/56.0.0 - Lump.png" Kind="Enemies" Name="Lump" Subtype="0" Variant="0" />
-	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.0.0 - MemBrain.png" Kind="Enemies" Name="MemBrain" Subtype="0" Variant="0" />
-	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
-	<entity BaseHP="35" Champion="1" Group="Lumps" ID="58" Image="resources/Entities/58.0.0 - Para-Bite.png" Kind="Enemies" Name="Para-Bite" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Lumps" ID="59" Image="resources/Entities/59.0.0 - Fred.png" Kind="Enemies" Name="Fred" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Kind="Enemies" Name="Bloodshot Eye" Subtype="0" Variant="1" />
-	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Kind="Enemies" Name="Sucker" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Kind="Enemies" Name="Spit" Subtype="0" Variant="1" />
-	<entity BaseHP="180" Boss="1" Group="Boss Rooms" ID="62" Image="resources/Entities/62.0.0 - Pin.png" Kind="Bosses" Name="Pin" Subtype="0" Variant="0" />
-	<entity BaseHP="300" Boss="1" Group="Boss Rooms" ID="62" Image="resources/Entities/62.1.0 - Scolex.png" Kind="Bosses" Name="Scolex" Subtype="0" Variant="1" />
-	<entity BaseHP="240" Boss="1" Group="Horsemen" ID="63" Image="resources/Entities/63.0.0 - Famine.png" Kind="Bosses" Name="Famine" Subtype="0" Variant="0" />
-	<entity BaseHP="280" Boss="1" Group="Horsemen" ID="64" Image="resources/Entities/64.0.0 - Pestilence.png" Kind="Bosses" Name="Pestilence" Subtype="0" Variant="0" />
-	<entity BaseHP="500" Boss="1" Group="Horsemen" ID="65" Image="resources/Entities/65.0.0 - War.png" Kind="Bosses" Name="War" Subtype="0" Variant="0" />
-	<entity BaseHP="500" Boss="1" Group="Horsemen" ID="65" Image="resources/Entities/65.1.0 - Conquest.png" Kind="Bosses" Name="Conquest" Subtype="0" Variant="1" />
-	<entity BaseHP="450" Boss="1" Group="Horsemen" ID="66" Image="resources/Entities/66.0.0 - Death.png" Kind="Bosses" Name="Death" Subtype="0" Variant="0" />
-	<entity BaseHP="110" Boss="1" Group="Boss Rooms" ID="67" Image="resources/Entities/67.0.0 - The Duke of Flies.png" Kind="Bosses" Name="The Duke of Flies" Subtype="0" Variant="0" />
-	<entity BaseHP="150" Boss="1" Group="Boss Rooms" ID="67" Image="resources/Entities/67.1.0 - The Husk.png" Kind="Bosses" Name="The Husk" Subtype="0" Variant="1" />
-	<entity BaseHP="450" Boss="1" Group="Boss Rooms" ID="68" Image="resources/Entities/68.0.0 - Peep.png" Kind="Bosses" Name="Peep" Subtype="0" Variant="0" />
-	<entity BaseHP="450" Boss="1" Group="Boss Rooms" ID="68" Image="resources/Entities/68.1.0 - The Bloat.png" Kind="Bosses" Name="The Bloat" Subtype="0" Variant="1" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="69" Image="resources/Entities/69.0.0 - Loki.png" Kind="Bosses" Name="Loki" Subtype="0" Variant="0" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="69" Image="resources/Entities/69.1.0 - Lokii.png" Kind="Bosses" Name="Lokii" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="Boss Rooms" ID="71" Image="resources/Entities/71.0.0 - Fistula Big.png" Kind="Bosses" Name="Fistula Big" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="Boss Rooms" ID="71" Image="resources/Entities/71.1.0 - Teratoma Big.png" Kind="Bosses" Name="Teratoma Big" Subtype="0" Variant="1" />
-	<entity BaseHP="15" Boss="1" Group="Boss Rooms" ID="72" Image="resources/Entities/72.0.0 - Fistula Medium.png" Kind="Bosses" Name="Fistula Medium" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Boss="1" Group="Boss Rooms" ID="72" Image="resources/Entities/72.1.0 - Teratoma Medium.png" Kind="Bosses" Name="Teratoma Medium" Subtype="0" Variant="1" />
-	<entity BaseHP="8" Boss="1" Group="Boss Rooms" ID="73" Image="resources/Entities/73.0.0 - Fistula Small.png" Kind="Bosses" Name="Fistula Small" Subtype="0" Variant="0" />
-	<entity BaseHP="8" Boss="1" Group="Boss Rooms" ID="73" Image="resources/Entities/73.1.0 - Teratoma Small.png" Kind="Bosses" Name="Teratoma Small" Subtype="0" Variant="1" />
-	<entity BaseHP="190" Boss="1" Group="Boss Rooms" ID="74" Image="resources/Entities/74.0.0 - Blastocyst Big.png" Kind="Bosses" Name="Blastocyst Big" Subtype="0" Variant="0" />
-	<entity BaseHP="75" Boss="1" Group="Boss Rooms" ID="75" Image="resources/Entities/75.0.0 - Blastocyst Medium.png" Kind="Bosses" Name="Blastocyst Medium" Subtype="0" Variant="0" />
-	<entity BaseHP="30" Boss="1" Group="Boss Rooms" ID="76" Image="resources/Entities/76.0.0 - Blastocyst Small.png" Kind="Bosses" Name="Blastocyst Small" Subtype="0" Variant="0" />
-	<entity BaseHP="12" Group="Worms" ID="77" Image="resources/Entities/77.0.0 - Embryo.png" Kind="Enemies" Name="Embryo" Subtype="0" Variant="0" />
-	<entity BaseHP="950" Boss="1" Group="Boss Rooms" ID="78" Image="resources/Entities/78.0.0 - Mom's Heart.png" Kind="Bosses" Name="Mom's Heart" Subtype="0" Variant="0" />
-	<entity BaseHP="950" Boss="1" Group="Boss Rooms" ID="78" Image="resources/Entities/78.1.0 - It Lives.png" Kind="Bosses" Name="It Lives" Subtype="0" Variant="1" />
-	<entity BaseHP="140" Boss="1" Group="Boss Rooms" ID="79" Image="resources/Entities/79.0.0 - Gemini.png" Kind="Bosses" Name="Gemini" Subtype="0" Variant="0" />
-	<entity BaseHP="140" Boss="1" Group="Boss Rooms" ID="79" Image="resources/Entities/79.1.0 - Steven.png" Kind="Bosses" Name="Steven" Subtype="0" Variant="1" />
-	<entity BaseHP="140" Boss="1" Group="Boss Rooms" ID="79" Image="resources/Entities/79.2.0 - The Blighted Ovum.png" Kind="Bosses" Name="The Blighted Ovum" Subtype="0" Variant="2" />
-	<entity BaseHP="10" Group="Flies" ID="80" Image="resources/Entities/80.0.0 - Moter.png" Kind="Enemies" Name="Moter" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="Heaven and Hell" ID="81" Image="resources/Entities/81.0.0 - The Fallen.png" Kind="Bosses" Name="The Fallen" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Boss="1" Group="Heaven and Hell" ID="81" Image="resources/Entities/81.1.0 - Krampus.png" Kind="Bosses" Name="Krampus" Subtype="0" Variant="1" />
-	<entity BaseHP="60" Boss="1" Group="Horsemen" ID="82" Image="resources/Entities/82.0.0 - Headless Horseman.png" Kind="Bosses" Name="Headless Horseman" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Boss="1" Group="Horsemen" ID="83" Image="resources/Entities/83.0.0 - Headless Horsemans Head.png" Kind="Bosses" Name="Headless Horsemans Head" Subtype="0" Variant="0" />
-	<entity BaseHP="600" Boss="1" Group="Heaven and Hell" ID="84" Image="resources/Entities/84.0.0 - Satan.png" Kind="Bosses" Name="Satan" Subtype="0" Variant="0" />
-	<entity BaseHP="6.5" Group="Spiders" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Kind="Enemies" Name="Spider" Subtype="0" Variant="0" />
-	<entity BaseHP="36" Champion="1" Group="Maws" ID="86" Image="resources/Entities/86.0.0 - Keeper.png" Kind="Enemies" Name="Keeper" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Champion="1" Group="Gapers" ID="87" Image="resources/Entities/87.0.0 - Gurgle.png" Kind="Enemies" Name="Gurgle" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.0.0 - Walking Boil.png" Kind="Enemies" Name="Walking Boil" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.1.0 - Walking Gut.png" Kind="Enemies" Name="Walking Gut" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.2.0 - Walking Sack.png" Kind="Enemies" Name="Walking Sack" Subtype="0" Variant="2" />
-	<entity BaseHP="20" Group="Worms" ID="89" Image="resources/Entities/89.0.0 - Buttlicker.png" Kind="Enemies" Name="Buttlicker" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Group="Other" ID="90" Image="resources/Entities/90.0.0 - Hanger.png" Kind="Enemies" Name="Hanger" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Champion="1" Group="Flies" ID="91" Image="resources/Entities/91.0.0 - Swarmer.png" Kind="Enemies" Name="Swarmer" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Group="Organs" ID="92" Image="resources/Entities/92.0.0 - Heart.png" Kind="Enemies" Name="Heart" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Group="Organs" ID="93" Image="resources/Entities/93.0.0 - Mask.png" Kind="Enemies" Name="Mask" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Spiders" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Kind="Enemies" Name="Big Spider" Subtype="0" Variant="0" />
-	<entity BaseHP="150" Boss="1" Group="Boss Rooms" ID="97" Image="resources/Entities/97.0.0 - Mask of Infamy.png" Kind="Bosses" Name="Mask of Infamy" Subtype="0" Variant="0" />
-	<entity BaseHP="200" Boss="1" Group="Boss Rooms" ID="98" Image="resources/Entities/98.0.0 - Heart of Infamy.png" Kind="Bosses" Name="Heart of Infamy" Subtype="0" Variant="0" />
-	<entity BaseHP="250" Boss="1" Group="Boss Rooms" ID="99" Image="resources/Entities/99.0.0 - Gurdy Jr..png" Kind="Bosses" Name="Gurdy Jr." Subtype="0" Variant="0" />
-	<entity BaseHP="130" Boss="1" Group="Boss Rooms" ID="100" Image="resources/Entities/100.0.0 - Widow.png" Kind="Bosses" Name="Widow" Subtype="0" Variant="0" />
-	<entity BaseHP="215" Boss="1" Group="Boss Rooms" ID="100" Image="resources/Entities/100.1.0 - The Wretched.png" Kind="Bosses" Name="The Wretched" Subtype="0" Variant="1" />
-	<entity BaseHP="300" Boss="1" Group="Boss Rooms" ID="101" Image="resources/Entities/101.0.0 - Daddy Long Legs.png" Kind="Bosses" Name="Daddy Long Legs" Subtype="0" Variant="0" />
-	<entity BaseHP="300" Boss="1" Group="Boss Rooms" ID="101" Image="resources/Entities/101.1.0 - Triachnid.png" Kind="Bosses" Name="Triachnid" Subtype="0" Variant="1" />
-	<entity BaseHP="2000" Boss="1" Group="Heaven and Hell" ID="102" Image="resources/Entities/102.0.0 - Isaac (final boss).png" Kind="Bosses" Name="Isaac (final boss)" Subtype="0" Variant="0" />
-	<entity BaseHP="2000" Boss="1" Group="Heaven and Hell" ID="102" Image="resources/Entities/102.1.0 - Blue Baby (final boss).png" Kind="Bosses" Name="??? (final boss)" Subtype="0" Variant="1" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="34" Image="resources/Entities/34.0.0 - Leaper.png" Kind="Enemies" Name="Leaper" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Group="All" ID="35" Image="resources/Entities/35.0.0 - Mr. Maw Body.png" Kind="Enemies" Name="Mr. Maw Body" Subtype="0" Variant="0" />
+	<entity BaseHP="595" Boss="1" Group="All" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="38" Image="resources/Entities/38.0.0 - Baby.png" Kind="Enemies" Name="Baby" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="38" Image="resources/Entities/38.1.0 - Angelic Baby.png" Kind="Enemies" Name="Angelic Baby" Subtype="0" Variant="1" />
+	<entity BaseHP="25" Boss="1" Champion="1" Group="All" ID="38" Image="resources/Entities/38.2.0 - Ultra Pride Baby.png" Kind="Bosses" Name="Ultra Pride Baby" Subtype="0" Variant="2" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="39" Image="resources/Entities/39.0.0 - Vis.png" Kind="Enemies" Name="Vis" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="39" Image="resources/Entities/39.1.0 - Double Vis.png" Kind="Enemies" Name="Double Vis" Subtype="0" Variant="1" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="39" Image="resources/Entities/39.2.0 - Chubber.png" Kind="Enemies" Name="Chubber" Subtype="0" Variant="2" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Down)" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Left)" Subtype="1" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Up)" Subtype="2" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Right)" Subtype="3" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="41" Image="resources/Entities/41.0.0 - Knight.png" Kind="Enemies" Name="Knight" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="41" Image="resources/Entities/41.1.0 - Selfless Knight.png" Kind="Enemies" Name="Selfless Knight" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Group="All" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="42" Image="resources/Entities/42.1.0 - Vomit Grimace.png" Kind="Enemies" Name="Vomit Grimace" Subtype="0" Variant="1" />
+	<entity BaseHP="632.5" Boss="1" Group="All" ID="43" Image="resources/Entities/43.0.0 - Monstro II.png" Kind="Bosses" Name="Monstro II" Subtype="0" Variant="0" />
+	<entity BaseHP="632.5" Boss="1" Group="All" ID="43" Image="resources/Entities/43.1.0 - Gish.png" Kind="Bosses" Name="Gish" Subtype="0" Variant="1" />
+	<entity BaseHP="100" Group="All" ID="44" Image="resources/Entities/44.0.0 - Poky.png" Kind="Enemies" Name="Poky" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="44" Image="resources/Entities/44.1.0 - Slide.png" Kind="Enemies" Name="Slide" Subtype="0" Variant="1" />
+	<entity BaseHP="645" Boss="1" Group="All" ID="45" Image="resources/Entities/45.0.0 - Mom.png" Kind="Bosses" Name="Mom" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="46" Image="resources/Entities/46.0.0 - Sloth.png" Kind="Bosses" Name="Sloth" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="46" Image="resources/Entities/46.1.0 - Super Sloth.png" Kind="Bosses" Name="Super Sloth" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="46" Image="resources/Entities/46.2.0 - Ultra Pride.png" Kind="Bosses" Name="Ultra Pride" Subtype="0" Variant="2" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="47" Image="resources/Entities/47.0.0 - Lust.png" Kind="Bosses" Name="Lust" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="47" Image="resources/Entities/47.1.0 - Super Lust.png" Kind="Bosses" Name="Super Lust" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="48" Image="resources/Entities/48.0.0 - Wrath.png" Kind="Bosses" Name="Wrath" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="48" Image="resources/Entities/48.1.0 - Super Wrath.png" Kind="Bosses" Name="Super Wrath" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="49" Image="resources/Entities/49.0.0 - Gluttony.png" Kind="Bosses" Name="Gluttony" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="49" Image="resources/Entities/49.1.0 - Super Gluttony.png" Kind="Bosses" Name="Super Gluttony" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="50" Image="resources/Entities/50.0.0 - Greed.png" Kind="Bosses" Name="Greed" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="50" Image="resources/Entities/50.1.0 - Super Greed.png" Kind="Bosses" Name="Super Greed" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="51" Image="resources/Entities/51.0.0 - Envy.png" Kind="Bosses" Name="Envy" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Champion="1" Group="All" ID="51" Image="resources/Entities/51.1.0 - Super Envy.png" Kind="Bosses" Name="Super Envy" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="52" Image="resources/Entities/52.0.0 - Pride.png" Kind="Bosses" Name="Pride" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="52" Image="resources/Entities/52.1.0 - Super Pride.png" Kind="Bosses" Name="Super Pride" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="53" Image="resources/Entities/53.0.0 - Dople.png" Kind="Enemies" Name="Dople" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="53" Image="resources/Entities/53.1.0 - Evil Twin.png" Kind="Enemies" Name="Evil Twin" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="54" Image="resources/Entities/54.0.0 - Flaming Hopper.png" Kind="Enemies" Name="Flaming Hopper" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="55" Image="resources/Entities/55.0.0 - Leech.png" Kind="Enemies" Name="Leech" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="55" Image="resources/Entities/55.1.0 - Kamikaze Leech.png" Kind="Enemies" Name="Kamikaze Leech" Subtype="0" Variant="1" />
+	<entity BaseHP="25" Champion="1" Group="All" ID="55" Image="resources/Entities/55.2.0 - Holy Leech.png" Kind="Enemies" Name="Holy Leech" Subtype="0" Variant="2" />
+	<entity BaseHP="30" Champion="1" Group="All" ID="56" Image="resources/Entities/56.0.0 - Lump.png" Kind="Enemies" Name="Lump" Subtype="0" Variant="0" />
+	<entity BaseHP="62" Champion="1" Group="All" ID="57" Image="resources/Entities/57.0.0 - MemBrain.png" Kind="Enemies" Name="MemBrain" Subtype="0" Variant="0" />
+	<entity BaseHP="62" Champion="1" Group="All" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
+	<entity BaseHP="35" Champion="1" Group="All" ID="58" Image="resources/Entities/58.0.0 - Para-Bite.png" Kind="Enemies" Name="Para-Bite" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="59" Image="resources/Entities/59.0.0 - Fred.png" Kind="Enemies" Name="Fred" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Kind="Enemies" Name="Bloodshot Eye" Subtype="0" Variant="1" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Kind="Enemies" Name="Sucker" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Kind="Enemies" Name="Spit" Subtype="0" Variant="1" />
+	<entity BaseHP="180" Boss="1" Group="All" ID="62" Image="resources/Entities/62.0.0 - Pin.png" Kind="Bosses" Name="Pin" Subtype="0" Variant="0" />
+	<entity BaseHP="300" Boss="1" Group="All" ID="62" Image="resources/Entities/62.1.0 - Scolex.png" Kind="Bosses" Name="Scolex" Subtype="0" Variant="1" />
+	<entity BaseHP="240" Boss="1" Group="All" ID="63" Image="resources/Entities/63.0.0 - Famine.png" Kind="Bosses" Name="Famine" Subtype="0" Variant="0" />
+	<entity BaseHP="280" Boss="1" Group="All" ID="64" Image="resources/Entities/64.0.0 - Pestilence.png" Kind="Bosses" Name="Pestilence" Subtype="0" Variant="0" />
+	<entity BaseHP="500" Boss="1" Group="All" ID="65" Image="resources/Entities/65.0.0 - War.png" Kind="Bosses" Name="War" Subtype="0" Variant="0" />
+	<entity BaseHP="500" Boss="1" Group="All" ID="65" Image="resources/Entities/65.1.0 - Conquest.png" Kind="Bosses" Name="Conquest" Subtype="0" Variant="1" />
+	<entity BaseHP="450" Boss="1" Group="All" ID="66" Image="resources/Entities/66.0.0 - Death.png" Kind="Bosses" Name="Death" Subtype="0" Variant="0" />
+	<entity BaseHP="110" Boss="1" Group="All" ID="67" Image="resources/Entities/67.0.0 - The Duke of Flies.png" Kind="Bosses" Name="The Duke of Flies" Subtype="0" Variant="0" />
+	<entity BaseHP="150" Boss="1" Group="All" ID="67" Image="resources/Entities/67.1.0 - The Husk.png" Kind="Bosses" Name="The Husk" Subtype="0" Variant="1" />
+	<entity BaseHP="450" Boss="1" Group="All" ID="68" Image="resources/Entities/68.0.0 - Peep.png" Kind="Bosses" Name="Peep" Subtype="0" Variant="0" />
+	<entity BaseHP="450" Boss="1" Group="All" ID="68" Image="resources/Entities/68.1.0 - The Bloat.png" Kind="Bosses" Name="The Bloat" Subtype="0" Variant="1" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="69" Image="resources/Entities/69.0.0 - Loki.png" Kind="Bosses" Name="Loki" Subtype="0" Variant="0" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="69" Image="resources/Entities/69.1.0 - Lokii.png" Kind="Bosses" Name="Lokii" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="71" Image="resources/Entities/71.0.0 - Fistula Big.png" Kind="Bosses" Name="Fistula Big" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="71" Image="resources/Entities/71.1.0 - Teratoma Big.png" Kind="Bosses" Name="Teratoma Big" Subtype="0" Variant="1" />
+	<entity BaseHP="15" Boss="1" Group="All" ID="72" Image="resources/Entities/72.0.0 - Fistula Medium.png" Kind="Bosses" Name="Fistula Medium" Subtype="0" Variant="0" />
+	<entity BaseHP="15" Boss="1" Group="All" ID="72" Image="resources/Entities/72.1.0 - Teratoma Medium.png" Kind="Bosses" Name="Teratoma Medium" Subtype="0" Variant="1" />
+	<entity BaseHP="8" Boss="1" Group="All" ID="73" Image="resources/Entities/73.0.0 - Fistula Small.png" Kind="Bosses" Name="Fistula Small" Subtype="0" Variant="0" />
+	<entity BaseHP="8" Boss="1" Group="All" ID="73" Image="resources/Entities/73.1.0 - Teratoma Small.png" Kind="Bosses" Name="Teratoma Small" Subtype="0" Variant="1" />
+	<entity BaseHP="190" Boss="1" Group="All" ID="74" Image="resources/Entities/74.0.0 - Blastocyst Big.png" Kind="Bosses" Name="Blastocyst Big" Subtype="0" Variant="0" />
+	<entity BaseHP="75" Boss="1" Group="All" ID="75" Image="resources/Entities/75.0.0 - Blastocyst Medium.png" Kind="Bosses" Name="Blastocyst Medium" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Boss="1" Group="All" ID="76" Image="resources/Entities/76.0.0 - Blastocyst Small.png" Kind="Bosses" Name="Blastocyst Small" Subtype="0" Variant="0" />
+	<entity BaseHP="12" Group="All" ID="77" Image="resources/Entities/77.0.0 - Embryo.png" Kind="Enemies" Name="Embryo" Subtype="0" Variant="0" />
+	<entity BaseHP="950" Boss="1" Group="All" ID="78" Image="resources/Entities/78.0.0 - Mom's Heart.png" Kind="Bosses" Name="Mom's Heart" Subtype="0" Variant="0" />
+	<entity BaseHP="950" Boss="1" Group="All" ID="78" Image="resources/Entities/78.1.0 - It Lives.png" Kind="Bosses" Name="It Lives" Subtype="0" Variant="1" />
+	<entity BaseHP="140" Boss="1" Group="All" ID="79" Image="resources/Entities/79.0.0 - Gemini.png" Kind="Bosses" Name="Gemini" Subtype="0" Variant="0" />
+	<entity BaseHP="140" Boss="1" Group="All" ID="79" Image="resources/Entities/79.1.0 - Steven.png" Kind="Bosses" Name="Steven" Subtype="0" Variant="1" />
+	<entity BaseHP="140" Boss="1" Group="All" ID="79" Image="resources/Entities/79.2.0 - The Blighted Ovum.png" Kind="Bosses" Name="The Blighted Ovum" Subtype="0" Variant="2" />
+	<entity BaseHP="10" Group="All" ID="80" Image="resources/Entities/80.0.0 - Moter.png" Kind="Enemies" Name="Moter" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="81" Image="resources/Entities/81.0.0 - The Fallen.png" Kind="Bosses" Name="The Fallen" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="81" Image="resources/Entities/81.1.0 - Krampus.png" Kind="Bosses" Name="Krampus" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Boss="1" Group="All" ID="82" Image="resources/Entities/82.0.0 - Headless Horseman.png" Kind="Bosses" Name="Headless Horseman" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Boss="1" Group="All" ID="83" Image="resources/Entities/83.0.0 - Headless Horsemans Head.png" Kind="Bosses" Name="Headless Horsemans Head" Subtype="0" Variant="0" />
+	<entity BaseHP="600" Boss="1" Group="All" ID="84" Image="resources/Entities/84.0.0 - Satan.png" Kind="Bosses" Name="Satan" Subtype="0" Variant="0" />
+	<entity BaseHP="6.5" Group="All" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Kind="Enemies" Name="Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="36" Champion="1" Group="All" ID="86" Image="resources/Entities/86.0.0 - Keeper.png" Kind="Enemies" Name="Keeper" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Champion="1" Group="All" ID="87" Image="resources/Entities/87.0.0 - Gurgle.png" Kind="Enemies" Name="Gurgle" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="88" Image="resources/Entities/88.0.0 - Walking Boil.png" Kind="Enemies" Name="Walking Boil" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="88" Image="resources/Entities/88.1.0 - Walking Gut.png" Kind="Enemies" Name="Walking Gut" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="88" Image="resources/Entities/88.2.0 - Walking Sack.png" Kind="Enemies" Name="Walking Sack" Subtype="0" Variant="2" />
+	<entity BaseHP="20" Group="All" ID="89" Image="resources/Entities/89.0.0 - Buttlicker.png" Kind="Enemies" Name="Buttlicker" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Group="All" ID="90" Image="resources/Entities/90.0.0 - Hanger.png" Kind="Enemies" Name="Hanger" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Champion="1" Group="All" ID="91" Image="resources/Entities/91.0.0 - Swarmer.png" Kind="Enemies" Name="Swarmer" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Group="All" ID="92" Image="resources/Entities/92.0.0 - Heart.png" Kind="Enemies" Name="Heart" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Group="All" ID="93" Image="resources/Entities/93.0.0 - Mask.png" Kind="Enemies" Name="Mask" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Kind="Enemies" Name="Big Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="150" Boss="1" Group="All" ID="97" Image="resources/Entities/97.0.0 - Mask of Infamy.png" Kind="Bosses" Name="Mask of Infamy" Subtype="0" Variant="0" />
+	<entity BaseHP="200" Boss="1" Group="All" ID="98" Image="resources/Entities/98.0.0 - Heart of Infamy.png" Kind="Bosses" Name="Heart of Infamy" Subtype="0" Variant="0" />
+	<entity BaseHP="250" Boss="1" Group="All" ID="99" Image="resources/Entities/99.0.0 - Gurdy Jr..png" Kind="Bosses" Name="Gurdy Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="130" Boss="1" Group="All" ID="100" Image="resources/Entities/100.0.0 - Widow.png" Kind="Bosses" Name="Widow" Subtype="0" Variant="0" />
+	<entity BaseHP="215" Boss="1" Group="All" ID="100" Image="resources/Entities/100.1.0 - The Wretched.png" Kind="Bosses" Name="The Wretched" Subtype="0" Variant="1" />
+	<entity BaseHP="300" Boss="1" Group="All" ID="101" Image="resources/Entities/101.0.0 - Daddy Long Legs.png" Kind="Bosses" Name="Daddy Long Legs" Subtype="0" Variant="0" />
+	<entity BaseHP="300" Boss="1" Group="All" ID="101" Image="resources/Entities/101.1.0 - Triachnid.png" Kind="Bosses" Name="Triachnid" Subtype="0" Variant="1" />
+	<entity BaseHP="2000" Boss="1" Group="All" ID="102" Image="resources/Entities/102.0.0 - Isaac (final boss).png" Kind="Bosses" Name="Isaac (final boss)" Subtype="0" Variant="0" />
+	<entity BaseHP="2000" Boss="1" Group="All" ID="102" Image="resources/Entities/102.1.0 - Blue Baby (final boss).png" Kind="Bosses" Name="??? (final boss)" Subtype="0" Variant="1" />
 
-	<entity BaseHP="1" Group="Organs" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Kind="Enemies" Name="Stone Eye" Subtype="0" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Hosts" ID="204" Image="resources/Entities/204.0.0 - Mobile Host.png" Kind="Enemies" Name="Mobile Host" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Mulligans" ID="205" Image="resources/Entities/205.0.0 - Nest.png" Kind="Enemies" Name="Nest" Subtype="0" Variant="0" />
-	<entity BaseHP="16" Champion="1" Group="Spiders" ID="206" Image="resources/Entities/206.0.0 - Baby Long Legs.png" Kind="Enemies" Name="Baby Long Legs" Subtype="0" Variant="0" />
-	<entity BaseHP="12" Champion="1" Group="Spiders" ID="206" Image="resources/Entities/206.1.0 - Small Baby Long Legs.png" Kind="Enemies" Name="Small Baby Long Legs" Subtype="0" Variant="1" />
-	<entity BaseHP="16" Champion="1" Group="Spiders" ID="207" Image="resources/Entities/207.0.0 - Crazy Long Legs.png" Kind="Enemies" Name="Crazy Long Legs" Subtype="0" Variant="0" />
-	<entity BaseHP="12" Champion="1" Group="Spiders" ID="207" Image="resources/Entities/207.1.0 - Small Crazy Long Legs.png" Kind="Enemies" Name="Small Crazy Long Legs" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Group="Fatties" ID="208" Image="resources/Entities/208.0.0 - Fatty.png" Kind="Enemies" Name="Fatty" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Fatties" ID="208" Image="resources/Entities/208.1.0 - Pale Fatty.png" Kind="Enemies" Name="Pale Fatty" Subtype="0" Variant="1" />
-	<entity BaseHP="16" Champion="1" Group="Fatties" ID="209" Image="resources/Entities/209.0.0 - Fat Sack.png" Kind="Enemies" Name="Fat Sack" Subtype="0" Variant="0" />
-	<entity BaseHP="16" Champion="1" Group="Fatties" ID="210" Image="resources/Entities/210.0.0 - Blubber.png" Kind="Enemies" Name="Blubber" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Fatties" ID="211" Image="resources/Entities/211.0.0 - Half Sack.png" Kind="Enemies" Name="Half Sack" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.0.0 - Death's Head.png" Kind="Enemies" Name="Death's Head" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Organs" ID="213" Image="resources/Entities/213.0.0 - Mom's Hand.png" Kind="Enemies" Name="Mom's Hand" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Kind="Enemies" Name="lvl2 Spider" Subtype="0" Variant="0" />
-	<entity BaseHP="38" Group="Maws" ID="216" Image="resources/Entities/216.0.0 - Swinger Body.png" Kind="Enemies" Name="Swinger Body" Subtype="0" Variant="0" />
-	<entity BaseHP="3" Group="Poop" ID="217" Image="resources/Entities/217.0.0 - Dip.png" Kind="Enemies" Name="Dip" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Nearest)" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Left)" Subtype="1" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Up)" Subtype="2" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" />
-	<entity BaseHP="25" Group="Other" ID="219" Image="resources/Entities/219.0.0 - Wizoob.png" Kind="Enemies" Name="Wizoob" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Group="Poop" ID="220" Image="resources/Entities/220.0.0 - Squirt.png" Kind="Enemies" Name="Squirt" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Worms" ID="221" Image="resources/Entities/221.0.0 - Cod Worm.png" Kind="Enemies" Name="Cod Worm" Subtype="0" Variant="0" />
-	<entity BaseHP="5" Group="Flies" ID="222" Image="resources/Entities/222.0.0 - Ring Fly.png" Kind="Enemies" Name="Ring Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="62" Group="Poop" ID="223" Image="resources/Entities/223.0.0 - Dinga.png" Kind="Enemies" Name="Dinga" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Other" ID="224" Image="resources/Entities/224.0.0 - Oob.png" Kind="Enemies" Name="Oob" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Maws" ID="225" Image="resources/Entities/225.0.0 - Black Maw.png" Kind="Enemies" Name="Black Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Gapers" ID="226" Image="resources/Entities/226.0.0 - Skinny.png" Kind="Enemies" Name="Skinny" Subtype="0" Variant="0" />
-	<entity BaseHP="16" Group="Gapers" ID="226" Image="resources/Entities/226.1.0 - Rotty.png" Kind="Enemies" Name="Rotty" Subtype="0" Variant="1" />
-	<entity BaseHP="8" Group="Gapers" ID="227" Image="resources/Entities/227.0.0 - Bony.png" Kind="Enemies" Name="Bony" Subtype="0" Variant="0" />
-	<entity BaseHP="36" Group="Other" ID="228" Image="resources/Entities/228.0.0 - Homunculus.png" Kind="Enemies" Name="Homunculus" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Organs" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
-	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr..png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.0.0 - Nerve Ending.png" Kind="Enemies" Name="Nerve Ending" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Other" ID="234" Image="resources/Entities/234.0.0 - One Tooth.png" Kind="Enemies" Name="One Tooth" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Stones" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="24" Champion="1" Group="Other" ID="237" Image="resources/Entities/237.0.0 - Gurgling.png" Kind="Enemies" Name="Gurgling" Subtype="0" Variant="0" />
-	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.1.0 - Gurgling (boss).png" Kind="Bosses" Name="Gurgling (boss)" Subtype="0" Variant="1" />
-	<entity BaseHP="10" Group="Gapers" ID="238" Image="resources/Entities/238.0.0 - Splasher.png" Kind="Enemies" Name="Splasher" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Worms" ID="239" Image="resources/Entities/239.0.0 - Grub.png" Kind="Enemies" Name="Grub" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Spiders" ID="240" Image="resources/Entities/240.0.0 - Wall Creep.png" Kind="Enemies" Name="Wall Creep" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Spiders" ID="241" Image="resources/Entities/241.0.0 - Rage Creep.png" Kind="Enemies" Name="Rage Creep" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Spiders" ID="242" Image="resources/Entities/242.0.0 - Blind Creep.png" Kind="Enemies" Name="Blind Creep" Subtype="0" Variant="0" />
-	<entity BaseHP="18" Group="Worms" ID="243" Image="resources/Entities/243.0.0 - Conjoined Spitty.png" Kind="Enemies" Name="Conjoined Spitty" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Worms" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Kind="Enemies" Name="Round Worm" Subtype="0" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Kind="Enemies" Name="Stone Eye" Subtype="0" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" />
+	<entity BaseHP="1" Group="All" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="204" Image="resources/Entities/204.0.0 - Mobile Host.png" Kind="Enemies" Name="Mobile Host" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="205" Image="resources/Entities/205.0.0 - Nest.png" Kind="Enemies" Name="Nest" Subtype="0" Variant="0" />
+	<entity BaseHP="16" Champion="1" Group="All" ID="206" Image="resources/Entities/206.0.0 - Baby Long Legs.png" Kind="Enemies" Name="Baby Long Legs" Subtype="0" Variant="0" />
+	<entity BaseHP="12" Champion="1" Group="All" ID="206" Image="resources/Entities/206.1.0 - Small Baby Long Legs.png" Kind="Enemies" Name="Small Baby Long Legs" Subtype="0" Variant="1" />
+	<entity BaseHP="16" Champion="1" Group="All" ID="207" Image="resources/Entities/207.0.0 - Crazy Long Legs.png" Kind="Enemies" Name="Crazy Long Legs" Subtype="0" Variant="0" />
+	<entity BaseHP="12" Champion="1" Group="All" ID="207" Image="resources/Entities/207.1.0 - Small Crazy Long Legs.png" Kind="Enemies" Name="Small Crazy Long Legs" Subtype="0" Variant="1" />
+	<entity BaseHP="20" Group="All" ID="208" Image="resources/Entities/208.0.0 - Fatty.png" Kind="Enemies" Name="Fatty" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="208" Image="resources/Entities/208.1.0 - Pale Fatty.png" Kind="Enemies" Name="Pale Fatty" Subtype="0" Variant="1" />
+	<entity BaseHP="16" Champion="1" Group="All" ID="209" Image="resources/Entities/209.0.0 - Fat Sack.png" Kind="Enemies" Name="Fat Sack" Subtype="0" Variant="0" />
+	<entity BaseHP="16" Champion="1" Group="All" ID="210" Image="resources/Entities/210.0.0 - Blubber.png" Kind="Enemies" Name="Blubber" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="211" Image="resources/Entities/211.0.0 - Half Sack.png" Kind="Enemies" Name="Half Sack" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="212" Image="resources/Entities/212.0.0 - Death's Head.png" Kind="Enemies" Name="Death's Head" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="213" Image="resources/Entities/213.0.0 - Mom's Hand.png" Kind="Enemies" Name="Mom's Hand" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Group="All" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Kind="Enemies" Name="lvl2 Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="38" Group="All" ID="216" Image="resources/Entities/216.0.0 - Swinger Body.png" Kind="Enemies" Name="Swinger Body" Subtype="0" Variant="0" />
+	<entity BaseHP="3" Group="All" ID="217" Image="resources/Entities/217.0.0 - Dip.png" Kind="Enemies" Name="Dip" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Nearest)" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Left)" Subtype="1" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Up)" Subtype="2" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" />
+	<entity BaseHP="25" Group="All" ID="219" Image="resources/Entities/219.0.0 - Wizoob.png" Kind="Enemies" Name="Wizoob" Subtype="0" Variant="0" />
+	<entity BaseHP="15" Group="All" ID="220" Image="resources/Entities/220.0.0 - Squirt.png" Kind="Enemies" Name="Squirt" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="221" Image="resources/Entities/221.0.0 - Cod Worm.png" Kind="Enemies" Name="Cod Worm" Subtype="0" Variant="0" />
+	<entity BaseHP="5" Group="All" ID="222" Image="resources/Entities/222.0.0 - Ring Fly.png" Kind="Enemies" Name="Ring Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="62" Group="All" ID="223" Image="resources/Entities/223.0.0 - Dinga.png" Kind="Enemies" Name="Dinga" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="224" Image="resources/Entities/224.0.0 - Oob.png" Kind="Enemies" Name="Oob" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="225" Image="resources/Entities/225.0.0 - Black Maw.png" Kind="Enemies" Name="Black Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="226" Image="resources/Entities/226.0.0 - Skinny.png" Kind="Enemies" Name="Skinny" Subtype="0" Variant="0" />
+	<entity BaseHP="16" Group="All" ID="226" Image="resources/Entities/226.1.0 - Rotty.png" Kind="Enemies" Name="Rotty" Subtype="0" Variant="1" />
+	<entity BaseHP="8" Group="All" ID="227" Image="resources/Entities/227.0.0 - Bony.png" Kind="Enemies" Name="Bony" Subtype="0" Variant="0" />
+	<entity BaseHP="36" Group="All" ID="228" Image="resources/Entities/228.0.0 - Homunculus.png" Kind="Enemies" Name="Homunculus" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
+	<entity BaseHP="32" Group="All" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr..png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="231" Image="resources/Entities/231.0.0 - Nerve Ending.png" Kind="Enemies" Name="Nerve Ending" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="All" ID="234" Image="resources/Entities/234.0.0 - One Tooth.png" Kind="Enemies" Name="One Tooth" Subtype="0" Variant="0" />
+	<entity BaseHP="100" Group="All" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="24" Champion="1" Group="All" ID="237" Image="resources/Entities/237.0.0 - Gurgling.png" Kind="Enemies" Name="Gurgling" Subtype="0" Variant="0" />
+	<entity BaseHP="90" Boss="1" Group="All" ID="237" Image="resources/Entities/237.1.0 - Gurgling (boss).png" Kind="Bosses" Name="Gurgling (boss)" Subtype="0" Variant="1" />
+	<entity BaseHP="10" Group="All" ID="238" Image="resources/Entities/238.0.0 - Splasher.png" Kind="Enemies" Name="Splasher" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="239" Image="resources/Entities/239.0.0 - Grub.png" Kind="Enemies" Name="Grub" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="240" Image="resources/Entities/240.0.0 - Wall Creep.png" Kind="Enemies" Name="Wall Creep" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="241" Image="resources/Entities/241.0.0 - Rage Creep.png" Kind="Enemies" Name="Rage Creep" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="242" Image="resources/Entities/242.0.0 - Blind Creep.png" Kind="Enemies" Name="Blind Creep" Subtype="0" Variant="0" />
+	<entity BaseHP="18" Group="All" ID="243" Image="resources/Entities/243.0.0 - Conjoined Spitty.png" Kind="Enemies" Name="Conjoined Spitty" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Kind="Enemies" Name="Round Worm" Subtype="0" Variant="0" />
 	<entity Group="Props" ID="245" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Pushable Poop" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Champion="1" Group="Spiders" ID="246" Image="resources/Entities/246.0.0 - Rag Ling.png" Kind="Enemies" Name="Rag Ling" Subtype="0" Variant="0" />
-	<entity BaseHP="27" Champion="1" Group="Hosts" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Kind="Enemies" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Maws" ID="248" Image="resources/Entities/248.0.0 - Psychic Horf.png" Kind="Enemies" Name="Psychic Horf" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Flies" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Group="Spiders" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Kind="Enemies" Name="Ticking Spider" Subtype="0" Variant="0" />
-	<entity BaseHP="60" Group="Other" ID="251" Image="resources/Entities/251.0.0 - Begotten.png" Kind="Enemies" Name="Begotten" Subtype="0" Variant="0" />
-	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Nulls.png" Kind="Enemies" Name="Nulls" Subtype="0" Variant="0" />
-	<entity BaseHP="40" Group="Organs" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Knights" ID="254" Image="resources/Entities/254.0.0 - Floating Knight.png" Kind="Enemies" Name="Floating Knight" Subtype="0" Variant="0" />
-	<entity BaseHP="35" Group="Worms" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Kind="Enemies" Name="Night Crawler" Subtype="0" Variant="0" />
-	<entity BaseHP="200" Boss="1" Group="Boss Rooms" ID="260" Image="resources/Entities/260.0.0 - Haunt.png" Kind="Bosses" Name="Haunt" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Other" ID="260" Image="resources/Entities/260.10.0 - Lil' Haunt.png" Kind="Enemies" Name="Lil' Haunt" Subtype="0" Variant="10" />
-	<entity BaseHP="300" Boss="1" Group="Boss Rooms" ID="261" Image="resources/Entities/261.0.0 - Dingle.png" Kind="Bosses" Name="Dingle" Subtype="0" Variant="0" />
-	<entity BaseHP="350" Boss="1" Group="Boss Rooms" ID="262" Image="resources/Entities/262.0.0 - Mega Maw.png" Kind="Bosses" Name="Mega Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="500" Boss="1" Group="Boss Rooms" ID="263" Image="resources/Entities/263.0.0 - The Gate.png" Kind="Bosses" Name="The Gate" Subtype="0" Variant="0" />
-	<entity BaseHP="600" Boss="1" Group="Boss Rooms" ID="264" Image="resources/Entities/264.0.0 - Mega Fatty.png" Kind="Bosses" Name="Mega Fatty" Subtype="0" Variant="0" />
-	<entity BaseHP="800" Boss="1" Group="Boss Rooms" ID="265" Image="resources/Entities/265.0.0 - The Cage.png" Kind="Bosses" Name="The Cage" Subtype="0" Variant="0" />
-	<entity BaseHP="750" Boss="1" Group="Boss Rooms" ID="266" Image="resources/Entities/266.0.0 - Mama Gurdy.png" Kind="Bosses" Name="Mama Gurdy" Subtype="0" Variant="0" />
-	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="267" Image="resources/Entities/267.0.0 - Dark One.png" Kind="Bosses" Name="Dark One" Subtype="0" Variant="0" />
-	<entity BaseHP="520" Boss="1" Group="Boss Rooms" ID="268" Image="resources/Entities/268.0.0 - The Adversary.png" Kind="Bosses" Name="The Adversary" Subtype="0" Variant="0" />
-	<entity BaseHP="200" Boss="1" Group="Boss Rooms" ID="269" Image="resources/Entities/269.0.0 - Polycephalus.png" Kind="Bosses" Name="Polycephalus" Subtype="0" Variant="0" />
-	<entity BaseHP="500" Boss="1" Group="Boss Rooms" ID="270" Image="resources/Entities/270.0.0 - Mr. Fred.png" Kind="Bosses" Name="Mr. Fred" Subtype="0" Variant="0" />
-	<entity Boss="1" Group="Heaven and Hell" ID="271" Image="resources/Entities/271.0.0 - Blue Angel.png" Kind="Bosses" Name="Blue Angel" Subtype="0" Variant="0" />
-	<entity Boss="1" Group="Heaven and Hell" ID="271" Image="resources/Entities/271.0.1 - Blue Dark Angel.png" Kind="Bosses" Name="Blue Dark Angel" Subtype="0" Variant="1" />
-	<entity Boss="1" Group="Heaven and Hell" ID="272" Image="resources/Entities/272.0.0 - Red Angel.png" Kind="Bosses" Name="Red Angel" Subtype="0" Variant="0" />
-	<entity Boss="1" Group="Heaven and Hell" ID="272" Image="resources/Entities/272.0.1 - Red Dark Angel.png" Kind="Bosses" Name="Red Dark Angel" Subtype="0" Variant="1" />
-	<entity BaseHP="2000" Boss="1" Group="Heaven and Hell" ID="273" Image="resources/Entities/273.0.0 - The Lamb.png" Kind="Bosses" Name="The Lamb" Subtype="0" Variant="0" />
-	<entity BaseHP="3000" Boss="1" Group="Heaven and Hell" ID="274" Image="resources/Entities/274.0.0 - Mega Satan's Head.png" Kind="Bosses" Name="Mega Satan's Head" Subtype="0" Variant="0" />
-	<entity BaseHP="600" Boss="1" Group="Heaven and Hell" ID="274" Image="resources/Entities/274.1.0 - Mega Satan's Right Hand.png" Kind="Bosses" Name="Mega Satan's Right Hand" Subtype="0" Variant="1" />
-	<entity BaseHP="600" Boss="1" Group="Heaven and Hell" ID="274" Image="resources/Entities/274.2.0 - Mega Satan's Left Hand.png" Kind="Bosses" Name="Mega Satan's Left Hand" Subtype="0" Variant="2" />
+	<entity BaseHP="13" Champion="1" Group="All" ID="246" Image="resources/Entities/246.0.0 - Rag Ling.png" Kind="Enemies" Name="Rag Ling" Subtype="0" Variant="0" />
+	<entity BaseHP="27" Champion="1" Group="All" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Kind="Enemies" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Champion="1" Group="All" ID="248" Image="resources/Entities/248.0.0 - Psychic Horf.png" Kind="Enemies" Name="Psychic Horf" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="All" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Group="All" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Kind="Enemies" Name="Ticking Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="60" Group="All" ID="251" Image="resources/Entities/251.0.0 - Begotten.png" Kind="Enemies" Name="Begotten" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="All" ID="252" Image="resources/Entities/252.0.0 - Nulls.png" Kind="Enemies" Name="Nulls" Subtype="0" Variant="0" />
+	<entity BaseHP="40" Group="All" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="All" ID="254" Image="resources/Entities/254.0.0 - Floating Knight.png" Kind="Enemies" Name="Floating Knight" Subtype="0" Variant="0" />
+	<entity BaseHP="35" Group="All" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Kind="Enemies" Name="Night Crawler" Subtype="0" Variant="0" />
+	<entity BaseHP="200" Boss="1" Group="All" ID="260" Image="resources/Entities/260.0.0 - Haunt.png" Kind="Bosses" Name="Haunt" Subtype="0" Variant="0" />
+	<entity BaseHP="25" Group="All" ID="260" Image="resources/Entities/260.10.0 - Lil' Haunt.png" Kind="Enemies" Name="Lil' Haunt" Subtype="0" Variant="10" />
+	<entity BaseHP="300" Boss="1" Group="All" ID="261" Image="resources/Entities/261.0.0 - Dingle.png" Kind="Bosses" Name="Dingle" Subtype="0" Variant="0" />
+	<entity BaseHP="350" Boss="1" Group="All" ID="262" Image="resources/Entities/262.0.0 - Mega Maw.png" Kind="Bosses" Name="Mega Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="500" Boss="1" Group="All" ID="263" Image="resources/Entities/263.0.0 - The Gate.png" Kind="Bosses" Name="The Gate" Subtype="0" Variant="0" />
+	<entity BaseHP="600" Boss="1" Group="All" ID="264" Image="resources/Entities/264.0.0 - Mega Fatty.png" Kind="Bosses" Name="Mega Fatty" Subtype="0" Variant="0" />
+	<entity BaseHP="800" Boss="1" Group="All" ID="265" Image="resources/Entities/265.0.0 - The Cage.png" Kind="Bosses" Name="The Cage" Subtype="0" Variant="0" />
+	<entity BaseHP="750" Boss="1" Group="All" ID="266" Image="resources/Entities/266.0.0 - Mama Gurdy.png" Kind="Bosses" Name="Mama Gurdy" Subtype="0" Variant="0" />
+	<entity BaseHP="400" Boss="1" Group="All" ID="267" Image="resources/Entities/267.0.0 - Dark One.png" Kind="Bosses" Name="Dark One" Subtype="0" Variant="0" />
+	<entity BaseHP="520" Boss="1" Group="All" ID="268" Image="resources/Entities/268.0.0 - The Adversary.png" Kind="Bosses" Name="The Adversary" Subtype="0" Variant="0" />
+	<entity BaseHP="200" Boss="1" Group="All" ID="269" Image="resources/Entities/269.0.0 - Polycephalus.png" Kind="Bosses" Name="Polycephalus" Subtype="0" Variant="0" />
+	<entity BaseHP="500" Boss="1" Group="All" ID="270" Image="resources/Entities/270.0.0 - Mr. Fred.png" Kind="Bosses" Name="Mr. Fred" Subtype="0" Variant="0" />
+	<entity Boss="1" Group="All" ID="271" Image="resources/Entities/271.0.0 - Blue Angel.png" Kind="Bosses" Name="Blue Angel" Subtype="0" Variant="0" />
+	<entity Boss="1" Group="All" ID="271" Image="resources/Entities/271.0.1 - Blue Dark Angel.png" Kind="Bosses" Name="Blue Dark Angel" Subtype="0" Variant="1" />
+	<entity Boss="1" Group="All" ID="272" Image="resources/Entities/272.0.0 - Red Angel.png" Kind="Bosses" Name="Red Angel" Subtype="0" Variant="0" />
+	<entity Boss="1" Group="All" ID="272" Image="resources/Entities/272.0.1 - Red Dark Angel.png" Kind="Bosses" Name="Red Dark Angel" Subtype="0" Variant="1" />
+	<entity BaseHP="2000" Boss="1" Group="All" ID="273" Image="resources/Entities/273.0.0 - The Lamb.png" Kind="Bosses" Name="The Lamb" Subtype="0" Variant="0" />
+	<entity BaseHP="3000" Boss="1" Group="All" ID="274" Image="resources/Entities/274.0.0 - Mega Satan's Head.png" Kind="Bosses" Name="Mega Satan's Head" Subtype="0" Variant="0" />
+	<entity BaseHP="600" Boss="1" Group="All" ID="274" Image="resources/Entities/274.1.0 - Mega Satan's Right Hand.png" Kind="Bosses" Name="Mega Satan's Right Hand" Subtype="0" Variant="1" />
+	<entity BaseHP="600" Boss="1" Group="All" ID="274" Image="resources/Entities/274.2.0 - Mega Satan's Left Hand.png" Kind="Bosses" Name="Mega Satan's Left Hand" Subtype="0" Variant="2" />
 
 	<entity Group="Obstacles" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" />
 	<entity Group="Traps" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" />
