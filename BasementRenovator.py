@@ -394,15 +394,6 @@ class Entity(QGraphicsItem):
 		painter.setBrush(Qt.Dense5Pattern)
 		painter.setPen(QPen(Qt.white))
 
-<<<<<<< Updated upstream
-		# Creeper special case
-		if self.entity['Type'] in [240, 241, 242]: 
-			# Calculate the nearest edge, draw an arrow to it, and rotate the image to match 
-# right, left, top, down
-			pass
-
-=======
->>>>>>> Stashed changes
 		if self.entity['pixmap']:
 			x = -(self.entity['pixmap'].width() -26) / 2
 			y = -(self.entity['pixmap'].height()-26) / 2
