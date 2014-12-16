@@ -1233,6 +1233,11 @@ class MainWindow(QMainWindow):
 		room.roomSpawns = spawns
 		room.roomDoors = doors
 
+	def quit(self):
+		if self.checkDirty(): return
+
+		QMainWindow.quit(self)
+
 
 #####################
 # Slots for Widgets #
