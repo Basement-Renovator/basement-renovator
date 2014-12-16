@@ -22,9 +22,15 @@
 #		A menu item to hide/show docks
 #		Application Icons
 #		Name View/ Sort Orders for Palette
+#		Stats window for entities, search for rooms with given entities
+#		Add delete confirmation to delete room button
 #
 #		Fix Background Rendering bugs for super secret room hardcoded areas
 #
+#		Variant number hardcoding notes:
+#			Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
+#
+
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
