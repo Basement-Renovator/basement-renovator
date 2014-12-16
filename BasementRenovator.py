@@ -834,17 +834,7 @@ class RoomSelector(QWidget):
 		self.list.keyPressEvent(event)
 
 		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
-			room = self.selectedRoom()
-			if room is None:
-				return
-
-			msgBox = QMessageBox(QMessageBox.Warning,
-					"Delete Room?", "Are you sure you want to delete this room? This action cannot be undone.",
-					QMessageBox.NoButton, self)
-			msgBox.addButton("Delete", QMessageBox.AcceptRole)
-			msgBox.addButton("Cancel", QMessageBox.RejectRole)
-			if msgBox.exec_() == QMessageBox.AcceptRole:
-				self.removeRoom()
+			self.removeRoom()
 
 	def addRoom(self):
 		"""Creates a new room."""
@@ -854,8 +844,19 @@ class RoomSelector(QWidget):
 	def removeRoom(self):
 		"""Removes selected room (no takebacks)"""
 
-		self.list.takeItem(self.list.currentRow())
-		self.list.clearSelection()
+		room = self.selectedRoom()
+		if room is None:
+			return
+
+		msgBox = QMessageBox(QMessageBox.Warning,
+				"Delete Room?", "Are you sure you want to delete this room? This action cannot be undone.",
+				QMessageBox.NoButton, self)
+		msgBox.addButton("Delete", QMessageBox.AcceptRole)
+		msgBox.addButton("Cancel", QMessageBox.RejectRole)
+		if msgBox.exec_() == QMessageBox.AcceptRole:
+
+			self.list.takeItem(self.list.currentRow())
+			self.list.clearSelection()
 
 	def duplicateRoom(self):
 		"""Duplicates the selected room"""
