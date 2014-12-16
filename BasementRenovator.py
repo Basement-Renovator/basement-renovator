@@ -270,6 +270,7 @@ class RoomEditorWidget(QGraphicsView):
 		en = Entity(x,y,int(paint.ID), int(paint.variant), int(paint.subtype), 0)
 
 		self.scene().addItem(en)
+		mainWindow.dirty()
 
 	def mousePressEvent(self, event):
 		if event.button() == Qt.RightButton:
@@ -305,6 +306,7 @@ class RoomEditorWidget(QGraphicsView):
 					obj.remove()
 				scene.update()
 				self.update()
+				mainWindow.dirty()
 				return
 		else:
 			QGraphicsView.keyPressEvent(self, event)
@@ -439,6 +441,7 @@ class Entity(QGraphicsItem):
 
 	def updatePosition(self):
 		self.setPos(self.entity['X']*26, self.entity['Y']*26)
+		mainWindow.dirty()
 
 	def paint(self, painter, option, widget):
 
@@ -548,6 +551,7 @@ class Door(QGraphicsItem):
 
 		event.accept()
 		self.update()
+		mainWindow.dirty()
 	
 	def remove(self):
 		self.scene().removeItem(self)
@@ -809,24 +813,30 @@ class RoomSelector(QWidget):
 					e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 					mainWindow.scene.addItem(e)
 
+		mainWindow.dirty()
+
 	@pyqtSlot(int)
 	def changeType(self, rtype):
 		self.selectedRoom().roomType = rtype
 		self.selectedRoom().renderDisplayIcon()
 		mainWindow.scene.setRoomBG(rtype)
 		mainWindow.scene.update()
+		mainWindow.dirty()
 
 	@pyqtSlot(int)
 	def changeVariant(self, var):
 		self.selectedRoom().roomVariant = var
+		mainWindow.dirty()
 
 	@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
 		self.selectedRoom().roomDifficulty = int(action.text())
+		mainWindow.dirty()
 
 	@pyqtSlot(QAction)
 	def changeWeight(self, action):
 		self.selectedRoom().roomWeight = float(action.text())
+		mainWindow.dirty()
 
 	def keyPressEvent(self, event):
 		self.list.keyPressEvent(event)
@@ -838,6 +848,7 @@ class RoomSelector(QWidget):
 		"""Creates a new room."""
 		
 		self.list.insertItem(self.list.currentRow()+1, Room())
+		mainWindow.dirty()
 
 	def removeRoom(self):
 		"""Removes selected room (no takebacks)"""
@@ -855,6 +866,7 @@ class RoomSelector(QWidget):
 
 			self.list.takeItem(self.list.currentRow())
 			self.list.clearSelection()
+			mainWindow.dirty()
 
 	def duplicateRoom(self):
 		"""Duplicates the selected room"""
@@ -868,6 +880,7 @@ class RoomSelector(QWidget):
 					room.roomVariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
 
 		self.list.insertItem(self.list.currentRow()+1, r)
+		mainWindow.dirty()
 	
 	def setButtonStates(self):
 		index = self.selectedRoom()
@@ -1111,6 +1124,7 @@ class MainWindow(QMainWindow):
 		self.setIconSize(QSize(16, 16))
 
 		self.path = None
+		self.dirty = False
 		
 		self.scene = RoomScene()
 		self.clipboard = None
@@ -1180,10 +1194,25 @@ class MainWindow(QMainWindow):
 
 		self.setWindowTitle('%s - Basement Renovator' % effectiveName)
 
-	# TODO
 	def checkDirty(self):
+		if not self.dirty:
+			return False
 
-		return False
+		msgBox = QMessageBox(QMessageBox.Warning,
+				"File is not saved", "Completing this operation without saving could cause loss of data.",
+				QMessageBox.NoButton, self)
+		msgBox.addButton("Continue", QMessageBox.AcceptRole)
+		msgBox.addButton("Cancel", QMessageBox.RejectRole)
+		if msgBox.exec_() == QMessageBox.AcceptRole:
+			return False
+
+		return True
+
+	def dirt(self):
+		self.dirty = True
+
+	def clean(self):
+		self.dirty = False
 
 	def storeEntityList(self, room=None):
 		if not room:
@@ -1251,6 +1280,8 @@ class MainWindow(QMainWindow):
 			item.getEntityInfo(int(entity.ID), int(entity.subtype), int(entity.variant))
 			item.update()
 
+		self.dirty()
+
 
 ########################
 # Slots for Menu Items #
@@ -1265,6 +1296,7 @@ class MainWindow(QMainWindow):
 		self.path = ''
 
 		self.updateTitlebar()
+		self.dirt()
 
 	def openMap(self):
 
@@ -1327,6 +1359,8 @@ class MainWindow(QMainWindow):
 			r = Room(roomName, doors, spawns, roomData[0], roomData[1], roomData[2], entityTable[0], entityTable[1], entityTable[2])
 			self.roomList.list.addItem(r)
 
+		self.clean()
+
 	def saveMap(self, forceNewName=False):
 		target = self.path
 
@@ -1341,6 +1375,7 @@ class MainWindow(QMainWindow):
 			self.updateTitlebar()
 
 		self.save()
+		self.clean()
 
 	def saveMapAs(self):
 		self.saveMap(True)
@@ -1423,6 +1458,8 @@ class MainWindow(QMainWindow):
 		for item in self.clipboard:
 			i = Entity(*item)
 			self.scene.addItem(i)
+
+		self.dirty()
 
 
 # Miscellaneous
