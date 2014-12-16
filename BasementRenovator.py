@@ -652,10 +652,15 @@ class RoomSelector(QWidget):
 		# Type, Weight, and Difficulty
 		Type = QWidgetAction(menu)
 		c = QComboBox()
+
 		types= ["Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room", 
 				"Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room", 
 				"Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room", 
 				"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market"] 
+
+		if "00." not in mainWindow.path:
+			types=["Null Room", "Normal Room"]
+
 		c.addItems(types)
 		c.setCurrentIndex(self.selectedRoom().roomType)
 		c.currentIndexChanged.connect(self.changeType)
