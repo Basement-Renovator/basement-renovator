@@ -239,6 +239,7 @@ class RoomEditorWidget(QGraphicsView):
 		self.centerOn(0,0)
 
 		self.objectToPaint = None
+		self.lastTile = None
 		
 	def tryToPaint(self, event):
 		'''Called when a paint attempt is initiated'''
@@ -257,6 +258,10 @@ class RoomEditorWidget(QGraphicsView):
 		x = int(x / 26)
 		y = int(y / 26)
 
+		# Make sure we're not spawning oodles
+		if self.lastTile == (x,y): return
+		self.lastTile = (x,y)
+
 		en = Entity(x,y,int(paint.ID), int(paint.variant), int(paint.subtype), 0)
 
 		self.scene().addItem(en)
@@ -266,9 +271,22 @@ class RoomEditorWidget(QGraphicsView):
 			if mainWindow.roomList.selectedRoom() is not None:
 				self.tryToPaint(event)
 				event.accept()
-
 		else:
+			self.lastTile = None
 			QGraphicsView.mousePressEvent(self, event)
+
+	def mouseMoveEvent(self, event):
+		if self.lastTile:
+			if mainWindow.roomList.selectedRoom() is not None:
+				self.tryToPaint(event)
+				event.accept()
+		else:
+			QGraphicsView.mouseMoveEvent(self, event)
+
+	def mouseReleaseEvent(self, event):
+		self.lastTile = None
+		QGraphicsView.mouseReleaseEvent(self, event)
+
 	
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
