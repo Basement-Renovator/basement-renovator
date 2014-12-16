@@ -741,8 +741,8 @@ class RoomSelector(QWidget):
 
 		# Variant
 		Variant = QWidgetAction(menu)
-		s = QSpinbox()
-		s.range(0,65534)
+		s = QSpinBox()
+		s.setRange(0,65534)
 
 		s.setValue(self.selectedRoom().roomVariant)
 
