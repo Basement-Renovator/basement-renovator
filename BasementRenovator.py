@@ -314,6 +314,8 @@ class Entity(QGraphicsItem):
 		self.updatePosition()
 		if self.entity['Type'] < 999:
 			self.setZValue(1)
+		else:
+			self.setZValue(0)
 
 		if not hasattr(Entity, 'SELECTION_PEN'):
 			Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
