@@ -747,7 +747,7 @@ class RoomSelector(QWidget):
 		s.setValue(self.selectedRoom().roomVariant)
 
 		Variant.setDefaultWidget(s)
-		Variant.valueChanged.connect(self.changeVariant)
+		s.valueChanged.connect(self.changeVariant)
 		menu.addAction(Variant)
 
 		# End it
