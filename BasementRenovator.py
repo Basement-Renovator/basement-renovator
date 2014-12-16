@@ -312,7 +312,7 @@ class Entity(QGraphicsItem):
 		self.getEntityInfo(mytype, subtype, variant)
 
 		self.updatePosition()
-		if self.entity['Type'] < 1000:
+		if self.entity['Type'] < 999:
 			self.setZValue(1)
 
 		if not hasattr(Entity, 'SELECTION_PEN'):
