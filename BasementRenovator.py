@@ -120,8 +120,8 @@ class RoomScene(QGraphicsScene):
 			if isinstance(e,Entity):
 				tiles[e.entity['Y']][e.entity['X']] += 1
 
-		painter.setPen(QPen(Qt.white,1,Qt.SolidLine)
-		painter.setBrush(QBrush(QColor(100,100,100,100)
+		painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
+		painter.setBrush(QBrush(QColor(100,100,100,100)))
 
 		for x in enumerate(tiles):
 			for y in enumerate(x[1]):
