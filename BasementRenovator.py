@@ -24,6 +24,7 @@
 #		Name View/ Sort Orders for Palette
 #		Stats window for entities, search for rooms with given entities
 #		Add delete confirmation to delete room button
+#		Make multiple entity stacking indicator use the isaac bitfont
 #
 #		Fix Background Rendering bugs for super secret room hardcoded areas
 #
