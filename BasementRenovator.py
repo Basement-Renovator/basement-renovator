@@ -129,8 +129,8 @@ class RoomScene(QGraphicsScene):
 			for x in enumerate(y[1]):
 
 				if x[1] > 1:
-					painter.drawRect( (x[0] + 1) * 26 - 8, (y[0] + 1) * 26 - 8, 8, 8)
-					painter.drawText( (x[0] + 1) * 26 - 7, (y[0] + 1) * 26 -1, str(x[1]) )
+					# painter.drawRect( (x[0] + 1) * 26 - 8, (y[0] + 1) * 26 - 8, 8, 8)
+					painter.drawText( (x[0] + 1) * 26 - 8, (y[0] + 1) * 26, str(x[1]) )
 
 		# Grey out the screen to show it's inactive if there are no rooms selected
 		if mainWindow.roomList.selectedRoom() is None:
