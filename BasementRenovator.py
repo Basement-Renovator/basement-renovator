@@ -116,7 +116,7 @@ class RoomScene(QGraphicsScene):
 	
 		# Display the number of entities on a given tile
 		tiles = [[0 for y in range(26)] for x in range(14)]
-		for e in eList:
+		for e in self.items():
 			if isinstance(e,Entity):
 				tiles[e.entity['Y']][e.entity['X']] += 1
 
