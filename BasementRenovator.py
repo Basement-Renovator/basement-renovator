@@ -258,9 +258,16 @@ class RoomEditorWidget(QGraphicsView):
 		x = int(x / 26)
 		y = int(y / 26)
 
+		# Don't stack multiple grid entities
+		for i in self.scene().items():
+			if isinstance(i, Entity):
+				if i.entity['X'] == x and i.entity['Y'] == y:
+					if i.entity['Type'] > 999 and self.objectToPaint.ID > 999:
+						return
+
 		# Make sure we're not spawning oodles
-		if self.lastTile == (x,y): return
-		self.lastTile = (x,y)
+		if (x,y) in self.lastTile: return
+		self.lastTile.add((x,y))
 
 		en = Entity(x,y,int(paint.ID), int(paint.variant), int(paint.subtype), 0)
 
@@ -269,6 +276,7 @@ class RoomEditorWidget(QGraphicsView):
 	def mousePressEvent(self, event):
 		if event.button() == Qt.RightButton:
 			if mainWindow.roomList.selectedRoom() is not None:
+				self.lastTile = set()
 				self.tryToPaint(event)
 				event.accept()
 		else:
