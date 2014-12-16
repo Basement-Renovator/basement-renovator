@@ -113,11 +113,30 @@ class RoomScene(QGraphicsScene):
 				item.remove()
 
 	def drawForeground(self, painter, rect):
+	
+		# Display the number of entities on a given tile
+		tiles = [[0 for y in range(26)] for x in range(14)]
+		for e in eList:
+			if isinstance(e,Entity):
+				tiles[e.entity['Y']][e.entity['X']] += 1
+
+		painter.setPen(QPen(Qt.white,1,Qt.SolidLine)
+		painter.setBrush(QBrush(QColor(100,100,100,100)
+
+		for x in enumerate(tiles):
+			for y in enumerate(x[1]):
+
+				if y[1] > 0:
+					painter.drawRect( x[0] * 26 - 8, y[0] * 26 - 8, 8, 8)
+					painter.drawText( x[0] * 26 - 8, y[0] * 26 - 8, str(y[1]) )
+
+		# Grey out the screen to show it's inactive if there are no rooms selected
 		if mainWindow.roomList.selectedRoom() is None:
 			b = QBrush(QColor(100,100,100,100))
 			painter.fillRect(rect, b)
 			return
 
+		# Draw me a foreground grid
 		if not self.grid: return
 		
 		painter.setRenderHint(QPainter.Antialiasing, True)
