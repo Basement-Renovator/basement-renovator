@@ -1320,6 +1320,9 @@ class MainWindow(QMainWindow):
 		fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Grahics (*.png)')[0]
 		if fn == '': return
 
+		g = self.scene.grid
+		self.scene.grid = False
+
 		ScreenshotImage = QImage(self.scene.sceneRect().width(), self.scene.sceneRect().height(), QImage.Format_ARGB32)
 		ScreenshotImage.fill(Qt.transparent)
 		
@@ -1329,6 +1332,7 @@ class MainWindow(QMainWindow):
 		   
 		ScreenshotImage.save(fn, 'PNG', 50)
 
+		self.scene.grid = g
 
 # Edit
 ########################
