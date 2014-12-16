@@ -1132,7 +1132,7 @@ class MainWindow(QMainWindow):
 				doors.append(e.doorItem)
 
 			else:
-				spawns[e.entity['Y']][e.entity['X']] = [[e.entity['Type'], e.entity['Variant'], e.entity['Subtype'], e.entity['Weight']]]
+				spawns[e.entity['Y']][e.entity['X']].append([e.entity['Type'], e.entity['Variant'], e.entity['Subtype'], e.entity['Weight']])
 
 		room.roomSpawns = spawns
 		room.roomDoors = doors
