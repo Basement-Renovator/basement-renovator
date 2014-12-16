@@ -697,7 +697,7 @@ class RoomSelector(QWidget):
 
 		menu.addSeparator()
 
-		# Type, Weight, and Difficulty
+		# Type
 		Type = QWidgetAction(menu)
 		c = QComboBox()
 
@@ -738,6 +738,17 @@ class RoomSelector(QWidget):
 				m.setChecked(True)
 
 		weight.triggered.connect(self.changeWeight)
+
+		# Variant
+		Variant = QWidgetAction(menu)
+		s = QSpinbox()
+		s.range(0,65534)
+
+		s.setValue(self.selectedRoom().roomVariant)
+
+		Variant.setDefaultWidget(s)
+		Variant.valueChanged.connect(self.changeVariant)
+		menu.addAction(Variant)
 
 		# End it
 		menu.exec_(self.list.mapToGlobal(pos))
@@ -806,6 +817,10 @@ class RoomSelector(QWidget):
 		self.selectedRoom().renderDisplayIcon()
 		mainWindow.scene.setRoomBG(rtype)
 		mainWindow.scene.update()
+
+	@pyqtSlot(int)
+	def changeVariant(self, var):
+		self.selectedRoom().roomVariant = var
 
 	@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
