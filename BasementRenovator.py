@@ -677,7 +677,7 @@ class RoomSelector(QWidget):
 		# Weight
 		weight = menu.addMenu('Weight')
 		
-		for w in [0.25,0.5,0.75,1.0,1.5,2.0,5.0]:
+		for w in [0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
 			m = weight.addAction('{0}'.format(w))
 
 			if self.selectedRoom().roomWeight == w:
