@@ -15,7 +15,6 @@
  #
 #
 #	Todo: 
-#		Dirty checking
 #		QSettings
 #		Room Symmetrizer
 #		A menu item to hide/show docks
@@ -638,6 +637,60 @@ class RoomSelector(QWidget):
 		self.layout = QVBoxLayout()
 		self.layout.setSpacing(0)
 
+		self.filterEntity = None
+
+		self.setupFilters()
+		self.setupList()
+		self.setupToolbar()
+
+		self.layout.addLayout(self.filter)
+		self.layout.addWidget(self.list)
+		self.layout.addWidget(self.toolbar)
+
+		self.setLayout(self.layout)
+		self.setButtonStates()
+
+	def setupFilters(self):
+		self.filter = QHBoxLayout()
+		
+		self.entityToggle = QToolButton()
+		self.entityToggle.setCheckable()
+		self.entityToggle.toggled.connect(self.changeFilter)
+
+		self.typeToggle = QComboBox()
+		self.weightToggle = QComboBox()
+		self.sizeToggle = QComboBox()
+						
+		# Type
+		q = QImage()
+		q.load('resources/UI/RoomIcons.png')
+
+		self.typeToggle.addItem(QIcon(), '')
+
+		for i in range(22):
+			self.typeToggle.addItem(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
+
+		self.typeToggle.currentIndexChanged.connect(self.changeFilter)
+
+		# Make a menu for Weight
+		for w in ['No Weight',0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
+			weight.addItem('{0}'.format(w))
+
+		self.weightToggle.currentIndexChanged.connect(self.changeFilter)
+
+		# Make a menu for Size
+		sizeList = ['No Size', 'Small', 'Wide', 'Tall', 'Large']
+		self.sizeToggle.addItems(sizeList)
+
+		self.sizeToggle.currentIndexChanged.connect(self.changeFilter)
+
+		# Add to Layout
+		self.filter.addWidget(self.entityToggle)
+		self.filter.addWidget(self.typeToggle)
+		self.filter.addWidget(self.weightToggle)
+		self.filter.addWidget(self.sizeToggle)		
+
+	def setupList(self):
 		self.list = QListWidget()
 		self.list.setViewMode(self.list.ListMode)
 		self.list.setSelectionMode(self.list.SingleSelection)
@@ -657,17 +710,12 @@ class RoomSelector(QWidget):
 		self.list.doubleClicked.connect(self.activateEdit)
 		self.list.customContextMenuRequested.connect(self.customContextMenu)
 
+	def setupToolbar(self):
 		self.toolbar = QToolBar()
 
 		self.addRoomButton = self.toolbar.addAction(QIcon(), 'Add', self.addRoom)
 		self.removeRoomButton = self.toolbar.addAction(QIcon(), 'Delete', self.removeRoom)
 		self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
-
-		self.layout.addWidget(self.toolbar)
-		self.layout.addWidget(self.list)
-
-		self.setLayout(self.layout)
-		self.setButtonStates()
 
 	def activateEdit(self):
 		self.list.editItem(self.selectedRoom())
@@ -754,6 +802,63 @@ class RoomSelector(QWidget):
 
 		# End it
 		menu.exec_(self.list.mapToGlobal(pos))
+
+	@pyqtSlot()
+	def changeFilter(self):
+		
+		# Save some performance, maybe
+		if 	not self.entityToggle.isChecked() and
+			self.typeToggle.currentIndex() is 0 and
+			self.weightToggle.currentIndex() is 0 and			self.sizeToggle.currentIndex() is 0:
+				return	
+
+		# Here we go
+		for room in self.items():
+			entityCond = typeCond = weightCond = sizeCond = True
+
+			# Check if the right entity is in the room
+			if self.entityToggle.isChecked() and self.filterEntity:
+				entityCond = False
+
+				for x in room.roomSpawns:
+					for y in x:
+						if entity.ID in y and entity.subtype in y and entity.variant in y:
+							entityCond = True
+
+			# Check if the room is the right type
+			if self.typeToggle.currentIndex() > 0:
+				typeCond = self.typeToggle.currentIndex() == room.roomType			
+			# Check if the room is the right weight
+			if self.weightToggle.currentIndex() > 0:
+				weightCond = self.typeToggle.currentText() == '{0}'.format(room.roomWeight)
+
+			# Check if the room is the right size
+			if self.sizeToggle.currentIndex() > 0:
+				sizeCond = False
+
+				text =  self.sizeToggle.currentText()
+				w = room.roomWidth
+				h = room.roomHeight
+
+				if w is 13 and h is 7 and text is 'Small':
+					sizeCond = True
+				if w is 26 and h is 7 and text is 'Wide:
+					sizeCond = True
+				if w is 13 and h is 14 and text is 'Tall':
+					sizeCond = True
+				if w is 26 and h is 14 and text is 'Large':
+					sizeCond = True
+
+			# Filter em' out
+			if entityCond and typeCond and weightCond and sizeCond:
+				room.setHidden(False)
+			else:
+				room.setHidden(True)		
+
+	def setEntityFilter(self, entity):
+		self.filterEntity = entity
+		self.entityToggle.setIcon(entity.icon)
+		self.changeFilter()
 
 	@pyqtSlot(QAction)
 	def changeSize(self, action):
@@ -1274,6 +1379,7 @@ class MainWindow(QMainWindow):
 	@pyqtSlot(EntityItem)
 	def handleObjectChanged(self, entity):
 		self.editor.objectToPaint = entity
+		self.roomList.setEntityFilter(entity)
 
 	@pyqtSlot(EntityItem)
 	def handleObjectReplaced(self, entity):
