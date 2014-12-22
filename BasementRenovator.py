@@ -807,9 +807,7 @@ class RoomSelector(QWidget):
 	def changeFilter(self):
 		
 		# Save some performance, maybe
-		if 	not self.entityToggle.isChecked() and
-			self.typeToggle.currentIndex() is 0 and
-			self.weightToggle.currentIndex() is 0 and			self.sizeToggle.currentIndex() is 0:
+		if (self.entityToggle.isChecked() == False) and (self.typeToggle.currentIndex() is 0) and (self.weightToggle.currentIndex() is 0) and (self.sizeToggle.currentIndex() is 0):
 				return	
 
 		# Here we go
