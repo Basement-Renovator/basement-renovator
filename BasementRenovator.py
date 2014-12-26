@@ -17,7 +17,6 @@
 #	Todo: 
 #		QSettings
 #		Room Symmetrizer
-#		A menu item to hide/show docks
 #		Application Icons
 #		Make multiple entity stacking indicator use the isaac bitfont
 #		Make rooms sorter use only toolbuttons and menus with icons, add default icons
@@ -66,6 +65,13 @@ class RoomScene(QGraphicsScene):
 		self.roomBG = 1
 		self.grid = True
 
+		# Make the bitfont
+		q = QImage()
+		q.load('resources/UI/Bitfont.png')
+
+		self.bitfont = [QPixmap.fromImage(q.copy(i*12,0,12,12)) for i in range(10)]
+		self.bitText = True
+
 	def newRoomSize(self, w, h):
 		self.roomWidth = w
 		self.roomHeight = h
@@ -110,27 +116,14 @@ class RoomScene(QGraphicsScene):
 				item.remove()
 
 	def drawForeground(self, painter, rect):
-	
-		# Display the number of entities on a given tile
-		tiles = [[0 for y in range(26)] for x in range(14)]
-		for e in self.items():
-			if isinstance(e,Entity):
-				tiles[e.entity['Y']][e.entity['X']] += 1
 
-		painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
-		painter.setBrush(QBrush(QColor(100,100,100,100)))
-
-		painter.font().setPixelSize(6)
-
-		for y in enumerate(tiles):
-			for x in enumerate(y[1]):
-
-				if x[1] > 1:
-					# painter.drawRect( (x[0] + 1) * 26 - 8, (y[0] + 1) * 26 - 8, 8, 8)
-					painter.drawText( (x[0] + 1) * 26 - 8, (y[0] + 1) * 26, str(x[1]) )
+		# Bitfont drawing: moved to the RoomEditorWidget.drawForeground for easier anti-aliasing
 
 		# Grey out the screen to show it's inactive if there are no rooms selected
 		if mainWindow.roomList.selectedRoom() is None:
+			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
+			painter.setBrush(QBrush(QColor(100,100,100,100)))
+
 			b = QBrush(QColor(100,100,100,100))
 			painter.fillRect(rect, b)
 			return
@@ -227,6 +220,7 @@ class RoomEditorWidget(QGraphicsView):
 		self.setDragMode(self.RubberBandDrag)
 		self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
 		self.setAlignment(Qt.AlignTop|Qt.AlignLeft)
+		self.newScale = 1.0
 		
 		self.assignNewScene(scene)
 
@@ -292,7 +286,6 @@ class RoomEditorWidget(QGraphicsView):
 		self.lastTile = None
 		QGraphicsView.mouseReleaseEvent(self, event)
 
-	
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
 			scene = self.scene()
@@ -326,6 +319,7 @@ class RoomEditorWidget(QGraphicsView):
 
 		tr = QTransform()
 		tr.scale(newScale, newScale)
+		self.newScale = newScale
 
 		self.setTransform(tr)
 
@@ -333,6 +327,37 @@ class RoomEditorWidget(QGraphicsView):
 			self.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
 		else:
 			self.setAlignment(Qt.AlignVCenter|Qt.AlignLeft)
+
+	def drawForeground(self, painter, rect):
+
+		QGraphicsView.drawForeground(self,painter,rect)
+
+		# Display the number of entities on a given tile, in bitFont or regular font
+		tiles = [[0 for y in range(26)] for x in range(14)]
+		for e in self.scene().items():
+			if isinstance(e,Entity):
+				tiles[e.entity['Y']][e.entity['X']] += 1
+	
+		if not self.scene().bitText:
+			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
+			painter.font().setPixelSize(5)
+
+		for y in enumerate(tiles):
+			for x in enumerate(y[1]):
+
+				if x[1] > 1:
+
+					if self.scene().bitText:
+						c = x[1]
+
+						if x[1] >= 10:
+							painter.drawPixmap( (x[0] + 1) * 26 - 24, (y[0] + 1) * 26 - 12, self.scene().bitfont[int(c/10)] )
+							c = c % 10
+
+						painter.drawPixmap( (x[0] + 1) * 26 - 12, (y[0] + 1) * 26 - 12, self.scene().bitfont[c] )
+
+					else:
+						painter.drawText( x[0] * 26, y[0] * 26, 26, 26, Qt.AlignBottom | Qt.AlignRight, str(x[1]) )
 
 class Entity(QGraphicsItem):
 	SNAP_TO = 26
@@ -1271,8 +1296,8 @@ class MainWindow(QMainWindow):
 		e.addSeparator()
 
 		v = mb.addMenu('View')
-		self.wa = v.addAction('Show Grid',					self.showGrid, QKeySequence("Ctrl+G"))
-		self.wa.setCheckable(True)
+		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
+		self.wd = v.addAction('Use Aliased Counter',		self.switchBitFont, QKeySequence("Ctrl+Alt+A"))
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
@@ -1591,19 +1616,30 @@ class MainWindow(QMainWindow):
 	def showGrid(self):
 		"""Handle toggling of the grid being showed"""
 		# settings.setValue('GridEnabled', checked)
-		
-		if self.scene.grid == True:
-			self.scene.grid = False
-			self.wa.setChecked(False)
-		else:
+
+		if self.wa.text() == "Show Grid":
 			self.scene.grid = True
-			self.wa.setChecked(True)
+			self.wa.setText("Hide Grid")
+		else:
+			self.scene.grid = False
+			self.wa.setText("Show Grid")
+		
+		self.scene.update()
+
+	@pyqtSlot()
+	def switchBitFont(self):
+		if self.wd.text() == "Use Aliased Counter":
+			self.scene.bitText = False
+			self.wd.setText("Use Bitfont Counter")
+		else:
+			self.scene.bitText = True
+			self.wd.setText("Use Aliased Counter")
 
 		self.scene.update()
 
 	@pyqtSlot()
 	def showPainter(self):
-		if self.EntityPaletteDock.isVisible():
+		if self.EntityPaletteDock.isVisible(): 
 			self.EntityPaletteDock.hide()
 		else:
 			self.EntityPaletteDock.show()
