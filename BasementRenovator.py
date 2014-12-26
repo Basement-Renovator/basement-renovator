@@ -19,9 +19,8 @@
 #		Room Symmetrizer
 #		A menu item to hide/show docks
 #		Application Icons
-#		Name View/ Sort Orders for Palette
-#		Stats window for entities, search for rooms with given entities
 #		Make multiple entity stacking indicator use the isaac bitfont
+#		Make rooms sorter use only toolbuttons and menus with icons, add default icons
 #
 #		Fix Background Rendering bugs for super secret room hardcoded areas
 #
@@ -653,6 +652,7 @@ class RoomSelector(QWidget):
 
 	def setupFilters(self):
 		self.filter = QHBoxLayout()
+		self.filter.setSpacing(4)
 		
 		self.entityToggle = QToolButton()
 		self.entityToggle.setCheckable(True)
@@ -1269,18 +1269,24 @@ class MainWindow(QMainWindow):
 		self.ed = e.addAction('Select All',					self.selectAll, QKeySequence.SelectAll)
 		self.ee = e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
 		e.addSeparator()
-		self.wa = e.addAction('Show Grid',					self.showGrid, QKeySequence("Ctrl+G"))
+
+		v = mb.addMenu('View')
+		self.wa = v.addAction('Show Grid',					self.showGrid, QKeySequence("Ctrl+G"))
 		self.wa.setCheckable(True)
+		v.addSeparator()
+		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
+		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
 
 		h = mb.addMenu('Help')
-		self.ha = h.addAction('About Koopatlas',			self.aboutDialog)
-		self.hb = h.addAction('Koopatlas Documentation',	self.goToHelp)
+		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
+		self.hb = h.addAction('Basement Renovator Documentation',	self.goToHelp)
 		# self.hc = h.addAction('Keyboard Shortcuts')
 
 	def setupDocks(self):
 		self.roomList = RoomSelector()
 		self.roomListDock = QDockWidget('Rooms')
 		self.roomListDock.setWidget(self.roomList)
+		self.roomListDock.visibilityChanged.connect(self.updateDockVisibility)
 
 		self.roomList.list.currentItemChanged.connect(self.handleSelectedRoomChanged)
 
@@ -1289,6 +1295,7 @@ class MainWindow(QMainWindow):
 		self.EntityPalette = EntityPalette()
 		self.EntityPaletteDock = QDockWidget('Entity Palette')
 		self.EntityPaletteDock.setWidget(self.EntityPalette)
+		self.EntityPaletteDock.visibilityChanged.connect(self.updateDockVisibility)
 
 		self.EntityPalette.objChanged.connect(self.handleObjectChanged)
 		self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
@@ -1577,7 +1584,6 @@ class MainWindow(QMainWindow):
 
 		self.dirt()
 
-
 # Miscellaneous
 ########################
 
@@ -1595,11 +1601,41 @@ class MainWindow(QMainWindow):
 
 		self.scene.update()
 
+	@pyqtSlot()
+	def showPainter(self):
+		if self.EntityPaletteDock.isVisible():
+			self.EntityPaletteDock.hide()
+		else:
+			self.EntityPaletteDock.show()
+
+		self.updateDockVisibility()
+
+	@pyqtSlot()
+	def showRoomList(self):
+		if self.roomListDock.isVisible():
+			self.roomListDock.hide()
+		else:
+			self.roomListDock.show()
+
+		self.updateDockVisibility()
+
+	@pyqtSlot()
+	def updateDockVisibility(self):
+
+		if self.EntityPaletteDock.isVisible():
+			self.wb.setText('Hide Entity Painter')
+		else:
+			self.wb.setText('Show Entity Painter')
+
+		if self.roomListDock.isVisible():
+			self.wc.setText('Hide Room List')
+		else:
+			self.wc.setText('Show Room List')
+
 
 # Help
 ########################
 
-	# TODO
 	@pyqtSlot(bool)
 	def aboutDialog(self):
 		caption = "About the Basement Renovator"
@@ -1607,9 +1643,8 @@ class MainWindow(QMainWindow):
 		text = "<big><b>Basement Renovator</b></big><br><br>    The Basement Renovator Editor is an editor for custom rooms, for use with the Binding of Isaac Rebirth. In order to use it, you must have unpacked the .stb files from Binding of Isaac Rebirth.<br><br>    The Basement Renovator was programmed by Tempus (u/Chronometrics).<br><br>    Find the source at <github link here>."
 
 
-		msg = QMessageBox.about(KP.mainWindow, caption, text)
+		msg = QMessageBox.about(mainWindow, caption, text)
 
-	# TODO
 	@pyqtSlot(bool)
 	def goToHelp(self):
 		QDesktopServices().openUrl(QUrl('http://www.reddit.com/r/themoddingofisaac'))
