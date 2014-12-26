@@ -269,7 +269,7 @@ class RoomEditorWidget(QGraphicsView):
 		en = Entity(x,y,int(paint.ID), int(paint.variant), int(paint.subtype), 0)
 
 		self.scene().addItem(en)
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	def mousePressEvent(self, event):
 		if event.button() == Qt.RightButton:
@@ -305,7 +305,7 @@ class RoomEditorWidget(QGraphicsView):
 					obj.remove()
 				scene.update()
 				self.update()
-				mainWindow.dirty()
+				mainWindow.dirt()
 				return
 		else:
 			QGraphicsView.keyPressEvent(self, event)
@@ -424,6 +424,8 @@ class Entity(QGraphicsItem):
 			if x != currentX or y != currentY:
 				self.entity['X'] = int(x/self.SNAP_TO)
 				self.entity['Y'] = int(y/self.SNAP_TO)
+			else:
+				mainWindow.dirt()
 
 			value.setX(x)
 			value.setY(y)
@@ -440,7 +442,6 @@ class Entity(QGraphicsItem):
 
 	def updatePosition(self):
 		self.setPos(self.entity['X']*26, self.entity['Y']*26)
-		mainWindow.dirty()
 
 	def paint(self, painter, option, widget):
 
@@ -550,7 +551,7 @@ class Door(QGraphicsItem):
 
 		event.accept()
 		self.update()
-		mainWindow.dirty()
+		mainWindow.dirt()
 	
 	def remove(self):
 		self.scene().removeItem(self)
@@ -654,7 +655,9 @@ class RoomSelector(QWidget):
 		self.filter = QHBoxLayout()
 		
 		self.entityToggle = QToolButton()
-		self.entityToggle.setCheckable()
+		self.entityToggle.setCheckable(True)
+		self.entityToggle.checked = False
+		self.entityToggle.toggled.connect(self.setEntityToggle)
 		self.entityToggle.toggled.connect(self.changeFilter)
 
 		self.typeToggle = QComboBox()
@@ -674,7 +677,7 @@ class RoomSelector(QWidget):
 
 		# Make a menu for Weight
 		for w in ['No Weight',0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
-			weight.addItem('{0}'.format(w))
+			self.weightToggle.addItem('{0}'.format(w))
 
 		self.weightToggle.currentIndexChanged.connect(self.changeFilter)
 
@@ -803,48 +806,51 @@ class RoomSelector(QWidget):
 		# End it
 		menu.exec_(self.list.mapToGlobal(pos))
 
+	@pyqtSlot(bool)
+	def setEntityToggle(self, checked):
+		self.entityToggle.checked = checked
+
 	@pyqtSlot()
 	def changeFilter(self):
 		
-		# Save some performance, maybe
-		if (self.entityToggle.isChecked() == False) and (self.typeToggle.currentIndex() is 0) and (self.weightToggle.currentIndex() is 0) and (self.sizeToggle.currentIndex() is 0):
-				return	
-
 		# Here we go
-		for room in self.items():
+		for room in self.getRooms():
 			entityCond = typeCond = weightCond = sizeCond = True
 
 			# Check if the right entity is in the room
-			if self.entityToggle.isChecked() and self.filterEntity:
+			if self.entityToggle.checked and self.filterEntity:
 				entityCond = False
 
 				for x in room.roomSpawns:
 					for y in x:
-						if entity.ID in y and entity.subtype in y and entity.variant in y:
-							entityCond = True
+						for e in y:
+							if int(self.filterEntity.ID) in e and int(self.filterEntity.subtype) in e and int(self.filterEntity.variant) in e:
+								entityCond = True
 
 			# Check if the room is the right type
 			if self.typeToggle.currentIndex() > 0:
-				typeCond = self.typeToggle.currentIndex() == room.roomType			
+				typeCond = self.typeToggle.currentIndex()-1 == room.roomType
+
 			# Check if the room is the right weight
 			if self.weightToggle.currentIndex() > 0:
-				weightCond = self.typeToggle.currentText() == '{0}'.format(room.roomWeight)
+				weightCond = self.weightToggle.currentText() == '{0}'.format(room.roomWeight)
+				print (self.weightToggle.currentText(), '{0}'.format(room.roomWeight))
 
 			# Check if the room is the right size
 			if self.sizeToggle.currentIndex() > 0:
 				sizeCond = False
 
-				text =  self.sizeToggle.currentText()
+				text = self.sizeToggle.currentText()
 				w = room.roomWidth
 				h = room.roomHeight
 
-				if w is 13 and h is 7 and text is 'Small':
+				if w is 13 and h is 7 and text == 'Small':
 					sizeCond = True
-				if w is 26 and h is 7 and text is 'Wide:
+				if w is 26 and h is 7 and text == 'Wide':
 					sizeCond = True
-				if w is 13 and h is 14 and text is 'Tall':
+				if w is 13 and h is 14 and text == 'Tall':
 					sizeCond = True
-				if w is 26 and h is 14 and text is 'Large':
+				if w is 26 and h is 14 and text == 'Large':
 					sizeCond = True
 
 			# Filter em' out
@@ -916,7 +922,7 @@ class RoomSelector(QWidget):
 					e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 					mainWindow.scene.addItem(e)
 
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	@pyqtSlot(int)
 	def changeType(self, rtype):
@@ -924,22 +930,22 @@ class RoomSelector(QWidget):
 		self.selectedRoom().renderDisplayIcon()
 		mainWindow.scene.setRoomBG(rtype)
 		mainWindow.scene.update()
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	@pyqtSlot(int)
 	def changeVariant(self, var):
 		self.selectedRoom().roomVariant = var
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
 		self.selectedRoom().roomDifficulty = int(action.text())
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	@pyqtSlot(QAction)
 	def changeWeight(self, action):
 		self.selectedRoom().roomWeight = float(action.text())
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	def keyPressEvent(self, event):
 		self.list.keyPressEvent(event)
@@ -951,7 +957,7 @@ class RoomSelector(QWidget):
 		"""Creates a new room."""
 		
 		self.list.insertItem(self.list.currentRow()+1, Room())
-		mainWindow.dirty()
+		mainWindow.dirt()
 
 	def removeRoom(self):
 		"""Removes selected room (no takebacks)"""
@@ -969,7 +975,7 @@ class RoomSelector(QWidget):
 
 			self.list.takeItem(self.list.currentRow())
 			self.list.clearSelection()
-			mainWindow.dirty()
+			mainWindow.dirt()
 
 	def duplicateRoom(self):
 		"""Duplicates the selected room"""
@@ -983,7 +989,7 @@ class RoomSelector(QWidget):
 					room.roomVariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
 
 		self.list.insertItem(self.list.currentRow()+1, r)
-		mainWindow.dirty()
+		mainWindow.dirt()
 	
 	def setButtonStates(self):
 		index = self.selectedRoom()
@@ -1239,6 +1245,7 @@ class MainWindow(QMainWindow):
 		self.setupMenuBar()
 
 		self.newMap()
+		self.clean()
 
 	def setupMenuBar(self):
 		mb = self.menuBar()
@@ -1298,7 +1305,7 @@ class MainWindow(QMainWindow):
 		self.setWindowTitle('%s - Basement Renovator' % effectiveName)
 
 	def checkDirty(self):
-		if not self.dirty:
+		if self.dirty is False:
 			return False
 
 		msgBox = QMessageBox(QMessageBox.Warning,
@@ -1389,7 +1396,7 @@ class MainWindow(QMainWindow):
 			item.getEntityInfo(int(entity.ID), int(entity.subtype), int(entity.variant))
 			item.update()
 
-		self.dirty()
+		self.dirt()
 
 
 ########################
@@ -1568,7 +1575,7 @@ class MainWindow(QMainWindow):
 			i = Entity(*item)
 			self.scene.addItem(i)
 
-		self.dirty()
+		self.dirt()
 
 
 # Miscellaneous
