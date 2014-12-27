@@ -1,10 +1,15 @@
 from distutils.core import setup
 import py2app, sys, os, shutil
+import subprocess
 
 sys.argv.append('py2app')
 
+if os.path.exists('build'):
+	shutil.rmtree('build')
+
 if os.path.exists('dist'):
 	shutil.rmtree('dist')
+
 
 setup(
 	name="Basement Renovator",
@@ -12,12 +17,37 @@ setup(
 	author="Tempus",
 	author_email="Tempus@chronometry.ca",
 	app=["BasementRenovator.py"],
-	options={"py2app": {"argv_emulation": True, "includes": ["sip", "PyQt5._qt"]}},
-	setup_requires=["py2app"]) 
+	options={"py2app": {
+		"argv_emulation": True, 
+		"includes": ["sip", "qtLibPathFacade"],
+		"iconfile": "resources/UI/BasementRenovator.icns",
+		"resources": "resources"
+		}},
+	setup_requires=["py2app"] 
 )
 
-os.mkdir('dist/platforms')
-shutil.copytree('resources', 'dist/resources')
+# print("copy plugins")
+# subprocess.call(["cp", "-r", "PlugIns", "dist/Basement Renovator.app/Contents/PlugIns"])
+# subprocess.call(["cp", "qt.conf", "dist/Basement Renovator.app/Contents/Resources/qt.conf"])
 
 
-# UNTESTED!
+
+# This shitty mac deploy simply won't work. here are some things:
+#
+#	- you'll need libqcocoa.dylib from your qt plugins/platforms directory, and you should put it into .app/Contents/PlugIns
+#	- you should touch .app/Contents/Resources/qt.conf
+#
+
+
+# Some non-working snippets
+
+# sys.argv.append('-platformpluginpath')
+# sys.argv.append('/Users/Tempus/Desktop/Basement Renovator/Basement-Renovator/dist/Basement Renovator.app/Contents/Resources/PlugIns')
+
+# QCoreApplication.addLibraryPath('/Users/Tempus/Desktop/Basement Renovator/Basement-Renovator/dist/Basement Renovator.app/Contents/')
+
+# os.system('export QT_PLUGIN_PATH="{0}/PlugIns"'.format(os.getcwd()))
+
+# from qtLibPathFacade.qtLibPathFacade import QtLibPathFacade
+# main:
+#	QtLibPathFacade.addBundledPluginsPath()

@@ -16,15 +16,13 @@
 #
 #	Todo: 
 #		QSettings
-#		Room Symmetrizer
-#		Application Icons
-#		Make multiple entity stacking indicator use the isaac bitfont
 #		Make rooms sorter use only toolbuttons and menus with icons, add default icons
+#		Allow multi-selection of rooms, handle them properly, and allow duplicating, exporting, and copy/pasta between stbs
+#		Fix Background Rendering for super secret room hardcoded variants
 #
-#		Fix Background Rendering bugs for super secret room hardcoded areas
-#
-#		Variant number hardcoding notes:
-#			Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
+#		Idiot proof the variant numbers further
+#			Variant number hardcoding notes:
+#				Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
 #
 
 
@@ -1686,7 +1684,6 @@ class MainWindow(QMainWindow):
 		QDesktopServices().openUrl(QUrl('http://www.reddit.com/r/themoddingofisaac'))
 
 
-
 if __name__ == '__main__':
 
 	import sys
@@ -1696,10 +1693,12 @@ if __name__ == '__main__':
 
 	# Application
 	app = QApplication(sys.argv)
+	app.setWindowIcon(QIcon('resources/UI/BasementRenovator.png'))
 
 	settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 
 	mainWindow = MainWindow()
+	mainWindow.setWindowIcon(QIcon('resources/UI/BasementRenovator-Small.png'))
 	mainWindow.setGeometry(100, 500, 1280, 600)
 	mainWindow.show()
 

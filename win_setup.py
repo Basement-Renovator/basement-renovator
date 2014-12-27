@@ -18,6 +18,7 @@ setup(
 		"includes":["sip", "xml.etree"],
 		'optimize': 2,
 		'bundle_files': 3,
+		"icon_resources": [(0, "resources/UI/BasementRenovator.ico")]
 	}}
 )
 
