@@ -650,6 +650,24 @@ class Room(QListWidgetItem):
 
 		self.setIcon(i)
 
+class RoomDelegate(QStyledItemDelegate):
+
+	def __init__(self):
+
+		self.pixmap = QPixmap('resources/UI/CurrentRoom.png')
+		QStyledItemDelegate.__init__(self)
+
+	def paint(self, painter, option, index):
+
+		painter.fillRect(option.rect.right()-19, option.rect.top(), 17, 16, QBrush(Qt.white))
+
+		QStyledItemDelegate.paint(self, painter, option, index)
+
+		item = mainWindow.roomList.list.item(index.row())
+		if item:
+			if item.data(100):
+				painter.drawPixmap(option.rect.right()-19, option.rect.top(), self.pixmap)
+
 class RoomSelector(QWidget):
 
 	def __init__(self):
@@ -719,7 +737,7 @@ class RoomSelector(QWidget):
 	def setupList(self):
 		self.list = QListWidget()
 		self.list.setViewMode(self.list.ListMode)
-		self.list.setSelectionMode(self.list.SingleSelection)
+		self.list.setSelectionMode(self.list.ExtendedSelection)
 		self.list.setResizeMode(self.list.Adjust)
 		self.list.setContextMenuPolicy(Qt.CustomContextMenu)
 
@@ -731,6 +749,8 @@ class RoomSelector(QWidget):
 		self.list.setHorizontalScrollBarPolicy(1)
 
 		self.list.setIconSize(QSize(52, 52))
+		d = RoomDelegate()
+		self.list.setItemDelegate(d)
 
 		self.list.currentItemChanged.connect(self.setButtonStates)
 		self.list.doubleClicked.connect(self.activateEdit)
@@ -979,7 +999,9 @@ class RoomSelector(QWidget):
 	def addRoom(self):
 		"""Creates a new room."""
 		
-		self.list.insertItem(self.list.currentRow()+1, Room())
+		r = Room()
+		self.list.insertItem(self.list.currentRow()+1, r)
+		self.list.setCurrentItem(r, QItemSelectionModel.ClearAndSelect)
 		mainWindow.dirt()
 
 	def removeRoom(self):
@@ -1392,6 +1414,9 @@ class MainWindow(QMainWindow):
 			if prev:
 				self.storeEntityList(prev)
 
+				# Clear the current room mark
+				prev.setData(100, False)
+
 			# Clear the room and reset the size
 			self.scene.clear()
 			self.scene.newRoomSize(current.roomWidth, current.roomHeight)
@@ -1410,6 +1435,9 @@ class MainWindow(QMainWindow):
 					for entity in x[1]:
 						e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 						self.scene.addItem(e)
+
+			# Make the current Room mark for clearer multi-selection
+			current.setData(100, True)
 
 	@pyqtSlot(EntityItem)
 	def handleObjectChanged(self, entity):
