@@ -752,7 +752,7 @@ class RoomSelector(QWidget):
 		d = RoomDelegate()
 		self.list.setItemDelegate(d)
 
-		self.list.currentItemChanged.connect(self.setButtonStates)
+		self.list.itemSelectionChanged.connect(self.setButtonStates)
 		self.list.doubleClicked.connect(self.activateEdit)
 		self.list.customContextMenuRequested.connect(self.customContextMenu)
 
@@ -762,6 +762,7 @@ class RoomSelector(QWidget):
 		self.addRoomButton = self.toolbar.addAction(QIcon(), 'Add', self.addRoom)
 		self.removeRoomButton = self.toolbar.addAction(QIcon(), 'Delete', self.removeRoom)
 		self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
+		self.exportRoomButton = self.toolbar.addAction(QIcon(), 'Export...', self.exportRoom)
 
 	def activateEdit(self):
 		self.list.editItem(self.selectedRoom())
@@ -877,7 +878,6 @@ class RoomSelector(QWidget):
 			# Check if the room is the right weight
 			if self.weightToggle.currentIndex() > 0:
 				weightCond = self.weightToggle.currentText() == '{0}'.format(room.roomWeight)
-				print (self.weightToggle.currentText(), '{0}'.format(room.roomWeight))
 
 			# Check if the room is the right size
 			if self.sizeToggle.currentIndex() > 0:
@@ -1007,43 +1007,88 @@ class RoomSelector(QWidget):
 	def removeRoom(self):
 		"""Removes selected room (no takebacks)"""
 
-		room = self.selectedRoom()
-		if room is None:
+		rooms = self.selectedRooms()
+		if rooms is None or len(rooms) == 0:
 			return
 
+		if len(rooms) == 1:
+			s = "this room"
+		else:
+			s = "these rooms"
+
 		msgBox = QMessageBox(QMessageBox.Warning,
-				"Delete Room?", "Are you sure you want to delete this room? This action cannot be undone.",
+				"Delete Room?", "Are you sure you want to delete {0}? This action cannot be undone.".format(s),
 				QMessageBox.NoButton, self)
 		msgBox.addButton("Delete", QMessageBox.AcceptRole)
 		msgBox.addButton("Cancel", QMessageBox.RejectRole)
 		if msgBox.exec_() == QMessageBox.AcceptRole:
 
-			self.list.takeItem(self.list.currentRow())
 			self.list.clearSelection()
+			for item in rooms:
+				self.list.takeItem(self.list.currentRow())
+	
 			mainWindow.dirt()
 
 	def duplicateRoom(self):
 		"""Duplicates the selected room"""
 
-		room = self.selectedRoom()
-		mainWindow.storeEntityList(room)
+		rooms = self.selectedRooms()
+		if rooms is None or len(rooms) == 0:
+			return
 
-		room.roomVariant += 1
+		mainWindow.storeEntityList()
 
-		r = Room(	room.text() + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
-					room.roomVariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
+		rv = rooms[0].roomVariant
+		v = 0
+		self.list.setCurrentItem(None, QItemSelectionModel.Clear)
 
-		self.list.insertItem(self.list.currentRow()+1, r)
+		for room in rooms:
+			v += 1
+
+			r = Room(	room.text() + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
+						v+rv, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
+
+			self.list.insertItem(self.list.currentRow()+v, r)
+			self.list.setCurrentItem(r, QItemSelectionModel.Select)
+
 		mainWindow.dirt()
 	
-	def setButtonStates(self):
-		index = self.selectedRoom()
+	def exportRoom(self):
 
-		self.removeRoomButton.setEnabled(index != -1)
-		self.duplicateRoomButton.setEnabled(index != -1)
+		# Get a new
+		dialogDir = '' if mainWindow.path is '' else os.path.dirname(mainWindow.path)
+		target = QFileDialog.getSaveFileName(self, 'Select a new name or an existing stb', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
+
+		if len(target) == 0:
+			return
+
+		path = target[0]
+
+		# Append these rooms onto the new stb
+		if os.path.exists(path):
+			rooms = self.selectedRooms()
+			oldRooms = mainWindow.open(path)
+
+			oldRooms.extend(rooms)
+
+			mainWindow.save(oldRooms, path)
+
+		# Make a new stb with the selected rooms
+		else:
+			mainWindow.save(self.selectedRooms(), path)
+
+	def setButtonStates(self):
+		rooms = len(self.selectedRooms()) > 0
+
+		self.removeRoomButton.setEnabled(rooms)
+		self.duplicateRoomButton.setEnabled(rooms)
+		self.exportRoomButton.setEnabled(rooms)
 
 	def selectedRoom(self):
 		return self.list.currentItem()
+
+	def selectedRooms(self):
+		return self.list.selectedItems()
 
 	def getRooms(self):
 		ret = []
@@ -1351,7 +1396,6 @@ class MainWindow(QMainWindow):
 		if self.path is '':
 			effectiveName = 'Untitled Map'
 		else:
-			print(self.path)
 			effectiveName = os.path.basename(self.path)
 
 		self.setWindowTitle('%s - Basement Renovator' % effectiveName)
@@ -1490,12 +1534,24 @@ class MainWindow(QMainWindow):
 		self.path = target[0]
 		self.updateTitlebar()
 
+		rooms = self.open()
+		for room in rooms:
+			self.roomList.list.addItem(room)
+
+		self.clean()
+
+	def open(self, path=None):
+
+		if not path:
+			path = self.path
+
 		# Let's read the file and parse it into our list items
-		stb = open(self.path, 'rb').read()
+		stb = open(path, 'rb').read()
 
 		# Room count
 		rooms = struct.unpack_from('<I', stb, 0)[0]
 		off = 4
+		ret = []
 
 		for room in range(rooms):
 
@@ -1531,9 +1587,9 @@ class MainWindow(QMainWindow):
 					off += 10
 
 			r = Room(roomName, doors, spawns, roomData[0], roomData[1], roomData[2], entityTable[0], entityTable[1], entityTable[2])
-			self.roomList.list.addItem(r)
+			ret.append(r)
 
-		self.clean()
+		return ret
 
 	def saveMap(self, forceNewName=False):
 		target = self.path
@@ -1548,19 +1604,19 @@ class MainWindow(QMainWindow):
 			self.path = target[0]
 			self.updateTitlebar()
 
-		self.save()
+		self.save(self.roomList.getRooms())
 		self.clean()
 
 	def saveMapAs(self):
 		self.saveMap(True)
 
-	def save(self):
+	def save(self, rooms, path=None):
+		if not path:
+			path = self.path
 
 		self.storeEntityList()
 
-		stb = open(self.path, 'wb')
-
-		rooms = self.roomList.getRooms()
+		stb = open(path, 'wb')
 		out = struct.pack('<I', len(rooms))
 
 		for room in rooms:
