@@ -16,9 +16,6 @@
 #
 #	Todo: 
 #		QSettings
-#		Make rooms sorter use only toolbuttons and menus with icons, add default icons
-#		Allow multi-selection of rooms, handle them properly, and allow duplicating, exporting, and copy/pasta between stbs
-#		Fix Background Rendering for super secret room hardcoded variants
 #
 #		Idiot proof the variant numbers further
 #			Variant number hardcoding notes:
@@ -60,7 +57,6 @@ class RoomScene(QGraphicsScene):
 					"0a_library.png", "0b_shop.png", "0c_isaacsroom.png", "0d_barrenroom.png", 
 					"0e_arcade.png", "0e_diceroom.png", "0f_secretroom.png"
 					]
-		self.roomBG = 1
 		self.grid = True
 
 		# Make the bitfont
@@ -75,38 +71,6 @@ class RoomScene(QGraphicsScene):
 		self.roomHeight = h
 
 		self.setSceneRect(-52, -52, self.roomWidth*26+52*2, self.roomHeight*26+52*2)
-
-	def setRoomBG(self, c):
-		self.roomBG = 1
-
-		roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'dark room']
-		for t in roomType:
-			if t in mainWindow.path:
-				self.roomBG = roomType.index(t)+1
-
-		if c == 12:
-			self.roomBG = 13
-		elif c == 2:
-			self.roomBG = 14
-		elif c == 18:
-			self.roomBG = 15
-		elif c == 19:
-			self.roomBG = 16
-		elif c == 9:
-			self.roomBG = 17
-		elif c == 21:
-			self.roomBG = 18
-		elif c == 7:
-			self.roomBG = 19
-
-		elif c in [10,11,13,14,17]:
-			self.roomBG = 9
-		elif c in [15]:
-			self.roomBG = 10
-		elif c in [20]:
-			self.roomBG = 11
-		elif c in [3,8]:
-			self.roomBG = 12
 
 	def clearDoors(self):
 		for item in self.items():
@@ -158,9 +122,13 @@ class RoomScene(QGraphicsScene):
 			y += ts
 
 	def drawBackground(self, painter, rect):
+		roomBG = 1
+
+		if mainWindow.roomList.selectedRoom():
+			roomBG = mainWindow.roomList.selectedRoom().roomBG
 
 		tile = QImage()
-		tile.load('resources/Backgrounds/{0}'.format(self.BG[self.roomBG-1]))
+		tile.load('resources/Backgrounds/{0}'.format(self.BG[roomBG-1]))
 
 		corner = tile.copy(		QRect(0,	0,	26*7,	26*4)	)
 		vert =   tile.copy(		QRect(26*7,	0,	26*2,	26*6)	)
@@ -604,6 +572,9 @@ class Room(QListWidgetItem):
 		self.roomWidth = width
 		self.roomHeight = height
 
+		self.roomBG = 1
+		self.setRoomBG()
+
 		self.setFlags(self.flags() | Qt.ItemIsEditable)
 		self.setToolTip()
 
@@ -650,6 +621,46 @@ class Room(QListWidgetItem):
 
 		self.setIcon(i)
 
+	def setRoomBG(self):
+		c = self.roomType
+
+		roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'dark room']
+		for t in roomType:
+			if t in mainWindow.path:
+				self.roomBG = roomType.index(t)+1
+
+		if c == 12:
+			self.roomBG = 13
+		elif c == 2:
+			self.roomBG = 14
+		elif c == 18:
+			self.roomBG = 15
+		elif c == 19:
+			self.roomBG = 16
+		elif c == 9:
+			self.roomBG = 17
+		elif c == 21:
+			self.roomBG = 18
+		elif c == 7:
+			self.roomBG = 19
+
+		elif c in [10,11,13,14,17]:
+			self.roomBG = 9
+		elif c in [15]:
+			self.roomBG = 10
+		elif c in [20]:
+			self.roomBG = 11
+		elif c in [3]:
+			self.roomBG = 12
+
+		elif c in [8]:
+			if self.roomVariant in [0,2,6]:
+				self.roomBG = 12
+			elif self.roomVariant in [1]:
+				self.roomBG = 10
+			else:
+				self.roomBG = 1
+
 class RoomDelegate(QStyledItemDelegate):
 
 	def __init__(self):
@@ -667,6 +678,25 @@ class RoomDelegate(QStyledItemDelegate):
 		if item:
 			if item.data(100):
 				painter.drawPixmap(option.rect.right()-19, option.rect.top(), self.pixmap)
+
+class FilterMenu(QMenu):
+
+	def __init__(self):
+
+		QMenu.__init__(self)
+
+	def paintEvent(self, event):
+	
+		QMenu.paintEvent(self, event)
+
+		painter = QPainter(self) 
+
+		for act in self.actions():
+			rect = self.actionGeometry(act)
+			painter.fillRect(rect.right()/2-12, rect.top()-2, 24, 24, QBrush(Qt.transparent))
+			painter.drawPixmap(rect.right()/2-12, rect.top()-2, act.icon().pixmap(24, 24));    
+
+
 
 class RoomSelector(QWidget):
 
@@ -694,45 +724,101 @@ class RoomSelector(QWidget):
 	def setupFilters(self):
 		self.filter = QHBoxLayout()
 		self.filter.setSpacing(4)
+
+		fq = QImage()
+		fq.load('resources/UI/FilterIcons.png')
 		
+		# Set the custom data
+		self.filter.typeData = -1
+		self.filter.weightData = -1
+		self.filter.sizeData = -1
+
+		# Entity Toggle Button
 		self.entityToggle = QToolButton()
 		self.entityToggle.setCheckable(True)
 		self.entityToggle.checked = False
+		self.entityToggle.setIconSize(QSize(24, 24))
 		self.entityToggle.toggled.connect(self.setEntityToggle)
 		self.entityToggle.toggled.connect(self.changeFilter)
+		self.entityToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(0,0,24,24))))
 
-		self.typeToggle = QComboBox()
-		self.weightToggle = QComboBox()
-		self.sizeToggle = QComboBox()
-						
-		# Type
+		# Type Toggle Button
+		self.typeToggle = QToolButton()
+		self.typeToggle.setIconSize(QSize(24, 24))
+		self.typeToggle.setPopupMode(QToolButton.InstantPopup)
+
+		typeMenu = QMenu()
+
 		q = QImage()
 		q.load('resources/UI/RoomIcons.png')
 
-		self.typeToggle.addItem(QIcon(), '')
+		self.typeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(1*24+4,4,16,16))))
+		act = typeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(1*24+4,4,16,16))), '')
+		act.setData(-1)
 
 		for i in range(22):
-			self.typeToggle.addItem(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
+			act = typeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
+			act.setData(i)
 
-		self.typeToggle.currentIndexChanged.connect(self.changeFilter)
+		self.typeToggle.triggered.connect(self.setTypeFilter)
+		self.typeToggle.setMenu(typeMenu)
 
-		# Make a menu for Weight
-		for w in ['No Weight',0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
-			self.weightToggle.addItem('{0}'.format(w))
+		# Weight Toggle Button
+		self.weightToggle = QToolButton()
+		self.weightToggle.setIconSize(QSize(24, 24))
+		self.weightToggle.setPopupMode(QToolButton.InstantPopup)
 
-		self.weightToggle.currentIndexChanged.connect(self.changeFilter)
+		weightMenu = FilterMenu()
 
-		# Make a menu for Size
-		sizeList = ['No Size', 'Small', 'Wide', 'Tall', 'Large']
-		self.sizeToggle.addItems(sizeList)
+		q = QImage()
+		q.load('resources/UI/WeightIcons.png')
 
-		self.sizeToggle.currentIndexChanged.connect(self.changeFilter)
+		self.weightToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(2*24,0,24,24))))
+		act = weightMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(2*24,0,24,24))), '')
+		act.setData(-1)
+		act.setIconVisibleInMenu(False)
+
+		w = [0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]
+		for i in range(8):
+			act = weightMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*24,0,24,24))), '')
+			act.setData(w[i])
+			act.setIconVisibleInMenu(False)
+
+		self.weightToggle.triggered.connect(self.setWeightFilter)
+		self.weightToggle.setMenu(weightMenu)
+
+		# Size Toggle Button
+		self.sizeToggle = QToolButton()
+		self.sizeToggle.setIconSize(QSize(24, 24))
+		self.sizeToggle.setPopupMode(QToolButton.InstantPopup)
+
+		sizeMenu = FilterMenu()
+
+		q = QImage()
+		q.load('resources/UI/SizeIcons.png')
+
+		self.sizeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(3*24,0,24,24))))
+		act = sizeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(3*24,0,24,24))), '')
+		act.setData(-1)
+		act.setIconVisibleInMenu(False)
+
+		w = ['Small', 'Wide', 'Tall', 'Large']
+		for i in range(4):
+			act = sizeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*24,0,24,24))), '')
+			act.setData(w[i])
+			act.setIconVisibleInMenu(False)
+
+		self.sizeToggle.triggered.connect(self.setSizeFilter)
+		self.sizeToggle.setMenu(sizeMenu)
 
 		# Add to Layout
+		self.filter.addStretch()
+		self.filter.addWidget(QLabel("Filter by:"))
 		self.filter.addWidget(self.entityToggle)
 		self.filter.addWidget(self.typeToggle)
 		self.filter.addWidget(self.weightToggle)
-		self.filter.addWidget(self.sizeToggle)		
+		self.filter.addWidget(self.sizeToggle)
+		self.filter.setContentsMargins(4,0,0,4)
 
 	def setupList(self):
 		self.list = QListWidget()
@@ -854,6 +940,24 @@ class RoomSelector(QWidget):
 	def setEntityToggle(self, checked):
 		self.entityToggle.checked = checked
 
+	@pyqtSlot(QAction)
+	def setTypeFilter(self, action):
+		self.filter.typeData = action.data()
+		self.typeToggle.setIcon(action.icon())
+		self.changeFilter()
+
+	@pyqtSlot(QAction)
+	def setWeightFilter(self, action):
+		self.filter.weightData = action.data()
+		self.weightToggle.setIcon(action.icon())
+		self.changeFilter()
+
+	@pyqtSlot(QAction)
+	def setSizeFilter(self, action):
+		self.filter.sizeData = action.data()
+		self.sizeToggle.setIcon(action.icon())
+		self.changeFilter()
+
 	@pyqtSlot()
 	def changeFilter(self):
 		
@@ -872,18 +976,18 @@ class RoomSelector(QWidget):
 								entityCond = True
 
 			# Check if the room is the right type
-			if self.typeToggle.currentIndex() > 0:
-				typeCond = self.typeToggle.currentIndex()-1 == room.roomType
+			if self.filter.typeData is not -1:
+				typeCond = self.filter.typeData == room.roomType
 
 			# Check if the room is the right weight
-			if self.weightToggle.currentIndex() > 0:
-				weightCond = self.weightToggle.currentText() == '{0}'.format(room.roomWeight)
+			if self.filter.weightData is not -1:
+				weightCond = self.filter.weightData == room.roomWeight
 
 			# Check if the room is the right size
-			if self.sizeToggle.currentIndex() > 0:
+			if self.filter.sizeData is not -1:
 				sizeCond = False
 
-				text = self.sizeToggle.currentText()
+				text = self.filter.sizeData
 				w = room.roomWidth
 				h = room.roomHeight
 
@@ -971,7 +1075,7 @@ class RoomSelector(QWidget):
 	def changeType(self, rtype):
 		self.selectedRoom().roomType = rtype
 		self.selectedRoom().renderDisplayIcon()
-		mainWindow.scene.setRoomBG(rtype)
+		self.selectedRoom().setRoomBG()
 		mainWindow.scene.update()
 		mainWindow.dirt()
 
@@ -1466,9 +1570,6 @@ class MainWindow(QMainWindow):
 			self.scene.newRoomSize(current.roomWidth, current.roomHeight)
 			
 			self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
-
-			# Set the Background image
-			self.scene.setRoomBG(current.roomType)
 
 			# Make some doors
 			current.clearDoors()
