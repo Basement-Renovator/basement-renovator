@@ -15,8 +15,6 @@
  #
 #
 #	Todo: 
-#		QSettings
-#
 #		Idiot proof the variant numbers further
 #			Variant number hardcoding notes:
 #				Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
@@ -297,6 +295,9 @@ class RoomEditorWidget(QGraphicsView):
 	def drawForeground(self, painter, rect):
 
 		QGraphicsView.drawForeground(self,painter,rect)
+
+		painter.setRenderHint(QPainter.Antialiasing, True)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
 		# Display the number of entities on a given tile, in bitFont or regular font
 		tiles = [[0 for y in range(26)] for x in range(14)]
@@ -695,8 +696,6 @@ class FilterMenu(QMenu):
 			rect = self.actionGeometry(act)
 			painter.fillRect(rect.right()/2-12, rect.top()-2, 24, 24, QBrush(Qt.transparent))
 			painter.drawPixmap(rect.right()/2-12, rect.top()-2, act.icon().pixmap(24, 24));    
-
-
 
 class RoomSelector(QWidget):
 
@@ -1426,7 +1425,6 @@ class MainWindow(QMainWindow):
 		self.setWindowIcon(QIcon('Resources/Koopatlas.png'))
 		self.setIconSize(QSize(16, 16))
 
-		self.path = None
 		self.dirty = False
 		
 		self.scene = RoomScene()
@@ -1438,7 +1436,15 @@ class MainWindow(QMainWindow):
 		self.setupDocks()
 		self.setupMenuBar()
 
-		self.newMap()
+
+		# Restore Settings
+		if settings.value('GridEnabled', False): self.showGrid()
+		if settings.value('BitfontEnabled', False): self.switchBitFont()
+
+		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
+		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
+
+		self.newMap()	
 		self.clean()
 
 	def setupMenuBar(self):
@@ -1481,6 +1487,7 @@ class MainWindow(QMainWindow):
 		self.roomListDock = QDockWidget('Rooms')
 		self.roomListDock.setWidget(self.roomList)
 		self.roomListDock.visibilityChanged.connect(self.updateDockVisibility)
+		self.roomListDock.setObjectName("RoomListDock")
 
 		self.roomList.list.currentItemChanged.connect(self.handleSelectedRoomChanged)
 
@@ -1490,6 +1497,7 @@ class MainWindow(QMainWindow):
 		self.EntityPaletteDock = QDockWidget('Entity Palette')
 		self.EntityPaletteDock.setWidget(self.EntityPalette)
 		self.EntityPaletteDock.visibilityChanged.connect(self.updateDockVisibility)
+		self.EntityPaletteDock.setObjectName("EntityPaletteDock")
 
 		self.EntityPalette.objChanged.connect(self.handleObjectChanged)
 		self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
@@ -1543,10 +1551,17 @@ class MainWindow(QMainWindow):
 		room.roomSpawns = spawns
 		room.roomDoors = doors
 
-	def quit(self):
-		if self.checkDirty(): return
-
-		QMainWindow.quit(self)
+	def closeEvent(self, event):
+		"""Handler for the main window close event"""
+		
+		if self.checkDirty():
+			event.ignore()
+		else:
+			# save our state			
+			settings.setValue('MainWindowGeometry', self.saveGeometry())
+			settings.setValue('MainWindowState', self.saveState(0))			
+						
+			event.accept()
 
 
 #####################
@@ -1798,7 +1813,7 @@ class MainWindow(QMainWindow):
 	@pyqtSlot()
 	def showGrid(self):
 		"""Handle toggling of the grid being showed"""
-		# settings.setValue('GridEnabled', checked)
+		settings.setValue('GridEnabled', self.scene.grid)
 
 		if self.wa.text() == "Show Grid":
 			self.scene.grid = True
@@ -1811,6 +1826,9 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def switchBitFont(self):
+		"""Handle toggling of the bitfont for entity counting"""
+		settings.setValue('BitfontEnabled', self.scene.bitText)
+
 		if self.wd.text() == "Use Aliased Counter":
 			self.scene.bitText = False
 			self.wd.setText("Use Bitfont Counter")
@@ -1889,4 +1907,29 @@ if __name__ == '__main__':
 
 	sys.exit(app.exec_())
 
+
+
+	
+	if settings.contains('GamePath'):
+		SetGamePath(settings.value('GamePath').toPyObject())
+
+	if settings.contains('MainWindowState'):
+		self.restoreState(settings.value('MainWindowState').toPyObject(), 0)
+	if settings.contains('MainWindowGeometry'):
+		self.restoreGeometry(settings.value('MainWindowGeometry').toPyObject())
+
+		# now get stuff ready
+		loaded = False
+		if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]) and IsNSMBLevel(sys.argv[1]):
+			loaded = self.LoadLevel(sys.argv[1], True, 1)
+		elif settings.contains('LastLevel'):
+			lastlevel = unicode(settings.value('LastLevel').toPyObject())
+			settings.remove('LastLevel')
+			
+			if lastlevel != 'None':
+				loaded = self.LoadLevel(lastlevel, True, 1)
+		
+		if not loaded:
+			self.LoadLevel('01-01', False, 1)
+		
 
