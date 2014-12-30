@@ -1045,7 +1045,7 @@ class RoomSelector(QWidget):
 			msgBox.addButton("Resize", QMessageBox.AcceptRole)
 			msgBox.addButton("Cancel", QMessageBox.RejectRole)
 			if msgBox.exec_() == QMessageBox.RejectRole:
-				# It's time for us to go now. B|
+				# It's time for us to go now.
 				return
 
 		# Clear the room and reset the size
@@ -1068,6 +1068,7 @@ class RoomSelector(QWidget):
 					e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 					mainWindow.scene.addItem(e)
 
+		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
 	@pyqtSlot(int)
@@ -1075,22 +1076,28 @@ class RoomSelector(QWidget):
 		self.selectedRoom().roomType = rtype
 		self.selectedRoom().renderDisplayIcon()
 		self.selectedRoom().setRoomBG()
+
+		self.selectedRoom().setToolTip()
+
 		mainWindow.scene.update()
 		mainWindow.dirt()
 
 	@pyqtSlot(int)
 	def changeVariant(self, var):
 		self.selectedRoom().roomVariant = var
+		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
 	@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
 		self.selectedRoom().roomDifficulty = int(action.text())
+		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
 	@pyqtSlot(QAction)
 	def changeWeight(self, action):
 		self.selectedRoom().roomWeight = float(action.text())
+		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
 	def keyPressEvent(self, event):
