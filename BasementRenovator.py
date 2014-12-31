@@ -1172,6 +1172,7 @@ class RoomSelector(QWidget):
 		# Get a new
 		dialogDir = '' if mainWindow.path is '' else os.path.dirname(mainWindow.path)
 		target = QFileDialog.getSaveFileName(self, 'Select a new name or an existing stb', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
+		mainWindow.restoreEditMenu()
 
 		if len(target) == 0:
 			return
@@ -1472,14 +1473,13 @@ class MainWindow(QMainWindow):
 		f.addSeparator()
 		# self.fi = f.addAction('Quit')
 
-		e = mb.addMenu('Edit')
-		self.ea = e.addAction('Copy',						self.copy, QKeySequence.Copy)
-		self.eb = e.addAction('Cut',						self.cut, QKeySequence.Cut)
-		self.ec = e.addAction('Paste',						self.paste, QKeySequence.Paste)
-		e.addSeparator()
-		self.ed = e.addAction('Select All',					self.selectAll, QKeySequence.SelectAll)
-		self.ee = e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
-		e.addSeparator()
+		self.e = mb.addMenu('Edit')
+		self.ea = self.e.addAction('Copy',						self.copy, QKeySequence.Copy)
+		self.eb = self.e.addAction('Cut',						self.cut, QKeySequence.Cut)
+		self.ec = self.e.addAction('Paste',						self.paste, QKeySequence.Paste)
+		self.ed = self.e.addAction('Select All',					self.selectAll, QKeySequence.SelectAll)
+		self.ee = self.e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
+		self.e.addSeparator()
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
@@ -1514,6 +1514,14 @@ class MainWindow(QMainWindow):
 		self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
 
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.EntityPaletteDock)
+
+	def restoreEditMenu(self):
+		a = self.e.actions()
+		self.e.insertAction(a[1], self.ea)
+		self.e.insertAction(a[2], self.eb)
+		self.e.insertAction(a[3], self.ec)
+		self.e.insertAction(a[4], self.ed)
+		self.e.insertAction(a[5], self.ee)
 
 	def updateTitlebar(self):
 		if self.path is '':
@@ -1649,6 +1657,7 @@ class MainWindow(QMainWindow):
 
 		target = QFileDialog.getOpenFileName(
 			self, 'Open Map', '', 'Stage Bundle (*.stb)')
+		self.restoreEditMenu()
 
 		# Looks like nothing was selected
 		if len(target[0]) == 0:
@@ -1724,6 +1733,7 @@ class MainWindow(QMainWindow):
 		if target is '' or forceNewName:
 			dialogDir = '' if target is '' else os.path.dirname(target)
 			target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Bundle (*.stb)')
+			self.restoreEditMenu()
 
 			if len(target) == 0:
 				return
