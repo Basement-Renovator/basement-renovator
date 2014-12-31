@@ -1154,6 +1154,7 @@ class RoomSelector(QWidget):
 		v = 0
 
 		initialPlace = self.list.currentRow()
+		self.selectedRoom().setData(100, False)
 		self.list.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
 
 		for room in rooms:
