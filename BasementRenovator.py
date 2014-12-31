@@ -216,7 +216,7 @@ class RoomEditorWidget(QGraphicsView):
 		for i in self.scene().items():
 			if isinstance(i, Entity):
 				if i.entity['X'] == x and i.entity['Y'] == y:
-					if i.entity['Type'] > 999 and self.objectToPaint.ID > 999:
+					if int(i.entity['Type']) > 999 and int(self.objectToPaint.ID) > 999:
 						return
 
 		# Make sure we're not spawning oodles
@@ -1152,7 +1152,9 @@ class RoomSelector(QWidget):
 
 		rv = rooms[0].roomVariant
 		v = 0
-		self.list.setCurrentItem(None, QItemSelectionModel.Clear)
+
+		initialPlace = self.list.currentRow()
+		self.list.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
 
 		for room in rooms:
 			v += 1
@@ -1160,7 +1162,7 @@ class RoomSelector(QWidget):
 			r = Room(	room.text() + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
 						v+rv, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
 
-			self.list.insertItem(self.list.currentRow()+v, r)
+			self.list.insertItem(initialPlace+v, r)
 			self.list.setCurrentItem(r, QItemSelectionModel.Select)
 
 		mainWindow.dirt()
@@ -1445,7 +1447,6 @@ class MainWindow(QMainWindow):
 		self.setupDocks()
 		self.setupMenuBar()
 
-
 		# Restore Settings
 		if settings.value('GridEnabled', False): self.showGrid()
 		if settings.value('BitfontEnabled', False): self.switchBitFont()
@@ -1453,6 +1454,7 @@ class MainWindow(QMainWindow):
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
 
+		# Setup a new map
 		self.newMap()	
 		self.clean()
 
@@ -1472,7 +1474,7 @@ class MainWindow(QMainWindow):
 
 		e = mb.addMenu('Edit')
 		self.ea = e.addAction('Copy',						self.copy, QKeySequence.Copy)
-		self.eb = e.addAction('Cut')						# X
+		self.eb = e.addAction('Cut',						self.cut, QKeySequence.Cut)
 		self.ec = e.addAction('Paste',						self.paste, QKeySequence.Paste)
 		e.addSeparator()
 		self.ed = e.addAction('Select All',					self.selectAll, QKeySequence.SelectAll)
@@ -1804,6 +1806,13 @@ class MainWindow(QMainWindow):
 		self.clipboard = []
 		for item in self.scene.selectedItems():
 			self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
+
+	@pyqtSlot()
+	def cut(self):
+		self.clipboard = []
+		for item in self.scene.selectedItems():
+			self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
+			item.remove()
 
 	@pyqtSlot()
 	def paste(self):
