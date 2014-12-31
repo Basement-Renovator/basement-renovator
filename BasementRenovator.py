@@ -1935,30 +1935,3 @@ if __name__ == '__main__':
 	mainWindow.show()
 
 	sys.exit(app.exec_())
-
-
-
-	
-	if settings.contains('GamePath'):
-		SetGamePath(settings.value('GamePath').toPyObject())
-
-	if settings.contains('MainWindowState'):
-		self.restoreState(settings.value('MainWindowState').toPyObject(), 0)
-	if settings.contains('MainWindowGeometry'):
-		self.restoreGeometry(settings.value('MainWindowGeometry').toPyObject())
-
-		# now get stuff ready
-		loaded = False
-		if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]) and IsNSMBLevel(sys.argv[1]):
-			loaded = self.LoadLevel(sys.argv[1], True, 1)
-		elif settings.contains('LastLevel'):
-			lastlevel = unicode(settings.value('LastLevel').toPyObject())
-			settings.remove('LastLevel')
-			
-			if lastlevel != 'None':
-				loaded = self.LoadLevel(lastlevel, True, 1)
-		
-		if not loaded:
-			self.LoadLevel('01-01', False, 1)
-		
-
