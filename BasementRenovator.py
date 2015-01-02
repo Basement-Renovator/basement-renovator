@@ -1137,8 +1137,10 @@ class RoomSelector(QWidget):
 
 			self.list.clearSelection()
 			for item in rooms:
-				self.list.takeItem(self.list.currentRow())
+				self.list.takeItem(self.list.row(item))
 	
+			self.list.scrollToItem(self.list.currentItem())
+			self.list.setCurrentItem(self.list.currentItem(), QItemSelectionModel.Select)
 			mainWindow.dirt()
 
 	def duplicateRoom(self):
