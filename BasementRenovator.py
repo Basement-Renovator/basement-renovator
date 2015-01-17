@@ -655,14 +655,24 @@ class Room(QListWidgetItem):
 			self.roomBG = 12
 
 		elif c in [8]:
-			if self.roomVariant in [2,6]:
-				self.roomBG = 12
 			elif self.roomVariant in [0]:
-				self.roomBG = 8
+				self.roomBG = 7
 			elif self.roomVariant in [1]:
 				self.roomBG = 10
-			else:
+			elif self.roomVariant in [2]:
+				self.roomBG = 9
+			elif self.roomVariant in [3]:
+				self.roomBG = 4
+			elif self.roomVariant in [4]:
+				self.roomBG = 2
+			elif self.roomVariant in [5]:
 				self.roomBG = 1
+			elif self.roomVariant in [6]:
+				self.roomBG = 12
+			elif self.roomVariant in [7]:
+				self.roomBG = 13
+			else:
+				self.roomBG = 12
 
 class RoomDelegate(QStyledItemDelegate):
 
