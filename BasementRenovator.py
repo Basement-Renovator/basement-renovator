@@ -655,7 +655,7 @@ class Room(QListWidgetItem):
 			self.roomBG = 12
 
 		elif c in [8]:
-			elif self.roomVariant in [0]:
+			if self.roomVariant in [0]:
 				self.roomBG = 7
 			elif self.roomVariant in [1]:
 				self.roomBG = 10
