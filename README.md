@@ -1,2 +1,2 @@
-# Basement Renovator fork
-I have forked Basement Renovator to apply community patches for custom entity support and possibly more.
+# Rebranded!
+This Basement Renovator fork was rebranded as [Basement Builder](http://basementbuilder.github.io).
