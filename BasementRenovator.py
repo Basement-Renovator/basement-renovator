@@ -1100,13 +1100,13 @@ class RoomSelector(QWidget):
         def changeSize(self, action):
  
                 # Set the Size
-                if action.text() == "Small":
+                if action.text().replace('&', '') == "Small":
                         w,h = 13,7
-                elif action.text() == "Wide":
+                elif action.text().replace('&', '') == "Wide":
                         w,h = 26,7
-                elif action.text() == "Tall":
+                elif action.text().replace('&', '') == "Tall":
                         w,h = 13,14
-                elif action.text() == "Large":
+                elif action.text().replace('&', '') == "Large":
                         w,h = 26,14
  
                 # No sense in doing work we don't have to!
@@ -1176,13 +1176,13 @@ class RoomSelector(QWidget):
  
         @pyqtSlot(QAction)
         def changeDifficulty(self, action):
-                self.selectedRoom().roomDifficulty = int(action.text())
+                self.selectedRoom().roomDifficulty = int(action.text().replace('&', ''))
                 self.selectedRoom().setToolTip()
                 mainWindow.dirt()
  
         @pyqtSlot(QAction)
         def changeWeight(self, action):
-                self.selectedRoom().roomWeight = float(action.text())
+                self.selectedRoom().roomWeight = float(action.text().replace('&', ''))
                 self.selectedRoom().setToolTip()
                 mainWindow.dirt()
  
