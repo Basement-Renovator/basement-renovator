@@ -1967,33 +1967,33 @@ class MainWindow(QMainWindow):
 
 		if self.checkDirty(): return
 
-		#target = QFileDialog.getOpenFileName(
-		#	self, 'Open Map', '', 'Stage Bundle (*.stb)')
+		target = QFileDialog.getOpenFileName(
+			self, 'Open Map', '', 'Stage Bundle (*.stb)')
 		self.restoreEditMenu()
 
 		# Looks like nothing was selected
-		#if len(target[0]) == 0:
-		#	return
+		if len(target[0]) == 0:
+			return
 
 		self.roomList.list.clear()
 		self.scene.clear()
 		self.path = ''
 
-		#self.path = target[0]
-		self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/"
+		self.path = target[0]
+		# self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/"
 		self.updateTitlebar()
 
-		filecheck = ["00.special rooms.stb", "01.basement.stb", "02.cellar.stb", "04.caves.stb", "05.catacombs.stb", "07.depths.stb", "08.necropolis.stb", "10.womb.stb", "11.utero.stb", "13.blue womb.stb", "14.sheol.stb", "15.cathedral.stb", "16.dark room.stb", "17.chest.stb", "18.greed special.stb", "19.greed basement.stb", "20.greed caves.stb", "21.greed depths.stb", "22.greed womb.stb", "23.greed sheol.stb", "24.greed the shop.stb", "25.ultra greed.stb"]
-		filecheck = ["01.basement.stb"]
-		for f in filecheck:
-			print (f)
-			self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/" + f
+		# filecheck = ["00.special rooms.stb", "01.basement.stb", "02.cellar.stb", "04.caves.stb", "05.catacombs.stb", "07.depths.stb", "08.necropolis.stb", "10.womb.stb", "11.utero.stb", "13.blue womb.stb", "14.sheol.stb", "15.cathedral.stb", "16.dark room.stb", "17.chest.stb", "18.greed special.stb", "19.greed basement.stb", "20.greed caves.stb", "21.greed depths.stb", "22.greed womb.stb", "23.greed sheol.stb", "24.greed the shop.stb", "25.ultra greed.stb"]
+		# filecheck = ["01.basement.stb"]
+		# for f in filecheck:
+		# 	print (f)
+		# 	self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/" + f
 
-			rooms = self.open()
-			for room in rooms:
-				self.roomList.list.addItem(room)
+		rooms = self.open()
+		for room in rooms:
+			self.roomList.list.addItem(room)
 
-			self.clean()
+		self.clean()
 	
 	def openRecent(self):
 		if self.checkDirty(): return
@@ -2082,7 +2082,7 @@ class MainWindow(QMainWindow):
 			
 		settings.setValue("RecentFiles", recent)
 		self.setupFileMenuBar()
-		print (rt)
+		# print (rt)
 		return ret
 
 	def saveMap(self, forceNewName=False):
