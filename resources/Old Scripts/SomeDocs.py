@@ -1,3 +1,39 @@
+AFTERBIRTH CHANGES:
+
+New subvariant added:
+	# Room Type, Room Variant, Subvariant, Difficulty, Length of Room Name String
+	roomData = struct.unpack_from('<IIIBH', stb, off)
+
+	0-64, usually 0 except for special rooms
+
+
+New room shapes:
+	# Weight, width, height, shape, number of doors, number of entities
+	entityTable = struct.unpack_from('<fBBBBH', stb, off)
+
+
+Room Shapes:
+	w x h -> 
+		1 = 1x1, 
+		2 = 1x0.5, 
+		3 = 0.5x1, 
+		4 = 2x1, 
+		5 = 2x0.5, 
+		6 = 1x2, 
+		7 = 0.5x2, 
+		8 = 2x2, 
+		9 = corner?, 
+		10 = corner?, 
+		11 = corner?, 
+		12 = corner? 
+
+
+
+
+
+REBIRTH STUFF HERE:
+
+
 Known Room Params:
 
 'size': {(26, 7), (13, 14), (13, 7), (26, 14), (0, 0)}
