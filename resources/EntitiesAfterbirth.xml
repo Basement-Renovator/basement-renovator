@@ -1,7 +1,7 @@
 <data>
-	<entity Group="Unknown" ID="0" Image="resources/Entities/collectibles/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="10" />
-	<entity Group="Unknown" ID="0" Image="resources/Entities/collectibles/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="20" />
-	<entity Group="Unknown" ID="0" Image="resources/Entities/collectibles/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="30" />
+	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="10" />
+	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="20" />
+	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="30" />
 
 	<entity Group="Broken" ID="1" Image="resources/Entities/1.0.0 - Player.png" Kind="Stage" Name="Player (crashes)" Subtype="0" Variant="0" />
 	<entity Group="Tears" ID="2" Image="resources/Entities/2.0.0 - Tear.png" Kind="Stage" Name="Tear" Subtype="0" Variant="0" />
@@ -978,9 +978,29 @@
 	<entity BaseHP="250" Boss="1" Group="Boss Rooms" ID="405" Image="resources/Entities/405.0.0 - Rag Man.png" Kind="Bosses" Name="Rag Man" Subtype="0" Variant="0" />
 	<entity BaseHP="3500" Boss="1" Group="The Sins" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Kind="Bosses" Name="Ultra Greed" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate" Subtype="0" Variant="1" />
+
+
+
+	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
 	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" />
-	<entity Group="Traps" ID="5000" Image="resources/Entities/collectibles/questionmark.png" Kind="Stage" Name="Unknown" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="5001" Image="resources/Entities/collectibles/questionmark.png" Kind="Stage" Name="Unknown" Subtype="0" Variant="0" />
+	<entity Group="Arcade" ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Kind="Stage" Name="Greed Machine" Subtype="0" Variant="11" />
+	<entity Boss="1" Group="Boss Rooms" ID="407" Image="resources/Entities/407.0.0 - Hush.png" Kind="Bosses" Name="Hush" Subtype="0" Variant="0" />
+	<entity Boss="1" Group="Boss Rooms" ID="408" Image="resources/Entities/408.0.0 - Skinless Hush.png" Kind="Bosses" Name="Skinless Hush" Subtype="0" Variant="0" />
+
+	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
+	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" />
+
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.42 - Get Out of Jail Free Card.png" Kind="Pickups" Name="Get Out of Jail Free Card" Subtype="42" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.43 - ? Card.png" Kind="Pickups" Name="? Card" Subtype="43" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.44 - Dice Shard.png" Kind="Pickups" Name="Dice Shard" Subtype="44" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.45 - Emergency Contact.png" Kind="Pickups" Name="Emergency Contact" Subtype="45" Variant="300" />
+
+
+
+
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill?" Subtype="12" Variant="70" />
+	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
 
 </data>

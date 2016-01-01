@@ -16,21 +16,17 @@
  #
 #
 #	Todo: 
-#		Idiot proof the variant numbers further
+#		Idiot proof the variant/subvariant numbers further
 #			Variant number hardcoding notes:
 #				Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
 #
 #
 #   Afterbirth Todo:
-#		Update room definition with subvariant and difficulty
-#		Room Size filtering
-#		Check and test missing entities (Mostly just cards/runes at this point...? Also maybe greed machine and pushable dynamite)
 #		Test Saving
 #
 #	Low priority
 #		Clear Corner Rooms Grid
 #		Auto-testing feature
-#		Entity tooltips
 #		Custom entity variant stuff
 #
 
@@ -192,7 +188,7 @@ class RoomScene(QGraphicsScene):
 
 		# Uh oh
 		else:
-			print ("This room is not a known shape.")
+			print ("This room is not a known shape. {0} - {1} x {2}".format(self.roomShape, self.roomWidth, self.roomHeight))
 			self.drawBGRegularRooms(painter, rect)
 
 	def drawBGRegularRooms(self, painter, rect):
@@ -599,6 +595,8 @@ class Entity(QGraphicsItem):
 
 		if not hasattr(Entity, 'SELECTION_PEN'):
 			Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
+
+		self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
 	
 	def getEntityInfo(self, t, subtype, variant):
 
@@ -615,6 +613,7 @@ class Entity(QGraphicsItem):
 			if self.entity['Type'] is 5 and self.entity['Variant'] is 100:
 				i = QImage()
 				i.load('resources/Entities/5.100.0 - Collectible.png')
+				i = i.convertToFormat(QImage.Format_ARGB32)
 
 				d = QImage()
 				d.load(en.get('Image'))
@@ -630,7 +629,7 @@ class Entity(QGraphicsItem):
 				self.entity['pixmap'].load(en.get('Image'))
 
 		except:
-			print ("Entitiy {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
+		 	print ("Entity {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
 
 	def itemChange(self, change, value):
 
@@ -1091,17 +1090,16 @@ class RoomSelector(QWidget):
 		sizeMenu = FilterMenu()
 
 		q = QImage()
-		q.load('resources/UI/SizeIcons.png')
+		q.load('resources/UI/ShapeIcons.png')
 
 		self.sizeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(3*24,0,24,24))))
 		act = sizeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(3*24,0,24,24))), '')
 		act.setData(-1)
 		act.setIconVisibleInMenu(False)
 
-		w = ['Small', 'Wide', 'Tall', 'Large']
-		for i in range(4):
-			act = sizeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*24,0,24,24))), '')
-			act.setData(w[i])
+		for i in range(12):
+			act = sizeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
+			act.setData(i+1)
 			act.setIconVisibleInMenu(False)
 
 		self.sizeToggle.triggered.connect(self.setSizeFilter)
@@ -1213,6 +1211,8 @@ class RoomSelector(QWidget):
 
 		weight.triggered.connect(self.changeWeight)
 
+		menu.addSeparator()
+
 		# Variant
 		Variant = QWidgetAction(menu)
 		s = QSpinBox()
@@ -1223,6 +1223,17 @@ class RoomSelector(QWidget):
 		Variant.setDefaultWidget(s)
 		s.valueChanged.connect(self.changeVariant)
 		menu.addAction(Variant)
+
+		# SubVariant
+		Subvariant = QWidgetAction(menu)
+		sv = QSpinBox()
+		sv.setRange(0,256)
+
+		sv.setValue(self.selectedRoom().roomSubvariant)
+
+		Subvariant.setDefaultWidget(sv)
+		sv.valueChanged.connect(self.changeSubvariant)
+		menu.addAction(Subvariant)
 
 		# End it
 		menu.exec_(self.list.mapToGlobal(pos))
@@ -1278,17 +1289,9 @@ class RoomSelector(QWidget):
 			if self.filter.sizeData is not -1:
 				sizeCond = False
 
-				text = self.filter.sizeData
-				w = room.roomWidth
-				h = room.roomHeight
+				shape = self.filter.sizeData
 
-				if w is 13 and h is 7 and text == 'Small':
-					sizeCond = True
-				if w is 26 and h is 7 and text == 'Wide':
-					sizeCond = True
-				if w is 13 and h is 14 and text == 'Tall':
-					sizeCond = True
-				if w is 26 and h is 14 and text == 'Large':
+				if room.roomShape == shape:
 					sizeCond = True
 
 			# Filter em' out
@@ -1379,6 +1382,12 @@ class RoomSelector(QWidget):
 	@pyqtSlot(int)
 	def changeVariant(self, var):
 		self.selectedRoom().roomVariant = var
+		self.selectedRoom().setToolTip()
+		mainWindow.dirt()
+
+	@pyqtSlot(int)
+	def changeSubvariant(self, var):
+		self.selectedRoom().roomSubvariant = var
 		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
@@ -1606,7 +1615,7 @@ class EntityGroupModel(QAbstractListModel):
 		if ((role > 1) and (role < 6)):
 			return None
 
-		elif (role == Qt.ForegroundRole):
+		elif role == Qt.ForegroundRole:
 			return QBrush(Qt.black)
 
 		elif role == Qt.TextAlignmentRole:
@@ -1967,31 +1976,31 @@ class MainWindow(QMainWindow):
 
 		if self.checkDirty(): return
 
-		target = QFileDialog.getOpenFileName(
-			self, 'Open Map', '', 'Stage Bundle (*.stb)')
-		self.restoreEditMenu()
+		# target = QFileDialog.getOpenFileName(
+		# 	self, 'Open Map', '', 'Stage Bundle (*.stb)')
+		# self.restoreEditMenu()
 
 		# Looks like nothing was selected
-		if len(target[0]) == 0:
-			return
+		# if len(target[0]) == 0:
+		# 	return
 
 		self.roomList.list.clear()
 		self.scene.clear()
 		self.path = ''
 
-		self.path = target[0]
-		# self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/"
+		# self.path = target[0]
+		self.path = "/Users/Chronometrics/Desktop/rooms/"
 		self.updateTitlebar()
 
-		# filecheck = ["00.special rooms.stb", "01.basement.stb", "02.cellar.stb", "04.caves.stb", "05.catacombs.stb", "07.depths.stb", "08.necropolis.stb", "10.womb.stb", "11.utero.stb", "13.blue womb.stb", "14.sheol.stb", "15.cathedral.stb", "16.dark room.stb", "17.chest.stb", "18.greed special.stb", "19.greed basement.stb", "20.greed caves.stb", "21.greed depths.stb", "22.greed womb.stb", "23.greed sheol.stb", "24.greed the shop.stb", "25.ultra greed.stb"]
-		# filecheck = ["01.basement.stb"]
-		# for f in filecheck:
-		# 	print (f)
-		# 	self.path = "/Users/Chronometrics/Dropbox/Basement Renovator/Basement-Renovator/rooms/" + f
+		filecheck = ["00.special rooms.stb", "01.basement.stb", "02.cellar.stb", "04.caves.stb", "05.catacombs.stb", "07.depths.stb", "08.necropolis.stb", "10.womb.stb", "11.utero.stb", "13.blue womb.stb", "14.sheol.stb", "15.cathedral.stb", "16.dark room.stb", "17.chest.stb", "18.greed special.stb", "19.greed basement.stb", "20.greed caves.stb", "21.greed depths.stb", "22.greed womb.stb", "23.greed sheol.stb", "24.greed the shop.stb", "25.ultra greed.stb"]
+		# filecheck = ["00.special rooms.stb"]
+		for f in filecheck:
+			print (f)
+			self.path = "/Users/Chronometrics/Desktop/rooms/" + f
 
-		rooms = self.open()
-		for room in rooms:
-			self.roomList.list.addItem(room)
+			rooms = self.open()
+			for room in rooms:
+				self.roomList.list.addItem(room)
 
 		self.clean()
 	
@@ -2013,7 +2022,7 @@ class MainWindow(QMainWindow):
 		self.clean()
 	
 	def open(self, path=None):
-		rt = set()
+
 		if not path:
 			path = self.path
 
@@ -2038,7 +2047,7 @@ class MainWindow(QMainWindow):
 			roomData = struct.unpack_from('<IIIBH', stb, off)
 			off += 0xF
 			#print ("Room Data: {0}".format(roomData))
-			rt.add(roomData[0])
+
 			# Room Name
 			roomName = struct.unpack_from('<{0}s'.format(roomData[4]), stb, off)[0].decode()
 			off += roomData[4]
@@ -2082,7 +2091,7 @@ class MainWindow(QMainWindow):
 			
 		settings.setValue("RecentFiles", recent)
 		self.setupFileMenuBar()
-		# print (rt)
+
 		return ret
 
 	def saveMap(self, forceNewName=False):
@@ -2112,7 +2121,9 @@ class MainWindow(QMainWindow):
 		self.storeEntityList()
 
 		stb = open(path, 'wb')
-		out = struct.pack('<I', len(rooms))
+
+		out = struct.pack('<4s', "STB1".encode())
+		out += struct.pack('<I', len(rooms))
 
 		for room in rooms:
 
