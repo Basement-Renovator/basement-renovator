@@ -1246,6 +1246,8 @@ class RoomSelector(QWidget):
 
 	@pyqtSlot(QPoint)
 	def customContextMenu(self, pos):
+		if not self.selectedRoom(): return
+
 		menu = QMenu(self.list)
 
 		# Size Changing Menu
