@@ -880,7 +880,10 @@ class Room(QListWidgetItem):
 
 		QListWidgetItem.__init__(self)
 
-		self.setText(name)
+		# self.setText(name)
+
+		self.setData(Qt.DisplayRole, name)
+		self.setText("{0} - {1}".format(variant, self.data(Qt.DisplayRole)))
 
 		self.roomSpawns = spawns
 		self.roomDoors = doors
@@ -1222,7 +1225,11 @@ class RoomSelector(QWidget):
 		self.exportRoomButton = self.toolbar.addAction(QIcon(), 'Export...', self.exportRoom)
 
 	def activateEdit(self):
+		room = self.selectedRoom()
+		room.setText(room.data(Qt.DisplayRole))
 		self.list.editItem(self.selectedRoom())
+		room.setData(room.text())
+		room.setText("{0} - {1}".format(room.roomVariant, room.data(Qt.DisplayRole)))
 
 	@pyqtSlot(QPoint)
 	def customContextMenu(self, pos):
