@@ -553,15 +553,15 @@ class RoomEditorWidget(QGraphicsView):
 
 			# Top Text
 			font = painter.font()
-			font.setPixelSize(12)
+			font.setPixelSize(13)
 			painter.setFont(font)
-			painter.drawText( 20, 16, "{0} - {1}".format(room.roomVariant, room.data(Qt.DisplayRole)) )
+			painter.drawText( 20, 16, "{0} - {1}".format(room.roomVariant, room.data(0x100)) )
 
 			# Bottom Text
 			font = painter.font()
-			font.setPixelSize(8)
+			font.setPixelSize(10)
 			painter.setFont(font)
-			painter.drawText( 4, 26, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight) )
+			painter.drawText( 4, 30, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight) )
 
 		painter.end()
 
@@ -882,8 +882,8 @@ class Room(QListWidgetItem):
 
 		# self.setText(name)
 
-		self.setData(Qt.DisplayRole, name)
-		self.setText("{0} - {1}".format(variant, self.data(Qt.DisplayRole)))
+		self.setData(0x100, name)
+		self.setText("{0} - {1}".format(variant, self.data(0x100)))
 
 		self.roomSpawns = spawns
 		self.roomDoors = doors
@@ -1216,6 +1216,8 @@ class RoomSelector(QWidget):
 		self.list.doubleClicked.connect(self.activateEdit)
 		self.list.customContextMenuRequested.connect(self.customContextMenu)
 
+		self.list.itemDelegate().closeEditor.connect(self.editComplete)
+
 	def setupToolbar(self):
 		self.toolbar = QToolBar()
 
@@ -1224,12 +1226,23 @@ class RoomSelector(QWidget):
 		self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
 		self.exportRoomButton = self.toolbar.addAction(QIcon(), 'Export...', self.exportRoom)
 
+		# self.IDButton = self.toolbar.addAction(QIcon(), 'ID', self.turnIDsOn)
+		# self.IDButton.setCheckable(True)
+		# self.IDButton.setChecked(True)
+
 	def activateEdit(self):
 		room = self.selectedRoom()
-		room.setText(room.data(Qt.DisplayRole))
+		room.setText(room.data(0x100))
 		self.list.editItem(self.selectedRoom())
-		room.setData(room.text())
-		room.setText("{0} - {1}".format(room.roomVariant, room.data(Qt.DisplayRole)))
+
+	def editComplete(self, lineEdit):
+		room = self.selectedRoom()
+		room.setData(0x100, lineEdit.text())
+		room.setText("{0} - {1}".format(room.roomVariant, room.data(0x100)))
+
+	@pyqtSlot(bool)
+	def turnIDsOn(self):
+		return
 
 	@pyqtSlot(QPoint)
 	def customContextMenu(self, pos):
@@ -1548,7 +1561,7 @@ class RoomSelector(QWidget):
 		for room in rooms:
 			v += 1
 
-			r = Room(	room.data(Qt.DisplayRole) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
+			r = Room(	room.data(0x100) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
 						v+rv, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
 
 			self.list.insertItem(initialPlace+v, r)
@@ -2206,9 +2219,9 @@ class MainWindow(QMainWindow):
 
 		for room in rooms:
 
-			out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.data(Qt.DisplayRole))),
-							 room.roomType, room.roomVariant, room.roomSubvariant, room.roomDifficulty, len(room.data(Qt.DisplayRole)),
-							 room.data(Qt.DisplayRole).encode(), room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
+			out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.data(0x100))),
+							 room.roomType, room.roomVariant, room.roomSubvariant, room.roomDifficulty, len(room.data(0x100)),
+							 room.data(0x100).encode(), room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
 
 			# Doors and Entities
 			out += struct.pack('<BH', len(room.roomDoors), room.getSpawnCount())
@@ -2290,7 +2303,7 @@ class MainWindow(QMainWindow):
 		
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
-			room.roomType, room.roomVariant, room.roomDifficulty, room.data(Qt.DisplayRole),
+			room.roomType, room.roomVariant, room.roomDifficulty, room.data(0x100),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
 		

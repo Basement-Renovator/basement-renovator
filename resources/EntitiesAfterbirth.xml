@@ -802,7 +802,7 @@
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.281 - Punching Bag.png" Kind="Collect" Name="Punching Bag" Subtype="281" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.318 - Gemini.png" Kind="Collect" Name="Gemini" Subtype="318" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.319 - Cain's Other Eye.png" Kind="Collect" Name="Cain's Other Eye" Subtype="319" Variant="100" />
-	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.320 - ???'s Only Friend.png" Kind="Collect" Name="???'s Only Friend" Subtype="320" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.320 - Blue Baby's Only Friend.png" Kind="Collect" Name="???'s Only Friend" Subtype="320" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.321 - Samson's Chains.png" Kind="Collect" Name="Samson's Chains" Subtype="321" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.322 - Mongo Baby.png" Kind="Collect" Name="Mongo Baby" Subtype="322" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.360 - Incubus.png" Kind="Collect" Name="Incubus" Subtype="360" Variant="100" />
@@ -883,7 +883,7 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.054 - Isaac's Head.png" Kind="Collect" Name="Isaac's Head" Subtype="54" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.055 - Maggy's Faith.png" Kind="Collect" Name="Maggy's Faith" Subtype="55" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.056 - Judas' Tongue.png" Kind="Collect" Name="Judas' Tongue" Subtype="56" Variant="350" />
-	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.057 - ???'s Soul.png" Kind="Collect" Name="???'s Soul" Subtype="57" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.057 - Blue Baby's Soul.png" Kind="Collect" Name="???'s Soul" Subtype="57" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.058 - Samson's Lock.png" Kind="Collect" Name="Samson's Lock" Subtype="58" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.059 - Cain's Eye.png" Kind="Collect" Name="Cain's Eye" Subtype="59" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.060 - Eve's Bird Foot.png" Kind="Collect" Name="Eve's Bird Foot" Subtype="60" Variant="350" />
@@ -939,7 +939,7 @@
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.0 - Scarred Guts.png" Kind="Enemies" Name="Scarred Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="35" Champion="1" Group="Lumps" ID="58" Image="resources/Entities/58.1.0 - Scarred Para-Bite.png" Kind="Enemies" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
 	<entity BaseHP="200" Boss="1" Group="Boss Rooms" ID="62" Image="resources/Entities/62.2.0 - The Frail.png" Kind="Bosses" Name="The Frail" Subtype="0" Variant="2" />
-	<entity BaseHP="1000" Boss="1" Group="Boss Rooms" ID="102" Image="resources/Entities/102.2.0 - ??? (Alt).png" Kind="Bosses" Name="??? (Alt)" Subtype="0" Variant="2" />
+	<entity BaseHP="1000" Boss="1" Group="Boss Rooms" ID="102" Image="resources/Entities/102.2.0 - Blue Baby (Alt).png" Kind="Bosses" Name="??? (Alt)" Subtype="0" Variant="2" />
 	<entity BaseHP="18" Group="Fatties" ID="208" Image="resources/Entities/208.2.0 - Flaming Fatty.png" Kind="Enemies" Name="Flaming Fatty" Subtype="0" Variant="2" />
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.1.0 - Dank Death's Head.png" Kind="Enemies" Name="Dank Death's Head" Subtype="0" Variant="1" />
 	<entity BaseHP="3" Group="Poop" ID="217" Image="resources/Entities/217.1.0 - Corn.png" Kind="Enemies" Name="Corn" Subtype="0" Variant="1" />
