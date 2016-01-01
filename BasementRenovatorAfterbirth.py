@@ -22,7 +22,7 @@
 #
 #
 #   Afterbirth Todo:
-#		Test Saving
+#		Fix up Rebirth/Afterbirth detection
 #
 #	Low priority
 #		Clear Corner Rooms Grid
@@ -2373,7 +2373,7 @@ class MainWindow(QMainWindow):
 	def aboutDialog(self):
 		caption = "About the Basement Renovator"
 
-		text = "<big><b>Basement Renovator</b></big><br><br>    The Basement Renovator Editor is an editor for custom rooms, for use with the Binding of Isaac Rebirth. In order to use it, you must have unpacked the .stb files from Binding of Isaac Rebirth.<br><br>    The Basement Renovator was programmed by Tempus (u/Chronometrics).<br><br>    Find the source at <github link here>."
+		text = "<big><b>Basement Renovator</b></big><br><br>    The Basement Renovator Editor is an editor for custom rooms, for use with the Binding of Isaac Afterbirth. In order to use it, you must have unpacked the .stb files from Binding of Isaac Afterbirth.<br><br>    The Basement Renovator was programmed by Tempus (u/Chronometrics).<br><br>    Find the source on <a href='https://github.com/Tempus/Basement-Renovator'>github</a>."
 		
 		msg = QMessageBox.about(mainWindow, caption, text)
 
