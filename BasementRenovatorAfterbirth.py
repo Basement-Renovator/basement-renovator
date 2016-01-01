@@ -420,6 +420,8 @@ class RoomEditorWidget(QGraphicsView):
 		
 		self.assignNewScene(scene)
 
+		self.statusBar = True
+
 	def assignNewScene(self, scene):
 		self.setScene(scene)
 		self.centerOn(0,0)
@@ -524,8 +526,46 @@ class RoomEditorWidget(QGraphicsView):
 		else:
 			self.setAlignment(Qt.AlignVCenter|Qt.AlignLeft)
 
-	def drawForeground(self, painter, rect):
+	def paintEvent(self, event):
+		#Purely handles the status overlay text
+		QGraphicsView.paintEvent(self, event)
 
+		if not self.statusBar: return
+
+		# Display the room status in a text overlay
+
+		painter = QPainter()
+		painter.begin(self.viewport())
+
+		painter.setRenderHint(QPainter.Antialiasing, True)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+
+		room = mainWindow.roomList.selectedRoom()
+		if room:
+			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
+
+			# Room Type Icon
+			q = QPixmap()
+			q.load('resources/UI/RoomIcons.png')
+
+			i = QIcon()
+			painter.drawPixmap(2,3, q.copy(room.roomType*16,0,16,16))
+
+			# Top Text
+			font = painter.font()
+			font.setPixelSize(12)
+			painter.setFont(font)
+			painter.drawText( 20, 16, "{0} - {1}".format(room.roomVariant, room.text()) )
+
+			# Bottom Text
+			font = painter.font()
+			font.setPixelSize(8)
+			painter.setFont(font)
+			painter.drawText( 4, 26, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight) )
+
+		painter.end()
+
+	def drawForeground(self, painter, rect):
 		QGraphicsView.drawForeground(self,painter,rect)
 
 		painter.setRenderHint(QPainter.Antialiasing, True)
@@ -766,7 +806,6 @@ class Entity(QGraphicsItem):
 			painter.drawText(4,32,str(self.entity['Variant']))
 			painter.drawText(4,48,str(self.entity['Subtype']))
 	
-
 	def remove(self):
 		self.scene().removeItem(self)
 
@@ -1794,6 +1833,7 @@ class MainWindow(QMainWindow):
 
 		# Restore Settings
 		if settings.value('GridEnabled', False): self.showGrid()
+		if settings.value('StatusEnabled', False): self.showStatus()
 		if settings.value('BitfontEnabled', False): self.switchBitFont()
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
@@ -1839,13 +1879,14 @@ class MainWindow(QMainWindow):
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
+		self.we = v.addAction('Hide Status Bar',			self.showStatus, QKeySequence("Ctrl+B"))
 		self.wd = v.addAction('Use Aliased Counter',		self.switchBitFont, QKeySequence("Ctrl+Alt+A"))
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
 
-		r = mb.addMenu('Run')
-		self.ra = r.addAction('Test Current Room',			self.testMap, QKeySequence("F5"))
+		# r = mb.addMenu('Run')
+		# self.ra = r.addAction('Test Current Room',			self.testMap, QKeySequence("F5"))
 		
 		h = mb.addMenu('Help')
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
@@ -2318,6 +2359,22 @@ class MainWindow(QMainWindow):
 			self.scene.grid = False
 			self.wa.setText("Show Grid")
 		
+		self.scene.update()
+
+	@pyqtSlot()
+	def showStatus(self):
+		"""Handle toggling of the grid being showed"""
+		settings.setValue('StatusEnabled', self.editor.statusBar)
+
+		if self.we.text() == "Show Status Bar":
+			self.editor.statusBar = True
+			self.we.setText("Hide Status Bar")
+		else:
+			self.editor.statusBar = False
+			self.we.setText("Show Status Bar")
+		
+		self.editor.repaint()
+		self.editor.update()
 		self.scene.update()
 
 	@pyqtSlot()
