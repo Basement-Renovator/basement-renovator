@@ -685,8 +685,11 @@ class Entity(QGraphicsItem):
 
 		if self.entity['pixmap']:
 			x = -(self.entity['pixmap'].width() -26) / 2
-			y = -(self.entity['pixmap'].height()-26) / 2
+			y = -(self.entity['pixmap'].height()-26)
 			
+			# if self.isSelected():
+			# 	painter.fillRect(0,0,26,26, QBrush(Qt.green, Qt.DiagCrossPattern))
+
 			# Creeper special case
 			if self.entity['Type'] in [240, 241, 242]: 
 				w = self.scene().roomWidth -1
@@ -698,7 +701,9 @@ class Entity(QGraphicsItem):
 				closest = min(distances)
 				direction = distances.index(closest)
 
+				# Wall lines
 				painter.setPen(QPen(QColor(220,220,180), 2, Qt.DashDotLine))
+				painter.setBrush(Qt.NoBrush)
 
 				if direction == 0: # Right
 					painter.drawLine(26,13, closest*26+26, 13)
@@ -718,16 +723,49 @@ class Entity(QGraphicsItem):
 			else:
 				painter.drawPixmap(x,y,self.entity['pixmap'])
 
+			if self.isSelected():
+				painter.setPen(self.SELECTION_PEN)
+				painter.setBrush(Qt.NoBrush)
+				painter.drawRect(x,y,self.entity['pixmap'].width(), self.entity['pixmap'].height())
+
+				# painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
+
+				# moveIcon = QPixmap()
+				# moveIcon.load('resources/UI/MoveIcon.png')
+				# painter.drawPixmap(0,0,moveIcon)
+				# s = 14
+				# painter.setPen(Qt.transparent)
+				# painter.setBrush(QColor(255,0,0,64))
+				# painter.drawEllipse(13-(s/2),13-(s/2),s,s)
+				
+				# s = 8
+				# painter.setBrush(QColor(255,0,0,64))
+				# painter.drawEllipse(13-(s/2),13-(s/2),s,s)
+
+				painter.setPen(Qt.green)
+				painter.drawLine(0,0,0,4)
+				painter.drawLine(0,0,4,0)
+
+				painter.drawLine(26,0,26,4)
+				painter.drawLine(26,0,22,0)
+
+				painter.drawLine(0,26,4,26)
+				painter.drawLine(0,26,0,22)
+
+				painter.drawLine(26,26,22,26)
+				painter.drawLine(26,26,26,22)
+
+				# painter.drawLine(4 , 4, 8, 8)
+				# painter.drawLine(22, 4,18, 8)
+				# painter.drawLine(4 ,22, 8,18)
+				# painter.drawLine(22,22,18,18)
+
 		else:
 			painter.drawRect(0, 0, 26, 26)
 			painter.drawText(4,16,str(self.entity['Type']))
 			painter.drawText(4,32,str(self.entity['Variant']))
 			painter.drawText(4,48,str(self.entity['Subtype']))
 	
-		if self.isSelected():
-			painter.setPen(self.SELECTION_PEN)
-			painter.setBrush(Qt.NoBrush)
-			painter.drawRect(x,y,self.entity['pixmap'].width(), self.entity['pixmap'].height())
 
 	def remove(self):
 		self.scene().removeItem(self)
@@ -2137,7 +2175,7 @@ class MainWindow(QMainWindow):
 					out += struct.pack('<hhB', x[0], y[0], len(x[1]))
 
 					for entity in x[1]:
-						out += struct.pack('<HHHf', entity[0], entity[1], entity[2], 2.0)
+						out += struct.pack('<HHHf', entity[0], entity[1], entity[2], entity[3])
 
 		stb.write(out)
 
