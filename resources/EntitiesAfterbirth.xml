@@ -1006,6 +1006,6 @@
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
 
-
+	<entity Group="Traps" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
 
 </data>
