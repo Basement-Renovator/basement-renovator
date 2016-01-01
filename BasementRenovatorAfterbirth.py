@@ -166,8 +166,7 @@ class RoomScene(QGraphicsScene):
 
 	def drawBackground(self, painter, rect):
 
-		if not self.tile:
-			self.loadBackground()
+		self.loadBackground()
 
 		########## SHAPE DEFINITIONS
 		# w x h
