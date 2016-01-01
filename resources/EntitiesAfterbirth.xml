@@ -1,7 +1,7 @@
 <data>
-	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="10" />
-	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="20" />
-	<entity Group="Unknown" ID="0" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Ladders or something?" Subtype="0" Variant="30" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.0.10 - Random Props A.png" Kind="Stage" Name="Random Props A" Subtype="0" Variant="10" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.0.20 - Random Props B.png" Kind="Stage" Name="Random Props B" Subtype="0" Variant="20" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.0.30 - Random Props C.png" Kind="Stage" Name="Random Props C" Subtype="0" Variant="30" />
 
 	<entity Group="Broken" ID="1" Image="resources/Entities/1.0.0 - Player.png" Kind="Stage" Name="Player (crashes)" Subtype="0" Variant="0" />
 	<entity Group="Tears" ID="2" Image="resources/Entities/2.0.0 - Tear.png" Kind="Stage" Name="Tear" Subtype="0" Variant="0" />
@@ -1002,5 +1002,10 @@
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill?" Subtype="12" Variant="70" />
 	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
+
+	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
+	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
+
+
 
 </data>
