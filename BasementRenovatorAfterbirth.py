@@ -437,8 +437,8 @@ class RoomEditorWidget(QGraphicsView):
 
 		clicked = self.mapToScene(event.x(), event.y())
 		x, y = clicked.x(), clicked.y()
-		if x > self.scene().roomWidth  * 26: return
-		if y > self.scene().roomHeight * 26: return
+		if x > self.scene().roomWidth  * 26: x = (self.scene().roomWidth-1)  * 26
+		if y > self.scene().roomHeight * 26: y = (self.scene().roomHeight-1) * 26
 
 		if x < 0: x = 0
 		if y < 0: y = 0
