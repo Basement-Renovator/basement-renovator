@@ -555,7 +555,7 @@ class RoomEditorWidget(QGraphicsView):
 			font = painter.font()
 			font.setPixelSize(12)
 			painter.setFont(font)
-			painter.drawText( 20, 16, "{0} - {1}".format(room.roomVariant, room.text()) )
+			painter.drawText( 20, 16, "{0} - {1}".format(room.roomVariant, room.data(Qt.DisplayRole)) )
 
 			# Bottom Text
 			font = painter.font()
@@ -1548,7 +1548,7 @@ class RoomSelector(QWidget):
 		for room in rooms:
 			v += 1
 
-			r = Room(	room.text() + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
+			r = Room(	room.data(Qt.DisplayRole) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
 						v+rv, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
 
 			self.list.insertItem(initialPlace+v, r)
@@ -2206,9 +2206,9 @@ class MainWindow(QMainWindow):
 
 		for room in rooms:
 
-			out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.text())),
-							 room.roomType, room.roomVariant, room.roomSubvariant, room.roomDifficulty, len(room.text()),
-							 room.text().encode(), room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
+			out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.data(Qt.DisplayRole))),
+							 room.roomType, room.roomVariant, room.roomSubvariant, room.roomDifficulty, len(room.data(Qt.DisplayRole)),
+							 room.data(Qt.DisplayRole).encode(), room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
 
 			# Doors and Entities
 			out += struct.pack('<BH', len(room.roomDoors), room.getSpawnCount())
@@ -2290,7 +2290,7 @@ class MainWindow(QMainWindow):
 		
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
-			room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
+			room.roomType, room.roomVariant, room.roomDifficulty, room.data(Qt.DisplayRole),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
 		
