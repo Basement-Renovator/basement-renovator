@@ -1355,7 +1355,7 @@ class RoomSelector(QWidget):
 		for room in self.getRooms():
 			IDCond = entityCond = typeCond = weightCond = sizeCond = True
 
-			if self.IDFilter.text().lowercase() not in room.text().lowercase():
+			if self.IDFilter.text().lower() not in room.text().lower():
 				IDCond = False
 
 			# Check if the right entity is in the room
