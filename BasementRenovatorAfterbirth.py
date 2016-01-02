@@ -726,8 +726,10 @@ class Entity(QGraphicsItem):
 			x = -(self.entity['pixmap'].width() -26) / 2
 			y = -(self.entity['pixmap'].height()-26)
 			
-			# if self.isSelected():
-			# 	painter.fillRect(0,0,26,26, QBrush(Qt.green, Qt.DiagCrossPattern))
+			# Curse room special case
+			if self.entity['Type'] is 5 and self.entity['Variant'] is 50 and mainWindow.roomList.selectedRoom().roomType == 10:
+				self.entity['pixmap'] = QPixmap()
+				self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
 
 			# Creeper special case
 			if self.entity['Type'] in [240, 241, 242]: 
@@ -767,20 +769,7 @@ class Entity(QGraphicsItem):
 				painter.setBrush(Qt.NoBrush)
 				painter.drawRect(x,y,self.entity['pixmap'].width(), self.entity['pixmap'].height())
 
-				# painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
-
-				# moveIcon = QPixmap()
-				# moveIcon.load('resources/UI/MoveIcon.png')
-				# painter.drawPixmap(0,0,moveIcon)
-				# s = 14
-				# painter.setPen(Qt.transparent)
-				# painter.setBrush(QColor(255,0,0,64))
-				# painter.drawEllipse(13-(s/2),13-(s/2),s,s)
-				
-				# s = 8
-				# painter.setBrush(QColor(255,0,0,64))
-				# painter.drawEllipse(13-(s/2),13-(s/2),s,s)
-
+				# Grid space boundary
 				painter.setPen(Qt.green)
 				painter.drawLine(0,0,0,4)
 				painter.drawLine(0,0,4,0)
@@ -793,11 +782,6 @@ class Entity(QGraphicsItem):
 
 				painter.drawLine(26,26,22,26)
 				painter.drawLine(26,26,26,22)
-
-				# painter.drawLine(4 , 4, 8, 8)
-				# painter.drawLine(22, 4,18, 8)
-				# painter.drawLine(4 ,22, 8,18)
-				# painter.drawLine(22,22,18,18)
 
 		else:
 			painter.drawRect(0, 0, 26, 26)
