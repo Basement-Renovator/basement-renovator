@@ -1840,7 +1840,6 @@ class MainWindow(QMainWindow):
 		QMainWindow.__init__(self)
 
 		self.setWindowTitle('Basement Renovator')
-		self.setWindowIcon(QIcon('Resources/BasementRenovator-Small.png'))
 		self.setIconSize(QSize(16, 16))
 
 		self.dirty = False
@@ -1864,7 +1863,6 @@ class MainWindow(QMainWindow):
 
 		# Setup a new map
 		self.newMap()	
-		#self.openMap()
 		self.clean()
 	
 	def setupFileMenuBar(self):
@@ -1969,11 +1967,11 @@ class MainWindow(QMainWindow):
 		return True
 
 	def dirt(self):
-		self.setWindowIcon(QIcon('Resources/BasementRenovator-SmallDirty.png'))
+		self.setWindowIcon(QIcon('resources/UI/BasementRenovator-SmallDirty.png'))
 		self.dirty = True
 
 	def clean(self):
-		self.setWindowIcon(QIcon('Resources/BasementRenovator-Small.png'))
+		self.setWindowIcon(QIcon('resources/UI/BasementRenovator-Small.png'))
 		self.dirty = False
 
 	def storeEntityList(self, room=None):
@@ -2075,6 +2073,7 @@ class MainWindow(QMainWindow):
 
 		self.updateTitlebar()
 		self.dirt()
+		self.roomList.changeFilter()
 
 	def openMap(self):
 
@@ -2100,6 +2099,7 @@ class MainWindow(QMainWindow):
 			self.roomList.list.addItem(room)
 
 		self.clean()
+		self.roomList.changeFilter()
 	
 	def openRecent(self):
 		if self.checkDirty(): return
@@ -2117,6 +2117,7 @@ class MainWindow(QMainWindow):
 			self.roomList.list.addItem(room)
 
 		self.clean()
+		self.roomList.changeFilter()
 	
 	def open(self, path=None):
 
@@ -2207,6 +2208,7 @@ class MainWindow(QMainWindow):
 
 		self.save(self.roomList.getRooms())
 		self.clean()
+		self.roomList.changeFilter()
 
 	def saveMapAs(self):
 		self.saveMap(True)
@@ -2471,12 +2473,11 @@ if __name__ == '__main__':
 
 	# Application
 	app = QApplication(sys.argv)
-	app.setWindowIcon(QIcon('resources/UI/BasementRenovator.png'))
+	app.setWindowIcon(QIcon('resources/UI/BasementRenovator-Small.png'))
 
 	settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 
 	mainWindow = MainWindow()
-	mainWindow.setWindowIcon(QIcon('resources/UI/BasementRenovator-Small.png'))
 	mainWindow.setGeometry(100, 500, 1280, 600)
 	mainWindow.show()
 
