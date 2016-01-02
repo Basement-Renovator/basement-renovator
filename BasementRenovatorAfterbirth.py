@@ -1365,7 +1365,7 @@ class RoomSelector(QWidget):
 				for x in room.roomSpawns:
 					for y in x:
 						for e in y:
-							if int(self.filterEntity.ID) in e and int(self.filterEntity.subtype) in e and int(self.filterEntity.variant) in e:
+							if int(self.filterEntity.ID) is e[0] and int(self.filterEntity.subtype) is e[1] and int(self.filterEntity.variant) is e[2]:
 								entityCond = True
 
 			# Check if the room is the right type
