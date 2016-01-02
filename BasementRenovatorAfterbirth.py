@@ -1365,7 +1365,7 @@ class RoomSelector(QWidget):
 				for x in room.roomSpawns:
 					for y in x:
 						for e in y:
-							if int(self.filterEntity.ID) is e[0] and int(self.filterEntity.subtype) is e[1] and int(self.filterEntity.variant) is e[2]:
+							if int(self.filterEntity.ID) is e[0] and int(self.filterEntity.subtype) is e[2] and int(self.filterEntity.variant) is e[1]:
 								entityCond = True
 
 			# Check if the room is the right type
@@ -1969,9 +1969,11 @@ class MainWindow(QMainWindow):
 		return True
 
 	def dirt(self):
+		self.setWindowIcon(QIcon('Resources/BasementRenovator-SmallDirty.png'))
 		self.dirty = True
 
 	def clean(self):
+		self.setWindowIcon(QIcon('Resources/BasementRenovator-Small.png'))
 		self.dirty = False
 
 	def storeEntityList(self, room=None):
