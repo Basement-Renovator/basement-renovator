@@ -1355,7 +1355,7 @@ class RoomSelector(QWidget):
 		for room in self.getRooms():
 			IDCond = entityCond = typeCond = weightCond = sizeCond = True
 
-			if self.IDFilter.text() not in room.text():
+			if self.IDFilter.text().lowercase() not in room.text().lowercase():
 				IDCond = False
 
 			# Check if the right entity is in the room
@@ -1461,39 +1461,48 @@ class RoomSelector(QWidget):
 
 	@pyqtSlot(int)
 	def changeType(self, rtype):
-		self.selectedRoom().roomType = rtype
-		self.selectedRoom().renderDisplayIcon()
-		self.selectedRoom().setRoomBG()
+		for r in self.selectedRooms():
+			r.roomType = rtype
+			r.renderDisplayIcon()
+			r.setRoomBG()
 
-		self.selectedRoom().setToolTip()
+			r.setToolTip()
 
 		mainWindow.scene.update()
 		mainWindow.dirt()
 
 	@pyqtSlot(int)
 	def changeVariant(self, var):
-		self.selectedRoom().roomVariant = var
-		self.selectedRoom().setToolTip()
+		for r in self.selectedRooms():
+			r.roomVariant = var
+			r.setToolTip()
 		mainWindow.dirt()
+		mainWindow.scene.update()
 
 	@pyqtSlot(int)
 	def changeSubvariant(self, var):
-		self.selectedRoom().roomSubvariant = var
-		self.selectedRoom().setToolTip()
+		for r in self.selectedRooms():
+			r.roomSubvariant = var
+			r.setToolTip()
 		mainWindow.dirt()
+		mainWindow.scene.update()
 
 	@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
+		for r in self.selectedRooms():
 		#self.selectedRoom().roomDifficulty = int(action.text())
-		self.selectedRoom().setDifficulty(int(action.text()))
-		self.selectedRoom().setToolTip()
+			r.setDifficulty(int(action.text()))
+			r.setToolTip()
 		mainWindow.dirt()
+		mainWindow.scene.update()
 
 	@pyqtSlot(QAction)
 	def changeWeight(self, action):
-		self.selectedRoom().roomWeight = float(action.text())
-		self.selectedRoom().setToolTip()
+		for r in self.selectedRooms():
+			r.roomWeight = float(action.text())
+			r.setToolTip()
 		mainWindow.dirt()
+		mainWindow.scene.update()
 
 	def keyPressEvent(self, event):
 		self.list.keyPressEvent(event)
@@ -2387,8 +2396,6 @@ class MainWindow(QMainWindow):
 			self.editor.statusBar = False
 			self.we.setText("Show Status Bar")
 		
-		self.editor.repaint()
-		self.editor.update()
 		self.scene.update()
 
 	@pyqtSlot()
