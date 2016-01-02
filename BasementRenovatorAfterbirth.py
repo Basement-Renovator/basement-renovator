@@ -668,7 +668,7 @@ class Entity(QGraphicsItem):
 				self.entity['pixmap'].load(en.get('Image'))
 
 		except:
-		 	print ("Entity {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
+			print ("Entity {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
 
 	def itemChange(self, change, value):
 
@@ -1107,6 +1107,11 @@ class RoomSelector(QWidget):
 		self.filter.weightData = -1
 		self.filter.sizeData = -1
 
+		# ID Filter
+		self.IDFilter = QLineEdit()
+		self.IDFilter.setPlaceholderText("ID / Name")
+		self.IDFilter.textChanged.connect(self.changeFilter)
+
 		# Entity Toggle Button
 		self.entityToggle = QToolButton()
 		self.entityToggle.setCheckable(True)
@@ -1187,6 +1192,7 @@ class RoomSelector(QWidget):
 		# Add to Layout
 		self.filter.addStretch()
 		self.filter.addWidget(QLabel("Filter by:"))
+		self.filter.addWidget(self.IDFilter)
 		self.filter.addWidget(self.entityToggle)
 		self.filter.addWidget(self.typeToggle)
 		self.filter.addWidget(self.weightToggle)
@@ -1363,7 +1369,10 @@ class RoomSelector(QWidget):
 		
 		# Here we go
 		for room in self.getRooms():
-			entityCond = typeCond = weightCond = sizeCond = True
+			IDCond = entityCond = typeCond = weightCond = sizeCond = True
+
+			if self.IDFilter.text() not in room.text():
+				IDCond = False
 
 			# Check if the right entity is in the room
 			if self.entityToggle.checked and self.filterEntity:
@@ -1393,7 +1402,7 @@ class RoomSelector(QWidget):
 					sizeCond = True
 
 			# Filter em' out
-			if entityCond and typeCond and weightCond and sizeCond:
+			if IDCond and entityCond and typeCond and weightCond and sizeCond:
 				room.setHidden(False)
 			else:
 				room.setHidden(True)		
