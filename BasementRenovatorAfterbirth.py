@@ -2295,6 +2295,7 @@ class MainWindow(QMainWindow):
 	@pyqtSlot()
 	def testMap(self):
 		if self.roomList.selectedRoom() == None:
+			QMessageBox.warning(self, "Error", "No room was selected to test.")
 			return
 
 		# Auto-tests by adding the room to basement.
@@ -2312,25 +2313,49 @@ class MainWindow(QMainWindow):
 		newRooms = [testRoom, Room()]
 
 		# Check for existing files, and backup if necessary
-		backupFlag = False
+		backupFlagBasement = False
 		if QFile.exists(resourcesPath + "/rooms/01.basement.stb"):
 			os.replace(resourcesPath + "/rooms/01.basement.stb", resourcesPath + "/rooms/01.basement (backup).stb")
-			backupFlag = True
+			backupFlagBasement = True
+
+		backupFlagCellar = False
+		if QFile.exists(resourcesPath + "/rooms/02.cellar.stb"):
+			os.replace(resourcesPath + "/rooms/02.cellar.stb", resourcesPath + "/rooms/02.cellar (backup).stb")
+			backupFlagCellar = True
 
 		self.save(newRooms, resourcesPath + "/rooms/01.basement.stb")
+		self.save(newRooms, resourcesPath + "/rooms/02.cellar.stb")
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
 
 		# Prompt to restore backup
-		if backupFlag:
-			result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 01.basement.stb")
-			if result == QMessageBox.Ok:
-				os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
+		if testRoom.roomShape is not 1:
+			message = "As you have a non-stand room shape, it's suggested to use the seed 'LABY RNTH' in order to spawn them semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+		else:
+			message = "Press 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+
+		result = QMessageBox.information(self, "Restore Backup", message)
+
+		if result == QMessageBox.Ok:
+			os.remove(resourcesPath + "/rooms/01.basement.stb")
+			os.remove(resourcesPath + "/rooms/02.cellar.stb")
+			if backupFlagBasement or backupFlagCellar:
+				if backupFlagBasement:
+					os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
+				if backupFlagCellar:
+					os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
+
+		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
+		try:
+			os.rmdir(resourcesPath + "/rooms/")
+		except:
+			pass
 
 	@pyqtSlot()
 	def testStartMap(self):
 		if self.roomList.selectedRoom() == None:
+			QMessageBox.warning(self, "Error", "No room was selected to test.")
 			return
 
 		# Sanity check for 1x1 room
@@ -2346,30 +2371,19 @@ class MainWindow(QMainWindow):
 		if resourcesPath == "":
 			return
 
-		# Locate the 00.special rooms.stb
-		specialRoomsPath = ""
-		if QFile.exists(settings.value('specialRoomsPath')):
-			specialRoomsPath = settings.value('specialRoomsPath')
-		else:
-			specialRoomsPath = QFileDialog.getOpenFileName(self, 'Please Locate a 00.special rooms.stb file', '', '')[0]
-
-		# Looks like nothing was selected
-		if len(specialRoomsPath) == 0:
-			QMessageBox.warning(self, "Error", "Could not find a valid 00.special rooms.stb")
-			return
-
-		settings.setValue("specialRoomsPath", specialRoomsPath)
-
 		# Parse the special rooms, replace the spawns
+		if not QFile.exists("resources/teststart.stb"):
+			QMessageBox.warning(self, "Error", "You seem to be missing the teststart.stb from resources. Please redownload Basement Renovator.")
+
 		foundYou = False
-		rooms = self.open(specialRoomsPath)
+		rooms = self.open("resources/teststart.stb")
 		for room in rooms:
 			if "Start Room" in room.data(0x100):
 				room.roomSpawns = testRoom.roomSpawns
 				foundYou = True
 
 		if not foundYou:
-			QMessageBox.warning(self, "Error", "This is not a valid 00.special rooms.stb")
+			QMessageBox.warning(self, "Error", "teststart.stb has been tampered with, and is no longer a valid stb file.")
 			return
 
 		# Backup, parse, find the start room, replace it, resave, restore backup
@@ -2379,16 +2393,23 @@ class MainWindow(QMainWindow):
 			backupFlag = True
 
 		# Resave the file
-		self.save(rooms, specialRoomsPath)
+		self.save(rooms, resourcesPath + "/rooms/00.special rooms.stb")
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
 	
 		# Prompt to restore backup
-		if backupFlag:
-			result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb")
-			if result == QMessageBox.Ok:
+		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb")
+		if result == QMessageBox.Ok:
+			os.remove(resourcesPath + "/rooms/00.special rooms.stb")
+			if backupFlag:
 				os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
+
+		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
+		try:
+			os.rmdir(resourcesPath + "/rooms/")
+		except:
+			pass
 
 	def findResourcePath(self):
 
@@ -2430,6 +2451,10 @@ class MainWindow(QMainWindow):
 				return
 
 			settings.setValue('ResourceFolder', resourcesPath)
+
+		# make sure 'rooms' exists
+		if not QFile.exists(resourcesPath + "/rooms/"):
+			os.mkdir(resourcesPath + "/rooms/")
 
 		return resourcesPath
 
