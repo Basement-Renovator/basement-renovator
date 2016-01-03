@@ -2695,6 +2695,8 @@ if __name__ == '__main__':
 
 	import sys
 
+	webbrowser.open('http://platinumgod.co.uk/darkbum/not')
+
 	# XML Globals
 	entityXML = getEntityXML()
 
