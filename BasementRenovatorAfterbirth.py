@@ -2331,9 +2331,9 @@ class MainWindow(QMainWindow):
 
 		# Prompt to restore backup
 		if testRoom.roomShape is not 1:
-			message = "As you have a non-stand room shape, it's suggested to use the seed 'LABY RNTH' in order to spawn them semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+			message = "As you have a non-standard room shape, it's suggested to use the seed 'LABY RNTH' in order to spawn them semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
 		else:
-			message = "Press 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+			message = "Press 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb."
 
 		result = QMessageBox.information(self, "Restore Backup", message)
 
@@ -2363,7 +2363,7 @@ class MainWindow(QMainWindow):
 		testRoom = self.roomList.selectedRoom()
 
 		if testRoom.roomShape is not 1:
-			QMessageBox.warning(self, "Error", "You may only test 1x1 rooms as the Starting room.")
+			QMessageBox.warning(self, "Error", "You may only test 1x1 rooms as the Start Room.")
 			return
 
 		# Auto-tests by adding the room to basement.
@@ -2399,7 +2399,7 @@ class MainWindow(QMainWindow):
 		webbrowser.open('steam://rungameid/250900')
 	
 		# Prompt to restore backup
-		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb")
+		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb.")
 		if result == QMessageBox.Ok:
 			os.remove(resourcesPath + "/rooms/00.special rooms.stb")
 			if backupFlag:
