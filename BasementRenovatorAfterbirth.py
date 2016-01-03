@@ -1929,8 +1929,8 @@ class MainWindow(QMainWindow):
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
 
 		r = mb.addMenu('Test')
-		self.ra = r.addAction('Test Current Room',			self.testMap, QKeySequence("Ctrl+T"))
-		self.ra = r.addAction('Start Current Room',			self.testStartMap, QKeySequence("Ctrl+Shift+T"))
+		self.ra = r.addAction('Test Current Room - Basement',		self.testMap, QKeySequence("Ctrl+T"))
+		self.ra = r.addAction('Test Current Room - Start',			self.testStartMap, QKeySequence("Ctrl+Shift+T"))
 		
 		h = mb.addMenu('Help')
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
@@ -2294,23 +2294,95 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def testMap(self):
+		# Auto-tests by adding the room to basement.
 		resourcesPath = self.findResourcePath()
 		if resourcesPath == "":
 			return
 
 		# Set the selected room to max weight
+		self.storeEntityList(self.roomList.selectedRoom())
 		testRoom = self.roomList.selectedRoom()
 		testRoom.roomWeight = 1000.0
+		testRoom.roomDifficulty = 1
 
-		# Make a new stb with a blank room, and save it to resources
+		# Make a new stb with a blank room
 		newRooms = [testRoom, Room()]
+
+		# Check for existing files, and backup if necessary
+		backupFlag = False
+		if QFile.exists(resourcesPath + "/rooms/01.basement.stb"):
+			os.replace(resourcesPath + "/rooms/01.basement.stb", resourcesPath + "/rooms/01.basement (backup).stb")
+			backupFlag = True
+
 		self.save(newRooms, resourcesPath + "/rooms/01.basement.stb")
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
 
+		# Prompt to restore backup
+		if backupFlag:
+			result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 01.basement.stb")
+			if result == QMessageBox.Ok:
+				os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
+
+	@pyqtSlot()
 	def testStartMap(self):
-		return
+		# Sanity check for 1x1 room
+		self.storeEntityList(self.roomList.selectedRoom())
+		testRoom = self.roomList.selectedRoom()
+
+		if testRoom.roomShape is not 1:
+			QMessageBox.warning(self, "Error", "You may only test 1x1 rooms as the Starting room.")
+			return
+
+		# Auto-tests by adding the room to basement.
+		resourcesPath = self.findResourcePath()
+		if resourcesPath == "":
+			return
+
+		# Locate the 00.special rooms.stb
+		specialRoomsPath = ""
+		if QFile.exists(settings.value('specialRoomsPath')):
+			specialRoomsPath = settings.value('specialRoomsPath')
+		else:
+			specialRoomsPath = QFileDialog.getOpenFileName(self, 'Please Locate a 00.special rooms.stb file', '', '')[0]
+
+		# Looks like nothing was selected
+		if len(specialRoomsPath) == 0:
+			QMessageBox.warning(self, "Error", "Could not find a valid 00.special rooms.stb")
+			return
+
+		settings.setValue("specialRoomsPath", specialRoomsPath)
+
+		# Parse the special rooms, replace the spawns
+		foundYou = False
+		rooms = self.open(specialRoomsPath)
+		for room in rooms:
+			if "Start Room" in room.data(0x100):
+				room.roomSpawns = testRoom.roomSpawns
+				foundYou = True
+
+		if not foundYou:
+			QMessageBox.warning(self, "Error", "This is not a valid 00.special rooms.stb")
+			return
+
+		# Backup, parse, find the start room, replace it, resave, restore backup
+		backupFlag = False
+		if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
+			os.replace(resourcesPath + "/rooms/00.special rooms.stb", resourcesPath + "/rooms/00.special rooms (backup).stb")
+			backupFlag = True
+
+		# Resave the file
+		self.save(rooms, specialRoomsPath)
+
+		# Launch Isaac
+		webbrowser.open('steam://rungameid/250900')
+	
+		# Prompt to restore backup
+		if backupFlag:
+			result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb")
+			if result == QMessageBox.Ok:
+				os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
 
 	def findResourcePath(self):
 
