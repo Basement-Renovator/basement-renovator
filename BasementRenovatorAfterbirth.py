@@ -2330,6 +2330,7 @@ class MainWindow(QMainWindow):
 		# Set the selected room to max weight
 		self.storeEntityList(self.roomList.selectedRoom())
 		testRoom = self.roomList.selectedRoom()
+		testRoom.roomType = 1
 		testRoom.roomWeight = 1000.0
 		testRoom.roomDifficulty = 1
 
