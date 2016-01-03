@@ -1566,13 +1566,13 @@ class RoomSelector(QWidget):
 			v += 1
 
 			r = Room(	room.data(0x100) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
-						v+rv, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight)
+						v+rv, room.roomSubvariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
 
 			self.list.insertItem(initialPlace+v, r)
 			self.list.setCurrentItem(r, QItemSelectionModel.Select)
 
 		mainWindow.dirt()
-
+	
 	def exportRoom(self):
 
 		# Get a new
