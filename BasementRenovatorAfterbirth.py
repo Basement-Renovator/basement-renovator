@@ -724,7 +724,13 @@ class Entity(QGraphicsItem):
 
 		if self.entity['pixmap']:
 			x = -(self.entity['pixmap'].width() -26) / 2
-			y = -(self.entity['pixmap'].height()-26)
+
+			# Centering code
+			zamiellLovesMakingMyCodeDirty = [44, 236, 218]
+			if self.entity['Type'] in zamiellLovesMakingMyCodeDirty or (self.entity['Type'] == 5 and self.entity['Variant'] == 380):
+				y = -(self.entity['pixmap'].height()-26) / 2
+			else:
+				y = -(self.entity['pixmap'].height()-26)
 			
 			# Curse room special case
 			if self.entity['Type'] is 5 and self.entity['Variant'] is 50 and mainWindow.roomList.selectedRoom().roomType == 10:
