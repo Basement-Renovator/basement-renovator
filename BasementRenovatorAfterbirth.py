@@ -35,7 +35,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-import struct, os, subprocess
+import struct, os, subprocess, platform, webbrowser
 import xml.etree.ElementTree as ET
 
 
@@ -1922,14 +1922,15 @@ class MainWindow(QMainWindow):
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
-		self.we = v.addAction('Hide Status Bar',			self.showStatus, QKeySequence("Ctrl+B"))
+		self.we = v.addAction('Hide Info',					self.showStatus, QKeySequence("Ctrl+I"))
 		self.wd = v.addAction('Use Aliased Counter',		self.switchBitFont, QKeySequence("Ctrl+Alt+A"))
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
 
-		# r = mb.addMenu('Run')
-		# self.ra = r.addAction('Test Current Room',			self.testMap, QKeySequence("F5"))
+		r = mb.addMenu('Test')
+		self.ra = r.addAction('Test Current Room',			self.testMap, QKeySequence("Ctrl+T"))
+		self.ra = r.addAction('Start Current Room',			self.testStartMap, QKeySequence("Ctrl+Shift+T"))
 		
 		h = mb.addMenu('Help')
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
@@ -2293,6 +2294,69 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def testMap(self):
+		resourcesPath = self.findResourcePath()
+		if resourcesPath == "":
+			return
+
+		# Set the selected room to max weight
+		testRoom = self.roomList.selectedRoom()
+		testRoom.roomWeight = 1000.0
+
+		# Make a new stb with a blank room, and save it to resources
+		newRooms = [testRoom, Room()]
+		self.save(newRooms, resourcesPath + "/rooms/01.basement.stb")
+
+		# Launch Isaac
+		webbrowser.open('steam://rungameid/250900')
+
+	def testStartMap(self):
+		return
+
+	def findResourcePath(self):
+
+		resourcePath = ''
+
+		if QFile.exists(settings.value('ResourceFolder')):
+			resourcesPath = settings.value('ResourceFolder')
+
+		else:
+			cantFindPath = False
+			# Windows path things
+			if "Windows" in platform.system():
+				basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
+				if not exePath:
+					cantFindPath = True
+				
+				resourcesPath = basePath + "/steamapps/common/The Binding of Isaac Rebirth/resources"
+				if not QFile.exists(resourcesPath):
+					cantFindPath = True
+
+			# Mac Path things
+			elif "Darwin" in platform.system():
+				resourcesPath = os.path.expanduser("~/Library/Application Support/Steam/steamapps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources/resources")
+				if not QFile.exists(resourcesPath):
+					cantFindPath = True
+
+			# Linux and others
+			else:
+				cantFindPath = True
+
+
+			# Fallback Resource Folder Locating
+			if cantFindPath == True:
+				resourcesPath = QFileDialog.getOpenFileName(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder', '', '')[0]
+
+			# Looks like nothing was selected
+			if len(resourcesPath) == 0:
+				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth Resources folder (" + resourcesPath + ")")
+				return
+
+			settings.setValue('ResourceFolder', resourcesPath)
+
+		return resourcesPath
+
+	@pyqtSlot()
+	def testMapInjectionRebirth(self):
 		room = self.roomList.list.currentItem()
 		if not room:
 			return
@@ -2418,12 +2482,12 @@ class MainWindow(QMainWindow):
 		"""Handle toggling of the grid being showed"""
 		settings.setValue('StatusEnabled', self.editor.statusBar)
 
-		if self.we.text() == "Show Status Bar":
+		if self.we.text() == "Show Info Bar":
 			self.editor.statusBar = True
-			self.we.setText("Hide Status Bar")
+			self.we.setText("Hide Info Bar")
 		else:
 			self.editor.statusBar = False
-			self.we.setText("Show Status Bar")
+			self.we.setText("Show Info Bar")
 		
 		self.scene.update()
 
@@ -2471,7 +2535,6 @@ class MainWindow(QMainWindow):
 			self.wc.setText('Hide Room List')
 		else:
 			self.wc.setText('Show Room List')
-
 
 # Help
 ########################
