@@ -969,7 +969,7 @@ class Room(QListWidgetItem):
 	def setRoomBG(self):
 		c = self.roomType
 
-		roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'darkroom', 'bluewomb']
+		roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'dark room', 'bluewomb']
 		
 		self.roomBG = 1
 		
