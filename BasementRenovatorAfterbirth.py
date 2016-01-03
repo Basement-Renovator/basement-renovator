@@ -1476,6 +1476,7 @@ class RoomSelector(QWidget):
 		for r in self.selectedRooms():
 			r.roomVariant = var
 			r.setToolTip()
+			r.setText("{0} - {1}".format(r.roomVariant, r.data(0x100)))
 		mainWindow.dirt()
 		mainWindow.scene.update()
 
