@@ -2100,6 +2100,7 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
+		self.setWindowFilePath(self.path)
 	
 	def openRecent(self):
 		if self.checkDirty(): return
@@ -2118,6 +2119,7 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
+		self.setWindowFilePath(self.path)
 	
 	def open(self, path=None):
 
@@ -2209,6 +2211,7 @@ class MainWindow(QMainWindow):
 		self.save(self.roomList.getRooms())
 		self.clean()
 		self.roomList.changeFilter()
+		self.setWindowFilePath(self.path)
 
 	def saveMapAs(self):
 		self.saveMap(True)
