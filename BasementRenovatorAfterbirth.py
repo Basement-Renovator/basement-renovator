@@ -2476,7 +2476,7 @@ if __name__ == '__main__':
 
 	# Application
 	app = QApplication(sys.argv)
-	app.setWindowIcon(QIcon('resources/UI/BasementRenovator-Small.png'))
+	app.setWindowIcon(QIcon('resources/UI/BasementRenovator.png'))
 
 	settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 
