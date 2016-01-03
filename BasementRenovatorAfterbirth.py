@@ -2310,7 +2310,19 @@ class MainWindow(QMainWindow):
 		testRoom.roomDifficulty = 1
 
 		# Make a new stb with a blank room
-		newRooms = [testRoom, Room()]
+		padMe = True
+		if testRoom.roomShape not in [2,3]:
+			padMe = False			
+			for door in testRoom.roomDoors:
+				if door[2] == False:
+					padMe = True
+
+		# Needs a padded room
+		if padMe:
+			newRooms = [testRoom, Room(difficulty=10, weight=0.1)]
+		else:
+			newRooms = [testRoom]
+
 
 		# Check for existing files, and backup if necessary
 		backupFlagBasement = False
@@ -2330,8 +2342,8 @@ class MainWindow(QMainWindow):
 		webbrowser.open('steam://rungameid/250900')
 
 		# Prompt to restore backup
-		if testRoom.roomShape is not 1:
-			message = "As you have a non-standard room shape, it's suggested to use the seed 'LABY RNTH' in order to spawn them semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+		if padMe:
+			message = "As you have a non-standard doors or shape, it's suggested to use the seed 'LABY RNTH' in order to spawn the room semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
 		else:
 			message = "Press 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb."
 
