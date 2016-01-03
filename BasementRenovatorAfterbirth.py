@@ -1370,7 +1370,22 @@ class RoomSelector(QWidget):
 
 			# Check if the room is the right type
 			if self.filter.typeData is not -1:
-				typeCond = self.filter.typeData == room.roomType
+				if self.filter.typeData == 0: # This is a null room, but we'll look for empty rooms too
+					typeCond = (self.filter.typeData == room.roomType) or (len(room.roomSpawns) == 0)
+
+					uselessEntities = [0, 1, 2, 1940]
+					hasUsefulEntities = False
+					for y in enumerate(room.roomSpawns):
+						for x in enumerate(y[1]):
+							for entity in x[1]:
+								if entity[0] not in uselessEntities:
+									hasUsefulEntities = True
+
+					if typeCond == False and hasUsefulEntities == False:
+						typeCond = True
+
+				else: # All the normal rooms
+					typeCond = self.filter.typeData == room.roomType
 
 			# Check if the room is the right weight
 			if self.filter.weightData is not -1:
