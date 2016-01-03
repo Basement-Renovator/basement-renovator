@@ -1667,15 +1667,19 @@ class EntityGroupItem(object):
 		self.startIndex = index
 		self.endIndex = len(self.objects) + index
 
-class EntityItem(object):
+class EntityItem(QStandardItem):
 	"""A single entity, pretty much just an icon and a few params."""
 
 	def __init__(self, name, ID, subtype, variant, iconPath):
+		QStandardItem.__init__(self)
+
 		self.name = name
 		self.ID = ID
 		self.subtype = subtype
 		self.variant = variant
 		self.icon = QIcon(iconPath)
+
+		self.setToolTip(name)
 
 class EntityGroupModel(QAbstractListModel):
 	"""Model containing all the grouped objects in a tileset"""
@@ -1757,6 +1761,7 @@ class EntityGroupModel(QAbstractListModel):
 				return item.icon
 
 		if role == Qt.ToolTipRole or role == Qt.StatusTipRole or role == Qt.WhatsThisRole:
+			print (role)
 			if isinstance(item, EntityItem):
 				return "{0}".format(item.name) 
 
@@ -1805,15 +1810,10 @@ class EntityPalette(QWidget):
 		self.tabs = QTabWidget()
 		self.layout.addWidget(self.tabs)
 
+
 		for group in ["Pickups", "Enemies", "Bosses", "Stage", "Collect"]:
 
-			listView = QListView()
-			listView.setFlow(QListView.LeftToRight)
-			listView.setLayoutMode(QListView.SinglePass)
-			listView.setMovement(QListView.Static)
-			listView.setResizeMode(QListView.Adjust)
-			listView.setWrapping(True)
-			listView.setIconSize(QSize(26,26))
+			listView = EntityList()
 
 			listView.setModel(EntityGroupModel(group))
 			listView.model().view = listView
@@ -1850,6 +1850,30 @@ class EntityPalette(QWidget):
 
 	objChanged = pyqtSignal(EntityItem)
 	objReplaced = pyqtSignal(EntityItem)
+
+class EntityList(QListView):
+	
+	def __init__(self):
+		QListView.__init__(self)
+
+		self.setFlow(QListView.LeftToRight)
+		self.setLayoutMode(QListView.SinglePass)
+		self.setMovement(QListView.Static)
+		self.setResizeMode(QListView.Adjust)
+		self.setWrapping(True)
+		self.setIconSize(QSize(26,26))
+
+		self.setMouseTracking(True)
+
+	def mouseMoveEvent(self, event):
+
+		index = self.indexAt(event.pos()).row()
+
+		if index is not -1:
+			item = self.model().getItem(index)
+
+			if isinstance(item, EntityItem):
+				QToolTip.showText(event.globalPos(), item.name)
 
 
 ########################
