@@ -2294,6 +2294,9 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def testMap(self):
+		if self.roomList.selectedRoom() == None:
+			return
+
 		# Auto-tests by adding the room to basement.
 		resourcesPath = self.findResourcePath()
 		if resourcesPath == "":
@@ -2327,6 +2330,9 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def testStartMap(self):
+		if self.roomList.selectedRoom() == None:
+			return
+
 		# Sanity check for 1x1 room
 		self.storeEntityList(self.roomList.selectedRoom())
 		testRoom = self.roomList.selectedRoom()
@@ -2396,7 +2402,7 @@ class MainWindow(QMainWindow):
 			# Windows path things
 			if "Windows" in platform.system():
 				basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
-				if not exePath:
+				if not basePath:
 					cantFindPath = True
 				
 				resourcesPath = basePath + "/steamapps/common/The Binding of Isaac Rebirth/resources"
