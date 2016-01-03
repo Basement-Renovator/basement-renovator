@@ -1004,7 +1004,9 @@
 
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
-	<entity Group=" Random" ID="5" Image="resources/Entities/resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill?" Subtype="12" Variant="70" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill?" Subtype="12" Variant="70" />
+	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="11" Variant="70" />
+
 	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
 
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
