@@ -2521,7 +2521,7 @@ class MainWindow(QMainWindow):
 
 			# Fallback Resource Folder Locating
 			if cantFindPath == True:
-				resourcesPath = QFileDialog.getOpenFileName(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder', '', '')[0]
+				resourcesPath = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder')[0]
 
 			# Looks like nothing was selected
 			if len(resourcesPath) == 0:
