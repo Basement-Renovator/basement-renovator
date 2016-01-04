@@ -739,7 +739,8 @@ class Entity(QGraphicsItem):
 			if x != currentX or y != currentY:
 				self.entity['X'] = int(x/self.SNAP_TO)
 				self.entity['Y'] = int(y/self.SNAP_TO)
-				mainWindow.dirt()
+				if self.isSelected():
+					mainWindow.dirt()
 
 			value.setX(x)
 			value.setY(y)
@@ -2190,7 +2191,6 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
-		self.setWindowFilePath(self.path)
 	
 	def openRecent(self):
 		if self.checkDirty(): return
@@ -2209,7 +2209,6 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
-		self.setWindowFilePath(self.path)
 	
 	def open(self, path=None):
 
@@ -2301,7 +2300,6 @@ class MainWindow(QMainWindow):
 		self.save(self.roomList.getRooms())
 		self.clean()
 		self.roomList.changeFilter()
-		self.setWindowFilePath(self.path)
 
 	def saveMapAs(self):
 		self.saveMap(True)
