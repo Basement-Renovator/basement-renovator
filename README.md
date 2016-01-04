@@ -8,7 +8,7 @@ This is the first *release candidate*. It has only been tested on a few other co
 
 ### Downloads
 
-[Basement Renovator v2.0rc1 - for Windows](https://github.com/Tempus/Basement-Renovator/releases/download/untagged-3250389008b682618ff5/Basement.Renovator.zip)
+[Basement Renovator v2.0rc1 - for Windows](https://github.com/Tempus/Basement-Renovator/releases/download/2.0rc1/Basement.Renovator.zip)
 
 [Basement Renovator v2.0rc1 (Github Source)](https://github.com/Tempus/Basement-Renovator)
 
