@@ -1,4 +1,5 @@
-# **Basement Renovator** ***^v2.0rc1*** - *A Binding of Isaac Afterbirth Level Editor*
+# **Basement Renovator** ***v2.0rc1***
+##### *A Binding of Isaac Afterbirth Level Editor*
 ---
 
 Hello everyone! Today marks the release of version 1.0 of the Basement Renovator! The Basement Renovator is an easy to use, intuitive tool for editing The Binding of Isaac Afterbirth rooms. It will *not*, I repeat, will *not* edit Rebirth rooms.
@@ -48,7 +49,7 @@ To run from source (Win, OSX, or Linux), install Python 3.x and PyQt5, then run 
 
 * **The Room List**: On the right of the window is the room list dock. This dock is moveable by grabbing the titlebar. Click any room in the list to load it into the editor. The type of the room is indicated by the icon to the left of the name, and the ID is the number beside the name. Room type determines the item pool and tileset. Create new rooms by hitting 'add', delete a room by selecting a room and either pressing the backspace/delete key or clicking 'delete', and duplicate a selected room by clicking 'duplicate' (duplicates will have a different variant number). 
 
-* **Room List cont.**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new stb, or if you choose an existing stb it will append those rooms onto the one you chose.
+* **The Room List cont.**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new stb, or if you choose an existing stb it will append those rooms onto the one you chose.
 
 * **The Entity Palette**: The entity palette on the left is a moveable dock just like the Room List. You can use it to paint entities onto the Editor just like Mario Paint. Simply select an entity from the palette, then right click in the Editor window where you want the entity to paint. You're basically stamping them into the room. All known game entities are listed.
 
@@ -79,7 +80,3 @@ To run from source (Win, OSX, or Linux), install Python 3.x and PyQt5, then run 
 *Where is custom entity support?*
 
 - Due to a number of considerations, including Afterbirth+, I'm shelving this for now. You can add custom entities pretty easily though: just add a new entry to your own EntitiesAfterbirth.xml and voila! Custom entity. Open the 'resources/EntitiesAfterbirth.xml' in any quality text editor (like Notepad++ or Sublime Text), and add a new entry just like the many that already exist there.
-
----
-
-Put any further comments below!
