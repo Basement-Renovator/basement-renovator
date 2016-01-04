@@ -532,22 +532,19 @@ class RoomEditorWidget(QGraphicsView):
 		if not self.statusBar: return
 
 		# Display the room status in a text overlay
-
 		painter = QPainter()
 		painter.begin(self.viewport())
 
 		painter.setRenderHint(QPainter.Antialiasing, True)
 		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+		painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
 
 		room = mainWindow.roomList.selectedRoom()
 		if room:
-			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
-
 			# Room Type Icon
 			q = QPixmap()
 			q.load('resources/UI/RoomIcons.png')
 
-			i = QIcon()
 			painter.drawPixmap(2,3, q.copy(room.roomType*16,0,16,16))
 
 			# Top Text
@@ -560,7 +557,54 @@ class RoomEditorWidget(QGraphicsView):
 			font = painter.font()
 			font.setPixelSize(10)
 			painter.setFont(font)
-			painter.drawText( 4, 30, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight) )
+			painter.drawText( 8, 30, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight) )
+
+
+		# Display the currently selected entity in a text overlay
+		selectedEntities = self.scene().selectedItems()
+
+		if len(selectedEntities) == 1:
+			e = selectedEntities[0]
+			r = event.rect()
+
+			# Entity Icon
+			i = QIcon()
+			painter.drawPixmap(QRect(r.right()-32, 2, 32, 32), e.entity["pixmap"])
+
+			# Top Text
+			font = painter.font()
+			font.setPixelSize(13)
+			painter.setFont(font)
+			painter.drawText(r.right()-34-200, 2, 200, 16, Qt.AlignRight | Qt.AlignBottom, "{1}.{2}.{3} - {0}".format(e.entity["name"], e.entity["Type"], e.entity["Variant"], e.entity["Subtype"]) )
+
+			# Bottom Text
+			font = painter.font()
+			font.setPixelSize(10)
+			painter.setFont(font)
+			painter.drawText(r.right()-34-200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, "Base HP : {0}".format(e.entity["baseHP"]) )
+
+		elif len(selectedEntities) > 1:
+			e = selectedEntities[0]
+			r = event.rect()
+
+			# Case Two: more than one type of entity
+			# Entity Icon
+			i = QIcon()
+			painter.drawPixmap(QRect(r.right()-32, 2, 32, 32), e.entity["pixmap"])
+
+			# Top Text
+			font = painter.font()
+			font.setPixelSize(13)
+			painter.setFont(font)
+			painter.drawText(r.right()-34-200, 2, 200, 16, Qt.AlignRight | Qt.AlignBottom, "{0} Entities Selected".format(len(selectedEntities)) )
+
+			# Bottom Text
+			font = painter.font()
+			font.setPixelSize(10)
+			painter.setFont(font)
+			painter.drawText(r.right()-34-200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, ", ".join(set([x.entity['name'] for x in selectedEntities])) )
+
+			pass
 
 		painter.end()
 
@@ -695,7 +739,6 @@ class Entity(QGraphicsItem):
 			if x != currentX or y != currentY:
 				self.entity['X'] = int(x/self.SNAP_TO)
 				self.entity['Y'] = int(y/self.SNAP_TO)
-			else:
 				mainWindow.dirt()
 
 			value.setX(x)
