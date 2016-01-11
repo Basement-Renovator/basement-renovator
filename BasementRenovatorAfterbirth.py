@@ -1960,7 +1960,7 @@ class MainWindow(QMainWindow):
 		# Setup a new map
 		self.newMap()	
 		self.clean()
-	
+
 	def setupFileMenuBar(self):
 		f = self.fileMenu
 		
@@ -2380,10 +2380,8 @@ class MainWindow(QMainWindow):
 
 		# Set the selected room to max weight
 		self.storeEntityList(self.roomList.selectedRoom())
-		testRoom = self.roomList.selectedRoom()
-		# testRoom.roomType = 1
-		testRoom.roomWeight = 1000.0
-		testRoom.roomDifficulty = 1
+		r = self.roomList.selectedRoom()
+		testRoom = Room(r.roomName, r.roomDoors, r.roomSpawns, mytype=1, r.roomVariant, r.roomSubvariant, difficulty=1, weight=1000.0, r.roomWidth, r.roomHeight, r.roomShape):
 
 		# Make a new stb with a blank room
 		padMe = True
