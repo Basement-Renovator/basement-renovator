@@ -2448,8 +2448,8 @@ class MainWindow(QMainWindow):
 		self.storeEntityList(self.roomList.selectedRoom())
 		testRoom = self.roomList.selectedRoom()
 
-		if testRoom.roomShape is not 1:
-			QMessageBox.warning(self, "Error", "You may only test 1x1 rooms as the Start Room.")
+		if testRoom.roomShape in [2, 9] :
+			QMessageBox.warning(self, "Error", "Room shapes 2 (Long and narrow) and 9 (L shaped with upper right corner missing) can't be tested as the Start Room.")
 			return
 
 		# Auto-tests by adding the room to basement.
