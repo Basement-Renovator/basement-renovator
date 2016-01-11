@@ -2435,7 +2435,7 @@ class MainWindow(QMainWindow):
 					os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
 
 		# Extra warnings
-		if self.path is resourcesPath + "/rooms/01.basement.stb" or self.path is resourcesPath + "/rooms/02.cellar.stb" :
+		if self.path == resourcesPath + "/rooms/01.basement.stb" or self.path == resourcesPath + "/rooms/02.cellar.stb" :
 			result = QMessageBox.information(self, "Warning", "When testing the basement.stb or cellar.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
@@ -2501,7 +2501,7 @@ class MainWindow(QMainWindow):
 				os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
 
 		# Extra warnings
-		if self.path is resourcesPath + "/rooms/00.special rooms.stb":
+		if self.path == resourcesPath + "/rooms/00.special rooms.stb":
 			result = QMessageBox.information(self, "Warning", "When testing the special rooms.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
