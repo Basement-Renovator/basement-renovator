@@ -1173,7 +1173,7 @@ class RoomSelector(QWidget):
 		act = typeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(1*24+4,4,16,16))), '')
 		act.setData(-1)
 
-		for i in range(22):
+		for i in range(24):
 			act = typeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
 			act.setData(i)
 
@@ -1318,7 +1318,7 @@ class RoomSelector(QWidget):
 		types= ["Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room", 
 				"Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room", 
 				"Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room", 
-				"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market"] 
+				"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"] 
 
 		# if "00." not in mainWindow.path:
 		# 	types=["Null Room", "Normal Room"]
@@ -2059,6 +2059,7 @@ class MainWindow(QMainWindow):
 		msgBox.addButton("Continue", QMessageBox.AcceptRole)
 		msgBox.addButton("Cancel", QMessageBox.RejectRole)
 		if msgBox.exec_() == QMessageBox.AcceptRole:
+			self.clean()
 			return False
 
 		return True
@@ -2241,7 +2242,7 @@ class MainWindow(QMainWindow):
 			# Room Type, Room Variant, Subvariant, Difficulty, Length of Room Name String
 			roomData = struct.unpack_from('<IIIBH', stb, off)
 			off += 0xF
-			#print ("Room Data: {0}".format(roomData))
+			# print ("Room Data: {0}".format(roomData))
 
 			# Room Name
 			roomName = struct.unpack_from('<{0}s'.format(roomData[4]), stb, off)[0].decode()
