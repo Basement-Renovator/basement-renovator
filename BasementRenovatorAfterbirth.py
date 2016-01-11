@@ -2523,6 +2523,11 @@ class MainWindow(QMainWindow):
 					cantFindPath = True
 
 			# Linux and others
+			elif "Linux" in platform.system():
+				resourcesPath = os.path.expanduser("~/.local/share/Steam/steamapps/common/The Binding of Isaac Rebirth/resources")
+				if not QFile.exists(resourcesPath):
+					cantFindPath = True
+
 			else:
 				cantFindPath = True
 
