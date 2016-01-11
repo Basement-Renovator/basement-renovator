@@ -1323,7 +1323,11 @@ class RoomSelector(QWidget):
 		# if "00." not in mainWindow.path:
 		# 	types=["Null Room", "Normal Room"]
 
-		c.addItems(types)
+		q = QImage()
+		q.load('resources/UI/RoomIcons.png')
+
+		for i, t in enumerate(types):
+			c.addItem(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), t)
 		c.setCurrentIndex(self.selectedRoom().roomType)
 		c.currentIndexChanged.connect(self.changeType)
 		Type.setDefaultWidget(c)
