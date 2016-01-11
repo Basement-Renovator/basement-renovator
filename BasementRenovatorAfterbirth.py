@@ -2397,6 +2397,8 @@ class MainWindow(QMainWindow):
 		else:
 			newRooms = [testRoom]
 
+		# Prevent accidental data loss from overwriting the file
+		self.dirt()
 
 		# Check for existing files, and backup if necessary
 		backupFlagBasement = False
@@ -2431,6 +2433,10 @@ class MainWindow(QMainWindow):
 					os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
 				if backupFlagCellar:
 					os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
+
+		# Extra warnings
+		if self.path is resourcesPath + "/rooms/01.basement.stb" or self.path is resourcesPath + "/rooms/02.cellar.stb" :
+			result = QMessageBox.information(self, "Warning", "When testing the basement.stb or cellar.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
@@ -2472,6 +2478,9 @@ class MainWindow(QMainWindow):
 			QMessageBox.warning(self, "Error", "teststart.stb has been tampered with, and is no longer a valid stb file.")
 			return
 
+		# Dirtify to prevent overwriting and then quitting without saving.
+		self.dirt()
+
 		# Backup, parse, find the start room, replace it, resave, restore backup
 		backupFlag = False
 		if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
@@ -2490,6 +2499,10 @@ class MainWindow(QMainWindow):
 			os.remove(resourcesPath + "/rooms/00.special rooms.stb")
 			if backupFlag:
 				os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
+
+		# Extra warnings
+		if self.path is resourcesPath + "/rooms/00.special rooms.stb":
+			result = QMessageBox.information(self, "Warning", "When testing the special rooms.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
