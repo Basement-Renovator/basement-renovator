@@ -1195,8 +1195,8 @@ class RoomSelector(QWidget):
 		act.setData(-1)
 		act.setIconVisibleInMenu(False)
 
-		w = [0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]
-		for i in range(8):
+		w = [0.1,0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]
+		for i in range(9):
 			act = weightMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*24,0,24,24))), '')
 			act.setData(w[i])
 			act.setIconVisibleInMenu(False)
@@ -1344,7 +1344,7 @@ class RoomSelector(QWidget):
 		# Weight
 		weight = menu.addMenu('Weight')
 		
-		for w in [0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
+		for w in [0.1,0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
 			m = weight.addAction('{0}'.format(w))
 
 			if self.selectedRoom().roomWeight == w:
