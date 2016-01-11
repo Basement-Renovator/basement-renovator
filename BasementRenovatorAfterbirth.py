@@ -2381,7 +2381,7 @@ class MainWindow(QMainWindow):
 		# Set the selected room to max weight
 		self.storeEntityList(self.roomList.selectedRoom())
 		r = self.roomList.selectedRoom()
-		testRoom = Room(r.roomName, r.roomDoors, r.roomSpawns, mytype=1, r.roomVariant, r.roomSubvariant, difficulty=1, weight=1000.0, r.roomWidth, r.roomHeight, r.roomShape):
+		testRoom = Room(r.data(0x100), r.roomDoors, r.roomSpawns, 1, r.roomVariant, r.roomSubvariant, 1, 1000.0, r.roomWidth, r.roomHeight, r.roomShape)
 
 		# Make a new stb with a blank room
 		padMe = True
