@@ -57,11 +57,14 @@
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.51.0 - Bomb Chest.png" Kind="Pickups" Name="Bomb Chest" Subtype="0" Variant="51" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.60.0 - Locked Chest.png" Kind="Pickups" Name="Locked Chest" Subtype="0" Variant="60" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill" Subtype="0" Variant="70" />
-	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.0 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Subtype="0" Variant="90" />
+	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="11" Variant="70" />
+	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="12" Variant="70" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/Items/5.100.0 - Random.png" Kind="Collect" Name="Random Collectible" Subtype="0" Variant="100" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/Items/5.150.0 - Random.png" Kind="Collect" Name="Random Shop Item" Subtype="0" Variant="150" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.300.0 - Random Card.png" Kind="Pickups" Name="Random Card" Subtype="0" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.0 - Random Card.png" Kind="Pickups" Name="Random Card" Subtype="0" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.1 - The Fool.png" Kind="Pickups" Name="The Fool" Subtype="1" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.2 - The Magician.png" Kind="Pickups" Name="The Magician" Subtype="2" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.3 - The High Priestess.png" Kind="Pickups" Name="The High Priestess" Subtype="3" Variant="300" />
@@ -122,6 +125,7 @@
 	<entity Group="Tears" ID="9" Image="resources/Entities/9.0.1 - Bone.png" Kind="Stage" Name="Bone" Subtype="0" Variant="1" />
 	<entity Group="Tears" ID="9" Image="resources/Entities/9.0.2 - Fire.png" Kind="Stage" Name="Fire" Subtype="0" Variant="2" />
 	<entity Group="Tears" ID="9" Image="resources/Entities/9.0.3 - Puke.png" Kind="Stage" Name="Puke" Subtype="0" Variant="3" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.0 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Subtype="0" Variant="90" />
 
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.0.0 - Frowning Gaper.png" Kind="Enemies" Name="Frowning Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.1.0 - Gaper.png" Kind="Enemies" Name="Gaper" Subtype="0" Variant="1" />
@@ -929,6 +933,8 @@
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.0 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Subtype="0" Variant="69" />
 	<entity Group="Arcade" ID="6" Image="resources/Entities/6.9.0 - Bomb Bum.png" Kind="Stage" Name="Bomb Bum" Subtype="0" Variant="9" />
 	<entity Group="Arcade" ID="6" Image="resources/Entities/6.10.0 - Shop Restock Machine.png" Kind="Stage" Name="Shop Restock Machine" Subtype="0" Variant="10" />
+	<entity Group="Arcade" ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Kind="Stage" Name="Greed Machine" Subtype="0" Variant="11" />
+	<entity BaseHP="8" Champion="1" Group="Flies" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Kind="Enemies" Name="Pooter (?)" Subtype="0" Variant="2" />
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.3.0 - Special Shopkeeper.png" Kind="Stage" Name="Special Shopkeeper" Subtype="0" Variant="3" />
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.4.0 - Special Secret Room Keeper.png" Kind="Stage" Name="Special Secret Room Keeper" Subtype="0" Variant="4" />
 	<entity BaseHP="18" Champion="1" Group="Mulligans" ID="22" Image="resources/Entities/22.1.0 - Drowned Hive.png" Kind="Enemies" Name="Drowned Hive" Subtype="0" Variant="1" />
@@ -946,7 +952,9 @@
 	<entity BaseHP="3" Group="Poop" ID="217" Image="resources/Entities/217.2.0 - Brownie Corn.png" Kind="Enemies" Name="Brownie Corn" Subtype="0" Variant="2" />
 	<entity BaseHP="15" Group="Poop" ID="220" Image="resources/Entities/220.1.0 - Dank Squirt.png" Kind="Enemies" Name="Dank Squirt" Subtype="0" Variant="1" />
 	<entity BaseHP="100" Group="Stones" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Kind="Enemies" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
 	<entity BaseHP="30" Group="Spiders" ID="246" Image="resources/Entities/246.1.0 - Rag man's Rag Ling.png" Kind="Enemies" Name="Rag man's Rag Ling" Subtype="0" Variant="1" />
+	<entity BaseHP="60" Group="Broken" ID="251" Image="resources/Entities/251.10.0 - Begotten Chain.png" Kind="Stage" Name="Begotten Chain" Subtype="0" Variant="10" /> <!-- not a real enemy -->
 	<entity BaseHP="5" Group="Flies" ID="256" Image="resources/Entities/256.0.0 - Dart Fly.png" Kind="Enemies" Name="Dart Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Fatties" ID="257" Image="resources/Entities/257.0.0 - Conjoined Fatty.png" Kind="Enemies" Name="Conjoined Fatty" Subtype="0" Variant="0" />
 	<entity BaseHP="60" Group="Fatties" ID="257" Image="resources/Entities/257.1.0 - Blue Conjoined Fatty.png" Kind="Enemies" Name="Blue Conjoined Fatty" Subtype="0" Variant="1" />
@@ -968,7 +976,11 @@
 	<entity BaseHP="25" Group="Flies" ID="288" Image="resources/Entities/288.0.0 - Dukie.png" Kind="Enemies" Name="Dukie" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Flies" ID="289" Image="resources/Entities/289.0.0 - Ulcer.png" Kind="Enemies" Name="Ulcer" Subtype="0" Variant="0" />
 	<entity BaseHP="15" Champion="1" Group="Blobs" ID="290" Image="resources/Entities/290.0.0 - Meatball.png" Kind="Enemies" Name="Meatball" Subtype="0" Variant="0" />
+	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Pitfall" Subtype="0" Variant="0" />
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Kind="Stage" Name="Suction Pitfall" Subtype="0" Variant="1" />
+	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
+	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
+	<entity Group="Traps" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Kind="Enemies" Name="Blue Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="401" Image="resources/Entities/401.0.0 - The Stain.png" Kind="Bosses" Namem="The Stain" Subtype="0" Variant="0" />
 	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="402" Image="resources/Entities/402.0.0 - Brownie.png" Kind="Bosses" Name="Brownie" Subtype="0" Variant="0" />
@@ -978,16 +990,11 @@
 	<entity BaseHP="250" Boss="1" Group="Boss Rooms" ID="405" Image="resources/Entities/405.0.0 - Rag Man.png" Kind="Bosses" Name="Rag Man" Subtype="0" Variant="0" />
 	<entity BaseHP="3500" Boss="1" Group="The Sins" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Kind="Bosses" Name="Ultra Greed" Subtype="0" Variant="0" />
 	<entity BaseHP="3500" Boss="1" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="1" />
-	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
-
-	<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.2.0 - Pooter.png"  Name="Pooter" Subtype="0" Variant="2" /> <!-- not a real enemy -->
-	<entity BaseHP="60" Champion="1" ID="14" Image="resources/Entities/14.10.0 - Begotten Chain.png"  Name="Begotten Chain" Subtype="0" Variant="10" /> <!-- not a real enemy -->
-
-	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
-	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" />
-	<entity Group="Arcade" ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Kind="Stage" Name="Greed Machine" Subtype="0" Variant="11" />
 	<entity Boss="1" Group="Boss Rooms" ID="407" Image="resources/Entities/407.0.0 - Hush.png" Kind="Bosses" Name="Hush" Subtype="0" Variant="0" />
 	<entity Boss="1" Group="Boss Rooms" ID="408" Image="resources/Entities/408.0.0 - Skinless Hush.png" Kind="Bosses" Name="Skinless Hush" Subtype="0" Variant="0" />
+	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
+	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
+	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" />
 
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
 	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" />
@@ -997,16 +1004,7 @@
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.44 - Dice Shard.png" Kind="Pickups" Name="Dice Shard" Subtype="44" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.45 - Emergency Contact.png" Kind="Pickups" Name="Emergency Contact" Subtype="45" Variant="300" />
 
-	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
-	<entity Group=" Random" ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill?" Subtype="12" Variant="70" />
-	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="11" Variant="70" />
-
-	<entity BaseHP="90" Boss="1" Group="Boss Rooms" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
-
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
-
-	<entity Group="Traps" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
 
 </data>

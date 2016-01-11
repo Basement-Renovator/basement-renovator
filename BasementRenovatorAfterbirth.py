@@ -771,7 +771,11 @@ class Entity(QGraphicsItem):
 
 			# Centering code
 			zamiellLovesMakingMyCodeDirty = [44, 236, 218]
-			if self.entity['Type'] in zamiellLovesMakingMyCodeDirty or (self.entity['Type'] == 5 and self.entity['Variant'] == 380):
+			if 	self.entity['Type'] in zamiellLovesMakingMyCodeDirty or \
+				(self.entity['Type'] == 5 and self.entity['Variant'] == 380) or \
+				(self.entity['Type'] == 291 and self.entity['Variant'] == 1) or \
+				(self.entity['Type'] == 291 and self.entity['Variant'] == 3):
+				
 				y = -(self.entity['pixmap'].height()-26) / 2
 			else:
 				y = -(self.entity['pixmap'].height()-26)
