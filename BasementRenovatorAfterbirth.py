@@ -1320,8 +1320,8 @@ class RoomSelector(QWidget):
 				"Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room", 
 				"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market"] 
 
-		if "00." not in mainWindow.path:
-			types=["Null Room", "Normal Room"]
+		# if "00." not in mainWindow.path:
+		# 	types=["Null Room", "Normal Room"]
 
 		c.addItems(types)
 		c.setCurrentIndex(self.selectedRoom().roomType)
@@ -2381,7 +2381,7 @@ class MainWindow(QMainWindow):
 		# Set the selected room to max weight
 		self.storeEntityList(self.roomList.selectedRoom())
 		testRoom = self.roomList.selectedRoom()
-		testRoom.roomType = 1
+		# testRoom.roomType = 1
 		testRoom.roomWeight = 1000.0
 		testRoom.roomDifficulty = 1
 
