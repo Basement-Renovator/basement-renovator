@@ -45,14 +45,14 @@
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.3 - Dime.png" Kind="Pickups" Name="Dime" Subtype="3" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.4 - Double Penny.png" Kind="Pickups" Name="Double Penny" Subtype="4" Variant="20" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.30.0 - RKey.png" Kind="Pickups" Name="Random Key" Subtype="0" Variant="30" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.30.0 - RKey.png" Kind="Pickups" Name="Random Key" Subtype="0" Variant="30" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.30.1 - Key.png" Kind="Pickups" Name="Key" Subtype="1" Variant="30" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.30.2 - Golden Key.png" Kind="Pickups" Name="Golden Key" Subtype="2" Variant="30" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.30.3 - Key Ring.png" Kind="Pickups" Name="Key Ring" Subtype="3" Variant="30" />
+	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.0 - RKey.png" Kind="Pickups" Name="Random Key" Subtype="0" Variant="30" />
+	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.1 - Key.png" Kind="Pickups" Name="Key" Subtype="1" Variant="30" />
+	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.2 - Golden Key.png" Kind="Pickups" Name="Golden Key" Subtype="2" Variant="30" />
+	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.3 - Key Ring.png" Kind="Pickups" Name="Key Ring" Subtype="3" Variant="30" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.40.0 - RBomb.png" Kind="Pickups" Name="Random Bomb" Subtype="0" Variant="40" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.0 - RBomb.png" Kind="Pickups" Name="Random Bomb" Subtype="0" Variant="40" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.1 - Bomb.png" Kind="Pickups" Name="Bomb" Subtype="1" Variant="40" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.2 - Double Bomb.png" Kind="Pickups" Name="Double Bomb" Subtype="2" Variant="40" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.0 - RBomb.png" Kind="Pickups" Name="Random Bomb" Subtype="0" Variant="40" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.1 - Bomb.png" Kind="Pickups" Name="Bomb" Subtype="1" Variant="40" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.2 - Double Bomb.png" Kind="Pickups" Name="Double Bomb" Subtype="2" Variant="40" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.50.0 - Chest.png" Kind="Pickups" Name="Chest" Subtype="0" Variant="50" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.51.0 - Bomb Chest.png" Kind="Pickups" Name="Bomb Chest" Subtype="0" Variant="51" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.60.0 - Locked Chest.png" Kind="Pickups" Name="Locked Chest" Subtype="0" Variant="60" />
@@ -925,9 +925,9 @@
 <!-- New Afterbirth Enemies, excluding trinkets and items -->
 
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.7 - Gold Heart.png" Kind="Pickups" Name="Gold Heart" Subtype="7" Variant="10" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.4 - Golden Bomb.png" Kind="Pickups" Name="Golden Bomb" Subtype="4" Variant="40" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.3 - Troll Bomb.png" Kind="Stage" Name="Troll Bomb" Subtype="3" Variant="40" />
-	<entity Group="Keys and Bombs" ID="5" Image="resources/Entities/5.40.5 - Megatroll Bomb.png" Kind="Stage" Name="Megatroll Bomb" Subtype="5" Variant="40" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.4 - Golden Bomb.png" Kind="Pickups" Name="Golden Bomb" Subtype="4" Variant="40" />
+	<entity ID="5" Image="resources/Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
+	<entity ID="5" Image="resources/Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.52.0 - Spiked Chest.png" Kind="Pickups" Name="Spiked Chest" Subtype="0" Variant="52" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.53.0 - Eternal Chest.png" Kind="Pickups" Name="Eternal Chest" Subtype="0" Variant="53" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.0 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Subtype="0" Variant="69" />
