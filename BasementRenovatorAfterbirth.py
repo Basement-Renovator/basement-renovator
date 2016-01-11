@@ -1359,6 +1359,7 @@ class RoomSelector(QWidget):
 		Variant = QWidgetAction(menu)
 		s = QSpinBox()
 		s.setRange(0,65534)
+		s.setPrefix("ID -  ")
 
 		s.setValue(self.selectedRoom().roomVariant)
 
@@ -1370,6 +1371,7 @@ class RoomSelector(QWidget):
 		Subvariant = QWidgetAction(menu)
 		sv = QSpinBox()
 		sv.setRange(0,256)
+		sv.setPrefix("Sub - ")
 
 		sv.setValue(self.selectedRoom().roomSubvariant)
 
