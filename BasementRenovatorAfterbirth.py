@@ -1134,7 +1134,7 @@ class RoomSelector(QWidget):
 		self.setButtonStates()
 
 	def setupFilters(self):
-		self.filter = QHBoxLayout()
+		self.filter = QGridLayout()
 		self.filter.setSpacing(4)
 
 		fq = QImage()
@@ -1172,6 +1172,7 @@ class RoomSelector(QWidget):
 		self.typeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(1*24+4,4,16,16))))
 		act = typeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(1*24+4,4,16,16))), '')
 		act.setData(-1)
+		self.typeToggle.setDefaultAction(act)
 
 		for i in range(24):
 			act = typeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
@@ -1194,6 +1195,7 @@ class RoomSelector(QWidget):
 		act = weightMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(2*24,0,24,24))), '')
 		act.setData(-1)
 		act.setIconVisibleInMenu(False)
+		self.weightToggle.setDefaultAction(act)
 
 		w = [0.1,0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]
 		for i in range(9):
@@ -1218,6 +1220,7 @@ class RoomSelector(QWidget):
 		act = sizeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(3*24,0,24,24))), '')
 		act.setData(-1)
 		act.setIconVisibleInMenu(False)
+		self.sizeToggle.setDefaultAction(act)
 
 		for i in range(12):
 			act = sizeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i*16,0,16,16))), '')
@@ -1228,14 +1231,49 @@ class RoomSelector(QWidget):
 		self.sizeToggle.setMenu(sizeMenu)
 
 		# Add to Layout
-		self.filter.addStretch()
-		self.filter.addWidget(QLabel("Filter by:"))
-		self.filter.addWidget(self.IDFilter)
-		self.filter.addWidget(self.entityToggle)
-		self.filter.addWidget(self.typeToggle)
-		self.filter.addWidget(self.weightToggle)
-		self.filter.addWidget(self.sizeToggle)
+		self.filter.addWidget(QLabel("Filter by:"),0,0)
+		self.filter.addWidget(self.IDFilter	,0,1)
+		self.filter.addWidget(self.entityToggle,0,2)
+		self.filter.addWidget(self.typeToggle,0,3)
+		self.filter.addWidget(self.weightToggle,0,4)
+		self.filter.addWidget(self.sizeToggle,0,5)
 		self.filter.setContentsMargins(4,0,0,4)
+
+		# Filter active notification and clear buttons
+
+		# Palette
+		self.clearAll = QToolButton()
+		self.clearAll.setIconSize(QSize(24, 0))
+		self.clearAll.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
+		self.clearAll.clicked.connect(self.clearAllFilter)
+
+		self.clearName = QToolButton()
+		self.clearName.setIconSize(QSize(24, 0))
+		self.clearName.setSizePolicy(self.IDFilter.sizePolicy())
+		self.clearName.clicked.connect(self.clearNameFilter)
+
+		self.clearEntity = QToolButton()
+		self.clearEntity.setIconSize(QSize(24, 0))
+		self.clearEntity.clicked.connect(self.clearEntityFilter)
+
+		self.clearType = QToolButton()
+		self.clearType.setIconSize(QSize(24, 0))
+		self.clearType.clicked.connect(self.clearTypeFilter)
+
+		self.clearWeight = QToolButton()
+		self.clearWeight.setIconSize(QSize(24, 0))
+		self.clearWeight.clicked.connect(self.clearWeightFilter)
+
+		self.clearSize = QToolButton()
+		self.clearSize.setIconSize(QSize(24, 0))
+		self.clearSize.clicked.connect(self.clearSizeFilter)
+
+		self.filter.addWidget(self.clearAll,1,0)
+		self.filter.addWidget(self.clearName,1,1)
+		self.filter.addWidget(self.clearEntity,1,2)
+		self.filter.addWidget(self.clearType,1,3)
+		self.filter.addWidget(self.clearWeight,1,4)
+		self.filter.addWidget(self.clearSize,1,5)
 
 	def setupList(self):
 		self.list = QListWidget()
@@ -1387,6 +1425,41 @@ class RoomSelector(QWidget):
 		menu.exec_(self.list.mapToGlobal(pos))
 
 	@pyqtSlot(bool)
+	def clearAllFilter(self):
+		self.IDFilter.clear()
+		self.entityToggle.setChecked(False)
+		self.filter.typeData = -1
+		self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
+		self.filter.weightData = -1
+		self.weightToggle.setIcon(self.weightToggle.defaultAction().icon())
+		self.filter.sizeData = -1
+		self.sizeToggle.setIcon(self.sizeToggle.defaultAction().icon())
+		self.changeFilter()
+
+	def clearNameFilter(self):
+		self.IDFilter.clear()
+		self.changeFilter()
+
+	def clearEntityFilter(self):
+		self.entityToggle.setChecked(False)
+		self.changeFilter()
+
+	def clearTypeFilter(self):
+		self.filter.typeData = -1
+		self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
+		self.changeFilter()
+
+	def clearWeightFilter(self):
+		self.filter.weightData = -1
+		self.weightToggle.setIcon(self.weightToggle.defaultAction().icon())
+		self.changeFilter()
+
+	def clearSizeFilter(self):
+		self.filter.sizeData = -1
+		self.sizeToggle.setIcon(self.sizeToggle.defaultAction().icon())
+		self.changeFilter()
+
+	@pyqtSlot(bool)
 	def setEntityToggle(self, checked):
 		self.entityToggle.checked = checked
 
@@ -1408,9 +1481,56 @@ class RoomSelector(QWidget):
 		self.sizeToggle.setIcon(action.icon())
 		self.changeFilter()
 
+	def colourizeClearFilterButtons(self):
+		colour = "background-color: #F00;"
+
+		all = False
+
+		# Name Button
+		if len(self.IDFilter.text()) > 0:
+			self.clearName.setStyleSheet(colour)
+			all = True
+		else:
+			self.clearName.setStyleSheet("")
+
+		# Entity Button
+		if self.entityToggle.checked:
+			self.clearEntity.setStyleSheet(colour)
+			all = True
+		else:
+			self.clearEntity.setStyleSheet("")
+
+		# Type Button
+		if self.filter.typeData is not -1:
+			self.clearType.setStyleSheet(colour)
+			all = True
+		else:
+			self.clearType.setStyleSheet("")
+
+		# Weight Button
+		if self.filter.weightData is not -1:
+			self.clearWeight.setStyleSheet(colour)
+			all = True
+		else:
+			self.clearWeight.setStyleSheet("")
+
+		# Size Button
+		if self.filter.sizeData is not -1:
+			self.clearSize.setStyleSheet(colour)
+			all = True
+		else:
+			self.clearSize.setStyleSheet("")
+
+		# All Button
+		if all:
+			self.clearAll.setStyleSheet(colour)
+		else:
+			self.clearAll.setStyleSheet("")
+
 	@pyqtSlot()
 	def changeFilter(self):
-		
+		self.colourizeClearFilterButtons()
+	
 		# Here we go
 		for room in self.getRooms():
 			IDCond = entityCond = typeCond = weightCond = sizeCond = True
@@ -1994,9 +2114,10 @@ class MainWindow(QMainWindow):
 		self.ea = self.e.addAction('Copy',						self.copy, QKeySequence.Copy)
 		self.eb = self.e.addAction('Cut',						self.cut, QKeySequence.Cut)
 		self.ec = self.e.addAction('Paste',						self.paste, QKeySequence.Paste)
-		self.ed = self.e.addAction('Select All',					self.selectAll, QKeySequence.SelectAll)
+		self.ed = self.e.addAction('Select All',				self.selectAll, QKeySequence.SelectAll)
 		self.ee = self.e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
 		self.e.addSeparator()
+		self.ef = self.e.addAction('Clear Filters',				self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
