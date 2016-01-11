@@ -981,7 +981,16 @@
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
 	<entity Group="Traps" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.0.0 - Ultra Greed Coin (Spinner).png" Kind="Stage" Name="Ultra Greed Coin (Spinner)" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.1.0 - Ultra Greed Coin (Key).png" Kind="Stage" Name="Ultra Greed Coin (Key)" Subtype="0" Variant="1" />
+	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.2.0 - Ultra Greed Coin (Bomb).png" Kind="Stage" Name="Ultra Greed Coin (Bomb)" Subtype="0" Variant="2" />
+	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.3.0 - Ultra Greed Coin (Heart).png" Kind="Stage" Name="Ultra Greed Coin (Heart)" Subtype="0" Variant="3" />
+	<entity BaseHP="30" Champion="1" Group="Broken" ID="294" Image="resources/Entities/294.0.0 - Ultra Greed Door.png" Kind="Stage" Name="Ultra Greed Door" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Traps" ID="295" Image="resources/Entities/295.0.0 - Corn Mine.png" Kind="Stage" Name="Corn Mine" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Flies" ID="296" Image="resources/Entities/296.0.0 - Hush Fly.png" Kind="Enemies" Name="Hush Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Kind="Enemies" Name="Blue Gaper" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Boils" ID="298" Image="resources/Entities/298.0.0 - Blue Boil.png" Kind="Enemies" Name="Blue Boil" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Gapers" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Kind="Enemies" Name="Greed Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="401" Image="resources/Entities/401.0.0 - The Stain.png" Kind="Bosses" Namem="The Stain" Subtype="0" Variant="0" />
 	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="402" Image="resources/Entities/402.0.0 - Brownie.png" Kind="Bosses" Name="Brownie" Subtype="0" Variant="0" />
 	<entity BaseHP="220" Boss="1" Group="Boss Rooms" ID="403" Image="resources/Entities/403.0.0 - The Forsaken.png" Kind="Bosses" Name="The Forsaken" Subtype="0" Variant="0" />
@@ -1006,5 +1015,6 @@
 
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
+
 
 </data>
