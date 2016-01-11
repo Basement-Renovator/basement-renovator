@@ -98,7 +98,7 @@ class RoomScene(QGraphicsScene):
 		# Bitfont drawing: moved to the RoomEditorWidget.drawForeground for easier anti-aliasing
 
 		# Grey out the screen to show it's inactive if there are no rooms selected
-		if mainWindow.roomList.selectedRoom() is None:
+		if mainWindow.roomList.selectedRoom() == None:
 			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
 			painter.setBrush(QBrush(QColor(100,100,100,100)))
 
@@ -346,7 +346,7 @@ class RoomScene(QGraphicsScene):
 		yl = 26 * (self.roomHeight+4)/2
 
 
-		if self.roomShape is 9:
+		if self.roomShape == 9:
 			# Clear the dead area
 			painter.fillRect(t , t , xl, yl, QColor(0,0,0,255))
 
@@ -361,7 +361,7 @@ class RoomScene(QGraphicsScene):
 			painter.drawPixmap	(xm+t,	t, 		QPixmap().fromImage(self.corner.mirrored(False, False)))
 			painter.drawPixmap	(xm+t,	ym+t, 	QPixmap().fromImage(self.innerCorner.mirrored(False, False)))
 
-		elif self.roomShape is 10:
+		elif self.roomShape == 10:
 			# Clear the dead area
 			painter.fillRect(xm, t , xl, yl, QColor(0,0,0,255))
 
@@ -376,7 +376,7 @@ class RoomScene(QGraphicsScene):
 			painter.drawPixmap	(xm-26*5,	t, 		QPixmap().fromImage(self.corner.mirrored(True, False)))
 			painter.drawPixmap	(xm,	ym+t, 	QPixmap().fromImage(self.innerCorner.mirrored(True, False)))
 
-		elif self.roomShape is 11:
+		elif self.roomShape == 11:
 			# Clear the dead area
 			painter.fillRect(t , ym, xl, yl, QColor(0,0,0,255))
 
@@ -391,7 +391,7 @@ class RoomScene(QGraphicsScene):
 			painter.drawPixmap	(xm+t,	ym*2+t, 		QPixmap().fromImage(self.corner.mirrored(False, True)))
 			painter.drawPixmap	(xm+t,	ym, 	QPixmap().fromImage(self.innerCorner.mirrored(False, True)))
 
-		elif self.roomShape is 12:
+		elif self.roomShape == 12:
 			# Clear the dead area
 			painter.fillRect(xm, ym, xl, yl, QColor(0,0,0,255))
 
@@ -432,7 +432,7 @@ class RoomEditorWidget(QGraphicsView):
 		'''Called when a paint attempt is initiated'''
 
 		paint = self.objectToPaint
-		if paint is None: return
+		if paint == None: return
 
 		clicked = self.mapToScene(event.x(), event.y())
 		x, y = clicked.x(), clicked.y()
@@ -693,7 +693,7 @@ class Entity(QGraphicsItem):
 			self.entity['boss'] = en.get('Boss')
 			self.entity['champion'] = en.get('Champion')
 
-			if self.entity['Type'] is 5 and self.entity['Variant'] is 100:
+			if self.entity['Type'] == 5 and self.entity['Variant'] == 100:
 				i = QImage()
 				i.load('resources/Entities/5.100.0 - Collectible.png')
 				i = i.convertToFormat(QImage.Format_ARGB32)
@@ -781,7 +781,7 @@ class Entity(QGraphicsItem):
 				y = -(self.entity['pixmap'].height()-26)
 			
 			# Curse room special case
-			if self.entity['Type'] is 5 and self.entity['Variant'] is 50 and mainWindow.roomList.selectedRoom().roomType == 10:
+			if self.entity['Type'] == 5 and self.entity['Variant'] == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
 				self.entity['pixmap'] = QPixmap()
 				self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
 
@@ -1419,7 +1419,7 @@ class RoomSelector(QWidget):
 				for x in room.roomSpawns:
 					for y in x:
 						for e in y:
-							if int(self.filterEntity.ID) is e[0] and int(self.filterEntity.subtype) is e[2] and int(self.filterEntity.variant) is e[1]:
+							if int(self.filterEntity.ID) == e[0] and int(self.filterEntity.subtype) == e[2] and int(self.filterEntity.variant) == e[1]:
 								entityCond = True
 
 			# Check if the room is the right type
@@ -1592,7 +1592,7 @@ class RoomSelector(QWidget):
 		"""Removes selected room (no takebacks)"""
 
 		rooms = self.selectedRooms()
-		if rooms is None or len(rooms) == 0:
+		if rooms == None or len(rooms) == 0:
 			return
 
 		if len(rooms) == 1:
@@ -1619,7 +1619,7 @@ class RoomSelector(QWidget):
 		"""Duplicates the selected room"""
 
 		rooms = self.selectedRooms()
-		if rooms is None or len(rooms) == 0:
+		if rooms == None or len(rooms) == 0:
 			return
 
 		mainWindow.storeEntityList()
@@ -1645,7 +1645,7 @@ class RoomSelector(QWidget):
 	def exportRoom(self):
 
 		# Get a new
-		dialogDir = '' if mainWindow.path is '' else os.path.dirname(mainWindow.path)
+		dialogDir = '' if mainWindow.path == '' else os.path.dirname(mainWindow.path)
 		target = QFileDialog.getSaveFileName(self, 'Select a new name or an existing stb', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
 		mainWindow.restoreEditMenu()
 
@@ -2040,7 +2040,7 @@ class MainWindow(QMainWindow):
 		self.e.insertAction(a[5], self.ee)
 
 	def updateTitlebar(self):
-		if self.path is '':
+		if self.path == '':
 			effectiveName = 'Untitled Map'
 		else:
 			effectiveName = os.path.basename(self.path)
@@ -2048,7 +2048,7 @@ class MainWindow(QMainWindow):
 		self.setWindowTitle('%s - Basement Renovator' % effectiveName)
 
 	def checkDirty(self):
-		if self.dirty is False:
+		if self.dirty == False:
 			return False
 
 		msgBox = QMessageBox(QMessageBox.Warning,
@@ -2290,8 +2290,8 @@ class MainWindow(QMainWindow):
 	def saveMap(self, forceNewName=False):
 		target = self.path
 
-		if target is '' or forceNewName:
-			dialogDir = '' if target is '' else os.path.dirname(target)
+		if target == '' or forceNewName:
+			dialogDir = '' if target == '' else os.path.dirname(target)
 			target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Bundle (*.stb)')
 			self.restoreEditMenu()
 
