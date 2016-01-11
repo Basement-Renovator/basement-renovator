@@ -2301,7 +2301,11 @@ class MainWindow(QMainWindow):
 			self.path = target[0]
 			self.updateTitlebar()
 
-		self.save(self.roomList.getRooms())
+		try:
+			self.save(self.roomList.getRooms())
+		except:
+			QMessageBox.warning(self, "Error", "Saving failed. Try saving to a new file instead.")
+
 		self.clean()
 		self.roomList.changeFilter()
 
