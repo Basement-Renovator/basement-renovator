@@ -2552,13 +2552,17 @@ class MainWindow(QMainWindow):
 		result = QMessageBox.information(self, "Restore Backup", message)
 
 		if result == QMessageBox.Ok:
-			os.remove(resourcesPath + "/rooms/01.basement.stb")
-			os.remove(resourcesPath + "/rooms/02.cellar.stb")
+			if QFile.exists(resourcesPath + "/rooms/01.basement.stb"):
+				os.remove(resourcesPath + "/rooms/01.basement.stb")
+			if QFile.exists(resourcesPath + "/rooms/02.cellar.stb"):
+				os.remove(resourcesPath + "/rooms/02.cellar.stb")
 			if backupFlagBasement or backupFlagCellar:
 				if backupFlagBasement:
-					os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
+					if QFile.exists(resourcesPath + "/rooms/01.basement (backup).stb"):
+						os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
 				if backupFlagCellar:
-					os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
+					if QFile.exists(resourcesPath + "/rooms/02.cellar (backup).stb"):
+						os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
 
 		# Extra warnings
 		if self.path == resourcesPath + "/rooms/01.basement.stb" or self.path == resourcesPath + "/rooms/02.cellar.stb" :
@@ -2622,9 +2626,11 @@ class MainWindow(QMainWindow):
 		# Prompt to restore backup
 		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb.")
 		if result == QMessageBox.Ok:
-			os.remove(resourcesPath + "/rooms/00.special rooms.stb")
+			if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
+				os.remove(resourcesPath + "/rooms/00.special rooms.stb")
 			if backupFlag:
-				os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
+				if QFile.exists(resourcesPath + "/rooms/00.special rooms (backup).stb"):
+					os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
 
 		# Extra warnings
 		if self.path == resourcesPath + "/rooms/00.special rooms.stb":
