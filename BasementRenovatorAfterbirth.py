@@ -2601,6 +2601,9 @@ class MainWindow(QMainWindow):
 		rooms = self.open("resources/teststart.stb")
 		for room in rooms:
 			if "Start Room" in room.data(0x100):
+				room.roomHeight= testRoom.roomHeight
+				room.roomWidth= testRoom.roomWidth
+				room.roomShape= testRoom.roomShape
 				room.roomSpawns = testRoom.roomSpawns
 				foundYou = True
 
