@@ -718,9 +718,13 @@ class Entity(QGraphicsItem):
 	def itemChange(self, change, value):
 
 		if change == self.ItemPositionChange:
+
 			currentX, currentY = self.x(), self.y()
 
 			x, y = value.x(), value.y()
+
+			if 'eep' in self.entity['name']:
+				print (self.entity['X'], self.entity['Y'], x, y)
 
 			try:
 				w = self.scene().initialRoomWidth
@@ -745,6 +749,10 @@ class Entity(QGraphicsItem):
 
 			value.setX(x)
 			value.setY(y)
+
+			if 'eep' in self.entity['name']:
+				print (self.entity['X'], self.entity['Y'], x, y)
+
 			return value
 
 		return QGraphicsItem.itemChange(self, change, value)
@@ -2259,6 +2267,7 @@ class MainWindow(QMainWindow):
 			for y in enumerate(current.roomSpawns):
 				for x in enumerate(y[1]):
 					for entity in x[1]:
+						print (x[0], y[0])
 						e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 						self.scene.addItem(e)
 
@@ -2392,6 +2401,9 @@ class MainWindow(QMainWindow):
 				# x, y, number of entities at this position
 				spawnLoc = struct.unpack_from('<hhB', stb, off)
 				off += 5
+
+				if spawnLoc[0] < 0 or spawnLoc[1] < 0:
+					print (spawnLoc[1],spawnLoc[0])
 
 				for spawn in range(spawnLoc[2]):
 					#  type, variant, subtype, weight
