@@ -2091,7 +2091,8 @@ class MainWindow(QMainWindow):
 		
 		f.clear()
 		self.fa = f.addAction('New',						self.newMap, QKeySequence("Ctrl+N"))
-		self.fb = f.addAction('Open...',					self.openMap, QKeySequence("Ctrl+O"))
+		self.fb = f.addAction('Open stage...',					self.openMapDefault, QKeySequence("Ctrl+O"))
+		self.fc = f.addAction('Open file...',					self.openMap, QKeySequence("Ctrl+Shift+O"))
 		f.addSeparator()
 		self.fd = f.addAction('Save',						self.saveMap, QKeySequence("Ctrl+S"))
 		self.fe = f.addAction('Save As...',					self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
@@ -2119,6 +2120,8 @@ class MainWindow(QMainWindow):
 		self.ee = self.e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
 		self.e.addSeparator()
 		self.ef = self.e.addAction('Clear Filters',				self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
+		self.e.addSeparator()
+		self.eg = self.e.addAction('Set default stage path',	self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
@@ -2136,6 +2139,26 @@ class MainWindow(QMainWindow):
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
 		self.hb = h.addAction('Basement Renovator Documentation',	self.goToHelp)
 		# self.hc = h.addAction('Keyboard Shortcuts')
+		
+	def setDefaultStagePath(self):
+		stagePath = "FAILED READING!"
+		if QFile.exists("resources/stagepath.txt"):
+			stagePathFile = open("resources/stagepath.txt", "r")
+			stagePath = stagePathFile.read()
+			stagePathFile.close()
+		else:
+			stagePathFile = open("resources/stagepath.txt", "w")
+			stagePathFile.write("$resources$/packed/afterbirth_unpack/resources/rooms")
+			stagePathFile.close()
+			stagePath = "$resources$/packed/afterbirth_unpack/resources/rooms"
+		newStagePath, newStagePathOk = QInputDialog.getText(self, "Stage Path", "Path:\n($resources$ will get replaced by resources path)", QLineEdit.Normal, stagePath)
+		if newStagePathOk:
+			stagePathFile = open("resources/stagepath.txt", "w")
+			stagePathFile.write(newStagePath)
+			stagePathFile.close()
+			
+		else:
+			return
 
 	def setupDocks(self):
 		self.roomList = RoomSelector()
@@ -2297,6 +2320,117 @@ class MainWindow(QMainWindow):
 
 		self.updateTitlebar()
 		self.dirt()
+		self.roomList.changeFilter()
+
+	def openMapDefault(self):
+
+		if self.checkDirty(): return
+		resourcesPath = self.findResourcePath()
+		
+		defaultMaps = ("Special Rooms",
+				"Basement",
+				"Cellar",
+				"Caves",
+				"Catacombs",
+				"Depths",
+				"Necropolis",
+				"Womb",
+				"Utero",
+				"Blue Womb",
+				"Sheol",
+				"Cathedral",
+				"Dark Room",
+				"Chest",
+				"Special Rooms [Greed]",
+				"Basement [Greed]",
+				"Caves [Greed]",
+				"Depths [Greed]",
+				"Womb [Greed]",
+				"Sheol [Greed]",
+				"The Shop [Greed]",
+				"Ultra Greed [Greed]")
+		selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", defaultMaps, 0, False)
+		self.restoreEditMenu()
+
+		mapFileName = ""
+		if selectedMapOk:
+			if selectedMap == "Special Rooms":
+				mapFileName = "00.special rooms.stb"
+			elif selectedMap == "Basement":
+				mapFileName = "01.basement.stb"
+			elif selectedMap == "Cellar":
+				mapFileName = "02.cellar.stb"
+			elif selectedMap == "Caves":
+				mapFileName = "04.caves.stb"
+			elif selectedMap == "Catacombs":
+				mapFileName = "05.catacombs.stb"
+			elif selectedMap == "Depths":
+				mapFileName = "07.depths.stb"
+			elif selectedMap == "Necropolis":
+				mapFileName = "08.necropolis.stb"
+			elif selectedMap == "Womb":
+				mapFileName = "10.womb.stb"
+			elif selectedMap == "Utero":
+				mapFileName = "11.utero.stb"
+			elif selectedMap == "Blue Womb":
+				mapFileName = "13.blue womb.stb"
+			elif selectedMap == "Sheol":
+				mapFileName = "14.sheol.stb"
+			elif selectedMap == "Cathedral":
+				mapFileName = "15.cathedral.stb"
+			elif selectedMap == "Dark Room":
+				mapFileName = "16.dark room.stb"
+			elif selectedMap == "Chest":
+				mapFileName = "17.chest.stb"
+			elif selectedMap == "Special Rooms [Greed]":
+				mapFileName = "18.greed special.stb"
+			elif selectedMap == "Basement [Greed]":
+				mapFileName = "19.greed basement.stb"
+			elif selectedMap == "Caves [Greed]":
+				mapFileName = "20.greed caves.stb"
+			elif selectedMap == "Depths [Greed]":
+				mapFileName = "21.greed depths.stb"
+			elif selectedMap == "Womb [Greed]":
+				mapFileName = "22.greed womb.stb"
+			elif selectedMap == "Sheol [Greed]":
+				mapFileName = "23.greed sheol.stb"
+			elif selectedMap == "The Shop [Greed]":
+				mapFileName = "24.greed the shop.stb"
+			elif selectedMap == "Ultra Greed [Greed]":
+				mapFileName = "25.ultra greed.stb"
+		else:
+			return
+		
+		if QFile.exists("resources/stagepath.txt"):
+			stagePathFile = open("resources/stagepath.txt", "r")
+			stagePath = stagePathFile.read()
+			stagePathFile.close()
+		else:
+			stagePathFile = open("resources/stagepath.txt", "w")
+			stagePathFile.write("$resources$/packed/afterbirth_unpack/resources/rooms")
+			stagePathFile.close()
+			stagePath = "$resources$/packed/afterbirth_unpack/resources/rooms"
+			
+		stagePathReal = stagePath.replace("$resources$", resourcesPath)
+		
+		roomPath = stagePathReal + "/" + mapFileName
+		
+		if not QFile.exists(roomPath):
+			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
+			return
+
+		self.roomList.list.clear()
+		self.scene.clear()
+		self.path = ''
+
+		self.path = roomPath
+		self.updateTitlebar()
+
+		rooms = self.open()
+		for room in rooms:
+			self.roomList.list.addItem(room)
+
+		self.clean()
 		self.roomList.changeFilter()
 
 	def openMap(self):
