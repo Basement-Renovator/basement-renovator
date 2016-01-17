@@ -37,6 +37,7 @@ from PyQt5.QtWidgets import *
 
 import struct, os, subprocess, platform, webbrowser
 import xml.etree.ElementTree as ET
+import psutil
 
 
 ########################
@@ -2574,6 +2575,8 @@ class MainWindow(QMainWindow):
 		except:
 			pass
 
+		self.killIsaac()
+
 	@pyqtSlot()
 	def testStartMap(self):
 		if self.roomList.selectedRoom() == None:
@@ -2645,6 +2648,8 @@ class MainWindow(QMainWindow):
 		except:
 			pass
 
+		self.killIsaac()
+
 	def findResourcePath(self):
 
 		resourcePath = ''
@@ -2696,6 +2701,15 @@ class MainWindow(QMainWindow):
 			os.mkdir(resourcesPath + "/rooms/")
 
 		return resourcesPath
+
+	def killIsaac(self):
+		for p in psutil.process_iter():
+			try:
+				if 'isaac' in p.name().lower():
+					p.terminate()
+			except:
+				# This is totally kosher, I'm just avoiding zombies.
+				pass
 
 	@pyqtSlot()
 	def testMapInjectionRebirth(self):
