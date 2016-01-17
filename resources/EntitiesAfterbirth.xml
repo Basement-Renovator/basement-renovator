@@ -991,7 +991,7 @@
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Kind="Enemies" Name="Blue Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Boils" ID="298" Image="resources/Entities/298.0.0 - Blue Boil.png" Kind="Enemies" Name="Blue Boil" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Kind="Enemies" Name="Greed Gaper" Subtype="0" Variant="0" />
-	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="401" Image="resources/Entities/401.0.0 - The Stain.png" Kind="Bosses" Namem="The Stain" Subtype="0" Variant="0" />
+	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="401" Image="resources/Entities/401.0.0 - The Stain.png" Kind="Bosses" Name="The Stain" Subtype="0" Variant="0" />
 	<entity BaseHP="400" Boss="1" Group="Boss Rooms" ID="402" Image="resources/Entities/402.0.0 - Brownie.png" Kind="Bosses" Name="Brownie" Subtype="0" Variant="0" />
 	<entity BaseHP="220" Boss="1" Group="Boss Rooms" ID="403" Image="resources/Entities/403.0.0 - The Forsaken.png" Kind="Bosses" Name="The Forsaken" Subtype="0" Variant="0" />
 	<entity BaseHP="200" Boss="1" Group="Boss Rooms" ID="404" Image="resources/Entities/404.0.0 - Little Horn.png" Kind="Bosses" Name="Little Horn" Subtype="0" Variant="0" />

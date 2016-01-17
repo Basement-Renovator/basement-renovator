@@ -1,1 +1,0 @@
-$resources$/packed/afterbirth_unpack/resources/rooms

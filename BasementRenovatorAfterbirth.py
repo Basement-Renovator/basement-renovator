@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 ###########################################
 # 
 #    Binding of Isaac: Rebirth Stage Editor
@@ -34,6 +35,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from collections import OrderedDict
 
 import struct, os, subprocess, platform, webbrowser
 import xml.etree.ElementTree as ET
@@ -718,9 +720,13 @@ class Entity(QGraphicsItem):
 	def itemChange(self, change, value):
 
 		if change == self.ItemPositionChange:
+
 			currentX, currentY = self.x(), self.y()
 
 			x, y = value.x(), value.y()
+
+			if 'eep' in self.entity['name']:
+				print (self.entity['X'], self.entity['Y'], x, y)
 
 			try:
 				w = self.scene().initialRoomWidth
@@ -745,6 +751,10 @@ class Entity(QGraphicsItem):
 
 			value.setX(x)
 			value.setY(y)
+
+			if 'eep' in self.entity['name']:
+				print (self.entity['X'], self.entity['Y'], x, y)
+
 			return value
 
 		return QGraphicsItem.itemChange(self, change, value)
@@ -2056,6 +2066,30 @@ class EntityList(QListView):
 ########################
 
 class MainWindow(QMainWindow):
+	
+	defaultMapsDict = {"Special Rooms": "00.special rooms.stb",
+		"Basement": "01.basement.stb",
+		"Cellar": "02.cellar.stb",
+		"Caves": "04.caves.stb",
+		"Catacombs": "05.catacombs.stb",
+		"Depths": "07.depths.stb",
+		"Necropolis": "08.necropolis.stb",
+		"Womb": "10.womb.stb",
+		"Utero": "11.utero.stb",
+		"Blue Womb": "13.blue womb.stb",
+		"Sheol": "14.sheol.stb",
+		"Cathedral": "15.cathedral.stb",
+		"Dark Room": "16.dark room.stb",
+		"Chest": "17.chest.stb",
+		"Special Rooms [Greed]": "18.greed special.stb",
+		"Basement [Greed]": "19.greed basement.stb",
+		"Caves [Greed]": "20.greed caves.stb",
+		"Depths [Greed]": "21.greed depths.stb",
+		"Womb [Greed]": "22.greed womb.stb",
+		"Sheol [Greed]": "23.greed sheol.stb",
+		"The Shop [Greed]": "24.greed the shop.stb",
+		"Ultra Greed [Greed]": "25.ultra greed.stb"}
+	defaultMapsOrdered = OrderedDict(sorted(defaultMapsDict.items(), key=lambda t: t[0]))
 
 	def __init__(self):
 		QMainWindow.__init__(self)
@@ -2091,14 +2125,18 @@ class MainWindow(QMainWindow):
 		
 		f.clear()
 		self.fa = f.addAction('New',						self.newMap, QKeySequence("Ctrl+N"))
-		self.fb = f.addAction('Open stage...',					self.openMapDefault, QKeySequence("Ctrl+O"))
-		self.fc = f.addAction('Open file...',					self.openMap, QKeySequence("Ctrl+Shift+O"))
+		self.fb = f.addAction('Open Stage',					self.openMapDefault, QKeySequence("Ctrl+O"))
+		self.fc = f.addAction('Open File',					self.openMap, QKeySequence("Ctrl+Shift+O"))
 		f.addSeparator()
 		self.fd = f.addAction('Save',						self.saveMap, QKeySequence("Ctrl+S"))
 		self.fe = f.addAction('Save As...',					self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
 		f.addSeparator()
 		self.fg = f.addAction('Take Screenshot...',			self.screenshot, QKeySequence("Ctrl+Alt+S"))
 		f.addSeparator()
+		self.fh = f.addAction('Set Stage Path',	self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
+		self.fi = f.addAction('Reset Stage Path',	self.resetStagePath, QKeySequence("Ctrl+Shift+R"))
+		f.addSeparator()
+		
 		
 		recent = settings.value("RecentFiles", [])
 		for r in recent:
@@ -2106,6 +2144,7 @@ class MainWindow(QMainWindow):
 		
 		f.addSeparator()
 
+	
 	def setupMenuBar(self):
 		mb = self.menuBar()
 
@@ -2120,8 +2159,6 @@ class MainWindow(QMainWindow):
 		self.ee = self.e.addAction('Deselect',					self.deSelect, QKeySequence("Ctrl+D"))
 		self.e.addSeparator()
 		self.ef = self.e.addAction('Clear Filters',				self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
-		self.e.addSeparator()
-		self.eg = self.e.addAction('Set default stage path',	self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
 
 		v = mb.addMenu('View')
 		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
@@ -2139,26 +2176,6 @@ class MainWindow(QMainWindow):
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
 		self.hb = h.addAction('Basement Renovator Documentation',	self.goToHelp)
 		# self.hc = h.addAction('Keyboard Shortcuts')
-		
-	def setDefaultStagePath(self):
-		stagePath = "FAILED READING!"
-		if QFile.exists("resources/stagepath.txt"):
-			stagePathFile = open("resources/stagepath.txt", "r")
-			stagePath = stagePathFile.read()
-			stagePathFile.close()
-		else:
-			stagePathFile = open("resources/stagepath.txt", "w")
-			stagePathFile.write("$resources$/packed/afterbirth_unpack/resources/rooms")
-			stagePathFile.close()
-			stagePath = "$resources$/packed/afterbirth_unpack/resources/rooms"
-		newStagePath, newStagePathOk = QInputDialog.getText(self, "Stage Path", "Path:\n($resources$ will get replaced by resources path)", QLineEdit.Normal, stagePath)
-		if newStagePathOk:
-			stagePathFile = open("resources/stagepath.txt", "w")
-			stagePathFile.write(newStagePath)
-			stagePathFile.close()
-			
-		else:
-			return
 
 	def setupDocks(self):
 		self.roomList = RoomSelector()
@@ -2282,6 +2299,7 @@ class MainWindow(QMainWindow):
 			for y in enumerate(current.roomSpawns):
 				for x in enumerate(y[1]):
 					for entity in x[1]:
+						print (x[0], y[0])
 						e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 						self.scene.addItem(e)
 
@@ -2321,99 +2339,48 @@ class MainWindow(QMainWindow):
 		self.updateTitlebar()
 		self.dirt()
 		self.roomList.changeFilter()
-
-	def openMapDefault(self):
-
-		if self.checkDirty(): return
-		resourcesPath = self.findResourcePath()
 		
-		defaultMaps = ("Special Rooms",
-				"Basement",
-				"Cellar",
-				"Caves",
-				"Catacombs",
-				"Depths",
-				"Necropolis",
-				"Womb",
-				"Utero",
-				"Blue Womb",
-				"Sheol",
-				"Cathedral",
-				"Dark Room",
-				"Chest",
-				"Special Rooms [Greed]",
-				"Basement [Greed]",
-				"Caves [Greed]",
-				"Depths [Greed]",
-				"Womb [Greed]",
-				"Sheol [Greed]",
-				"The Shop [Greed]",
-				"Ultra Greed [Greed]")
-		selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", defaultMaps, 0, False)
+	def setDefaultStagePath(self):
+		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+		if not settings.contains("stagepath"):
+			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+		stagePath = settings.value("stagepath")
+		stagePathDialog = QFileDialog()
+		stagePathDialog.setFilter(QDir.Hidden)
+		newStagePath = QFileDialog.getExistingDirectory(self, "Select directory", stagePath)
+		
+		if newStagePath != "":
+			settings.setValue("stagepath", newStagePath)
+		else:
+			return
+		
+	def resetStagePath(self):
+		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+		settings.remove("stagepath")
+		settings.remove("ResourceFolder")
+		settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+		
+	def openMapDefault(self):
+		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+		if self.checkDirty(): return
+		
+		selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", self.defaultMapsOrdered, 0, False)
 		self.restoreEditMenu()
 
 		mapFileName = ""
 		if selectedMapOk:
-			if selectedMap == "Special Rooms":
-				mapFileName = "00.special rooms.stb"
-			elif selectedMap == "Basement":
-				mapFileName = "01.basement.stb"
-			elif selectedMap == "Cellar":
-				mapFileName = "02.cellar.stb"
-			elif selectedMap == "Caves":
-				mapFileName = "04.caves.stb"
-			elif selectedMap == "Catacombs":
-				mapFileName = "05.catacombs.stb"
-			elif selectedMap == "Depths":
-				mapFileName = "07.depths.stb"
-			elif selectedMap == "Necropolis":
-				mapFileName = "08.necropolis.stb"
-			elif selectedMap == "Womb":
-				mapFileName = "10.womb.stb"
-			elif selectedMap == "Utero":
-				mapFileName = "11.utero.stb"
-			elif selectedMap == "Blue Womb":
-				mapFileName = "13.blue womb.stb"
-			elif selectedMap == "Sheol":
-				mapFileName = "14.sheol.stb"
-			elif selectedMap == "Cathedral":
-				mapFileName = "15.cathedral.stb"
-			elif selectedMap == "Dark Room":
-				mapFileName = "16.dark room.stb"
-			elif selectedMap == "Chest":
-				mapFileName = "17.chest.stb"
-			elif selectedMap == "Special Rooms [Greed]":
-				mapFileName = "18.greed special.stb"
-			elif selectedMap == "Basement [Greed]":
-				mapFileName = "19.greed basement.stb"
-			elif selectedMap == "Caves [Greed]":
-				mapFileName = "20.greed caves.stb"
-			elif selectedMap == "Depths [Greed]":
-				mapFileName = "21.greed depths.stb"
-			elif selectedMap == "Womb [Greed]":
-				mapFileName = "22.greed womb.stb"
-			elif selectedMap == "Sheol [Greed]":
-				mapFileName = "23.greed sheol.stb"
-			elif selectedMap == "The Shop [Greed]":
-				mapFileName = "24.greed the shop.stb"
-			elif selectedMap == "Ultra Greed [Greed]":
-				mapFileName = "25.ultra greed.stb"
+			mapFileName = self.defaultMapsDict[selectedMap]
 		else:
 			return
-		
-		if QFile.exists("resources/stagepath.txt"):
-			stagePathFile = open("resources/stagepath.txt", "r")
-			stagePath = stagePathFile.read()
-			stagePathFile.close()
-		else:
-			stagePathFile = open("resources/stagepath.txt", "w")
-			stagePathFile.write("$resources$/packed/afterbirth_unpack/resources/rooms")
-			stagePathFile.close()
-			stagePath = "$resources$/packed/afterbirth_unpack/resources/rooms"
 			
-		stagePathReal = stagePath.replace("$resources$", resourcesPath)
+		if not settings.contains("stagepath"):
+			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+		stagePath = settings.value("stagepath")
+		if not stagePath:
+			QMessageBox.warning(self, "Error", "Could not set default stage path or stage path is empty.")
+			return
 		
-		roomPath = stagePathReal + "/" + mapFileName
+		roomPath = os.path.expanduser(stagePath) + "/" + mapFileName
 		
 		if not QFile.exists(roomPath):
 			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
@@ -2432,13 +2399,20 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
-
+	
 	def openMap(self):
-
 		if self.checkDirty(): return
 
+		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+		if not settings.contains("stagepath"):
+			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+		stagePath = settings.value("stagepath")
+		if stagePath == "":
+			QMessageBox.warning(self, "Error", "Could not set default stage path.")
+			return
+		
 		target = QFileDialog.getOpenFileName(
-			self, 'Open Map', '', 'Stage Bundle (*.stb)')
+			self, 'Open Map', os.path.expanduser(stagePath), 'Stage Bundle (*.stb)')
 		self.restoreEditMenu()
 
 		# Looks like nothing was selected
@@ -2526,6 +2500,9 @@ class MainWindow(QMainWindow):
 				# x, y, number of entities at this position
 				spawnLoc = struct.unpack_from('<hhB', stb, off)
 				off += 5
+
+				if spawnLoc[0] < 0 or spawnLoc[1] < 0:
+					print (spawnLoc[1],spawnLoc[0])
 
 				for spawn in range(spawnLoc[2]):
 					#  type, variant, subtype, weight
@@ -2814,26 +2791,39 @@ class MainWindow(QMainWindow):
 				resourcesPath = os.path.expanduser("~/.local/share/Steam/steamapps/common/The Binding of Isaac Rebirth/resources")
 				if not QFile.exists(resourcesPath):
 					cantFindPath = True
-
 			else:
 				cantFindPath = True
 
-
 			# Fallback Resource Folder Locating
 			if cantFindPath == True:
-				resourcesPath = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder')[0]
+				resourcesPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder')
+				if not resourcesPathOut:
+					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
+					return
+				else:
+					resourcesPath = resourcesPathOut[0]
+				if resourcesPath == "":
+					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
+					return
+				if not QDir(resourcesPath).exists:
+					QMessageBox.warning(self, "Error", "Selected folder does not exist or is not a folder.")
+					return
+				if not QDir(resourcesPath + "/rooms/").exists:
+					QMessageBox.warning(self, "Error", "Could not find rooms folder in selected directory.")
+					return
 
 			# Looks like nothing was selected
 			if len(resourcesPath) == 0:
 				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth Resources folder (" + resourcesPath + ")")
 				return
 
+			print(resourcesPath + " 2")
 			settings.setValue('ResourceFolder', resourcesPath)
 
 		# make sure 'rooms' exists
-		if not QFile.exists(resourcesPath + "/rooms/"):
+		if not QDir(resourcesPath + "/rooms/").exists:
 			os.mkdir(resourcesPath + "/rooms/")
-
+		print(resourcesPath)
 		return resourcesPath
 
 	def killIsaac(self):
