@@ -549,7 +549,7 @@
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.242 - Infamy.png" Kind="Collect" Name="Infamy" Subtype="242" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.243 - Trinity Shield.png" Kind="Collect" Name="Trinity Shield" Subtype="243" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.244 - Tech.5.png" Kind="Collect" Name="Tech.5" Subtype="244" Variant="100" />
-	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.245 - 20/20.png" Kind="Collect" Name="20/20" Subtype="245" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.245 - 20-20.png" Kind="Collect" Name="20/20" Subtype="245" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.246 - Blue Map.png" Kind="Collect" Name="Blue Map" Subtype="246" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.247 - BFFS!.png" Kind="Collect" Name="BFFS!" Subtype="247" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.248 - Hive Mind.png" Kind="Collect" Name="Hive Mind" Subtype="248" Variant="100" />
