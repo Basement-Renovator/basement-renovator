@@ -918,7 +918,7 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.085 - Karma.png" Kind="Collect" Name="Karma" Subtype="85" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.086 - Lil Larva.png" Kind="Collect" Name="Lil Larva" Subtype="86" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.087 - Mom's Locket.png" Kind="Collect" Name="Mom's Locket" Subtype="87" Variant="350" />
-	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.088 - NO!.png" Kind="Collect" Name="NO!" Subtype="88" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.088 - NO.png" Kind="Collect" Name="NO!" Subtype="88" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.089 - Child Leash.png" Kind="Collect" Name="Child Leash" Subtype="89" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.090 - Brown Cap.png" Kind="Collect" Name="Brown Cap" Subtype="90" Variant="350" />
 
