@@ -977,7 +977,7 @@
 	<entity BaseHP="15" Champion="1" Group="Blobs" ID="290" Image="resources/Entities/290.0.0 - Meatball.png" Kind="Enemies" Name="Meatball" Subtype="0" Variant="0" />
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Pitfall" Subtype="0" Variant="0" />
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Kind="Stage" Name="Suction Pitfall" Subtype="0" Variant="1" />
-	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
+	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
 	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
 	<entity Group="Traps" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.0.0 - Ultra Greed Coin (Spinner).png" Kind="Stage" Name="Ultra Greed Coin (Spinner)" Subtype="0" Variant="0" />
