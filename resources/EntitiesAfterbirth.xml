@@ -472,7 +472,7 @@
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.134 - Guppy's Tail.png" Kind="Collect" Name="Guppy's Tail" Subtype="134" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.138 - Stigmata.png" Kind="Collect" Name="Stigmata" Subtype="138" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.139 - Mom's Purse.png" Kind="Collect" Name="Mom's Purse" Subtype="139" Variant="100" />
-	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.140 - Bob's Curse.png" Kind="Collect" Name="Bob's Curse" Subtype="140" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.140 - Bobs Curse.png" Kind="Collect" Name="Bob's Curse" Subtype="140" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.141 - Pageant Boy.png" Kind="Collect" Name="Pageant Boy" Subtype="141" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.142 - Scapular.png" Kind="Collect" Name="Scapular" Subtype="142" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.143 - Speed Ball.png" Kind="Collect" Name="Speed Ball" Subtype="143" Variant="100" />
