@@ -404,7 +404,7 @@
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.12 - Magic Mushroom.png" Kind="Collect" Name="Magic Mushroom" Subtype="12" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.13 - The Virus.png" Kind="Collect" Name="The Virus" Subtype="13" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.14 - Roid Rage.png" Kind="Collect" Name="Roid Rage" Subtype="14" Variant="100" />
-	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.15 - &lt;3.png" Kind="Collect" Name="&lt;3" Subtype="15" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.15 - Heart.png" Kind="Collect" Name="&lt;3" Subtype="15" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.16 - Raw Liver.png" Kind="Collect" Name="Raw Liver" Subtype="16" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.17 - Skeleton Key.png" Kind="Collect" Name="Skeleton Key" Subtype="17" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.18 - A Dollar.png" Kind="Collect" Name="A Dollar" Subtype="18" Variant="100" />
