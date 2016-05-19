@@ -2992,9 +2992,9 @@ class MainWindow(QMainWindow):
 		settings.setValue('BitfontEnabled', self.scene.bitText)
 
 		if self.scene.bitText:
-			self.wd.setText("Use Bitfont Counter")
-		else:
 			self.wd.setText("Use Aliased Counter")
+		else:
+			self.wd.setText("Use Bitfont Counter")
 
 		self.scene.update()
 
