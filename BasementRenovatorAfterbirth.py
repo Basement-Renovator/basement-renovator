@@ -2169,7 +2169,7 @@ class MainWindow(QMainWindow):
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
-		self.we = v.addAction('Reset Window Defaults',		self.resetWindowDefaults)
+		self.wf = v.addAction('Reset Window Defaults',		self.resetWindowDefaults)
 
 		r = mb.addMenu('Test')
 		self.ra = r.addAction('Test Current Room - Basement',		self.testMap, QKeySequence("Ctrl+T"))
