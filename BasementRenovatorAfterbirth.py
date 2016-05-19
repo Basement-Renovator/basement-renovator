@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ###########################################
-# 
+#
 #    Binding of Isaac: Rebirth Stage Editor
 #		by Colin Noga
 #		   Chronometrics / Tempus
@@ -56,12 +56,13 @@ class RoomScene(QGraphicsScene):
 		QGraphicsScene.__init__(self, 0,0,0,0)
 		self.newRoomSize(13, 7, 1)
 
-		self.BG = [	"01_basement", "02_cellar", "03_caves", "04_catacombs", 
-					"05_depths", "06_necropolis", "07_the womb", "08_utero", 
-					"09_sheol", "10_cathedral", "11_chest", "12_darkroom", 
-					"0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom", 
-					"0e_arcade", "0e_diceroom", "0f_secretroom", "18_bluewomb"
-					]
+		self.BG = [
+			"01_basement", "02_cellar", "03_caves", "04_catacombs",
+			"05_depths", "06_necropolis", "07_the womb", "08_utero",
+			"09_sheol", "10_cathedral", "11_chest", "12_darkroom",
+			"0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom",
+			"0e_arcade", "0e_diceroom", "0f_secretroom", "18_bluewomb"
+		]
 		self.grid = True
 
 		# Make the bitfont
@@ -83,7 +84,7 @@ class RoomScene(QGraphicsScene):
 		self.roomHeight = h
 		self.roomShape = s
 
-		self.setSceneRect(-52, -52, self.roomWidth*26+52*2, self.roomHeight*26+52*2)
+		self.setSceneRect(-52, -52, self.roomWidth * 26 + 52 * 2, self.roomHeight * 26 + 52 * 2)
 
 	def clearDoors(self):
 		for item in self.items():
@@ -96,46 +97,46 @@ class RoomScene(QGraphicsScene):
 
 		# Grey out the screen to show it's inactive if there are no rooms selected
 		if mainWindow.roomList.selectedRoom() == None:
-			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
-			painter.setBrush(QBrush(QColor(100,100,100,100)))
+			painter.setPen(QPen(Qt.white, 1, Qt.SolidLine))
+			painter.setBrush(QBrush(QColor(100, 100, 100, 100)))
 
-			b = QBrush(QColor(100,100,100,100))
+			b = QBrush(QColor(100, 100, 100, 100))
 			painter.fillRect(rect, b)
 			return
 
 		# Draw me a foreground grid
 		if not self.grid: return
-		
+
 		painter.setRenderHint(QPainter.Antialiasing, True)
 		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
-		rect = QRectF(0,0,self.roomWidth*26,self.roomHeight*26)
+		rect = QRectF(0, 0, self.roomWidth * 26, self.roomHeight * 26)
 
 		# Modify Rect for slim rooms
-		if self.roomShape in [2,7]:
-			rect = QRectF(0,52,self.roomWidth*26,self.roomHeight*26)
+		if self.roomShape in [2, 7]:
+			rect = QRectF(0, 52, self.roomWidth * 26, self.roomHeight * 26)
 
-		if self.roomShape in [3,5]:
-			rect = QRectF(104,0,self.roomWidth*26,self.roomHeight*26)
+		if self.roomShape in [3, 5]:
+			rect = QRectF(104, 0, self.roomWidth * 26, self.roomHeight * 26)
 
 		# Actual drawing code
 		ts = 26
 
 		startx = rect.x()
 		endx = startx + rect.width()
-		
+
 		starty = rect.y()
 		endy = starty + rect.height()
-		
-		painter.setPen(QPen(QColor.fromRgb(255,255,255,100), 1, Qt.DashLine))
-		
+
+		painter.setPen(QPen(QColor.fromRgb(255, 255, 255, 100), 1, Qt.DashLine))
+
 		x = startx
 		y1 = rect.top()
 		y2 = rect.bottom()
 		while x <= endx:
 			painter.drawLine(x, starty, x, endy)
 			x += ts
-		
+
 		y = starty
 		x1 = rect.left()
 		x2 = rect.right()
@@ -153,13 +154,13 @@ class RoomScene(QGraphicsScene):
 		self.tile = QImage()
 		self.tile.load('resources/Backgrounds/{0}.png'.format(self.BG[roomBG-1]))
 
-		self.corner = self.tile.copy(		QRect(0,	0,	26*7,	26*4)	)
-		self.vert =   self.tile.copy(		QRect(26*7,	0,	26*2,	26*6)	)
-		self.horiz =  self.tile.copy(		QRect(0, 26*4,	26*9,	26*2)	)
+		self.corner = self.tile.copy(QRect(0,       0,      26 * 7, 26 * 4))
+		self.vert =   self.tile.copy(QRect(26 * 7,  0,      26 * 2, 26 * 6))
+		self.horiz =  self.tile.copy(QRect(0,       26 * 4, 26 * 9, 26 * 2))
 
 		# I'll need to do something here for the other corner
 		self.innerCorner = QImage()
-		self.innerCorner.load('resources/Backgrounds/{0}Inner.png'.format(self.BG[roomBG-1]))
+		self.innerCorner.load('resources/Backgrounds/{0}Inner.png'.format(self.BG[roomBG - 1]))
 
 	def drawBackground(self, painter, rect):
 
@@ -189,47 +190,47 @@ class RoomScene(QGraphicsScene):
 
 	def drawBGRegularRooms(self, painter, rect):
 		t = -52
-		xm = 26 * (self.roomWidth+2)  - 26*7
-		ym = 26 * (self.roomHeight+2) - 26*4
+		xm = 26 * (self.roomWidth + 2)  - 26 * 7
+		ym = 26 * (self.roomHeight + 2) - 26 * 4
 
 		# Corner Painting
-		painter.drawPixmap	(t,t, 	QPixmap().fromImage(self.corner.mirrored(False, False)))
-		painter.drawPixmap	(xm,t, 	QPixmap().fromImage(self.corner.mirrored(True, False)))
-		painter.drawPixmap	(t,ym,	QPixmap().fromImage(self.corner.mirrored(False, True)))
-		painter.drawPixmap	(xm,ym,	QPixmap().fromImage(self.corner.mirrored(True, True)))
+		painter.drawPixmap(t,  t,  QPixmap().fromImage(self.corner.mirrored(False, False)))
+		painter.drawPixmap(xm, t,  QPixmap().fromImage(self.corner.mirrored(True, False)))
+		painter.drawPixmap(t,  ym, QPixmap().fromImage(self.corner.mirrored(False, True)))
+		painter.drawPixmap(xm, ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
 		# Mirrored Textures
-		uRect = QImage(26*4, 26*6, QImage.Format_RGB32)
-		lRect = QImage(26*9, 26*4, QImage.Format_RGB32)
+		uRect = QImage(26 * 4, 26 * 6, QImage.Format_RGB32)
+		lRect = QImage(26 * 9, 26 * 4, QImage.Format_RGB32)
 
 		uRect.fill(1)
 		lRect.fill(1)
 
 		vp = QPainter()
 		vp.begin(uRect)
-		vp.drawPixmap(0, 0,QPixmap().fromImage(self.vert))
-		vp.drawPixmap(52,0,QPixmap().fromImage(self.vert.mirrored(True, False)))
+		vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
+		vp.drawPixmap(52, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
 		vp.end()
 
 		vh = QPainter()
 		vh.begin(lRect)
-		vh.drawPixmap(0, 0,QPixmap().fromImage(self.horiz))
-		vh.drawPixmap(0,52,QPixmap().fromImage(self.horiz.mirrored(False, True)))
+		vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
+		vh.drawPixmap(0, 52, QPixmap().fromImage(self.horiz.mirrored(False, True)))
 		vh.end()
 
-		painter.drawTiledPixmap(26*7-52-13, -52, 26 * (self.roomWidth - 10)+26, 26*6, QPixmap().fromImage(uRect))
-		painter.drawTiledPixmap(-52, 26*4-52-13, 26*9, 26 * (self.roomHeight - 4)+26, QPixmap().fromImage(lRect))
-		painter.drawTiledPixmap(26*7-52-13, self.roomHeight*26-26*4, 26 * (self.roomWidth - 10)+26, 26*6, QPixmap().fromImage(uRect.mirrored(False, True)))
-		painter.drawTiledPixmap(self.roomWidth*26-26*7, 26*4-52-13, 26*9, 26 * (self.roomHeight - 4)+26, QPixmap().fromImage(lRect.mirrored(True, False)))
+		painter.drawTiledPixmap(26 * 7 - 52 - 13, -52, 26 * (self.roomWidth - 10) + 26, 26 * 6, QPixmap().fromImage(uRect))
+		painter.drawTiledPixmap(-52, 26 * 4 - 52 - 13, 26 * 9, 26 * (self.roomHeight - 4) + 26, QPixmap().fromImage(lRect))
+		painter.drawTiledPixmap(26 * 7 - 52 - 13, self.roomHeight * 26 - 26 * 4, 26 * (self.roomWidth - 10) + 26, 26 * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
+		painter.drawTiledPixmap(self.roomWidth * 26 - 26 * 7, 26 * 4 - 52 - 13, 26 * 9, 26 * (self.roomHeight - 4) + 26, QPixmap().fromImage(lRect.mirrored(True, False)))
 
 		if self.roomHeight == 14 and self.roomWidth == 26:
 
-			self.center = self.tile.copy(		QRect(26*3,	26*3, 26*6, 26*3)	)
+			self.center = self.tile.copy(QRect(26 * 3, 26 * 3, 26 * 6, 26 * 3))
 
-			painter.drawPixmap	(26*7,  26*4, 	QPixmap().fromImage(self.center.mirrored(False, False)))
-			painter.drawPixmap	(26*13, 26*4, 	QPixmap().fromImage(self.center.mirrored(True, False)))
-			painter.drawPixmap	(26*7 , 26*7,	QPixmap().fromImage(self.center.mirrored(False, True)))
-			painter.drawPixmap	(26*13, 26*7,	QPixmap().fromImage(self.center.mirrored(True, True)))
+			painter.drawPixmap	(26 * 7,  26 * 4, QPixmap().fromImage(self.center.mirrored(False, False)))
+			painter.drawPixmap	(26 * 13, 26 * 4, QPixmap().fromImage(self.center.mirrored(True, False)))
+			painter.drawPixmap	(26 * 7,  26 * 7, QPixmap().fromImage(self.center.mirrored(False, True)))
+			painter.drawPixmap	(26 * 13, 26 * 7, QPixmap().fromImage(self.center.mirrored(True, True)))
 
 	def drawBGSlimRooms(self, painter, rect):
 
@@ -238,27 +239,27 @@ class RoomScene(QGraphicsScene):
 		xo = 0
 
 		# Thin in Height
-		if self.roomShape in [2,7]:
+		if self.roomShape in [2, 7]:
 			self.roomHeight = 3
 			yo = (2 * 26)
 
 		# Thin in Width
-		if self.roomShape in [3,5]:
+		if self.roomShape in [3, 5]:
 			self.roomWidth = 5
 			xo = (4 * 26)
 
-		xm = 26 * (self.roomWidth+2)  - 26*7
-		ym = 26 * (self.roomHeight+2) - 26*4
+		xm = 26 * (self.roomWidth+2)  - 26 * 7
+		ym = 26 * (self.roomHeight+2) - 26 * 4
 
 		# Corner Painting
-		painter.drawPixmap	( t+xo,  t+yo, QPixmap().fromImage(self.corner.mirrored(False, False)))
-		painter.drawPixmap	(xm+xo,  t+yo, QPixmap().fromImage(self.corner.mirrored(True, False)))
-		painter.drawPixmap	( t+xo, ym+yo, QPixmap().fromImage(self.corner.mirrored(False, True)))
-		painter.drawPixmap	(xm+xo, ym+yo, QPixmap().fromImage(self.corner.mirrored(True, True)))
+		painter.drawPixmap( t+xo,  t+yo, QPixmap().fromImage(self.corner.mirrored(False, False)))
+		painter.drawPixmap(xm+xo,  t+yo, QPixmap().fromImage(self.corner.mirrored(True, False)))
+		painter.drawPixmap( t+xo, ym+yo, QPixmap().fromImage(self.corner.mirrored(False, True)))
+		painter.drawPixmap(xm+xo, ym+yo, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
 		# Mirrored Textures
-		uRect = QImage(26*4, 26*4, QImage.Format_RGB32)
-		lRect = QImage(26*7, 26*4, QImage.Format_RGB32)
+		uRect = QImage(26 * 4, 26 * 4, QImage.Format_RGB32)
+		lRect = QImage(26 * 7, 26 * 4, QImage.Format_RGB32)
 
 		uRect.fill(1)
 		lRect.fill(1)
@@ -291,12 +292,12 @@ class RoomScene(QGraphicsScene):
 
 	def drawBGCornerRooms(self, painter, rect):
 		t = -52
-		xm = 26 * (self.roomWidth+2)  - 26*7
-		ym = 26 * (self.roomHeight+2) - 26*4
+		xm = 26 * (self.roomWidth + 2)  - 26 * 7
+		ym = 26 * (self.roomHeight + 2) - 26 * 4
 
 		# Mirrored Textures
-		uRect = QImage(26*4, 26*6, QImage.Format_RGB32)
-		lRect = QImage(26*9, 26*4, QImage.Format_RGB32)
+		uRect = QImage(26 * 4, 26 * 6, QImage.Format_RGB32)
+		lRect = QImage(26 * 9, 26 * 4, QImage.Format_RGB32)
 
 		uRect.fill(1)
 		lRect.fill(1)
@@ -314,10 +315,10 @@ class RoomScene(QGraphicsScene):
 		vh.end()
 
 		# Exterior Corner Painting
-		painter.drawPixmap	(t,t, 	QPixmap().fromImage(self.corner.mirrored(False, False)))
-		painter.drawPixmap	(xm,t, 	QPixmap().fromImage(self.corner.mirrored(True, False)))
-		painter.drawPixmap	(t,ym,	QPixmap().fromImage(self.corner.mirrored(False, True)))
-		painter.drawPixmap	(xm,ym,	QPixmap().fromImage(self.corner.mirrored(True, True)))
+		painter.drawPixmap(t,t,   QPixmap().fromImage(self.corner.mirrored(False, False)))
+		painter.drawPixmap(xm,t,  QPixmap().fromImage(self.corner.mirrored(True, False)))
+		painter.drawPixmap(t,ym,  QPixmap().fromImage(self.corner.mirrored(False, True)))
+		painter.drawPixmap(xm,ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
 		# Exterior Wall Painting
 		painter.drawTiledPixmap(26*7-52-13, -52, 26 * (self.roomWidth - 10)+26, 26*6, QPixmap().fromImage(uRect))
@@ -347,7 +348,7 @@ class RoomScene(QGraphicsScene):
 			# Clear the dead area
 			painter.fillRect(t , t , xl, yl, QColor(0,0,0,255))
 
-			# Draw the horizontal wall 
+			# Draw the horizontal wall
 			painter.drawTiledPixmap(xm-26*8, ym+t, 26*6, 26*6, QPixmap().fromImage(uRect))
 
 			# Draw the vertical wall
@@ -413,7 +414,7 @@ class RoomEditorWidget(QGraphicsView):
 		self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
 		self.setAlignment(Qt.AlignTop|Qt.AlignLeft)
 		self.newScale = 1.0
-		
+
 		self.assignNewScene(scene)
 
 		self.statusBar = True
@@ -616,7 +617,7 @@ class RoomEditorWidget(QGraphicsView):
 		for e in self.scene().items():
 			if isinstance(e,Entity):
 				tiles[e.entity['Y']][e.entity['X']] += 1
-	
+
 		if not self.scene().bitText:
 			painter.setPen(QPen(Qt.white,1,Qt.SolidLine))
 			painter.font().setPixelSize(5)
@@ -677,7 +678,7 @@ class Entity(QGraphicsItem):
 			Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
 
 		self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
-	
+
 	def getEntityInfo(self, t, subtype, variant):
 
 		# Try catch so I can not crash BR so often
@@ -780,18 +781,18 @@ class Entity(QGraphicsItem):
 				(self.entity['Type'] == 5 and self.entity['Variant'] == 380) or \
 				(self.entity['Type'] == 291 and self.entity['Variant'] == 1) or \
 				(self.entity['Type'] == 291 and self.entity['Variant'] == 3):
-				
+
 				y = -(self.entity['pixmap'].height()-26) / 2
 			else:
 				y = -(self.entity['pixmap'].height()-26)
-			
+
 			# Curse room special case
 			if self.entity['Type'] == 5 and self.entity['Variant'] == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
 				self.entity['pixmap'] = QPixmap()
 				self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
 
 			# Creeper special case
-			if self.entity['Type'] in [240, 241, 242]: 
+			if self.entity['Type'] in [240, 241, 242]:
 				w = self.scene().roomWidth -1
 				h = self.scene().roomHeight-1
 				ex = self.entity['X']
@@ -816,7 +817,7 @@ class Entity(QGraphicsItem):
 
 				elif direction == 3: # Bottom
 					painter.drawLine(13,26, 13, closest*26+26)
-				
+
 				painter.drawPixmap(x,y,self.entity['pixmap'])
 
 			# Most Painting
@@ -847,7 +848,7 @@ class Entity(QGraphicsItem):
 			painter.drawText(4,16,str(self.entity['Type']))
 			painter.drawText(4,32,str(self.entity['Variant']))
 			painter.drawText(4,48,str(self.entity['Subtype']))
-	
+
 	def remove(self):
 		self.scene().removeItem(self)
 
@@ -936,7 +937,7 @@ class Room(QListWidgetItem):
 		self.roomWeight = weight
 		self.roomWidth = width
 		self.roomHeight = height
-		self.roomShape = shape 				# w x h -> 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2, 9 = corner?, 10 = corner?, 11 = corner?, 12 = corner? 
+		self.roomShape = shape 				# w x h -> 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2, 9 = corner?, 10 = corner?, 11 = corner?, 12 = corner?
 
 		self.roomBG = 1
 		self.setRoomBG()
@@ -1029,9 +1030,9 @@ class Room(QListWidgetItem):
 		c = self.roomType
 
 		roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'dark room', 'bluewomb']
-		
+
 		self.roomBG = 1
-		
+
 		for t in roomType:
 			if t in mainWindow.path:
 				self.roomBG = roomType.index(t)+1
@@ -1105,15 +1106,16 @@ class FilterMenu(QMenu):
 		QMenu.__init__(self)
 
 	def paintEvent(self, event):
-	
+
+
 		QMenu.paintEvent(self, event)
 
-		painter = QPainter(self) 
+		painter = QPainter(self)
 
 		for act in self.actions():
 			rect = self.actionGeometry(act)
 			painter.fillRect(rect.right()/2-12, rect.top()-2, 24, 24, QBrush(Qt.transparent))
-			painter.drawPixmap(rect.right()/2-12, rect.top()-2, act.icon().pixmap(24, 24));    
+			painter.drawPixmap(rect.right()/2-12, rect.top()-2, act.icon().pixmap(24, 24));
 
 class RoomSelector(QWidget):
 
@@ -1144,7 +1146,7 @@ class RoomSelector(QWidget):
 
 		fq = QImage()
 		fq.load('resources/UI/FilterIcons.png')
-		
+
 		# Set the custom data
 		self.filter.typeData = -1
 		self.filter.weightData = -1
@@ -1344,7 +1346,7 @@ class RoomSelector(QWidget):
 
 		for sizeName in range(1,13):
 			i = QIcon(QPixmap.fromImage(q.copy((sizeName-1)*16,0,16,16)))
-	
+
 			s = size.addAction(i, str(sizeName))
 			if self.selectedRoom().roomShape == sizeName:
 				s.setCheckable(True)
@@ -1358,10 +1360,12 @@ class RoomSelector(QWidget):
 		Type = QWidgetAction(menu)
 		c = QComboBox()
 
-		types= ["Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room", 
-				"Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room", 
-				"Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room", 
-				"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"] 
+		types= [
+			"Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room",
+			"Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room",
+			"Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room",
+			"Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"
+		]
 
 		# if "00." not in mainWindow.path:
 		# 	types=["Null Room", "Normal Room"]
@@ -1378,7 +1382,7 @@ class RoomSelector(QWidget):
 
 		# Difficulty
 		diff = menu.addMenu('Difficulty')
-		
+
 		for d in [0,1,2,5,10]:
 			m = diff.addAction('{0}'.format(d))
 
@@ -1390,7 +1394,7 @@ class RoomSelector(QWidget):
 
 		# Weight
 		weight = menu.addMenu('Weight')
-		
+
 		for w in [0.1,0.25,0.5,0.75,1.0,1.5,2.0,5.0,1000.0]:
 			m = weight.addAction('{0}'.format(w))
 
@@ -1535,7 +1539,7 @@ class RoomSelector(QWidget):
 	@pyqtSlot()
 	def changeFilter(self):
 		self.colourizeClearFilterButtons()
-	
+
 		# Here we go
 		for room in self.getRooms():
 			IDCond = entityCond = typeCond = weightCond = sizeCond = True
@@ -1589,7 +1593,7 @@ class RoomSelector(QWidget):
 			if IDCond and entityCond and typeCond and weightCond and sizeCond:
 				room.setHidden(False)
 			else:
-				room.setHidden(True)		
+				room.setHidden(True)
 
 	def setEntityFilter(self, entity):
 		self.filterEntity = entity
@@ -1644,7 +1648,7 @@ class RoomSelector(QWidget):
 		self.selectedRoom().makeNewDoors()
 		self.selectedRoom().clearDoors()
 		mainWindow.scene.newRoomSize(w, h, s)
-		
+
 		mainWindow.editor.resizeEvent(QResizeEvent(mainWindow.editor.size(), mainWindow.editor.size()))
 
 		# Spawn those entities
@@ -1713,7 +1717,7 @@ class RoomSelector(QWidget):
 
 	def addRoom(self):
 		"""Creates a new room."""
-		
+
 		r = Room()
 		self.list.insertItem(self.list.currentRow()+1, r)
 		self.list.setCurrentItem(r, QItemSelectionModel.ClearAndSelect)
@@ -1741,7 +1745,7 @@ class RoomSelector(QWidget):
 			self.list.clearSelection()
 			for item in rooms:
 				self.list.takeItem(self.list.row(item))
-	
+
 			self.list.scrollToItem(self.list.currentItem())
 			self.list.setCurrentItem(self.list.currentItem(), QItemSelectionModel.Select)
 			mainWindow.dirt()
@@ -1765,14 +1769,14 @@ class RoomSelector(QWidget):
 		for room in rooms:
 			v += 1
 
-			r = Room(	room.data(0x100) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType, 
-						v+rv, room.roomSubvariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
+			r = Room(room.data(0x100) + ' (copy)', [list(door) for door in room.roomDoors], room.roomSpawns, room.roomType,
+					 v+rv, room.roomSubvariant, room.roomDifficulty, room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
 
 			self.list.insertItem(initialPlace+v, r)
 			self.list.setCurrentItem(r, QItemSelectionModel.Select)
 
 		mainWindow.dirt()
-	
+
 	def exportRoom(self):
 
 		# Get a new
@@ -1842,7 +1846,7 @@ class EntityGroupItem(object):
 		if (index <= self.startIndex + len(self.objects)):
 			return self.objects[index - self.startIndex - 1]
 
-	def calculateIndices(self, index):		
+	def calculateIndices(self, index):
 		self.startIndex = index
 		self.endIndex = len(self.objects) + index
 
@@ -1912,7 +1916,7 @@ class EntityGroupModel(QAbstractListModel):
 				return group.getItem(index)
 
 	def data(self, index, role=Qt.DisplayRole):
-		# Should return the contents of a row when asked for the index 
+		# Should return the contents of a row when asked for the index
 		#
 		# Can be optimized by only dealing with the roles we need prior
 		# to lookup: Role order is 13, 6, 7, 9, 10, 1, 0, 8
@@ -1941,7 +1945,7 @@ class EntityGroupModel(QAbstractListModel):
 
 		if role == Qt.ToolTipRole or role == Qt.StatusTipRole or role == Qt.WhatsThisRole:
 			if isinstance(item, EntityItem):
-				return "{0}".format(item.name) 
+				return "{0}".format(item.name)
 
 		elif role == Qt.DisplayRole:
 			if isinstance(item, EntityGroupItem):
@@ -2030,7 +2034,7 @@ class EntityPalette(QWidget):
 	objReplaced = pyqtSignal(EntityItem)
 
 class EntityList(QListView):
-	
+
 	def __init__(self):
 		QListView.__init__(self)
 
@@ -2059,8 +2063,9 @@ class EntityList(QListView):
 ########################
 
 class MainWindow(QMainWindow):
-	
-	defaultMapsDict = {"Special Rooms": "00.special rooms.stb",
+
+	defaultMapsDict = {
+		"Special Rooms": "00.special rooms.stb",
 		"Basement": "01.basement.stb",
 		"Cellar": "02.cellar.stb",
 		"Caves": "04.caves.stb",
@@ -2081,7 +2086,8 @@ class MainWindow(QMainWindow):
 		"Womb [Greed]": "22.greed womb.stb",
 		"Sheol [Greed]": "23.greed sheol.stb",
 		"The Shop [Greed]": "24.greed the shop.stb",
-		"Ultra Greed [Greed]": "25.ultra greed.stb"}
+		"Ultra Greed [Greed]": "25.ultra greed.stb"
+	}
 	defaultMapsOrdered = OrderedDict(sorted(defaultMapsDict.items(), key=lambda t: t[0]))
 
 	def __init__(self):
@@ -2091,7 +2097,7 @@ class MainWindow(QMainWindow):
 		self.setIconSize(QSize(16, 16))
 
 		self.dirty = False
-		
+
 		self.scene = RoomScene()
 		self.clipboard = None
 
@@ -2112,12 +2118,12 @@ class MainWindow(QMainWindow):
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
 
 		# Setup a new map
-		self.newMap()	
+		self.newMap()
 		self.clean()
 
 	def setupFileMenuBar(self):
 		f = self.fileMenu
-		
+
 		f.clear()
 		self.fa = f.addAction('New',						self.newMap, QKeySequence("Ctrl+N"))
 		self.fb = f.addAction('Open Stage',					self.openMapDefault, QKeySequence("Ctrl+O"))
@@ -2131,16 +2137,15 @@ class MainWindow(QMainWindow):
 		self.fh = f.addAction('Set Stage Path',				self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
 		self.fi = f.addAction('Reset Stage Path',			self.resetStagePath, QKeySequence("Ctrl+Shift+R"))
 		f.addSeparator()
-		
-		
+
 		recent = settings.value("RecentFiles", [])
 		for r in recent:
 			f.addAction("%d: %s" % (recent.index(r), r), self.openRecent).setData(r)
-		
+
 		f.addSeparator()
 
 		self.fj = f.addAction('Exit', 						self.close, QKeySequence.Quit)
-	
+
 	def setupMenuBar(self):
 		mb = self.menuBar()
 
@@ -2167,7 +2172,7 @@ class MainWindow(QMainWindow):
 		r = mb.addMenu('Test')
 		self.ra = r.addAction('Test Current Room - Basement',		self.testMap, QKeySequence("Ctrl+T"))
 		self.ra = r.addAction('Test Current Room - Start',			self.testStartMap, QKeySequence("Ctrl+Shift+T"))
-		
+
 		h = mb.addMenu('Help')
 		self.ha = h.addAction('About Basement Renovator',			self.aboutDialog)
 		self.hb = h.addAction('Basement Renovator Documentation',	self.goToHelp)
@@ -2255,14 +2260,14 @@ class MainWindow(QMainWindow):
 
 	def closeEvent(self, event):
 		"""Handler for the main window close event"""
-		
+
 		if self.checkDirty():
 			event.ignore()
 		else:
-			# save our state			
+			# Save our state
 			settings.setValue('MainWindowGeometry', self.saveGeometry())
-			settings.setValue('MainWindowState', self.saveState(0))			
-						
+			settings.setValue('MainWindowState', self.saveState(0))
+
 			event.accept()
 
 			app.quit()
@@ -2287,7 +2292,7 @@ class MainWindow(QMainWindow):
 			# Clear the room and reset the size
 			self.scene.clear()
 			self.scene.newRoomSize(current.roomWidth, current.roomHeight, current.roomShape)
-			
+
 			self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
 
 			# Make some doors
@@ -2337,7 +2342,7 @@ class MainWindow(QMainWindow):
 		self.updateTitlebar()
 		self.dirt()
 		self.roomList.changeFilter()
-		
+
 	def setDefaultStagePath(self):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 		if not settings.contains("stagepath"):
@@ -2346,22 +2351,22 @@ class MainWindow(QMainWindow):
 		stagePathDialog = QFileDialog()
 		stagePathDialog.setFilter(QDir.Hidden)
 		newStagePath = QFileDialog.getExistingDirectory(self, "Select directory", stagePath)
-		
+
 		if newStagePath != "":
 			settings.setValue("stagepath", newStagePath)
 		else:
 			return
-		
+
 	def resetStagePath(self):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 		settings.remove("stagepath")
 		settings.remove("ResourceFolder")
 		settings.setValue("stagepath", self.findResourcePath() + "/rooms")
-		
+
 	def openMapDefault(self):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 		if self.checkDirty(): return
-		
+
 		selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", self.defaultMapsOrdered, 0, False)
 		self.restoreEditMenu()
 
@@ -2370,16 +2375,16 @@ class MainWindow(QMainWindow):
 			mapFileName = self.defaultMapsDict[selectedMap]
 		else:
 			return
-			
+
 		if not settings.contains("stagepath"):
 			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
 		stagePath = settings.value("stagepath")
 		if not stagePath:
 			QMessageBox.warning(self, "Error", "Could not set default stage path or stage path is empty.")
 			return
-		
+
 		roomPath = os.path.expanduser(stagePath) + "/" + mapFileName
-		
+
 		if not QFile.exists(roomPath):
 			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
 			return
@@ -2397,7 +2402,7 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
-	
+
 	def openMap(self):
 		if self.checkDirty(): return
 
@@ -2408,7 +2413,7 @@ class MainWindow(QMainWindow):
 		if stagePath == "":
 			QMessageBox.warning(self, "Error", "Could not set default stage path.")
 			return
-		
+
 		target = QFileDialog.getOpenFileName(
 			self, 'Open Map', os.path.expanduser(stagePath), 'Stage Bundle (*.stb)')
 		self.restoreEditMenu()
@@ -2430,25 +2435,25 @@ class MainWindow(QMainWindow):
 
 		self.clean()
 		self.roomList.changeFilter()
-	
+
 	def openRecent(self):
 		if self.checkDirty(): return
-		
+
 		path = self.sender().data()
 		self.restoreEditMenu()
-		
+
 		self.roomList.list.clear()
 		self.scene.clear()
 		self.path = path
 		self.updateTitlebar()
-		
+
 		rooms = self.open()
 		for room in rooms:
 			self.roomList.list.addItem(room)
 
 		self.clean()
 		self.roomList.changeFilter()
-	
+
 	def open(self, path=None):
 
 		if not path:
@@ -2515,11 +2520,11 @@ class MainWindow(QMainWindow):
 		recent = settings.value("RecentFiles", [])
 		while recent.count(path) > 0:
 			recent.remove(path)
-			
+
 		recent.insert(0, path)
 		while len(recent) > 10:
 			recent.pop()
-			
+
 		settings.setValue("RecentFiles", recent)
 		self.setupFileMenuBar()
 
@@ -2594,11 +2599,11 @@ class MainWindow(QMainWindow):
 
 		ScreenshotImage = QImage(self.scene.sceneRect().width(), self.scene.sceneRect().height(), QImage.Format_ARGB32)
 		ScreenshotImage.fill(Qt.transparent)
-		
+
 		RenderPainter = QPainter(ScreenshotImage)
 		self.scene.render(RenderPainter, QRectF(ScreenshotImage.rect()), self.scene.sceneRect())
 		RenderPainter.end()
-		   
+
 		ScreenshotImage.save(fn, 'PNG', 50)
 
 		self.scene.grid = g
@@ -2622,7 +2627,7 @@ class MainWindow(QMainWindow):
 		# Make a new stb with a blank room
 		padMe = True
 		if testRoom.roomShape not in [2,3,5,7]:	# Always pad these rooms
-			padMe = False			
+			padMe = False
 			for door in testRoom.roomDoors:
 				if door[2] == False:
 					padMe = True
@@ -2705,7 +2710,7 @@ class MainWindow(QMainWindow):
 			QMessageBox.warning(self, "Error", "Room shapes 2 and 7 (Long and narrow) and 9 (L shaped with upper right corner missing) can't be tested as the Start Room.")
 			return
 
-		# Auto-tests by adding the room to basement.
+		# Auto-tests by adding the room to basement
 		resourcesPath = self.findResourcePath()
 		if resourcesPath == "":
 			return
@@ -2746,7 +2751,7 @@ class MainWindow(QMainWindow):
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
-	
+
 		# Prompt to restore backup
 		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb.")
 		if result == QMessageBox.Ok:
@@ -2783,7 +2788,7 @@ class MainWindow(QMainWindow):
 				basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
 				if not basePath:
 					cantFindPath = True
-				
+
 				resourcesPath = basePath + "/steamapps/common/The Binding of Isaac Rebirth/resources"
 				if not QFile.exists(resourcesPath):
 					cantFindPath = True
@@ -2827,7 +2832,7 @@ class MainWindow(QMainWindow):
 
 			settings.setValue('ResourceFolder', resourcesPath)
 
-		# make sure 'rooms' exists
+		# Make sure 'rooms' exists
 		if not QDir(resourcesPath + "/rooms/").exists:
 			os.mkdir(resourcesPath + "/rooms/")
 		return resourcesPath
@@ -2846,22 +2851,22 @@ class MainWindow(QMainWindow):
 		room = self.roomList.list.currentItem()
 		if not room:
 			return
-		
+
 		exePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
 		if not exePath:
 			QMessageBox.warning(self, "Error", "Could not find Steam directory")
 			return
-		
+
 		exePath += "/steamapps/common/The Binding of Isaac Rebirth/"
 		if not QFile.exists(exePath + "isaac-ng.exe"):
 			QMessageBox.warning(self, "Error", "Could not find isaac-ng.exe (" + exePath + "isaac-ng.exe)")
 			return
-		
+
 		path = exePath + "br_output.xml"
 		self.storeEntityList()
-		
+
 		out = open(path, 'w')
-		
+
 		# Floor type
 		roomType = [
 			('basement', 1, 0),
@@ -2877,38 +2882,38 @@ class MainWindow(QMainWindow):
 			('dark room', 11, 0),
 			('chest', 11, 1)
 		]
-		
+
 		floorInfo = roomType[0]
 		for t in roomType:
 			if t[0] in mainWindow.path:
 				floorInfo = t
-		
+
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
 			room.roomType, room.roomVariant, room.roomDifficulty, room.data(0x100),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
-		
+
 		# Doors
 		for door in room.roomDoors:
 			out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
-		
+
 		# Spawns
 		for y in enumerate(room.roomSpawns):
 			for x in enumerate(y[1]):
 				if len(x[1]) == 0: continue
-				
+
 				out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
 				for entity in x[1]:
 					out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
 						entity[0], entity[1], entity[2], 2.0
 					))
 				out.write('\t</spawn>\n')
-		
+
 		out.write('</room>\n')
-		
+
 		subprocess.call([exePath + "/isaac-ng.exe", "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2])])
-		
+
 # Edit
 ########################
 	@pyqtSlot()
@@ -2948,7 +2953,7 @@ class MainWindow(QMainWindow):
 
 # Miscellaneous
 ########################
-	
+
 	@pyqtSlot()
 	def switchGrid(self):
 		"""Handle toggling of the grid being showed"""
@@ -2960,13 +2965,13 @@ class MainWindow(QMainWindow):
 			self.wa.setText("Hide Grid")
 		else:
 			self.wa.setText("Show Grid")
-		
+
 		self.scene.update()
 
 	@pyqtSlot()
 	def switchInfo(self):
 		"""Handle toggling of the grid being showed"""
-		
+
 		self.editor.statusBar = not self.editor.statusBar
 		settings.setValue('StatusEnabled', self.editor.statusBar)
 
@@ -2974,7 +2979,7 @@ class MainWindow(QMainWindow):
 			self.we.setText("Hide Info Bar")
 		else:
 			self.we.setText("Show Info Bar")
-		
+
 		self.scene.update()
 
 	@pyqtSlot()
@@ -2993,7 +2998,7 @@ class MainWindow(QMainWindow):
 
 	@pyqtSlot()
 	def showPainter(self):
-		if self.EntityPaletteDock.isVisible(): 
+		if self.EntityPaletteDock.isVisible():
 			self.EntityPaletteDock.hide()
 		else:
 			self.EntityPaletteDock.show()
@@ -3030,7 +3035,7 @@ class MainWindow(QMainWindow):
 		caption = "About the Basement Renovator"
 
 		text = "<big><b>Basement Renovator</b></big><br><br>    The Basement Renovator Editor is an editor for custom rooms, for use with the Binding of Isaac Afterbirth. In order to use it, you must have unpacked the .stb files from Binding of Isaac Afterbirth.<br><br>    The Basement Renovator was programmed by Tempus (u/Chronometrics).<br><br>    Find the source on <a href='https://github.com/Tempus/Basement-Renovator'>github</a>."
-		
+
 		msg = QMessageBox.about(mainWindow, caption, text)
 
 	@pyqtSlot(bool)
