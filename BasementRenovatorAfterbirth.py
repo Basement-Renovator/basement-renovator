@@ -2643,6 +2643,10 @@ class MainWindow(QMainWindow):
 			os.replace(resourcesPath + "/rooms/02.cellar.stb", resourcesPath + "/rooms/02.cellar (backup).stb")
 			backupFlagCellar = True
 
+		# Sanity check for saving
+		if not QFile.exists(resourcesPath + "/rooms/"):
+			os.mkdir(resourcesPath + "/rooms/")
+
 		self.save(newRooms, resourcesPath + "/rooms/01.basement.stb")
 		self.save(newRooms, resourcesPath + "/rooms/02.cellar.stb")
 
@@ -2728,6 +2732,10 @@ class MainWindow(QMainWindow):
 		if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
 			os.replace(resourcesPath + "/rooms/00.special rooms.stb", resourcesPath + "/rooms/00.special rooms (backup).stb")
 			backupFlag = True
+
+		# Sanity check for saving
+		if not QFile.exists(resourcesPath + "/rooms/"):
+			os.mkdir(resourcesPath + "/rooms/")
 
 		# Resave the file
 		self.save(rooms, resourcesPath + "/rooms/00.special rooms.stb")
