@@ -16,12 +16,6 @@
   #
  #
 #
-#	Todo: 
-#		Idiot proof the variant/subvariant numbers further
-#			Variant number hardcoding notes:
-#				Horsemen, shops, devil/angel trapdoor rooms, Satan, Lamb
-#
-#
 #   Afterbirth Todo:
 #		Fix up Rebirth/Afterbirth detection
 #
@@ -2143,7 +2137,6 @@ class MainWindow(QMainWindow):
 			f.addAction("%d: %s" % (recent.index(r), r), self.openRecent).setData(r)
 		
 		f.addSeparator()
-
 	
 	def setupMenuBar(self):
 		mb = self.menuBar()
@@ -2330,6 +2323,7 @@ class MainWindow(QMainWindow):
 
 # File
 ########################
+
 	def newMap(self):
 		if self.checkDirty(): return
 		self.roomList.list.clear()
@@ -2682,7 +2676,8 @@ class MainWindow(QMainWindow):
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
-			os.rmdir(resourcesPath + "/rooms/")
+			if QFile.exists(resourcesPath + "/rooms/"):
+				os.rmdir(resourcesPath + "/rooms/")
 		except:
 			pass
 
@@ -2755,7 +2750,8 @@ class MainWindow(QMainWindow):
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
-			os.rmdir(resourcesPath + "/rooms/")
+			if QFile.exists(resourcesPath + "/rooms/"):
+				os.rmdir(resourcesPath + "/rooms/")
 		except:
 			pass
 
