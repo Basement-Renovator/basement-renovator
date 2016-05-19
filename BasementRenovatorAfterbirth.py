@@ -2214,7 +2214,10 @@ class MainWindow(QMainWindow):
 		if self.path == '':
 			effectiveName = 'Untitled Map'
 		else:
-			effectiveName = os.path.basename(self.path)
+			if "Windows" in platform.system():
+				effectiveName = self.path
+			else:
+				effectiveName = os.path.basename(self.path)
 
 		self.setWindowTitle('%s - Basement Renovator' % effectiveName)
 
