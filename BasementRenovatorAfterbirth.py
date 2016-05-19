@@ -2101,6 +2101,10 @@ class MainWindow(QMainWindow):
 		self.setupDocks()
 		self.setupMenuBar()
 
+		print ('GridEnabled: {0}'.format(settings.value('GridEnabled')))
+		print ('StatusEnabled: {0}'.format(settings.value('StatusEnabled')))
+		print ('BitfontEnabled: {0}'.format(settings.value('BitfontEnabled')))
+
 		# Restore Settings
 		if settings.value('GridEnabled', False): self.showGrid()
 		if settings.value('StatusEnabled', False): self.showStatus()
