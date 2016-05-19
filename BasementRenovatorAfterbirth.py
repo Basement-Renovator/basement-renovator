@@ -1940,7 +1940,6 @@ class EntityGroupModel(QAbstractListModel):
 				return item.icon
 
 		if role == Qt.ToolTipRole or role == Qt.StatusTipRole or role == Qt.WhatsThisRole:
-			print (role)
 			if isinstance(item, EntityItem):
 				return "{0}".format(item.name) 
 
@@ -2292,7 +2291,6 @@ class MainWindow(QMainWindow):
 			for y in enumerate(current.roomSpawns):
 				for x in enumerate(y[1]):
 					for entity in x[1]:
-						print (x[0], y[0])
 						e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
 						self.scene.addItem(e)
 
@@ -2617,7 +2615,7 @@ class MainWindow(QMainWindow):
 
 		# Make a new stb with a blank room
 		padMe = True
-		if testRoom.roomShape not in [2,3]:
+		if testRoom.roomShape not in [2,3,5,7]:	# Always pad these rooms
 			padMe = False			
 			for door in testRoom.roomDoors:
 				if door[2] == False:
@@ -2821,13 +2819,11 @@ class MainWindow(QMainWindow):
 				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth Resources folder (" + resourcesPath + ")")
 				return
 
-			print(resourcesPath + " 2")
 			settings.setValue('ResourceFolder', resourcesPath)
 
 		# make sure 'rooms' exists
 		if not QDir(resourcesPath + "/rooms/").exists:
 			os.mkdir(resourcesPath + "/rooms/")
-		print(resourcesPath)
 		return resourcesPath
 
 	def killIsaac(self):
