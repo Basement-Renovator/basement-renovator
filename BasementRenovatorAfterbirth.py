@@ -2141,7 +2141,7 @@ class MainWindow(QMainWindow):
 
 		recent = settings.value("RecentFiles", [])
 		for r in recent:
-			f.addAction("%d: %s" % (recent.index(r), r), self.openRecent).setData(r)
+			f.addAction("%d: %s" % (recent.index(r), os.path.normpath(r)), self.openRecent).setData(r)
 
 		f.addSeparator()
 
@@ -2170,6 +2170,7 @@ class MainWindow(QMainWindow):
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
 		self.wf = v.addAction('Reset Window Defaults',		self.resetWindowDefaults)
+		v.addSeparator()
 
 		r = mb.addMenu('Test')
 		self.ra = r.addAction('Test Current Room - Basement',		self.testMap, QKeySequence("Ctrl+T"))
