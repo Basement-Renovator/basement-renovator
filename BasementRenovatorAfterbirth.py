@@ -2102,9 +2102,9 @@ class MainWindow(QMainWindow):
 		self.setupMenuBar()
 
 		# Restore Settings
-		if not settings.value('GridEnabled', True): self.showGrid()
-		if not settings.value('StatusEnabled', True): self.showStatus()
-		if not settings.value('BitfontEnabled', True): self.switchBitFont()
+		if not settings.value('GridEnabled'): self.showGrid()
+		if not settings.value('StatusEnabled'): self.showStatus()
+		if not settings.value('BitfontEnabled'): self.switchBitFont()
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
