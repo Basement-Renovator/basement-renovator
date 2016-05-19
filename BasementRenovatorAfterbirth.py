@@ -720,8 +720,8 @@ class Entity(QGraphicsItem):
 
 			x, y = value.x(), value.y()
 
-			if 'eep' in self.entity['name']:
-				print (self.entity['X'], self.entity['Y'], x, y)
+			# if 'eep' in self.entity['name']:
+			# 	print (self.entity['X'], self.entity['Y'], x, y)
 
 			try:
 				w = self.scene().initialRoomWidth
@@ -747,8 +747,8 @@ class Entity(QGraphicsItem):
 			value.setX(x)
 			value.setY(y)
 
-			if 'eep' in self.entity['name']:
-				print (self.entity['X'], self.entity['Y'], x, y)
+			# if 'eep' in self.entity['name']:
+			# 	print (self.entity['X'], self.entity['Y'], x, y)
 
 			return value
 
