@@ -2215,7 +2215,7 @@ class MainWindow(QMainWindow):
 			effectiveName = 'Untitled Map'
 		else:
 			if "Windows" in platform.system():
-				effectiveName = self.path
+				effectiveName = os.path.normpath(self.path)
 			else:
 				effectiveName = os.path.basename(self.path)
 
