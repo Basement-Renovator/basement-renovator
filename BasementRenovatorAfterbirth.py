@@ -2104,8 +2104,8 @@ class MainWindow(QMainWindow):
 		# Restore Settings
 		print ("Grid Enabled: {}".format(settings.value('GridEnabled')))
 
-		if not settings.value('GridEnabled', True): self.showGrid()
-		if not settings.value('StatusEnabled', True): self.showStatus()
+		if not settings.value('GridEnabled', True): self.switchGrid()
+		if not settings.value('StatusEnabled', True): self.switchInfo()
 		if not settings.value('BitfontEnabled', True): self.switchBitFont()
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
@@ -2157,8 +2157,8 @@ class MainWindow(QMainWindow):
 		self.ef = self.e.addAction('Clear Filters',				self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
 
 		v = mb.addMenu('View')
-		self.wa = v.addAction('Hide Grid',					self.showGrid, QKeySequence("Ctrl+G"))
-		self.we = v.addAction('Hide Info',					self.showStatus, QKeySequence("Ctrl+I"))
+		self.wa = v.addAction('Hide Grid',					self.switchGrid, QKeySequence("Ctrl+G"))
+		self.we = v.addAction('Hide Info',					self.switchInfo, QKeySequence("Ctrl+I"))
 		self.wd = v.addAction('Use Aliased Counter',		self.switchBitFont, QKeySequence("Ctrl+Alt+A"))
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
@@ -2950,7 +2950,7 @@ class MainWindow(QMainWindow):
 ########################
 	
 	@pyqtSlot()
-	def showGrid(self):
+	def switchGrid(self):
 		"""Handle toggling of the grid being showed"""
 
 		self.scene.grid = not self.scene.grid
@@ -2964,7 +2964,7 @@ class MainWindow(QMainWindow):
 		self.scene.update()
 
 	@pyqtSlot()
-	def showStatus(self):
+	def switchInfo(self):
 		"""Handle toggling of the grid being showed"""
 		
 		self.editor.statusBar = not self.editor.statusBar
