@@ -2947,6 +2947,7 @@ class MainWindow(QMainWindow):
 	def showGrid(self):
 		"""Handle toggling of the grid being showed"""
 		settings.setValue('GridEnabled', self.scene.grid)
+		settings.sync()
 
 		if self.wa.text() == "Show Grid":
 			self.scene.grid = True
@@ -2961,6 +2962,7 @@ class MainWindow(QMainWindow):
 	def showStatus(self):
 		"""Handle toggling of the grid being showed"""
 		settings.setValue('StatusEnabled', self.editor.statusBar)
+		settings.sync()
 
 		if self.we.text() == "Show Info Bar":
 			self.editor.statusBar = True
@@ -2975,6 +2977,7 @@ class MainWindow(QMainWindow):
 	def switchBitFont(self):
 		"""Handle toggling of the bitfont for entity counting"""
 		settings.setValue('BitfontEnabled', self.scene.bitText)
+		settings.sync()
 
 		if self.wd.text() == "Use Aliased Counter":
 			self.scene.bitText = False
