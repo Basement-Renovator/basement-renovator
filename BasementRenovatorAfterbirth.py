@@ -2101,14 +2101,10 @@ class MainWindow(QMainWindow):
 		self.setupDocks()
 		self.setupMenuBar()
 
-		print ('GridEnabled: {0}'.format(settings.value('GridEnabled')))
-		print ('StatusEnabled: {0}'.format(settings.value('StatusEnabled')))
-		print ('BitfontEnabled: {0}'.format(settings.value('BitfontEnabled')))
-
 		# Restore Settings
-		if settings.value('GridEnabled', False): self.showGrid()
-		if settings.value('StatusEnabled', False): self.showStatus()
-		if settings.value('BitfontEnabled', False): self.switchBitFont()
+		if not settings.value('GridEnabled', True): self.showGrid()
+		if not settings.value('StatusEnabled', True): self.showStatus()
+		if not settings.value('BitfontEnabled', True): self.switchBitFont()
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
@@ -2141,7 +2137,7 @@ class MainWindow(QMainWindow):
 		
 		f.addSeparator()
 
-		self.fj = f.addAction('Quit', 						app.quit, QKeySequence("Ctrl+Q"))
+		self.fj = f.addAction('Exit', 						app.quit, QKeySequence.Quit)
 	
 	def setupMenuBar(self):
 		mb = self.menuBar()
@@ -2952,14 +2948,13 @@ class MainWindow(QMainWindow):
 	@pyqtSlot()
 	def showGrid(self):
 		"""Handle toggling of the grid being showed"""
-		settings.setValue('GridEnabled', self.scene.grid)
-		settings.sync()
 
-		if self.wa.text() == "Show Grid":
-			self.scene.grid = True
+		self.scene.grid = not self.scene.grid
+		settings.setValue('GridEnabled', self.scene.grid)
+
+		if self.scene.grid:
 			self.wa.setText("Hide Grid")
 		else:
-			self.scene.grid = False
 			self.wa.setText("Show Grid")
 		
 		self.scene.update()
@@ -2967,14 +2962,13 @@ class MainWindow(QMainWindow):
 	@pyqtSlot()
 	def showStatus(self):
 		"""Handle toggling of the grid being showed"""
+		
+		self.editor.statusBar = not self.editor.statusBar
 		settings.setValue('StatusEnabled', self.editor.statusBar)
-		settings.sync()
 
-		if self.we.text() == "Show Info Bar":
-			self.editor.statusBar = True
+		if self.editor.statusBar:
 			self.we.setText("Hide Info Bar")
 		else:
-			self.editor.statusBar = False
 			self.we.setText("Show Info Bar")
 		
 		self.scene.update()
@@ -2982,14 +2976,13 @@ class MainWindow(QMainWindow):
 	@pyqtSlot()
 	def switchBitFont(self):
 		"""Handle toggling of the bitfont for entity counting"""
-		settings.setValue('BitfontEnabled', self.scene.bitText)
-		settings.sync()
 
-		if self.wd.text() == "Use Aliased Counter":
-			self.scene.bitText = False
+		self.scene.bitText = not self.scene.bitText
+		settings.setValue('BitfontEnabled', self.scene.bitText)
+
+		if self.scene.bitText:
 			self.wd.setText("Use Bitfont Counter")
 		else:
-			self.scene.bitText = True
 			self.wd.setText("Use Aliased Counter")
 
 		self.scene.update()
