@@ -2101,9 +2101,10 @@ class MainWindow(QMainWindow):
 		self.setupDocks()
 		self.setupMenuBar()
 
-		# Restore Settings
-		print ("Grid Enabled: {}".format(settings.value('GridEnabled')))
+		self.setGeometry(100, 500, 1280, 600)
+		self.resetWindow = {"state" : self.saveState(), "geometry" : self.saveGeometry()}
 
+		# Restore Settings
 		if not settings.value('GridEnabled', True): self.switchGrid()
 		if not settings.value('StatusEnabled', True): self.switchInfo()
 		if not settings.value('BitfontEnabled', True): self.switchBitFont()
@@ -2163,6 +2164,7 @@ class MainWindow(QMainWindow):
 		v.addSeparator()
 		self.wb = v.addAction('Hide Entity Painter',		self.showPainter, QKeySequence("Ctrl+Alt+P"))
 		self.wc = v.addAction('Hide Room List',				self.showRoomList, QKeySequence("Ctrl+Alt+R"))
+		self.we = v.addAction('Reset Window Defaults',		self.resetWindowDefaults)
 
 		r = mb.addMenu('Test')
 		self.ra = r.addAction('Test Current Room - Basement',		self.testMap, QKeySequence("Ctrl+T"))
@@ -3022,6 +3024,12 @@ class MainWindow(QMainWindow):
 		else:
 			self.wc.setText('Show Room List')
 
+	@pyqtSlot()
+	def resetWindowDefaults(self):
+		self.restoreState(self.resetWindow["state"], 0)
+		self.restoreGeometry(self.resetWindow["geometry"])
+
+
 # Help
 ########################
 
@@ -3052,7 +3060,6 @@ if __name__ == '__main__':
 	settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 
 	mainWindow = MainWindow()
-	mainWindow.setGeometry(100, 500, 1280, 600)
 	mainWindow.show()
 
 	sys.exit(app.exec_())
