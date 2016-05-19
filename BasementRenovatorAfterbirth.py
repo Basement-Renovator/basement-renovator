@@ -2111,9 +2111,9 @@ class MainWindow(QMainWindow):
 		self.resetWindow = {"state" : self.saveState(), "geometry" : self.saveGeometry()}
 
 		# Restore Settings
-		if not settings.value('GridEnabled', True): self.switchGrid()
-		if not settings.value('StatusEnabled', True): self.switchInfo()
-		if not settings.value('BitfontEnabled', True): self.switchBitFont()
+		if not settings.value('GridEnabled', True) or settings.value('GridEnabled', True) == 'false': self.switchGrid()
+		if not settings.value('StatusEnabled', True) or settings.value('StatusEnabled', True) == 'false': self.switchInfo()
+		if not settings.value('BitfontEnabled', True) or settings.value('BitfontEnabled', True) == 'false': self.switchBitFont()
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
