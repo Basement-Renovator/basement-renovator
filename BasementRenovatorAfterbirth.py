@@ -2126,8 +2126,8 @@ class MainWindow(QMainWindow):
 		f.addSeparator()
 		self.fg = f.addAction('Take Screenshot...',			self.screenshot, QKeySequence("Ctrl+Alt+S"))
 		f.addSeparator()
-		self.fh = f.addAction('Set Stage Path',	self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
-		self.fi = f.addAction('Reset Stage Path',	self.resetStagePath, QKeySequence("Ctrl+Shift+R"))
+		self.fh = f.addAction('Set Stage Path',				self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
+		self.fi = f.addAction('Reset Stage Path',			self.resetStagePath, QKeySequence("Ctrl+Shift+R"))
 		f.addSeparator()
 		
 		
@@ -2136,6 +2136,8 @@ class MainWindow(QMainWindow):
 			f.addAction("%d: %s" % (recent.index(r), r), self.openRecent).setData(r)
 		
 		f.addSeparator()
+
+		self.fj = f.addAction('Quit', 						app.quit, QKeySequence("Ctrl+Q"))
 	
 	def setupMenuBar(self):
 		mb = self.menuBar()
