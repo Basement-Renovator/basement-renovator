@@ -1376,11 +1376,11 @@ class RoomSelector(QWidget):
 		room.setData(0x100, lineEdit.text())
 		room.setText("{0} - {1}".format(room.roomVariant, room.data(0x100)))
 
-	@pyqtSlot(bool)
+	#@pyqtSlot(bool)
 	def turnIDsOn(self):
 		return
 
-	@pyqtSlot(QPoint)
+	#@pyqtSlot(QPoint)
 	def customContextMenu(self, pos):
 		if not self.selectedRoom(): return
 
@@ -1481,7 +1481,7 @@ class RoomSelector(QWidget):
 		# End it
 		menu.exec_(self.list.mapToGlobal(pos))
 
-	@pyqtSlot(bool)
+	#@pyqtSlot(bool)
 	def clearAllFilter(self):
 		self.IDFilter.clear()
 		self.entityToggle.setChecked(False)
@@ -1516,23 +1516,23 @@ class RoomSelector(QWidget):
 		self.sizeToggle.setIcon(self.sizeToggle.defaultAction().icon())
 		self.changeFilter()
 
-	@pyqtSlot(bool)
+	#@pyqtSlot(bool)
 	def setEntityToggle(self, checked):
 		self.entityToggle.checked = checked
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def setTypeFilter(self, action):
 		self.filter.typeData = action.data()
 		self.typeToggle.setIcon(action.icon())
 		self.changeFilter()
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def setWeightFilter(self, action):
 		self.filter.weightData = action.data()
 		self.weightToggle.setIcon(action.icon())
 		self.changeFilter()
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def setSizeFilter(self, action):
 		self.filter.sizeData = action.data()
 		self.sizeToggle.setIcon(action.icon())
@@ -1584,7 +1584,7 @@ class RoomSelector(QWidget):
 		else:
 			self.clearAll.setStyleSheet("")
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def changeFilter(self):
 		self.colourizeClearFilterButtons()
 
@@ -1648,7 +1648,7 @@ class RoomSelector(QWidget):
 		self.entityToggle.setIcon(entity.icon)
 		self.changeFilter()
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def changeSize(self, action):
 
 		# Set the Size - gotta lotta shit to do here
@@ -1714,7 +1714,7 @@ class RoomSelector(QWidget):
 		self.selectedRoom().setToolTip()
 		mainWindow.dirt()
 
-	@pyqtSlot(int)
+	#@pyqtSlot(int)
 	def changeType(self, rtype):
 		for r in self.selectedRooms():
 			r.roomType = rtype
@@ -1726,7 +1726,7 @@ class RoomSelector(QWidget):
 		mainWindow.scene.update()
 		mainWindow.dirt()
 
-	@pyqtSlot(int)
+	#@pyqtSlot(int)
 	def changeVariant(self, var):
 		for r in self.selectedRooms():
 			r.roomVariant = var
@@ -1735,7 +1735,7 @@ class RoomSelector(QWidget):
 		mainWindow.dirt()
 		mainWindow.scene.update()
 
-	@pyqtSlot(int)
+	#@pyqtSlot(int)
 	def changeSubvariant(self, var):
 		for r in self.selectedRooms():
 			r.roomSubvariant = var
@@ -1743,7 +1743,7 @@ class RoomSelector(QWidget):
 		mainWindow.dirt()
 		mainWindow.scene.update()
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def changeDifficulty(self, action):
 		for r in self.selectedRooms():
 		#self.selectedRoom().roomDifficulty = int(action.text())
@@ -1752,7 +1752,7 @@ class RoomSelector(QWidget):
 		mainWindow.dirt()
 		mainWindow.scene.update()
 
-	@pyqtSlot(QAction)
+	#@pyqtSlot(QAction)
 	def changeWeight(self, action):
 		for r in self.selectedRooms():
 			r.roomWeight = float(action.text())
@@ -2082,7 +2082,7 @@ class EntityPalette(QWidget):
 
 		return obj
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def objSelected(self):
 		"""Throws a signal emitting the current object when changed"""
 		if (self.currentSelectedObject()):
@@ -2345,7 +2345,7 @@ class MainWindow(QMainWindow):
 # Slots for Widgets #
 #####################
 
-	@pyqtSlot(Room, Room)
+	#@pyqtSlot(Room, Room)
 	def handleSelectedRoomChanged(self, current, prev):
 
 		if current:
@@ -2376,12 +2376,12 @@ class MainWindow(QMainWindow):
 			# Make the current Room mark for clearer multi-selection
 			current.setData(100, True)
 
-	@pyqtSlot(EntityItem)
+	#@pyqtSlot(EntityItem)
 	def handleObjectChanged(self, entity):
 		self.editor.objectToPaint = entity
 		self.roomList.setEntityFilter(entity)
 
-	@pyqtSlot(EntityItem)
+	#@pyqtSlot(EntityItem)
 	def handleObjectReplaced(self, entity):
 		for item in self.scene.selectedItems():
 			item.entity['Type'] = int(entity.ID)
@@ -2657,7 +2657,7 @@ class MainWindow(QMainWindow):
 
 		stb.write(out)
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def screenshot(self):
 		fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Grahics (*.png)')[0]
 		if fn == '': return
@@ -2676,7 +2676,7 @@ class MainWindow(QMainWindow):
 
 		self.scene.grid = g
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def testMap(self):
 		if self.roomList.selectedRoom() == None:
 			QMessageBox.warning(self, "Error", "No room was selected to test.")
@@ -2764,7 +2764,7 @@ class MainWindow(QMainWindow):
 
 		self.killIsaac()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def testStartMap(self):
 		if self.roomList.selectedRoom() == None:
 			QMessageBox.warning(self, "Error", "No room was selected to test.")
@@ -2914,7 +2914,7 @@ class MainWindow(QMainWindow):
 				# This is totally kosher, I'm just avoiding zombies.
 				pass
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def testMapInjectionRebirth(self):
 		room = self.roomList.list.currentItem()
 		if not room:
@@ -2984,31 +2984,32 @@ class MainWindow(QMainWindow):
 
 # Edit
 ########################
-	@pyqtSlot()
+
+	#@pyqtSlot()
 	def selectAll(self):
 
 		path = QPainterPath()
 		path.addRect(self.scene.sceneRect())
 		self.scene.setSelectionArea(path)
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def deSelect(self):
 		self.scene.clearSelection()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def copy(self):
 		self.clipboard = []
 		for item in self.scene.selectedItems():
 			self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def cut(self):
 		self.clipboard = []
 		for item in self.scene.selectedItems():
 			self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
 			item.remove()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def paste(self):
 		if not self.clipboard: return
 
@@ -3022,7 +3023,7 @@ class MainWindow(QMainWindow):
 # Miscellaneous
 ########################
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def switchGrid(self):
 		"""Handle toggling of the grid being showed"""
 
@@ -3036,7 +3037,7 @@ class MainWindow(QMainWindow):
 
 		self.scene.update()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def switchInfo(self):
 		"""Handle toggling of the grid being showed"""
 
@@ -3050,7 +3051,7 @@ class MainWindow(QMainWindow):
 
 		self.scene.update()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def switchBitFont(self):
 		"""Handle toggling of the bitfont for entity counting"""
 
@@ -3064,7 +3065,7 @@ class MainWindow(QMainWindow):
 
 		self.scene.update()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def showPainter(self):
 		if self.EntityPaletteDock.isVisible():
 			self.EntityPaletteDock.hide()
@@ -3073,7 +3074,7 @@ class MainWindow(QMainWindow):
 
 		self.updateDockVisibility()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def showRoomList(self):
 		if self.roomListDock.isVisible():
 			self.roomListDock.hide()
@@ -3082,7 +3083,7 @@ class MainWindow(QMainWindow):
 
 		self.updateDockVisibility()
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def updateDockVisibility(self):
 
 		if self.EntityPaletteDock.isVisible():
@@ -3095,16 +3096,15 @@ class MainWindow(QMainWindow):
 		else:
 			self.wc.setText('Show Room List')
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def resetWindowDefaults(self):
 		self.restoreState(self.resetWindow["state"], 0)
 		self.restoreGeometry(self.resetWindow["geometry"])
 
-
 # Help
 ########################
 
-	@pyqtSlot(bool)
+	#@pyqtSlot(bool)
 	def aboutDialog(self):
 		caption = "About the Basement Renovator"
 
@@ -3112,7 +3112,7 @@ class MainWindow(QMainWindow):
 
 		msg = QMessageBox.about(mainWindow, caption, text)
 
-	@pyqtSlot(bool)
+	#@pyqtSlot(bool)
 	def goToHelp(self):
 		QDesktopServices().openUrl(QUrl('http://www.reddit.com/r/themoddingofisaac'))
 
