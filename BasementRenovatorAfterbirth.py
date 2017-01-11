@@ -2457,19 +2457,7 @@ class MainWindow(QMainWindow):
 			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
 			return
 
-		self.roomList.list.clear()
-		self.scene.clear()
-		self.path = ''
-
-		self.path = roomPath
-		self.updateTitlebar()
-
-		rooms = self.open()
-		for room in rooms:
-			self.roomList.list.addItem(room)
-
-		self.clean()
-		self.roomList.changeFilter()
+		self.openWrapper(roomPath)
 
 	def openMap(self):
 		if self.checkDirty(): return
@@ -2490,19 +2478,7 @@ class MainWindow(QMainWindow):
 		if len(target[0]) == 0:
 			return
 
-		self.roomList.list.clear()
-		self.scene.clear()
-		self.path = ''
-
-		self.path = target[0]
-		self.updateTitlebar()
-
-		rooms = self.open()
-		for room in rooms:
-			self.roomList.list.addItem(room)
-
-		self.clean()
-		self.roomList.changeFilter()
+		self.openWrapper(target[0])
 
 	def openRecent(self):
 		if self.checkDirty(): return
@@ -2510,12 +2486,21 @@ class MainWindow(QMainWindow):
 		path = self.sender().data()
 		self.restoreEditMenu()
 
-		self.roomList.list.clear()
-		self.scene.clear()
+		self.openWrapper(path)
+
+	def openWrapper(self, path=None):
+		print (path)
 		self.path = path
-		self.updateTitlebar()
 
 		rooms = self.open()
+		if not rooms:
+			QMessageBox.warning(self, "Error", "This is not a valid Afterbirth+ STB file. It may be a Rebirth STB, or it may be one of the prototype STB files accidentally included in the AB+ release.")
+			return
+
+		self.roomList.list.clear()
+		self.scene.clear()
+		self.updateTitlebar()
+
 		for room in rooms:
 			self.roomList.list.addItem(room)
 
@@ -2524,7 +2509,7 @@ class MainWindow(QMainWindow):
 
 	def open(self, path=None):
 
-		if not path:
+		if path==None:
 			path = self.path
 
 		# Let's read the file and parse it into our list items
