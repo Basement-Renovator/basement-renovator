@@ -2189,8 +2189,8 @@ class MainWindow(QMainWindow):
 
 		f.clear()
 		self.fa = f.addAction('New',                self.newMap, QKeySequence("Ctrl+N"))
-		self.fb = f.addAction('Open Stage',         self.openMapDefault, QKeySequence("Ctrl+O"))
-		self.fc = f.addAction('Open File',          self.openMap, QKeySequence("Ctrl+Shift+O"))
+		self.fc = f.addAction('Open',          		self.openMap, QKeySequence("Ctrl+O"))
+		self.fb = f.addAction('Open by Stage',      self.openMapDefault, QKeySequence("Ctrl+Shift+O"))
 		f.addSeparator()
 		self.fd = f.addAction('Save',               self.saveMap, QKeySequence("Ctrl+S"))
 		self.fe = f.addAction('Save As...',         self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
