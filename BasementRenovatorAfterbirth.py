@@ -21,7 +21,7 @@
 #
 #	Low priority
 #		Clear Corner Rooms Grid
-#		Auto-testing feature
+#		Fix Zatherz Open Stage to auto-detect files and disable properly, and list numerically
 #		Custom entity variant stuff
 #
 
@@ -712,6 +712,7 @@ class Entity(QGraphicsItem):
 		self.entity['boss'] = None
 		self.entity['champion'] = None
 		self.entity['pixmap'] = None
+		self.entity['known'] = False
 
 		self.getEntityInfo(mytype, subtype, variant)
 
@@ -756,8 +757,12 @@ class Entity(QGraphicsItem):
 				self.entity['pixmap'] = QPixmap()
 				self.entity['pixmap'].load(en.get('Image'))
 
+			self.entity['known'] = True
+
 		except:
 			print ("Entity {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
+			self.entity['pixmap'] = QPixmap()
+			self.entity['pixmap'].load("resources/Entities/questionmark.png")
 
 	def itemChange(self, change, value):
 
@@ -892,11 +897,13 @@ class Entity(QGraphicsItem):
 				painter.drawLine(26, 26, 22, 26)
 				painter.drawLine(26, 26, 26, 22)
 
-		else:
-			painter.drawRect(0, 0, 26, 26)
-			painter.drawText(4, 16, str(self.entity['Type']))
-			painter.drawText(4, 32, str(self.entity['Variant']))
-			painter.drawText(4, 48, str(self.entity['Subtype']))
+		if self.entity["known"] == False:
+			painter.setFont(QFont("Arial", 6));			
+
+			painter.drawText(2, 26, "{}.{}.{}".format(
+				str(self.entity['Type']),
+				str(self.entity['Variant']),
+				str(self.entity['Subtype'])))
 
 	def remove(self):
 		self.scene().removeItem(self)
