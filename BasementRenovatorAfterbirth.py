@@ -2203,7 +2203,7 @@ class MainWindow(QMainWindow):
 
 		recent = settings.value("RecentFiles", [])
 		for r in recent:
-			f.addAction("%d: %s" % (recent.index(r), os.path.normpath(r)), self.openRecent).setData(r)
+			f.addAction(os.path.normpath(r), self.openRecent).setData(r)
 
 		f.addSeparator()
 
@@ -2462,16 +2462,30 @@ class MainWindow(QMainWindow):
 	def openMap(self):
 		if self.checkDirty(): return
 
-		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
-		if not settings.contains("stagepath"):
-			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
-		stagePath = settings.value("stagepath")
-		if stagePath == "":
-			QMessageBox.warning(self, "Error", "Could not set default stage path.")
-			return
+		startPath = ""
+
+		# Get the rooms folder if you can
+		try:
+			settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+			if not settings.contains("stagepath"):
+				settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+			stagePath = settings.value("stagepath")
+
+			startPath = stagePath
+		except:
+			pass
+
+		# Get the folder containing the last open file if you can
+		try:
+			recent = settings.value("RecentFiles", [])
+			lastPath = os.path.normpath(recent[0])
+
+			startPath = lastPath
+		except:
+			pass
 
 		target = QFileDialog.getOpenFileName(
-			self, 'Open Map', os.path.expanduser(stagePath), 'Stage Bundle (*.stb)')
+			self, 'Open Map', os.path.expanduser(startPath), 'Stage Bundle (*.stb)')
 		self.restoreEditMenu()
 
 		# Looks like nothing was selected
