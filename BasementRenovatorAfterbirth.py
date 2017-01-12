@@ -23,6 +23,7 @@
 #		Clear Corner Rooms Grid
 #		Fix Zatherz Open Stage to auto-detect files and disable properly, and list numerically
 #		Custom entity variant stuff
+#		Fix icon for win_setup.py
 #
 
 
@@ -41,7 +42,7 @@ import psutil
 ########################
 
 def getEntityXML():
-	tree = ET.parse('resources/EntitiesAfterbirth.xml')
+	tree = ET.parse('resources/EntitiesAfterbirthPlus.xml')
 	root = tree.getroot()
 
 	return root
