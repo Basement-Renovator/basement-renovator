@@ -2164,8 +2164,6 @@ class EntityGroupModel(QAbstractListModel):
 				# Grab the anm location
 				anmPath = linuxPathSensitivityTraining(os.path.join(modPath, "resources", anm2root, en.get("anm2path")))
 
-
-
 				# Grab the first frame of the anm
 				anmTree = ET.parse(anmPath)
 				spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
