@@ -68,31 +68,29 @@ def findModsPath():
 				cantFindPath = True
 
 		# Linux and others
-		elif "Linux" in platform.system():
-			modsPath = os.path.expanduser("~/.local/share/Binding of Isaac Afterbirth+ Mods")
+		else:
+			modsPath = os.path.expanduser("~/.local/share/binding of isaac afterbirth+ mods/")
 			if not QFile.exists(modsPath):
 				cantFindPath = True
-		else:
-			cantFindPath = True
 
 		# Fallback Resource Folder Locating
 		if cantFindPath == True:
-			modsPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
+			modsPathOut = QFileDialog.getExistingDirectory(mainWindow, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
 			if not modsPathOut:
-				QMessageBox.warning(self, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				QMessageBox.warning(mainWindow, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
 			else:
 				modsPath = modsPathOut[0]
 			if modsPath == "":
-				QMessageBox.warning(self, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				QMessageBox.warning(mainWindow, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
 			if not QDir(modsPath).exists:
-				QMessageBox.warning(self, "Error", "Selected folder does not exist or is not a folder.")
+				QMessageBox.warning(mainWindow, "Error", "Selected folder does not exist or is not a folder.")
 				return
 
 		# Looks like nothing was selected
 		if len(modsPath) == 0:
-			QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
+			QMessageBox.warning(mainWindow, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
 			return
 
 		settings.setValue('ModsFolder', modsPath)
@@ -2207,7 +2205,7 @@ class EntityGroupModel(QAbstractListModel):
 				etmp.set("Image", filename)
 
 				entityXML.append(etmp)
-)
+
 
 class EntityPalette(QWidget):
 
