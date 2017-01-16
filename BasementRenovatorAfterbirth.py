@@ -97,6 +97,18 @@ def findModsPath():
 
 	return modsPath
 
+def linuxPathSensitivityTraining(path):
+
+	directory, file = os.path.split(path)
+
+	contents = os.listdir(directory)
+
+	for item in contents:
+		if item.lower() == file.lower():
+			return os.path.join(directory, item)
+
+	return path
+
 
 ########################
 #      Scene/View      #
@@ -2150,8 +2162,10 @@ class EntityGroupModel(QAbstractListModel):
 				# Grab the anm location
 				anmPath = os.path.join(modPath, "resources", anm2root, en.get("anm2path"))
 
+
+
 				# Grab the first frame of the anm
-				anmTree = ET.parse(anmPath)
+				anmTree = ET.parse(linuxPathSensitivityTraining(anmPath))
 				spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
 				default = anmTree.find("Animations").get("DefaultAnimation")
 				layer = anmTree.find("./Animations/Animation[@Name='{0}']".format(default)).find(".//LayerAnimation")
@@ -2167,7 +2181,7 @@ class EntityGroupModel(QAbstractListModel):
 				# Load the Image
 				sourceImage = QImage()
 				sourceImage.fill(0)
-				sourceImage.load(image, 'Format_ARGB32')
+				sourceImage.load(linuxPathSensitivityTraining(image), 'Format_ARGB32')
 
 				# Create the destination
 				pixmapImg = QImage(w, h, QImage.Format_ARGB32)
