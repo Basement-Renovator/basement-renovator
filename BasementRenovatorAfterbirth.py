@@ -47,6 +47,59 @@ def getEntityXML():
 
 	return root
 
+def findModsPath():
+	modsPath = ''
+
+	if QFile.exists(settings.value('ModsFolder')):
+		modsPath = settings.value('ModsFolder')
+
+	else:
+		cantFindPath = False
+		# Windows path things
+		if "Windows" in platform.system():
+			modsPath = os.path.join(os.path.expanduser("~"), os.path.normpath("/Documents/My Games/Binding of Isaac Afterbirth+ Mods"))
+			if not QFile.exists(modsPath):
+				cantFindPath = True
+
+		# Mac Path things
+		elif "Darwin" in platform.system():
+			modsPath = os.path.expanduser("~/Library/Application Support/Binding of Isaac Afterbirth+ Mods")
+			if not QFile.exists(modsPath):
+				cantFindPath = True
+
+		# Linux and others
+		elif "Linux" in platform.system():
+			modsPath = os.path.expanduser("~/.local/share/Binding of Isaac Afterbirth+ Mods")
+			if not QFile.exists(modsPath):
+				cantFindPath = True
+		else:
+			cantFindPath = True
+
+		# Fallback Resource Folder Locating
+		if cantFindPath == True:
+			modsPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
+			if not modsPathOut:
+				QMessageBox.warning(self, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				return
+			else:
+				modsPath = modsPathOut[0]
+			if modsPath == "":
+				QMessageBox.warning(self, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				return
+			if not QDir(modsPath).exists:
+				QMessageBox.warning(self, "Error", "Selected folder does not exist or is not a folder.")
+				return
+
+		# Looks like nothing was selected
+		if len(modsPath) == 0:
+			QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
+			return
+
+		settings.setValue('ModsFolder', modsPath)
+
+	return modsPath
+
+
 ########################
 #      Scene/View      #
 ########################
@@ -1959,6 +2012,10 @@ class EntityGroupModel(QAbstractListModel):
 
 				self.groups[g].objects.append(e)
 
+		# Special case for mods
+		if self.kind == "Mods":
+			self.addMods()
+
 		i = 0
 		for key, group in sorted(self.groups.items()):
 			group.calculateIndices(i)
@@ -2046,6 +2103,112 @@ class EntityGroupModel(QAbstractListModel):
 
 		return None
 
+	def addMods(self):
+
+		global entityXML
+
+		# Each mod in the mod folder is a Group
+		modsPath = findModsPath()
+
+		modsInstalled = os.listdir(modsPath)
+
+		for mod in modsInstalled:
+			modPath = os.path.join(modsPath, mod)
+
+			# Make sure we're a mod
+			if not os.path.isdir(modPath):
+				continue
+
+			# Get the mod name
+			tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
+			root = tree.getroot()
+			name = root.find("name").text
+
+
+			# Continue if there are no entities
+			if not os.path.exists(os.path.join(modPath, 'content/entities2.xml')):
+				continue
+
+			# Grab their Entities2.xml
+			tree = ET.parse(os.path.join(modPath, 'content/entities2.xml'))
+			root = tree.getroot()
+			anm2root = root.get("anm2root")
+
+			# Iterate through all the entities
+			enList = root.findall("entity")
+
+			# Skip if the mod is empty
+			if len(enList) == 0:
+				continue
+
+			# Add a group if it's a new mod, handles duplicate mods as well
+			if name not in self.groups.keys():
+				self.groups[name] = EntityGroupItem(name)
+
+			for en in enList:
+				# Get the Pixmap
+				pixmap = QPixmap()
+
+				# Grab the anm location
+				anmPath = os.path.join(modPath, "resources", anm2root, en.get("anm2path"))
+
+				# Grab the first frame of the anm
+				anmTree = ET.parse(anmPath)
+				spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
+				default = anmTree.find("Animations").get("DefaultAnimation")
+				layer = anmTree.find("./Animations/Animation[@Name='{0}']".format(default)).find(".//LayerAnimation")
+				frame = layer.find("Frame")
+
+				# Here's the anm specs
+				x = int(frame.get("XCrop"))
+				y = int(frame.get("YCrop"))
+				h = int(frame.get("Height"))
+				w = int(frame.get("Width"))
+				image = os.path.join(modPath, "resources", anm2root, spritesheets[int(layer.get("LayerId"))].get("Path"))
+
+				# Load the Image
+				sourceImage = QImage()
+				sourceImage.fill(0)
+				sourceImage.load(image, 'Format_ARGB32')
+
+				# Create the destination
+				pixmapImg = QImage(w, h, QImage.Format_ARGB32)
+				pixmapImg.fill(0)
+
+				# Transfer the crop area to the pixmap
+				cropRect = QRect(x, y, w, h)
+
+				RenderPainter = QPainter(pixmapImg)
+				RenderPainter.drawImage(0,0,sourceImage.copy(cropRect))
+				RenderPainter.end()
+
+				# Fix some shit
+				s = en.get("subtype")
+				if s == None:
+					s = 0
+				v = en.get("variant")
+				if v == None:
+					v = 0
+
+				# Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
+				filename = "resources/Entities/Temp/{0}.{1}.{2} - {3}.png".format(en.get("id"), s, v, en.get("name"))
+				pixmapImg.save(filename, "PNG")
+
+				# Pass this to the Entity Item
+				e = EntityItem(en.get("name"), en.get("id"), s, v, filename)
+				self.groups[name].objects.append(e)
+
+				# Write the modded entity to the entityXML temporarily for runtime
+				etmp = ET.Element("entity")
+				etmp.set("Name", en.get("name"))
+				etmp.set("ID", en.get("id"))
+				etmp.set("Subtype", str(s))
+				etmp.set("Variant", str(v))
+				etmp.set("Image", filename)
+
+				entityXML.append(etmp)
+)
+
 class EntityPalette(QWidget):
 
 	def __init__(self):
@@ -2063,7 +2226,7 @@ class EntityPalette(QWidget):
 		self.layout.addWidget(self.tabs)
 
 
-		for group in ["Pickups", "Enemies", "Bosses", "Stage", "Collect"]:
+		for group in ["Pickups", "Enemies", "Bosses", "Stage", "Collect", "Mods"]:
 
 			listView = EntityList()
 
@@ -2156,8 +2319,8 @@ class MainWindow(QMainWindow):
 		"Womb [Greed]": "22.greed womb.stb",
 		"Sheol [Greed]": "23.greed sheol.stb",
 		"The Shop [Greed]": "24.greed the shop.stb",
-		"Ultra Greed [Greed]": "25.ultra greed.stb"
-	}
+		"Ultra Greed [Greed]": "25.ultra greed.stb" }
+
 	defaultMapsOrdered = OrderedDict(sorted(defaultMapsDict.items(), key=lambda t: t[0]))
 
 	def __init__(self):
@@ -2884,7 +3047,7 @@ class MainWindow(QMainWindow):
 
 			# Fallback Resource Folder Locating
 			if cantFindPath == True:
-				resourcesPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth Resources Folder')
+				resourcesPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth+ Resources Folder')
 				if not resourcesPathOut:
 					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
 					return
@@ -2902,7 +3065,7 @@ class MainWindow(QMainWindow):
 
 			# Looks like nothing was selected
 			if len(resourcesPath) == 0:
-				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth Resources folder (" + resourcesPath + ")")
+				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth+ Resources folder (" + resourcesPath + ")")
 				return
 
 			settings.setValue('ResourceFolder', resourcesPath)

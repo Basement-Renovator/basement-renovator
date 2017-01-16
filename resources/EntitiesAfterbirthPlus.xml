@@ -997,7 +997,7 @@
 	<entity BaseHP="10" Group="Boss Rooms" ID="404" Image="resources/Entities/404.1.0 - Dark Ball.png" Kind="Bosses" Name="Dark Ball" Subtype="0" Variant="1" />
 	<entity BaseHP="250" Boss="1" Group="Boss Rooms" ID="405" Image="resources/Entities/405.0.0 - Rag Man.png" Kind="Bosses" Name="Rag Man" Subtype="0" Variant="0" />
 	<entity BaseHP="3500" Boss="1" Group="The Sins" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Kind="Bosses" Name="Ultra Greed" Subtype="0" Variant="0" />
-	<entity BaseHP="3500" Boss="1" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="1" />
+	<entity BaseHP="3500" Boss="1" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
 	<entity Boss="1" Group="Boss Rooms" ID="407" Image="resources/Entities/407.0.0 - Hush.png" Kind="Bosses" Name="Hush" Subtype="0" Variant="0" />
 	<entity Boss="1" Group="Boss Rooms" ID="408" Image="resources/Entities/408.0.0 - Skinless Hush.png" Kind="Bosses" Name="Skinless Hush" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
