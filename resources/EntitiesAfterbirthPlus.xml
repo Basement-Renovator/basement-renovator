@@ -91,20 +91,39 @@
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.24 - 2 of Diamonds.png" Kind="Pickups" Name="2 of Diamonds" Subtype="24" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.25 - 2 of Spades.png" Kind="Pickups" Name="2 of Spades" Subtype="25" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.26 - 2 of Hearts.png" Kind="Pickups" Name="2 of Hearts" Subtype="26" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.27 - Joker.png" Kind="Pickups" Name="Joker" Subtype="27" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.28 - Hagalaz.png" Kind="Pickups" Name="Hagalaz" Subtype="28" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.29 - Jera.png" Kind="Pickups" Name="Jera" Subtype="29" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.30 - Ehwaz.png" Kind="Pickups" Name="Ehwaz" Subtype="30" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.31 - Dagaz.png" Kind="Pickups" Name="Dagaz" Subtype="31" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.32 - Ansuz.png" Kind="Pickups" Name="Ansuz" Subtype="32" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.33 - Perthro.png" Kind="Pickups" Name="Perthro" Subtype="33" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.34 - Berkano.png" Kind="Pickups" Name="Berkano" Subtype="34" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.35 - Algiz.png" Kind="Pickups" Name="Algiz" Subtype="35" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.36 - Chaos Card.png" Kind="Pickups" Name="Chaos Card" Subtype="37" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.37 - Credit Card.png" Kind="Pickups" Name="Credit Card" Subtype="38" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.38 - Rules Card.png" Kind="Pickups" Name="Rules Card" Subtype="39" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.39 - A Card Against Humanity.png" Kind="Pickups" Name="A Card Against Humanity" Subtype="40" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.40 - Suicide King.png" Kind="Pickups" Name="Suicide King" Subtype="41" Variant="300" />
+
+	<!-- Didn't feel like renaming the broken entity pngs -->
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.27 - Ace of Clubs.png" Kind="Pickups" Name="Ace of Clubs" Subtype="27" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.28 - Ace of Diamonds.png" Kind="Pickups" Name="Ace of Diamonds" Subtype="28" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.29 - Ace of Spades.png" Kind="Pickups" Name="Ace of Spades" Subtype="29" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.30 - Ace of Hearts.png" Kind="Pickups" Name="Ace of Hearts" Subtype="30" Variant="300" />
+
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.27 - Joker.png" Kind="Pickups" Name="Joker" Subtype="31" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.28 - Hagalaz.png" Kind="Pickups" Name="Hagalaz" Subtype="32" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.29 - Jera.png" Kind="Pickups" Name="Jera" Subtype="33" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.30 - Ehwaz.png" Kind="Pickups" Name="Ehwaz" Subtype="34" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.31 - Dagaz.png" Kind="Pickups" Name="Dagaz" Subtype="35" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.32 - Ansuz.png" Kind="Pickups" Name="Ansuz" Subtype="36" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.33 - Perthro.png" Kind="Pickups" Name="Perthro" Subtype="37" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.34 - Berkano.png" Kind="Pickups" Name="Berkano" Subtype="38" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.35 - Algiz.png" Kind="Pickups" Name="Algiz" Subtype="39" Variant="300" />
+
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.40 - Blank Rune.png" Kind="Pickups" Name="Blank Rune" Subtype="40" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Black Rune.png" Kind="Pickups" Name="Black Rune" Subtype="41" Variant="300" />
+
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.36 - Chaos Card.png" Kind="Pickups" Name="Chaos Card" Subtype="42" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.37 - Credit Card.png" Kind="Pickups" Name="Credit Card" Subtype="43" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.38 - Rules Card.png" Kind="Pickups" Name="Rules Card" Subtype="44" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.39 - A Card Against Humanity.png" Kind="Pickups" Name="A Card Against Humanity" Subtype="45" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.40 - Suicide King.png" Kind="Pickups" Name="Suicide King" Subtype="46" Variant="300" />
+
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.42 - Get Out of Jail Free Card.png" Kind="Pickups" Name="Get Out of Jail Free Card" Subtype="47" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.43 - Question Card.png" Kind="Pickups" Name="? Card" Subtype="48" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.44 - Dice Shard.png" Kind="Pickups" Name="Dice Shard" Subtype="49" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.45 - Emergency Contact.png" Kind="Pickups" Name="Emergency Contact" Subtype="50" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.51 - Holy Card.png" Kind="Pickups" Name="Holy Card" Subtype="51" Variant="300" />
+	<!-- -->
+
 	<entity Group="Special Exits" ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Kind="Stage" Name="Big Chest" Subtype="0" Variant="340" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.350.0 - Trinket.png" Kind="Collect" Name="Random Trinket" Subtype="0" Variant="350" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.360.0 - Red Chest.png" Kind="Pickups" Name="Red Chest" Subtype="0" Variant="360" />
@@ -658,6 +677,43 @@
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.433 - My Shadow.png" Kind="Collect" Name="My Shadow" Subtype="433" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.438 - Binky.png" Kind="Collect" Name="Binky" Subtype="438" Variant="100" />
 	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.440 - Kidney Stone.png" Kind="Collect" Name="Kidney Stone" Subtype="440" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.442 - Dark Princes Crown.png" Kind="Collect" Name="Dark Princes Crown" Subtype="442" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.443 - Apple!.png" Kind="Collect" Name="Apple!" Subtype="443" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.444 - Lead Pencil.png" Kind="Collect" Name="Lead Pencil" Subtype="444" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.445 - Dog Tooth.png" Kind="Collect" Name="Dog Tooth" Subtype="445" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.446 - Dead Tooth.png" Kind="Collect" Name="Dead Tooth" Subtype="446" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.447 - Linger Bean.png" Kind="Collect" Name="Linger Bean" Subtype="447" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.448 - Shard of Glass.png" Kind="Collect" Name="Shard of Glass" Subtype="448" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.449 - Metal Plate.png" Kind="Collect" Name="Metal Plate" Subtype="449" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.450 - Eye of Greed.png" Kind="Collect" Name="Eye of Greed" Subtype="450" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.451 - Tarot Cloth.png" Kind="Collect" Name="Tarot Cloth" Subtype="451" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.452 - Varicose Veins.png" Kind="Collect" Name="Varicose Veins" Subtype="452" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.453 - Compound Fracture.png" Kind="Collect" Name="Compound Fracture" Subtype="453" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.454 - Polydactyly.png" Kind="Collect" Name="Polydactyly" Subtype="454" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.455 - Dads Lost Coin.png" Kind="Collect" Name="Dad's Lost Coin" Subtype="455" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.456 - Moldy Bread.png" Kind="Collect" Name="Moldy Bread" Subtype="456" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.457 - Cone Head.png" Kind="Collect" Name="Cone Head" Subtype="457" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.458 - Belly Button.png" Kind="Collect" Name="Belly Button" Subtype="458" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.459 - Sinus Infection.png" Kind="Collect" Name="Sinus Infection" Subtype="459" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.460 - Glaucoma.png" Kind="Collect" Name="Glaucoma" Subtype="460" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.461 - Parasitoid.png" Kind="Collect" Name="Parasitoid" Subtype="461" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.462 - Eye of Belial.png" Kind="Collect" Name="Eye of Belial" Subtype="462" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.463 - Sulfuric Acid.png" Kind="Collect" Name="Sulfuric Acid" Subtype="463" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.464 - Glyph of Balance.png" Kind="Collect" Name="Glyph of Balance" Subtype="464" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.465 - Analog Stick.png" Kind="Collect" Name="Analog Stick" Subtype="465" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.466 - Contagion.png" Kind="Collect" Name="Contagion" Subtype="466" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.493 - Adderline.png" Kind="Collect" Name="Adderline" Subtype="493" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.494 - Jacob's Ladder.png" Kind="Collect" Name="Jacob's Ladder" Subtype="494" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.495 - Ghost Pepper.png" Kind="Collect" Name="Ghost Pepper" Subtype="495" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.496 - Euthanasia.png" Kind="Collect" Name="Euthanasia" Subtype="496" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.497 - Camo Undies.png" Kind="Collect" Name="Camo Undies" Subtype="497" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.498 - Duality.png" Kind="Collect" Name="Duality" Subtype="498" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.499 - Eucharist.png" Kind="Collect" Name="Eucharist" Subtype="499" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.501 - Greed's Gullet.png" Kind="Collect" Name="Greed's Gullet" Subtype="501" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.502 - Large Zit.png" Kind="Collect" Name="Large Zit" Subtype="502" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.503 - Little Horn.png" Kind="Collect" Name="Little Horn" Subtype="503" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.505 - Poke Go.png" Kind="Collect" Name="Poke Go" Subtype="505" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.506 - BackStabber.png" Kind="Collect" Name="BackStabber" Subtype="506" Variant="100" />
 
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.33 - The Bible.png" Kind="Collect" Name="The Bible" Subtype="33" Variant="100" />
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.34 - The Book of Belial.png" Kind="Collect" Name="The Book of Belial" Subtype="34" Variant="100" />
@@ -752,6 +808,25 @@
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.437 - D7.png" Kind="Collect" Name="D7" Subtype="437" Variant="100" />
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.439 - Mom's Box.png" Kind="Collect" Name="Mom's Box" Subtype="439" Variant="100" />
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.441 - Mega Blast.png" Kind="Collect" Name="Mega Blast" Subtype="441" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.475 - Plan C.png" Kind="Collect" Name="Plan C" Subtype="475" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.476 - D1.png" Kind="Collect" Name="D1" Subtype="476" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.477 - Void.png" Kind="Collect" Name="Void" Subtype="477" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.478 - Pause.png" Kind="Collect" Name="Pause" Subtype="478" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.479 - Smelter.png" Kind="Collect" Name="Smelter" Subtype="479" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.480 - Compost.png" Kind="Collect" Name="Compost" Subtype="480" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.481 - Dataminer.png" Kind="Collect" Name="Dataminer" Subtype="481" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.482 - Clicker.png" Kind="Collect" Name="Clicker" Subtype="482" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.483 - MaMa Mega!.png" Kind="Collect" Name="MaMa Mega!" Subtype="483" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.484 - Wait What.png" Kind="Collect" Name="Wait What?" Subtype="484" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.485 - Crooked Penny.png" Kind="Collect" Name="Crooked Penny" Subtype="485" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.486 - Dull Razor.png" Kind="Collect" Name="Dull Razor" Subtype="486" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.487 - Potato Peeler.png" Kind="Collect" Name="Potato Peeler" Subtype="487" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.488 - Metronome.png" Kind="Collect" Name="Metronome" Subtype="488" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.489 - D infinity.png" Kind="Collect" Name="D infinity" Subtype="489" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.490 - Eden's Soul.png" Kind="Collect" Name="Eden's Soul" Subtype="490" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.504 - Brown Nugget.png" Kind="Collect" Name="Brown Nugget" Subtype="504" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.507 - Sharp Straw.png" Kind="Collect" Name="Sharp Straw" Subtype="507" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.510 - Delirious.png" Kind="Collect" Name="Delirious" Subtype="510" Variant="100" />
 
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.8 - Brother Bobby.png" Kind="Collect" Name="Brother Bobby" Subtype="8" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.10 - Halo of Flies.png" Kind="Collect" Name="Halo of Flies" Subtype="10" Variant="100" />
@@ -830,6 +905,19 @@
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.431 - Multidimensional Baby.png" Kind="Collect" Name="Multidimensional Baby" Subtype="431" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.435 - Lil Loki.png" Kind="Collect" Name="Lil Loki" Subtype="435" Variant="100" />
 	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.436 - Milk!.png" Kind="Collect" Name="Milk!" Subtype="436" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.467 - Finger!.png" Kind="Collect" Name="Finger!" Subtype="467" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.468 - Shade.png" Kind="Collect" Name="Shade" Subtype="468" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.469 - Depression.png" Kind="Collect" Name="Depression" Subtype="469" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.470 - Hushy.png" Kind="Collect" Name="Hushy" Subtype="470" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.471 - Lil Monstro.png" Kind="Collect" Name="Lil Monstro" Subtype="471" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.472 - King Baby.png" Kind="Collect" Name="King Baby" Subtype="472" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.473 - Big Chubby.png" Kind="Collect" Name="Big Chubby" Subtype="473" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.474 - Tonsil.png" Kind="Collect" Name="Tonsil" Subtype="474" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.491 - Acid Baby.png" Kind="Collect" Name="Acid Baby" Subtype="491" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.492 - YO LISTEN!.png" Kind="Collect" Name="YO LISTEN!" Subtype="492" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.500 - Sack of Sacks.png" Kind="Collect" Name="Sack of Sacks" Subtype="500" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.508 - Mom's Razor.png" Kind="Collect" Name="Mom's Razor" Subtype="508" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.509 - Bloodshot Eye.png" Kind="Collect" Name="Bloodshot Eye" Subtype="509" Variant="100" />
 
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.001 - Swallowed Penny.png" Kind="Collect" Name="Swallowed Penny" Subtype="1" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.002 - Petrified Poop.png" Kind="Collect" Name="Petrified Poop" Subtype="2" Variant="350" />
@@ -920,6 +1008,35 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.088 - NO.png" Kind="Collect" Name="NO!" Subtype="88" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.089 - Child Leash.png" Kind="Collect" Name="Child Leash" Subtype="89" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.090 - Brown Cap.png" Kind="Collect" Name="Brown Cap" Subtype="90" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.091 - Meconium.png" Kind="Collect" Name="Meconium" Subtype="91" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.092 - Cracked Crown.png" Kind="Collect" Name="Cracked Crown" Subtype="92" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.093 - Used Diaper.png" Kind="Collect" Name="Used Diaper" Subtype="93" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.094 - Fish Tail.png" Kind="Collect" Name="Fish Tail" Subtype="94" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.095 - Black Tooth.png" Kind="Collect" Name="Black Tooth" Subtype="95" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.096 - Ouroboros Worm.png" Kind="Collect" Name="Ouroboros Worm" Subtype="96" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.097 - Tonsil.png" Kind="Collect" Name="Tonsil" Subtype="97" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.098 - Nose Goblin.png" Kind="Collect" Name="Nose Goblin" Subtype="98" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.099 - Super Ball.png" Kind="Collect" Name="Super Ball" Subtype="99" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.100 - Vibrant Bulb.png" Kind="Collect" Name="Vibrant Bulb" Subtype="100" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.101 - Dim Bulb.png" Kind="Collect" Name="Dim Bulb" Subtype="101" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.102 - Fragmented Card.png" Kind="Collect" Name="Fragmented Card" Subtype="102" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.103 - Equality!.png" Kind="Collect" Name="Equality!" Subtype="103" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.104 - Wish Bone.png" Kind="Collect" Name="Wish Bone" Subtype="104" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.105 - Bag Lunch.png" Kind="Collect" Name="Bag Lunch" Subtype="105" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.106 - Lost Cork.png" Kind="Collect" Name="Lost Cork" Subtype="106" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.107 - Crow Heart.png" Kind="Collect" Name="Crow Heart" Subtype="107" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.108 - Walnut.png" Kind="Collect" Name="Walnut" Subtype="108" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.109 - Duct Tape.png" Kind="Collect" Name="Duct Tape" Subtype="109" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.110 - Silver Dollar.png" Kind="Collect" Name="Silver Dollar" Subtype="110" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.111 - Bloody Crown.png" Kind="Collect" Name="Bloody Crown" Subtype="111" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.112 - Pay To Win.png" Kind="Collect" Name="Pay To Win" Subtype="112" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.113 - Locust of Wrath.png" Kind="Collect" Name="Locust of Wrath" Subtype="113" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.114 - Locust of Pestilence.png" Kind="Collect" Name="Locust of Pestilence" Subtype="114" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.115 - Locust of Famine.png" Kind="Collect" Name="Locust of Famine" Subtype="115" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.116 - Locust of Death.png" Kind="Collect" Name="Locust of Death" Subtype="116" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.117 - Locust of Conquest.png" Kind="Collect" Name="Locust of Conquest" Subtype="117" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.118 - Bat Wing.png" Kind="Collect" Name="Bat Wing" Subtype="118" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.119 - Stem Cell.png" Kind="Collect" Name="Stem Cell" Subtype="119" Variant="350" />
 
 <!-- New Afterbirth Enemies, excluding trinkets and items -->
 
@@ -1006,12 +1123,6 @@
 
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
 	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" />
-
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Null Card.png" Kind="Pickups" Name="Blank Rune" Subtype="36" Variant="300" />	
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.42 - Get Out of Jail Free Card.png" Kind="Pickups" Name="Get Out of Jail Free Card" Subtype="42" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.43 - Question Card.png" Kind="Pickups" Name="? Card" Subtype="43" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.44 - Dice Shard.png" Kind="Pickups" Name="Dice Shard" Subtype="44" Variant="300" />
-	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.45 - Emergency Contact.png" Kind="Pickups" Name="Emergency Contact" Subtype="45" Variant="300" />
 
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />

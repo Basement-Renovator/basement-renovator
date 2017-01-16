@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import *
 app = QApplication([])
 
 
-isaacResourceFolder = '/Users/Chronometrics/Dropbox/Basement Renovator/Afterbirth Rooms/resources/'
+isaacResourceFolder = '/Users/Chronometrics/Library/Application Support/Steam/steamapps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources/resources/'
 
 
 
@@ -39,15 +39,14 @@ for cat in categories:
 		e.set('Variant', '100')
 		e.set('Subtype', i.get('id'))
 
-		v = os.path.exists('resources/NewEntities/Items/' + i.get('gfx'))
-		print (v, 'resources/NewEntities/Items/' + i.get('gfx'))
-		if v:
-			shutil.move('resources/NewEntities/Items/' + i.get('gfx'), e.get('Image'))
-
-		# v = os.path.exists(isaacResourceFolder + 'items/collectibles/' + i.get('gfx'))
-		# if v:
-		# 	shutil.move(isaacResourceFolder + 'items/collectibles/' + i.get('gfx'), e.get('Image'))
-quit()
+		#Fuckin 20/20
+		try:
+			v = os.path.exists(e.get('Image'))
+			if not v:
+				print ("Moving {0}".format(e.get('Image')))
+				shutil.move(isaacResourceFolder + 'gfx/items/collectibles/' + i.get('gfx'), e.get('Image'))
+		except:
+			pass
 
 # Trinkets
 r = iroot.findall('trinket')
@@ -56,7 +55,7 @@ for i in r:
 	e = ET.SubElement(entityXML, 'entity')
 
 	e.set('Name', i.get('name'))
-	e.set('Image', 'resources/Entities/5.350.{0} - {1}.png'.format(i.get('id'), i.get('name')))
+	e.set('Image', 'resources/Entities/Trinkets/5.350.{0} - {1}.png'.format(i.get('id'), i.get('name')))
 
 	e.set('Group', 'Trinkets')
 	e.set('Kind', 'Collect')
@@ -64,7 +63,12 @@ for i in r:
 	e.set('ID', "5")
 	e.set('Variant', '350')
 	e.set('Subtype', i.get('id'))
+	
+	v = os.path.exists(e.get('Image'))
+	if not v:
+		print ("Moving {0}".format(e.get('Image')))
+		shutil.move(isaacResourceFolder + 'gfx/items/trinkets/' + i.get('gfx'), e.get('Image'))
 
-	v = os.path.exists(isaacResourceFolder + 'items/trinkets/' + i.get('gfx'))
-	if v:
-		shutil.move(isaacResourceFolder + 'items/trinkets/' + i.get('gfx'), e.get('Image'))
+f = open("items.xml", "wb")
+f.write(ET.tostring(entityXML))
+f.close()
