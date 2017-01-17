@@ -2220,7 +2220,6 @@ class EntityGroupModel(QAbstractListModel):
 
 				entityXML.append(etmp)
 
-
 class EntityPalette(QWidget):
 
 	def __init__(self):
@@ -2713,8 +2712,11 @@ class MainWindow(QMainWindow):
 		stb = open(path, 'rb').read()
 
 		# Header
-		header = struct.unpack_from('<4s', stb, 0)[0].decode()
-		if header != "STB1":
+		try:
+			header = struct.unpack_from('<4s', stb, 0)[0].decode()
+			if header != "STB1":
+				return
+		except:
 			return
 
 		off = 4
@@ -3098,25 +3100,21 @@ class MainWindow(QMainWindow):
 
 	#@pyqtSlot()
 	def testMapInjectionRebirth(self):
+		# This was used for antibirth
+
 		room = self.roomList.list.currentItem()
 		if not room:
 			return
-
-		exePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
+		
+		exePath = self.getExecutablePath()
 		if not exePath:
-			QMessageBox.warning(self, "Error", "Could not find Steam directory")
 			return
-
-		exePath += "/steamapps/common/The Binding of Isaac Rebirth/"
-		if not QFile.exists(exePath + "isaac-ng.exe"):
-			QMessageBox.warning(self, "Error", "Could not find isaac-ng.exe (" + exePath + "isaac-ng.exe)")
-			return
-
+		
 		path = exePath + "br_output.xml"
 		self.storeEntityList()
-
+		
 		out = open(path, 'w')
-
+		
 		# Floor type
 		roomType = [
 			('basement', 1, 0),
@@ -3130,39 +3128,125 @@ class MainWindow(QMainWindow):
 			('sheol', 9, 0),
 			('cathedral', 9, 1),
 			('dark room', 11, 0),
-			('chest', 11, 1)
+			('chest', 11, 1),
+			('downpour', 1, 2),
+			('mines', 3, 2),
+			('mausoleum', 5, 2),
+			('corpse', 7, 2),
+			('forest', 11, 2)
 		]
-
+		
 		floorInfo = roomType[0]
 		for t in roomType:
 			if t[0] in mainWindow.path:
 				floorInfo = t
-
+		
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
-			room.roomType, room.roomVariant, room.roomDifficulty, room.data(0x100),
+			room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
-
+		
 		# Doors
 		for door in room.roomDoors:
 			out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
-
+		
 		# Spawns
 		for y in enumerate(room.roomSpawns):
 			for x in enumerate(y[1]):
 				if len(x[1]) == 0: continue
-
+				
 				out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
 				for entity in x[1]:
 					out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
 						entity[0], entity[1], entity[2], 2.0
 					))
 				out.write('\t</spawn>\n')
-
+		
 		out.write('</room>\n')
+		
+		exeName = "isaac-ng.exe"
+		if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
+			exeName = "isaac-ng-rebirth.exe"
+		
+		subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
+			cwd = exePath
+		)
 
-		subprocess.call([exePath + "/isaac-ng.exe", "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2])])
+	#@pyqtSlot()
+	def testMapInstapreview(self):
+		room = self.roomList.list.currentItem()
+		if not room:
+			return
+		
+		exePath = self.getExecutablePath()
+		if not exePath:
+			return
+		
+		path = exePath + "br_output.xml"
+		self.storeEntityList()
+		
+		out = open(path, 'w')
+		
+		# Floor type
+		roomType = [
+			('basement', 1, 0),
+			('cellar', 1, 1),
+			('caves', 3, 0),
+			('catacombs', 3, 1),
+			('depths', 5, 0),
+			('necropolis', 5, 1),
+			('womb', 7, 0),
+			('utero', 7, 1),
+			('sheol', 9, 0),
+			('cathedral', 9, 1),
+			('dark room', 11, 0),
+			('chest', 11, 1),
+			('downpour', 1, 2),
+			('mines', 3, 2),
+			('mausoleum', 5, 2),
+			('corpse', 7, 2),
+			('forest', 11, 2)
+		]
+		
+		floorInfo = roomType[0]
+		for t in roomType:
+			if t[0] in mainWindow.path:
+				floorInfo = t
+		
+		# Room header
+		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
+			room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
+			room.roomWeight, room.roomWidth, room.roomHeight
+		))
+		
+		# Doors
+		for door in room.roomDoors:
+			out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
+		
+		# Spawns
+		for y in enumerate(room.roomSpawns):
+			for x in enumerate(y[1]):
+				if len(x[1]) == 0: continue
+				
+				out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
+				for entity in x[1]:
+					out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
+						entity[0], entity[1], entity[2], 2.0
+					))
+				out.write('\t</spawn>\n')
+		
+		out.write('</room>\n')
+		
+		exeName = "isaac-ng.exe"
+		if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
+			exeName = "isaac-ng-rebirth.exe"
+		
+		subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
+			cwd = exePath
+		)
+
+		# --set-stage-type=0 --set-stage=1 --load-room=superinstapreview.xml
 
 # Edit
 ########################
