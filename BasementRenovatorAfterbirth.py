@@ -2025,8 +2025,8 @@ class EntityGroupModel(QAbstractListModel):
 				self.groups[g].objects.append(e)
 
 		# Special case for mods
-		# if self.kind == "Mods":
-		# 	self.addMods()
+		if self.kind == "Mods":
+			self.addMods()
 
 		i = 0
 		for key, group in sorted(self.groups.items()):
