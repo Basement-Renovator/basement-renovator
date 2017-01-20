@@ -57,7 +57,7 @@ def findModsPath():
 		cantFindPath = False
 		# Windows path things
 		if "Windows" in platform.system():
-			modsPath = os.path.join(os.path.expanduser("~"), os.path.normpath("/Documents/My Games/Binding of Isaac Afterbirth+ Mods"))
+			modsPath = os.path.join(os.path.expanduser("~"), "Documents", "My Games", "Binding of Isaac Afterbirth+ Mods")
 			if not QFile.exists(modsPath):
 				cantFindPath = True
 
@@ -80,7 +80,7 @@ def findModsPath():
 				QMessageBox.warning(None, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
 			else:
-				modsPath = modsPathOut[0]
+				modsPath = modsPathOut
 			if modsPath == "":
 				QMessageBox.warning(None, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
