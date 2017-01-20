@@ -75,22 +75,22 @@ def findModsPath():
 
 		# Fallback Resource Folder Locating
 		if cantFindPath == True:
-			modsPathOut = QFileDialog.getExistingDirectory(mainWindow, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
+			modsPathOut = QFileDialog.getExistingDirectory(None, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
 			if not modsPathOut:
-				QMessageBox.warning(mainWindow, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				QMessageBox.warning(None, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
 			else:
 				modsPath = modsPathOut[0]
 			if modsPath == "":
-				QMessageBox.warning(mainWindow, "Error", "Couldn't locate Mods folder and no folder was selected.")
+				QMessageBox.warning(None, "Error", "Couldn't locate Mods folder and no folder was selected.")
 				return
 			if not QDir(modsPath).exists:
-				QMessageBox.warning(mainWindow, "Error", "Selected folder does not exist or is not a folder.")
+				QMessageBox.warning(None, "Error", "Selected folder does not exist or is not a folder.")
 				return
 
 		# Looks like nothing was selected
 		if len(modsPath) == 0:
-			QMessageBox.warning(mainWindow, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
+			QMessageBox.warning(None, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
 			return
 
 		settings.setValue('ModsFolder', modsPath)
