@@ -566,7 +566,7 @@ class RoomEditorWidget(QGraphicsView):
 		if (x, y) in self.lastTile: return
 		self.lastTile.add((x, y))
 
-		en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 0)
+		en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
 
 		self.scene().addItem(en)
 		mainWindow.dirt()
@@ -592,6 +592,13 @@ class RoomEditorWidget(QGraphicsView):
 	def mouseReleaseEvent(self, event):
 		self.lastTile = None
 		QGraphicsView.mouseReleaseEvent(self, event)
+
+	def mouseDoubleClickEvent(self, event):
+		clicked = self.mapToScene(event.x(), event.y())
+		items = self.scene().items(clicked, Qt.IntersectsItemBoundingRect)
+
+		# context = QMenu()
+
 
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
@@ -790,6 +797,8 @@ class Entity(QGraphicsItem):
 			Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
 
 		self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
+		self.setAcceptHoverEvents(True)
+		self.popup = None
 
 	def getEntityInfo(self, t, subtype, variant):
 
@@ -970,7 +979,22 @@ class Entity(QGraphicsItem):
 				str(self.entity['Subtype'])))
 
 	def remove(self):
+		if self.popup:
+			self.popup.remove()
 		self.scene().removeItem(self)
+
+	def hoverEnterEvent(self, event):
+		stack = self.collidingItems()
+		stack.append(self)
+		popup = EntityStack(stack)
+
+		self.scene().addItem(popup)
+		self.popup = popup
+
+	def hoverLeaveEvent(self, event):
+		if self.popup:
+			self.popup.remove()
+			self.popup = None
 
 class Door(QGraphicsItem):
 
@@ -1027,6 +1051,69 @@ class Door(QGraphicsItem):
 
 	def remove(self):
 		self.scene().removeItem(self)
+
+class EntityStack(QGraphicsItem):
+
+	def __init__(self, items):
+		QGraphicsItem.__init__(self)
+
+		self.items = items
+
+	def paint(self, painter, option, widget):
+		painter.setRenderHint(QPainter.Antialiasing, True)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+
+		brush = QBrush(QColor(0,0,0,80))
+		painter.setPen(QPen(Qt.transparent))
+		painter.setBrush(brush)
+
+		r = self.boundingRect().adjusted(0,0,0,-16)
+
+		path = QPainterPath()
+		path.addRoundedRect(r, 4, 4)
+		path.moveTo(r.center().x()-6, r.bottom())
+		path.lineTo(r.center().x()+6, r.bottom())
+		path.lineTo(r.center().x(), r.bottom()+12)
+		painter.drawPath(path)
+
+		painter.setPen(QPen(Qt.white))
+		painter.setFont(QFont("Arial", 8));
+		
+		w = 0
+		for item in self.items:
+			w += 4
+			pix = item.entity['pixmap']
+			painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
+			painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
+			w += pix.width()
+
+	def boundingRect(self):
+		width = 0
+		height = 0
+
+		# Calculate the combined size
+		for item in self.items:
+			if item.entity['pixmap']:
+				width = width + item.entity['pixmap'].rect().width()
+				if item.entity['pixmap'].rect().height() > height:
+					height = item.entity['pixmap'].rect().height()
+			else:
+				width = width + 26
+				if 26 > height:
+					height = 26
+
+		# Add in buffers
+		height = height + 8 + 8 + 8 + 16 # Top, bottom, weight text, and arrow
+		width = width + 4 + len(self.items)*4 # Left and right and the middle bits
+
+		self.setX(self.items[-1].x() - width/2 + 13)
+		self.setY(self.items[-1].y() - height)
+
+		return QRectF(0.0, 0.0, width, height)
+
+	def remove(self):
+		self.scene().removeItem(self)
+		del self
 
 
 ########################
