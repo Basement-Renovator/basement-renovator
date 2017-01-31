@@ -1046,6 +1046,7 @@ class EntityStack(QGraphicsItem):
 
 	def __init__(self, items):
 		QGraphicsItem.__init__(self)
+		self.setZValue(1000)
 
 		self.items = items
 
