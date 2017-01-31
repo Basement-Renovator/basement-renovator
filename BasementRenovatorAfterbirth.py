@@ -21,8 +21,6 @@
 #
 #	Low priority
 #		Clear Corner Rooms Grid
-#		Fix Zatherz Open Stage to auto-detect files and disable properly, and list numerically
-#		Custom entity variant stuff
 #		Fix icon for win_setup.py
 #
 
@@ -2007,6 +2005,8 @@ class EntityGroupModel(QAbstractListModel):
 		self.kind = kind
 		self.view = None
 
+		self.filter = ""
+
 		QAbstractListModel.__init__(self)
 
 		global entityXML
@@ -2016,16 +2016,17 @@ class EntityGroupModel(QAbstractListModel):
 			g = en.get('Group')
 			k = en.get('Kind')
 
-			if self.kind == k:
-				if g not in self.groups.keys():
+			if self.kind == k or self.kind == None:
+				if g not in self.groups.keys() and g != None:
 					self.groups[g] = EntityGroupItem(g)
 
 				e = EntityItem(en.get('Name'), en.get('ID'), en.get('Subtype'), en.get('Variant'), en.get('Image'))
 
-				self.groups[g].objects.append(e)
+				if g != None:
+					self.groups[g].objects.append(e)
 
 		# Special case for mods
-		if self.kind == "Mods":
+		if self.kind == "Mods" or self.kind == None:
 			self.addMods()
 
 		i = 0
@@ -2228,14 +2229,40 @@ class EntityPalette(QWidget):
 
 		QWidget.__init__(self)
 
-		self.menuSetup = False
-
+		# Make the layout
 		self.layout = QVBoxLayout()
 		self.layout.setSpacing(0)
 
+		# Create the tabs for the default and mod entities
 		self.tabs = QTabWidget()
+		self.populateTabs()
 		self.layout.addWidget(self.tabs)
 
+		# Create the hidden search results tab
+		self.searchTab = QTabWidget()
+
+		# Funky model setup
+		listView = EntityList()
+		listView.setModel(EntityGroupModel(None))
+		listView.model().view = listView
+		listView.clicked.connect(self.objSelected)
+		
+		# Hide the search results
+		self.searchTab.addTab(listView, "Search")
+		self.searchTab.hide()
+
+		self.layout.addWidget(self.searchTab)
+
+		# Add the Search bar
+		self.searchBar = QLineEdit()
+		self.searchBar.setPlaceholderText("Search")
+		self.searchBar.textEdited.connect(self.updateSearch)
+		self.layout.addWidget(self.searchBar)
+
+		# And Done
+		self.setLayout(self.layout)
+
+	def populateTabs(self):
 
 		for group in ["Pickups", "Enemies", "Bosses", "Stage", "Collect", "Mods"]:
 
@@ -2254,13 +2281,17 @@ class EntityPalette(QWidget):
 
 			self.tabs.addTab(listView, group)
 
-		self.setLayout(self.layout)
+		return
 
 	def currentSelectedObject(self):
 		"""Returns the currently selected object reference, for painting purposes."""
 
-		index = self.tabs.currentWidget().currentIndex().row()
-		obj = self.tabs.currentWidget().model().getItem(index)
+		if len(self.searchBar.text()) > 0:
+			index = self.searchTab.currentWidget().currentIndex().row()
+			obj = self.searchTab.currentWidget().model().getItem(index)
+		else:
+			index = self.tabs.currentWidget().currentIndex().row()
+			obj = self.tabs.currentWidget().model().getItem(index)
 
 		return obj
 
@@ -2273,6 +2304,17 @@ class EntityPalette(QWidget):
 		# Throws a signal when the selected object is used as a replacement
 		if QApplication.keyboardModifiers() == Qt.AltModifier:
 			self.objReplaced.emit(self.currentSelectedObject())
+
+	#@pyqtSlot()
+	def updateSearch(self, text):
+		if len(self.searchBar.text()) > 0:
+			self.tabs.hide()
+			self.searchTab.widget(0).filter = text
+			self.searchTab.widget(0).filterList()
+			self.searchTab.show()
+		else:
+			self.tabs.show()
+			self.searchTab.hide()
 
 	objChanged = pyqtSignal(EntityItem)
 	objReplaced = pyqtSignal(EntityItem)
@@ -2291,6 +2333,8 @@ class EntityList(QListView):
 
 		self.setMouseTracking(True)
 
+		self.filter = ""
+
 	def mouseMoveEvent(self, event):
 
 		index = self.indexAt(event.pos()).row()
@@ -2300,6 +2344,31 @@ class EntityList(QListView):
 
 			if isinstance(item, EntityItem):
 				QToolTip.showText(event.globalPos(), item.name)
+
+	def filterList(self):
+		m = self.model()
+		rows = m.rowCount()
+
+		# First loop for entity items
+		for row in range(rows):
+			item = m.getItem(row)
+
+			if isinstance(item, EntityItem):
+				if self.filter.lower() in item.name.lower():
+					self.setRowHidden(row, False)
+				else:
+					self.setRowHidden(row, True)
+
+		# Second loop for Group titles, check to see if all contents are hidden or not
+		for row in range(rows):
+			item = m.getItem(row)
+
+			if isinstance(item, EntityGroupItem):
+				self.setRowHidden(row, True)
+				
+				for i in range(item.startIndex, item.endIndex):
+					if not self.isRowHidden(i):
+						self.setRowHidden(row, False)
 
 
 ########################
