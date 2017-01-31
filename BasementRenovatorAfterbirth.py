@@ -560,6 +560,9 @@ class RoomEditorWidget(QGraphicsView):
 		for i in self.scene().items():
 			if isinstance(i, Entity):
 				if i.entity['X'] == x and i.entity['Y'] == y:
+					
+					i.removeWeightPopup(True)
+
 					if int(i.entity['Type']) > 999 and int(self.objectToPaint.ID) > 999:
 						return
 
@@ -763,6 +766,7 @@ class Entity(QGraphicsItem):
 		)
 
 		self.popup = None
+		mainWindow.scene.selectionChanged.connect(self.removeWeightPopup)
 
 		# Supplied entity info
 		self.entity = {}
@@ -980,20 +984,28 @@ class Entity(QGraphicsItem):
 		self.scene().removeItem(self)
 
 	def hoverEnterEvent(self, event):
-		self.scene().selectionChanged.connect(self.removeWeightPopup)
-
-		stack = self.collidingItems()
-		stack.append(self)
-		if len(stack) <= 1: return
-		popup = EntityStack(stack)
-
-		if self.popup == None:
-			self.scene().addItem(popup)
-			self.popup = popup
-			self.scene().views()[0].canDelete = False
+		self.createWeightPopup()
 
 	def hoverLeaveEvent(self, event):
 		self.removeWeightPopup()
+
+	def createWeightPopup(self):
+		# Get the stack
+		stack = self.collidingItems()
+		stack.append(self)
+
+		# Make sure there are no doors or popups involved
+		stack = [x for x in stack if isinstance(x,Entity)]
+
+		# 1 is not a stack.
+		if len(stack) <= 1: return
+
+		# If there's no popu, make a popup
+		if self.popup == None:
+			popup = EntityStack(stack)
+			self.scene().views()[0].canDelete = False
+			self.scene().addItem(popup)
+			self.popup = popup
 
 	def removeWeightPopup(self, force=False):
 		if self in mainWindow.scene.selectedItems() and not force:
@@ -1031,7 +1043,6 @@ class EntityStack(QGraphicsItem):
 			QGraphicsProxyWidget.__init__(self, parent)
 
 			self.setWidget(button)
-			self.setZValue(parent.zValue()+1000)
 
 	def __init__(self, items):
 		QGraphicsItem.__init__(self)
@@ -1111,8 +1122,15 @@ class EntityStack(QGraphicsItem):
 		return QRectF(0.0, 0.0, width, height)
 
 	def remove(self):
+		# Fix for the nullptr left by the scene parent of the widget, avoids a segfault from the dangling pointer
+		for spin in self.spinners:
+			self.scene().removeItem(spin)
+			# spin.widget().setParent(None)
+			spin.setWidget(None)	# Turns out this function calls the above commented out function
+			del spin # Probably useless
+
 		self.scene().removeItem(self)
-		del self
+		del self # Probably useless
 
 class Door(QGraphicsItem):
 
