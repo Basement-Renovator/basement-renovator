@@ -762,6 +762,8 @@ class Entity(QGraphicsItem):
 			self.ItemIsMovable
 		)
 
+		self.popup = None
+
 		# Supplied entity info
 		self.entity = {}
 		self.entity['X'] = x
@@ -792,7 +794,6 @@ class Entity(QGraphicsItem):
 
 		self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
 		self.setAcceptHoverEvents(True)
-		self.popup = None
 
 	def getEntityInfo(self, t, subtype, variant):
 
@@ -834,6 +835,7 @@ class Entity(QGraphicsItem):
 	def itemChange(self, change, value):
 
 		if change == self.ItemPositionChange:
+			self.removeWeightPopup(True)
 
 			currentX, currentY = self.x(), self.y()
 
@@ -993,8 +995,8 @@ class Entity(QGraphicsItem):
 	def hoverLeaveEvent(self, event):
 		self.removeWeightPopup()
 
-	def removeWeightPopup(self):
-		if self in self.scene().selectedItems():
+	def removeWeightPopup(self, force=False):
+		if self in mainWindow.scene.selectedItems() and not force:
 			return
 
 		if self.popup:
