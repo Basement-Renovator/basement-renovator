@@ -986,6 +986,7 @@ class Entity(QGraphicsItem):
 	def hoverEnterEvent(self, event):
 		stack = self.collidingItems()
 		stack.append(self)
+		if len(stack) <= 1: return
 		popup = EntityStack(stack)
 
 		self.scene().addItem(popup)
