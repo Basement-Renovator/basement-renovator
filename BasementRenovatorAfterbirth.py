@@ -595,7 +595,7 @@ class RoomEditorWidget(QGraphicsView):
 		QGraphicsView.mouseReleaseEvent(self, event)
 
 	def keyPressEvent(self, event):
-		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace and self.canDelete:
+		if (event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace) and self.canDelete:
 			scene = self.scene()
 
 			selection = scene.selectedItems()
