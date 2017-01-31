@@ -530,6 +530,7 @@ class RoomEditorWidget(QGraphicsView):
 		self.assignNewScene(scene)
 
 		self.statusBar = True
+		self.canDelete = True
 
 	def assignNewScene(self, scene):
 		self.setScene(scene)
@@ -593,15 +594,8 @@ class RoomEditorWidget(QGraphicsView):
 		self.lastTile = None
 		QGraphicsView.mouseReleaseEvent(self, event)
 
-	def mouseDoubleClickEvent(self, event):
-		clicked = self.mapToScene(event.x(), event.y())
-		items = self.scene().items(clicked, Qt.IntersectsItemBoundingRect)
-
-		# context = QMenu()
-
-
 	def keyPressEvent(self, event):
-		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
+		if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace and self.canDelete:
 			scene = self.scene()
 
 			selection = scene.selectedItems()
@@ -984,18 +978,139 @@ class Entity(QGraphicsItem):
 		self.scene().removeItem(self)
 
 	def hoverEnterEvent(self, event):
+		self.scene().selectionChanged.connect(self.removeWeightPopup)
+
 		stack = self.collidingItems()
 		stack.append(self)
 		if len(stack) <= 1: return
 		popup = EntityStack(stack)
 
-		self.scene().addItem(popup)
-		self.popup = popup
+		if self.popup == None:
+			self.scene().addItem(popup)
+			self.popup = popup
+			self.scene().views()[0].canDelete = False
 
 	def hoverLeaveEvent(self, event):
+		self.removeWeightPopup()
+
+	def removeWeightPopup(self):
+		if self in self.scene().selectedItems():
+			return
+
 		if self.popup:
 			self.popup.remove()
 			self.popup = None
+			self.scene().views()[0].canDelete = True
+
+class EntityStack(QGraphicsItem):
+
+	class WeightSpinner(QDoubleSpinBox):
+		def __init__(self):
+			QDoubleSpinBox.__init__(self)
+
+			self.setRange(0.0, 100.0)
+			self.setDecimals(2)
+			self.setSingleStep(0.1)
+			self.setFrame(False)
+			self.setAlignment(Qt.AlignHCenter)
+
+			self.setFont(QFont("Arial", 10))
+
+			palette = self.palette()
+			palette.setColor(QPalette.Base, Qt.transparent)
+			palette.setColor(QPalette.Text, Qt.white)
+			palette.setColor(QPalette.Window, Qt.transparent)
+
+			self.setPalette(palette)
+			self.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+	class Proxy(QGraphicsProxyWidget):
+		def __init__(self, button, parent):
+			QGraphicsProxyWidget.__init__(self, parent)
+
+			self.setWidget(button)
+			self.setZValue(parent.zValue()+1000)
+
+	def __init__(self, items):
+		QGraphicsItem.__init__(self)
+
+		self.items = items
+
+		self.spinners = []
+		
+		w = 0
+		for item in self.items:
+			w += 4
+			pix = item.entity['pixmap']
+			w += pix.width()
+
+			weight = self.WeightSpinner()
+			weight.setValue(item.entity["Weight"])
+			weight.valueChanged.connect(self.weightChanged)
+			weightProxy = self.Proxy(weight, self)
+			self.spinners.append(weightProxy)
+
+	def weightChanged(self):
+		for n, spinner in enumerate(self.spinners):
+			self.items[n].entity['Weight'] = spinner.widget().value()
+
+	def paint(self, painter, option, widget):
+		painter.setRenderHint(QPainter.Antialiasing, True)
+		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+
+		brush = QBrush(QColor(0,0,0,80))
+		painter.setPen(QPen(Qt.transparent))
+		painter.setBrush(brush)
+
+		r = self.boundingRect().adjusted(0,0,0,-16)
+
+		path = QPainterPath()
+		path.addRoundedRect(r, 4, 4)
+		path.moveTo(r.center().x()-6, r.bottom())
+		path.lineTo(r.center().x()+6, r.bottom())
+		path.lineTo(r.center().x(), r.bottom()+12)
+		painter.drawPath(path)
+
+		painter.setPen(QPen(Qt.white))
+		painter.setFont(QFont("Arial", 8));
+		
+		w = 0
+		for item in self.items:
+			self.spinners[self.items.index(item)].setPos(w-8, r.bottom()-26)
+			w += 4
+			pix = item.entity['pixmap']
+			painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
+			
+			# painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
+			w += pix.width()
+
+	def boundingRect(self):
+		width = 0
+		height = 0
+
+		# Calculate the combined size
+		for item in self.items:
+			if item.entity['pixmap']:
+				width = width + item.entity['pixmap'].rect().width()
+				if item.entity['pixmap'].rect().height() > height:
+					height = item.entity['pixmap'].rect().height()
+			else:
+				width = width + 26
+				if 26 > height:
+					height = 26
+
+		# Add in buffers
+		height = height + 8 + 8 + 8 + 16 # Top, bottom, weight text, and arrow
+		width = width + 4 + len(self.items)*4 # Left and right and the middle bits
+
+		self.setX(self.items[-1].x() - width/2 + 13)
+		self.setY(self.items[-1].y() - height)
+
+		return QRectF(0.0, 0.0, width, height)
+
+	def remove(self):
+		self.scene().removeItem(self)
+		del self
 
 class Door(QGraphicsItem):
 
@@ -1053,68 +1168,6 @@ class Door(QGraphicsItem):
 	def remove(self):
 		self.scene().removeItem(self)
 
-class EntityStack(QGraphicsItem):
-
-	def __init__(self, items):
-		QGraphicsItem.__init__(self)
-
-		self.items = items
-
-	def paint(self, painter, option, widget):
-		painter.setRenderHint(QPainter.Antialiasing, True)
-		painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-
-		brush = QBrush(QColor(0,0,0,80))
-		painter.setPen(QPen(Qt.transparent))
-		painter.setBrush(brush)
-
-		r = self.boundingRect().adjusted(0,0,0,-16)
-
-		path = QPainterPath()
-		path.addRoundedRect(r, 4, 4)
-		path.moveTo(r.center().x()-6, r.bottom())
-		path.lineTo(r.center().x()+6, r.bottom())
-		path.lineTo(r.center().x(), r.bottom()+12)
-		painter.drawPath(path)
-
-		painter.setPen(QPen(Qt.white))
-		painter.setFont(QFont("Arial", 8));
-		
-		w = 0
-		for item in self.items:
-			w += 4
-			pix = item.entity['pixmap']
-			painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
-			painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
-			w += pix.width()
-
-	def boundingRect(self):
-		width = 0
-		height = 0
-
-		# Calculate the combined size
-		for item in self.items:
-			if item.entity['pixmap']:
-				width = width + item.entity['pixmap'].rect().width()
-				if item.entity['pixmap'].rect().height() > height:
-					height = item.entity['pixmap'].rect().height()
-			else:
-				width = width + 26
-				if 26 > height:
-					height = 26
-
-		# Add in buffers
-		height = height + 8 + 8 + 8 + 16 # Top, bottom, weight text, and arrow
-		width = width + 4 + len(self.items)*4 # Left and right and the middle bits
-
-		self.setX(self.items[-1].x() - width/2 + 13)
-		self.setY(self.items[-1].y() - height)
-
-		return QRectF(0.0, 0.0, width, height)
-
-	def remove(self):
-		self.scene().removeItem(self)
-		del self
 
 
 ########################
