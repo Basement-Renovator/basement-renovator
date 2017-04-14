@@ -1168,5 +1168,31 @@
 
 	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="1000" Name="Isaac's Carpet" Variant="74" Subtype="0" />
 	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="1000" Name="Dice Room Floor" Variant="76" Subtype="0" />
-
+	
+<!--Aftebirth+ Booster Pack#1-->
+	<!--Cards-->
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.52 - Huge Growth.png" Kind="Pickups" Name="Huge Growth" Subtype="52" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.53 - Ancient Recall.png" Kind="Pickups" Name="Ancient Recall" Subtype="53" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.54 - Era Walk.png" Kind="Pickups" Name="Era Walk" Subtype="54" Variant="300" />
+	<!--/Cards-->
+	<!--Passives-->
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.513 - Bozo.png" Kind="Collect" Name="Bozo" Subtype="513" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.514 - Broken Modem.png" Kind="Collect" Name="Broken Modem" Subtype="514" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.517 - Fast Bombs.png" Kind="Collect" Name="Fast Bombs" Subtype="517" Variant="100" />
+	<!--/Passives-->
+	<!--Actives-->
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.512 - Black Hole.png" Kind="Collect" Name="Black Hole" Subtype="512" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.515 - Mystery Gift.png" Kind="Collect" Name="Mystery Gift" Subtype="515" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.516 - Sprinkler.png" Kind="Collect" Name="Sprinkler" Subtype="516" Variant="100" />
+	<!--/Actives-->
+	<!--Familiars-->
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.511 - Angry Fly.png" Kind="Collect" Name="Angry Fly" Subtype="511" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.518 - Buddy in a Box.png" Kind="Collect" Name="Buddy in a Box" Subtype="518" Variant="100" />
+	<entity Group="Familiars" ID="5" Image="resources/Entities/Items/5.100.519 - Lil Delirium.png" Kind="Collect" Name="Lil Delirium" Subtype="519" Variant="100" />
+	<!--/Familiars-->
+	<!--Trinkets-->
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.120 - Hairpin.png" Kind="Collect" Name="Hairpin" Subtype="120" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.121 - Wooden Cross.png" Kind="Collect" Name="Wooden Cross" Subtype="121" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.122 - Butter!.png" Kind="Collect" Name="Butter!" Subtype="122" Variant="350" />
+	<!--/Trinkets-->
 </data>
