@@ -1169,7 +1169,7 @@
 	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="1000" Name="Isaac's Carpet" Variant="74" Subtype="0" />
 	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="1000" Name="Dice Room Floor" Variant="76" Subtype="0" />
 	
-<!--Aftebirth+ Booster Pack#1-->
+<!--Aftebirth+ Booster Pack #1-->
 	<!--Cards-->
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.52 - Huge Growth.png" Kind="Pickups" Name="Huge Growth" Subtype="52" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.53 - Ancient Recall.png" Kind="Pickups" Name="Ancient Recall" Subtype="53" Variant="300" />
@@ -1195,4 +1195,22 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.121 - Wooden Cross.png" Kind="Collect" Name="Wooden Cross" Subtype="121" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.122 - Butter!.png" Kind="Collect" Name="Butter!" Subtype="122" Variant="350" />
 	<!--/Trinkets-->
+	
+<!--Aftebirth+ Booster Pack #2-->
+	<!--Passives-->
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.520 - Jumper Cables.png" Kind="Collect" Name="Jumper Cables" Subtype="520" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.524 - Technology Zero.png" Kind="Collect" Name="Technology Zero" Subtype="524" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.525 - Leprosy.png" Kind="Collect" Name="Leprosy" Subtype="525" Variant="100" />
+	<!--/Passives-->
+	<!--Actives-->
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.521 - Coupon.png" Kind="Collect" Name="Coupon" Subtype="521" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.522 - Telekinesis.png" Kind="Collect" Name="Telekinesis" Subtype="522" Variant="100" />
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.523 - Moving Box.png" Kind="Collect" Name="Moving Box" Subtype="523" Variant="100" />
+	<!--/Actives-->
+	<!--Trinkets-->
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.123 - Filigree Feather.png" Kind="Collect" Name="Filigree Feather" Subtype="120" Variant="350" />
+	<!--/Trinkets-->
+	<!--Arcade-->
+	<entity Group="Arcade" ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Kind="Stage" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
+	<!--/Arcade-->
 </data>
