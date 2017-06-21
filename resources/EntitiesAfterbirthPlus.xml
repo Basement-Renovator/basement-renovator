@@ -1208,7 +1208,7 @@
 	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.523 - Moving Box.png" Kind="Collect" Name="Moving Box" Subtype="523" Variant="100" />
 	<!--/Actives-->
 	<!--Trinkets-->
-	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.123 - Filigree Feather.png" Kind="Collect" Name="Filigree Feather" Subtype="120" Variant="350" />
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.123 - Filigree Feather.png" Kind="Collect" Name="Filigree Feather" Subtype="123" Variant="350" />
 	<!--/Trinkets-->
 	<!--Arcade-->
 	<entity Group="Arcade" ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Kind="Stage" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
