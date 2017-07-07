@@ -1213,4 +1213,17 @@
 	<!--Arcade-->
 	<entity Group="Arcade" ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Kind="Stage" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
 	<!--/Arcade-->
+	
+<!--Aftebirth+ Booster Pack #3-->
+	<!--Passives-->
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.526 - 7 Seals.png" Kind="Collect" Name="7 Seals" Subtype="526" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.528 - Angelic Prism.png" Kind="Collect" Name="Angelic Prism" Subtype="528" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.529 - Pop!.png" Kind="Collect" Name="Pop!" Subtype="529" Variant="100" />
+	<!--/Passives-->
+	<!--Actives-->
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.527 - Mr. ME!.png" Kind="Collect" Name="Mr. ME!" Subtype="527" Variant="100" />
+	<!--/Actives-->
+	<!--Trinkets-->
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.124 - Door Stop.png" Kind="Collect" Name="Door Stop" Subtype="124" Variant="350" />
+	<!--/Trinkets-->
 </data>
