@@ -22,6 +22,9 @@
 #	Low priority
 #		Clear Corner Rooms Grid
 #		Fix icon for win_setup.py
+#		Bosscolours for the alternate boss entities
+#		Fix mod auto-detection
+#		Multi-entity stack improvments so it doesn't crash all the time
 #
 
 
@@ -29,6 +32,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from collections import OrderedDict
+from copy import deepcopy
 
 import struct, os, subprocess, platform, webbrowser
 import xml.etree.ElementTree as ET
@@ -1205,8 +1209,6 @@ class Room(QListWidgetItem):
 
 		QListWidgetItem.__init__(self)
 
-		# self.setText(name)
-
 		self.setData(0x100, name)
 		self.setText("{0} - {1}".format(variant, self.data(0x100)))
 
@@ -1362,6 +1364,46 @@ class Room(QListWidgetItem):
 				self.roomBG = 13
 			else:
 				self.roomBG = 12
+
+	def mirrorX(self):
+		# Flip Spawns
+		for column in self.roomSpawns:
+			column[:self.roomWidth] = column[:self.roomWidth][::-1]
+
+		# To flip, just reverse the signs then offset by room width (-1 for the indexing)
+		# Flip Doors
+		for door in self.roomDoors:
+			door[0] = -door[0] + (self.roomWidth-1)
+
+		# Flip Shape
+		if self.roomShape is 9:
+			self.roomShape = 10
+		elif self.roomShape is 10:
+			self.roomShape = 9
+		elif self.roomShape is 11:
+			self.roomShape = 12
+		elif self.roomShape is 12:
+			self.roomShape = 11
+
+	def mirrorY(self):
+		# To flip, just reverse the signs then offset by room width (-1 for the indexing)
+
+		# Flip Spawns
+		self.roomSpawns[:self.roomHeight] = self.roomSpawns[:self.roomHeight][::-1]
+
+		# Flip Doors
+		for door in self.roomDoors:
+			door[1] = -door[1] + (self.roomHeight-1)
+
+		# Flip Shape
+		if self.roomShape is 9:
+			self.roomShape = 11
+		elif self.roomShape is 11:
+			self.roomShape = 9
+		elif self.roomShape is 10:
+			self.roomShape = 12
+		elif self.roomShape is 12:
+			self.roomShape = 10
 
 class RoomDelegate(QStyledItemDelegate):
 
@@ -1595,6 +1637,8 @@ class RoomSelector(QWidget):
 		self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
 		self.exportRoomButton    = self.toolbar.addAction(QIcon(), 'Export...', self.exportRoom)
 
+		self.mirror = False
+		self.mirrorY = False
 		# self.IDButton = self.toolbar.addAction(QIcon(), 'ID', self.turnIDsOn)
 		# self.IDButton.setCheckable(True)
 		# self.IDButton.setChecked(True)
@@ -2054,23 +2098,53 @@ class RoomSelector(QWidget):
 			v += 1
 
 			r = Room(
-				room.data(0x100) + ' (copy)',
-				[list(door) for door in room.roomDoors],
-				room.roomSpawns,
-				room.roomType,
-				v + rv,
-				room.roomSubvariant,
-				room.roomDifficulty,
-				room.roomWeight,
-				room.roomWidth,
-				room.roomHeight,
-				room.roomShape
+				deepcopy(room.data(0x100) + ' (copy)'),
+				deepcopy([list(door) for door in room.roomDoors]),
+				deepcopy(room.roomSpawns),
+				deepcopy(room.roomType),
+				deepcopy(v + rv),
+				deepcopy(room.roomSubvariant),
+				deepcopy(room.roomDifficulty),
+				deepcopy(room.roomWeight),
+				deepcopy(room.roomWidth),
+				deepcopy(room.roomHeight),
+				deepcopy(room.roomShape)
 			)
+
+			if self.mirror:
+				# Change the name to mirrored.
+				r.setData(0x100, room.data(0x100) + ' (mirrored)')
+				r.setText("{0}".format(room.data(0x100) + ' (mirrored)'))
+
+				# Mirror the room
+				if self.mirrorY:
+					r.mirrorY()
+				else:
+					r.mirrorX()
 
 			self.list.insertItem(initialPlace + v, r)
 			self.list.setCurrentItem(r, QItemSelectionModel.Select)
 
 		mainWindow.dirt()
+
+	def mirrorButtonOn(self):
+		self.mirror = True
+		self.duplicateRoomButton.setText("Mirror X")
+
+	def mirrorButtonOff(self):
+		self.mirror = False
+		self.mirrorY = False
+		self.duplicateRoomButton.setText("Duplicate")
+
+	def mirrorYButtonOn(self):
+		if self.mirror:
+			self.mirrorY = True
+			self.duplicateRoomButton.setText("Mirror Y")
+
+	def mirrorYButtonOff(self):
+		if self.mirror:
+			self.mirrorY = False
+			self.duplicateRoomButton.setText("Mirror X")
 
 	def exportRoom(self):
 
@@ -2188,8 +2262,8 @@ class EntityGroupModel(QAbstractListModel):
 					self.groups[g].objects.append(e)
 
 		# Special case for mods
-		if self.kind == "Mods" or self.kind == None:
-			self.addMods()
+		# if self.kind == "Mods" or self.kind == None:
+		# 	self.addMods()
 
 		i = 0
 		for key, group in sorted(self.groups.items()):
@@ -2279,7 +2353,7 @@ class EntityGroupModel(QAbstractListModel):
 		return None
 
 	def addMods(self):
-
+		
 		global entityXML
 
 		# Each mod in the mod folder is a Group
@@ -2538,6 +2612,20 @@ class EntityList(QListView):
 ########################
 
 class MainWindow(QMainWindow):
+
+	def keyPressEvent(self, event):
+		QMainWindow.keyPressEvent(self, event)
+		if event.key() == Qt.Key_Alt:
+			self.roomList.mirrorButtonOn()
+		if event.key() == Qt.Key_Shift:
+			self.roomList.mirrorYButtonOn()
+
+	def keyReleaseEvent(self, event):
+		QMainWindow.keyReleaseEvent(self, event)
+		if event.key() == Qt.Key_Alt:
+			self.roomList.mirrorButtonOff()
+		if event.key() == Qt.Key_Shift:
+			self.roomList.mirrorYButtonOff()
 
 	defaultMapsDict = {
 		"Special Rooms": "00.special rooms.stb",
