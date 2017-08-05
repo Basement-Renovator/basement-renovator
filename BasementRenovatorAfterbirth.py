@@ -2093,9 +2093,9 @@ class RoomSelector(QWidget):
 
 		for room in rooms:
 			if self.mirrorY:
-				v = 2000
+				v = 20000
 			elif self.mirror:
-				v = 1000
+				v = 10000
 			else:
 				v = 1
 
@@ -2115,8 +2115,11 @@ class RoomSelector(QWidget):
 
 			if self.mirror:
 				# Change the name to mirrored.
-				r.setData(0x100, room.data(0x100) + ' (mirrored)')
-				r.setText("{0} - {1}".format(r.roomVariant, room.data(0x100) + ' (mirrored)'))
+				flipName = ' (flipped X)'
+				if self.mirrorY:
+					flipName = ' (flipped Y)'
+				r.setData(0x100, room.data(0x100) + flipName)
+				r.setText("{0} - {1}".format(r.roomVariant, room.data(0x100) + flipName))
 
 				# Mirror the room
 				if self.mirrorY:
