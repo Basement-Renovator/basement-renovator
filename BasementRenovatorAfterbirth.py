@@ -2087,22 +2087,24 @@ class RoomSelector(QWidget):
 
 		mainWindow.storeEntityList()
 
-		rv = rooms[0].roomVariant
-		v = 0
-
 		initialPlace = self.list.currentRow()
 		self.selectedRoom().setData(100, False)
 		self.list.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
 
 		for room in rooms:
-			v += 1
+			if self.mirrorY:
+				v = 2000
+			elif self.mirror:
+				v = 1000
+			else:
+				v = 1
 
 			r = Room(
 				deepcopy(room.data(0x100) + ' (copy)'),
 				deepcopy([list(door) for door in room.roomDoors]),
 				deepcopy(room.roomSpawns),
 				deepcopy(room.roomType),
-				deepcopy(v + rv),
+				deepcopy(room.roomVariant+v),
 				deepcopy(room.roomSubvariant),
 				deepcopy(room.roomDifficulty),
 				deepcopy(room.roomWeight),
@@ -2114,7 +2116,7 @@ class RoomSelector(QWidget):
 			if self.mirror:
 				# Change the name to mirrored.
 				r.setData(0x100, room.data(0x100) + ' (mirrored)')
-				r.setText("{0}".format(room.data(0x100) + ' (mirrored)'))
+				r.setText("{0} - {1}".format(r.roomVariant, room.data(0x100) + ' (mirrored)'))
 
 				# Mirror the room
 				if self.mirrorY:
