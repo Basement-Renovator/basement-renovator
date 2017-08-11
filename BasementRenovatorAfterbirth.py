@@ -1370,6 +1370,37 @@ class Room(QListWidgetItem):
 		for column in self.roomSpawns:
 			column[:self.roomWidth] = column[:self.roomWidth][::-1]
 
+			# Flip Directional Entities
+			for row in column:
+				for spawn in row:
+					# 40  - Guts 			(1,3)
+					if spawn[0] == 40:
+						if spawn[2] == 1:
+							spawn[2] = 3
+						elif spawn[2] == 3:
+							spawn[2] = 1
+
+					# 202 - Stone Shooter 	(0,2)
+					elif spawn[0] == 202:
+						if spawn[2] == 0:
+							spawn[2] = 2
+						elif spawn[2] == 2:
+							spawn[2] = 0
+
+					# 203 - Brim Head 		(0,2)
+					elif spawn[0] == 203:
+						if spawn[2] == 0:
+							spawn[2] = 2
+						elif spawn[2] == 2:
+							spawn[2] = 0
+
+					# 218 - Wall Hugger 	(1,3)
+					elif spawn[0] == 218:
+						if spawn[2] == 1:
+							spawn[2] = 3
+						elif spawn[2] == 3:
+							spawn[2] = 1
+							
 		# To flip, just reverse the signs then offset by room width (-1 for the indexing)
 		# Flip Doors
 		for door in self.roomDoors:
@@ -1390,6 +1421,38 @@ class Room(QListWidgetItem):
 
 		# Flip Spawns
 		self.roomSpawns[:self.roomHeight] = self.roomSpawns[:self.roomHeight][::-1]
+
+		# Flip Directional Entities
+		for column in self.roomSpawns:
+			for row in column:
+				for spawn in row:
+					# 40  - Guts 			(0,2)
+					if spawn[0] == 40:
+						if spawn[2] == 0:
+							spawn[2] = 2
+						elif spawn[2] == 2:
+							spawn[2] = 0
+
+					# 202 - Stone Shooter 	(1,3)
+					elif spawn[0] == 202:
+						if spawn[2] == 1:
+							spawn[2] = 3
+						elif spawn[2] == 3:
+							spawn[2] = 1
+
+					# 203 - Brim Head 		(1,3)
+					elif spawn[0] == 203:
+						if spawn[2] == 1:
+							spawn[2] = 3
+						elif spawn[2] == 3:
+							spawn[2] = 1
+
+					# 218 - Wall Hugger 	(2,4)
+					elif spawn[0] == 218:
+						if spawn[2] == 2:
+							spawn[2] = 4
+						elif spawn[2] == 4:
+							spawn[2] = 2
 
 		# Flip Doors
 		for door in self.roomDoors:
