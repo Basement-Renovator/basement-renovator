@@ -187,6 +187,7 @@
 	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Kind="Enemies" Name="Boil" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.1.0 - Gut.png" Kind="Enemies" Name="Gut" Subtype="0" Variant="1" />
 	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.2.0 - Sack.png" Kind="Enemies" Name="Sack" Subtype="0" Variant="2" />
+	<entity Group="Boils" Kind="Enemies" Image="resources/Entities/309.0.0 - Gush.png" BaseHP="20" Champion="1" ID="309" Name="Gush" Variant="0" Subtype="0" />
 	<entity BaseHP="10" Champion="1" Group="Worms" ID="31" Image="resources/Entities/31.0.0 - Spitty.png" Kind="Enemies" Name="Spitty" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="32" Image="resources/Entities/32.0.0 - Brain.png" Kind="Enemies" Name="Brain" Subtype="0" Variant="0" />
 	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire Place" Subtype="0" Variant="0" />
@@ -237,6 +238,7 @@
 	<entity BaseHP="25" Champion="1" Group="Worms" ID="55" Image="resources/Entities/55.1.0 - Kamikaze Leech.png" Kind="Enemies" Name="Kamikaze Leech" Subtype="0" Variant="1" />
 	<entity BaseHP="25" Champion="1" Group="Worms" ID="55" Image="resources/Entities/55.2.0 - Holy Leech.png" Kind="Enemies" Name="Holy Leech" Subtype="0" Variant="2" />
 	<entity BaseHP="30" Champion="1" Group="Lumps" ID="56" Image="resources/Entities/56.0.0 - Lump.png" Kind="Enemies" Name="Lump" Subtype="0" Variant="0" />
+	<entity Group="Lumps" Kind="Enemies" Image="resources/Entities/307.0.0 - Tar Boy.png" BaseHP="55" Champion="1" ID="307" Name="Tar Boy" Variant="0" Subtype="0" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.0.0 - MemBrain.png" Kind="Enemies" Name="MemBrain" Subtype="0" Variant="0" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="35" Champion="1" Group="Lumps" ID="58" Image="resources/Entities/58.0.0 - Para-Bite.png" Kind="Enemies" Name="Para-Bite" Subtype="0" Variant="0" />
@@ -245,6 +247,7 @@
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Kind="Enemies" Name="Bloodshot Eye" Subtype="0" Variant="1" />
 	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Kind="Enemies" Name="Sucker" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Kind="Enemies" Name="Spit" Subtype="0" Variant="1" />
+	<entity Group="Flies" Kind="Enemies" Image="resources/Entities/61.2.0 - Soul Sucker.png" BaseHP="18" Champion="1" ID="61" Name="Soul Sucker" Variant="2" Subtype="0" />
 	<entity BaseHP="180" Boss="1" Group="Boss Rooms" ID="62" Image="resources/Entities/62.0.0 - Pin.png" Kind="Bosses" Name="Pin" Subtype="0" Variant="0" />
 	<entity BaseHP="300" Boss="1" Group="Boss Rooms" ID="62" Image="resources/Entities/62.1.0 - Scolex.png" Kind="Bosses" Name="Scolex" Subtype="0" Variant="1" />
 	<entity BaseHP="240" Boss="1" Group="Horsemen" ID="63" Image="resources/Entities/63.0.0 - Famine.png" Kind="Bosses" Name="Famine" Subtype="0" Variant="0" />
@@ -306,6 +309,7 @@
 	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" />
+	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" />
@@ -357,6 +361,7 @@
 	<entity BaseHP="10" Group="Spiders" ID="242" Image="resources/Entities/242.0.0 - Blind Creep.png" Kind="Enemies" Name="Blind Creep" Subtype="0" Variant="0" />
 	<entity BaseHP="18" Group="Worms" ID="243" Image="resources/Entities/243.0.0 - Conjoined Spitty.png" Kind="Enemies" Name="Conjoined Spitty" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Worms" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Kind="Enemies" Name="Round Worm" Subtype="0" Variant="0" />
+	<entity Group="Worms" Kind="Enemies" Image="resources/Entities/244.1.0 - Tube Worm.png" BaseHP="20" Champion="0" ID="244" Name="Tube Worm" Variant="1" Subtype="0" />
 	<entity Group="Props" ID="245" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Pushable Poop" Subtype="0" Variant="0" />
 	<entity BaseHP="13" Champion="1" Group="Spiders" ID="246" Image="resources/Entities/246.0.0 - Rag Ling.png" Kind="Enemies" Name="Rag Ling" Subtype="0" Variant="0" />
 	<entity BaseHP="27" Champion="1" Group="Hosts" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Kind="Enemies" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
@@ -1159,6 +1164,7 @@
 	<entity Group="Spiders" Kind="Enemies" Image="resources/Entities/304.0.0 - TheThing.png" BaseHP="15" Champion="1" ID="304" Name="The Thing" Variant="0" Subtype="0" />
 	<entity Group="Blobs" Kind="Enemies" Image="resources/Entities/305.0.0 - Ministro.png" BaseHP="9" Champion="1" ID="305" Name="Ministro" Variant="0" Subtype="0" />
 	<entity Group="Other" Kind="Enemies" Image="resources/Entities/306.0.0 - Portal.png" BaseHP="10" ID="306" Name="Portal" Variant="0" Subtype="0" />
+	<entity Group="Other" Kind="Enemies" Image="resources/Entities/308.0.0 - Fistuloid.png" BaseHP="30" Champion="1" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
 
 	<entity Group="Boss Rooms" Kind="Bosses" ID="406" Variant="1" Subtype="0" Name="Ultra Greedier" BaseHP="2500" Boss="1" Image="resources/Entities/406.1.0 - UltraGreedier.png" />
 	<entity Group="Boss Rooms" Kind="Bosses" Image="resources/Entities/409.0.0 - RagMega.png" BaseHP="110" Boss="1" ID="409" Name="Rag Mega" Variant="0" Subtype="0" />
@@ -1225,5 +1231,19 @@
 	<!--/Actives-->
 	<!--Trinkets-->
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.124 - Door Stop.png" Kind="Collect" Name="Door Stop" Subtype="124" Variant="350" />
+	<!--/Trinkets-->
+	
+<!--Aftebirth+ Booster Pack #4-->
+	<!--Passives-->
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.530 - Death's List.png" Kind="Collect" Name="Death's List" Subtype="530" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.531 - Haemolacria.png" Kind="Collect" Name="Haemolacria" Subtype="531" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.532 - Lachryphagy.png" Kind="Collect" Name="Lachryphagy" Subtype="532" Variant="100" />
+	<entity Group="Passive Items" ID="5" Image="resources/Entities/Items/5.100.533 - Trisagion.png" Kind="Collect" Name="Trisagion" Subtype="533" Variant="100" />
+	<!--/Passives-->
+	<!--Actives-->
+	<entity Group="Active Items" ID="5" Image="resources/Entities/Items/5.100.534 - Schoolbag.png" Kind="Collect" Name="Schoolbag" Subtype="534" Variant="100" />
+	<!--/Actives-->
+	<!--Trinkets-->
+	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.125 - Extension Cord.png" Kind="Collect" Name="Extension Cord" Subtype="125" Variant="350" />
 	<!--/Trinkets-->
 </data>
