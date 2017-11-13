@@ -564,7 +564,7 @@ class RoomEditorWidget(QGraphicsView):
 		for i in self.scene().items():
 			if isinstance(i, Entity):
 				if i.entity['X'] == x and i.entity['Y'] == y:
-					
+
 					i.removeWeightPopup(True)
 
 					if int(i.entity['Type']) > 999 and int(self.objectToPaint.ID) > 999:
@@ -975,7 +975,7 @@ class Entity(QGraphicsItem):
 				painter.drawLine(26, 26, 26, 22)
 
 		if self.entity["known"] == False:
-			painter.setFont(QFont("Arial", 6));			
+			painter.setFont(QFont("Arial", 6));
 
 			painter.drawText(2, 26, "{}.{}.{}".format(
 				str(self.entity['Type']),
@@ -1055,7 +1055,7 @@ class EntityStack(QGraphicsItem):
 		self.items = items
 
 		self.spinners = []
-		
+
 		w = 0
 		for item in self.items:
 			w += 4
@@ -1091,14 +1091,14 @@ class EntityStack(QGraphicsItem):
 
 		painter.setPen(QPen(Qt.white))
 		painter.setFont(QFont("Arial", 8));
-		
+
 		w = 0
 		for item in self.items:
 			self.spinners[self.items.index(item)].setPos(w-8, r.bottom()-26)
 			w += 4
 			pix = item.entity['pixmap']
 			painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
-			
+
 			# painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
 			w += pix.width()
 
@@ -1400,7 +1400,7 @@ class Room(QListWidgetItem):
 							spawn[2] = 3
 						elif spawn[2] == 3:
 							spawn[2] = 1
-							
+
 		# To flip, just reverse the signs then offset by room width (-1 for the indexing)
 		# Flip Doors
 		for door in self.roomDoors:
@@ -2421,7 +2421,7 @@ class EntityGroupModel(QAbstractListModel):
 		return None
 
 	def addMods(self):
-		
+
 		global entityXML
 
 		# Each mod in the mod folder is a Group
@@ -2550,7 +2550,7 @@ class EntityPalette(QWidget):
 		listView.setModel(EntityGroupModel(None))
 		listView.model().view = listView
 		listView.clicked.connect(self.objSelected)
-		
+
 		# Hide the search results
 		self.searchTab.addTab(listView, "Search")
 		self.searchTab.hide()
@@ -2669,7 +2669,7 @@ class EntityList(QListView):
 
 			if isinstance(item, EntityGroupItem):
 				self.setRowHidden(row, True)
-				
+
 				for i in range(item.startIndex, item.endIndex):
 					if not self.isRowHidden(i):
 						self.setRowHidden(row, False)
@@ -2983,7 +2983,7 @@ class MainWindow(QMainWindow):
 	def setDefaultStagePath(self):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 		if not settings.contains("stagepath"):
-			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+			settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
 		stagePath = settings.value("stagepath")
 		stagePathDialog = QFileDialog()
 		stagePathDialog.setFilter(QDir.Hidden)
@@ -2998,7 +2998,7 @@ class MainWindow(QMainWindow):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 		settings.remove("stagepath")
 		settings.remove("ResourceFolder")
-		settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+		settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
 
 	def openMapDefault(self):
 		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
@@ -3014,13 +3014,13 @@ class MainWindow(QMainWindow):
 			return
 
 		if not settings.contains("stagepath"):
-			settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+			settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
 		stagePath = settings.value("stagepath")
 		if not stagePath:
 			QMessageBox.warning(self, "Error", "Could not set default stage path or stage path is empty.")
 			return
 
-		roomPath = os.path.expanduser(stagePath) + "/" + mapFileName
+		roomPath = os.path.expanduser(stagePath) + os.path.sep + mapFileName
 
 		if not QFile.exists(roomPath):
 			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
@@ -3037,7 +3037,7 @@ class MainWindow(QMainWindow):
 		try:
 			settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
 			if not settings.contains("stagepath"):
-				settings.setValue("stagepath", self.findResourcePath() + "/rooms")
+				settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
 			stagePath = settings.value("stagepath")
 
 			startPath = stagePath
@@ -3282,21 +3282,21 @@ class MainWindow(QMainWindow):
 
 		# Check for existing files, and backup if necessary
 		backupFlagBasement = False
-		if QFile.exists(resourcesPath + "/rooms/01.basement.stb"):
-			os.replace(resourcesPath + "/rooms/01.basement.stb", resourcesPath + "/rooms/01.basement (backup).stb")
+		if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement.stb")):
+			os.replace(os.path.join(resourcesPath, "rooms", "01.basement.stb"), os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"))
 			backupFlagBasement = True
 
 		backupFlagCellar = False
-		if QFile.exists(resourcesPath + "/rooms/02.cellar.stb"):
-			os.replace(resourcesPath + "/rooms/02.cellar.stb", resourcesPath + "/rooms/02.cellar (backup).stb")
+		if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar.stb")):
+			os.replace(os.path.join(resourcesPath, "rooms", "02.cellar.stb"), os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"))
 			backupFlagCellar = True
 
 		# Sanity check for saving
-		if not QFile.exists(resourcesPath + "/rooms/"):
-			os.mkdir(resourcesPath + "/rooms/")
+		if not QFile.exists(os.path.join(resourcesPath, "rooms")):
+			os.mkdir(os.path.join(resourcesPath, "rooms"))
 
-		self.save(newRooms, resourcesPath + "/rooms/01.basement.stb")
-		self.save(newRooms, resourcesPath + "/rooms/02.cellar.stb")
+		self.save(newRooms, os.path.join(resourcesPath, "rooms", "01.basement.stb"))
+		self.save(newRooms, os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
@@ -3310,26 +3310,26 @@ class MainWindow(QMainWindow):
 		result = QMessageBox.information(self, "Restore Backup", message)
 
 		if result == QMessageBox.Ok:
-			if QFile.exists(resourcesPath + "/rooms/01.basement.stb"):
-				os.remove(resourcesPath + "/rooms/01.basement.stb")
-			if QFile.exists(resourcesPath + "/rooms/02.cellar.stb"):
-				os.remove(resourcesPath + "/rooms/02.cellar.stb")
+			if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement.stb")):
+				os.remove(os.path.join(resourcesPath, "rooms", "01.basement.stb"))
+			if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar.stb")):
+				os.remove(os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
 			if backupFlagBasement or backupFlagCellar:
 				if backupFlagBasement:
-					if QFile.exists(resourcesPath + "/rooms/01.basement (backup).stb"):
-						os.replace(resourcesPath + "/rooms/01.basement (backup).stb", resourcesPath + "/rooms/01.basement.stb")
+					if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb")):
+						os.replace(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"), os.path.join(resourcesPath, "rooms", "01.basement.stb"))
 				if backupFlagCellar:
-					if QFile.exists(resourcesPath + "/rooms/02.cellar (backup).stb"):
-						os.replace(resourcesPath + "/rooms/02.cellar (backup).stb", resourcesPath + "/rooms/02.cellar.stb")
+					if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb")):
+						os.replace(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"), os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
 
 		# Extra warnings
-		if self.path == resourcesPath + "/rooms/01.basement.stb" or self.path == resourcesPath + "/rooms/02.cellar.stb" :
+		if self.path == os.path.join(resourcesPath, "rooms", "01.basement.stb") or self.path == os.path.join(resourcesPath, "rooms", "02.cellar.stb") :
 			result = QMessageBox.information(self, "Warning", "When testing the basement.stb or cellar.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open STB file completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
-			if QFile.exists(resourcesPath + "/rooms/"):
-				os.rmdir(resourcesPath + "/rooms/")
+			if QFile.exists(os.path.join(resourcesPath, "rooms")):
+				os.rmdir(os.path.join(resourcesPath, "rooms"))
 		except:
 			pass
 
@@ -3377,16 +3377,16 @@ class MainWindow(QMainWindow):
 
 		# Backup, parse, find the start room, replace it, resave, restore backup
 		backupFlag = False
-		if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
-			os.replace(resourcesPath + "/rooms/00.special rooms.stb", resourcesPath + "/rooms/00.special rooms (backup).stb")
+		if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
+			os.replace(os.path.join(resourcesPath, "rooms", "00.special rooms.stb"), os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb"))
 			backupFlag = True
 
 		# Sanity check for saving
-		if not QFile.exists(resourcesPath + "/rooms/"):
-			os.mkdir(resourcesPath + "/rooms/")
+		if not QFile.exists(os.path.join(resourcesPath, "rooms")):
+			os.mkdir(os.path.join(resourcesPath, "rooms"))
 
 		# Resave the file
-		self.save(rooms, resourcesPath + "/rooms/00.special rooms.stb")
+		self.save(rooms, os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
@@ -3394,20 +3394,20 @@ class MainWindow(QMainWindow):
 		# Prompt to restore backup
 		result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb.")
 		if result == QMessageBox.Ok:
-			if QFile.exists(resourcesPath + "/rooms/00.special rooms.stb"):
-				os.remove(resourcesPath + "/rooms/00.special rooms.stb")
+			if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
+				os.remove(os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
 			if backupFlag:
-				if QFile.exists(resourcesPath + "/rooms/00.special rooms (backup).stb"):
-					os.replace(resourcesPath + "/rooms/00.special rooms (backup).stb", resourcesPath + "/rooms/00.special rooms.stb")
+				if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb")):
+					os.replace(os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb"), os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
 
 		# Extra warnings
-		if self.path == resourcesPath + "/rooms/00.special rooms.stb":
+		if self.path == (os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
 			result = QMessageBox.information(self, "Warning", "When testing the special rooms.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
 		try:
-			if QFile.exists(resourcesPath + "/rooms/"):
-				os.rmdir(resourcesPath + "/rooms/")
+			if QFile.exists(os.path.join(resourcesPath, "rooms")):
+				os.rmdir(os.path.join(resourcesPath, "rooms"))
 		except:
 			pass
 
@@ -3428,7 +3428,7 @@ class MainWindow(QMainWindow):
 				if not basePath:
 					cantFindPath = True
 
-				resourcesPath = basePath + "/steamapps/common/The Binding of Isaac Rebirth/resources"
+				resourcesPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth", "resources")
 				if not QFile.exists(resourcesPath):
 					cantFindPath = True
 
@@ -3453,14 +3453,14 @@ class MainWindow(QMainWindow):
 					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
 					return
 				else:
-					resourcesPath = resourcesPathOut[0]
+					resourcesPath = resourcesPathOut
 				if resourcesPath == "":
 					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
 					return
 				if not QDir(resourcesPath).exists:
 					QMessageBox.warning(self, "Error", "Selected folder does not exist or is not a folder.")
 					return
-				if not QDir(resourcesPath + "/rooms/").exists:
+				if not QDir(os.path.join(resourcesPath, "rooms")).exists:
 					QMessageBox.warning(self, "Error", "Could not find rooms folder in selected directory.")
 					return
 
@@ -3472,8 +3472,9 @@ class MainWindow(QMainWindow):
 			settings.setValue('ResourceFolder', resourcesPath)
 
 		# Make sure 'rooms' exists
-		if not QDir(resourcesPath + "/rooms/").exists:
-			os.mkdir(resourcesPath + "/rooms/")
+		roomsdir = os.path.join(resourcesPath, "rooms")
+		if not QDir(roomsdir).exists:
+			os.mkdir(roomsdir)
 		return resourcesPath
 
 	def killIsaac(self):
@@ -3492,16 +3493,16 @@ class MainWindow(QMainWindow):
 		room = self.roomList.list.currentItem()
 		if not room:
 			return
-		
+
 		exePath = self.getExecutablePath()
 		if not exePath:
 			return
-		
+
 		path = exePath + "br_output.xml"
 		self.storeEntityList()
-		
+
 		out = open(path, 'w')
-		
+
 		# Floor type
 		roomType = [
 			('basement', 1, 0),
@@ -3522,40 +3523,40 @@ class MainWindow(QMainWindow):
 			('corpse', 7, 2),
 			('forest', 11, 2)
 		]
-		
+
 		floorInfo = roomType[0]
 		for t in roomType:
 			if t[0] in mainWindow.path:
 				floorInfo = t
-		
+
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
 			room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
-		
+
 		# Doors
 		for door in room.roomDoors:
 			out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
-		
+
 		# Spawns
 		for y in enumerate(room.roomSpawns):
 			for x in enumerate(y[1]):
 				if len(x[1]) == 0: continue
-				
+
 				out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
 				for entity in x[1]:
 					out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
 						entity[0], entity[1], entity[2], 2.0
 					))
 				out.write('\t</spawn>\n')
-		
+
 		out.write('</room>\n')
-		
+
 		exeName = "isaac-ng.exe"
 		if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
 			exeName = "isaac-ng-rebirth.exe"
-		
+
 		subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
 			cwd = exePath
 		)
@@ -3565,16 +3566,16 @@ class MainWindow(QMainWindow):
 		room = self.roomList.list.currentItem()
 		if not room:
 			return
-		
+
 		exePath = self.getExecutablePath()
 		if not exePath:
 			return
-		
+
 		path = exePath + "br_output.xml"
 		self.storeEntityList()
-		
+
 		out = open(path, 'w')
-		
+
 		# Floor type
 		roomType = [
 			('basement', 1, 0),
@@ -3595,40 +3596,40 @@ class MainWindow(QMainWindow):
 			('corpse', 7, 2),
 			('forest', 11, 2)
 		]
-		
+
 		floorInfo = roomType[0]
 		for t in roomType:
 			if t[0] in mainWindow.path:
 				floorInfo = t
-		
+
 		# Room header
 		out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
 			room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
 			room.roomWeight, room.roomWidth, room.roomHeight
 		))
-		
+
 		# Doors
 		for door in room.roomDoors:
 			out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
-		
+
 		# Spawns
 		for y in enumerate(room.roomSpawns):
 			for x in enumerate(y[1]):
 				if len(x[1]) == 0: continue
-				
+
 				out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
 				for entity in x[1]:
 					out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
 						entity[0], entity[1], entity[2], 2.0
 					))
 				out.write('\t</spawn>\n')
-		
+
 		out.write('</room>\n')
-		
+
 		exeName = "isaac-ng.exe"
 		if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
 			exeName = "isaac-ng-rebirth.exe"
-		
+
 		subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
 			cwd = exePath
 		)
