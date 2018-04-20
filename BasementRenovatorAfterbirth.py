@@ -3291,21 +3291,28 @@ class MainWindow(QMainWindow):
 			os.replace(os.path.join(resourcesPath, "rooms", "02.cellar.stb"), os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"))
 			backupFlagCellar = True
 
+		backupFlagBurning = False
+		if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement.stb")):
+			os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"), os.path.join(resourcesPath, "rooms", "03.burning basement.stb (backup).stb"))
+			backupFlagBurning = True
+
 		# Sanity check for saving
 		if not QFile.exists(os.path.join(resourcesPath, "rooms")):
 			os.mkdir(os.path.join(resourcesPath, "rooms"))
 
 		self.save(newRooms, os.path.join(resourcesPath, "rooms", "01.basement.stb"))
 		self.save(newRooms, os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
+		self.save(newRooms, os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
 
 		# Launch Isaac
 		webbrowser.open('steam://rungameid/250900')
 
 		# Prompt to restore backup
+		message = ""
 		if padMe:
-			message = "As you have a non-standard doors or shape, it's suggested to use the seed 'LABY RNTH' in order to spawn the room semi-regularly. You may have to reset a few times for your room to appear.\n\nPress 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb"
+			message += "As you have a non-standard doors or shape, it's suggested to use the seed 'LABY RNTH' in order to spawn the room semi-regularly. You may have to reset a few times for your room to appear.\n\n"
 		else:
-			message = "Press 'OK' when done testing to restore your original 01.basement.stb/02.cellar.stb."
+			message += "Press 'OK' when done testing to restore your original \"01.basement.stb\", \"02.cellar.stb\", and \"03.burning basement.stb\"."
 
 		result = QMessageBox.information(self, "Restore Backup", message)
 
@@ -3314,16 +3321,20 @@ class MainWindow(QMainWindow):
 				os.remove(os.path.join(resourcesPath, "rooms", "01.basement.stb"))
 			if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar.stb")):
 				os.remove(os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
-			if backupFlagBasement or backupFlagCellar:
-				if backupFlagBasement:
-					if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb")):
-						os.replace(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"), os.path.join(resourcesPath, "rooms", "01.basement.stb"))
-				if backupFlagCellar:
-					if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb")):
-						os.replace(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"), os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
+			if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement.stb")):
+				os.remove(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
+			if backupFlagBasement:
+				if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb")):
+					os.replace(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"), os.path.join(resourcesPath, "rooms", "01.basement.stb"))
+			if backupFlagCellar:
+				if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb")):
+					os.replace(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"), os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
+			if backupFlagBurning:
+				if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb")):
+					os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb"), os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
 
 		# Extra warnings
-		if self.path == os.path.join(resourcesPath, "rooms", "01.basement.stb") or self.path == os.path.join(resourcesPath, "rooms", "02.cellar.stb") :
+		if self.path == os.path.join(resourcesPath, "rooms", "01.basement.stb") or self.path == os.path.join(resourcesPath, "rooms", "02.cellar.stb") or self.path == os.path.join(resourcesPath, "rooms", "03.burning basement.stb"):
 			result = QMessageBox.information(self, "Warning", "When testing the basement.stb or cellar.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open STB file completely.")
 
 		# Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
