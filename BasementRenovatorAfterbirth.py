@@ -3293,7 +3293,7 @@ class MainWindow(QMainWindow):
 
 		backupFlagBurning = False
 		if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement.stb")):
-			os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"), os.path.join(resourcesPath, "rooms", "03.burning basement.stb (backup).stb"))
+			os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"), os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb"))
 			backupFlagBurning = True
 
 		# Sanity check for saving
