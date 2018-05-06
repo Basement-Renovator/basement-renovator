@@ -309,6 +309,9 @@
 	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" />
 	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
+	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
+	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
+	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" />
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" />
@@ -508,6 +511,13 @@
 	<entity Group="Machines" ID="6" Image="resources/Entities/6.8.0 - Donation Machine.png" Kind="Stage" Name="Donation Machine" Subtype="0" Variant="8" />
 	<entity Group="Machines" ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Kind="Stage" Name="Greed Machine" Subtype="0" Variant="11" />
 	<entity Group="Machines" ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Kind="Stage" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
+	<!--Other-->
+	<entity Group="Other" ID="10000" Image="resources/Entities/10000.0.0 - Gravity.png" Kind="Stage" Name="Gravity" Subtype="0" Variant="0" />
+	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Pitfall" Subtype="0" Variant="0" />
+	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Kind="Stage" Name="Suction Pitfall" Subtype="0" Variant="1" />
+	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
+	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
+	<entity BaseHP="0" Group="Other" ID="999" Image="resources/Entities/999.116.0 - Dirt Patch.png" Kind="Stage" Name="Dirt Patch" Subtype="0" Variant="116" />
 	<!--Poop-->
 	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" />
@@ -556,12 +566,6 @@
 	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.1.0 - Ultra Greed Coin (Key).png" Kind="Stage" Name="Ultra Greed Coin (Key)" Subtype="0" Variant="1" />
 	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.2.0 - Ultra Greed Coin (Bomb).png" Kind="Stage" Name="Ultra Greed Coin (Bomb)" Subtype="0" Variant="2" />
 	<entity BaseHP="30" Champion="1" Group="Tears" ID="293" Image="resources/Entities/293.3.0 - Ultra Greed Coin (Heart).png" Kind="Stage" Name="Ultra Greed Coin (Heart)" Subtype="0" Variant="3" />
-	<!--Traps-->
-	<entity Group="Traps" ID="10000" Image="resources/Entities/10000.0.0 - Gravity.png" Kind="Stage" Name="Gravity" Subtype="0" Variant="0" />
-	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Kind="Stage" Name="Pitfall" Subtype="0" Variant="0" />
-	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Kind="Stage" Name="Suction Pitfall" Subtype="0" Variant="1" />
-	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" />
-	<entity BaseHP="0" Group="Traps" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
 	<!-- Troll Bombs -->
 	<entity Group="Troll Bombs" ID="4" Image="resources/Entities/4.0.3 - Troll Bomb.png" Kind="Stage" Name="Troll Bomb" Subtype="0" Variant="3" />
 	<entity Group="Troll Bombs" ID="4" Image="resources/Entities/4.0.4 - Megatroll Bomb.png" Kind="Stage" Name="Megatroll Bomb" Subtype="0" Variant="4" />
@@ -1249,27 +1253,25 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.127 - Baby-Bender.png" Kind="Collect" Name="Baby-Bender" Subtype="127" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.128 - Finger Bone.png" Kind="Collect" Name="Finger Bone" Subtype="128" Variant="350" />
 	<!--———Unused———-->
-	<!--
-	<entity Image="004.012_GlitterBomb.png" BaseHP="0" ID="4" Name="Glitter Bomb" Variant="12">
-	<entity Image="023.000.001_My Shadow.png" BaseHP="20" Champion="1" ID="23" Name="My Shadow" Variant="0" Subtype="1" 
-	<entity Image="065.010_War without horse.png" BaseHP="500" Boss="1" ID="65" Name="War without horse" Variant="10" >
-	<entity Image="066.010_Death Scythe.png" BaseHP="50" ID="66" Name="Death Scythe" Variant="10" >
-	<entity Image="066.020_Death Horse.png" BaseHP="150" Boss="1" ID="66" Name="Death Horse" Variant="20" >
-	<entity Image="066.030_Death without horse.png" BaseHP="300" Boss="1" ID="66" Name="Death without horse" Variant="30" >
-	<entity Image="078.010_Moms Guts.png" BaseHP="0" ID="78" Name="Moms Guts" Variant="10" >
-	<entity Image="079.010_Gemini Baby.png" BaseHP="140" Boss="1" ID="79" Name="Gemini Baby" Variant="10" 
-	<entity Image="079.011_Steven Baby.png" BaseHP="140" Boss="1" ID="79" Name="Steven Baby" Variant="11" 
-	<entity Image="079.012_The Blighted Ovum Baby.png" BaseHP="140" Boss="1" ID="79" Name="The Blighted Ovum Baby" Variant="12" 
-	<entity Image="079.020_Umbilical Cord.png" BaseHP="140" ID="79" Name="Umbilical Cord" Variant="20" shutdoors="false">
-	<entity Image="084.010_Satan Stomp.png" BaseHP="600" Boss="1" ID="84" Name="Satan Stomp" Variant="10" 
-	<entity ID="212" Variant="1" Name="Dank Death's Head" BaseHP="20" Image="212.001_Dank DeathsHead.png" gridCollision="walls" >
-	<entity ID="216" Variant="1" Name="Swinger Head" reroll="true" BaseHP="38" Image="221.000_Swinger.png" >
-	<entity ID="216" Variant="10" Name="Swinger Neck" BaseHP="25" Image="221.000_Swinger.png" shutdoors="false">
+	<entity Image="004.012_GlitterBomb.png" BaseHP="0" ID="4" Name="Glitter Bomb" Variant="12" />
+	<entity Image="023.000.001_My Shadow.png" BaseHP="20" Champion="1" ID="23" Name="My Shadow" Variant="0" Subtype="1" />
+	<entity Image="065.010_War without horse.png" BaseHP="500" Boss="1" ID="65" Name="War without horse" Variant="10" />
+	<entity Image="066.010_Death Scythe.png" BaseHP="50" ID="66" Name="Death Scythe" Variant="10" />
+	<entity Image="066.020_Death Horse.png" BaseHP="150" Boss="1" ID="66" Name="Death Horse" Variant="20" />
+	<entity Image="066.030_Death without horse.png" BaseHP="300" Boss="1" ID="66" Name="Death without horse" Variant="30" />
+	<entity Image="078.010_Moms Guts.png" BaseHP="0" ID="78" Name="Moms Guts" Variant="10" />
+	<entity Image="079.010_Gemini Baby.png" BaseHP="140" Boss="1" ID="79" Name="Gemini Baby" Variant="10" />
+	<entity Image="079.011_Steven Baby.png" BaseHP="140" Boss="1" ID="79" Name="Steven Baby" Variant="11" />
+	<entity Image="079.012_The Blighted Ovum Baby.png" BaseHP="140" Boss="1" ID="79" Name="The Blighted Ovum Baby" Variant="12" />
+	<entity Image="079.020_Umbilical Cord.png" BaseHP="140" ID="79" Name="Umbilical Cord" Variant="20" shutdoors="false" />
+	<entity Image="084.010_Satan Stomp.png" BaseHP="600" Boss="1" ID="84" Name="Satan Stomp" Variant="10" />
+	<entity ID="212" Variant="1" Name="Dank Death's Head" BaseHP="20" Image="212.001_Dank DeathsHead.png" gridCollision="walls" />
+	<entity ID="216" Variant="1" Name="Swinger Head" reroll="true" BaseHP="38" Image="221.000_Swinger.png" />
+	<entity ID="216" Variant="10" Name="Swinger Neck" BaseHP="25" Image="221.000_Swinger.png" shutdoors="false" />
 	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="11" Variant="70" />
 	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="12" Variant="70" />
 	<entity ID="5" Image="resources/Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
 	<entity ID="5" Image="resources/Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
 	<entity BaseHP="3500" Boss="1" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
 	<entity BaseHP="8" Champion="1" Group="Flies" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Kind="Enemies" Name="Pooter (?)" Subtype="0" Variant="2" />
-	-->
 </data>
