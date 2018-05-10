@@ -1780,9 +1780,9 @@ class RoomSelector(QWidget):
 
 		diff.triggered.connect(self.changeDifficulty)
 
-		# Weight
+		# Weight (old)
+		'''
 		weight = menu.addMenu('Weight')
-
 		for w in [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 1000.0]:
 			m = weight.addAction('{0}'.format(w))
 
@@ -1791,8 +1791,21 @@ class RoomSelector(QWidget):
 				m.setChecked(True)
 
 		weight.triggered.connect(self.changeWeight)
+		'''
 
 		menu.addSeparator()
+
+		# Weight (new)
+		weight = QWidgetAction(menu)
+		s = QDoubleSpinBox()
+		s.setRange(0, 1000)
+		s.setPrefix("Weight -  ")
+
+		s.setValue(self.selectedRoom().roomWeight)
+
+		weight.setDefaultWidget(s)
+		s.valueChanged.connect(self.changeWeight)
+		menu.addAction(weight)
 
 		# Variant
 		Variant = QWidgetAction(menu)
