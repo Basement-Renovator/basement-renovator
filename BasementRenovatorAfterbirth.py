@@ -1798,8 +1798,7 @@ class RoomSelector(QWidget):
 		# Weight (new)
 		weight = QWidgetAction(menu)
 		s = QDoubleSpinBox()
-		s.setRange(0, 1000)
-		s.setPrefix("Weight -  ")
+		s.setPrefix("Weight - ")
 
 		s.setValue(self.selectedRoom().roomWeight)
 
@@ -1811,7 +1810,7 @@ class RoomSelector(QWidget):
 		Variant = QWidgetAction(menu)
 		s = QSpinBox()
 		s.setRange(0, 65534)
-		s.setPrefix("ID -  ")
+		s.setPrefix("ID - ")
 
 		s.setValue(self.selectedRoom().roomVariant)
 
@@ -2108,7 +2107,8 @@ class RoomSelector(QWidget):
 	#@pyqtSlot(QAction)
 	def changeWeight(self, action):
 		for r in self.selectedRooms():
-			r.roomWeight = float(action.text())
+			#r.roomWeight = float(action.text())
+			r.roomWeight = action
 			r.setToolTip()
 		mainWindow.dirt()
 		mainWindow.scene.update()
