@@ -52,14 +52,25 @@ Perform the following steps in Terminal.
   * `cd Basement-Renovator`
   * `python3 BasementRenovator.py`
 
-### How to Use
+### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
 * First, unpack the game's assets using the official unpacker.
-  * On Windows: `` <br />
-  (this will populate the "" directory with .stb files)
+  * On Windows: `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
+  (this will populate the "C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms" directory with .stb files)
   (on Windows)
   * On MacOS: `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
   (this will populate the "$HOME/Documents/IsaacUnpacked/resources/rooms" directory with .stb files)
+* Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
+* After saving your work, include the modified STB file in your mod's resources directory (e.g. "C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources" and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended. 
+
+### How to Create a Mod that Include Extra Rooms
+
+* Use Basement Renovator to create a brand new STB file with only the extra rooms that you want to add. Then, name it with the exact same filename as the vanilla floor STB. (Refer to the previous section if you do not know what the filename is.)
+* After saving your work, include the new STB file in your mod's content directory (e.g. "C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\content\rooms" and it will add the rooms to the floor.
+
+### How to Use the Interface
+
+* You will first want to use Basement Renovator to open a vanilla floor STB file in order to look around and get a feel for how it works. Follow the instructions in the "How to Create a Mod that Modifies Rooms in the Vanilla Game" section above.
 
 * **The Editor**: Smack in the middle is the main editor. You can drag any entity in this editor by clicking it, or select multiple entities by dragging a box around them. You can move entities wherever you'd like in the room. You can cut or paste entities, using the menu or keyboard shortcuts, and you can delete them by selecting them and hitting backspace or delete. Alt-click an entity to replace it with the chosen entity in your palette. You can choose whether doors are active or inactive by double clicking them.
 
@@ -73,10 +84,7 @@ Perform the following steps in Terminal.
 
 * **Test Menu**: There's a really useful test feature in the menu bar. You can load up rooms to test easily anywhere in the Basement/Cellar, or in the start room directly. The start room only supports 1x1 rooms, however! Makes testing a breeze.
 
----
+### Community & Help
 
-### F.A.Q.
-
-*I found a bug!*
-
-[Open an issue](https://github.com/Tempus/Basement-Renovator/issues).
+* If you find a bug or an issue, you can [open an issue](https://github.com/Tempus/Basement-Renovator/issues).
+* Many people in the modding community hang out in the #modding channel of the [BoI Discord server](https://discord.gg/isaac).
