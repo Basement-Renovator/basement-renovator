@@ -2,7 +2,8 @@
 
 * Basement Renovator is a 3rd-party *[Binding of Isaac: Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/)* room and level editor.
 * It is open-source and written in [Python 3](https://www.python.org/).
-* It is much better than the room editor included with the game and is even used by the official staff to create new content. * It was originally authoed by [Colin Naga](http://www.chronometry.ca/) and is now supported by the modding community.
+* It is much better than the room editor included with the game and is even used by the official staff to create new content.
+* It was originally authoed by [Colin Naga](http://www.chronometry.ca/) and is now supported by the modding community.
 
 ### Compatibility
 
