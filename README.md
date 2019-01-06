@@ -55,17 +55,19 @@ Perform the following steps in Terminal.
 ### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
 * First, unpack the game's assets using the official unpacker.
-  * On Windows: `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
-  (this will populate the "C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms" directory with .stb files)
-  * On MacOS: `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
-  (this will populate the "$HOME/Documents/IsaacUnpacked/resources/rooms" directory with .stb files)
+  * On Windows: <br />
+  `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
+  (this will populate the `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms` directory with .stb files)
+  * On MacOS: <br />
+  `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
+  (this will populate the `$HOME/Documents/IsaacUnpacked/resources/rooms` directory with .stb files)
 * Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
-* After saving your work, include the modified STB file in your mod's resources directory (e.g. "C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources" and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended. 
+* After saving your work, include the modified STB file in your mod's resources directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources`) and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended. 
 
 ### How to Create a Mod that Include Extra Rooms
 
 * Use Basement Renovator to create a brand new STB file with only the extra rooms that you want to add. Then, name it with the exact same filename as the vanilla floor STB. (Refer to the previous section if you do not know what the filename is.)
-* After saving your work, include the new STB file in your mod's content directory (e.g. "C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\content\rooms" and it will add the rooms to the floor.
+* After saving your work, include the new STB file in your mod's content directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\content\rooms`) and it will add the rooms to the floor.
 
 ### How to Use the Interface
 
