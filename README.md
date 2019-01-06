@@ -57,7 +57,6 @@ Perform the following steps in Terminal.
 * First, unpack the game's assets using the official unpacker.
   * On Windows: `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
   (this will populate the "C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms" directory with .stb files)
-  (on Windows)
   * On MacOS: `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
   (this will populate the "$HOME/Documents/IsaacUnpacked/resources/rooms" directory with .stb files)
 * Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
