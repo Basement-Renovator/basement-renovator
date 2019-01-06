@@ -7,7 +7,7 @@
 
 ### Compatibility
 
-The current version will work on floor files for the *[Afterbirth](https://store.steampowered.com/app/401920/The_Binding_of_Isaac_Afterbirth/)* expansion and the *[Afterbirth+](https://store.steampowered.com/app/570660/The_Binding_of_Isaac_Afterbirth/)* expansion, but not for the base game (*Rebirth*). If you need to edit *Rebirth* floors for some reason, just use an [older version of the code](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c)
+The current version will work on floor files for the *[Afterbirth](https://store.steampowered.com/app/401920/The_Binding_of_Isaac_Afterbirth/)* expansion and the *[Afterbirth+](https://store.steampowered.com/app/570660/The_Binding_of_Isaac_Afterbirth/)* expansion, but not for the base game (*Rebirth*). If you need to edit *Rebirth* floors for some reason, just use an [older version of the code](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
 
 ### Downloads
 
