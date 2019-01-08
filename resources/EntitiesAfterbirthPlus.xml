@@ -97,6 +97,21 @@
 	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.3 - Key Ring.png" Kind="Pickups" Name="Key Ring" Subtype="3" Variant="30" />
 	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.2 - Golden Key.png" Kind="Pickups" Name="Golden Key" Subtype="2" Variant="30" />
 	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.4 - ChargedKey.png" Kind="Pickups" Name="Charged Key" Subtype="4" Variant="30" />
+	<!--Pills-->
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Kind="Pickups" Name="Random Pill" Subtype="0" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.1 - Blue Pill.png" Kind="Pickups" Name="Blue Pill" Subtype="1" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2 - White-Blue Pill.png" Kind="Pickups" Name="White-Blue Pill" Subtype="2" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.3 - Orange Pill.png" Kind="Pickups" Name="Orange Pill" Subtype="3" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.4 - White Pill.png" Kind="Pickups" Name="White Pill" Subtype="4" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.5 - Dots-Red Pill.png" Kind="Pickups" Name="Dots-Red Pill" Subtype="5" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.6 - Pink-Red Pill.png" Kind="Pickups" Name="Pink-Red Pill" Subtype="6" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.7 - Blue-Cadetblue Pill.png" Kind="Pickups" Name="Blue-Cadetblue Pill" Subtype="7" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.8 - Yellow-Orange Pill.png" Kind="Pickups" Name="Yellow-Orange Pill" Subtype="8" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.9 - Dots-White Pill.png" Kind="Pickups" Name="Dots-White Pill" Subtype="9" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.10 - White-Azure Pill.png" Kind="Pickups" Name="White-Azure Pill" Subtype="10" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.11 - Black-Yellow Pill.png" Kind="Pickups" Name="Black-Yellow Pill" Subtype="11" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.12 - White-Black Pill.png" Kind="Pickups" Name="White-Black Pill" Subtype="12" Variant="70" />
+	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.13 - White-Yellow Pill.png" Kind="Pickups" Name="White-Yellow Pill" Subtype="13" Variant="70" />
 	<!--Runes-->
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.28 - Hagalaz.png" Kind="Pickups" Name="Hagalaz" Subtype="32" Variant="300" />
@@ -1268,8 +1283,6 @@
 	<entity ID="212" Variant="1" Name="Dank Death's Head" BaseHP="20" Image="212.001_Dank DeathsHead.png" gridCollision="walls" />
 	<entity ID="216" Variant="1" Name="Swinger Head" reroll="true" BaseHP="38" Image="221.000_Swinger.png" />
 	<entity ID="216" Variant="10" Name="Swinger Neck" BaseHP="25" Image="221.000_Swinger.png" shutdoors="false" />
-	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="11" Variant="70" />
-	<entity ID="5" Image="resources/Entities/5.70.0 - Random Pill.png" Name="Random Pill?" Subtype="12" Variant="70" />
 	<entity ID="5" Image="resources/Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
 	<entity ID="5" Image="resources/Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
 	<entity BaseHP="3500" Boss="1" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
