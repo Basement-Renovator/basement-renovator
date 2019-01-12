@@ -63,3 +63,12 @@ target/
 
 # Repository specific stuff
 release/
+
+# Editor files
+.vscode
+
+# Modded Entities
+resources/Entities/ModTemp
+
+# Settings files
+settings.ini

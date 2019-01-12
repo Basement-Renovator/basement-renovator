@@ -34,7 +34,7 @@ from PyQt5.QtWidgets import *
 from collections import OrderedDict
 from copy import deepcopy
 
-import struct, os, subprocess, platform, webbrowser
+import struct, os, subprocess, platform, webbrowser, re
 import xml.etree.ElementTree as ET
 import psutil
 
@@ -49,12 +49,77 @@ def getEntityXML():
 
 	return root
 
-def findModsPath():
+def findInstallPath():
+	installPath = ''
+
+	if QFile.exists(settings.value('InstallFolder')):
+		installPath = settings.value('InstallFolder')
+
+	else:
+		cantFindPath = False
+		# Windows path things
+		if "Windows" in platform.system():
+			basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
+			if not basePath:
+				cantFindPath = True
+
+			installPath = os.path.join(basePath, "steamapps/common", "The Binding of Isaac Rebirth")
+			if not QFile.exists(installPath):
+				cantFindPath = True
+					
+				libconfig = os.path.join(basePath, "steamapps/libraryfolders.vdf")
+				if os.path.isfile(libconfig):
+					libLines = list(open(libconfig, 'r'))
+					matcher = re.compile(r'"\d"')
+					installDirs = map(lambda parts: os.path.normpath(parts[1].strip('"')),
+										filter(lambda parts: matcher.match(parts[0]),
+											map(lambda line: line.split(), libLines)))
+					for root in installDirs:
+						installPath = os.path.join(root, 'steamapps/common', 'The Binding of Isaac Rebirth')
+						if QFile.exists(installPath):
+							cantFindPath = False
+							break
+
+		# Mac Path things
+		elif "Darwin" in platform.system():
+			installPath = os.path.expanduser("~/Library/Application Support/Steam/steamapps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources")
+			if not QFile.exists(installPath):
+				cantFindPath = True
+
+		# Linux and others
+		elif "Linux" in platform.system():
+			installPath = os.path.expanduser("~/.local/share/Steam/steamapps/common/The Binding of Isaac Rebirth")
+			if not QFile.exists(installPath):
+				cantFindPath = True
+		else:
+			cantFindPath = True
+
+		# Looks like nothing was selected
+		if len(installPath) == 0:
+			print("Could not find The Binding of Isaac: Afterbirth+ install folder (%s)" % installPath)
+			return ''
+
+		settings.setValue('InstallFolder', installPath)
+
+	return installPath
+
+def findModsPath(installPath=None):
+	installPath = installPath or findInstallPath()
 	modsPath = ''
 
 	if QFile.exists(settings.value('ModsFolder')):
 		modsPath = settings.value('ModsFolder')
 
+	elif len(installPath) > 0:
+		modd = os.path.join(installPath, "savedatapath.txt")
+		if os.path.isfile(modd):
+			lines = list(open(modd, 'r'))
+			modDirs = list(filter(lambda parts: parts[0] == 'Modding Data Path',
+							map(lambda line: line.split(': '), lines)))
+			if len(modDirs) > 0:
+				modsPath = os.path.normpath(modDirs[0][1].strip())
+				if not QFile.exists(modsPath):
+					cantFindPath = True
 	else:
 		cantFindPath = False
 		# Windows path things
@@ -92,8 +157,8 @@ def findModsPath():
 
 		# Looks like nothing was selected
 		if len(modsPath) == 0:
-			QMessageBox.warning(None, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (" + modsPath + ")")
-			return
+			QMessageBox.warning(None, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (%s)" % modsPath)
+			return ''
 
 		settings.setValue('ModsFolder', modsPath)
 
@@ -165,10 +230,10 @@ class RoomScene(QGraphicsScene):
 
 		# Grey out the screen to show it's inactive if there are no rooms selected
 		if mainWindow.roomList.selectedRoom() == None:
-			painter.setPen(QPen(Qt.white, 1, Qt.SolidLine))
-			painter.setBrush(QBrush(QColor(100, 100, 100, 100)))
+			b = QBrush(QColor(255, 255, 255, 100))
+			painter.setPen(Qt.white)
+			painter.setBrush(b)
 
-			b = QBrush(QColor(100, 100, 100, 100))
 			painter.fillRect(rect, b)
 			return
 
@@ -1234,7 +1299,7 @@ class Room(QListWidgetItem):
 
 	def setDifficulty(self, d):
 		self.roomDifficulty = d
-		self.setForeground(QColor.fromHsvF(1, 1, d / 10, 1))
+		self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
 
 	def makeNewDoors(self):
 		self.roomDoors = []
@@ -1501,7 +1566,7 @@ class FilterMenu(QMenu):
 		for act in self.actions():
 			rect = self.actionGeometry(act)
 			painter.fillRect(rect.right() / 2 - 12, rect.top() - 2, 24, 24, QBrush(Qt.transparent))
-			painter.drawPixmap(rect.right() / 2 - 12, rect.top() - 2, act.icon().pixmap(24, 24));
+			painter.drawPixmap(rect.right() / 2 - 12, rect.top() - 2, act.icon().pixmap(24, 24))
 
 class RoomSelector(QWidget):
 
@@ -2735,7 +2800,7 @@ class MainWindow(QMainWindow):
 	defaultMapsOrdered = OrderedDict(sorted(defaultMapsDict.items(), key=lambda t: t[0]))
 
 	def __init__(self):
-		QMainWindow.__init__(self)
+		super(QMainWindow, self).__init__()
 
 		self.setWindowTitle('Basement Renovator')
 		self.setIconSize(QSize(16, 16))
@@ -2752,7 +2817,6 @@ class MainWindow(QMainWindow):
 		self.setupMenuBar()
 
 		self.setGeometry(100, 500, 1280, 600)
-		self.resetWindow = {"state" : self.saveState(), "geometry" : self.saveGeometry()}
 
 		# Restore Settings
 		if not settings.value('GridEnabled', True) or settings.value('GridEnabled', True) == 'false': self.switchGrid()
@@ -2761,6 +2825,8 @@ class MainWindow(QMainWindow):
 
 		self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
 		self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
+
+		self.resetWindow = {"state" : self.saveState(), "geometry" : self.saveGeometry()}
 
 		# Setup a new map
 		self.newMap()
@@ -2779,8 +2845,8 @@ class MainWindow(QMainWindow):
 		f.addSeparator()
 		self.fg = f.addAction('Take Screenshot...', self.screenshot, QKeySequence("Ctrl+Alt+S"))
 		f.addSeparator()
-		self.fh = f.addAction('Set Stage Path',     self.setDefaultStagePath, QKeySequence("Ctrl+Shift+P"))
-		self.fi = f.addAction('Reset Stage Path',   self.resetStagePath, QKeySequence("Ctrl+Shift+R"))
+		self.fh = f.addAction('Set Resources Path',     self.setDefaultResourcesPath, QKeySequence("Ctrl+Shift+P"))
+		self.fi = f.addAction('Reset Resources Path',   self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
 		f.addSeparator()
 
 		recent = settings.value("RecentFiles", [])
@@ -2914,6 +2980,8 @@ class MainWindow(QMainWindow):
 		if self.checkDirty():
 			event.ignore()
 		else:
+			settings = QSettings('settings.ini', QSettings.IniFormat)
+
 			# Save our state
 			settings.setValue('MainWindowGeometry', self.saveGeometry())
 			settings.setValue('MainWindowState', self.saveState(0))
@@ -2993,28 +3061,25 @@ class MainWindow(QMainWindow):
 		self.dirt()
 		self.roomList.changeFilter()
 
-	def setDefaultStagePath(self):
-		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
-		if not settings.contains("stagepath"):
-			settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
-		stagePath = settings.value("stagepath")
-		stagePathDialog = QFileDialog()
-		stagePathDialog.setFilter(QDir.Hidden)
-		newStagePath = QFileDialog.getExistingDirectory(self, "Select directory", stagePath)
+	def setDefaultResourcesPath(self):
+		settings = QSettings('settings.ini', QSettings.IniFormat)
+		if not settings.contains("ResourceFolder"):
+			settings.setValue("ResourceFolder", self.findResourcePath())
+		resPath = settings.value("ResourceFolder")
+		resPathDialog = QFileDialog()
+		resPathDialog.setFilter(QDir.Hidden)
+		newResPath = QFileDialog.getExistingDirectory(self, "Select directory", resPath)
 
-		if newStagePath != "":
-			settings.setValue("stagepath", newStagePath)
-		else:
-			return
+		if newResPath != "":
+			settings.setValue("ResourceFolder", newResPath)
 
-	def resetStagePath(self):
-		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
-		settings.remove("stagepath")
+	def resetResourcesPath(self):
+		settings = QSettings('settings.ini', QSettings.IniFormat)
 		settings.remove("ResourceFolder")
-		settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
+		settings.setValue("ResourceFolder", self.findResourcePath())
 
 	def openMapDefault(self):
-		settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+		settings = QSettings('settings.ini', QSettings.IniFormat)
 		if self.checkDirty(): return
 
 		selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", self.defaultMapsOrdered, 0, False)
@@ -3026,17 +3091,13 @@ class MainWindow(QMainWindow):
 		else:
 			return
 
-		if not settings.contains("stagepath"):
-			settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
-		stagePath = settings.value("stagepath")
-		if not stagePath:
-			QMessageBox.warning(self, "Error", "Could not set default stage path or stage path is empty.")
-			return
-
-		roomPath = os.path.expanduser(stagePath) + os.path.sep + mapFileName
+		roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
 
 		if not QFile.exists(roomPath):
-			QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the stage path is set correctly (see Edit menu) and that the proper STB file is present in the directory.")
+			self.setDefaultResourcesPath()
+			roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
+			if not QFile.exists(roomPath):
+				QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the resources path is set correctly (see Edit menu) and that the proper STB file is present in the rooms directory.")
 			return
 
 		self.openWrapper(roomPath)
@@ -3046,25 +3107,17 @@ class MainWindow(QMainWindow):
 
 		startPath = ""
 
-		# Get the rooms folder if you can
-		try:
-			settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
-			if not settings.contains("stagepath"):
-				settings.setValue("stagepath", self.findResourcePath() + os.path.sep + "rooms")
-			stagePath = settings.value("stagepath")
-
+		# Get the mods folder if you can, no sense looking in rooms for explicit open
+		settings = QSettings('settings.ini', QSettings.IniFormat)
+		stagePath = findModsPath()
+		if os.path.isdir(stagePath):
 			startPath = stagePath
-		except:
-			pass
 
 		# Get the folder containing the last open file if you can
-		try:
 			recent = settings.value("RecentFiles", [])
-			lastPath = os.path.normpath(recent[0])
-
+		if len(recent):
+			lastPath, file = os.path.split(recent[0])
 			startPath = lastPath
-		except:
-			pass
 
 		target = QFileDialog.getOpenFileName(
 			self, 'Open Map', os.path.expanduser(startPath), 'Stage Bundle (*.stb)')
@@ -3186,7 +3239,7 @@ class MainWindow(QMainWindow):
 		target = self.path
 
 		if target == '' or forceNewName:
-			dialogDir = '' if target == '' else os.path.dirname(target)
+			dialogDir = target == '' and findModsPath() or os.path.dirname(target)
 			target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Bundle (*.stb)')
 			self.restoreEditMenu()
 
@@ -3439,39 +3492,18 @@ class MainWindow(QMainWindow):
 
 	def findResourcePath(self):
 
-		resourcePath = ''
+		resourcesPath = ''
 
 		if QFile.exists(settings.value('ResourceFolder')):
 			resourcesPath = settings.value('ResourceFolder')
 
 		else:
-			cantFindPath = False
-			# Windows path things
-			if "Windows" in platform.system():
-				basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
-				if not basePath:
-					cantFindPath = True
+			installPath = findInstallPath()
 
-				resourcesPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth", "resources")
-				if not QFile.exists(resourcesPath):
-					cantFindPath = True
-
-			# Mac Path things
-			elif "Darwin" in platform.system():
-				resourcesPath = os.path.expanduser("~/Library/Application Support/Steam/steamapps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources/resources")
-				if not QFile.exists(resourcesPath):
-					cantFindPath = True
-
-			# Linux and others
-			elif "Linux" in platform.system():
-				resourcesPath = os.path.expanduser("~/.local/share/Steam/steamapps/common/The Binding of Isaac Rebirth/resources")
-				if not QFile.exists(resourcesPath):
-					cantFindPath = True
-			else:
-				cantFindPath = True
-
+			if len(installPath) != 0:
+				resourcesPath = os.path.join(installPath, 'resources')
 			# Fallback Resource Folder Locating
-			if cantFindPath == True:
+			else:
 				resourcesPathOut = QFileDialog.getExistingDirectory(self, 'Please Locate The Binding of Isaac: Afterbirth+ Resources Folder')
 				if not resourcesPathOut:
 					QMessageBox.warning(self, "Error", "Couldn't locate resources folder and no folder was selected.")
@@ -3490,8 +3522,8 @@ class MainWindow(QMainWindow):
 
 			# Looks like nothing was selected
 			if len(resourcesPath) == 0:
-				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth+ Resources folder (" + resourcesPath + ")")
-				return
+				QMessageBox.warning(self, "Error", "Could not find The Binding of Isaac: Afterbirth+ Resources folder (%s)" % resourcesPath)
+				return ''
 
 			settings.setValue('ResourceFolder', resourcesPath)
 
@@ -3799,16 +3831,26 @@ if __name__ == '__main__':
 
 	import sys
 
-	# XML Globals
-	entityXML = getEntityXML()
-
 	# Application
 	app = QApplication(sys.argv)
 	app.setWindowIcon(QIcon('resources/UI/BasementRenovator.png'))
 
-	settings = QSettings('RoomEditor', 'Binding of Isaac Rebirth: Room Editor')
+	cmdParser = QCommandLineParser()
+	cmdParser.setApplicationDescription('Basement Renovator is a room editor for The Binding of Isaac: Afterbirth[+]')
+	cmdParser.addHelpOption()
 
+	cmdParser.process(app)	
+
+	settings = QSettings('settings.ini', QSettings.IniFormat)
+
+	# XML Globals
+	entityXML = getEntityXML()
 	mainWindow = MainWindow()
+	
+	recent = settings.value("RecentFiles", [])
+	if len(recent) > 0 and os.path.exists(recent[0]):
+		mainWindow.openWrapper(recent[0])
+
 	mainWindow.show()
 
-	sys.exit(app.exec_())
+	sys.exit(app.exec())
