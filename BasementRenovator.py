@@ -66,7 +66,7 @@ def findInstallPath():
 			installPath = os.path.join(basePath, "steamapps/common", "The Binding of Isaac Rebirth")
 			if not QFile.exists(installPath):
 				cantFindPath = True
-					
+
 				libconfig = os.path.join(basePath, "steamapps/libraryfolders.vdf")
 				if os.path.isfile(libconfig):
 					libLines = list(open(libconfig, 'r'))
@@ -853,6 +853,7 @@ class Entity(QGraphicsItem):
 		self.entity['champion'] = None
 		self.entity['pixmap'] = None
 		self.entity['known'] = False
+		self.entity['PlaceVisual'] = None
 
 		self.getEntityInfo(mytype, subtype, variant)
 
@@ -864,6 +865,7 @@ class Entity(QGraphicsItem):
 
 		if not hasattr(Entity, 'SELECTION_PEN'):
 			Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
+			Entity.OFFSET_SELECTION_PEN = QPen(Qt.red, 1, Qt.DashLine)
 
 		self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
 		self.setAcceptHoverEvents(True)
@@ -879,6 +881,7 @@ class Entity(QGraphicsItem):
 			self.entity['baseHP'] = en.get('BaseHP')
 			self.entity['boss'] = en.get('Boss')
 			self.entity['champion'] = en.get('Champion')
+			self.entity['PlaceVisual'] = en.get('PlaceVisual')
 
 			if self.entity['Type'] == 5 and self.entity['Variant'] == 100:
 				i = QImage()
@@ -897,6 +900,20 @@ class Entity(QGraphicsItem):
 			else:
 				self.entity['pixmap'] = QPixmap()
 				self.entity['pixmap'].load(en.get('Image'))
+
+			def checkNum(s):
+				try:
+					float(s)
+					return True
+				except ValueError:
+					return False
+
+			if self.entity['PlaceVisual']:
+				parts = list(map(lambda x: x.strip(), self.entity['PlaceVisual'].split(',')))
+				if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
+					self.entity['PlaceVisual'] = (float(parts[0]), float(parts[1]))
+				else:
+					self.entity['PlaceVisual'] = parts[0]
 
 			self.entity['known'] = True
 
@@ -969,64 +986,79 @@ class Entity(QGraphicsItem):
 		painter.setPen(QPen(Qt.white))
 
 		if self.entity['pixmap']:
-			x = -(self.entity['pixmap'].width() -26) / 2
+			w, h = self.entity['pixmap'].width(), self.entity['pixmap'].height()
+			xc, yc = 0, 0
 
-			# Centering code
-			zamiellLovesMakingMyCodeDirty = [44, 236, 218]
-			if self.entity['Type'] in zamiellLovesMakingMyCodeDirty or \
-			  (self.entity['Type'] == 5 and self.entity['Variant'] == 380) or \
-			  (self.entity['Type'] == 291 and self.entity['Variant'] == 1) or \
-			  (self.entity['Type'] == 291 and self.entity['Variant'] == 3):
-
-				y = -(self.entity['pixmap'].height() - 26) / 2
-			else:
-				y = -(self.entity['pixmap'].height() - 26)
-
-			# Curse room special case
-			if self.entity['Type'] == 5 and self.entity['Variant'] == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
-				self.entity['pixmap'] = QPixmap()
-				self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
-
-			# Creeper special case
-			if self.entity['Type'] in [240, 241, 242]:
-				w = self.scene().roomWidth -1
-				h = self.scene().roomHeight - 1
+			def WallSnap():
+				rw = self.scene().roomWidth - 1
+				rh = self.scene().roomHeight - 1
 				ex = self.entity['X']
 				ey = self.entity['Y']
 
-				distances = [w - ex, ex, ey, h - ey]
+				shape = self.scene().roomShape
+				if shape == 9:
+					if ex < 13:
+						ey -= 7
+						rh = 7
+					elif ey < 7:
+						ex -= 13
+						rw = 13
+				elif shape == 10:
+					if ex >= 13:
+						ey -= 7
+						rh = 7
+					elif ey < 7:
+						rw = 13
+				elif shape == 11:
+					if ex < 13:
+						rh = 7
+					elif ey >= 7:
+						ex -= 13
+						rw = 13
+				elif shape == 12:
+					if ex > 13:
+						rh = 7
+					elif ey >= 7:
+						rw = 13
+
+				distances = [rw - ex, ex, ey, rh - ey]
 				closest = min(distances)
 				direction = distances.index(closest)
 
-				# Wall lines
-				painter.setPen(QPen(QColor(220, 220, 180), 2, Qt.DashDotLine))
-				painter.setBrush(Qt.NoBrush)
-
+				wx, wy = 0, 0
 				if direction == 0: # Right
-					painter.drawLine(26, 13, closest * 26 + 26, 13)
+					wx, wy = 2 * closest + 1, 0
 
 				elif direction == 1: # Left
-					painter.drawLine(0, 13, -closest * 26, 13)
+					wx, wy = -2 * closest - 1, 0
 
 				elif direction == 2: # Top
-					painter.drawLine(13, 0, 13, -closest * 26)
+					wx, wy = 0, -closest - 1
 
 				elif direction == 3: # Bottom
-					painter.drawLine(13, 26, 13, closest * 26 + 26)
+					wx, wy = 0, closest
 
-				painter.drawPixmap(x, y, self.entity['pixmap'])
+				return wx, wy
 
-			# Most Painting
-			else:
-				painter.drawPixmap(x, y, self.entity['pixmap'])
+			customPlaceVisuals = {
+				'WallSnap': WallSnap
+			}
 
-			if self.isSelected():
-				painter.setPen(self.SELECTION_PEN)
-				painter.setBrush(Qt.NoBrush)
-				painter.drawRect(x, y, self.entity['pixmap'].width(), self.entity['pixmap'].height())
+			recenter = self.entity.get('PlaceVisual', None)
+			if recenter:
+				if isinstance(recenter, str):
+					recenter = customPlaceVisuals.get(recenter, None)
+					if recenter:
+						xc, yc = recenter()
+				else:
+					xc, yc = recenter
 
-				# Grid space boundary
-				painter.setPen(Qt.green)
+			xc += 1
+			yc += 1
+			x = (xc * 26 - w) / 2
+			y = (yc * 26 - h)
+
+			def drawGridBorders():
 				painter.drawLine(0, 0, 0, 4)
 				painter.drawLine(0, 0, 4, 0)
 
@@ -1039,13 +1071,36 @@ class Entity(QGraphicsItem):
 				painter.drawLine(26, 26, 22, 26)
 				painter.drawLine(26, 26, 26, 22)
 
-		if self.entity["known"] == False:
-			painter.setFont(QFont("Arial", 6));
+			# Curse room special case
+			if self.entity['Type'] == 5 and self.entity['Variant'] == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
+				self.entity['pixmap'] = QPixmap()
+				self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
 
-			painter.drawText(2, 26, "{}.{}.{}".format(
-				str(self.entity['Type']),
-				str(self.entity['Variant']),
-				str(self.entity['Subtype'])))
+			painter.drawPixmap(x, y, self.entity['pixmap'])
+
+			# if the offset is high enough, draw an indicator of the actual position
+			if abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5:
+				painter.setPen(self.OFFSET_SELECTION_PEN)
+				painter.setBrush(Qt.NoBrush)
+				painter.drawLine(13, 13, x + w / 2, y + h - 13)
+				drawGridBorders()
+				painter.fillRect(x + w / 2 - 3, y + h - 13 - 3, 6, 6, Qt.red)
+
+			if self.isSelected():
+				painter.setPen(self.SELECTION_PEN)
+				painter.setBrush(Qt.NoBrush)
+				painter.drawRect(x, y, w, h)
+
+				# Grid space boundary
+				painter.setPen(Qt.green)
+				drawGridBorders()
+
+		if not self.entity['known']:
+			painter.setFont(QFont("Arial", 6))
+
+			painter.drawText(2, 26, "%d.%d.%d" % (self.entity['Type'],
+												  self.entity['Variant'],
+												  self.entity['Subtype']))
 
 	def remove(self):
 		if self.popup:
@@ -3839,14 +3894,14 @@ if __name__ == '__main__':
 	cmdParser.setApplicationDescription('Basement Renovator is a room editor for The Binding of Isaac: Afterbirth[+]')
 	cmdParser.addHelpOption()
 
-	cmdParser.process(app)	
+	cmdParser.process(app)
 
 	settings = QSettings('settings.ini', QSettings.IniFormat)
 
 	# XML Globals
 	entityXML = getEntityXML()
 	mainWindow = MainWindow()
-	
+
 	recent = settings.value("RecentFiles", [])
 	if len(recent) > 0 and os.path.exists(recent[0]):
 		mainWindow.openWrapper(recent[0])
