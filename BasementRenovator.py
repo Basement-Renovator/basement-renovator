@@ -202,7 +202,7 @@ class RoomScene(QGraphicsScene):
 		q = QImage()
 		q.load('resources/UI/Bitfont.png')
 
-		self.bitfont = [QPixmap.fromImage(q.copy(i * 12, 0, 12, 12)) for i in range(10)]
+        self.bitfont = [ QPixmap.fromImage(q.copy(i * 12, j * 12, 12, 12)) for j in range(int(q.height() / 12)) for i in range(int(q.width() / 12)) ]
 		self.bitText = True
 
 		self.tile = None
@@ -616,21 +616,21 @@ class RoomEditorWidget(QGraphicsView):
 
 		clicked = self.mapToScene(event.x(), event.y())
 		x, y = clicked.x(), clicked.y()
-		if x > self.scene().roomWidth  * 26: x = (self.scene().roomWidth-1)  * 26
-		if y > self.scene().roomHeight * 26: y = (self.scene().roomHeight-1) * 26
-
-		if x < 0: x = 0
-		if y < 0: y = 0
 
 		x = int(x / 26)
 		y = int(y / 26)
+
+        x = min(max(x, 0), self.scene().roomWidth - 1)
+        y = min(max(y, 0), self.scene().roomHeight - 1)
 
 		# Don't stack multiple grid entities
 		for i in self.scene().items():
 			if isinstance(i, Entity):
 				if i.entity['X'] == x and i.entity['Y'] == y:
+                    if i.stackDepth == EntityStack.MAX_STACK_DEPTH:
+                        return
 
-					i.removeWeightPopup(True)
+                    i.removeWeightPopup()
 
 					if int(i.entity['Type']) > 999 and int(self.objectToPaint.ID) > 999:
 						return
@@ -652,6 +652,7 @@ class RoomEditorWidget(QGraphicsView):
 				event.accept()
 		else:
 			self.lastTile = None
+        # not calling this for right click + adding items to the scene causes crashes
 			QGraphicsView.mousePressEvent(self, event)
 
 	def mouseMoveEvent(self, event):
@@ -659,7 +660,6 @@ class RoomEditorWidget(QGraphicsView):
 			if mainWindow.roomList.selectedRoom() is not None:
 				self.tryToPaint(event)
 				event.accept()
-		else:
 			QGraphicsView.mouseMoveEvent(self, event)
 
 	def mouseReleaseEvent(self, event):
@@ -803,25 +803,31 @@ class RoomEditorWidget(QGraphicsView):
 				tiles[e.entity['Y']][e.entity['X']] += 1
 
 		if not self.scene().bitText:
-			painter.setPen(QPen(Qt.white, 1, Qt.SolidLine))
+            painter.setPen(Qt.white)
 			painter.font().setPixelSize(5)
 
-		for y in enumerate(tiles):
-			for x in enumerate(y[1]):
+        for y, row in enumerate(tiles):
+            yc = (y + 1) * 26 - 12
 
-				if x[1] > 1:
+            for x, count in enumerate(row):
+                if count <= 1: continue
 
 					if self.scene().bitText:
-						c = x[1]
+                    xc = (x + 1) * 26 - 12
 
-						if x[1] >= 10:
-							painter.drawPixmap( (x[0] + 1) * 26 - 24, (y[0] + 1) * 26 - 12, self.scene().bitfont[int(c/10)] )
-							c = c % 10
+                    digits = [ int(i) for i in str(count) ]
 
-						painter.drawPixmap( (x[0] + 1) * 26 - 12, (y[0] + 1) * 26 - 12, self.scene().bitfont[c] )
+                    fontrow = count == EntityStack.MAX_STACK_DEPTH and 1 or 0
 
+                    numDigits = len(digits) - 1
+                    for i, digit in enumerate(digits):
+                        painter.drawPixmap( xc - 12 * (numDigits - i), yc, self.scene().bitfont[digit + fontrow * 10] )
 					else:
-						painter.drawText( x[0] * 26, y[0] * 26, 26, 26, Qt.AlignBottom | Qt.AlignRight, str(x[1]) )
+                    if count == EntityStack.MAX_STACK_DEPTH: painter.setPen(Qt.red)
+
+                    painter.drawText( x * 26, y * 26, 26, 26, Qt.AlignBottom | Qt.AlignRight, str(count) )
+
+                    if count == EntityStack.MAX_STACK_DEPTH: painter.setPen(Qt.white)
 
 class Entity(QGraphicsItem):
 	SNAP_TO = 26
@@ -834,8 +840,9 @@ class Entity(QGraphicsItem):
 			self.ItemIsMovable
 		)
 
+        self.stackDepth = 1
 		self.popup = None
-		mainWindow.scene.selectionChanged.connect(self.removeWeightPopup)
+        mainWindow.scene.selectionChanged.connect(self.hideWeightPopup)
 
 		# Supplied entity info
 		self.entity = {}
@@ -908,7 +915,6 @@ class Entity(QGraphicsItem):
 	def itemChange(self, change, value):
 
 		if change == self.ItemPositionChange:
-			self.removeWeightPopup(True)
 
 			currentX, currentY = self.x(), self.y()
 
@@ -941,6 +947,9 @@ class Entity(QGraphicsItem):
 
 			value.setX(x)
 			value.setY(y)
+
+            self.getStack()
+            if self.popup: self.popup.update(self.stack)
 
 			# Debug code
 			# if 'eep' in self.entity['name']:
@@ -1052,40 +1061,56 @@ class Entity(QGraphicsItem):
 			self.popup.remove()
 		self.scene().removeItem(self)
 
+    def mouseReleaseEvent(self, event):
+        self.hideWeightPopup()
+        QGraphicsItem.mouseReleaseEvent(self, event)
+
 	def hoverEnterEvent(self, event):
 		self.createWeightPopup()
 
 	def hoverLeaveEvent(self, event):
-		self.removeWeightPopup()
+        self.hideWeightPopup()
 
-	def createWeightPopup(self):
+    def getStack(self):
 		# Get the stack
-		stack = self.collidingItems()
+        stack = self.collidingItems(Qt.IntersectsItemBoundingRect)
 		stack.append(self)
 
 		# Make sure there are no doors or popups involved
-		stack = [x for x in stack if isinstance(x,Entity)]
+        self.stack = [x for x in stack if isinstance(x,Entity)]
 
 		# 1 is not a stack.
-		if len(stack) <= 1: return
+        self.stackDepth = len(self.stack)
 
-		# If there's no popu, make a popup
-		if self.popup == None:
-			popup = EntityStack(stack)
-			self.scene().views()[0].canDelete = False
-			self.scene().addItem(popup)
-			self.popup = popup
+    def createWeightPopup(self):
+        self.getStack()
+        if self.stackDepth <= 1 or any(x.popup and x != self and x.popup.isVisible() for x in self.stack):
+            self.hideWeightPopup()
+            return
 
-	def removeWeightPopup(self, force=False):
-		if self in mainWindow.scene.selectedItems() and not force:
+        # If there's no popup, make a popup
+        if self.popup:
+            if self.popup.activeSpinners != self.stackDepth:
+                self.popup.update(self.stack)
+            self.popup.setVisible(True)
 			return
 
+        self.scene().views()[0].canDelete = False
+        self.popup = EntityStack(self.stack)
+        self.scene().addItem(self.popup)
+
+    def hideWeightPopup(self):
+        if self.popup and self not in mainWindow.scene.selectedItems():
+            self.popup.setVisible(False)
+
+    def removeWeightPopup(self):
 		if self.popup:
 			self.popup.remove()
 			self.popup = None
 			self.scene().views()[0].canDelete = True
 
 class EntityStack(QGraphicsItem):
+    MAX_STACK_DEPTH = 25
 
 	class WeightSpinner(QDoubleSpinBox):
 		def __init__(self):
@@ -1117,25 +1142,37 @@ class EntityStack(QGraphicsItem):
 		QGraphicsItem.__init__(self)
 		self.setZValue(1000)
 
-		self.items = items
-
 		self.spinners = []
+        self.activeSpinners = 0
+        self.update(items)
 
-		w = 0
-		for item in self.items:
-			w += 4
-			pix = item.entity['pixmap']
-			w += pix.width()
+    def update(self, items):
+        activeSpinners = len(items)
 
+        for i in range(activeSpinners - len(self.spinners)):
 			weight = self.WeightSpinner()
-			weight.setValue(item.entity["Weight"])
-			weight.valueChanged.connect(self.weightChanged)
-			weightProxy = self.Proxy(weight, self)
-			self.spinners.append(weightProxy)
+            weight.valueChanged.connect(lambda: self.weightChanged(i))
+            self.spinners.append(self.Proxy(weight, self))
 
-	def weightChanged(self):
-		for n, spinner in enumerate(self.spinners):
-			self.items[n].entity['Weight'] = spinner.widget().value()
+        for i in range(activeSpinners, len(self.spinners)):
+            self.spinners[i].setVisible(False)
+
+        if activeSpinners > 1:
+            for i, item in enumerate(items):
+                spinner = self.spinners[i]
+                spinner.widget().setValue(item.entity["Weight"])
+                spinner.setVisible(True)
+        else:
+            self.setVisible(False)
+
+        # it's very important that this happens AFTER setting up the spinners
+        # it greatly increases the odds of races with weightChanged if items are updated first
+        self.items = items
+        self.activeSpinners = activeSpinners
+
+    def weightChanged(self, idx):
+        if idx < self.activeSpinners:
+            self.items[idx].entity['Weight'] = self.spinners[idx].widget().value()
 
 	def paint(self, painter, option, widget):
 		painter.setRenderHint(QPainter.Antialiasing, True)
@@ -1155,13 +1192,13 @@ class EntityStack(QGraphicsItem):
 		painter.drawPath(path)
 
 		painter.setPen(QPen(Qt.white))
-		painter.setFont(QFont("Arial", 8));
+        painter.setFont(QFont("Arial", 8))
 
 		w = 0
-		for item in self.items:
-			self.spinners[self.items.index(item)].setPos(w-8, r.bottom()-26)
+        for i, item in enumerate(self.items):
+            pix = item.entity['pixmap']
+            self.spinners[i].setPos(w-8, r.bottom()-26)
 			w += 4
-			pix = item.entity['pixmap']
 			painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
 
 			# painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
@@ -1173,14 +1210,12 @@ class EntityStack(QGraphicsItem):
 
 		# Calculate the combined size
 		for item in self.items:
-			if item.entity['pixmap']:
-				width = width + item.entity['pixmap'].rect().width()
-				if item.entity['pixmap'].rect().height() > height:
-					height = item.entity['pixmap'].rect().height()
-			else:
-				width = width + 26
-				if 26 > height:
-					height = 26
+            dx, dy = 26, 26
+            pix = item.entity['pixmap']
+            if pix:
+                dx, dy = pix.rect().width(), pix.rect().height()
+            width = width + dx
+            height = max(height, dy)
 
 		# Add in buffers
 		height = height + 8 + 8 + 8 + 16 # Top, bottom, weight text, and arrow
@@ -1197,10 +1232,9 @@ class EntityStack(QGraphicsItem):
 			self.scene().removeItem(spin)
 			# spin.widget().setParent(None)
 			spin.setWidget(None)	# Turns out this function calls the above commented out function
-			del spin # Probably useless
+        del self.spinners
 
 		self.scene().removeItem(self)
-		del self # Probably useless
 
 class Door(QGraphicsItem):
 
