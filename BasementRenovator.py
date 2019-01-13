@@ -168,7 +168,10 @@ def linuxPathSensitivityTraining(path):
 
     path = path.replace("\\", "/")
 
-    directory, file = os.path.split(path)
+    directory, file = os.path.split(os.path.normpath(path))
+
+    if not os.path.isdir(directory):
+        return None
 
     contents = os.listdir(directory)
 
@@ -178,6 +181,207 @@ def linuxPathSensitivityTraining(path):
 
     return os.path.normpath(path)
 
+def loadFromModXML(modPath, name, entRoot, resourcePath):
+
+    anm2root = entRoot.get("anm2root")
+
+    # Iterate through all the entities
+    enList = entRoot.findall("entity")
+
+    # Skip if the mod is empty
+    if len(enList) == 0:
+        return
+
+    print('-----------------------\nLoading entities from "%s"' % name)
+
+    def mapEn(en):
+        # Fix some shit
+        i = int(en.get("id"))
+        s = en.get("subtype") or '0'
+        v = en.get("variant") or '0'
+
+        if i >= 1000 or i in (0, 1, 7, 8, 9):
+            print('Skipping: Invalid entity type %d: %s' % (i, en.get("name")))
+            return None
+
+        # Grab the anm location
+        anmPath = linuxPathSensitivityTraining(os.path.join(modPath, "resources", anm2root, en.get("anm2path"))) or ''
+        print('LOADING: %s' % anmPath)
+        if not os.path.isfile(anmPath):
+            print('Skipping: Invalid anm2!')
+            return None
+
+        anm2Dir, anm2File = os.path.split(anmPath)
+
+        # Grab the first frame of the anm
+        anmTree = ET.parse(anmPath)
+        spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
+        layers = anmTree.findall(".Content/Layers/Layer")
+        default = anmTree.find("Animations").get("DefaultAnimation")
+
+        anim = anmTree.find("./Animations/Animation[@Name='{0}']".format(default))
+        layer = anim.find(".//LayerAnimation[Frame]")
+
+        imgPath = None
+        x, y, h, w = 0, 0, 0, 0
+        if layer:
+            frame = layer.find('Frame')
+
+            # Here's the anm specs
+            x = int(frame.get("XCrop"))
+            y = int(frame.get("YCrop"))
+            h = int(frame.get("Height"))
+            w = int(frame.get("Width"))
+
+            sheetPath = spritesheets[int(layers[int(layer.get("LayerId"))].get("SpritesheetId"))].get("Path")
+            image = os.path.join(anm2Dir, sheetPath)
+            imgPath = linuxPathSensitivityTraining(image)
+            if not imgPath:
+                image = re.sub(r'.*resources', resourcePath, image)
+                imgPath = linuxPathSensitivityTraining(image)
+
+        filename = "resources/Entities/questionmark.png"
+        if imgPath:
+            # Get the Pixmap
+            pixmap = QPixmap()
+
+            # Load the Image
+            sourceImage = QImage(imgPath)
+
+            # Create the destination
+            pixmapImg = QImage(w, h, sourceImage.format())
+            pixmapImg.fill(0)
+
+            # Transfer the crop area to the pixmap
+            cropRect = QRect(x, y, w, h)
+
+            RenderPainter = QPainter()
+            RenderPainter.begin(pixmapImg)
+            RenderPainter.drawImage(QPoint(0,0), sourceImage, cropRect)
+            RenderPainter.end()
+
+            # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
+            filename = "resources/Entities/ModTemp/{0}.{1}.{2} - {3}.png".format(en.get("id"), v, s, en.get("name"))
+            pixmapImg.save(filename, "PNG")
+
+        # Write the modded entity to the entityXML temporarily for runtime
+        etmp = ET.Element("entity")
+        etmp.set("Name", en.get("name"))
+        etmp.set("ID", str(i))
+        etmp.set("Subtype", s)
+        etmp.set("Variant", v)
+        etmp.set("Image", filename)
+
+        i = int(i)
+        etmp.set("Group", "(Mod) %s" % name)
+        etmp.set("Kind", "Mods")
+        if i == 3:
+            etmp.set("Kind", "Collect")
+            etmp.set("Group", "(Mod) %s (Familiar)" % name)
+        elif i == 5: # pickups
+            if v == 100: # collectible
+                return None
+            etmp.set("Kind", "Pickup")
+        elif i in (2, 4, 6): # tears, live bombs, machines
+            etmp.set("Kind", "Stage")
+        elif en.get("boss") == '1':
+            etmp.set("Kind", "Bosses")
+        else:
+            etmp.set("Kind", "Enemies")
+
+        return etmp
+
+    return filter(lambda x: x != None, map(mapEn, enList))
+
+def loadFromMod(modPath, name, entRoot):
+
+    brPath = os.path.join(modPath, 'basementrenovator')
+    if not os.path.isdir(brPath):
+        return
+
+    entFile = os.path.join(brPath, 'EntitiesMod.xml')
+    if not os.path.isfile(entFile):
+        return
+
+    tree = ET.parse(entFile)
+    root = tree.getroot()
+
+    enList = root.findall('entity')
+    if len(enList) == 0:
+        return
+
+    print('-----------------------\nLoading entities from "%s"' % name)
+
+    def mapEn(en):
+        imgPath = linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
+
+        i = en.get('ID')
+        s = en.get('Subtype') or '0'
+        v = en.get('Variant') or '0'
+
+        entXML = None
+
+        if en.get('Metadata') != '1':
+            entXML = entRoot.find("entity[@id='%s'][@variant='%s'][@subtype='%s']" % (i, v, s))
+            if not entXML:
+                if s == '0':
+                    entXML = entRoot.find("entity[@id='%s'][@variant='%s']" % (i, v))
+                    if not entXML and v == '0':
+                        entXML = entRoot.find("entity[@id='%s']" % i)
+                elif v == '0':
+                    entXML = entRoot.find("entity[@id='%s'][@subtype='%s']" % (i, s))
+            if not entXML:
+                print('Loading invalid entity: ' + str(en.attrib))
+
+        # Write the modded entity to the entityXML temporarily for runtime
+        if not en.get('Group'):
+            en.set('Group', '(Mod) %s' % name)
+        en.set("Image", imgPath)
+
+        en.set("Subtype", s)
+        en.set("Variant", v)
+
+        en.set('BaseHP', entXML and entXML.get('baseHP') or en.get('BaseHP') or '0')
+
+        return en
+
+    return list(map(mapEn, enList))
+
+def loadMods(autogenerate, installPath, resourcePath):
+    global entityXML
+
+    # Each mod in the mod folder is a Group
+    modsPath = findModsPath(installPath)
+
+    modsInstalled = os.listdir(modsPath)
+
+    print('LOADING MOD CONTENT')
+    for mod in modsInstalled:
+        modPath = os.path.join(modsPath, mod)
+
+        # Make sure we're a mod
+        if not os.path.isdir(modPath) or os.path.isfile(os.path.join(modPath, 'disable.it')):
+            continue
+
+        # Get the mod name
+        tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
+        root = tree.getroot()
+        name = root.find("name").text
+
+        # add dedicated entities
+        entPath = os.path.join(modPath, 'content/entities2.xml')
+        if os.path.exists(entPath):
+            # Grab their Entities2.xml
+            entRoot = ET.parse(entPath).getroot()
+
+            ents = None
+            if autogenerate:
+                ents = loadFromModXML(modPath, name, entRoot, resourcePath)
+            else:
+                ents = loadFromMod(modPath, name, entRoot)
+
+            if ents:
+                entityXML.extend(ents)
 
 ########################
 #      Scene/View      #
@@ -2484,17 +2688,13 @@ class EntityGroupModel(QAbstractListModel):
             k = en.get('Kind')
 
             if self.kind == k or self.kind == None:
-                if g not in self.groups.keys() and g != None:
+                if g and g not in self.groups:
                     self.groups[g] = EntityGroupItem(g)
 
                 e = EntityItem(en.get('Name'), en.get('ID'), en.get('Subtype'), en.get('Variant'), en.get('Image'))
 
                 if g != None:
                     self.groups[g].objects.append(e)
-
-        # Special case for mods
-        # if self.kind == "Mods" or self.kind == None:
-        # 	self.addMods()
 
         i = 0
         for key, group in sorted(self.groups.items()):
@@ -2583,111 +2783,6 @@ class EntityGroupModel(QAbstractListModel):
 
         return None
 
-    def addMods(self):
-
-        global entityXML
-
-        # Each mod in the mod folder is a Group
-        modsPath = findModsPath()
-
-        modsInstalled = os.listdir(modsPath)
-
-        for mod in modsInstalled:
-            modPath = os.path.join(modsPath, mod)
-
-            # Make sure we're a mod
-            if not os.path.isdir(modPath):
-                continue
-
-            # Get the mod name
-            tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
-            root = tree.getroot()
-            name = root.find("name").text
-
-
-            # Continue if there are no entities
-            if not os.path.exists(os.path.join(modPath, 'content/entities2.xml')):
-                continue
-
-            # Grab their Entities2.xml
-            tree = ET.parse(os.path.join(modPath, 'content/entities2.xml'))
-            root = tree.getroot()
-            anm2root = root.get("anm2root")
-
-            # Iterate through all the entities
-            enList = root.findall("entity")
-
-            # Skip if the mod is empty
-            if len(enList) == 0:
-                continue
-
-            # Add a group if it's a new mod, handles duplicate mods as well
-            if name not in self.groups.keys():
-                self.groups[name] = EntityGroupItem(name)
-
-            for en in enList:
-                # Get the Pixmap
-                pixmap = QPixmap()
-
-                # Grab the anm location
-                anmPath = linuxPathSensitivityTraining(os.path.join(modPath, "resources", anm2root, en.get("anm2path")))
-
-                # Grab the first frame of the anm
-                anmTree = ET.parse(anmPath)
-                spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
-                default = anmTree.find("Animations").get("DefaultAnimation")
-                layer = anmTree.find("./Animations/Animation[@Name='{0}']".format(default)).find(".//LayerAnimation")
-                frame = layer.find("Frame")
-
-                # Here's the anm specs
-                x = int(frame.get("XCrop"))
-                y = int(frame.get("YCrop"))
-                h = int(frame.get("Height"))
-                w = int(frame.get("Width"))
-                image = os.path.join(modPath, "resources", anm2root, spritesheets[int(layer.get("LayerId"))].get("Path"))
-
-                # Load the Image
-                sourceImage = QImage()
-                sourceImage.fill(0)
-                sourceImage.load(linuxPathSensitivityTraining(image), 'Format_ARGB32')
-
-                # Create the destination
-                pixmapImg = QImage(w, h, QImage.Format_ARGB32)
-                pixmapImg.fill(0)
-
-                # Transfer the crop area to the pixmap
-                cropRect = QRect(x, y, w, h)
-
-                RenderPainter = QPainter(pixmapImg)
-                RenderPainter.drawImage(0,0,sourceImage.copy(cropRect))
-                RenderPainter.end()
-
-                # Fix some shit
-                s = en.get("subtype")
-                if s == None:
-                    s = 0
-                v = en.get("variant")
-                if v == None:
-                    v = 0
-
-                # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-                filename = "resources/Entities/Temp/{0}.{1}.{2} - {3}.png".format(en.get("id"), s, v, en.get("name"))
-                pixmapImg.save(filename, "PNG")
-
-                # Pass this to the Entity Item
-                e = EntityItem(en.get("name"), en.get("id"), s, v, filename)
-                self.groups[name].objects.append(e)
-
-                # Write the modded entity to the entityXML temporarily for runtime
-                etmp = ET.Element("entity")
-                etmp.set("Name", en.get("name"))
-                etmp.set("ID", en.get("id"))
-                etmp.set("Subtype", str(s))
-                etmp.set("Variant", str(v))
-                etmp.set("Image", filename)
-
-                entityXML.append(etmp)
-
 class EntityPalette(QWidget):
 
     def __init__(self):
@@ -2731,7 +2826,11 @@ class EntityPalette(QWidget):
 
     def populateTabs(self):
 
-        for group in ["Pickups", "Enemies", "Bosses", "Stage", "Collect", "Mods"]:
+        groups = ["Pickups", "Enemies", "Bosses", "Stage", "Collect" ]
+        if settings.value('ModAutogen') == '1':
+            groups.append("Mods")
+
+        for group in groups:
 
             listView = EntityList()
 
@@ -2932,6 +3031,10 @@ class MainWindow(QMainWindow):
         f.addSeparator()
         self.fh = f.addAction('Set Resources Path',     self.setDefaultResourcesPath, QKeySequence("Ctrl+Shift+P"))
         self.fi = f.addAction('Reset Resources Path',   self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
+        f.addSeparator()
+        self.fl = f.addAction('Autogenerate mod content (discouraged)', self.toggleModAutogen)
+        self.fl.setCheckable(True)
+        self.fl.setChecked(settings.value('ModAutogen') == '1')
         f.addSeparator()
 
         recent = settings.value("RecentFiles", [])
@@ -3162,6 +3265,10 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.remove("ResourceFolder")
         settings.setValue("ResourceFolder", self.findResourcePath())
+
+    def toggleModAutogen(self):
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        settings.setValue('ModAutogen', settings.value('ModAutogen') == '1' and '0' or '1')
 
     def openMapDefault(self):
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -3930,8 +4037,10 @@ if __name__ == '__main__':
 
     # XML Globals
     entityXML = getEntityXML()
-    mainWindow = MainWindow()
+    if settings.value('DisableMods') != '1':
+        loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder') or '')
 
+    mainWindow = MainWindow()
     recent = settings.value("RecentFiles", [])
     if len(recent) > 0 and os.path.exists(recent[0]):
         mainWindow.openWrapper(recent[0])
