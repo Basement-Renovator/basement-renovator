@@ -2583,15 +2583,19 @@ class RoomSelector(QWidget):
 
     def exportRoom(self):
 
-        # Get a new
-        dialogDir = '' if mainWindow.path == '' else os.path.dirname(mainWindow.path)
-        target = QFileDialog.getSaveFileName(self, 'Select a new name or an existing STB', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
+        dialogDir = findModsPath()
+
+        recent = settings.value("RecentFiles", [])
+        if len(recent) > 1:
+            dialogDir = recent[1]
+
+        target, match = QFileDialog.getSaveFileName(self, 'Select a new name or an existing STB', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
         mainWindow.restoreEditMenu()
 
         if len(target) == 0:
             return
 
-        path = target[0]
+        path = target
 
         # Append these rooms onto the new STB
         if os.path.exists(path):
@@ -2961,12 +2965,16 @@ class MainWindow(QMainWindow):
         "Special Rooms": "00.special rooms.stb",
         "Basement": "01.basement.stb",
         "Cellar": "02.cellar.stb",
+        "Burning Basement": "03.burning basement.stb",
         "Caves": "04.caves.stb",
         "Catacombs": "05.catacombs.stb",
+        "Flooded Caves": "06.flooded caves.stb",
         "Depths": "07.depths.stb",
         "Necropolis": "08.necropolis.stb",
+        "Dank Depths": "09.dank depths.stb",
         "Womb": "10.womb.stb",
         "Utero": "11.utero.stb",
+        "Scarred Womb": "12.scarred womb.stb",
         "Blue Womb": "13.blue womb.stb",
         "Sheol": "14.sheol.stb",
         "Cathedral": "15.cathedral.stb",
@@ -3071,6 +3079,7 @@ class MainWindow(QMainWindow):
         v.addSeparator()
 
         r = mb.addMenu('Test')
+        self.ra = r.addAction('Test Current Room - InstaPreview', self.testMapInstapreview, QKeySequence("Ctrl+P"))
         self.ra = r.addAction('Test Current Room - Basement',     self.testMap, QKeySequence("Ctrl+T"))
         self.ra = r.addAction('Test Current Room - Start',        self.testStartMap, QKeySequence("Ctrl+Shift+T"))
 
@@ -3156,7 +3165,7 @@ class MainWindow(QMainWindow):
             if isinstance(e, Door):
                 doors.append(e.doorItem)
 
-            else:
+            elif isinstance(e, Entity):
                 spawns[e.entity['Y']][e.entity['X']].append([e.entity['Type'], e.entity['Variant'], e.entity['Subtype'], e.entity['Weight']])
 
         room.roomSpawns = spawns
@@ -3348,7 +3357,7 @@ class MainWindow(QMainWindow):
         self.clean()
         self.roomList.changeFilter()
 
-    def open(self, path=None):
+    def open(self, path=None, addToRecent=True):
 
         if path==None:
             path = self.path
@@ -3414,16 +3423,17 @@ class MainWindow(QMainWindow):
             ret.append(r)
 
         # Update recent files
-        recent = settings.value("RecentFiles", [])
-        while recent.count(path) > 0:
-            recent.remove(path)
+        if addToRecent:
+            recent = settings.value("RecentFiles", [])
+            while recent.count(path) > 0:
+                recent.remove(path)
 
-        recent.insert(0, path)
-        while len(recent) > 10:
-            recent.pop()
+            recent.insert(0, path)
+            while len(recent) > 10:
+                recent.pop()
 
-        settings.setValue("RecentFiles", recent)
-        self.setupFileMenuBar()
+            settings.setValue("RecentFiles", recent)
+            self.setupFileMenuBar()
 
         return ret
 
@@ -3505,6 +3515,40 @@ class MainWindow(QMainWindow):
 
         self.scene.grid = g
 
+    def makeTestMod(self):
+        modFolder = findModsPath()
+
+        name = 'basement-renovator-test-room-loader'
+        folder = os.path.join(modFolder, name)
+        roomPath = os.path.join(folder, 'resources', 'rooms')
+
+        # delete the old files
+        if os.path.isdir(folder):
+            dis = os.path.join(folder, 'disable.it')
+            if os.path.isfile(dis): os.unlink(dis)
+
+            for f in os.listdir(roomPath):
+                f = os.path.join(roomPath, f)
+                try:
+                    if os.path.isfile(f): os.unlink(f)
+                except:
+                    pass
+        # otherwise, make it fresh
+        else:
+            os.makedirs(roomPath)
+        
+            metadata = open(os.path.join(folder, 'metadata.xml'), 'w')
+            metadata.write("""<?xml version="1.0" encoding="UTF-8"?>
+            <metadata>
+                <name>%s</name>
+                <directory>%s</directory>
+                <description>Used by Basement Renovator to load test rooms in the starting room and basement</description>
+            </metadata>
+            """ % ('!!!!!!' + name, name)) # resources are loaded in reverse ascii order, so prepend with !s
+            metadata.close()
+
+        return roomPath
+
     #@pyqtSlot()
     def testMap(self):
         if self.roomList.selectedRoom() == None:
@@ -3512,9 +3556,10 @@ class MainWindow(QMainWindow):
             return
 
         # Auto-tests by adding the room to basement.
-        resourcesPath = self.findResourcePath()
-        if resourcesPath == "":
-            return
+        modPath = findModsPath()
+        if modPath == "": return
+
+        modPath = self.makeTestMod()
 
         # Set the selected room to max weight
         self.storeEntityList(self.roomList.selectedRoom())
@@ -3530,83 +3575,80 @@ class MainWindow(QMainWindow):
                     padMe = True
 
         # Needs a padded room
+        newRooms = [testRoom]
         if padMe:
-            newRooms = [testRoom, Room(difficulty=10, weight=0.1)]
-        else:
-            newRooms = [testRoom]
+            newRooms.append(Room(difficulty=10, weight=0.1))
 
         # Prevent accidental data loss from overwriting the file
         self.dirt()
 
         # Check for existing files, and backup if necessary
-        backupFlagBasement = False
-        if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement.stb")):
-            os.replace(os.path.join(resourcesPath, "rooms", "01.basement.stb"), os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"))
-            backupFlagBasement = True
-
-        backupFlagCellar = False
-        if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar.stb")):
-            os.replace(os.path.join(resourcesPath, "rooms", "02.cellar.stb"), os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"))
-            backupFlagCellar = True
-
-        backupFlagBurning = False
-        if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement.stb")):
-            os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"), os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb"))
-            backupFlagBurning = True
+        basements = [
+            ("01.basement.stb", False),
+            ("02.cellar.stb", False),
+            ("03.burning basement.stb", False)
+        ]
 
         # Sanity check for saving
-        if not QFile.exists(os.path.join(resourcesPath, "rooms")):
-            os.mkdir(os.path.join(resourcesPath, "rooms"))
+        #if not QFile.exists(os.path.join(resourcesPath, "rooms")):
+        #    os.mkdir(os.path.join(resourcesPath, "rooms"))
 
-        self.save(newRooms, os.path.join(resourcesPath, "rooms", "01.basement.stb"))
-        self.save(newRooms, os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
-        self.save(newRooms, os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
+        for b in basements:
+            #path = os.path.join(resourcesPath, "rooms", b[0])
+            path = os.path.join(modPath, b[0])
+            #if QFile.exists():
+                #os.replace(os.path.join(path, os.path.join(resourcesPath, "rooms", "(backup) %s" % b[0]))
+                #b[1] = True
+            self.save(newRooms, path)
 
         # Launch Isaac
-        webbrowser.open('steam://rungameid/250900')
+        installPath = findInstallPath()
+        if installPath == '':
+            webbrowser.open('steam://rungameid/250900')
+        else:
+            exePath = self.findExecutablePath()
+            subprocess.Popen([exePath], cwd = installPath)
 
         # Prompt to restore backup
         message = ""
         if padMe:
             message += "As you have a non-standard doors or shape, it's suggested to use the seed 'LABY RNTH' in order to spawn the room semi-regularly. You may have to reset a few times for your room to appear.\n\n"
-        else:
-            message += "Press 'OK' when done testing to restore your original \"01.basement.stb\", \"02.cellar.stb\", and \"03.burning basement.stb\"."
-
-        result = QMessageBox.information(self, "Restore Backup", message)
+        #message += 'Press "OK" when done testing to restore your original "01.basement.stb", "02.cellar.stb", and "03.burning basement.stb".'
+        message += 'Press "OK when done testing to disable the BR mod replacing the rooms; this will not work if you have other mods that add rooms to the basement.'
+        result = QMessageBox.information(self,#"Restore Backup",
+                                              "Disable BR", message)
 
         if result == QMessageBox.Ok:
-            if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement.stb")):
-                os.remove(os.path.join(resourcesPath, "rooms", "01.basement.stb"))
-            if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar.stb")):
-                os.remove(os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
-            if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement.stb")):
-                os.remove(os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
-            if backupFlagBasement:
-                if QFile.exists(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb")):
-                    os.replace(os.path.join(resourcesPath, "rooms", "01.basement (backup).stb"), os.path.join(resourcesPath, "rooms", "01.basement.stb"))
-            if backupFlagCellar:
-                if QFile.exists(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb")):
-                    os.replace(os.path.join(resourcesPath, "rooms", "02.cellar (backup).stb"), os.path.join(resourcesPath, "rooms", "02.cellar.stb"))
-            if backupFlagBurning:
-                if QFile.exists(os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb")):
-                    os.replace(os.path.join(resourcesPath, "rooms", "03.burning basement (backup).stb"), os.path.join(resourcesPath, "rooms", "03.burning basement.stb"))
+            dis = open(os.path.normpath(modPath + '../../../disable.it'), 'w')
+            dis.close()
+            #for b in basements:
+                #path = os.path.join(resourcesPath, "rooms", b[0])
+                #if QFile.exists(path):
+                    #os.remove(path)
+                #if b[1]:
+                    #backup = os.path.join(resourcesPath, "rooms", "(backup) %s" % b[0])
+                    #if QFile.exists(backup):
+                        #os.replace(backup), path))
 
         # Extra warnings
-        if self.path == os.path.join(resourcesPath, "rooms", "01.basement.stb") or self.path == os.path.join(resourcesPath, "rooms", "02.cellar.stb") or self.path == os.path.join(resourcesPath, "rooms", "03.burning basement.stb"):
-            result = QMessageBox.information(self, "Warning", "When testing the basement.stb or cellar.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open STB file completely.")
+        #if self.path == os.path.join(resourcesPath, "rooms", "01.basement.stb") or
+        #   self.path == os.path.join(resourcesPath, "rooms", "02.cellar.stb") or
+        #   self.path == os.path.join(resourcesPath, "rooms", "03.burning basement.stb"):
+        #    result = QMessageBox.information(self, "Warning", "When testing the basement.stb, cellar.stb, or burning basement.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open STB file completely.")
 
-        # Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
-        try:
-            if QFile.exists(os.path.join(resourcesPath, "rooms")):
-                os.rmdir(os.path.join(resourcesPath, "rooms"))
-        except:
-            pass
+        # Why not, try catches are good practice, right? rmdir won't kill non-empty directories, so this will kill rooms dir if it's empty.
+        #try:
+        #    if QFile.exists(os.path.join(resourcesPath, "rooms")):
+        #        os.rmdir(os.path.join(resourcesPath, "rooms"))
+        #except:
+        #    pass
 
         self.killIsaac()
 
     #@pyqtSlot()
+    # Auto-tests by replacing the starting room
     def testStartMap(self):
-        if self.roomList.selectedRoom() == None:
+        if not self.roomList.selectedRoom():
             QMessageBox.warning(self, "Error", "No room was selected to test.")
             return
 
@@ -3618,69 +3660,95 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Error", "Room shapes 2 and 7 (Long and narrow) and 9 (L shaped with upper right corner missing) can't be tested as the Start Room.")
             return
 
-        # Auto-tests by adding the room to basement
-        resourcesPath = self.findResourcePath()
-        if resourcesPath == "":
-            return
+        modPath = findModsPath()
+        if modPath == "": return
+
+        resourcePath = self.findResourcePath()
+        if resourcePath == "": return
+
+        roomPath = os.path.join(resourcePath, "rooms", "00.special rooms.stb")
 
         # Parse the special rooms, replace the spawns
-        if not QFile.exists("resources/teststart.stb"):
-            QMessageBox.warning(self, "Error", "You seem to be missing the teststart.stb from resources. Please redownload Basement Renovator.")
+        if not QFile.exists(roomPath):
+            QMessageBox.warning(self, "Error", "You seem to be missing 00.special rooms.stb from resources. Please unpack your resource files.")
 
         foundYou = False
-        rooms = self.open("resources/teststart.stb")
+        rooms = self.open(roomPath, False)
         for room in rooms:
             if "Start Room" in room.data(0x100):
-                room.roomHeight= testRoom.roomHeight
-                room.roomWidth= testRoom.roomWidth
-                room.roomShape= testRoom.roomShape
+                room.roomHeight = testRoom.roomHeight
+                room.roomWidth  = testRoom.roomWidth
+                room.roomShape  = testRoom.roomShape
                 room.roomSpawns = testRoom.roomSpawns
                 foundYou = True
 
         if not foundYou:
-            QMessageBox.warning(self, "Error", "teststart.stb has been tampered with, and is no longer a valid STB file.")
+            QMessageBox.warning(self, "Error", "00.special rooms.stb has been tampered with, and is no longer a valid STB file.")
             return
+
+        modPath = self.makeTestMod()
 
         # Dirtify to prevent overwriting and then quitting without saving.
         self.dirt()
 
-        # Backup, parse, find the start room, replace it, resave, restore backup
-        backupFlag = False
-        if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
-            os.replace(os.path.join(resourcesPath, "rooms", "00.special rooms.stb"), os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb"))
-            backupFlag = True
+        #path = roomPath
+        path = os.path.join(modPath, "00.special rooms.stb")
 
         # Sanity check for saving
-        if not QFile.exists(os.path.join(resourcesPath, "rooms")):
-            os.mkdir(os.path.join(resourcesPath, "rooms"))
+        #if not QFile.exists(os.path.join(resourcesPath, "rooms")):
+        #    os.mkdir(os.path.join(resourcesPath, "rooms"))
+
+        # Backup, parse, find the start room, replace it, resave, restore backup
+        #backupFlag = False
+        #if QFile.exists(path):
+        #    os.replace(path, os.path.join(resourcesPath, "rooms", "(backup) 00.special rooms.stb"))
+        #    backupFlag = True
 
         # Resave the file
-        self.save(rooms, os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
+        #self.save(rooms, os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
+        self.save(rooms, os.path.join(modPath, "00.special rooms.stb"))
 
         # Launch Isaac
-        webbrowser.open('steam://rungameid/250900')
+        installPath = findInstallPath()
+        if installPath == '':
+            webbrowser.open('steam://rungameid/250900')
+        else:
+            exePath = self.findExecutablePath()
+            subprocess.Popen([exePath], cwd = installPath)
 
         # Prompt to restore backup
-        result = QMessageBox.information(self, "Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb.")
+        result = QMessageBox.information(self,
+            #"Restore Backup", "Press 'OK' when done testing to restore your original 00.special rooms.stb."
+            'Disable BR', 'Press "OK" when done testing to disable the BR mod replacing the starting room')
         if result == QMessageBox.Ok:
-            if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
-                os.remove(os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
-            if backupFlag:
-                if QFile.exists(os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb")):
-                    os.replace(os.path.join(resourcesPath, "rooms", "00.special rooms (backup).stb"), os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
+            dis = open(os.path.normpath(modPath + '../../../disable.it'), 'w')
+            dis.close()
+            #if QFile.exists(path):
+            #    os.remove(path)
+            #if backupFlag:
+            #    if QFile.exists(os.path.join(resourcesPath, "rooms", "(backup) 00.special rooms.stb")):
+            #        os.replace(os.path.join(resourcesPath, "rooms", "(backup) 00.special rooms.stb"), path)
 
         # Extra warnings
-        if self.path == (os.path.join(resourcesPath, "rooms", "00.special rooms.stb")):
-            result = QMessageBox.information(self, "Warning", "When testing the special rooms.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
+        #if self.path == path:
+        #    result = QMessageBox.information(self, "Warning", "When testing the special rooms.stb from the resources folder, it's recommended you save before quitting or risk losing the currently open stb completely.")
 
         # Why not, try catches are good practice, right? rmdir won't kill empty directories, so this will kill rooms dir if it's empty.
-        try:
-            if QFile.exists(os.path.join(resourcesPath, "rooms")):
-                os.rmdir(os.path.join(resourcesPath, "rooms"))
-        except:
-            pass
+        #try:
+        #    if QFile.exists(os.path.join(resourcesPath, "rooms")):
+        #        os.rmdir(os.path.join(resourcesPath, "rooms"))
+        #except:
+        #    pass
 
         self.killIsaac()
+
+    def findExecutablePath(self):
+        installPath = findInstallPath()
+        if len(installPath) > 0:
+            exeName = "isaac-ng.exe"
+            if QFile.exists(os.path.join(installPath, "isaac-ng-rebirth.exe")):
+                exeName = "isaac-ng-rebirth.exe"
+            return os.path.join(installPath, exeName)
 
     def findResourcePath(self):
 
@@ -3735,109 +3803,39 @@ class MainWindow(QMainWindow):
                 pass
 
     #@pyqtSlot()
-    def testMapInjectionRebirth(self):
-        # This was used for antibirth
-
-        room = self.roomList.list.currentItem()
-        if not room:
-            return
-
-        exePath = self.getExecutablePath()
-        if not exePath:
-            return
-
-        path = exePath + "br_output.xml"
-        self.storeEntityList()
-
-        out = open(path, 'w')
-
-        # Floor type
-        roomType = [
-            ('basement', 1, 0),
-            ('cellar', 1, 1),
-            ('caves', 3, 0),
-            ('catacombs', 3, 1),
-            ('depths', 5, 0),
-            ('necropolis', 5, 1),
-            ('womb', 7, 0),
-            ('utero', 7, 1),
-            ('sheol', 9, 0),
-            ('cathedral', 9, 1),
-            ('dark room', 11, 0),
-            ('chest', 11, 1),
-            ('downpour', 1, 2),
-            ('mines', 3, 2),
-            ('mausoleum', 5, 2),
-            ('corpse', 7, 2),
-            ('forest', 11, 2)
-        ]
-
-        floorInfo = roomType[0]
-        for t in roomType:
-            if t[0] in mainWindow.path:
-                floorInfo = t
-
-        # Room header
-        out.write('<room type="%d" variant="%d" difficulty="%d" name="%s" weight="%g" width="%d" height="%d">\n' % (
-            room.roomType, room.roomVariant, room.roomDifficulty, room.text(),
-            room.roomWeight, room.roomWidth, room.roomHeight
-        ))
-
-        # Doors
-        for door in room.roomDoors:
-            out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
-
-        # Spawns
-        for y in enumerate(room.roomSpawns):
-            for x in enumerate(y[1]):
-                if len(x[1]) == 0: continue
-
-                out.write('\t<spawn x="%d" y="%d">\n' % (x[0], y[0]))
-                for entity in x[1]:
-                    out.write('\t\t<entity type="%d" variant="%d" subtype="%d" weight="%g" />\n' % (
-                        entity[0], entity[1], entity[2], 2.0
-                    ))
-                out.write('\t</spawn>\n')
-
-        out.write('</room>\n')
-
-        exeName = "isaac-ng.exe"
-        if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
-            exeName = "isaac-ng-rebirth.exe"
-
-        subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
-            cwd = exePath
-        )
-
-    #@pyqtSlot()
     def testMapInstapreview(self):
-        room = self.roomList.list.currentItem()
-        if not room:
-            return
+        room = self.roomList.selectedRoom()
+        if not room: return
 
-        exePath = self.getExecutablePath()
-        if not exePath:
-            return
+        installPath = findInstallPath()
+        if len(installPath) == 0: return
 
-        path = exePath + "br_output.xml"
-        self.storeEntityList()
+        testfile = "br_roomtest.xml"
+        path = os.path.join(installPath, testfile)
+        self.storeEntityList(room)
 
         out = open(path, 'w')
 
         # Floor type
         roomType = [
+            # name, stage, stage type
             ('basement', 1, 0),
             ('cellar', 1, 1),
+            ('burning basement', 1, 2),
             ('caves', 3, 0),
             ('catacombs', 3, 1),
+            ('flooded caves', 3, 2),
             ('depths', 5, 0),
             ('necropolis', 5, 1),
+            ('dank depths', 5, 2),
             ('womb', 7, 0),
             ('utero', 7, 1),
+            ('scarred womb', 7, 2),
             ('sheol', 9, 0),
             ('cathedral', 9, 1),
             ('dark room', 11, 0),
             ('chest', 11, 1),
+            # TODO update when repentance comes out
             ('downpour', 1, 2),
             ('mines', 3, 2),
             ('mausoleum', 5, 2),
@@ -3857,8 +3855,8 @@ class MainWindow(QMainWindow):
         ))
 
         # Doors
-        for door in room.roomDoors:
-            out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (door[0], door[1], "true" if door[2] else "false"))
+        for x, y, exists in room.roomDoors:
+            out.write('\t<door x="%d" y="%d" exists="%s" />\n' % (x, y, "true" if exists else "false"))
 
         # Spawns
         for y in enumerate(room.roomSpawns):
@@ -3874,12 +3872,21 @@ class MainWindow(QMainWindow):
 
         out.write('</room>\n')
 
-        exeName = "isaac-ng.exe"
-        if QFile.exists(exePath + "/isaac-ng-rebirth.exe"):
-            exeName = "isaac-ng-rebirth.exe"
+        exePath = self.findExecutablePath()
 
-        subprocess.Popen([exePath + "/" + exeName, "-room", "br_output.xml", "-floorType", str(floorInfo[1]), "-floorAlt", str(floorInfo[2]), "-console"],
-            cwd = exePath
+        # how to do it in rebirth/anti
+        #subprocess.Popen([exePath, "-console",
+        #                 "-room", testfile,
+        #                 "-floorType", str(floorInfo[1]),
+        #                 "-floorAlt", str(floorInfo[2])],
+        #    cwd = exePath
+        #)
+
+        subprocess.Popen([exePath,
+                        "--load-room=%s" % testfile,
+                        "--set-stage=%d" % floorInfo[1],
+                        "--set-stage-type=%d" % floorInfo[2]],
+            cwd = installPath
         )
 
         # --set-stage-type=0 --set-stage=1 --load-room=superinstapreview.xml
