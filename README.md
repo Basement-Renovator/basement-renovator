@@ -82,5 +82,4 @@ There are some older packaged downloads on the [releases tab](https://github.com
   * It has to generate BR images for every entity in the mod each time the program starts up. This makes it slightly slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
   * Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
   * Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
-  * The techniques don't mix, and so you'll lose out on the pluses of the other option.
-  For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
+  * The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
