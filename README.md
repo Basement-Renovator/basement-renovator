@@ -3,30 +3,28 @@
 * Basement Renovator is a 3rd-party *[Binding of Isaac: Afterbirth(+)](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/)* room and level editor.
   * It will **not** edit *Rebirth* rooms. If you need to edit *Rebirth* floors for some reason, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
 * It is open-source and written in [Python 3](https://www.python.org/).
-* It makes it easy to create rooms and is even used by official staff.
+* It makes it easy to create rooms and it is even used by the game's official staff.
 * It was originally written by [Colin Naga](http://www.chronometry.ca/) and is now supported by the modding community.
 
 ### Downloads
 
-  - There are some older packaged downloads that are on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these are **out of date**. Please run Basement Renovator from source as described below.
+There are some older packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these are **out of date**. Please run Basement Renovator from source as described below.
 
 ### Running from Source
 
 1. Download a copy of the source code, either through git or using `Clone or download > Download zip`
 
-2. Install python 3 from the [Python website](https://www.python.org/downloads/) or whatever method you prefer. (apt, brew, chocolatey, etc.) Make sure to [check the box to] add Python to your PATH; if you don't, the next steps will
-complain about python command not existing. If you forget, rerun the installer to check the box. If you use another installation method, make sure you have *pip* (python package manager, used to grab dependencies)
+2. Install Python 3 from the [Python website](https://www.python.org/downloads/) or from a package manager (apt, brew, Chocolatey, etc.). Make sure to check the box to add Python to your PATH; if you don't, the next steps will complain about `python` command not existing. If you forget, re-run the installer and check the box. If you use another installation method, make sure you have *pip* installed. (pip is the Python package manager, used to grab dependencies).
 
-3. Run `pip install pyqt5 psutil` from a console window. (cmd, powershell, a terminal, etc.) This installs some additional dependencies for BR.
+3. Run `pip install pyqt5 psutil` (from cmd, Terminal, etc.) to install dependencies.
 
-4. Run `python BasementRenovator.py` from the console, make sure you run it in the BR folder.
-Alternatively, double click the script to run it. Errors and other messages will display in the console.
+4. Double click the "BasementRenovator.py" script.
 
 ---
 
 ### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
-* If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. Otherwise:
+* If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+), read on.
 * First, unpack the game's assets using the official unpacker.
   * On Windows: <br />
   `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
@@ -64,36 +62,25 @@ Alternatively, double click the script to run it. Errors and other messages will
 
 *I found a bug!*
 
-- Please [open an issue on github](https://github.com/Tempus/Basement-Renovator/issues) (we may not see everything immediately since the project is community maintained, but they will be addressed)
-- If you need immediate help, many people in the modding community hang out in the **#modding** channel of the [BoI Discord server](https://discord.gg/isaac).
-
-*I found something new you don't have!*
-
-- Great, let us know! Create an issue as mentioned above and we'll take a look.
+* Please [open an issue on github](https://github.com/Tempus/Basement-Renovator/issues).
+* If you need immediate help, many people in the modding community hang out in the **#modding** channel of the [BoI Discord server](https://discord.gg/isaac).
 
 *When is the next update?*
 
-- The project doesn't really do formal releases anymore. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
+* The project doesn't really do formal releases anymore. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
 
-*Why can't I edit door position/custom room size/make random entities?*
+*Why can't I edit door position? Why can't I make a custom room size?*
 
-- All of these have no effect, make the game buggy, or crash, and are not included in this editor.
+* These make the game crash, so they are not included in the editor.
 
 *How do I add custom entities?*
-  - For Afterbirth+ mods, you're in luck! Create a folder named `basementrenovator` in your mod's root folder. (it must be within your overall mods folder to be detected) Inside that folder, create an `EntitiesMod.xml` file.
-This should use the same format as `resources/EntitiesAfterbirth.xml` and has all the same conventions. To make things slightly easier, Group will default to `(Mod) Your Mod Name` if left out for an entity.
-The Image path is relative to the basementrenovator folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
 
-    - If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesAfterbirth+` for some examples; it can either be `X,Y` in +/- grid squares of offset or precoded dynamic behaviors like `WallSnap`.
-    - If you have an entity that does not exist in your `entities2.xml` for some reason. (This is mostly relevant to helper entities used with [Stage API](https://github.com/Meowlala/BOIStageAPI15)) you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows BR to load entities it normally wouldn't.
-
-  - If for some reason this is too much hassle, or you want to quickly create rooms with entities from large mods that don't have support, you can toggle the *Autogenerate mod content* setting.
-This will crawl mods' `content/entities2.xml` instead of the `basementrenovator` folder and work automagically without any additional work. HOWEVER this comes with a number of downsides:
-    - It has to generate BR images for every entity in the mod each time the program starts up. This makes it slightly slower, but worse than that is the way the image is selected.
-    For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay,
-    the image is very poor compared to a curated one.
-    - Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
-    - Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
-    - The techniques don't mix, and so you'll lose out on the pluses of the other option.
-
-    For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
+* This will only work for Afterbirth+ mods. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirth.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
+* If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesAfterbirth+` for some examples. It can either be `X,Y` in +/- grid squares of offset or precoded dynamic behaviors like `WallSnap`.
+* If you have an entity that does not exist in your `entities2.xml` for some reason, you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows BR to load entities it normally wouldn't. (This kind of thing is mostly relevant to helper entities used with [Stage API](https://github.com/Meowlala/BOIStageAPI15).)
+* If for some reason this is too much hassle, or you want to quickly create rooms with entities from large mods that don't have support, you can toggle the *Autogenerate mod content* setting. This will crawl mods' `content/entities2.xml` instead of the `basementrenovator` folder and work automagically without any additional work. HOWEVER this comes with a number of downsides:
+  * It has to generate BR images for every entity in the mod each time the program starts up. This makes it slightly slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
+  * Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
+  * Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
+  * The techniques don't mix, and so you'll lose out on the pluses of the other option.
+  For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
