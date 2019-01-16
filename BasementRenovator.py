@@ -1203,8 +1203,8 @@ class Entity(QGraphicsItem):
             xc, yc = 0, 0
 
             def WallSnap():
-                rw = self.scene().roomWidth - 1
-                rh = self.scene().roomHeight - 1
+                rw = self.scene().roomWidth
+                rh = self.scene().roomHeight
                 ex = self.entity['X']
                 ey = self.entity['Y']
 
@@ -1234,7 +1234,7 @@ class Entity(QGraphicsItem):
                     elif ey >= 7:
                         rw = 13
 
-                distances = [rw - ex, ex, ey, rh - ey]
+                distances = [rw - ex - 1, ex, ey, rh - ey - 1]
                 closest = min(distances)
                 direction = distances.index(closest)
 
