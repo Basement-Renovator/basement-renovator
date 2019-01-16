@@ -384,7 +384,7 @@
 	<!-- Chapter 2 -->
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.0.0 - Chub.png" Kind="Bosses" Name="Chub" Subtype="0" Variant="0" />
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.1.0 - C.H.A.D..png" Kind="Bosses" Name="C.H.A.D." Subtype="0" Variant="1" />
-	<entity BaseHP="595" Boss="1" Group="Chapter 2" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" PlaceVisual="0,-1" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
+	<entity BaseHP="595" Boss="1" Group="Chapter 2" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" PlaceVisual="0,1" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="262" Image="resources/Entities/262.0.0 - Mega Maw.png" PlaceVisual="0,-2" Kind="Bosses" Name="Mega Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="600" Boss="1" Group="Chapter 2" ID="264" Image="resources/Entities/264.0.0 - Mega Fatty.png" Kind="Bosses" Name="Mega Fatty" Subtype="0" Variant="0" />
 	<entity Group="Chapter 2" Kind="Bosses" Image="resources/Entities/409.0.0 - RagMega.png" BaseHP="110" Boss="1" ID="409" Name="Rag Mega" Variant="0" Subtype="0" />
@@ -446,7 +446,7 @@
 	<entity Boss="1" Group="Special" ID="408" Image="resources/Entities/408.0.0 - Skinless Hush.png" Kind="Bosses" Name="Skinless Hush" Subtype="0" Variant="0" />
 	<entity BaseHP="2000" Boss="1" Group="Special" ID="102" Image="resources/Entities/102.0.0 - Isaac (final boss).png" Kind="Bosses" Name="Isaac (final boss)" Subtype="0" Variant="0" />
 	<entity BaseHP="2000" Boss="1" Group="Special" ID="102" Image="resources/Entities/102.1.0 - Blue Baby (final boss).png" Kind="Bosses" Name="??? (final boss)" Subtype="0" Variant="1" />
-	<entity BaseHP="600" Boss="1" Group="Special" ID="84" Image="resources/Entities/84.0.0 - Satan.png" PlaceVisual="0,-2" Kind="Bosses" Name="Satan" Subtype="0" Variant="0" />
+	<entity BaseHP="600" Boss="1" Group="Special" ID="84" Image="resources/Entities/84.0.0 - Satan.png" PlaceVisual="0,2" Kind="Bosses" Name="Satan" Subtype="0" Variant="0" />
 	<entity BaseHP="2000" Boss="1" Group="Special" ID="273" Image="resources/Entities/273.0.0 - The Lamb.png" Kind="Bosses" Name="The Lamb" Subtype="0" Variant="0" />
 	<entity BaseHP="3000" Boss="1" Group="Special" ID="274" Image="resources/Entities/274.0.0 - Mega Satan's Head.png" Kind="Bosses" Name="Mega Satan's Head" Subtype="0" Variant="0" />
 	<entity BaseHP="600" Boss="1" Group="Special" ID="274" Image="resources/Entities/274.1.0 - Mega Satan's Right Hand.png" Kind="Bosses" Name="Mega Satan's Right Hand" Subtype="0" Variant="1" />
