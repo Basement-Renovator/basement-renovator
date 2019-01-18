@@ -397,8 +397,10 @@ class RoomScene(QGraphicsScene):
             "01_basement", "02_cellar", "03_caves", "04_catacombs",
             "05_depths", "06_necropolis", "07_the womb", "08_utero",
             "09_sheol", "10_cathedral", "11_chest", "12_darkroom",
+            "13_burningbasement", "14_floodedcaves", "15_dankdepths", "16_scarredwomb",
+            "18_bluewomb",
             "0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom",
-            "0e_arcade", "0e_diceroom", "0f_secretroom", "18_bluewomb"
+            "0e_arcade", "0e_diceroom", "0f_secretroom"
         ]
         self.grid = True
 
@@ -1665,59 +1667,76 @@ class Room(QListWidgetItem):
         self.setIcon(i)
 
     def setRoomBG(self):
-        c = self.roomType
-
-        roomType = ['basement', 'cellar', 'caves', 'catacombs', 'depths', 'necropolis', 'womb', 'utero', 'sheol', 'cathedral', 'chest', 'dark room', 'bluewomb']
+        roomType = ['basement', 'cellar',
+                    'caves','catacombs',
+                    'depths', 'necropolis',
+                    'womb', 'utero',
+                    'sheol', 'cathedral',
+                    'chest', 'dark room',
+                    'burning basement', 'flooded caves',
+                    'dank depths', 'scarred womb',
+                    'blue womb']
 
         self.roomBG = 1
 
-        for t in roomType:
-            if t in mainWindow.path:
-                self.roomBG = roomType.index(t) + 1
+        for i in range(len(roomType)):
+            if roomType[i] in mainWindow.path:
+                self.roomBG = i + 1
+
+        c = self.roomType
 
         if c == 12:
-            self.roomBG = 13
-        elif c == 2:
-            self.roomBG = 14
-        elif c == 18:
-            self.roomBG = 15
-        elif c == 19:
-            self.roomBG = 16
-        elif c == 9:
-            self.roomBG = 17
-        elif c == 21:
             self.roomBG = 18
-        elif c == 7:
+        elif c == 2:
             self.roomBG = 19
+        elif c == 18:
+            self.roomBG = 20
+        elif c == 19:
+            self.roomBG = 21
+        elif c == 9:
+            self.roomBG = 22
+        elif c == 21:
+            self.roomBG = 23
+        elif c == 7:
+            self.roomBG = 24
 
-        elif c in [10, 11, 13, 14, 17]:
+        elif c in [10, 11, 13, 14, 17, 22]:
             self.roomBG = 9
         elif c in [15]:
             self.roomBG = 10
         elif c in [20]:
             self.roomBG = 11
-        elif c in [3]:
+        elif c in [3, 16]:
             self.roomBG = 12
 
         elif c in [8]:
-            if self.roomVariant in [0]:
+            if self.roomVariant in [0, 11, 15]:
                 self.roomBG = 7
-            elif self.roomVariant in [1]:
+            elif self.roomVariant in [1, 12, 16]:
                 self.roomBG = 10
-            elif self.roomVariant in [2]:
+            elif self.roomVariant in [2, 13, 17]:
                 self.roomBG = 9
             elif self.roomVariant in [3]:
                 self.roomBG = 4
             elif self.roomVariant in [4]:
                 self.roomBG = 2
-            elif self.roomVariant in [5]:
+            elif self.roomVariant in [5, 19]:
                 self.roomBG = 1
             elif self.roomVariant in [6]:
-                self.roomBG = 12
+                self.roomBG = 18
             elif self.roomVariant in [7]:
+                self.roomBG = 12
+            elif self.roomVariant in [8]:
                 self.roomBG = 13
+            elif self.roomVariant in [9]:
+                self.roomBG = 14
+            elif self.roomVariant in [14, 18]:
+                self.roomBG = 19
             else:
                 self.roomBG = 12
+        # grave rooms
+        elif c == 1 and self.roomVariant > 2 and 'special rooms' in mainWindow.path:
+            self.roomBG = 12
 
     def mirrorX(self):
         # Flip Spawns
@@ -3498,7 +3517,7 @@ class MainWindow(QMainWindow):
 
     #@pyqtSlot()
     def screenshot(self):
-        fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Grahics (*.png)')[0]
+        fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Graphics (*.png)')[0]
         if fn == '': return
 
         g = self.scene.grid
