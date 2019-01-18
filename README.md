@@ -83,3 +83,12 @@ There are some older packaged downloads on the [releases tab](https://github.com
   * Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
   * Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
   * The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
+
+*Why does my custom entity appear with a hazard sign on it?*
+
+* While Basement Renovator can save a wide range of values identifying entities, not all of them play nicely in game. Some are fine in game, but are still invalid.
+  - Variants are represented in game as 12 bits, which range from 0 - 4095. BR saves them as 32 bit values, and the game can read your modded entity like this, but it will always be reduced into that range. You can be 100% certain of your variant if it falls within that range
+  - Ids/Types have the same representation as variants, with an additional twist. Entities of type 1000 or higher are read from rooms as *grid entities* like rocks or spikes. That means your entity will not get spawned in the room at all if its id is that high!
+  - Subtypes are represented using 8 bits, or the range 0 - 255. This is the same both in BR and in game. Follows the same rules as variant otherwise.
+
+  If you see this warning, please change your values to fit in the proper range. This will prevent a lot of difficult to debug issues in your mods. You can see exactly where an entity is out of range in the logs or in the tooltip if you hover over it in the room.

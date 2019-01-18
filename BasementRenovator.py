@@ -381,6 +381,16 @@ def loadMods(autogenerate, installPath, resourcePath):
                 ents = loadFromMod(modPath, name, entRoot)
 
             if ents:
+                for ent in ents:
+                    name, i, v, s = ent.get('Name'), int(ent.get('ID')), int(ent.get('Variant')), int(ent.get('Subtype'))
+
+                    if i >= 1000:
+                        print('Entity "%s" has a type outside the 0 - 999 range! (%d) It will not load properly from rooms!' % (name, i))
+                    if v >= 4096:
+                        print('Entity "%s" has a variant outside the 0 - 4095 range! (%d)' % (name, v))
+                    if s >= 256:
+                        print('Entity "%s" has a subtype outside the 0 - 255 range! (%d)' % (name, s))
+
                 entityXML.extend(ents)
 
 ########################
@@ -1059,6 +1069,7 @@ class Entity(QGraphicsItem):
 
         # Derived Entity Info
         self.entity['name'] = None
+        self.isGridEnt = False
         self.entity['baseHP'] = None
         self.entity['boss'] = None
         self.entity['champion'] = None
@@ -1077,8 +1088,8 @@ class Entity(QGraphicsItem):
         if not hasattr(Entity, 'SELECTION_PEN'):
             Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
             Entity.OFFSET_SELECTION_PEN = QPen(Qt.red, 1, Qt.DashLine)
+            Entity.OUT_OF_RANGE_WARNING_IMG = QPixmap('resources/UI/warning.png')
 
-        self.setToolTip("{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity))
         self.setAcceptHoverEvents(True)
 
     def getEntityInfo(self, t, subtype, variant):
@@ -1089,12 +1100,15 @@ class Entity(QGraphicsItem):
             en = entityXML.find("entity[@ID='{0}'][@Subtype='{1}'][@Variant='{2}']".format(t, subtype, variant))
 
             self.entity['name'] = en.get('Name')
+            self.isGridEnt = en.get('Kind') == 'Stage' and \
+                            en.get('Group') in [ 'Grid', 'Poop', 'Fireplaces', 'Other', 'Props', 'Special Exits', 'Broken' ]
+
             self.entity['baseHP'] = en.get('BaseHP')
             self.entity['boss'] = en.get('Boss')
             self.entity['champion'] = en.get('Champion')
             self.entity['PlaceVisual'] = en.get('PlaceVisual')
 
-            if self.entity['Type'] == 5 and self.entity['Variant'] == 100:
+            if t == 5 and variant == 100:
                 i = QImage()
                 i.load('resources/Entities/5.100.0 - Collectible.png')
                 i = i.convertToFormat(QImage.Format_ARGB32)
@@ -1133,6 +1147,20 @@ class Entity(QGraphicsItem):
             self.entity['pixmap'] = QPixmap()
             self.entity['pixmap'].load("resources/Entities/questionmark.png")
 
+        self.updateTooltip()
+
+    def updateTooltip(self):
+        tooltipStr = "{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity)
+        
+        if self.entity['Type'] >= 1000 and not self.isGridEnt:
+            tooltipStr += '\nType is outside the valid range of 0 - 999! This will not load properly in-game!'
+        if self.entity['Variant'] >= 4096:
+            tooltipStr += '\nVariant is outside the valid range of 0 - 4095!'
+        if self.entity['Subtype'] >= 255:
+            tooltipStr += '\nSubtype is outside the valid range of 0 - 255!'
+
+        self.setToolTip(tooltipStr)
+
     def itemChange(self, change, value):
 
         if change == self.ItemPositionChange:
@@ -1163,6 +1191,8 @@ class Entity(QGraphicsItem):
             if x != currentX or y != currentY:
                 self.entity['X'] = int(x / self.SNAP_TO)
                 self.entity['Y'] = int(y / self.SNAP_TO)
+                
+                self.updateTooltip()
                 if self.isSelected():
                     mainWindow.dirt()
 
@@ -1201,6 +1231,8 @@ class Entity(QGraphicsItem):
         if self.entity['pixmap']:
             w, h = self.entity['pixmap'].width(), self.entity['pixmap'].height()
             xc, yc = 0, 0
+
+            typ, var, sub = self.entity['Type'], self.entity['Variant'], self.entity['Subtype']
 
             def WallSnap():
                 rw = self.scene().roomWidth
@@ -1285,9 +1317,8 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             # Curse room special case
-            if self.entity['Type'] == 5 and self.entity['Variant'] == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
-                self.entity['pixmap'] = QPixmap()
-                self.entity['pixmap'].load('resources/Entities/5.360.0 - Red Chest.png')
+            if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
+                self.entity['pixmap'] = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
 
             painter.drawPixmap(x, y, self.entity['pixmap'])
 
@@ -1311,9 +1342,12 @@ class Entity(QGraphicsItem):
         if not self.entity['known']:
             painter.setFont(QFont("Arial", 6))
 
-            painter.drawText(2, 26, "%d.%d.%d" % (self.entity['Type'],
-                                                  self.entity['Variant'],
-                                                  self.entity['Subtype']))
+            painter.drawText(2, 26, "%d.%d.%d" % (typ, var, sub))
+        
+        # entities have 12 bits for type and variant, 8 for subtype
+        # common mod error is to make them outside that range
+        if var >= 4096 or sub >= 256 or (typ >= 1000 and not self.isGridEnt):
+            painter.drawPixmap(18, -8, Entity.OUT_OF_RANGE_WARNING_IMG)
 
     def remove(self):
         if self.popup:
