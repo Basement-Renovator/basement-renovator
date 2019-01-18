@@ -364,15 +364,24 @@ def loadMods(autogenerate, installPath, resourcePath):
             continue
 
         # Get the mod name
-        tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
-        root = tree.getroot()
-        name = root.find("name").text
+        name = mod
+        try:
+            tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
+            root = tree.getroot()
+            name = root.find("name").text
+        except ParseError:
+            print('Failed to parse mod metadata "%s", falling back on default name' % name)
 
         # add dedicated entities
         entPath = os.path.join(modPath, 'content/entities2.xml')
         if os.path.exists(entPath):
             # Grab their Entities2.xml
-            entRoot = ET.parse(entPath).getroot()
+            entRoot = None
+            try:
+                entRoot = ET.parse(entPath).getroot()
+            except ParseError as e:
+                print('ERROR parsing entities2 xml for mod "{0}": {1}'.format(name, e))
+                continue
 
             ents = None
             if autogenerate:
