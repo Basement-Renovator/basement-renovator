@@ -200,7 +200,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         s = en.get("subtype") or '0'
         v = en.get("variant") or '0'
 
-        if i >= 1000 or i in (0, 1, 7, 8, 9):
+        if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
             print('Skipping: Invalid entity type %d: %s' % (i, en.get("name")))
             return None
 
@@ -261,7 +261,9 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
             RenderPainter.end()
 
             # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-            filename = "resources/Entities/ModTemp/{0}.{1}.{2} - {3}.png".format(en.get("id"), v, s, en.get("name"))
+            resDir = 'resources/Entities/ModTemp/%s/' % name
+            if not os.path.isdir(resDir): os.mkdir(resDir)
+            filename = os.path.join(resDir, "{0}.{1}.{2} - {3}.png".format(en.get("id"), v, s, en.get("name")))
             pixmapImg.save(filename, "PNG")
 
         # Write the modded entity to the entityXML temporarily for runtime
@@ -275,10 +277,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         i = int(i)
         etmp.set("Group", "(Mod) %s" % name)
         etmp.set("Kind", "Mods")
-        if i == 3:
-            etmp.set("Kind", "Collect")
-            etmp.set("Group", "(Mod) %s (Familiar)" % name)
-        elif i == 5: # pickups
+        if i == 5: # pickups
             if v == 100: # collectible
                 return None
             etmp.set("Kind", "Pickup")
@@ -291,7 +290,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
 
         return etmp
 
-    return filter(lambda x: x != None, map(mapEn, enList))
+    return list(filter(lambda x: x != None, map(mapEn, enList)))
 
 def loadFromMod(modPath, name, entRoot):
 
@@ -361,6 +360,10 @@ def loadMods(autogenerate, installPath, resourcePath):
 
         # Make sure we're a mod
         if not os.path.isdir(modPath) or os.path.isfile(os.path.join(modPath, 'disable.it')):
+            continue
+
+        # simple workaround for now
+        if not autogenerate and not os.path.exists(os.path.join(modPath, 'basementrenovator', 'EntitiesMod.xml')):
             continue
 
         # Get the mod name
@@ -2438,11 +2441,10 @@ class RoomSelector(QWidget):
         warn = False
         mainWindow.storeEntityList()
 
-        for y in enumerate(self.selectedRoom().roomSpawns):
-            for x in enumerate(y[1]):
-                for entity in x[1]:
-
-                    if x[0] >= w or y[0] >= h:
+        for y, row in enumerate(self.selectedRoom().roomSpawns):
+            for x, entStack in enumerate(row):
+                for entity in entStack:
+                    if x >= w or y >= h:
                         warn = True
 
         if warn:
@@ -2471,12 +2473,12 @@ class RoomSelector(QWidget):
         mainWindow.editor.resizeEvent(QResizeEvent(mainWindow.editor.size(), mainWindow.editor.size()))
 
         # Spawn those entities
-        for y in enumerate(self.selectedRoom().roomSpawns):
-            for x in enumerate(y[1]):
-                for entity in x[1]:
-                    if x[0] >= w or y[0] >= h: continue
+        for y, row in enumerate(self.selectedRoom().roomSpawns):
+            for x, entStack in enumerate(row):
+                for entity in entStack:
+                    if x >= w or y >= h: continue
 
-                    e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
+                    e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
                     mainWindow.scene.addItem(e)
 
         self.selectedRoom().setToolTip()
@@ -3276,10 +3278,10 @@ class MainWindow(QMainWindow):
             current.clearDoors()
 
             # Spawn those entities
-            for y in enumerate(current.roomSpawns):
-                for x in enumerate(y[1]):
-                    for entity in x[1]:
-                        e = Entity(x[0], y[0], entity[0], entity[1], entity[2], entity[3])
+            for y, row in enumerate(current.roomSpawns):
+                for x, entStack in enumerate(row):
+                    for entity in entStack:
+                        e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
                         self.scene.addItem(e)
 
             # Make the current Room mark for clearer multi-selection
@@ -3444,44 +3446,46 @@ class MainWindow(QMainWindow):
 
         for room in range(rooms):
 
-            # Room Type, Room Variant, Subvariant, Difficulty, Length of Room Name String
+            # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
             roomData = struct.unpack_from('<IIIBH', stb, off)
+            rtype, rvariant, rsubtype, difficulty, nameLen = roomData
             off += 0xF
             # print ("Room Data: {0}".format(roomData))
 
             # Room Name
-            roomName = struct.unpack_from('<{0}s'.format(roomData[4]), stb, off)[0].decode()
-            off += roomData[4]
+            roomName = struct.unpack_from('<{0}s'.format(nameLen), stb, off)[0].decode()
+            off += nameLen
             #print ("Room Name: {0}".format(roomName))
 
             # Weight, width, height, shape, number of doors, number of entities
             entityTable = struct.unpack_from('<fBBBBH', stb, off)
+            rweight, width, height, shape, numDoors, numEnts = entityTable
             off += 0xA
             #print ("Entity Table: {0}".format(entityTable))
 
             doors = []
-            for door in range(entityTable[-2]):
+            for door in range(numDoors):
                 # X, Y, exists
-                d = struct.unpack_from('<hh?', stb, off)
-                doors.append([d[0], d[1], d[2]])
+                doorX, doorY, exists = struct.unpack_from('<hh?', stb, off)
+                doors.append([ doorX, doorY, exists ])
                 off += 5
 
             spawns = [[[] for y in range(26)] for x in range(14)]
-            for entity in range(entityTable[-1]):
+            for entity in range(numEnts):
                 # x, y, number of entities at this position
-                spawnLoc = struct.unpack_from('<hhB', stb, off)
+                ex, ey, stackedEnts = struct.unpack_from('<hhB', stb, off)
                 off += 5
 
-                if spawnLoc[0] < 0 or spawnLoc[1] < 0:
-                    print (spawnLoc[1], spawnLoc[0])
+                if ex < 0 or ex >= width or ey < 0 or ey >= height:
+                    print ('Found entity with out of bounds spawn loc in room %d.%d.%d (%d x %d): %d, %d' % (rtype, rvariant, rsubtype, width, height, ex, ey))
 
-                for spawn in range(spawnLoc[2]):
+                for spawn in range(stackedEnts):
                     #  type, variant, subtype, weight
-                    t = struct.unpack_from('<HHHf', stb, off)
-                    spawns[spawnLoc[1]][spawnLoc[0]].append([t[0], t[1], t[2], t[3]])
+                    etype, evariant, esubtype, eweight = struct.unpack_from('<HHHf', stb, off)
+                    spawns[ey][ex].append([ etype, evariant, esubtype, eweight ])
                     off += 0xA
 
-            r = Room(roomName, doors, spawns, roomData[0], roomData[1], roomData[2], roomData[3], entityTable[0], entityTable[1], entityTable[2], entityTable[3])
+            r = Room(roomName, doors, spawns, rtype, rvariant, rsubtype, difficulty, rweight, width, height, shape)
             ret.append(r)
 
         # Update recent files
