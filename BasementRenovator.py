@@ -23,8 +23,6 @@
 #		Clear Corner Rooms Grid
 #		Fix icon for win_setup.py
 #		Bosscolours for the alternate boss entities
-#		Fix mod auto-detection
-#		Multi-entity stack improvments so it doesn't crash all the time
 #
 
 
@@ -70,10 +68,10 @@ def findInstallPath():
                 libconfig = os.path.join(basePath, "steamapps/libraryfolders.vdf")
                 if os.path.isfile(libconfig):
                     libLines = list(open(libconfig, 'r'))
-                    matcher = re.compile(r'"\d"')
-                    installDirs = map(lambda parts: os.path.normpath(parts[1].strip('"')),
-                                        filter(lambda parts: matcher.match(parts[0]),
-                                            map(lambda line: line.split(), libLines)))
+                    matcher = re.compile(r'"\d+"\s*"(.*?)"')
+                    installDirs = map(lambda res: os.path.normpath(res.group(1)),
+                                        filter(lambda res: res,
+                                            map(lambda line: matcher.search(line), libLines)))
                     for root in installDirs:
                         installPath = os.path.join(root, 'steamapps/common', 'The Binding of Isaac Rebirth')
                         if QFile.exists(installPath):
@@ -2145,24 +2143,6 @@ class RoomSelector(QWidget):
 
         menu = QMenu(self.list)
 
-        # Size Changing Menu
-        size = menu.addMenu('Size')
-
-        q = QImage()
-        q.load('resources/UI/ShapeIcons.png')
-
-        for sizeName in range(1, 13):
-            i = QIcon(QPixmap.fromImage(q.copy((sizeName - 1) * 16, 0, 16, 16)))
-
-            s = size.addAction(i, str(sizeName))
-            if self.selectedRoom().roomShape == sizeName:
-                s.setCheckable(True)
-                s.setChecked(True)
-
-        size.triggered.connect(self.changeSize)
-
-        menu.addSeparator()
-
         # Type
         Type = QWidgetAction(menu)
         c = QComboBox()
@@ -2174,9 +2154,6 @@ class RoomSelector(QWidget):
             "Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"
         ]
 
-        #if "00." not in mainWindow.path:
-        #	types=["Null Room", "Normal Room"]
-
         q = QImage()
         q.load('resources/UI/RoomIcons.png')
 
@@ -2186,44 +2163,6 @@ class RoomSelector(QWidget):
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
         menu.addAction(Type)
-
-        # Difficulty
-        diff = menu.addMenu('Difficulty')
-
-        for d in [0, 1, 2, 5, 10]:
-            m = diff.addAction('{0}'.format(d))
-
-            if self.selectedRoom().roomDifficulty == d:
-                m.setCheckable(True)
-                m.setChecked(True)
-
-        diff.triggered.connect(self.changeDifficulty)
-
-        # Weight (old)
-        '''
-        weight = menu.addMenu('Weight')
-        for w in [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 1000.0]:
-            m = weight.addAction('{0}'.format(w))
-
-            if self.selectedRoom().roomWeight == w:
-                m.setCheckable(True)
-                m.setChecked(True)
-
-        weight.triggered.connect(self.changeWeight)
-        '''
-
-        menu.addSeparator()
-
-        # Weight (new)
-        weight = QWidgetAction(menu)
-        s = QDoubleSpinBox()
-        s.setPrefix("Weight - ")
-
-        s.setValue(self.selectedRoom().roomWeight)
-
-        weight.setDefaultWidget(s)
-        s.valueChanged.connect(self.changeWeight)
-        menu.addAction(weight)
 
         # Variant
         Variant = QWidgetAction(menu)
@@ -2237,6 +2176,31 @@ class RoomSelector(QWidget):
         s.valueChanged.connect(self.changeVariant)
         menu.addAction(Variant)
 
+        menu.addSeparator()
+
+        # Difficulty
+        Difficulty = QWidgetAction(menu)
+        dv = QSpinBox()
+        dv.setRange(0, 15)
+        dv.setPrefix("Difficulty - ")
+
+        dv.setValue(self.selectedRoom().roomDifficulty)
+
+        Difficulty.setDefaultWidget(dv)
+        dv.valueChanged.connect(self.changeDifficulty)
+        menu.addAction(Difficulty)
+
+        # Weight
+        weight = QWidgetAction(menu)
+        s = QDoubleSpinBox()
+        s.setPrefix("Weight - ")
+
+        s.setValue(self.selectedRoom().roomWeight)
+
+        weight.setDefaultWidget(s)
+        s.valueChanged.connect(self.changeWeight)
+        menu.addAction(weight)
+
         # SubVariant
         Subvariant = QWidgetAction(menu)
         sv = QSpinBox()
@@ -2248,6 +2212,22 @@ class RoomSelector(QWidget):
         Subvariant.setDefaultWidget(sv)
         sv.valueChanged.connect(self.changeSubvariant)
         menu.addAction(Subvariant)
+
+        menu.addSeparator()
+
+        # Room shape
+        Shape = QWidgetAction(menu)
+        c = QComboBox()
+
+        q = QImage()
+        q.load('resources/UI/ShapeIcons.png')
+
+        for shapeName in range(1, 13):
+            c.addItem(QIcon(QPixmap.fromImage(q.copy((shapeName - 1) * 16, 0, 16, 16))), str(shapeName))
+        c.setCurrentIndex(self.selectedRoom().roomShape - 1)
+        c.currentIndexChanged.connect(self.changeSize)
+        Shape.setDefaultWidget(c)
+        menu.addAction(Shape)
 
         # End it
         menu.exec_(self.list.mapToGlobal(pos))
@@ -2420,10 +2400,10 @@ class RoomSelector(QWidget):
         self.changeFilter()
 
     #@pyqtSlot(QAction)
-    def changeSize(self, action):
+    def changeSize(self, shapeIdx):
 
         # Set the Size - gotta lotta shit to do here
-        s = int(action.text())
+        s = shapeIdx + 1
 
         w = 26
         if s in [1, 2, 3, 4, 5]:
@@ -2443,9 +2423,8 @@ class RoomSelector(QWidget):
 
         for y, row in enumerate(self.selectedRoom().roomSpawns):
             for x, entStack in enumerate(row):
-                for entity in entStack:
-                    if x >= w or y >= h:
-                        warn = True
+                if (x >= w or y >= h) and len(entStack) > 0:
+                    warn = True
 
         if warn:
             msgBox = QMessageBox(
@@ -2514,10 +2493,9 @@ class RoomSelector(QWidget):
         mainWindow.scene.update()
 
     #@pyqtSlot(QAction)
-    def changeDifficulty(self, action):
+    def changeDifficulty(self, var):
         for r in self.selectedRooms():
-        #self.selectedRoom().roomDifficulty = int(action.text())
-            r.setDifficulty(int(action.text()))
+            r.setDifficulty(var)
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
@@ -2647,11 +2625,9 @@ class RoomSelector(QWidget):
 
     def exportRoom(self):
 
-        dialogDir = findModsPath()
-
-        recent = settings.value("RecentFiles", [])
-        if len(recent) > 1:
-            dialogDir = recent[1]
+        dialogDir = mainWindow.path
+        if dialogDir == "":
+            dialogDir = findModsPath()
 
         target, match = QFileDialog.getSaveFileName(self, 'Select a new name or an existing STB', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
         mainWindow.restoreEditMenu()
@@ -2915,8 +2891,6 @@ class EntityPalette(QWidget):
 
             self.tabs.addTab(listView, group)
 
-        return
-
     def currentSelectedObject(self):
         """Returns the currently selected object reference, for painting purposes."""
 
@@ -3101,8 +3075,8 @@ class MainWindow(QMainWindow):
         f.addSeparator()
         self.fg = f.addAction('Take Screenshot...', self.screenshot, QKeySequence("Ctrl+Alt+S"))
         f.addSeparator()
-        self.fh = f.addAction('Set Resources Path',     self.setDefaultResourcesPath, QKeySequence("Ctrl+Shift+P"))
-        self.fi = f.addAction('Reset Resources Path',   self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
+        self.fh = f.addAction('Set Resources Path',   self.setDefaultResourcesPath, QKeySequence("Ctrl+Shift+P"))
+        self.fi = f.addAction('Reset Resources Path', self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
         f.addSeparator()
         self.fl = f.addAction('Autogenerate mod content (discouraged)', self.toggleModAutogen)
         self.fl.setCheckable(True)
@@ -3217,8 +3191,8 @@ class MainWindow(QMainWindow):
         self.dirty = False
 
     def storeEntityList(self, room=None):
-        if not room:
-            room = self.roomList.selectedRoom()
+        room = room or self.roomList.selectedRoom()
+        if not room: return
 
         eList = self.scene.items()
 
@@ -3363,7 +3337,7 @@ class MainWindow(QMainWindow):
             roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
             if not QFile.exists(roomPath):
                 QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the resources path is set correctly (see Edit menu) and that the proper STB file is present in the rooms directory.")
-            return
+                return
 
         self.openWrapper(roomPath)
 
@@ -3372,17 +3346,23 @@ class MainWindow(QMainWindow):
 
         startPath = ""
 
-        # Get the mods folder if you can, no sense looking in rooms for explicit open
         settings = QSettings('settings.ini', QSettings.IniFormat)
-        stagePath = findModsPath()
-        if os.path.isdir(stagePath):
-            startPath = stagePath
 
         # Get the folder containing the last open file if you can
-            recent = settings.value("RecentFiles", [])
-        if len(recent):
-            lastPath, file = os.path.split(recent[0])
-            startPath = lastPath
+        # and it's not a default stage
+        stagePath = os.path.join(settings.value("ResourceFolder", ''), 'rooms')
+        recent = settings.value("RecentFiles", [])
+        for recPath in recent:
+            lastPath, file = os.path.split(recPath)
+            if lastPath != stagePath:
+                startPath = lastPath
+                break
+
+        # Get the mods folder if you can, no sense looking in rooms for explicit open
+        if startPath == "":
+            modPath = findModsPath()
+            if os.path.isdir(modPath):
+                startPath = modPath
 
         target = QFileDialog.getOpenFileName(
             self, 'Open Map', os.path.expanduser(startPath), 'Stage Bundle (*.stb)')
@@ -3623,7 +3603,9 @@ class MainWindow(QMainWindow):
 
         # Auto-tests by adding the room to basement.
         modPath = findModsPath()
-        if modPath == "": return
+        if modPath == "":
+            QMessageBox.warning(self, "Error", "The mods folder could not be found. Please reconfigure in settings.ini")
+            return
 
         modPath = self.makeTestMod()
 
@@ -3727,16 +3709,21 @@ class MainWindow(QMainWindow):
             return
 
         modPath = findModsPath()
-        if modPath == "": return
+        if modPath == "":
+            QMessageBox.warning(self, "Error", "The mods folder could not be found. Please reconfigure in settings.ini")
+            return
 
         resourcePath = self.findResourcePath()
-        if resourcePath == "": return
+        if resourcePath == "":
+            QMessageBox.warning(self, "Error", "The resources folder could not be found. Please try reselecting it.")
+            return
 
         roomPath = os.path.join(resourcePath, "rooms", "00.special rooms.stb")
 
         # Parse the special rooms, replace the spawns
         if not QFile.exists(roomPath):
-            QMessageBox.warning(self, "Error", "You seem to be missing 00.special rooms.stb from resources. Please unpack your resource files.")
+            QMessageBox.warning(self, "Error", "Missing 00.special rooms.stb from resources. Please unpack your resource files.")
+            return
 
         foundYou = False
         rooms = self.open(roomPath, False)
@@ -3747,6 +3734,7 @@ class MainWindow(QMainWindow):
                 room.roomShape  = testRoom.roomShape
                 room.roomSpawns = testRoom.roomSpawns
                 foundYou = True
+                break
 
         if not foundYou:
             QMessageBox.warning(self, "Error", "00.special rooms.stb has been tampered with, and is no longer a valid STB file.")
@@ -3772,7 +3760,7 @@ class MainWindow(QMainWindow):
 
         # Resave the file
         #self.save(rooms, os.path.join(resourcesPath, "rooms", "00.special rooms.stb"))
-        self.save(rooms, os.path.join(modPath, "00.special rooms.stb"))
+        self.save(rooms, path)
 
         # Launch Isaac
         installPath = findInstallPath()
@@ -3874,10 +3862,17 @@ class MainWindow(QMainWindow):
         if not room: return
 
         installPath = findInstallPath()
-        if len(installPath) == 0: return
+        if len(installPath) == 0:
+            QMessageBox.warning(self, "Error", "The install folder could not be found. Please reconfigure in settings.ini")
+            return
 
-        testfile = "br_roomtest.xml"
-        path = os.path.join(installPath, testfile)
+        exePath = self.findExecutablePath()
+        if not QFile.exists(exePath):
+            QMessageBox.warning(self, "Error", "The game executable could not be found in your install path! You may have the wrong directory, reconfigure in settings.ini")
+            return
+
+        testfile = "instapreview.xml"
+        path = os.path.abspath(os.path.join('./resources', testfile))
         self.storeEntityList(room)
 
         out = open(path, 'w')
@@ -3938,18 +3933,16 @@ class MainWindow(QMainWindow):
 
         out.write('</room>\n')
 
-        exePath = self.findExecutablePath()
-
         # how to do it in rebirth/anti
         #subprocess.Popen([exePath, "-console",
-        #                 "-room", testfile,
+        #                 "-room", path,
         #                 "-floorType", str(floorInfo[1]),
         #                 "-floorAlt", str(floorInfo[2])],
         #    cwd = exePath
         #)
 
         subprocess.Popen([exePath,
-                        "--load-room=%s" % testfile,
+                        "--load-room=%s" % path,
                         "--set-stage=%d" % floorInfo[1],
                         "--set-stage-type=%d" % floorInfo[2]],
             cwd = installPath
@@ -4111,7 +4104,7 @@ if __name__ == '__main__':
     # XML Globals
     entityXML = getEntityXML()
     if settings.value('DisableMods') != '1':
-        loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder') or '')
+        loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder', ''))
 
     mainWindow = MainWindow()
     recent = settings.value("RecentFiles", [])
