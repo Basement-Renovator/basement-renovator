@@ -329,7 +329,8 @@ def loadFromMod(modPath, name, entRoot):
                 elif v == '0':
                     entXML = entRoot.find("entity[@id='%s'][@subtype='%s']" % (i, s))
             if not entXML:
-                print('Loading invalid entity: ' + str(en.attrib))
+                print('Loading invalid entity (no entry in entities2 xml): ' + str(en.attrib))
+                en.set('Invalid', '1')
 
         # Write the modded entity to the entityXML temporarily for runtime
         if not en.get('Group'):
@@ -339,7 +340,7 @@ def loadFromMod(modPath, name, entRoot):
         en.set("Subtype", s)
         en.set("Variant", v)
 
-        en.set('BaseHP', entXML and entXML.get('baseHP') or en.get('BaseHP') or '0')
+        en.set('BaseHP', entXML and entXML.get('baseHP') or en.get('BaseHP'))
 
         return en
 
@@ -847,19 +848,23 @@ class RoomEditorWidget(QGraphicsView):
         x = int(x / 26)
         y = int(y / 26)
 
-        x = min(max(x, 0), self.scene().roomWidth - 1)
-        y = min(max(y, 0), self.scene().roomHeight - 1)
+        xmax, ymax = self.scene().roomWidth, self.scene().roomHeight
 
-        # Don't stack multiple grid entities
+        # TODO fix for weird rooms and out of bounds
+
+        x = min(max(x, 0), xmax - 1)
+        y = min(max(y, 0), ymax - 1)
+
         for i in self.scene().items():
             if isinstance(i, Entity):
-                if i.entity['X'] == x and i.entity['Y'] == y:
+                if i.entity.x == x and i.entity.y == y:
                     if i.stackDepth == EntityStack.MAX_STACK_DEPTH:
                         return
 
                     i.hideWeightPopup()
 
-                    if int(i.entity['Type']) > 999 and int(self.objectToPaint.ID) > 999:
+                    # Don't stack multiple grid entities
+                    if int(i.entity.Type) > 999 and int(self.objectToPaint.ID) > 999:
                         return
 
         # Make sure we're not spawning oodles
@@ -967,7 +972,7 @@ class RoomEditorWidget(QGraphicsView):
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(8, 30, "Difficulty: {1}, Weight: {2}, Subvariant: {0}".format(room.roomSubvariant, room.roomDifficulty, room.roomWeight))
+            painter.drawText(8, 30, f"Difficulty: {room.roomDifficulty}, Weight: {room.roomWeight}, Subtype: {room.roomSubvariant}")
 
         # Display the currently selected entity in a text overlay
         selectedEntities = self.scene().selectedItems()
@@ -978,19 +983,20 @@ class RoomEditorWidget(QGraphicsView):
 
             # Entity Icon
             i = QIcon()
-            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity["pixmap"])
+            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
 
             # Top Text
             font = painter.font()
             font.setPixelSize(13)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 2, 200, 16, Qt.AlignRight | Qt.AlignBottom, "{1}.{2}.{3} - {0}".format(e.entity["name"], e.entity["Type"], e.entity["Variant"], e.entity["Subtype"]) )
+            painter.drawText(r.right() - 34 - 400, 2, 400, 16, Qt.AlignRight | Qt.AlignBottom,
+                                f'{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.name}')
 
             # Bottom Text
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, "Base HP : {0}".format(e.entity["baseHP"]) )
+            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, f"Base HP : {e.entity.baseHP}")
 
         elif len(selectedEntities) > 1:
             e = selectedEntities[0]
@@ -999,19 +1005,19 @@ class RoomEditorWidget(QGraphicsView):
             # Case Two: more than one type of entity
             # Entity Icon
             i = QIcon()
-            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity["pixmap"])
+            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
 
             # Top Text
             font = painter.font()
             font.setPixelSize(13)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 2, 200, 16, Qt.AlignRight | Qt.AlignBottom, "{0} Entities Selected".format(len(selectedEntities)) )
+            painter.drawText(r.right() - 34 - 200, 2, 200, 16, Qt.AlignRight | Qt.AlignBottom, f"{len(selectedEntities)} Entities Selected" )
 
             # Bottom Text
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, ", ".join(set([x.entity['name'] for x in selectedEntities])) )
+            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, ", ".join(set([x.entity.name for x in selectedEntities])) )
 
             pass
 
@@ -1027,7 +1033,7 @@ class RoomEditorWidget(QGraphicsView):
         tiles = [[0 for y in range(26)] for x in range(14)]
         for e in self.scene().items():
             if isinstance(e, Entity):
-                tiles[e.entity['Y']][e.entity['X']] += 1
+                tiles[e.entity.y][e.entity.x] += 1
 
         if not self.scene().bitText:
             painter.setPen(Qt.white)
@@ -1059,67 +1065,56 @@ class RoomEditorWidget(QGraphicsView):
 class Entity(QGraphicsItem):
     SNAP_TO = 26
 
-    def __init__(self, x, y, mytype, variant, subtype, weight):
-        QGraphicsItem.__init__(self)
-        self.setFlags(
-            self.ItemSendsGeometryChanges |
-            self.ItemIsSelectable |
-            self.ItemIsMovable
-        )
+    class Info:
+        def __init__(self, x, y, t, v, s, weight, changeAtStart=True):
+            # Supplied entity info
+            self.x = x
+            self.y = y
+            self.weight = weight
 
-        self.stackDepth = 1
-        self.popup = None
-        mainWindow.scene.selectionChanged.connect(self.hideWeightPopup)
+            if changeAtStart:
+                self.changeTo(t, v, s)
 
-        # Supplied entity info
-        self.entity = {}
-        self.entity['X'] = x
-        self.entity['Y'] = y
-        self.entity['Type'] = mytype
-        self.entity['Variant'] = variant
-        self.entity['Subtype'] = subtype
-        self.entity['Weight'] = weight
+        def changeTo(self, t, v, s):
+            self.Type = t
+            self.Variant = v
+            self.Subtype = s
 
-        # Derived Entity Info
-        self.entity['name'] = None
-        self.isGridEnt = False
-        self.entity['baseHP'] = None
-        self.entity['boss'] = None
-        self.entity['champion'] = None
-        self.entity['pixmap'] = None
-        self.entity['known'] = False
-        self.entity['PlaceVisual'] = None
+            # Derived Entity Info
+            self.name = None
+            self.isGridEnt = False
+            self.baseHP = None
+            self.boss = None
+            self.champion = None
+            self.pixmap = None
+            self.known = False
+            self.invalid = False
+            self.placeVisual = None
 
-        self.getEntityInfo(mytype, subtype, variant)
+            self.getEntityInfo(t, v, s)
 
-        self.updatePosition()
-        if self.entity['Type'] < 999:
-            self.setZValue(1)
-        else:
-            self.setZValue(0)
+        def getEntityInfo(self, t, variant, subtype):
 
-        if not hasattr(Entity, 'SELECTION_PEN'):
-            Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
-            Entity.OFFSET_SELECTION_PEN = QPen(Qt.red, 1, Qt.DashLine)
-            Entity.OUT_OF_RANGE_WARNING_IMG = QPixmap('resources/UI/warning.png')
+            en = None
+            try:
+                global entityXML
+                en = entityXML.find(f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']")
+            except:
+                print (f"Entity {t}, Variant {variant}, Subtype {subtype} expected, but was not found")
+                en = None
 
-        self.setAcceptHoverEvents(True)
+            if en == None:
+                self.pixmap = QPixmap("resources/Entities/questionmark.png")
+                return
 
-    def getEntityInfo(self, t, subtype, variant):
-
-        # Try catch so I can not crash BR so often
-        try:
-            global entityXML
-            en = entityXML.find("entity[@ID='{0}'][@Subtype='{1}'][@Variant='{2}']".format(t, subtype, variant))
-
-            self.entity['name'] = en.get('Name')
+            self.name = en.get('Name')
             self.isGridEnt = en.get('Kind') == 'Stage' and \
                             en.get('Group') in [ 'Grid', 'Poop', 'Fireplaces', 'Other', 'Props', 'Special Exits', 'Broken' ]
 
-            self.entity['baseHP'] = en.get('BaseHP')
-            self.entity['boss'] = en.get('Boss')
-            self.entity['champion'] = en.get('Champion')
-            self.entity['PlaceVisual'] = en.get('PlaceVisual')
+            self.baseHP = en.get('BaseHP')
+            self.boss = en.get('Boss')
+            self.champion = en.get('Champion')
+            self.placeVisual = en.get('PlaceVisual')
 
             if t == 5 and variant == 100:
                 i = QImage()
@@ -1133,11 +1128,10 @@ class Entity(QGraphicsItem):
                 p.drawImage(0, 0, d)
                 p.end()
 
-                self.entity['pixmap'] = QPixmap.fromImage(i)
+                self.pixmap = QPixmap.fromImage(i)
 
             else:
-                self.entity['pixmap'] = QPixmap()
-                self.entity['pixmap'].load(en.get('Image'))
+                self.pixmap = QPixmap(en.get('Image'))
 
             def checkNum(s):
                 try:
@@ -1146,31 +1140,62 @@ class Entity(QGraphicsItem):
                 except ValueError:
                     return False
 
-            if self.entity['PlaceVisual']:
-                parts = list(map(lambda x: x.strip(), self.entity['PlaceVisual'].split(',')))
+            if self.placeVisual:
+                parts = list(map(lambda x: x.strip(), self.placeVisual.split(',')))
                 if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
-                    self.entity['PlaceVisual'] = (float(parts[0]), float(parts[1]))
+                    self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
-                    self.entity['PlaceVisual'] = parts[0]
+                    self.placeVisual = parts[0]
 
-            self.entity['known'] = True
+            self.invalid = en.get('Invalid') == '1'
+            self.known = True
 
-        except:
-            print ("Entity {0}, Subtype {1}, Variant {2} expected, but was not found".format(t, subtype, variant))
-            self.entity['pixmap'] = QPixmap()
-            self.entity['pixmap'].load("resources/Entities/questionmark.png")
 
+    def __init__(self, x, y, mytype, variant, subtype, weight):
+        QGraphicsItem.__init__(self)
+        self.setFlags(
+            self.ItemSendsGeometryChanges |
+            self.ItemIsSelectable |
+            self.ItemIsMovable
+        )
+
+        self.stackDepth = 1
+        self.popup = None
+        mainWindow.scene.selectionChanged.connect(self.hideWeightPopup)
+
+        self.entity = Entity.Info(x, y, mytype, variant, subtype, weight)
+        self.updateTooltip()
+
+        self.updatePosition()
+        if self.entity.Type < 999:
+            self.setZValue(1)
+        else:
+            self.setZValue(0)
+
+        if not hasattr(Entity, 'SELECTION_PEN'):
+            Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
+            Entity.OFFSET_SELECTION_PEN = QPen(Qt.red, 1, Qt.DashLine)
+            Entity.INVALID_ERROR_IMG = QPixmap('resources/UI/ent-error.png')
+            Entity.OUT_OF_RANGE_WARNING_IMG = QPixmap('resources/UI/ent-warning.png')
+
+        self.setAcceptHoverEvents(True)
+
+    def setData(self, t, v, s):
+        self.entity.changeTo(t, v, s)
         self.updateTooltip()
 
     def updateTooltip(self):
-        tooltipStr = "{name} @ {X} x {Y} - {Type}.{Variant}.{Subtype}; HP: {baseHP}".format(**self.entity)
+        e = self.entity
+        tooltipStr = f"{e.name} @ {e.x} x {e.x} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
         
-        if self.entity['Type'] >= 1000 and not self.isGridEnt:
+        if e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += '\nType is outside the valid range of 0 - 999! This will not load properly in-game!'
-        if self.entity['Variant'] >= 4096:
+        if e.Variant >= 4096:
             tooltipStr += '\nVariant is outside the valid range of 0 - 4095!'
-        if self.entity['Subtype'] >= 255:
+        if e.Subtype >= 255:
             tooltipStr += '\nSubtype is outside the valid range of 0 - 255!'
+        if e.invalid:
+            tooltipStr += '\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!'
 
         self.setToolTip(tooltipStr)
 
@@ -1181,10 +1206,6 @@ class Entity(QGraphicsItem):
             currentX, currentY = self.x(), self.y()
 
             x, y = value.x(), value.y()
-
-            # Debug code
-            # if 'eep' in self.entity['name']:
-            # 	print (self.entity['X'], self.entity['Y'], x, y)
 
             try:
                 w = self.scene().initialRoomWidth
@@ -1215,9 +1236,6 @@ class Entity(QGraphicsItem):
             self.getStack()
             if self.popup: self.popup.update(self.stack)
 
-            # Debug code
-            # if 'eep' in self.entity['name']:
-            # 	print (self.entity['X'], self.entity['Y'], x, y)
 
             return value
 
@@ -1225,13 +1243,13 @@ class Entity(QGraphicsItem):
 
     def boundingRect(self):
 
-        #if self.entity['pixmap']:
-        #	return QRectF(self.entity['pixmap'].rect())
+        #if self.entity.pixmap:
+        #	return QRectF(self.entity.pixmap.rect())
         #else:
         return QRectF(0.0, 0.0, 26.0, 26.0)
 
     def updatePosition(self):
-        self.setPos(self.entity['X'] * 26, self.entity['Y'] * 26)
+        self.setPos(self.entity.x * 26, self.entity.y * 26)
 
     def paint(self, painter, option, widget):
 
@@ -1241,17 +1259,17 @@ class Entity(QGraphicsItem):
         painter.setBrush(Qt.Dense5Pattern)
         painter.setPen(QPen(Qt.white))
 
-        if self.entity['pixmap']:
-            w, h = self.entity['pixmap'].width(), self.entity['pixmap'].height()
+        if self.entity.pixmap:
+            w, h = self.entity.pixmap.width(), self.entity.pixmap.height()
             xc, yc = 0, 0
 
-            typ, var, sub = self.entity['Type'], self.entity['Variant'], self.entity['Subtype']
+            typ, var, sub = self.entity.Type, self.entity.Variant, self.entity.Subtype
 
             def WallSnap():
                 rw = self.scene().roomWidth
                 rh = self.scene().roomHeight
-                ex = self.entity['X']
-                ey = self.entity['Y']
+                ex = self.entity.x
+                ey = self.entity.y
 
                 shape = self.scene().roomShape
                 if shape == 9:
@@ -1302,7 +1320,7 @@ class Entity(QGraphicsItem):
                 'WallSnap': WallSnap
             }
 
-            recenter = self.entity.get('PlaceVisual', None)
+            recenter = self.entity.placeVisual
             if recenter:
                 if isinstance(recenter, str):
                     recenter = customPlaceVisuals.get(recenter, None)
@@ -1331,9 +1349,9 @@ class Entity(QGraphicsItem):
 
             # Curse room special case
             if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
-                self.entity['pixmap'] = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
+                self.entity.pixmap = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
 
-            painter.drawPixmap(x, y, self.entity['pixmap'])
+            painter.drawPixmap(x, y, self.entity.pixmap)
 
             # if the offset is high enough, draw an indicator of the actual position
             if abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5:
@@ -1352,15 +1370,22 @@ class Entity(QGraphicsItem):
                 painter.setPen(Qt.green)
                 drawGridBorders()
 
-        if not self.entity['known']:
+        if not self.entity.known:
             painter.setFont(QFont("Arial", 6))
 
             painter.drawText(2, 26, "%d.%d.%d" % (typ, var, sub))
         
+        warningIcon = None
+        # applies to entities that do not have a corresponding entities2 entry
+        if self.entity.invalid:
+            warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
-        if var >= 4096 or sub >= 256 or (typ >= 1000 and not self.isGridEnt):
-            painter.drawPixmap(18, -8, Entity.OUT_OF_RANGE_WARNING_IMG)
+        elif var >= 4096 or sub >= 256 or (typ >= 1000 and not self.entity.isGridEnt):
+            warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
+        
+        if warningIcon:
+            painter.drawPixmap(18, -8, warningIcon)
 
     def remove(self):
         if self.popup:
@@ -1462,7 +1487,7 @@ class EntityStack(QGraphicsItem):
         if activeSpinners > 1:
             for i, item in enumerate(items):
                 spinner = self.spinners[i]
-                spinner.widget().setValue(item.entity["Weight"])
+                spinner.widget().setValue(item.entity.weight)
                 spinner.setVisible(True)
         else:
             self.setVisible(False)
@@ -1474,7 +1499,7 @@ class EntityStack(QGraphicsItem):
 
     def weightChanged(self, idx):
         if idx < self.activeSpinners:
-            self.items[idx].entity['Weight'] = self.spinners[idx].widget().value()
+            self.items[idx].entity.weight = self.spinners[idx].widget().value()
 
     def paint(self, painter, option, widget):
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -1498,12 +1523,12 @@ class EntityStack(QGraphicsItem):
 
         w = 0
         for i, item in enumerate(self.items):
-            pix = item.entity['pixmap']
+            pix = item.entity.pixmap
             self.spinners[i].setPos(w-8, r.bottom()-26)
             w += 4
             painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
 
-            # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity['Weight']))
+            # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity.weight))
             w += pix.width()
 
     def boundingRect(self):
@@ -1513,7 +1538,7 @@ class EntityStack(QGraphicsItem):
         # Calculate the combined size
         for item in self.items:
             dx, dy = 26, 26
-            pix = item.entity['pixmap']
+            pix = item.entity.pixmap
             if pix:
                 dx, dy = pix.rect().width(), pix.rect().height()
             width = width + dx
@@ -2980,11 +3005,105 @@ class EntityList(QListView):
                         self.setRowHidden(row, False)
 
 
+class ReplaceDialog(QDialog):
+
+    class EntSpinners(QWidget):
+
+        def __init__(self):
+            super(QWidget, self).__init__()
+            layout = QFormLayout()
+
+            self.type = QSpinBox()
+            self.type.setRange(1, 2**31-1)
+            self.variant = QSpinBox()
+            self.variant.setRange(-1, 2**31-1)
+            self.subtype = QSpinBox()
+            self.subtype.setRange(-1, 2**8-1)
+
+            layout.addRow('&Type:', self.type)
+            layout.addRow('&Variant:', self.variant)
+            layout.addRow('&Subtype:', self.subtype)
+
+            self.entity = Entity.Info(0,0,0,0,0,0,changeAtStart=False)
+
+            self.type.valueChanged.connect(self.resetEnt)
+            self.variant.valueChanged.connect(self.resetEnt)
+            self.subtype.valueChanged.connect(self.resetEnt)
+
+            self.setLayout(layout)
+
+        def getEnt(self):
+            return (self.type.value(),
+                    self.variant.value(),
+                    self.subtype.value())
+
+        def setEnt(self, t, v, s):
+            self.type.setValue(t)
+            self.variant.setValue(v)
+            self.subtype.setValue(s)
+            self.entity.changeTo(t, v, s)
+
+        valueChanged = pyqtSignal()
+
+        def resetEnt(self):
+            self.entity.changeTo(*self.getEnt())
+            self.valueChanged.emit()
+
+    def __init__(self):
+        super(QDialog, self).__init__()
+        self.setWindowTitle("Replace Entities")
+    
+        layout = QVBoxLayout()
+    
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+    
+        cols = QHBoxLayout()
+
+        def genEnt(name):
+            spinners = ReplaceDialog.EntSpinners()
+            info = QVBoxLayout()
+            info.addWidget(QLabel(name))
+            icon = QLabel()
+            spinners.valueChanged.connect(lambda: icon.setPixmap(spinners.entity.pixmap))
+            info.addWidget(icon)
+            infoWidget = QWidget()
+            infoWidget.setLayout(info)
+            return infoWidget, spinners
+
+        fromInfo, self.fromEnt = genEnt("From")
+        toInfo, self.toEnt = genEnt("To")
+
+        selection = mainWindow.scene.selectedItems()
+        if len(selection) > 0:
+            selection = selection[0].entity
+            self.fromEnt.setEnt(int(selection.Type), int(selection.Variant), int(selection.Subtype))
+        else:
+            self.fromEnt.resetEnt()
+    
+        paint = mainWindow.editor.objectToPaint
+        if paint:
+            self.toEnt.setEnt(int(paint.ID), int(paint.variant), int(paint.subtype))
+        else:
+            self.toEnt.resetEnt()
+
+        cols.addWidget(fromInfo)
+        cols.addWidget(self.fromEnt)
+        cols.addWidget(toInfo)
+        cols.addWidget(self.toEnt)
+
+        layout.addLayout(cols)
+        layout.addWidget(buttonBox)
+        self.setLayout(layout)
+
+
 class HooksDialog(QDialog):
 
     class HookItem(QListWidgetItem):
         def __init__(self, text, setting, tooltip):
             super(QListWidgetItem, self).__init__(text)
+            self.setWindowTitle("Set Hooks")
             self.setToolTip(tooltip)
             self.setting = setting
 
@@ -3209,6 +3328,8 @@ class MainWindow(QMainWindow):
         self.ee = self.e.addAction('Deselect',                    self.deSelect, QKeySequence("Ctrl+D"))
         self.e.addSeparator()
         self.ef = self.e.addAction('Clear Filters',               self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
+        self.e.addSeparator()
+        self.eg = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
 
         v = mb.addMenu('View')
         self.wa = v.addAction('Hide Grid',                        self.switchGrid, QKeySequence("Ctrl+G"))
@@ -3308,7 +3429,7 @@ class MainWindow(QMainWindow):
                 doors.append(e.doorItem)
 
             elif isinstance(e, Entity):
-                spawns[e.entity['Y']][e.entity['X']].append([e.entity['Type'], e.entity['Variant'], e.entity['Subtype'], e.entity['Weight']])
+                spawns[e.entity.y][e.entity.x].append([e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight])
 
         room.roomSpawns = spawns
         room.roomDoors = doors
@@ -3337,33 +3458,33 @@ class MainWindow(QMainWindow):
     #@pyqtSlot(Room, Room)
     def handleSelectedRoomChanged(self, current, prev):
 
-        if current:
+        if not current: return
 
-            # Encode the current room, just in case there are changes
-            if prev:
-                self.storeEntityList(prev)
+        # Encode the current room, just in case there are changes
+        if prev:
+            self.storeEntityList(prev)
 
-                # Clear the current room mark
-                prev.setData(100, False)
+            # Clear the current room mark
+            prev.setData(100, False)
 
-            # Clear the room and reset the size
-            self.scene.clear()
-            self.scene.newRoomSize(current.roomWidth, current.roomHeight, current.roomShape)
+        # Clear the room and reset the size
+        self.scene.clear()
+        self.scene.newRoomSize(current.roomWidth, current.roomHeight, current.roomShape)
 
-            self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
+        self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
 
-            # Make some doors
-            current.clearDoors()
+        # Make some doors
+        current.clearDoors()
 
-            # Spawn those entities
-            for y, row in enumerate(current.roomSpawns):
-                for x, entStack in enumerate(row):
-                    for entity in entStack:
-                        e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
-                        self.scene.addItem(e)
+        # Spawn those entities
+        for y, row in enumerate(current.roomSpawns):
+            for x, entStack in enumerate(row):
+                for entity in entStack:
+                    e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
+                    self.scene.addItem(e)
 
-            # Make the current Room mark for clearer multi-selection
-            current.setData(100, True)
+        # Make the current Room mark for clearer multi-selection
+        current.setData(100, True)
 
     #@pyqtSlot(EntityItem)
     def handleObjectChanged(self, entity):
@@ -3373,11 +3494,7 @@ class MainWindow(QMainWindow):
     #@pyqtSlot(EntityItem)
     def handleObjectReplaced(self, entity):
         for item in self.scene.selectedItems():
-            item.entity['Type'] = int(entity.ID)
-            item.entity['Variant'] = int(entity.variant)
-            item.entity['Subtype'] = int(entity.subtype)
-
-            item.getEntityInfo(int(entity.ID), int(entity.subtype), int(entity.variant))
+            item.setData(int(entity.ID), int(entity.variant), int(entity.subtype))
             item.update()
 
         self.dirt()
@@ -3622,8 +3739,6 @@ class MainWindow(QMainWindow):
 
         self.storeEntityList()
 
-        stb = open(path, 'wb')
-
         out = struct.pack('<4s', "STB1".encode())
         out += struct.pack('<I', len(rooms))
 
@@ -3648,7 +3763,8 @@ class MainWindow(QMainWindow):
                     for entity in x[1]:
                         out += struct.pack('<HHHf', entity[0], entity[1], entity[2], entity[3])
 
-        stb.write(out)
+        with open(path, 'wb') as stb:
+            stb.write(out)
 
         # used for some of the test functions
         if doHook:
@@ -3662,6 +3778,46 @@ class MainWindow(QMainWindow):
                         subprocess.run([hook, stbPath, '--save'], cwd = path)
                     except Exception as e:
                         print('Save hook failed! Reason:', e)
+
+
+    def replaceEntities(self, replaced, replacement):
+        self.storeEntityList()
+
+        numEnts = 0
+        numRooms = 0
+
+        def checkEq(a, b):
+            return a[0] == b[0] \
+              and (b[1] < 0 or a[1] == b[1]) \
+              and (b[2] < 0 or a[2] == b[2])
+
+        def fixEnt(a, b):
+            a[0] = b[0]
+            if b[1] >= 0: a[1] = b[1]
+            if b[2] >= 0: a[2] = b[2]
+
+        for i in range(self.roomList.list.count()):
+            currRoom = self.roomList.list.item(i)
+
+            n = 0
+            for row in currRoom.roomSpawns:
+                for entStack in row:
+                    for ent in entStack:
+                        if checkEq(ent, replaced):
+                            fixEnt(ent, replacement)
+                            n += 1
+            if n > 0:
+                numRooms += 1
+                numEnts += n
+
+        room = self.roomList.selectedRoom()
+        if room:
+            self.handleSelectedRoomChanged(room, None)
+
+        self.dirt()
+        QMessageBox.information(None, "Replace",
+            numEnts > 0 and f"Replaced {numEnts} entities in {numRooms} rooms"
+                        or "No entities to replace!")
 
     #@pyqtSlot()
     def screenshot(self):
@@ -4052,13 +4208,13 @@ class MainWindow(QMainWindow):
     def copy(self):
         self.clipboard = []
         for item in self.scene.selectedItems():
-            self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
+            self.clipboard.append([item.entity.x, item.entity.y, item.entity.Type, item.entity.Variant, item.entity.Subtype, item.entity.weight])
 
     #@pyqtSlot()
     def cut(self):
         self.clipboard = []
         for item in self.scene.selectedItems():
-            self.clipboard.append([item.entity['X'], item.entity['Y'], item.entity['Type'], item.entity['Variant'], item.entity['Subtype'], item.entity['Weight']])
+            self.clipboard.append([item.entity.x, item.entity.y, item.entity.Type, item.entity.Variant, item.entity.Subtype, item.entity.weight])
             item.remove()
 
     #@pyqtSlot()
@@ -4071,6 +4227,12 @@ class MainWindow(QMainWindow):
             self.scene.addItem(i)
 
         self.dirt()
+
+    def showReplaceDialog(self):
+        replaceDialog = ReplaceDialog()
+        if replaceDialog.exec() != QDialog.Accepted: return
+
+        self.replaceEntities(replaceDialog.fromEnt.getEnt(), replaceDialog.toEnt.getEnt())
 
 # Miscellaneous
 ########################
