@@ -1637,49 +1637,28 @@ class Room(QListWidgetItem):
         self.roomDifficulty = d
         self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
 
-    def makeNewDoors(self):
-        self.roomDoors = []
-
-        ########## SHAPE DEFINITIONS
+    ########## SHAPE DEFINITIONS
         # w x h
         # 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2
         # 9 = DR corner, 10 = DL corner, 11 = UR corner, 12 = UL corner
+    ShapeDoors = {
+        1: [[6, -1, True], [-1, 3, True], [13, 3, True], [6, 7, True]],
+        2: [[-1, 3, True], [13, 3, True]],
+        3: [[6, -1, True], [6, 7, True]],
+        4: [[6, -1, True], [13, 3, True], [-1, 3, True], [13, 10, True], [-1, 10, True], [6, 14, True]],
+        5: [[6, -1, True], [6, 14, True]],
+        6: [[6, -1, True], [-1, 3, True], [6, 7, True], [19, 7, True], [26, 3, True], [19, -1, True]],
+        7: [[-1, 3, True], [26, 3, True]],
+        8: [[6, -1, True], [-1, 3, True], [-1, 10, True], [19, -1, True], [6, 14, True], [19, 14, True], [26, 3, True], [26, 10, True]],
+        9: [[19, -1, True], [26, 3, True], [6, 14, True], [19, 14, True], [12, 3, True], [-1, 10, True], [26, 10, True], [6, 6, True]],
+        10: [[-1, 3, True], [13, 3, True], [6, -1, True], [19, 6, True], [6, 14, True], [19, 14, True], [-1, 10, True], [26, 10, True]],
+        11: [[-1, 3, True], [6, 7, True], [6, -1, True], [12, 10, True], [19, -1, True], [26, 3, True], [19, 14, True], [26, 10, True]],
+        12: [[-1, 3, True], [6, -1, True], [19, -1, True], [13, 10, True], [26, 3, True], [6, 14, True], [-1, 10, True], [19, 7, True]]
+    }
+    DoorSortKey = lambda door: f'{door[0]},{door[1]}'
 
-        if self.roomShape == 1:
-            self.roomDoors = [[6, -1, True], [-1, 3, True], [13, 3, True], [6, 7, True]]
-
-        elif self.roomShape == 2:
-            self.roomDoors = [[-1, 3, True], [13, 3, True]]
-
-        elif self.roomShape == 3:
-            self.roomDoors = [[6, -1, True], [6, 7, True]]
-
-        elif self.roomShape == 4:
-            self.roomDoors = [[6, -1, True], [13, 3, True], [-1, 3, True], [13, 10, True], [-1, 10, True], [6, 14, True]]
-
-        elif self.roomShape == 5:
-            self.roomDoors = [[6, -1, True], [6, 14, True]]
-
-        elif self.roomShape == 6:
-            self.roomDoors = [[6, -1, True], [-1, 3, True], [6, 7, True], [19, 7, True], [26, 3, True], [19, -1, True]]
-
-        elif self.roomShape == 7:
-            self.roomDoors = [[-1, 3, True], [26, 3, True]]
-
-        elif self.roomShape == 8:
-            self.roomDoors = [[6, -1, True], [-1, 3, True], [-1, 10, True], [19, -1, True], [6, 14, True], [19, 14, True], [26, 3, True], [26, 10, True]]
-
-        elif self.roomShape == 9:
-            self.roomDoors = [[19, -1, True], [26, 3, True], [6, 14, True], [19, 14, True], [12, 3, True], [-1, 10, True], [26, 10, True], [6, 6, True]]
-
-        elif self.roomShape == 10:
-            self.roomDoors = [[-1, 3, True], [13, 3, True], [6, -1, True], [19, 6, True], [6, 14, True], [19, 14, True], [-1, 10, True], [26, 10, True]]
-
-        elif self.roomShape == 11:
-            self.roomDoors = [[-1, 3, True], [6, 7, True], [6, -1, True], [12, 10, True], [19, -1, True], [26, 3, True], [19, 14, True], [26, 10, True]]
-
-        elif self.roomShape == 12:
-            self.roomDoors = [[-1, 3, True], [6, -1, True], [19, -1, True], [13, 10, True], [26, 3, True], [6, 14, True], [-1, 10, True], [19, 7, True]]
+    def makeNewDoors(self):
+        self.roomDoors = [ door[:] for door in Room.ShapeDoors.get(self.roomShape, []) ]
 
     def clearDoors(self):
         mainWindow.scene.clearDoors()
@@ -1698,7 +1677,7 @@ class Room(QListWidgetItem):
         return ret
 
     def setToolTip(self):
-        tip = "{4}x{5} - Type: {0}, Variant: {1}, Difficulty: {2}, Weight: {3}, Shape: {6}".format(self.roomType, self.roomVariant, self.roomDifficulty, self.roomWeight, self.roomWidth, self.roomHeight, self.roomShape)
+        tip = f"{self.roomType}.{self.roomVariant}.{self.roomSubvariant} ({self.roomWidth}x{self.roomHeight}) - Difficulty: {self.roomDifficulty}, Weight: {self.roomWeight}, Shape: {self.roomShape}"
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
@@ -3551,12 +3530,26 @@ class MainWindow(QMainWindow):
             off += 0xA
             #print ("Entity Table: {0}".format(entityTable))
 
+            def getRoomPrefix():
+                return f'{rtype}.{rvariant}.{rsubtype} ({width}x{height}, shape {shape})'
+
             doors = []
             for door in range(numDoors):
                 # X, Y, exists
                 doorX, doorY, exists = struct.unpack_from('<hh?', stb, off)
                 doors.append([ doorX, doorY, exists ])
                 off += 5
+
+            def sameDoorLocs(a, b):
+                for ad, bd in zip(a, b):
+                    if ad[0] != bd[0] or ad[1] != bd[1]:
+                        return False
+                return True
+
+            normalDoors = sorted(Room.ShapeDoors[shape], key=Room.DoorSortKey)
+            sortedDoors = sorted(doors, key=Room.DoorSortKey)
+            if len(normalDoors) != numDoors or not sameDoorLocs(normalDoors, sortedDoors):
+                print (f'Invalid doors in room {getRoomPrefix()}: Expected {normalDoors}, Got {sortedDoors}')
 
             spawns = [[[] for y in range(26)] for x in range(14)]
             for entity in range(numEnts):
@@ -3565,7 +3558,7 @@ class MainWindow(QMainWindow):
                 off += 5
 
                 if ex < 0 or ex >= width or ey < 0 or ey >= height:
-                    print ('Found entity with out of bounds spawn loc in room %d.%d.%d (%d x %d): %d, %d' % (rtype, rvariant, rsubtype, width, height, ex, ey))
+                    print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex}, {ey}')
 
                 for spawn in range(stackedEnts):
                     #  type, variant, subtype, weight
