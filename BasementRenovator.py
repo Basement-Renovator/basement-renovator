@@ -1636,7 +1636,6 @@ class Room(QListWidgetItem):
         QListWidgetItem.__init__(self)
 
         self.setData(0x100, name)
-        self.setText("{0} - {1}".format(variant, self.data(0x100)))
 
         self.roomSpawns = spawns
         self.roomDoors = doors
@@ -1680,7 +1679,7 @@ class Room(QListWidgetItem):
         11: [[-1, 3, True], [6, 7, True], [6, -1, True], [12, 10, True], [19, -1, True], [26, 3, True], [19, 14, True], [26, 10, True]],
         12: [[-1, 3, True], [6, -1, True], [19, -1, True], [13, 10, True], [26, 3, True], [6, 14, True], [-1, 10, True], [19, 7, True]]
     }
-    DoorSortKey = lambda door: f'{door[0]},{door[1]}'
+    DoorSortKey = lambda door: (door[0], door[1])
 
     def makeNewDoors(self):
         self.roomDoors = [ door[:] for door in Room.ShapeDoors.get(self.roomShape, []) ]
@@ -1701,8 +1700,12 @@ class Room(QListWidgetItem):
 
         return ret
 
+    def getDesc(rtype, rvariant, rsubtype, width, height, difficulty, weight, shape):
+        return f'{rtype}.{rvariant}.{rsubtype} ({width}x{height}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {shape}'
+
     def setToolTip(self):
-        tip = f"{self.roomType}.{self.roomVariant}.{self.roomSubvariant} ({self.roomWidth}x{self.roomHeight}) - Difficulty: {self.roomDifficulty}, Weight: {self.roomWeight}, Shape: {self.roomShape}"
+        self.setText("{0} - {1}".format(self.roomVariant, self.data(0x100)))
+        tip = Room.getDesc(self.roomType, self.roomVariant, self.roomSubvariant, self.roomWidth, self.roomHeight, self.roomDifficulty, self.roomWeight, self.roomShape)
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
@@ -3309,6 +3312,7 @@ class MainWindow(QMainWindow):
         self.ef = self.e.addAction('Clear Filters',               self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
         self.e.addSeparator()
         self.eg = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
+        self.eg = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs)
 
         v = mb.addMenu('View')
         self.wa = v.addAction('Hide Grid',                        self.switchGrid, QKeySequence("Ctrl+G"))
@@ -3647,9 +3651,6 @@ class MainWindow(QMainWindow):
             off += 0xA
             #print ("Entity Table: {0}".format(entityTable))
 
-            def getRoomPrefix():
-                return f'{rtype}.{rvariant}.{rsubtype} ({width}x{height}, shape {shape})'
-
             doors = []
             for door in range(numDoors):
                 # X, Y, exists
@@ -3662,6 +3663,9 @@ class MainWindow(QMainWindow):
                     if ad[0] != bd[0] or ad[1] != bd[1]:
                         return False
                 return True
+
+            def getRoomPrefix():
+                return Room.getDesc(rtype, rvariant, rsubtype, width, height, difficulty, rweight, shape)
 
             normalDoors = sorted(Room.ShapeDoors[shape], key=Room.DoorSortKey)
             sortedDoors = sorted(doors, key=Room.DoorSortKey)
@@ -3806,11 +3810,35 @@ class MainWindow(QMainWindow):
         room = self.roomList.selectedRoom()
         if room:
             self.handleSelectedRoomChanged(room, None)
+            self.scene.update()
 
         self.dirt()
         QMessageBox.information(None, "Replace",
             numEnts > 0 and f"Replaced {numEnts} entities in {numRooms} rooms"
                         or "No entities to replace!")
+
+    def recomputeRoomIDs(self):
+        roomsByType = {}
+        
+        roomList = self.roomList.list
+        selection = roomList.currentItem()
+        roomList.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
+        rooms = sorted([ roomList.takeItem(roomList.count() - 1) for x in range(roomList.count()) ], key=lambda x: (x.roomType,x.roomVariant))
+
+        for room in rooms:
+            if room.roomType not in roomsByType:
+                roomsByType[room.roomType] = room.roomVariant
+
+        for room in rooms:
+            room.roomVariant = roomsByType[room.roomType]
+            room.setToolTip()
+            roomList.addItem(room)
+
+            roomsByType[room.roomType] += 1
+        self.dirt()
+        roomList.setCurrentItem(selection, QItemSelectionModel.ClearAndSelect)
+        roomList.scrollToItem(selection)
+        self.scene.update()
 
     #@pyqtSlot()
     def screenshot(self):
