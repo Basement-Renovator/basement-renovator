@@ -19,3 +19,8 @@ Did you know that when bulk replacing entities, the "replaced" entity is based o
 ### Recompute Room IDs
 Ever have a room file where the organization has completely gotten away from you and everything is completely out of order? This fixes that by reordering all your rooms and changing their variants to all be next to each other.
 
+### Turn off custom entities
+Sometimes you want BR to open as fast as possible and don't care about mods. For that, set DisableMods to 1 in your settings.ini file in the BR folder.
+
+### Fix libpng warnings
+If you're running BR with a console window open, you may notice some warnings from libpng complaining about formats. This is because of issues with how your custom entities icons are saved. To fix these issues and silence the warning, set FixIconFormat to 1 in the settings.ini. It will turn itself off after BR loads mods once, since it shouldn't have any additional work to do.
