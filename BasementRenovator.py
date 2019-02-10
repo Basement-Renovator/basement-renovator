@@ -50,23 +50,23 @@ def getEntityXML():
 
 def findInstallPath():
     installPath = ''
+    cantFindPath = False
 
     if QFile.exists(settings.value('InstallFolder')):
         installPath = settings.value('InstallFolder')
 
     else:
-        cantFindPath = False
         # Windows path things
         if "Windows" in platform.system():
             basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
             if not basePath:
                 cantFindPath = True
 
-            installPath = os.path.join(basePath, "steamapps/common", "The Binding of Isaac Rebirth")
+            installPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth")
             if not QFile.exists(installPath):
                 cantFindPath = True
 
-                libconfig = os.path.join(basePath, "steamapps/libraryfolders.vdf")
+                libconfig = os.path.join(basePath, "steamapps", "libraryfolders.vdf")
                 if os.path.isfile(libconfig):
                     libLines = list(open(libconfig, 'r'))
                     matcher = re.compile(r'"\d+"\s*"(.*?)"')
@@ -74,7 +74,7 @@ def findInstallPath():
                                         filter(lambda res: res,
                                             map(lambda line: matcher.search(line), libLines)))
                     for root in installDirs:
-                        installPath = os.path.join(root, 'steamapps/common', 'The Binding of Isaac Rebirth')
+                        installPath = os.path.join(root, 'steamapps', 'common', 'The Binding of Isaac Rebirth')
                         if QFile.exists(installPath):
                             cantFindPath = False
                             break
@@ -94,8 +94,8 @@ def findInstallPath():
             cantFindPath = True
 
         # Looks like nothing was selected
-        if len(installPath) == 0:
-            print("Could not find The Binding of Isaac: Afterbirth+ install folder (%s)" % installPath)
+        if cantFindPath or installPath == '' or not os.path.isdir(installPath):
+            print(f"Could not find The Binding of Isaac: Afterbirth+ install folder ({installPath})")
             return ''
 
         settings.setValue('InstallFolder', installPath)
@@ -103,23 +103,27 @@ def findInstallPath():
     return installPath
 
 def findModsPath(installPath=None):
-    installPath = installPath or findInstallPath()
     modsPath = ''
+    cantFindPath = False
 
     if QFile.exists(settings.value('ModsFolder')):
         modsPath = settings.value('ModsFolder')
 
-    elif len(installPath) > 0:
-        modd = os.path.join(installPath, "savedatapath.txt")
-        if os.path.isfile(modd):
-            lines = list(open(modd, 'r'))
-            modDirs = list(filter(lambda parts: parts[0] == 'Modding Data Path',
-                            map(lambda line: line.split(': '), lines)))
-            if len(modDirs) > 0:
-                modsPath = os.path.normpath(modDirs[0][1].strip())
-                if not QFile.exists(modsPath):
-                    cantFindPath = True
     else:
+        installPath = installPath or findInstallPath()
+        if len(installPath) > 0:
+            modd = os.path.join(installPath, "savedatapath.txt")
+            if os.path.isfile(modd):
+                lines = list(open(modd, 'r'))
+                modDirs = list(filter(lambda parts: parts[0] == 'Modding Data Path',
+                                map(lambda line: line.split(': '), lines)))
+                if len(modDirs) > 0:
+                    modsPath = os.path.normpath(modDirs[0][1].strip())
+
+    if modsPath == '' or not os.path.isdir(modsPath):
+        cantFindPath = True
+
+    if cantFindPath:
         cantFindPath = False
         # Windows path things
         if "Windows" in platform.system():
@@ -140,7 +144,7 @@ def findModsPath(installPath=None):
                 cantFindPath = True
 
         # Fallback Resource Folder Locating
-        if cantFindPath == True:
+        if cantFindPath:
             modsPathOut = QFileDialog.getExistingDirectory(None, 'Please Locate The Binding of Isaac: Afterbirth+ Mods Folder')
             if not modsPathOut:
                 QMessageBox.warning(None, "Error", "Couldn't locate Mods folder and no folder was selected.")
@@ -155,8 +159,8 @@ def findModsPath(installPath=None):
                 return
 
         # Looks like nothing was selected
-        if len(modsPath) == 0:
-            QMessageBox.warning(None, "Error", "Could not find The Binding of Isaac: Afterbirth+ Mods folder (%s)" % modsPath)
+        if modsPath == '' or not os.path.isdir(modsPath):
+            QMessageBox.warning(None, "Error", f"Could not find The Binding of Isaac: Afterbirth+ Mods folder ({modsPath})")
             return ''
 
         settings.setValue('ModsFolder', modsPath)
@@ -261,9 +265,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         if len(imgs) == 0:
             print(f'Entity Icon could not be generated due to {ignoreCount > 0 and "visibility" or "missing files"}')
         else:
-            # Get the Pixmap
-            pixmap = QPixmap()
 
+            # Fetch each layer and establish the needed dimensions for the final image
             finalRect = QRect()
             for img in imgs:
                 imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
@@ -292,6 +295,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
             pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
             pixmapImg.fill(0)
 
+            # Paint all the layers to it
             RenderPainter = QPainter(pixmapImg)
             for imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
                 # Transfer the crop area to the pixmap
@@ -312,6 +316,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         etmp.set("Subtype", s)
         etmp.set("Variant", v)
         etmp.set("Image", filename)
+        etmp.set("BaseHP", en.get("baseHP"))
 
         i = int(i)
         etmp.set("Group", "(Mod) %s" % name)
@@ -395,10 +400,17 @@ def loadMods(autogenerate, installPath, resourcePath):
 
     # Each mod in the mod folder is a Group
     modsPath = findModsPath(installPath)
+    if not os.path.isdir(modsPath):
+        print('Could not find Mods Folder! Skipping mod content!')
+        return
 
     modsInstalled = os.listdir(modsPath)
 
     fixIconFormat = settings.value('FixIconFormat') == '1'
+
+    autogenPath = 'resources/Entities/ModTemp'
+    if autogenerate and not os.path.exists(autogenPath):
+        os.mkdir(autogenPath)
 
     print('LOADING MOD CONTENT')
     for mod in modsInstalled:
@@ -449,7 +461,11 @@ def loadMods(autogenerate, installPath, resourcePath):
                     if s >= 256:
                         print('Entity "%s" has a subtype outside the 0 - 255 range! (%d)' % (name, s))
 
-                entityXML.extend(ents)
+                    existingEn = entityXML.find(f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']")
+                    if existingEn != None:
+                        print(f'Entity "{name}" has the same id, variant, and subtype ({i}.{v}.{s}) as "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!')
+
+                    entityXML.append(ent)
 
     settings.setValue('FixIconFormat', '0')
 
@@ -1271,8 +1287,8 @@ class Entity(QGraphicsItem):
             if y >= (self.SNAP_TO * (h - 1)): y = (self.SNAP_TO * (h - 1))
 
             if x != currentX or y != currentY:
-                self.entity['X'] = int(x / self.SNAP_TO)
-                self.entity['Y'] = int(y / self.SNAP_TO)
+                self.entity.x = int(x / self.SNAP_TO)
+                self.entity.y = int(y / self.SNAP_TO)
                 
                 self.updateTooltip()
                 if self.isSelected():
