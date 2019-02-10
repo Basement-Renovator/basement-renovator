@@ -15,3 +15,9 @@ Occasionally you may decide to move certain rooms to another file, or want copie
 
 ### Better Bulk Replace Entities
 Did you know that when bulk replacing entities, the "replaced" entity is based on your currently selected entity in the room, and the "replacement" entity is based on your currently selected entity in the palette? This can save some time when performing this process as you don't have to remember the actual ids. Additionally, leaving the variants and/or subtypes as -1 will either match any, for the replaced entity, or preserve the original value, for the replacement.
+
+### Turn off custom entities
+Sometimes you want BR to open as fast as possible and don't care about mods. For that, set DisableMods to 1 in your settings.ini file in the BR folder.
+
+### Fix libpng warnings
+If you're running BR with a console window open, you may notice some warnings from libpng complaining about formats. This is because of issues with how your custom entities icons are saved. To fix these issues and silence the warning, set FixIconFormat to 1 in the settings.ini. It will turn itself off after BR loads mods once, since it shouldn't have any additional work to do.

@@ -180,7 +180,7 @@ def linuxPathSensitivityTraining(path):
 
     return os.path.normpath(path)
 
-def loadFromModXML(modPath, name, entRoot, resourcePath):
+def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
     anm2root = entRoot.get("anm2root")
 
@@ -196,6 +196,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
     def mapEn(en):
         # Fix some shit
         i = int(en.get("id"))
+        if i == 1000: i = 999
         s = en.get("subtype") or '0'
         v = en.get("variant") or '0'
 
@@ -218,51 +219,90 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         layers = anmTree.findall(".Content/Layers/Layer")
         default = anmTree.find("Animations").get("DefaultAnimation")
 
-        anim = anmTree.find("./Animations/Animation[@Name='{0}']".format(default))
-        layer = anim.find(".//LayerAnimation[Frame]")
+        anim = anmTree.find(f"./Animations/Animation[@Name='{default}']")
+        framelayers = anim.findall(".//LayerAnimation[Frame]")
 
-        imgPath = None
-        x, y, h, w = 0, 0, 0, 0
-        if layer:
+        imgs = []
+        ignoreCount = 0
+        for layer in framelayers:
+            if layer.get('Visible') == 'false':
+                ignoreCount += 1
+                continue
+
             frame = layer.find('Frame')
-
-            # Here's the anm specs
-            x = int(frame.get("XCrop"))
-            y = int(frame.get("YCrop"))
-            h = int(frame.get("Height"))
-            w = int(frame.get("Width"))
+            if frame.get('Visible') == 'false':
+                ignoreCount += 1
+                continue
 
             sheetPath = spritesheets[int(layers[int(layer.get("LayerId"))].get("SpritesheetId"))].get("Path")
-            image = os.path.join(anm2Dir, sheetPath)
+            image = os.path.abspath(os.path.join(anm2Dir, sheetPath))
             imgPath = linuxPathSensitivityTraining(image)
-            if not imgPath:
+            if not (imgPath and os.path.isfile(imgPath)):
                 image = re.sub(r'.*resources', resourcePath, image)
                 imgPath = linuxPathSensitivityTraining(image)
+                
+            if imgPath and os.path.isfile(imgPath):
+                # Here's the anm specs
+                xp = -int(frame.get("XPivot")) # applied before rotation
+                yp = -int(frame.get("YPivot"))
+                r = int(frame.get("Rotation"))
+                x = int(frame.get("XPosition")) # applied after rotation
+                y = int(frame.get("YPosition"))
+                xc = int(frame.get("XCrop"))
+                yc = int(frame.get("YCrop"))
+                xs = float(frame.get("XScale")) / 100
+                ys = float(frame.get("YScale")) / 100
+                w = int(frame.get("Width"))
+                h = int(frame.get("Height"))
+
+                imgs.append([imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
 
         filename = "resources/Entities/questionmark.png"
-        if imgPath:
+        if len(imgs) == 0:
+            print(f'Entity Icon could not be generated due to {ignoreCount > 0 and "visibility" or "missing files"}')
+        else:
             # Get the Pixmap
             pixmap = QPixmap()
 
-            # Load the Image
-            sourceImage = QImage(imgPath)
+            finalRect = QRect()
+            for img in imgs:
+                imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
+                cropRect = QRect(xc, yc, w, h)
+
+                mat = QTransform()
+                mat.rotate(r)
+                mat.scale(xs, ys)
+                mat.translate(xp, yp)
+
+                # Load the Image
+                qimg = QImage(imgPath)
+                sourceImage = qimg.copy(cropRect).transformed(mat)
+                img.append(sourceImage)
+
+                if fixIconFormat:
+                    qimg.save(imgPath)
+
+                cropRect.moveTopLeft(QPoint())
+                cropRect = mat.mapRect(cropRect)
+                cropRect.translate(QPoint(x, y))
+                finalRect = finalRect.united(cropRect)
+                img.append(cropRect)
 
             # Create the destination
-            pixmapImg = QImage(w, h, sourceImage.format())
+            pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
             pixmapImg.fill(0)
 
-            # Transfer the crop area to the pixmap
-            cropRect = QRect(x, y, w, h)
-
-            RenderPainter = QPainter()
-            RenderPainter.begin(pixmapImg)
-            RenderPainter.drawImage(QPoint(0,0), sourceImage, cropRect)
+            RenderPainter = QPainter(pixmapImg)
+            for imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
+                # Transfer the crop area to the pixmap
+                boundingRect.translate(-finalRect.topLeft())
+                RenderPainter.drawImage(boundingRect, sourceImage)
             RenderPainter.end()
 
             # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-            resDir = 'resources/Entities/ModTemp/%s/' % name
+            resDir = f'resources/Entities/ModTemp/{name}/'
             if not os.path.isdir(resDir): os.mkdir(resDir)
-            filename = os.path.join(resDir, "{0}.{1}.{2} - {3}.png".format(en.get("id"), v, s, en.get("name")))
+            filename = os.path.join(resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png')
             pixmapImg.save(filename, "PNG")
 
         # Write the modded entity to the entityXML temporarily for runtime
@@ -291,7 +331,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
 
     return list(filter(lambda x: x != None, map(mapEn, enList)))
 
-def loadFromMod(modPath, name, entRoot):
+def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
 
     brPath = os.path.join(modPath, 'basementrenovator')
     if not os.path.isdir(brPath):
@@ -337,6 +377,10 @@ def loadFromMod(modPath, name, entRoot):
             en.set('Group', '(Mod) %s' % name)
         en.set("Image", imgPath)
 
+        if fixIconFormat:
+            formatFix = QImage(imgPath)
+            formatFix.save(imgPath)
+
         en.set("Subtype", s)
         en.set("Variant", v)
 
@@ -353,6 +397,8 @@ def loadMods(autogenerate, installPath, resourcePath):
     modsPath = findModsPath(installPath)
 
     modsInstalled = os.listdir(modsPath)
+
+    fixIconFormat = settings.value('FixIconFormat') == '1'
 
     print('LOADING MOD CONTENT')
     for mod in modsInstalled:
@@ -383,14 +429,14 @@ def loadMods(autogenerate, installPath, resourcePath):
             try:
                 entRoot = ET.parse(entPath).getroot()
             except ET.ParseError as e:
-                print('ERROR parsing entities2 xml for mod "{0}": {1}'.format(name, e))
+                print(f'ERROR parsing entities2 xml for mod "{name}": {e}')
                 continue
 
             ents = None
             if autogenerate:
-                ents = loadFromModXML(modPath, name, entRoot, resourcePath)
+                ents = loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=fixIconFormat)
             else:
-                ents = loadFromMod(modPath, name, entRoot)
+                ents = loadFromMod(modPath, name, entRoot, fixIconFormat=fixIconFormat)
 
             if ents:
                 for ent in ents:
@@ -404,6 +450,8 @@ def loadMods(autogenerate, installPath, resourcePath):
                         print('Entity "%s" has a subtype outside the 0 - 255 range! (%d)' % (name, s))
 
                 entityXML.extend(ents)
+
+    settings.setValue('FixIconFormat', '0')
 
 ########################
 #      Scene/View      #
