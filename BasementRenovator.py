@@ -212,8 +212,12 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         anmPath = linuxPathSensitivityTraining(os.path.join(modPath, "resources", anm2root, en.get("anm2path"))) or ''
         print('LOADING: %s' % anmPath)
         if not os.path.isfile(anmPath):
-            print('Skipping: Invalid anm2!')
-            return None
+            anmPath = linuxPathSensitivityTraining(os.path.join(resourcePath, anm2root, en.get('anm2path'))) or ''
+
+            print('REDIRECT LOADING: %s' % anmPath)
+            if not os.path.isfile(anmPath):
+                print('Skipping: Invalid anm2!')
+                return None
 
         anm2Dir, anm2File = os.path.split(anmPath)
 
@@ -254,8 +258,9 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
                 y = int(frame.get("YPosition"))
                 xc = int(frame.get("XCrop"))
                 yc = int(frame.get("YCrop"))
-                xs = float(frame.get("XScale")) / 100
-                ys = float(frame.get("YScale")) / 100
+                #xs = float(frame.get("XScale")) / 100
+                #ys = float(frame.get("YScale")) / 100
+                xs, ys = 1, 1 # this ended up being a bad idea since it's usually used for squash and stretch
                 w = int(frame.get("Width"))
                 h = int(frame.get("Height"))
 
@@ -359,21 +364,20 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
         imgPath = linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
 
         i = en.get('ID')
-        s = en.get('Subtype') or '0'
         v = en.get('Variant') or '0'
+        s = en.get('Subtype') or '0'
 
         entXML = None
 
         if en.get('Metadata') != '1':
-            entXML = entRoot.find("entity[@id='%s'][@variant='%s'][@subtype='%s']" % (i, v, s))
-            if not entXML:
-                if s == '0':
-                    entXML = entRoot.find("entity[@id='%s'][@variant='%s']" % (i, v))
-                    if not entXML and v == '0':
-                        entXML = entRoot.find("entity[@id='%s']" % i)
-                elif v == '0':
-                    entXML = entRoot.find("entity[@id='%s'][@subtype='%s']" % (i, s))
-            if not entXML:
+            adjustedId = i == 999 and 1000 or i
+            query = f"entity[@id='{adjustedId}'][@variant='{v}']"
+
+            entXML = entRoot.find(query + f"[@subtype='{s}']")
+            if entXML is None and s == '0':
+                entXML = entRoot.find(query)
+
+            if entXML == None:
                 print('Loading invalid entity (no entry in entities2 xml): ' + str(en.attrib))
                 en.set('Invalid', '1')
 
@@ -1250,7 +1254,7 @@ class Entity(QGraphicsItem):
 
     def updateTooltip(self):
         e = self.entity
-        tooltipStr = f"{e.name} @ {e.x} x {e.x} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
+        tooltipStr = f"{e.name} @ {e.x} x {e.y} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
         
         if e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += '\nType is outside the valid range of 0 - 999! This will not load properly in-game!'
@@ -3376,6 +3380,8 @@ class MainWindow(QMainWindow):
         self.ef = self.e.addAction('Clear Filters',               self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
         self.e.addSeparator()
         self.eg = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
+        self.eg = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
+        self.eg = self.e.addAction('Sort Rooms by Name',          self.sortRoomNames)
         self.eg = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs)
 
         v = mb.addMenu('View')
@@ -3590,32 +3596,26 @@ class MainWindow(QMainWindow):
         settings.setValue('ModAutogen', settings.value('ModAutogen') == '1' and '0' or '1')
 
     def openMapDefault(self):
-        settings = QSettings('settings.ini', QSettings.IniFormat)
         if self.checkDirty(): return
 
         selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", self.defaultMapsOrdered, 0, False)
         self.restoreEditMenu()
 
-        mapFileName = ""
-        if selectedMapOk:
-            mapFileName = self.defaultMapsDict[selectedMap]
-        else:
-            return
+        if not selectedMapOk: return
 
+        mapFileName = self.defaultMapsDict[selectedMap]
         roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
 
         if not QFile.exists(roomPath):
             self.setDefaultResourcesPath()
             roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
             if not QFile.exists(roomPath):
-                QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the resources path is set correctly (see Edit menu) and that the proper STB file is present in the rooms directory.")
+                QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the resources path is set correctly (see File menu) and that the proper STB file is present in the rooms directory.")
                 return
 
         self.openWrapper(roomPath)
 
-    def openMap(self):
-        if self.checkDirty(): return
-
+    def getRecentFolder(self):
         startPath = ""
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -3636,8 +3636,25 @@ class MainWindow(QMainWindow):
             if os.path.isdir(modPath):
                 startPath = modPath
 
+        return os.path.expanduser(startPath)
+
+    def updateRecent(self, path):
+        recent = settings.value("RecentFiles", [])
+        while recent.count(path) > 0:
+            recent.remove(path)
+
+        recent.insert(0, path)
+        while len(recent) > 10:
+            recent.pop()
+
+        settings.setValue("RecentFiles", recent)
+        self.setupFileMenuBar()
+
+    def openMap(self):
+        if self.checkDirty(): return
+
         target = QFileDialog.getOpenFileName(
-            self, 'Open Map', os.path.expanduser(startPath), 'Stage Bundle (*.stb)')
+            self, 'Open Map', self.getRecentFolder(), 'Stage Binary (*.stb)')
         self.restoreEditMenu()
 
         # Looks like nothing was selected
@@ -3674,9 +3691,7 @@ class MainWindow(QMainWindow):
         self.roomList.changeFilter()
 
     def open(self, path=None, addToRecent=True):
-
-        if path==None:
-            path = self.path
+        path = path or self.path
 
         # Let's read the file and parse it into our list items
         stb = open(path, 'rb').read()
@@ -3696,6 +3711,7 @@ class MainWindow(QMainWindow):
         off += 4
         ret = []
 
+        seenSpawns = {}
         for room in range(rooms):
 
             # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
@@ -3749,6 +3765,14 @@ class MainWindow(QMainWindow):
                     #  type, variant, subtype, weight
                     etype, evariant, esubtype, eweight = struct.unpack_from('<HHHf', stb, off)
                     spawns[ey][ex].append([ etype, evariant, esubtype, eweight ])
+
+                    if (etype, esubtype, evariant) not in seenSpawns:
+                        global entityXML
+                        en = entityXML.find(f"entity[@ID='{etype}'][@Subtype='{esubtype}'][@Variant='{evariant}']")
+                        if en == None or en.get('Invalid') == '1':
+                            print(f"Room has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})")
+                        seenSpawns[(etype, esubtype, evariant)] = en == None or en.get('Invalid') == '1'
+
                     off += 0xA
 
             r = Room(roomName, doors, spawns, rtype, rvariant, rsubtype, difficulty, rweight, width, height, shape)
@@ -3756,16 +3780,7 @@ class MainWindow(QMainWindow):
 
         # Update recent files
         if addToRecent:
-            recent = settings.value("RecentFiles", [])
-            while recent.count(path) > 0:
-                recent.remove(path)
-
-            recent.insert(0, path)
-            while len(recent) > 10:
-                recent.pop()
-
-            settings.setValue("RecentFiles", recent)
-            self.setupFileMenuBar()
+            self.updateRecent(path)
 
         return ret
 
@@ -3773,8 +3788,8 @@ class MainWindow(QMainWindow):
         target = self.path
 
         if target == '' or forceNewName:
-            dialogDir = target == '' and findModsPath() or os.path.dirname(target)
-            target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Bundle (*.stb)')
+            dialogDir = target == '' and self.getRecentFolder() or os.path.dirname(target)
+            target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Binary (*.stb)')
             self.restoreEditMenu()
 
             if len(target) == 0:
@@ -3795,7 +3810,7 @@ class MainWindow(QMainWindow):
     def saveMapAs(self):
         self.saveMap(True)
 
-    def save(self, rooms, path=None, doHook=True):
+    def save(self, rooms, path=None, updateRecent=True):
         path = path or self.path
 
         self.storeEntityList()
@@ -3827,8 +3842,11 @@ class MainWindow(QMainWindow):
         with open(path, 'wb') as stb:
             stb.write(out)
 
-        # used for some of the test functions
-        if doHook:
+        if updateRecent:
+            self.updateRecent(path)
+
+            # if a save doesn't update the recent list, it's probably not a real save
+            # so only do hooks in this case
             settings = QSettings('settings.ini', QSettings.IniFormat)
             saveHooks = settings.value('HooksSave')
             if saveHooks:
@@ -3836,7 +3854,7 @@ class MainWindow(QMainWindow):
                 for hook in saveHooks:
                     path, name = os.path.split(hook)
                     try:
-                        subprocess.run([hook, stbPath, '--save'], cwd = path)
+                        subprocess.run([hook, stbPath, '--save'], cwd = path, timeout=60)
                     except Exception as e:
                         print('Save hook failed! Reason:', e)
 
@@ -3881,27 +3899,44 @@ class MainWindow(QMainWindow):
             numEnts > 0 and f"Replaced {numEnts} entities in {numRooms} rooms"
                         or "No entities to replace!")
 
+    def sortRoomIDs(self):
+        self.sortRoomsByKey(lambda x: (x.roomType,x.roomVariant))
+
+    def sortRoomNames(self):
+        self.sortRoomsByKey(lambda x: (x.roomType,x.data(0x100),x.roomVariant))
+
+    def sortRoomsByKey(self, key):
+        roomList = self.roomList.list
+        selection = roomList.currentItem()
+        roomList.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
+
+        rooms = sorted([ roomList.takeItem(roomList.count() - 1) for x in range(roomList.count()) ], key=key)
+
+        for room in rooms:
+            roomList.addItem(room)
+
+        self.dirt()
+        roomList.setCurrentItem(selection, QItemSelectionModel.ClearAndSelect)
+        roomList.scrollToItem(selection)
+
+
     def recomputeRoomIDs(self):
         roomsByType = {}
         
         roomList = self.roomList.list
-        selection = roomList.currentItem()
-        roomList.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
-        rooms = sorted([ roomList.takeItem(roomList.count() - 1) for x in range(roomList.count()) ], key=lambda x: (x.roomType,x.roomVariant))
 
-        for room in rooms:
+        for i in range(roomList.count()):
+            room = roomList.item(i)
+
             if room.roomType not in roomsByType:
                 roomsByType[room.roomType] = room.roomVariant
 
-        for room in rooms:
             room.roomVariant = roomsByType[room.roomType]
             room.setToolTip()
-            roomList.addItem(room)
 
             roomsByType[room.roomType] += 1
+
         self.dirt()
-        roomList.setCurrentItem(selection, QItemSelectionModel.ClearAndSelect)
-        roomList.scrollToItem(selection)
         self.scene.update()
 
     #@pyqtSlot()
@@ -3997,7 +4032,7 @@ class MainWindow(QMainWindow):
                 newRooms.append(Room(difficulty=10, weight=0.1))
 
             path = os.path.join(roomsPath, floorInfo[0])
-            self.save(newRooms, path, doHook=False)
+            self.save(newRooms, path, updateRecent=False)
 
             # Prompt to restore backup
             message = ""
@@ -4047,7 +4082,7 @@ class MainWindow(QMainWindow):
             path = os.path.join(roomsPath, "00.special rooms.stb")
 
             # Resave the file
-            self.save(rooms, path, doHook=False)
+            self.save(rooms, path, updateRecent=False)
 
             return [], startRoom, ""
 
