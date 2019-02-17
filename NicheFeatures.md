@@ -17,7 +17,7 @@ Occasionally you may decide to move certain rooms to another file, or want copie
 Did you know that when bulk replacing entities, the "replaced" entity is based on your currently selected entity in the room, and the "replacement" entity is based on your currently selected entity in the palette? This can save some time when performing this process as you don't have to remember the actual ids. Additionally, leaving the variants and/or subtypes as -1 will either match any, for the replaced entity, or preserve the original value, for the replacement.
 
 ### Recompute Room IDs
-Ever have a room file where the organization has completely gotten away from you and everything is completely out of order? This fixes that by reordering all your rooms and changing their variants to all be next to each other.
+Ever have a room file where the organization has completely gotten away from you and everything is completely out of order? This fixes that by changing their variants to be in sequence by type, starting with the first one it sees. You can also sort the rooms by variant or name before doing this.
 
 ### Turn off custom entities
 Sometimes you want BR to open as fast as possible and don't care about mods. For that, set DisableMods to 1 in your settings.ini file in the BR folder.
