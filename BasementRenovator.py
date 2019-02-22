@@ -248,7 +248,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
             if not (imgPath and os.path.isfile(imgPath)):
                 image = re.sub(r'.*resources', resourcePath, image)
                 imgPath = linuxPathSensitivityTraining(image)
-                
+
             if imgPath and os.path.isfile(imgPath):
                 # Here's the anm specs
                 xp = -int(frame.get("XPivot")) # applied before rotation
@@ -360,6 +360,7 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
 
     print('-----------------------\nLoading entities from "%s"' % name)
 
+    cleanUp = re.compile('[^\w\d]')
     def mapEn(en):
         imgPath = linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
 
@@ -380,6 +381,8 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
             if entXML == None:
                 print('Loading invalid entity (no entry in entities2 xml): ' + str(en.attrib))
                 en.set('Invalid', '1')
+            elif cleanUp.sub('', entXML.get('name')).lower() != cleanUp.sub('', en.get('Name')).lower():
+                print('Loading entity, found name mismatch! There may be a duplicate entity: in entities2: ', entXML.get('name'), '; in BR: ', en.get('Name'))
 
         # Write the modded entity to the entityXML temporarily for runtime
         if not en.get('Group'):
@@ -1264,6 +1267,8 @@ class Entity(QGraphicsItem):
             tooltipStr += '\nSubtype is outside the valid range of 0 - 255!'
         if e.invalid:
             tooltipStr += '\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!'
+        if not e.known:
+            tooltipStr += '\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!'
 
         self.setToolTip(tooltipStr)
 
@@ -1445,7 +1450,7 @@ class Entity(QGraphicsItem):
         
         warningIcon = None
         # applies to entities that do not have a corresponding entities2 entry
-        if self.entity.invalid:
+        if self.entity.invalid or not self.entity.known:
             warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
@@ -2701,9 +2706,7 @@ class RoomSelector(QWidget):
 
     def exportRoom(self):
 
-        dialogDir = mainWindow.path
-        if dialogDir == "":
-            dialogDir = findModsPath()
+        dialogDir = mainWindow.getRecentFolder()
 
         target, match = QFileDialog.getSaveFileName(self, 'Select a new name or an existing STB', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
         mainWindow.restoreEditMenu()
@@ -2714,17 +2717,14 @@ class RoomSelector(QWidget):
         path = target
 
         # Append these rooms onto the new STB
+        rooms = self.selectedRooms()
         if os.path.exists(path):
-            rooms = self.selectedRooms()
             oldRooms = mainWindow.open(path)
-
             oldRooms.extend(rooms)
-
             mainWindow.save(oldRooms, path)
-
         # Make a new STB with the selected rooms
         else:
-            mainWindow.save(self.selectedRooms(), path)
+            mainWindow.save(rooms, path)
 
     def setButtonStates(self):
         rooms = len(self.selectedRooms()) > 0
@@ -2982,12 +2982,20 @@ class EntityPalette(QWidget):
     #@pyqtSlot()
     def objSelected(self):
         """Throws a signal emitting the current object when changed"""
-        if (self.currentSelectedObject()):
-            self.objChanged.emit(self.currentSelectedObject())
+
+        curr = self.currentSelectedObject()
+        if curr == None: return
+
+        # holding ctrl skips the filter change step
+        kb = int(QGuiApplication.keyboardModifiers())
+        
+        holdCtrl = kb & Qt.ControlModifier != 0
+        pinEntityFilter = settings.value('PinEntityFilter') == '1'
+        self.objChanged.emit(curr, holdCtrl == pinEntityFilter)
 
         # Throws a signal when the selected object is used as a replacement
-        if QApplication.keyboardModifiers() == Qt.AltModifier:
-            self.objReplaced.emit(self.currentSelectedObject())
+        if kb & Qt.AltModifier != 0:
+            self.objReplaced.emit(curr)
 
     #@pyqtSlot()
     def updateSearch(self, text):
@@ -3000,7 +3008,7 @@ class EntityPalette(QWidget):
             self.tabs.show()
             self.searchTab.hide()
 
-    objChanged = pyqtSignal(EntityItem)
+    objChanged = pyqtSignal(EntityItem,bool)
     objReplaced = pyqtSignal(EntityItem)
 
 class EntityList(QListView):
@@ -3153,7 +3161,6 @@ class HooksDialog(QDialog):
     class HookItem(QListWidgetItem):
         def __init__(self, text, setting, tooltip):
             super(QListWidgetItem, self).__init__(text)
-            self.setWindowTitle("Set Hooks")
             self.setToolTip(tooltip)
             self.setting = setting
 
@@ -3170,6 +3177,7 @@ class HooksDialog(QDialog):
 
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Set Hooks")
 
         self.layout = QHBoxLayout()
 
@@ -3351,7 +3359,7 @@ class MainWindow(QMainWindow):
         self.fi = f.addAction('Reset Resources Path', self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
         f.addSeparator()
         self.fj = f.addAction('Set Hooks', self.showHooksMenu)
-        self.fl = f.addAction('Autogenerate mod content (discouraged)', self.toggleModAutogen)
+        self.fl = f.addAction('Autogenerate mod content (discouraged)', lambda: self.toggleSetting('ModAutogen'))
         self.fl.setCheckable(True)
         self.fl.setChecked(settings.value('ModAutogen') == '1')
         f.addSeparator()
@@ -3378,11 +3386,12 @@ class MainWindow(QMainWindow):
         self.ee = self.e.addAction('Deselect',                    self.deSelect, QKeySequence("Ctrl+D"))
         self.e.addSeparator()
         self.ef = self.e.addAction('Clear Filters',               self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
+        self.eg = self.e.addAction('Pin Entity Filter',           lambda: self.toggleSetting('PinEntityFilter'), QKeySequence("Ctrl+Alt+K"))
         self.e.addSeparator()
-        self.eg = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
-        self.eg = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
-        self.eg = self.e.addAction('Sort Rooms by Name',          self.sortRoomNames)
-        self.eg = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs)
+        self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
+        self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
+        self.ej = self.e.addAction('Sort Rooms by Name',          self.sortRoomNames)
+        self.ek = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs)
 
         v = mb.addMenu('View')
         self.wa = v.addAction('Hide Grid',                        self.switchGrid, QKeySequence("Ctrl+G"))
@@ -3540,9 +3549,10 @@ class MainWindow(QMainWindow):
         current.setData(100, True)
 
     #@pyqtSlot(EntityItem)
-    def handleObjectChanged(self, entity):
+    def handleObjectChanged(self, entity, setFilter=True):
         self.editor.objectToPaint = entity
-        self.roomList.setEntityFilter(entity)
+        if setFilter:
+            self.roomList.setEntityFilter(entity)
 
     #@pyqtSlot(EntityItem)
     def handleObjectReplaced(self, entity):
@@ -3590,10 +3600,6 @@ class MainWindow(QMainWindow):
     def showHooksMenu(self):
         hooks = HooksDialog(self)
         hooks.show()
-
-    def toggleModAutogen(self):
-        settings = QSettings('settings.ini', QSettings.IniFormat)
-        settings.setValue('ModAutogen', settings.value('ModAutogen') == '1' and '0' or '1')
 
     def openMapDefault(self):
         if self.checkDirty(): return
@@ -4356,6 +4362,10 @@ class MainWindow(QMainWindow):
 
 # Miscellaneous
 ########################
+
+    def toggleSetting(self, setting):
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        settings.setValue(setting, settings.value(setting) == '1' and '0' or '1')
 
     #@pyqtSlot()
     def switchGrid(self):
