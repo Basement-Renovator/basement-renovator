@@ -4,8 +4,14 @@ Some of BR's features are for power users, or aren't very discoverable in the UI
 ### Mirroring Rooms
 BR's Duplicate Room feature lets you create exact copies of existing rooms without much effort. However, it's also possible to create an exact mirrored duplicate! This is a pretty common technique for quickly padding out room counts when creating a lot of them, so BR attempts to make this a bit easier. Simply hold Alt and Duplicate will become Mirror (creates a horizontally mirrored duplicate) or Alt+Shift and it will become Mirror Y. (creates a vertically mirrored duplicate) This accounts for directional entities like Grimaces, Wall Huggers, etc. and mirrors them as needed.
 
-### Replace Selected Entities
+### Entity Palette Bonuses
+
+#### Replace Selected Entities
 Sometimes it's desirable to replace a few entities in a room with another one. Simply select these entities and then Alt+Click the replacement entity in the palette and you're done!
+
+#### Keep Current Filter, Select a new Paint Entity
+Sometimes you'd like to keep an entity filter active while selecting new entities to paint for the current room. Ctrl+Click the entity you'd like to paint and the current entity filter will not change.
+You can also invert the normal behavior by toggling Edit > Pin Entity Filter.
 
 ### Hooks
 While already detailed in the FAQ, this feature lets you run scripts as needed when BR performs various actions. Save hooks run scripts on newly saved stbs, Test hooks run on output xmls before the game launches, etc.
