@@ -322,6 +322,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         etmp.set("Variant", v)
         etmp.set("Image", filename)
         etmp.set("BaseHP", en.get("baseHP"))
+        etmp.set("Boss", en.get('boss'))
+        etmp.set("Champion", en.get('champion'))
 
         i = int(i)
         etmp.set("Group", "(Mod) %s" % name)
@@ -351,14 +353,19 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
     if not os.path.isfile(entFile):
         return
 
-    tree = ET.parse(entFile)
-    root = tree.getroot()
+    print('-----------------------\nLoading entities from "%s"' % name)
+
+    root = None
+    try:
+        tree = ET.parse(entFile)
+        root = tree.getroot()
+    except Exception as e:
+        print('Error loading BR xml:', e)
+        return
 
     enList = root.findall('entity')
     if len(enList) == 0:
         return
-
-    print('-----------------------\nLoading entities from "%s"' % name)
 
     cleanUp = re.compile('[^\w\d]')
     def mapEn(en):
@@ -374,15 +381,22 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
             adjustedId = i == 999 and 1000 or i
             query = f"entity[@id='{adjustedId}'][@variant='{v}']"
 
+            validMissingSubtype = False
+
             entXML = entRoot.find(query + f"[@subtype='{s}']")
-            if entXML is None and s == '0':
+            if entXML is None:
                 entXML = entRoot.find(query)
+                validMissingSubtype = entXML is not None
 
             if entXML == None:
                 print('Loading invalid entity (no entry in entities2 xml): ' + str(en.attrib))
                 en.set('Invalid', '1')
-            elif cleanUp.sub('', entXML.get('name')).lower() != cleanUp.sub('', en.get('Name')).lower():
-                print('Loading entity, found name mismatch! There may be a duplicate entity: in entities2: ', entXML.get('name'), '; in BR: ', en.get('Name'))
+            else:
+                foundName = entXML.get('name')
+                givenName = en.get('Name')
+                foundNameClean, givenNameClean = list(map(lambda s: cleanUp.sub('', s).lower(), (foundName, givenName)))
+                if not (foundNameClean == givenNameClean or ( validMissingSubtype and (foundNameClean in givenNameClean or givenNameClean in foundNameClean) )):
+                    print('Loading entity, found name mismatch! In entities2: ', foundName, '; In BR: ', givenName)
 
         # Write the modded entity to the entityXML temporarily for runtime
         if not en.get('Group'):
@@ -396,7 +410,9 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
         en.set("Subtype", s)
         en.set("Variant", v)
 
-        en.set('BaseHP', entXML and entXML.get('baseHP') or en.get('BaseHP'))
+        en.set('BaseHP',   entXML and entXML.get('baseHP') or en.get('BaseHP'))
+        en.set('Boss',     entXML and entXML.get('boss') or en.get('Boss'))
+        en.set('Champion', entXML and entXML.get('champion') or en.get('Champion'))
 
         return en
 
@@ -470,7 +486,7 @@ def loadMods(autogenerate, installPath, resourcePath):
 
                     existingEn = entityXML.find(f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']")
                     if existingEn != None:
-                        print(f'Entity "{name}" has the same id, variant, and subtype ({i}.{v}.{s}) as "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!')
+                        print(f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" has the same id, variant, and subtype ({i}.{v}.{s}) as "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!')
 
                     entityXML.append(ent)
 
@@ -1067,7 +1083,8 @@ class RoomEditorWidget(QGraphicsView):
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, f"Base HP : {e.entity.baseHP}")
+            painter.drawText(r.right() - 34 - 400, 20, 400, 12, Qt.AlignRight | Qt.AlignBottom, f"Boss: {e.entity.boss}, Champion: {e.entity.champion}")
+            painter.drawText(r.right() - 34 - 200, 36, 200, 12, Qt.AlignRight | Qt.AlignBottom, f"Base HP : {e.entity.baseHP}")
 
         elif len(selectedEntities) > 1:
             e = selectedEntities[0]
@@ -1183,8 +1200,8 @@ class Entity(QGraphicsItem):
                             en.get('Group') in [ 'Grid', 'Poop', 'Fireplaces', 'Other', 'Props', 'Special Exits', 'Broken' ]
 
             self.baseHP = en.get('BaseHP')
-            self.boss = en.get('Boss')
-            self.champion = en.get('Champion')
+            self.boss = en.get('Boss') == '1'
+            self.champion = en.get('Champion') == '1'
             self.placeVisual = en.get('PlaceVisual')
 
             if t == 5 and variant == 100:
@@ -1258,7 +1275,7 @@ class Entity(QGraphicsItem):
     def updateTooltip(self):
         e = self.entity
         tooltipStr = f"{e.name} @ {e.x} x {e.y} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
-        
+
         if e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += '\nType is outside the valid range of 0 - 999! This will not load properly in-game!'
         if e.Variant >= 4096:
@@ -1447,7 +1464,7 @@ class Entity(QGraphicsItem):
             painter.setFont(QFont("Arial", 6))
 
             painter.drawText(2, 26, "%d.%d.%d" % (typ, var, sub))
-        
+
         warningIcon = None
         # applies to entities that do not have a corresponding entities2 entry
         if self.entity.invalid or not self.entity.known:
@@ -1456,7 +1473,7 @@ class Entity(QGraphicsItem):
         # common mod error is to make them outside that range
         elif var >= 4096 or sub >= 256 or (typ >= 1000 and not self.entity.isGridEnt):
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
-        
+
         if warningIcon:
             painter.drawPixmap(18, -8, warningIcon)
 
@@ -2791,17 +2808,14 @@ class EntityItem(QStandardItem):
 class EntityGroupModel(QAbstractListModel):
     """Model containing all the grouped objects in a tileset"""
 
-    def __init__(self, kind):
+    def __init__(self, kind, enList):
+        QAbstractListModel.__init__(self)
+
         self.groups = {}
         self.kind = kind
         self.view = None
 
         self.filter = ""
-
-        QAbstractListModel.__init__(self)
-
-        global entityXML
-        enList = entityXML.findall("entity")
 
         for en in enList:
             g = en.get('Group')
@@ -2923,9 +2937,12 @@ class EntityPalette(QWidget):
         # Create the hidden search results tab
         self.searchTab = QTabWidget()
 
+        global entityXML
+        allEnts = entityXML.findall("entity")
+
         # Funky model setup
         listView = EntityList()
-        listView.setModel(EntityGroupModel(None))
+        listView.setModel(EntityGroupModel(None, allEnts))
         listView.model().view = listView
         listView.clicked.connect(self.objSelected)
 
@@ -2946,15 +2963,34 @@ class EntityPalette(QWidget):
 
     def populateTabs(self):
 
-        groups = ["Pickups", "Enemies", "Bosses", "Stage", "Collect" ]
-        if settings.value('ModAutogen') == '1':
-            groups.append("Mods")
+        groups = {
+            "Pickups": [],
+            "Enemies": [],
+            "Bosses": [],
+            "Stage": [],
+            "Collect": [],
+            "Mods": []
+        }
 
-        for group in groups:
+        global entityXML
+        enList = entityXML.findall("entity")
+
+        for en in enList:
+            k = en.get('Kind')
+            if k is None: continue
+
+            if k not in groups:
+                groups[k] = []
+            groups[k].append(en)
+
+        for group, ents in groups.items():
+            numEnts = len(ents)
+            if numEnts == 0: continue
 
             listView = EntityList()
+            print(f'Populating palette tab "{group}" with {numEnts} entities')
 
-            listView.setModel(EntityGroupModel(group))
+            listView.setModel(EntityGroupModel(group, ents))
             listView.model().view = listView
 
             listView.clicked.connect(self.objSelected)
@@ -2988,7 +3024,7 @@ class EntityPalette(QWidget):
 
         # holding ctrl skips the filter change step
         kb = int(QGuiApplication.keyboardModifiers())
-        
+
         holdCtrl = kb & Qt.ControlModifier != 0
         pinEntityFilter = settings.value('PinEntityFilter') == '1'
         self.objChanged.emit(curr, holdCtrl == pinEntityFilter)
@@ -3110,13 +3146,13 @@ class ReplaceDialog(QDialog):
     def __init__(self):
         super(QDialog, self).__init__()
         self.setWindowTitle("Replace Entities")
-    
+
         layout = QVBoxLayout()
-    
+
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
-    
+
         cols = QHBoxLayout()
 
         def genEnt(name):
@@ -3139,7 +3175,7 @@ class ReplaceDialog(QDialog):
             self.fromEnt.setEnt(int(selection.Type), int(selection.Variant), int(selection.Subtype))
         else:
             self.fromEnt.resetEnt()
-    
+
         paint = mainWindow.editor.objectToPaint
         if paint:
             self.toEnt.setEnt(int(paint.ID), int(paint.variant), int(paint.subtype))
@@ -3208,7 +3244,7 @@ class HooksDialog(QDialog):
         buttons.addWidget(editButton)
         buttons.addWidget(deleteButton)
         pane.addLayout(buttons)
-        
+
         self.layout.addWidget(paneWidget, 1)
 
         self.hooks.currentItemChanged.connect(self.displayHook)
@@ -3244,7 +3280,7 @@ class HooksDialog(QDialog):
     def editPath(self):
         item = self.content.currentItem()
         if not item: return
-            
+
         path = self.insertPath(item.text())
         if path != '':
             item.setText(path)
@@ -3391,7 +3427,7 @@ class MainWindow(QMainWindow):
         self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
         self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
         self.ej = self.e.addAction('Sort Rooms by Name',          self.sortRoomNames)
-        self.ek = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs)
+        self.ek = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs, QKeySequence("Ctrl+B"))
 
         v = mb.addMenu('View')
         self.wa = v.addAction('Hide Grid',                        self.switchGrid, QKeySequence("Ctrl+G"))
@@ -3928,7 +3964,7 @@ class MainWindow(QMainWindow):
 
     def recomputeRoomIDs(self):
         roomsByType = {}
-        
+
         roomList = self.roomList.list
 
         for i in range(roomList.count()):
@@ -4047,7 +4083,7 @@ class MainWindow(QMainWindow):
             message += 'This method will not work properly if you have other mods that add rooms to the floor.\n\n'
 
             return [], testRoom, message
-        
+
         self.testMapCommon('StageReplace', setup)
 
     # Test by replacing the starting room
@@ -4482,6 +4518,8 @@ if __name__ == '__main__':
     if settings.value('DisableMods') != '1':
         loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder', ''))
 
+    print('-'.join([ '' for i in range(50) ]))
+    print('INITIALIZING MAIN WINDOW')
     mainWindow = MainWindow()
     recent = settings.value("RecentFiles", [])
     if len(recent) > 0 and os.path.exists(recent[0]):
