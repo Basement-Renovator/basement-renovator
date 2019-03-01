@@ -4280,8 +4280,6 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Error", "The basement renovator mod folder could not be copied over: " + str(roomPath))
             return
 
-        # Dirtify to prevent overwriting and then quitting without saving
-        self.dirt()
         # Ensure that the room data is up to date before writing
         self.storeEntityList(room)
 
