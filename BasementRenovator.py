@@ -4507,6 +4507,8 @@ if __name__ == '__main__':
     cmdParser.setApplicationDescription('Basement Renovator is a room editor for The Binding of Isaac: Afterbirth[+]')
     cmdParser.addHelpOption()
 
+    cmdParser.addPositionalArgument('file', 'optional file to open on launch, otherwise opens most recent file')
+
     cmdParser.process(app)
 
     settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -4519,9 +4521,19 @@ if __name__ == '__main__':
     print('-'.join([ '' for i in range(50) ]))
     print('INITIALIZING MAIN WINDOW')
     mainWindow = MainWindow()
-    recent = settings.value("RecentFiles", [])
-    if len(recent) > 0 and os.path.exists(recent[0]):
-        mainWindow.openWrapper(recent[0])
+
+    startFile = None
+
+    args = cmdParser.positionalArguments()
+    if args:
+        startFile = args[0]
+    else:
+        recent = settings.value("RecentFiles", [])
+        if recent:
+            startFile = recent[0]
+
+    if startFile and os.path.exists(startFile):
+        mainWindow.openWrapper(startFile)
 
     mainWindow.show()
 
