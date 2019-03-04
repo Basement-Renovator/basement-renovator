@@ -33,7 +33,7 @@ There are some older packaged downloads on the [releases tab](https://github.com
   `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
   (this will populate the `$HOME/Documents/IsaacUnpacked/resources/rooms` directory with .stb files)
 * Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
-* After saving your work, include the modified STB file in your mod's resources directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources`) and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended. 
+* After saving your work, include the modified STB file in your mod's resources directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources`) and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended.
 
 ### How to Create a Mod that Include Extra Rooms
 
@@ -46,7 +46,7 @@ There are some older packaged downloads on the [releases tab](https://github.com
 
 * **The Editor**: Smack in the middle is the main editor. You can drag any entity in this editor by clicking it, or select multiple entities by dragging a box around them. You can move entities wherever you'd like in the room. You can cut or paste entities, using the menu or keyboard shortcuts, and you can delete them by selecting them and hitting backspace or delete. Alt-click an entity to replace it with the chosen entity in your palette. You can choose whether doors are active or inactive by double clicking them.
 
-* **The Room List**: On the right of the window is the room list dock. This dock is moveable by grabbing the titlebar. Click any room in the list to load it into the editor. The type of the room is indicated by the icon to the left of the name, and the ID is the number beside the name. Room type determines the item pool and tileset. Create new rooms by hitting 'add', delete a room by selecting a room and either pressing the backspace/delete key or clicking 'delete', and duplicate a selected room by clicking 'duplicate' (duplicates will have a different variant number). 
+* **The Room List**: On the right of the window is the room list dock. This dock is moveable by grabbing the titlebar. Click any room in the list to load it into the editor. The type of the room is indicated by the icon to the left of the name, and the ID is the number beside the name. Room type determines the item pool and tileset. Create new rooms by hitting 'add', delete a room by selecting a room and either pressing the backspace/delete key or clicking 'delete', and duplicate a selected room by clicking 'duplicate' (duplicates will have a different variant number).
 
 * **The Room List continued**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new stb, or if you choose an existing stb it will append those rooms onto the one you chose.
 
@@ -83,6 +83,13 @@ There are some older packaged downloads on the [releases tab](https://github.com
   * Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
   * Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
   * The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
+
+*Is there a fast way to set up BR compatibility?*
+
+* You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In BR's resource folder under Entities/ModTemp, there will be a folder with your mod's name.
+It will contain an icons folder and an EntitiesMod.xml file. However, this will generate entries for many things you may not want to have entries for, so you'll need to clean it up.
+* Some icons may not be what you want out of the box. For example, gapers will be missing their heads because they're overlays, or the first frame might not be a good representative.
+BR includes an Icon Generator script under resources to allow for more finegrained icon generation from any frame in an anm2. Run it with --help or -h for more details.
 
 *Why does my custom entity appear with a yellow hazard sign on it?*
 
