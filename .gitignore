@@ -61,8 +61,11 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+# random junk
+Thumbs.db
+
 # Repository specific stuff
-release/
+hooks/
 
 # Editor files
 .vscode
