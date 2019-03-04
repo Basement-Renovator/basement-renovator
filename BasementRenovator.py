@@ -35,6 +35,7 @@ from copy import deepcopy
 import struct, os, subprocess, platform, webbrowser, urllib, re, shutil
 from pathlib import Path
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import psutil
 
 
@@ -186,6 +187,10 @@ def linuxPathSensitivityTraining(path):
 
 def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
+    cleanUp = re.compile('[^\w\d]')
+    outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', name)}"
+    if not os.path.isdir(outputDir): os.mkdir(outputDir)
+
     anm2root = entRoot.get("anm2root")
 
     # Iterate through all the entities
@@ -309,7 +314,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
             RenderPainter.end()
 
             # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-            resDir = f'resources/Entities/ModTemp/{name}/'
+            resDir = os.path.join(outputDir, 'icons')
             if not os.path.isdir(resDir): os.mkdir(resDir)
             filename = os.path.join(resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png')
             pixmapImg.save(filename, "PNG")
@@ -321,9 +326,15 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         etmp.set("Subtype", s)
         etmp.set("Variant", v)
         etmp.set("Image", filename)
-        etmp.set("BaseHP", en.get("baseHP"))
-        etmp.set("Boss", en.get('boss'))
-        etmp.set("Champion", en.get('champion'))
+
+        def condSet(setName, name):
+            val = en.get(name)
+            if val is not None:
+                etmp.set(setName, val)
+
+        condSet("BaseHP", "baseHP")
+        condSet("Boss", 'boss')
+        condSet("Champion", 'champion')
 
         i = int(i)
         etmp.set("Group", "(Mod) %s" % name)
@@ -331,7 +342,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
         if i == 5: # pickups
             if v == 100: # collectible
                 return None
-            etmp.set("Kind", "Pickup")
+            etmp.set("Kind", "Pickups")
         elif i in (2, 4, 6): # tears, live bombs, machines
             etmp.set("Kind", "Stage")
         elif en.get("boss") == '1':
@@ -341,7 +352,16 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
         return etmp
 
-    return list(filter(lambda x: x != None, map(mapEn, enList)))
+    result = list(filter(lambda x: x != None, map(mapEn, enList)))
+
+    outputRoot = ET.Element('data')
+    outputRoot.extend(result)
+    with open(os.path.join(outputDir, 'EntitiesMod.xml'), 'w') as out:
+        xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
+        s = str.replace(xml, outputDir + os.path.sep, '').replace(os.path.sep, '/')
+        out.write(s)
+
+    return result
 
 def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
 
