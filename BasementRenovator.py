@@ -1174,7 +1174,7 @@ class Entity(QGraphicsItem):
     SNAP_TO = 26
 
     class Info:
-        def __init__(self, x, y, t, v, s, weight, changeAtStart=True):
+        def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
             # Supplied entity info
             self.x = x
             self.y = y
@@ -1198,6 +1198,9 @@ class Entity(QGraphicsItem):
             self.known = False
             self.invalid = False
             self.placeVisual = None
+
+            self.mirrorX = None
+            self.mirrorY = None
 
             self.getEntityInfo(t, v, s)
 
@@ -1223,6 +1226,13 @@ class Entity(QGraphicsItem):
             self.boss = en.get('Boss') == '1'
             self.champion = en.get('Champion') == '1'
             self.placeVisual = en.get('PlaceVisual')
+
+            def getEnt(s):
+                return list(map(int, s.split('.')))
+
+            mirrorX, mirrorY = en.get('MirrorX'), en.get('MirrorY')
+            if mirrorX: self.mirrorX = getEnt(mirrorX)
+            if mirrorY: self.mirrorY = getEnt(mirrorY)
 
             if t == 5 and variant == 100:
                 i = QImage()
@@ -1906,35 +1916,13 @@ class Room(QListWidgetItem):
             column[:self.roomWidth] = column[:self.roomWidth][::-1]
 
             # Flip Directional Entities
+            info = Entity.Info(changeAtStart=False)
             for row in column:
                 for spawn in row:
-                    # 40  - Guts 			(1,3)
-                    if spawn[0] == 40:
-                        if spawn[2] == 1:
-                            spawn[2] = 3
-                        elif spawn[2] == 3:
-                            spawn[2] = 1
-
-                    # 202 - Stone Shooter 	(0,2)
-                    elif spawn[0] == 202:
-                        if spawn[2] == 0:
-                            spawn[2] = 2
-                        elif spawn[2] == 2:
-                            spawn[2] = 0
-
-                    # 203 - Brim Head 		(0,2)
-                    elif spawn[0] == 203:
-                        if spawn[2] == 0:
-                            spawn[2] = 2
-                        elif spawn[2] == 2:
-                            spawn[2] = 0
-
-                    # 218 - Wall Hugger 	(1,3)
-                    elif spawn[0] == 218:
-                        if spawn[2] == 1:
-                            spawn[2] = 3
-                        elif spawn[2] == 3:
-                            spawn[2] = 1
+                    info.changeTo(spawn[0], spawn[1], spawn[2])
+                    if info.mirrorX:
+                        for i in range(3):
+                            spawn[i] = info.mirrorX[i]
 
         # To flip, just reverse the signs then offset by room width (-1 for the indexing)
         # Flip Doors
@@ -1958,36 +1946,14 @@ class Room(QListWidgetItem):
         self.roomSpawns[:self.roomHeight] = self.roomSpawns[:self.roomHeight][::-1]
 
         # Flip Directional Entities
+        info = Entity.Info(changeAtStart=False)
         for column in self.roomSpawns:
             for row in column:
                 for spawn in row:
-                    # 40  - Guts 			(0,2)
-                    if spawn[0] == 40:
-                        if spawn[2] == 0:
-                            spawn[2] = 2
-                        elif spawn[2] == 2:
-                            spawn[2] = 0
-
-                    # 202 - Stone Shooter 	(1,3)
-                    elif spawn[0] == 202:
-                        if spawn[2] == 1:
-                            spawn[2] = 3
-                        elif spawn[2] == 3:
-                            spawn[2] = 1
-
-                    # 203 - Brim Head 		(1,3)
-                    elif spawn[0] == 203:
-                        if spawn[2] == 1:
-                            spawn[2] = 3
-                        elif spawn[2] == 3:
-                            spawn[2] = 1
-
-                    # 218 - Wall Hugger 	(2,4)
-                    elif spawn[0] == 218:
-                        if spawn[2] == 2:
-                            spawn[2] = 4
-                        elif spawn[2] == 4:
-                            spawn[2] = 2
+                    info.changeTo(spawn[0], spawn[1], spawn[2])
+                    if info.mirrorY:
+                        for i in range(3):
+                            spawn[i] = info.mirrorY[i]
 
         # Flip Doors
         for door in self.roomDoors:
