@@ -254,15 +254,15 @@
 	<entity Group="Organs" Kind="Enemies" Image="resources/Entities/301.0.0 - PoisonMind.png" BaseHP="20" Champion="1" ID="301" Name="Poison Mind" Variant="0" Subtype="0" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.0.0 - MemBrain.png" Kind="Enemies" Name="MemBrain" Subtype="0" Variant="0" />
 	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.0 - Guts.png" Kind="Enemies" Name="Guts (Random)" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.1 - Guts (Left).png" Kind="Enemies" Name="Guts (Left)" Subtype="1" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.2 - Guts (Up).png" Kind="Enemies" Name="Guts (Up)" Subtype="2" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.3 - Guts (Right).png" Kind="Enemies" Name="Guts (Right)" Subtype="3" Variant="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.4 - Guts (Down).png" Kind="Enemies" Name="Guts (Down)" Subtype="4" Variant="0" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.1 - Guts (Left).png" Kind="Enemies" Name="Guts (Left)" Subtype="1" Variant="0" MirrorX="40.0.3" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.2 - Guts (Up).png" Kind="Enemies" Name="Guts (Up)" Subtype="2" Variant="0" MirrorY="40.0.4" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.3 - Guts (Right).png" Kind="Enemies" Name="Guts (Right)" Subtype="3" Variant="0" MirrorX="40.0.1" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.4 - Guts (Down).png" Kind="Enemies" Name="Guts (Down)" Subtype="4" Variant="0" MirrorY="40.0.2" />
 	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.0 - Scarred Guts.png" Kind="Enemies" Name="Scarred Guts (Random)" Subtype="0" Variant="0" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.1 - Scarred Guts (Left).png" Kind="Enemies" Name="Scarred Guts (Left)" Subtype="1" Variant="1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Kind="Enemies" Name="Scarred Guts (Up)" Subtype="2" Variant="1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Kind="Enemies" Name="Scarred Guts (Right)" Subtype="3" Variant="1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Kind="Enemies" Name="Scarred Guts (Down)" Subtype="4" Variant="1" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.1 - Scarred Guts (Left).png" Kind="Enemies" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Kind="Enemies" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Kind="Enemies" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Kind="Enemies" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Kind="Enemies" Name="Bloodshot Eye" Subtype="0" Variant="1" />
@@ -322,25 +322,25 @@
 	<entity BaseHP="100" Group="Spikes" ID="44" Image="resources/Entities/44.0.0 - Poky.png"  PlaceVisual="0,0.5" Kind="Enemies" Name="Poky" Subtype="0" Variant="0" />
 	<entity BaseHP="100" Group="Spikes" ID="44" Image="resources/Entities/44.1.0 - Slide.png" PlaceVisual="0,0.5" Kind="Enemies" Name="Slide" Subtype="0" Variant="1" />
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" PlaceVisual="0,0.5" Kind="Enemies" Name="Wall Hugger (Random)" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.1 - Wall Hugger (Left).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Left)" Subtype="1" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.2 - Wall Hugger (Up).png" PlaceVisual="0,0.5" Kind="Enemies" Name="Wall Hugger (Up)" Subtype="2" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.3 - Wall Hugger (Right).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" />
-	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.4 - Wall Hugger (Down).png" PlaceVisual="0,0.25" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" />
+	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.1 - Wall Hugger (Left).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Left)" Subtype="1" Variant="0" MirrorX="218.0.3" />
+	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.2 - Wall Hugger (Up).png" PlaceVisual="0,0.5" Kind="Enemies" Name="Wall Hugger (Up)" Subtype="2" Variant="0" MirrorY="218.0.4" />
+	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.3 - Wall Hugger (Right).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" MirrorX="218.0.1" />
+	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.4 - Wall Hugger (Down).png" PlaceVisual="0,0.25" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" MirrorY="218.0.2" />
 	<!-- Stones -->
 	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.1.0 - Vomit Grimace.png" Kind="Enemies" Name="Vomit Grimace" Subtype="0" Variant="1" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" />
+	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" MirrorX="202.0.2" />
+	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" MirrorY="202.0.3" />
+	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" MirrorX="202.0.0" />
+	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" MirrorY="202.0.1" />
 	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
 	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
 	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
 	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" />
-	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" />
+	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Left)" Subtype="0" Variant="0" MirrorX="203.0.2" />
+	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Up)" Subtype="1" Variant="0" MirrorY="203.0.3" />
+	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Right)" Subtype="2" Variant="0" MirrorX="203.0.0" />
+	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
 	<entity BaseHP="100" Group="Stones" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="100" Group="Stones" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Kind="Enemies" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
 	<!-- Twins -->
