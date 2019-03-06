@@ -1470,6 +1470,20 @@ class Entity(QGraphicsItem):
             if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
                 self.entity.pixmap = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
 
+            # Crawlspace special case
+            if (typ == 0 or typ == 1900) and mainWindow.roomList.selectedRoom().roomType == 16:
+                if typ == 1900 and var == 0:
+                    self.entity.pixmap = QPixmap('resources/Entities/1900.0.0 - Crawlspace Brick.png')
+                    self.setZValue(-1 * self.entity.y)
+                    recenter = (0, 0)
+                elif typ == 0:
+                    if var == 10:
+                        self.entity.pixmap = QPixmap('resources/Entities/0.10.0 - Ladder.png')
+                    elif var == 20:
+                        self.entity.pixmap = QPixmap('resources/Entities/0.20.0 - Ladder Base.png')
+                    elif var == 30:
+                        self.entity.pixmap = QPixmap('resources/Entities/0.30.0 - Ladder Through.png')
+
             painter.drawPixmap(x, y, self.entity.pixmap)
 
             # if the offset is high enough, draw an indicator of the actual position
