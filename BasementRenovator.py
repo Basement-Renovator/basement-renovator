@@ -1006,10 +1006,10 @@ class RoomEditorWidget(QGraphicsView):
         QGraphicsView.mouseReleaseEvent(self, event)
 
     def keyPressEvent(self, event):
-        if (event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace) and self.canDelete:
+        if self.canDelete and (event.key() == Qt.Key_Delete):
             scene = self.scene()
-
             selection = scene.selectedItems()
+
             if len(selection) > 0:
                 for obj in selection:
                     obj.setSelected(False)
@@ -1017,9 +1017,8 @@ class RoomEditorWidget(QGraphicsView):
                 scene.update()
                 self.update()
                 mainWindow.dirt()
-                return
-        else:
-            QGraphicsView.keyPressEvent(self, event)
+
+        QGraphicsView.keyPressEvent(self, event)
 
     def drawBackground(self, painter, rect):
         painter.fillRect(rect, QColor(0, 0, 0))
@@ -1676,10 +1675,10 @@ class EntityStack(QGraphicsItem):
     def remove(self):
         # Fix for the nullptr left by the scene parent of the widget, avoids a segfault from the dangling pointer
         for spin in self.spinners:
-            self.scene().removeItem(spin)
             # spin.widget().setParent(None)
             spin.setWidget(None)	# Turns out this function calls the above commented out function
-        del self.spinners
+            self.scene().removeItem(spin)
+        #del self.spinners # causes crashes
 
         self.scene().removeItem(self)
 
