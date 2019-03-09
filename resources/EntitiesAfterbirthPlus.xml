@@ -387,7 +387,6 @@
 	<entity BaseHP="130" Boss="1" Group="Chapter 1" ID="100" Image="resources/Entities/100.0.0 - Widow.png" Kind="Bosses" Name="Widow" Subtype="0" Variant="0" />
 	<entity BaseHP="90"  Boss="1" Group="Chapter 1" ID="237" Image="resources/Entities/237.1.0 - Gurgling (boss).png" Kind="Bosses" Name="Gurgling (boss)" Subtype="0" Variant="1" />
 	<entity BaseHP="90"  Boss="1" Group="Chapter 1" ID="237" Image="resources/Entities/237.2.0 - Turdling.png" Kind="Bosses" Name="Turdling" Subtype="0" Variant="2" />
-	<entity BaseHP="250" Boss="1" Group="Chapter 1" ID="99" Image="resources/Entities/99.0.0 - Gurdy Jr..png" Kind="Bosses" Name="Gurdy Jr." Subtype="0" Variant="0" />
 	<entity BaseHP="180" Boss="1" Group="Chapter 1" ID="62" Image="resources/Entities/62.0.0 - Pin.png" Kind="Bosses" Name="Pin" Subtype="0" Variant="0" />
 	<entity BaseHP="200" Boss="1" Group="Chapter 1" ID="260" Image="resources/Entities/260.0.0 - Haunt.png" Kind="Bosses" Name="Haunt" Subtype="0" Variant="0" />
 	<entity BaseHP="240" Boss="1" Group="Chapter 1" ID="63" Image="resources/Entities/63.0.0 - Famine.png" Kind="Bosses" Name="Famine" Subtype="0" Variant="0" />
@@ -397,8 +396,9 @@
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.0.0 - Chub.png" Kind="Bosses" Name="Chub" Subtype="0" Variant="0" />
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.1.0 - C.H.A.D..png" Kind="Bosses" Name="C.H.A.D." Subtype="0" Variant="1" />
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.2.0 - The Carrion Queen.png" Kind="Bosses" Name="The Carrion Queen" Subtype="0" Variant="2" />
-	<entity BaseHP="595" Boss="1" Group="Chapter 2" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" PlaceVisual="0,1" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
 	<entity BaseHP="450" Boss="1" Group="Chapter 2" ID="68" Image="resources/Entities/68.0.0 - Peep.png" Kind="Bosses" Name="Peep" Subtype="0" Variant="0" />
+	<entity BaseHP="595" Boss="1" Group="Chapter 2" ID="36" Image="resources/Entities/36.0.0 - Gurdy.png" PlaceVisual="0,1" Kind="Bosses" Name="Gurdy" Subtype="0" Variant="0" />
+	<entity BaseHP="250" Boss="1" Group="Chapter 1" ID="99" Image="resources/Entities/99.0.0 - Gurdy Jr.png" Kind="Bosses" Name="Gurdy Jr." Subtype="0" Variant="0" />
 	<entity BaseHP="22"  Boss="1" Group="Chapter 2" ID="19" Image="resources/Entities/19.1.0 - The Hollow.png" Kind="Bosses" Name="The Hollow" Subtype="0" Variant="1" />
 	<entity BaseHP="150" Boss="1" Group="Chapter 2" ID="67" Image="resources/Entities/67.1.0 - The Husk.png" Kind="Bosses" Name="The Husk" Subtype="0" Variant="1" />
 	<entity BaseHP="215" Boss="1" Group="Chapter 2" ID="100" Image="resources/Entities/100.1.0 - The Wretched.png" Kind="Bosses" Name="The Wretched" Subtype="0" Variant="1" />
