@@ -2650,7 +2650,7 @@ class RoomSelector(QWidget):
     def duplicateRoom(self):
         """Duplicates the selected room"""
 
-        rooms = self.selectedRooms()
+        rooms = self.orderedSelectedRooms()
         if rooms == None or len(rooms) == 0:
             return
 
@@ -2733,7 +2733,7 @@ class RoomSelector(QWidget):
         path = target
 
         # Append these rooms onto the new STB
-        rooms = self.selectedRooms()
+        rooms = self.orderedSelectedRooms()
         if os.path.exists(path):
             oldRooms = mainWindow.open(path)
             oldRooms.extend(rooms)
@@ -2755,12 +2755,12 @@ class RoomSelector(QWidget):
     def selectedRooms(self):
         return self.list.selectedItems()
 
-    def getRooms(self):
-        ret = []
-        for i in range(self.list.count()):
-            ret.append(self.list.item(i))
+    def orderedSelectedRooms(self):
+        sortedIndexes = sorted(self.list.selectionModel().selectedIndexes(), key=lambda x: (x.column(), x.row()))
+        return [ self.list.itemFromIndex(i) for i in sortedIndexes ]
 
-        return ret
+    def getRooms(self):
+        return [ self.list.item(i) for i in range(self.list.count()) ]
 
 # Entity Palette
 ########################
