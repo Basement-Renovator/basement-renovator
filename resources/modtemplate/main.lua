@@ -20,23 +20,23 @@ end
 
 local success, data = pcall(require, 'roomTest')
 if success then
-    BasementRenovator.testRoom = data
+    BasementRenovator.TestRoomData = data
 else
     log(data) -- error
 end
 
-if not BasementRenovator.testRoom then
+if not BasementRenovator.TestRoomData then
     log('No room to test; please disable the mod')
     return
 else
-    local room = BasementRenovator.testRoom
-    log('TEST METHOD: ' .. BasementRenovator.testRoom.TestType)
+    local room = BasementRenovator.TestRoomData
+    log('TEST METHOD: ' .. BasementRenovator.TestRoomData.TestType)
     log('TEST STAGE: ' .. room.Stage .. '.' .. room.StageType)
     log('TEST ROOM: ' .. room.Type .. '.' .. room.Variant .. '.' .. room.Subtype)
 end
 
 function BasementRenovator:InTestRoom()
-    local test = BasementRenovator.testRoom
+    local test = BasementRenovator.TestRoomData
 
     local t, v, s = test.Type, test.Variant, test.Subtype
 
@@ -51,11 +51,11 @@ end
 local badShapes = {
     [2] = true,
     [3] = true,
-    [5] = true, 
+    [5] = true,
     [7] = true
 }
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function(_, curse)
-    local test = BasementRenovator.testRoom
+    local test = BasementRenovator.TestRoomData
 
     if test.TestType == 'StageReplace' and badShapes[test.Shape] then
         log('Forcing XL due to room shape!')
@@ -64,7 +64,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function(_, c
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
-    local test = BasementRenovator.testRoom
+    local test = BasementRenovator.TestRoomData
 
     if test.TestType == 'StageReplace' then
         Game():GetPlayer(0):AddCollectible(CollectibleType.COLLECTIBLE_MIND, 0, false)
@@ -78,7 +78,7 @@ local typeToSuffix = {
     [StageType.STAGETYPE_AFTERBIRTH] = "b"
 }
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function()
-    local test = BasementRenovator.testRoom
+    local test = BasementRenovator.TestRoomData
     -- For whatever reasons, callbacks execute when the stage command is run from the console,
     -- but don't when used from lua
     -- This may be patched in Rep, so fix this then so the callback doesn't happen twice
@@ -96,22 +96,31 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function()
         end
     end
 
-    fireCallback('TestStage', BasementRenovator.testRoom)
+    fireCallback('TestStage', BasementRenovator.TestRoomData)
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
     local desc = BasementRenovator:InTestRoom()
     if desc then
-        fireCallback('TestRoom', BasementRenovator.testRoom, desc)
+        fireCallback('TestRoom', BasementRenovator.TestRoomData, desc)
     end
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_PRE_ROOM_ENTITY_SPAWN, function(_, ...)
     local desc = BasementRenovator:InTestRoom()
     if desc then
-        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.testRoom, desc, ...)
+        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.TestRoomData, desc, ...)
         if replacement then
             return replacement
         end
     end
+end)
+
+BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
+    local test = BasementRenovator.TestRoomData
+    local desc = BasementRenovator:InTestRoom()
+
+    local pos = Game():GetRoom():GetRenderSurfaceTopLeft() * 2 + Vector(-20,286) --Vector(442,286)
+    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. test.Name .. " (" .. test.Variant .. ")", pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+    Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (desc and 'YES' or 'NO'), pos.X, pos.Y - 12, 0.5, 0.5, 255, 255, 0, 0.75)
 end)
