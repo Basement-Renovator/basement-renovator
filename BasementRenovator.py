@@ -1124,7 +1124,7 @@ class RoomEditorWidget(QGraphicsView):
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, ", ".join(set([x.entity.name for x in selectedEntities])) )
+            painter.drawText(r.right() - 34 - 200, 20, 200, 12, Qt.AlignRight | Qt.AlignBottom, ", ".join(set([x.entity.name or 'INVALID' for x in selectedEntities])) )
 
             pass
 
@@ -2651,22 +2651,23 @@ class RoomSelector(QWidget):
         """Duplicates the selected room"""
 
         rooms = self.orderedSelectedRooms()
-        if rooms == None or len(rooms) == 0:
-            return
+        if not rooms: return
+
+        numRooms = len(rooms)
 
         mainWindow.storeEntityList()
 
-        initialPlace = self.list.currentRow()
+        lastPlace = self.list.indexFromItem(rooms[-1]).row() + 1
         self.selectedRoom().setData(100, False)
         self.list.setCurrentItem(None, QItemSelectionModel.ClearAndSelect)
 
-        for room in rooms:
+        for room in reversed(rooms):
             if self.mirrorY:
                 v = 20000
             elif self.mirror:
                 v = 10000
             else:
-                v = 1
+                v = numRooms
 
             r = Room(
                 deepcopy(room.data(0x100) + ' (copy)'),
@@ -2696,7 +2697,7 @@ class RoomSelector(QWidget):
                 else:
                     r.mirrorX()
 
-            self.list.insertItem(initialPlace + v, r)
+            self.list.insertItem(lastPlace, r)
             self.list.setCurrentItem(r, QItemSelectionModel.Select)
 
         mainWindow.dirt()
@@ -3350,7 +3351,9 @@ class MainWindow(QMainWindow):
         self.setIconSize(QSize(16, 16))
 
         self.dirty = False
+
         self.wroteModFolder = False
+        self.disableTestModTimer = None
 
         self.scene = RoomScene()
         self.clipboard = None
@@ -3422,6 +3425,8 @@ class MainWindow(QMainWindow):
         self.e.addSeparator()
         self.ef = self.e.addAction('Clear Filters',               self.roomList.clearAllFilter, QKeySequence("Ctrl+K"))
         self.eg = self.e.addAction('Pin Entity Filter',           lambda: self.toggleSetting('PinEntityFilter'), QKeySequence("Ctrl+Alt+K"))
+        self.eg.setCheckable(True)
+        self.eg.setChecked(settings.value('PinEntityFilter') == '1')
         self.e.addSeparator()
         self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
         self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
@@ -3440,8 +3445,12 @@ class MainWindow(QMainWindow):
 
         r = mb.addMenu('Test')
         self.ra = r.addAction('Test Current Room - InstaPreview',  self.testMapInstapreview, QKeySequence("Ctrl+P"))
-        self.ra = r.addAction('Test Current Room - Replace Stage', self.testMap,             QKeySequence("Ctrl+T"))
-        self.ra = r.addAction('Test Current Room - Replace Start', self.testStartMap,        QKeySequence("Ctrl+Shift+T"))
+        self.rb = r.addAction('Test Current Room - Replace Stage', self.testMap,             QKeySequence("Ctrl+T"))
+        self.rc = r.addAction('Test Current Room - Replace Start', self.testStartMap,        QKeySequence("Ctrl+Shift+T"))
+        r.addSeparator()
+        self.rd = r.addAction('Enable Test Mod Dialog',  lambda: self.toggleSetting('DisableTestDialog'))
+        self.rd.setCheckable(True)
+        self.rd.setChecked(settings.value('DisableTestDialog') != '1')
 
         h = mb.addMenu('Help')
         self.ha = h.addAction('About Basement Renovator',         self.aboutDialog)
@@ -3533,6 +3542,8 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         """Handler for the main window close event"""
+
+        self.disableTestMod()
 
         if self.checkDirty():
             event.ignore()
@@ -3735,7 +3746,12 @@ class MainWindow(QMainWindow):
         path = path or self.path
 
         # Let's read the file and parse it into our list items
-        stb = open(path, 'rb').read()
+        stb = None
+        try:
+            stb = open(path, 'rb').read()
+        except:
+            QMessageBox.warning(self, "Error", "Failed opening rooms. The file may not exist.")
+            return
 
         # Header
         try:
@@ -3811,7 +3827,7 @@ class MainWindow(QMainWindow):
                         global entityXML
                         en = entityXML.find(f"entity[@ID='{etype}'][@Subtype='{esubtype}'][@Variant='{evariant}']")
                         if en == None or en.get('Invalid') == '1':
-                            print(f"Room has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})")
+                            print(f"Room {getRoomPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})")
                         seenSpawns[(etype, esubtype, evariant)] = en == None or en.get('Invalid') == '1'
 
                     off += 0xA
@@ -3999,11 +4015,13 @@ class MainWindow(QMainWindow):
 
         self.scene.grid = g
 
-    def makeTestMod(self):
+    def getTestModPath(self):
         modFolder = findModsPath()
-
         name = 'basement-renovator-helper'
-        folder = os.path.join(modFolder, name)
+        return os.path.join(modFolder, name)
+
+    def makeTestMod(self):
+        folder = self.getTestModPath()
         roomPath = os.path.join(folder, 'resources', 'rooms')
 
         if not mainWindow.wroteModFolder and os.path.isdir(folder):
@@ -4038,16 +4056,25 @@ class MainWindow(QMainWindow):
     def writeTestData(self, folder, testType, floorInfo, testRoom):
         with open(os.path.join(folder, 'roomTest.lua'), 'w') as testData:
 
+            quot = '\\"'
             testData.write(f'''return {{
     TestType = '{testType}',
     Stage = {floorInfo[1]},
     StageType = {floorInfo[2]},
+    Name = "{testRoom.data(0x100).replace('"', quot)}",
     Type = {testRoom.roomType},
     Variant = {testRoom.roomVariant},
     Subtype = {testRoom.roomSubvariant},
     Shape = {testRoom.roomShape}
 }}
 ''')
+
+    def disableTestMod(self, modPath=None):
+        modPath = modPath or self.getTestModPath()
+        if not os.path.isdir(modPath): return
+
+        with open(os.path.join(modPath, 'disable.it'), 'w'):
+            pass
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
@@ -4212,7 +4239,7 @@ class MainWindow(QMainWindow):
                 out.write('<stage>\n')
             # Room header
             out.write('<room type="%d" variant="%d" subtype="%d" name="%s" difficulty="%d" weight="%g" width="%d" height="%d" shape="%d">\n' % (
-                room.roomType, room.roomVariant, room.roomSubvariant, room.text(), room.roomDifficulty,
+                room.roomType, room.roomVariant, room.roomSubvariant, room.data(0x100), room.roomDifficulty,
                 room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape
             ))
 
@@ -4328,26 +4355,37 @@ class MainWindow(QMainWindow):
              QMessageBox.warning(self, "Error", f'Failed to test with {testType}: {e}')
              return
 
-        # Prompt to disable mod and perform cleanup
-        # for some reason, if the dialog blocks on the button click,
-        # e.g. QMessageBox.information() or msg.exec(), isaac crashes on launch.
-        # This is probably a bug in python or Qt
-        msg = QMessageBox(QMessageBox.Information,
-            'Disable BR', extraMessage +
-            'Press "OK" when done testing to disable the BR helper mod.'
-            , QMessageBox.Ok, self)
+        if settings.value('DisableTestDialog') == '1':
+            # disable mod in 5 minutes
+            if self.disableTestModTimer: self.disableTestModTimer.disconnect()
+            timer = QTimer()
+            timer.setSingleShot(True)
+            timer.timeout.connect(lambda: self.disableTestMod(modPath))
+            self.disableTestModTimer = timer
+            timer.start(5 * 60 * 1000)
 
-        def fin(button):
-            result = msg.standardButton(button)
-            if result == QMessageBox.Ok:
-                if os.path.isdir(modPath):
-                    with open(os.path.join(modPath, 'disable.it'), 'w'):
-                        pass
+            if extraMessage:
+                QMessageBox.information(self, 'BR Test', extraMessage)
 
-            self.killIsaac()
+        else:
+            # Prompt to disable mod and perform cleanup
+            # for some reason, if the dialog blocks on the button click,
+            # e.g. QMessageBox.information() or msg.exec(), isaac crashes on launch.
+            # This is probably a bug in python or Qt
+            msg = QMessageBox(QMessageBox.Information,
+                'Disable BR', extraMessage +
+                'Press "OK" when done testing to disable the BR helper mod.'
+                , QMessageBox.Ok, self)
 
-        msg.buttonClicked.connect(fin)
-        msg.open()
+            def fin(button):
+                result = msg.standardButton(button)
+                if result == QMessageBox.Ok:
+                    self.disableTestMod(modPath)
+
+                self.killIsaac()
+
+            msg.buttonClicked.connect(fin)
+            msg.open()
 
 # Edit
 ########################
