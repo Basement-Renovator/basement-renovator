@@ -32,6 +32,7 @@ from PyQt5.QtWidgets import *
 from collections import OrderedDict
 from copy import deepcopy
 
+import traceback, sys
 import struct, os, subprocess, platform, webbrowser, urllib, re, shutil
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -520,7 +521,7 @@ class RoomScene(QGraphicsScene):
 
     def __init__(self):
         QGraphicsScene.__init__(self, 0, 0, 0, 0)
-        self.newRoomSize(13, 7, 1)
+        self.newRoomSize(1)
 
         self.BG = [
             "01_basement", "02_cellar", "03_caves", "04_catacombs",
@@ -542,17 +543,13 @@ class RoomScene(QGraphicsScene):
 
         self.tile = None
 
-    def newRoomSize(self, w, h, s):
-        # Fuck their room size code is inelegant and annoying - these are kept for error checking purposes, of which I didn't do a great job
-        self.initialRoomWidth = w
-        self.initialRoomHeight = h
+    def newRoomSize(self, shape):
+        self.roomInfo = Room.Info(shape=shape)
+        if not self.roomInfo.shapeData: return
 
-        # Drawing variables
-        self.roomWidth = w
-        self.roomHeight = h
-        self.roomShape = s
+        self.roomWidth, self.roomHeight = self.roomInfo.dims
 
-        self.setSceneRect(-52, -52, self.roomWidth * 26 + 52 * 2, self.roomHeight * 26 + 52 * 2)
+        self.setSceneRect(-2 * 26, -2 * 26, (self.roomWidth + 4) * 26, (self.roomHeight + 4) * 26)
 
     def clearDoors(self):
         for item in self.items():
@@ -572,47 +569,40 @@ class RoomScene(QGraphicsScene):
             painter.fillRect(rect, b)
             return
 
-        # Draw me a foreground grid
-        if not self.grid: return
+        if settings.value('GridEnabled') == '0': return
+
+        gs = 26
 
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
-        rect = QRectF(0, 0, self.roomWidth * 26, self.roomHeight * 26)
+        white = QColor.fromRgb(255, 255, 255, 100)
+        bad = QColor.fromRgb(50, 255, 255, 100)
 
-        # Modify Rect for slim rooms
-        if self.roomShape in [2, 7]:
-            rect = QRectF(0, 52, self.roomWidth * 26, self.roomHeight * 26)
+        for y in range(self.roomHeight):
+            for x in range(self.roomWidth):
+                if self.roomInfo.isInBounds(x,y):
+                    painter.setPen(QPen(white, 1, Qt.DashLine))
+                else:
+                    painter.setPen(QPen(bad, 1, Qt.DashLine))
 
-        if self.roomShape in [3, 5]:
-            rect = QRectF(104, 0, self.roomWidth * 26, self.roomHeight * 26)
+                painter.drawLine(x * gs, y * gs, (x + 1) * gs, y * gs)
+                painter.drawLine(x * gs, (y + 1) * gs, (x + 1) * gs, (y + 1) * gs)
+                painter.drawLine(x * gs, y * gs, x * gs, (y + 1) * gs)
+                painter.drawLine((x + 1) * gs, y * gs, (x + 1) * gs, (y + 1) * gs)
 
-        # Actual drawing code
-        ts = 26
+        # Draw Walls (Debug)
+        # painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
+        # h = gs / 2
+        # walls = self.roomInfo.shapeData['Walls']
+        # for wmin, wmax, wlvl, wdir in walls['X']:
+        #     painter.drawLine(wmin * gs + h, wlvl * gs + h, wmax * gs + h, wlvl * gs + h)
+        # for wmin, wmax, wlvl, wdir in walls['Y']:
+        #     painter.drawLine(wlvl * gs + h, wmin * gs + h, wlvl * gs + h, wmax * gs + h)
 
-        startx = rect.x()
-        endx = startx + rect.width()
-
-        starty = rect.y()
-        endy = starty + rect.height()
-
-        painter.setPen(QPen(QColor.fromRgb(255, 255, 255, 100), 1, Qt.DashLine))
-
-        x = startx
-        y1 = rect.top()
-        y2 = rect.bottom()
-        while x <= endx:
-            painter.drawLine(x, starty, x, endy)
-            x += ts
-
-        y = starty
-        x1 = rect.left()
-        x2 = rect.right()
-        while y <= endy:
-            painter.drawLine(startx, y, endx, y)
-            y += ts
 
     def loadBackground(self):
+        gs = 26
 
         roomBG = 1
 
@@ -622,11 +612,11 @@ class RoomScene(QGraphicsScene):
         self.tile = QImage()
         self.tile.load('resources/Backgrounds/{0}.png'.format(self.BG[roomBG-1]))
 
-        self.corner = self.tile.copy(QRect(0,      0,      26 * 7, 26 * 4))
-        self.vert   = self.tile.copy(QRect(26 * 7, 0,      26 * 2, 26 * 6))
-        self.horiz  = self.tile.copy(QRect(0,      26 * 4, 26 * 9, 26 * 2))
+        # grab the images from the appropriate parts of the spritesheet
+        self.corner = self.tile.copy(QRect(0,      0,      gs * 7, gs * 4))
+        self.vert   = self.tile.copy(QRect(gs * 7, 0,      gs * 2, gs * 6))
+        self.horiz  = self.tile.copy(QRect(0,      gs * 4, gs * 9, gs * 2))
 
-        # I'll need to do something here for the other corner
         self.innerCorner = QImage()
         self.innerCorner.load('resources/Backgrounds/{0}Inner.png'.format(self.BG[roomBG - 1]))
 
@@ -634,32 +624,36 @@ class RoomScene(QGraphicsScene):
 
         self.loadBackground()
 
+        if not self.roomInfo.shapeData:
+            print (f"This room has an unknown shape: {self.roomInfo.shape}")
+            self.drawBGRegularRooms(painter, rect)
+
         ########## SHAPE DEFINITIONS
         # w x h
         # 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2
         # 9 = DR corner, 10 = DL corner, 11 = UR corner, 12 = UL corner
 
         # Regular Rooms
-        if self.roomShape in [1, 4, 6, 8]:
+        if self.roomInfo.shape in [1, 4, 6, 8]:
             self.drawBGRegularRooms(painter, rect)
 
         # Slim Rooms
-        elif self.roomShape in [2, 3, 5, 7]:
+        elif self.roomInfo.shape in [2, 3, 5, 7]:
             self.drawBGSlimRooms(painter, rect)
 
         # L Rooms
-        elif self.roomShape in [9, 10, 11, 12]:
+        elif self.roomInfo.shape in [9, 10, 11, 12]:
             self.drawBGCornerRooms(painter, rect)
 
-        # Uh oh
-        else:
-            print ("This room is not a known shape. {0} - {1} x {2}".format(self.roomShape, self.roomWidth, self.roomHeight))
-            self.drawBGRegularRooms(painter, rect)
-
     def drawBGRegularRooms(self, painter, rect):
-        t = -52
-        xm = 26 * (self.roomWidth + 2)  - 26 * 7
-        ym = 26 * (self.roomHeight + 2) - 26 * 4
+        gs = 26
+
+        width = self.roomWidth - 2
+        height = self.roomHeight - 2
+
+        t = -1 * gs
+        xm = gs * (width - 4)
+        ym = gs * (height - 1)
 
         # Corner Painting
         painter.drawPixmap(t,  t,  QPixmap().fromImage(self.corner.mirrored(False, False)))
@@ -668,80 +662,86 @@ class RoomScene(QGraphicsScene):
         painter.drawPixmap(xm, ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
         # Mirrored Textures
-        uRect = QImage(26 * 4, 26 * 6, QImage.Format_RGB32)
-        lRect = QImage(26 * 9, 26 * 4, QImage.Format_RGB32)
+        uRect = QImage(gs * 4, gs * 6, QImage.Format_RGB32)
+        lRect = QImage(gs * 9, gs * 4, QImage.Format_RGB32)
 
         uRect.fill(1)
         lRect.fill(1)
 
+        # setup the image tiles
         vp = QPainter()
         vp.begin(uRect)
         vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(52, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
+        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
         vp.end()
 
         vh = QPainter()
         vh.begin(lRect)
         vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, 52, QPixmap().fromImage(self.horiz.mirrored(False, True)))
+        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
         vh.end()
 
+        # paint the tiles onto the scene
         painter.drawTiledPixmap(
-            26 * 7 - 52 - 13,
-            -52,
-            26 * (self.roomWidth - 10) + 26,
-            26 * 6,
+            gs * 5,
+            -1 * gs,
+            gs * (width - 9),
+            gs * 6,
             QPixmap().fromImage(uRect)
         )
         painter.drawTiledPixmap(
-            -52,
-            26 * 4 - 52 - 13,
-            26 * 9,
-            26 * (self.roomHeight - 4) + 26,
+            -1 * gs,
+            gs * 2,
+            gs * 9,
+            gs * (height - 3),
             QPixmap().fromImage(lRect)
         )
         painter.drawTiledPixmap(
-            26 * 7 - 52 - 13,
-            self.roomHeight * 26 - 26 * 4,
-            26 * (self.roomWidth - 10) + 26,
+            gs * 5,
+            gs * (height - 3),
+            26 * (width - 9),
             26 * 6,
             QPixmap().fromImage(uRect.mirrored(False, True))
         )
         painter.drawTiledPixmap(
-            self.roomWidth * 26 - 26 * 7,
-            26 * 4 - 52 - 13,
-            26 * 9,
-            26 * (self.roomHeight - 4) + 26,
+            gs * (width - 6),
+            gs * 2,
+            gs * 9,
+            gs * (height - 3),
             QPixmap().fromImage(lRect.mirrored(True, False))
         )
 
-        if self.roomHeight == 14 and self.roomWidth == 26:
+        if height == 14 and width == 26:
 
-            self.center = self.tile.copy(QRect(26 * 3, 26 * 3, 26 * 6, 26 * 3))
+            self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
 
-            painter.drawPixmap	(26 * 7,  26 * 4, QPixmap().fromImage(self.center.mirrored(False, False)))
-            painter.drawPixmap	(26 * 13, 26 * 4, QPixmap().fromImage(self.center.mirrored(True, False)))
-            painter.drawPixmap	(26 * 7,  26 * 7, QPixmap().fromImage(self.center.mirrored(False, True)))
-            painter.drawPixmap	(26 * 13, 26 * 7, QPixmap().fromImage(self.center.mirrored(True, True)))
+            painter.drawPixmap	(gs * 8,  gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
+            painter.drawPixmap	(gs * 14, gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
+            painter.drawPixmap	(gs * 8,  gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
+            painter.drawPixmap	(gs * 14, gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
 
     def drawBGSlimRooms(self, painter, rect):
+        gs = 26
 
-        t = -52
+        width = self.roomWidth - 2
+        height = self.roomHeight - 2
+
+        t = -1 * gs
         yo = 0
         xo = 0
 
         # Thin in Height
-        if self.roomShape in [2, 7]:
-            self.roomHeight = 3
-            yo = (2 * 26)
+        if self.roomInfo.shape in [2, 7]:
+            height = 3
+            yo = (2 * gs)
 
         # Thin in Width
-        if self.roomShape in [3, 5]:
-            self.roomWidth = 5
-            xo = (4 * 26)
+        if self.roomInfo.shape in [3, 5]:
+            width = 5
+            xo = (4 * gs)
 
-        xm = 26 * (self.roomWidth+2)  - 26 * 7
-        ym = 26 * (self.roomHeight+2) - 26 * 4
+        xm = gs * (width - 4)
+        ym = gs * (height - 1)
 
         # Corner Painting
         painter.drawPixmap(t + xo,  t + yo,  QPixmap().fromImage(self.corner.mirrored(False, False)))
@@ -750,8 +750,8 @@ class RoomScene(QGraphicsScene):
         painter.drawPixmap(xm + xo, ym + yo, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
         # Mirrored Textures
-        uRect = QImage(26 * 4, 26 * 4, QImage.Format_RGB32)
-        lRect = QImage(26 * 7, 26 * 4, QImage.Format_RGB32)
+        uRect = QImage(gs * 4, gs * 4, QImage.Format_RGB32)
+        lRect = QImage(gs * 7, gs * 4, QImage.Format_RGB32)
 
         uRect.fill(1)
         lRect.fill(1)
@@ -759,75 +759,80 @@ class RoomScene(QGraphicsScene):
         vp = QPainter()
         vp.begin(uRect)
         vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(52, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
+        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
         vp.end()
 
         vh = QPainter()
         vh.begin(lRect)
         vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, 52, QPixmap().fromImage(self.horiz.mirrored(False, True)))
+        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
         vh.end()
 
         painter.drawTiledPixmap(
-            xo + 26 * 7 - 52 - 13,
-            yo + -52,
-            26 * (self.roomWidth - 10) + 26,
-            26 * 4,
+            xo + gs * 5,
+            yo - 1 * gs,
+            gs * (width - 9),
+            gs * 4,
             QPixmap().fromImage(uRect)
         )
         painter.drawTiledPixmap(
-            xo + -52,
-            yo + 26 * 4 - 52 -13,
-            26 * 7,
-            26 * (self.roomHeight - 4) + 26,
+            xo - 1 * gs,
+            yo + gs * 2,
+            gs * 7,
+            gs * (height - 3),
             QPixmap().fromImage(lRect)
         )
         painter.drawTiledPixmap(
-            xo + 26 * 7 - 52 - 13,
-            yo + self.roomHeight * 26 - 26 * 2,
-            26 * (self.roomWidth - 10) + 26,
-            26 * 4,
+            xo + gs * 5,
+            yo + gs * (height - 1),
+            gs * (width - 9),
+            gs * 4,
             QPixmap().fromImage(uRect.mirrored(False, True))
         )
         painter.drawTiledPixmap(
-            xo + self.roomWidth * 26 - 26 * 5,
-            yo + 26 * 4 - 52 - 13,
-            26 * 7,
-            26 * (self.roomHeight - 4) + 26,
+            xo + gs * (width - 4),
+            yo + gs * 3,
+            gs * 7,
+            gs * (height - 3),
             QPixmap().fromImage(lRect.mirrored(True, False))
         )
 
-        if self.roomHeight == 14 and self.roomWidth == 26:
+        if height == 14 and width == 26:
 
-            self.center = self.tile.copy(QRect(26 * 3, 26 * 3, 26 * 6, 26 * 3))
+            self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
 
-            painter.drawPixmap(xo + 26 * 7,  yo + 26 * 4, QPixmap().fromImage(self.center.mirrored(False, False)))
-            painter.drawPixmap(xo + 26 * 13, yo + 26 * 4, QPixmap().fromImage(self.center.mirrored(True, False)))
-            painter.drawPixmap(xo + 26 * 7 , yo + 26 * 7, QPixmap().fromImage(self.center.mirrored(False, True)))
-            painter.drawPixmap(xo + 26 * 13, yo + 26 * 7, QPixmap().fromImage(self.center.mirrored(True, True)))
+            painter.drawPixmap(xo + gs * 8,  yo + gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
+            painter.drawPixmap(xo + gs * 14, yo + gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
+            painter.drawPixmap(xo + gs * 8,  yo + gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
+            painter.drawPixmap(xo + gs * 14, yo + gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
 
     def drawBGCornerRooms(self, painter, rect):
-        t = -52
-        xm = 26 * (self.roomWidth + 2)  - 26 * 7
-        ym = 26 * (self.roomHeight + 2) - 26 * 4
+        gs = 26
+
+        width = self.roomWidth - 2
+        height = self.roomHeight - 2
+
+        t = -1 * gs
+        xm = gs * (width - 4)
+        ym = gs * (height - 1)
 
         # Mirrored Textures
-        uRect = QImage(26 * 4, 26 * 6, QImage.Format_RGB32)
-        lRect = QImage(26 * 9, 26 * 4, QImage.Format_RGB32)
+        uRect = QImage(gs * 4, gs * 6, QImage.Format_RGB32)
+        lRect = QImage(gs * 9, gs * 4, QImage.Format_RGB32)
 
         uRect.fill(1)
         lRect.fill(1)
 
         vp = QPainter()
         vp.begin(uRect)
-        vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(52, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
+        vp.drawPixmap(0,      0, QPixmap().fromImage(self.vert))
+        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
         vp.end()
 
         vh = QPainter()
         vh.begin(lRect)
-        vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, 52, QPixmap().fromImage(self.horiz.mirrored(False, True)))
+        vh.drawPixmap(0, 0,      QPixmap().fromImage(self.horiz))
+        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
         vh.end()
 
         # Exterior Corner Painting
@@ -837,88 +842,88 @@ class RoomScene(QGraphicsScene):
         painter.drawPixmap(xm, ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
 
         # Exterior Wall Painting
-        painter.drawTiledPixmap(26 * 7 - 52 - 13, -52, 26 * (self.roomWidth - 10) + 26, 26 * 6, QPixmap().fromImage(uRect))
-        painter.drawTiledPixmap(-52, 26 * 4 - 52 - 13, 26 * 9, 26 * (self.roomHeight - 4) + 26, QPixmap().fromImage(lRect))
-        painter.drawTiledPixmap(26 * 7 - 52 - 13, self.roomHeight * 26 - 26 * 4, 26 * (self.roomWidth - 10) + 26, 26 * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
-        painter.drawTiledPixmap(self.roomWidth * 26 - 26 * 7, 26 * 4 - 52 - 13, 26 * 9, 26 * (self.roomHeight - 4) + 26, QPixmap().fromImage(lRect.mirrored(True, False)))
+        painter.drawTiledPixmap(gs * 5, gs * -1, gs * (width - 9), gs * 6, QPixmap().fromImage(uRect))
+        painter.drawTiledPixmap(-gs * 1, gs * 2, gs * 9, gs * (height - 3), QPixmap().fromImage(lRect))
+        painter.drawTiledPixmap(gs * 5, gs * (height - 3), gs * (width - 9), gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
+        painter.drawTiledPixmap(gs * (width - 6), gs * 2, gs * 9, gs * (height - 3), QPixmap().fromImage(lRect.mirrored(True, False)))
 
         # Center Floor Painting
-        self.center = self.tile.copy(QRect(26 * 3, 26 * 3, 26 * 6, 26 * 3))
+        self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
 
-        painter.drawPixmap(26 * 7,  26 * 4, QPixmap().fromImage(self.center.mirrored(False, False)))
-        painter.drawPixmap(26 * 13, 26 * 4, QPixmap().fromImage(self.center.mirrored(True, False)))
-        painter.drawPixmap(26 * 7,  26 * 7, QPixmap().fromImage(self.center.mirrored(False, True)))
-        painter.drawPixmap(26 * 13, 26 * 7, QPixmap().fromImage(self.center.mirrored(True, True)))
+        painter.drawPixmap(gs * 8,  gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
+        painter.drawPixmap(gs * 14, gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
+        painter.drawPixmap(gs * 8,  gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
+        painter.drawPixmap(gs * 14, gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
 
         # Interior Corner Painting (This is the annoying bit)
         # New midpoints
-        xm = 26 * (self.roomWidth / 2)
-        ym = 26 * (self.roomHeight / 2)
+        xm = gs * (width / 2)
+        ym = gs * (height / 2)
 
         # New half-lengths/heights
-        xl = 26 * (self.roomWidth + 4) / 2
-        yl = 26 * (self.roomHeight + 4) / 2
+        xl = xm + gs * 2
+        yl = ym + gs * 2
 
 
-        if self.roomShape == 9:
+        if self.roomInfo.shape == 9:
             # Clear the dead area
             painter.fillRect(t, t, xl, yl, QColor(0, 0, 0, 255))
 
             # Draw the horizontal wall
-            painter.drawTiledPixmap(xm - 26 * 8, ym + t, 26 * 6, 26 * 6, QPixmap().fromImage(uRect))
+            painter.drawTiledPixmap(xm - gs * 7, ym + t, gs * 6, gs * 6, QPixmap().fromImage(uRect))
 
             # Draw the vertical wall
-            painter.drawTiledPixmap(xm + t, ym - 26 * 5, 26 * 9, 26 * 3, QPixmap().fromImage(lRect))
+            painter.drawTiledPixmap(xm + t, ym - gs * 4, gs * 9, gs * 3, QPixmap().fromImage(lRect))
 
             # Draw the three remaining corners
             painter.drawPixmap(t,      ym + t, QPixmap().fromImage(self.corner.mirrored(False, False)))
             painter.drawPixmap(xm + t, t,      QPixmap().fromImage(self.corner.mirrored(False, False)))
             painter.drawPixmap(xm + t, ym + t, QPixmap().fromImage(self.innerCorner.mirrored(False, False)))
 
-        elif self.roomShape == 10:
+        elif self.roomInfo.shape == 10:
             # Clear the dead area
-            painter.fillRect(xm, t , xl, yl, QColor(0, 0, 0, 255))
+            painter.fillRect(xm - t, t, xl, yl, QColor(0, 0, 0, 255))
 
             # Draw the horizontal wall
-            painter.drawTiledPixmap(xm - t, ym + t, 26 * 6, 26 * 6, QPixmap().fromImage(uRect))
+            painter.drawTiledPixmap(xm + gs * 3, ym + t, gs * 6, gs * 6, QPixmap().fromImage(uRect))
 
             # Draw the vertical wall
-            painter.drawTiledPixmap(xm - 26 * 7, ym - 26 * 5, 26 * 9, 26 * 3, QPixmap().fromImage(lRect.mirrored(True, False)))
+            painter.drawTiledPixmap(xm - gs * 6, ym - gs * 4, gs * 9, gs * 3, QPixmap().fromImage(lRect.mirrored(True, False)))
 
             # Draw the three remaining corners
-            painter.drawPixmap(26 * (self.roomWidth + 2) - 26 * 7, ym + t, QPixmap().fromImage(self.corner.mirrored(True, False)))
-            painter.drawPixmap(xm - 26 * 5, t, QPixmap().fromImage(self.corner.mirrored(True, False)))
-            painter.drawPixmap(xm, ym + t, QPixmap().fromImage(self.innerCorner.mirrored(True, False)))
+            painter.drawPixmap(gs * (width - 4), ym + t, QPixmap().fromImage(self.corner.mirrored(True, False)))
+            painter.drawPixmap(xm - gs * 4, t, QPixmap().fromImage(self.corner.mirrored(True, False)))
+            painter.drawPixmap(xm + gs, ym + t, QPixmap().fromImage(self.innerCorner.mirrored(True, False)))
 
-        elif self.roomShape == 11:
+        elif self.roomInfo.shape == 11:
             # Clear the dead area
-            painter.fillRect(t, ym, xl, yl, QColor(0, 0, 0, 255))
+            painter.fillRect(t, ym - t, xl, yl, QColor(0, 0, 0, 255))
 
             # Draw the horizontal wall
-            painter.drawTiledPixmap(xm - 26 * 8, ym + t * 2, 26 * 6, 26 * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
+            painter.drawTiledPixmap(xm - gs * 7, ym + t * 3, gs * 6, gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
 
             # Draw the vertical wall
-            painter.drawTiledPixmap(xm + t, ym - t, 26 * 9, 26 * 3, QPixmap().fromImage(lRect))
+            painter.drawTiledPixmap(xm + t, ym - t * 2, gs * 9, gs * 4, QPixmap().fromImage(lRect))
 
             # Draw the three remaining corners
             painter.drawPixmap(t,      ym + t,     QPixmap().fromImage(self.corner.mirrored(False, True)))
             painter.drawPixmap(xm + t, ym * 2 + t, QPixmap().fromImage(self.corner.mirrored(False, True)))
-            painter.drawPixmap(xm + t, ym,         QPixmap().fromImage(self.innerCorner.mirrored(False, True)))
+            painter.drawPixmap(xm + t, ym - t,     QPixmap().fromImage(self.innerCorner.mirrored(False, True)))
 
-        elif self.roomShape == 12:
+        elif self.roomInfo.shape == 12:
             # Clear the dead area
-            painter.fillRect(xm, ym, xl, yl, QColor(0, 0, 0, 255))
+            painter.fillRect(xm - t, ym - t, xl, yl, QColor(0, 0, 0, 255))
 
             # Draw the horizontal wall
-            painter.drawTiledPixmap(xm + 26 * 2, ym + t * 2, 26 * 6, 26 * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
+            painter.drawTiledPixmap(xm + gs * 3, ym + t * 3, gs * 6, gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
 
             # Draw the vertical wall
-            painter.drawTiledPixmap(xm - 26 * 7, ym - t, 26 * 9, 26 * 3, QPixmap().fromImage(lRect.mirrored(True, False)))
+            painter.drawTiledPixmap(xm - gs * 6, ym - t * 2, gs * 9, gs * 4, QPixmap().fromImage(lRect.mirrored(True, False)))
 
             # Draw the three remaining corners
-            painter.drawPixmap(xm + 26 * 8, ym + t,      QPixmap().fromImage(self.corner.mirrored(True, True)))
-            painter.drawPixmap(xm - 26 * 5, ym + 26 * 5, QPixmap().fromImage(self.corner.mirrored(True, True)))
-            painter.drawPixmap(xm,          ym,          QPixmap().fromImage(self.innerCorner.mirrored(True, True)))
+            painter.drawPixmap(xm + gs * 9, ym + t,      QPixmap().fromImage(self.corner.mirrored(True, True)))
+            painter.drawPixmap(xm - gs * 4, ym + gs * 6, QPixmap().fromImage(self.corner.mirrored(True, True)))
+            painter.drawPixmap(xm + gs,     ym - t,      QPixmap().fromImage(self.innerCorner.mirrored(True, True)))
 
 class RoomEditorWidget(QGraphicsView):
 
@@ -933,7 +938,6 @@ class RoomEditorWidget(QGraphicsView):
 
         self.assignNewScene(scene)
 
-        self.statusBar = True
         self.canDelete = True
 
     def assignNewScene(self, scene):
@@ -957,10 +961,11 @@ class RoomEditorWidget(QGraphicsView):
 
         xmax, ymax = self.scene().roomWidth, self.scene().roomHeight
 
-        # TODO fix for weird rooms and out of bounds
-
         x = min(max(x, 0), xmax - 1)
         y = min(max(y, 0), ymax - 1)
+
+        if settings.value('SnapToBounds') == '1':
+            x, y = self.scene().roomInfo.snapToBounds(x, y)
 
         for i in self.scene().items():
             if isinstance(i, Entity):
@@ -1031,8 +1036,8 @@ class RoomEditorWidget(QGraphicsView):
         w = self.scene().roomWidth
         h = self.scene().roomHeight
 
-        xScale = event.size().width()  / (w * 26 + 52 * 2)
-        yScale = event.size().height() / (h * 26 + 52 * 2)
+        xScale = event.size().width()  / (26 * (w + 4))
+        yScale = event.size().height() / (26 * (h + 4))
         newScale = min([xScale, yScale])
 
         tr = QTransform()
@@ -1050,7 +1055,7 @@ class RoomEditorWidget(QGraphicsView):
         # Purely handles the status overlay text
         QGraphicsView.paintEvent(self, event)
 
-        if not self.statusBar: return
+        if settings.value('StatusEnabled') == '0': return
 
         # Display the room status in a text overlay
         painter = QPainter()
@@ -1066,19 +1071,19 @@ class RoomEditorWidget(QGraphicsView):
             q = QPixmap()
             q.load('resources/UI/RoomIcons.png')
 
-            painter.drawPixmap(2, 3, q.copy(room.roomType * 16, 0, 16, 16))
+            painter.drawPixmap(2, 3, q.copy(room.info.type * 16, 0, 16, 16))
 
             # Top Text
             font = painter.font()
             font.setPixelSize(13)
             painter.setFont(font)
-            painter.drawText(20, 16, "{0} - {1}".format(room.roomVariant, room.data(0x100)) )
+            painter.drawText(20, 16, f"{room.info.variant} - {room.data(0x100)}" )
 
             # Bottom Text
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(8, 30, f"Difficulty: {room.roomDifficulty}, Weight: {room.roomWeight}, Subtype: {room.roomSubvariant}")
+            painter.drawText(8, 30, f"Difficulty: {room.difficulty}, Weight: {room.weight}, Subtype: {room.info.subtype}")
 
         # Display the currently selected entity in a text overlay
         selectedEntities = self.scene().selectedItems()
@@ -1137,12 +1142,14 @@ class RoomEditorWidget(QGraphicsView):
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
         # Display the number of entities on a given tile, in bitFont or regular font
-        tiles = [[0 for y in range(26)] for x in range(14)]
+        tiles = [ [ 0 for x in range(self.scene().roomWidth) ] for y in range(self.scene().roomHeight) ]
         for e in self.scene().items():
             if isinstance(e, Entity):
                 tiles[e.entity.y][e.entity.x] += 1
 
-        if not self.scene().bitText:
+        useAliased = settings.value('BitfontEnabled') == '0'
+
+        if useAliased:
             painter.setPen(Qt.white)
             painter.font().setPixelSize(5)
 
@@ -1152,7 +1159,7 @@ class RoomEditorWidget(QGraphicsView):
             for x, count in enumerate(row):
                 if count <= 1: continue
 
-                if self.scene().bitText:
+                if not useAliased:
                     xc = (x + 1) * 26 - 12
 
                     digits = [ int(i) for i in str(count) ]
@@ -1170,7 +1177,7 @@ class RoomEditorWidget(QGraphicsView):
                     if count == EntityStack.MAX_STACK_DEPTH: painter.setPen(Qt.white)
 
 class Entity(QGraphicsItem):
-    SNAP_TO = 26
+    GRID_SIZE = 26
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1303,7 +1310,7 @@ class Entity(QGraphicsItem):
 
     def updateTooltip(self):
         e = self.entity
-        tooltipStr = f"{e.name} @ {e.x} x {e.y} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
+        tooltipStr = f"{e.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
 
         if e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += '\nType is outside the valid range of 0 - 999! This will not load properly in-game!'
@@ -1324,44 +1331,49 @@ class Entity(QGraphicsItem):
 
             currentX, currentY = self.x(), self.y()
 
-            x, y = value.x(), value.y()
+            xc, yc = value.x(), value.y()
 
-            try:
-                w = self.scene().initialRoomWidth
-                h = self.scene().initialRoomHeight
-            except:
-                w = 26
-                h = 14
+            # TODO fix this hack, this is only needed because we don't have a scene on init
+            w, h = 28, 16
+            if self.scene():
+                w = self.scene().roomWidth
+                h = self.scene().roomHeight
 
-            x = int((x + (self.SNAP_TO / 2)) / self.SNAP_TO) * self.SNAP_TO
-            y = int((y + (self.SNAP_TO / 2)) / self.SNAP_TO) * self.SNAP_TO
+            # should be round, but python is dumb and
+            # arbitrarily decides when it wants to be
+            # a normal programming language
+            x = int(xc / Entity.GRID_SIZE + 0.5)
+            y = int(yc / Entity.GRID_SIZE + 0.5)
 
-            if x < 0: x = 0
-            if x >= (self.SNAP_TO * (w - 1)): x = (self.SNAP_TO * (w - 1))
-            if y < 0: y = 0
-            if y >= (self.SNAP_TO * (h - 1)): y = (self.SNAP_TO * (h - 1))
+            x = min(max(x, 0), w - 1)
+            y = min(max(y, 0), h - 1)
 
-            if x != currentX or y != currentY:
-                self.entity.x = int(x / self.SNAP_TO)
-                self.entity.y = int(y / self.SNAP_TO)
-                
+            # TODO above hack is here too
+            if settings.value('SnapToBounds') == '1' and self.scene():
+                x, y = self.scene().roomInfo.snapToBounds(x, y)
+
+            xc = x * Entity.GRID_SIZE
+            yc = y * Entity.GRID_SIZE
+
+            if xc != currentX or yc != currentY:
+                self.entity.x = x
+                self.entity.y = y
+
                 self.updateTooltip()
                 if self.isSelected():
                     mainWindow.dirt()
 
-            value.setX(x)
-            value.setY(y)
+            value.setX(xc)
+            value.setY(yc)
 
             self.getStack()
             if self.popup: self.popup.update(self.stack)
-
 
             return value
 
         return QGraphicsItem.itemChange(self, change, value)
 
     def boundingRect(self):
-
         #if self.entity.pixmap:
         #	return QRectF(self.entity.pixmap.rect())
         #else:
@@ -1385,53 +1397,26 @@ class Entity(QGraphicsItem):
             typ, var, sub = self.entity.Type, self.entity.Variant, self.entity.Subtype
 
             def WallSnap():
-                rw = self.scene().roomWidth
-                rh = self.scene().roomHeight
                 ex = self.entity.x
                 ey = self.entity.y
 
-                shape = self.scene().roomShape
-                if shape == 9:
-                    if ex < 13:
-                        ey -= 7
-                        rh = 7
-                    elif ey < 7:
-                        ex -= 13
-                        rw = 13
-                elif shape == 10:
-                    if ex >= 13:
-                        ey -= 7
-                        rh = 7
-                    elif ey < 7:
-                        rw = 13
-                elif shape == 11:
-                    if ex < 13:
-                        rh = 7
-                    elif ey >= 7:
-                        ex -= 13
-                        rw = 13
-                elif shape == 12:
-                    if ex > 13:
-                        rh = 7
-                    elif ey >= 7:
-                        rw = 13
+                shape = self.scene().roomInfo.shapeData
 
-                distances = [rw - ex - 1, ex, ey, rh - ey - 1]
-                closest = min(distances)
-                direction = distances.index(closest)
+                walls = shape['Walls']
+                distancesY = [ ((ex < w[0] or ex > w[1]) and 100000 or abs(ey - w[2]), w) for w in walls['X'] ]
+                distancesX = [ ((ey < w[0] or ey > w[1]) and 100000 or abs(ex - w[2]), w) for w in walls['Y'] ]
 
+                closestY = min(distancesY, key=lambda w: w[0])
+                closestX = min(distancesX, key=lambda w: w[0])
+
+                # TODO match up with game when distances are equal
                 wx, wy = 0, 0
-                if direction == 0: # Right
-                    wx, wy = 2 * closest + 1, 0
-
-                elif direction == 1: # Left
-                    wx, wy = -2 * closest - 1, 0
-
-                elif direction == 2: # Top
-                    wx, wy = 0, -closest - 1
-
-                elif direction == 3: # Bottom
-                    wx, wy = 0, closest
+                if closestY[0] < closestX[0]:
+                    w = closestY[1]
+                    wy = w[2] - ey
+                else:
+                    w = closestX[1]
+                    wx = (w[2] - ex) * 2
 
                 return wx, wy
 
@@ -1467,11 +1452,11 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             # Curse room special case
-            if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().roomType == 10:
+            if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().info.type == 10:
                 self.entity.pixmap = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
 
             # Crawlspace special case
-            if (typ == 0 or typ == 1900) and mainWindow.roomList.selectedRoom().roomType == 16:
+            if (typ == 0 or typ == 1900) and mainWindow.roomList.selectedRoom().info.type == 16:
                 if typ == 1900 and var == 0:
                     self.entity.pixmap = QPixmap('resources/Entities/1900.0.0 - Crawlspace Brick.png')
                     self.setZValue(-1 * self.entity.y)
@@ -1703,18 +1688,17 @@ class Door(QGraphicsItem):
 
         # Supplied entity info
         self.doorItem = doorItem
-        self.exists = doorItem[2]
 
         self.setPos(self.doorItem[0] * 26 - 13, self.doorItem[1] * 26 - 13)
 
         tr = QTransform()
-        if doorItem[0] in [-1, 12]:
+        if doorItem[0] in [0, 13]:
             tr.rotate(270)
             self.moveBy(-13, 0)
-        elif doorItem[0] in [13, 26]:
+        elif doorItem[0] in [14, 27]:
             tr.rotate(90)
             self.moveBy(13, 0)
-        elif doorItem[1] in [7, 14]:
+        elif doorItem[1] in [8, 15]:
             tr.rotate(180)
             self.moveBy(0, 13)
         else:
@@ -1722,6 +1706,12 @@ class Door(QGraphicsItem):
 
         self.image = QImage('resources/Backgrounds/Door.png').transformed(tr)
         self.disabledImage = QImage('resources/Backgrounds/DisabledDoor.png').transformed(tr)
+
+    @property
+    def exists(self): return self.doorItem[2]
+
+    @exists.setter
+    def exists(self, val): self.doorItem[2] = val
 
     def paint(self, painter, option, widget):
 
@@ -1738,12 +1728,7 @@ class Door(QGraphicsItem):
 
     def mouseDoubleClickEvent(self, event):
 
-        if self.exists:
-            self.exists = False
-        else:
-            self.exists = True
-
-        self.doorItem[2] = self.exists
+        self.exists = not self.exists
 
         event.accept()
         self.update()
@@ -1763,23 +1748,215 @@ class Door(QGraphicsItem):
 
 class Room(QListWidgetItem):
 
-    def __init__(self, name="New Room", doors=[], spawns=[], mytype=1, variant=0, subvariant=0, difficulty=1, weight=1.0, width=13, height=7, shape=1):
+    # contains concrete room information necessary for examining a room's game qualities
+    # such as type, variant, subtype, and shape information
+    class Info:
+        ########## SHAPE DEFINITIONS
+        # w x h
+        # 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 1x2, 5 = 0.5x2, 6 = 2x1, 7 = 2x0.5, 8 = 2x2
+        # 9 = DR corner, 10 = DL corner, 11 = UR corner, 12 = UL corner
+        # all coords must be offset -1, -1 when saving
+        Shapes = {
+            1: { # 1x1
+                'Doors': [[7, 0], [0, 4], [14, 4], [7, 8]],
+                # format: min, max on axis, cross axis coord, normal direction along cross axis
+                'Walls': {
+                    'X': [ (0, 14, 0, 1), (0, 14, 8, -1) ],
+                    'Y': [ (0, 8, 0, 1), (0, 8, 14, -1) ]
+                },
+                'Dims': (15, 9)
+            },
+            2: { # horizontal closet (1x0.5)
+                'Doors': [[0, 4], [14, 4]],
+                'Walls': {
+                    'X': [ (0, 14, 2, 1), (0, 14, 6, -1) ],
+                    'Y': [ (2, 6, 0, 1), (2, 6, 14, -1) ]
+                },
+                'TopLeft': 30, # Grid coord
+                'BaseShape': 1, # Base Room shape this is rendered over
+                'Dims': (15, 5)
+            },
+            3: { # vertical closet (0.5x1)
+                'Doors': [[7, 0], [7, 8]],
+                'Walls': {
+                    'X': [ (4, 10, 0, 1), (4, 10, 8, -1) ],
+                    'Y': [ (0, 8, 4, 1), (0, 8, 10, -1) ]
+                },
+                'TopLeft': 4,
+                'BaseShape': 1,
+                'Dims': (7, 9)
+            },
+            4: { # 1x2 room
+                'Doors': [[7, 0], [14, 4], [0, 4], [14, 11], [0, 11], [7, 15]],
+                'Walls': {
+                    'X': [ (0, 14, 0, 1), (0, 14, 15, -1) ],
+                    'Y': [ (0, 15, 0, 1), (0, 15, 14, -1) ]
+                },
+                'Dims': (15, 16)
+            },
+            5: { # tall closet (0.5x2)
+                'Doors': [[7, 0], [7, 15]],
+                'Walls': {
+                    'X': [ (4, 10, 0, 1), (4, 10, 15, -1) ],
+                    'Y': [ (0, 15, 4, 1), (0, 15, 10, -1) ]
+                },
+                'TopLeft': 4,
+                'BaseShape': 4,
+                'Dims': (7, 16)
+            },
+            6: { # 2x1 room
+                'Doors': [[7, 0], [0, 4], [7, 8], [20, 8], [27, 4], [20, 0]],
+                'Walls': {
+                    'X': [ (0, 27, 0, 1), (0, 27, 8, -1) ],
+                    'Y': [ (0, 8, 0, 1), (0, 8, 27, -1) ]
+                },
+                'Dims': (28, 9)
+            },
+            7: { # wide closet (2x0.5)
+                'Doors': [[0, 4], [27, 4]],
+                'Walls': {
+                    'X': [ (0, 27, 2, 1), (0, 27, 6, -1) ],
+                    'Y': [ (2, 6, 0, 1), (2, 6, 27, -1) ]
+                },
+                'TopLeft': 56,
+                'BaseShape': 6,
+                'Dims': (28, 5)
+            },
+            8: { # 2x2 room
+                'Doors': [[7, 0], [0, 4], [0, 11], [20, 0], [7, 15], [20, 15], [27, 4], [27, 11]],
+                'Walls': {
+                    'X': [ (0, 27, 0, 1), (0, 27, 15, -1) ],
+                    'Y': [ (0, 15, 0, 1), (0, 15, 27, -1) ]
+                },
+                'Dims': (28, 16)
+            },
+            9: { # mirrored L room
+                'Doors': [[20, 0], [27, 4], [7, 15], [20, 15], [13, 4], [0, 11], [27, 11], [7, 7]],
+                'Walls': {
+                    'X': [ (0, 13, 7, 1), (13, 27, 0, 1), (0, 27, 15, -1) ],
+                    'Y': [ (7, 15, 0, 1), (0, 7, 13, 1), (0, 15, 27, -1) ]
+                },
+                'BaseShape': 8,
+                'MirrorX': 10,
+                'MirrorY': 11,
+                'Dims': (28, 16)
+            },
+            10: { # L room
+                'Doors': [[0, 4], [14, 4], [7, 0], [20, 7], [7, 15], [20, 15], [0, 11], [27, 11]],
+                'Walls': {
+                    'X': [ (0, 14, 0, 1), (14, 27, 7, 1), (0, 27, 15, -1) ],
+                    'Y': [ (0, 15, 0, 1), (0, 7, 14, -1), (7, 15, 27, -1) ]
+                },
+                'BaseShape': 8,
+                'MirrorX': 9,
+                'MirrorY': 12,
+                'Dims': (28, 16)
+            },
+            11: { # mirrored r room
+                'Doors': [[0, 4], [7, 8], [7, 0], [13, 11], [20, 0], [27, 4], [20, 15], [27, 11]],
+                'Walls': {
+                    'X': [ (0, 27, 0, 1), (0, 13, 8, -1), (13, 27, 15, -1) ],
+                    'Y': [ (0, 8, 0, 1), (8, 15, 13, 1), (0, 15, 27, -1) ]
+                },
+                'BaseShape': 8,
+                'MirrorX': 12,
+                'MirrorY': 9,
+                'Dims': (28, 16)
+            },
+            12: { # r room
+                'Doors': [[0, 4], [7, 0], [20, 0], [14, 11], [27, 4], [7, 15], [0, 11], [20, 8]],
+                'Walls': {
+                    'X': [ (0, 27, 0, 1), (14, 27, 8, -1), (0, 14, 15, -1) ],
+                    'Y': [ (0, 15, 0, 1), (8, 15, 14, -1), (0, 8, 27, -1) ]
+                },
+                'BaseShape': 8,
+                'MirrorX': 11,
+                'MirrorY': 10,
+                'Dims': (28, 16)
+            }
+        }
+
+        for shape in Shapes.values():
+            for door in shape['Doors']:
+                door.append(True)
+
+        def __init__(self, t=0, v=0, s=0, shape=1):
+            self.type = t
+            self.variant = v
+            self.subtype = s
+            self.shape = shape
+
+        @property
+        def shape(self):
+            return self._shape
+
+        @shape.setter
+        def shape(self, val):
+            self._shape = val
+            self.shapeData = Room.Info.Shapes[self.shape]
+            bs = self.shapeData.get('BaseShape')
+            self.baseShapeData = bs and Room.Info.Shapes[bs]
+            self.makeNewDoors()
+
+        # represents the actual dimensions of the room, including out of bounds
+        @property
+        def dims(self): return (self.baseShapeData or self.shapeData)['Dims']
+
+        @property
+        def width(self): return self.shapeData['Dims'][0]
+
+        @property
+        def height(self): return self.shapeData['Dims'][1]
+
+        def makeNewDoors(self):
+            self.doors = [ door[:] for door in self.shapeData['Doors'] ]
+
+        def gridLen(self):
+            dims = self.dims
+            return dims[0] * dims[1]
+
+        def gridIndex(x,y,w):
+            return y * w + x
+
+        def _axisBounds(a, c, w):
+            wmin, wmax, wlvl, wdir = w
+            return a < wmin or a > wmax or ((c > wlvl) - (c < wlvl)) == wdir
+
+        def isInBounds(self, x,y):
+            return all(Room.Info._axisBounds(x,y,w) for w in self.shapeData['Walls']['X']) and \
+                   all(Room.Info._axisBounds(y,x,w) for w in self.shapeData['Walls']['Y'])
+
+        def snapToBounds(self, x,y,dist=1):
+            for w in self.shapeData['Walls']['X']:
+                if not Room.Info._axisBounds(x,y,w):
+                    y = w[2] + w[3] * dist
+
+            for w in self.shapeData['Walls']['Y']:
+                if not Room.Info._axisBounds(y,x,w):
+                    x = w[2] + w[3] * dist
+
+            return (x, y)
+
+
+    def __init__(self, name="New Room", spawns=[], difficulty=1, weight=1.0, mytype=1, variant=0, subtype=0, shape=1, doors=None):
         """Initializes the room item."""
 
         QListWidgetItem.__init__(self)
 
         self.setData(0x100, name)
 
-        self.roomSpawns = spawns
-        self.roomDoors = doors
-        self.roomType = mytype
-        self.roomVariant = variant
-        self.roomSubvariant = subvariant # 0-64, usually 0 except for special rooms
-        self.setDifficulty(difficulty)
-        self.roomWeight = weight
-        self.roomWidth = width
-        self.roomHeight = height
-        self.roomShape = shape           # w x h -> 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2, 9 = corner?, 10 = corner?, 11 = corner?, 12 = corner?
+        self.info = Room.Info(mytype, variant, subtype, shape)
+        if doors:
+            if len(self.info.doors) != len(doors):
+                print(f'{name} ({variant}): Invalid doors!', doors)
+            self.info.doors = doors
+
+        self.gridSpawns = spawns
+        if self.info.gridLen() != len(self.gridSpawns):
+            print(f'{name} ({variant}): Invalid grid spawns!')
+
+        self.difficulty = difficulty
+        self.weight = weight
 
         self.roomBG = 1
         self.setRoomBG()
@@ -1787,58 +1964,53 @@ class Room(QListWidgetItem):
         self.setFlags(self.flags() | Qt.ItemIsEditable)
         self.setToolTip()
 
-        if doors == []: self.makeNewDoors()
         self.renderDisplayIcon()
 
-    def setDifficulty(self, d):
-        self.roomDifficulty = d
+    @property
+    def difficulty(self): return self._difficulty
+
+    @difficulty.setter
+    def difficulty(self, d):
+        self._difficulty = d
         self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
 
-    ########## SHAPE DEFINITIONS
-        # w x h
-        # 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2
-        # 9 = DR corner, 10 = DL corner, 11 = UR corner, 12 = UL corner
-    ShapeDoors = {
-        1: [[6, -1, True], [-1, 3, True], [13, 3, True], [6, 7, True]],
-        2: [[-1, 3, True], [13, 3, True]],
-        3: [[6, -1, True], [6, 7, True]],
-        4: [[6, -1, True], [13, 3, True], [-1, 3, True], [13, 10, True], [-1, 10, True], [6, 14, True]],
-        5: [[6, -1, True], [6, 14, True]],
-        6: [[6, -1, True], [-1, 3, True], [6, 7, True], [19, 7, True], [26, 3, True], [19, -1, True]],
-        7: [[-1, 3, True], [26, 3, True]],
-        8: [[6, -1, True], [-1, 3, True], [-1, 10, True], [19, -1, True], [6, 14, True], [19, 14, True], [26, 3, True], [26, 10, True]],
-        9: [[19, -1, True], [26, 3, True], [6, 14, True], [19, 14, True], [12, 3, True], [-1, 10, True], [26, 10, True], [6, 6, True]],
-        10: [[-1, 3, True], [13, 3, True], [6, -1, True], [19, 6, True], [6, 14, True], [19, 14, True], [-1, 10, True], [26, 10, True]],
-        11: [[-1, 3, True], [6, 7, True], [6, -1, True], [12, 10, True], [19, -1, True], [26, 3, True], [19, 14, True], [26, 10, True]],
-        12: [[-1, 3, True], [6, -1, True], [19, -1, True], [13, 10, True], [26, 3, True], [6, 14, True], [-1, 10, True], [19, 7, True]]
-    }
     DoorSortKey = lambda door: (door[0], door[1])
-
-    def makeNewDoors(self):
-        self.roomDoors = [ door[:] for door in Room.ShapeDoors.get(self.roomShape, []) ]
 
     def clearDoors(self):
         mainWindow.scene.clearDoors()
-        for door in self.roomDoors:
-            d = Door(door)
-            mainWindow.scene.addItem(d)
+        for door in self.info.doors:
+            mainWindow.scene.addItem(Door(door))
 
     def getSpawnCount(self):
         ret = 0
 
-        for x in self.roomSpawns:
-            for y in x:
-                if len(y) is not 0:
-                    ret += 1
+        for entStack in self.gridSpawns:
+            if entStack: ret += 1
 
         return ret
 
-    def getDesc(rtype, rvariant, rsubtype, width, height, difficulty, weight, shape):
-        return f'{rtype}.{rvariant}.{rsubtype} ({width}x{height}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {shape}'
+    def reshape(self, shape):
+        spawnIter = self.spawns()
+
+        self.info.shape = shape
+        realWidth = self.info.dims[0]
+
+        gridLen = self.info.gridLen()
+        newGridSpawns = [ [] for x in range(gridLen) ]
+
+        for stack, x, y in spawnIter:
+            idx = Room.Info.gridIndex(x, y, realWidth)
+            if idx < gridLen:
+                newGridSpawns[idx] = stack
+
+        self.gridSpawns = newGridSpawns
+
+    def getDesc(info, difficulty, weight):
+        return f'{info.type}.{info.variant}.{info.subtype} ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}'
 
     def setToolTip(self):
-        self.setText("{0} - {1}".format(self.roomVariant, self.data(0x100)))
-        tip = Room.getDesc(self.roomType, self.roomVariant, self.roomSubvariant, self.roomWidth, self.roomHeight, self.roomDifficulty, self.roomWeight, self.roomShape)
+        self.setText(f"{self.info.variant} - {self.data(0x100)}")
+        tip = Room.getDesc(self.info, self.difficulty, self.weight)
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
@@ -1847,9 +2019,33 @@ class Room(QListWidgetItem):
         q = QImage()
         q.load('resources/UI/RoomIcons.png')
 
-        i = QIcon(QPixmap.fromImage(q.copy(self.roomType * 16, 0, 16, 16)))
+        i = QIcon(QPixmap.fromImage(q.copy(self.info.type * 16, 0, 16, 16)))
 
         self.setIcon(i)
+
+    class _SpawnIter:
+        def __init__(self, gridSpawns, dims):
+            self.idx = -1
+            self.spawns = gridSpawns
+            self.width, self.height = dims
+
+        def __iter__(self): return self
+
+        def __next__(self):
+            stack = None
+            while True:
+                self.idx += 1
+                if self.idx >= self.width * self.height or self.idx >= len(self.spawns):
+                    raise StopIteration
+
+                stack = self.spawns[self.idx]
+                if stack: break
+            x = int(self.idx % self.width)
+            y = int(self.idx / self.width)
+            return (stack, x, y)
+
+    def spawns(self):
+        return Room._SpawnIter(self.gridSpawns, self.info.dims)
 
     def setRoomBG(self):
         roomType = ['basement', 'cellar',
@@ -1868,7 +2064,8 @@ class Room(QListWidgetItem):
             if roomType[i] in mainWindow.path:
                 self.roomBG = i + 1
 
-        c = self.roomType
+        c = self.info.type
+        v = self.info.variant
 
         if c == 12:
             self.roomBG = 18
@@ -1895,92 +2092,95 @@ class Room(QListWidgetItem):
             self.roomBG = 12
 
         elif c in [8]:
-            if self.roomVariant in [0, 11, 15]:
+            if v in [0, 11, 15]:
                 self.roomBG = 7
-            elif self.roomVariant in [1, 12, 16]:
+            elif v in [1, 12, 16]:
                 self.roomBG = 10
-            elif self.roomVariant in [2, 13, 17]:
+            elif v in [2, 13, 17]:
                 self.roomBG = 9
-            elif self.roomVariant in [3]:
+            elif v in [3]:
                 self.roomBG = 4
-            elif self.roomVariant in [4]:
+            elif v in [4]:
                 self.roomBG = 2
-            elif self.roomVariant in [5, 19]:
+            elif v in [5, 19]:
                 self.roomBG = 1
-            elif self.roomVariant in [6]:
+            elif v in [6]:
                 self.roomBG = 18
-            elif self.roomVariant in [7]:
+            elif v in [7]:
                 self.roomBG = 12
-            elif self.roomVariant in [8]:
+            elif v in [8]:
                 self.roomBG = 13
-            elif self.roomVariant in [9]:
+            elif v in [9]:
                 self.roomBG = 14
-            elif self.roomVariant in [14, 18]:
+            elif v in [14, 18]:
                 self.roomBG = 19
             else:
                 self.roomBG = 12
         # grave rooms
-        elif c == 1 and self.roomVariant > 2 and 'special rooms' in mainWindow.path:
+        elif c == 1 and v > 2 and 'special rooms' in mainWindow.path:
             self.roomBG = 12
 
     def mirrorX(self):
         # Flip Spawns
-        for column in self.roomSpawns:
-            column[:self.roomWidth] = column[:self.roomWidth][::-1]
-
-            # Flip Directional Entities
-            info = Entity.Info(changeAtStart=False)
-            for row in column:
-                for spawn in row:
-                    info.changeTo(spawn[0], spawn[1], spawn[2])
-                    if info.mirrorX:
-                        for i in range(3):
-                            spawn[i] = info.mirrorX[i]
+        width, height = self.info.dims
+        for y in range(height):
+            for x in range(int(width / 2)):
+                ox = Room.Info.gridIndex(x,y,width)
+                mx = Room.Info.gridIndex(width-x-1,y,width)
+                oxs = self.gridSpawns[ox]
+                self.gridSpawns[ox] = self.gridSpawns[mx]
+                self.gridSpawns[mx] = oxs
 
         # To flip, just reverse the signs then offset by room width (-1 for the indexing)
         # Flip Doors
-        for door in self.roomDoors:
-            door[0] = -door[0] + (self.roomWidth-1)
+        for door in self.info.doors:
+            door[0] = width - door[0] - 1
+
+        # Flip Directional Entities
+        info = Entity.Info(changeAtStart=False)
+        for stack, x, y in self.spawns():
+            for spawn in stack:
+                info.changeTo(spawn[0], spawn[1], spawn[2])
+                if info.mirrorX:
+                    for i in range(3):
+                        spawn[i] = info.mirrorX[i]
 
         # Flip Shape
-        if self.roomShape is 9:
-            self.roomShape = 10
-        elif self.roomShape is 10:
-            self.roomShape = 9
-        elif self.roomShape is 11:
-            self.roomShape = 12
-        elif self.roomShape is 12:
-            self.roomShape = 11
+        shape = self.info.shapeData.get('MirrorX')
+        if shape:
+            self.reshape(shape)
 
     def mirrorY(self):
         # To flip, just reverse the signs then offset by room width (-1 for the indexing)
 
         # Flip Spawns
-        self.roomSpawns[:self.roomHeight] = self.roomSpawns[:self.roomHeight][::-1]
+        width, height = self.info.dims
+        for x in range(width):
+            for y in range(int(height / 2)):
+                oy = Room.Info.gridIndex(x,y,width)
+                my = Room.Info.gridIndex(x,height-y-1,width)
+                oys = self.gridSpawns[oy]
+                self.gridSpawns[oy] = self.gridSpawns[my]
+                self.gridSpawns[my] = oys
+
+
+        # Flip Doors
+        for door in self.info.doors:
+            door[1] = height - door[1] - 1
 
         # Flip Directional Entities
         info = Entity.Info(changeAtStart=False)
-        for column in self.roomSpawns:
-            for row in column:
-                for spawn in row:
-                    info.changeTo(spawn[0], spawn[1], spawn[2])
-                    if info.mirrorY:
-                        for i in range(3):
-                            spawn[i] = info.mirrorY[i]
-
-        # Flip Doors
-        for door in self.roomDoors:
-            door[1] = -door[1] + (self.roomHeight-1)
+        for stack, x, y in self.spawns():
+            for spawn in stack:
+                info.changeTo(spawn[0], spawn[1], spawn[2])
+                if info.mirrorY:
+                    for i in range(3):
+                        spawn[i] = info.mirrorY[i]
 
         # Flip Shape
-        if self.roomShape is 9:
-            self.roomShape = 11
-        elif self.roomShape is 11:
-            self.roomShape = 9
-        elif self.roomShape is 10:
-            self.roomShape = 12
-        elif self.roomShape is 12:
-            self.roomShape = 10
+        shape = self.info.shapeData.get('MirrorY')
+        if shape:
+            self.reshape(shape)
 
 class RoomDelegate(QStyledItemDelegate):
 
@@ -1996,9 +2196,8 @@ class RoomDelegate(QStyledItemDelegate):
         QStyledItemDelegate.paint(self, painter, option, index)
 
         item = mainWindow.roomList.list.item(index.row())
-        if item:
-            if item.data(100):
-                painter.drawPixmap(option.rect.right() - 19, option.rect.top(), self.pixmap)
+        if item and item.data(100):
+            painter.drawPixmap(option.rect.right() - 19, option.rect.top(), self.pixmap)
 
 class FilterMenu(QMenu):
 
@@ -2228,7 +2427,7 @@ class RoomSelector(QWidget):
     def editComplete(self, lineEdit):
         room = self.selectedRoom()
         room.setData(0x100, lineEdit.text())
-        room.setText("{0} - {1}".format(room.roomVariant, room.data(0x100)))
+        room.setText(f"{room.info.variant} - {room.data(0x100)}")
 
     #@pyqtSlot(bool)
     def turnIDsOn(self):
@@ -2256,7 +2455,7 @@ class RoomSelector(QWidget):
 
         for i, t in enumerate(types):
             c.addItem(QIcon(QPixmap.fromImage(q.copy(i * 16, 0, 16, 16))), t)
-        c.setCurrentIndex(self.selectedRoom().roomType)
+        c.setCurrentIndex(self.selectedRoom().info.type)
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
         menu.addAction(Type)
@@ -2267,7 +2466,7 @@ class RoomSelector(QWidget):
         s.setRange(0, 65534)
         s.setPrefix("ID - ")
 
-        s.setValue(self.selectedRoom().roomVariant)
+        s.setValue(self.selectedRoom().info.variant)
 
         Variant.setDefaultWidget(s)
         s.valueChanged.connect(self.changeVariant)
@@ -2281,7 +2480,7 @@ class RoomSelector(QWidget):
         dv.setRange(0, 15)
         dv.setPrefix("Difficulty - ")
 
-        dv.setValue(self.selectedRoom().roomDifficulty)
+        dv.setValue(self.selectedRoom().difficulty)
 
         Difficulty.setDefaultWidget(dv)
         dv.valueChanged.connect(self.changeDifficulty)
@@ -2292,23 +2491,23 @@ class RoomSelector(QWidget):
         s = QDoubleSpinBox()
         s.setPrefix("Weight - ")
 
-        s.setValue(self.selectedRoom().roomWeight)
+        s.setValue(self.selectedRoom().weight)
 
         weight.setDefaultWidget(s)
         s.valueChanged.connect(self.changeWeight)
         menu.addAction(weight)
 
         # SubVariant
-        Subvariant = QWidgetAction(menu)
-        sv = QSpinBox()
-        sv.setRange(0, 256)
-        sv.setPrefix("Sub - ")
+        Subtype = QWidgetAction(menu)
+        st = QSpinBox()
+        st.setRange(0, 256)
+        st.setPrefix("Sub - ")
 
-        sv.setValue(self.selectedRoom().roomSubvariant)
+        st.setValue(self.selectedRoom().info.subtype)
 
-        Subvariant.setDefaultWidget(sv)
-        sv.valueChanged.connect(self.changeSubvariant)
-        menu.addAction(Subvariant)
+        Subtype.setDefaultWidget(st)
+        st.valueChanged.connect(self.changeSubtype)
+        menu.addAction(Subtype)
 
         menu.addSeparator()
 
@@ -2321,7 +2520,7 @@ class RoomSelector(QWidget):
 
         for shapeName in range(1, 13):
             c.addItem(QIcon(QPixmap.fromImage(q.copy((shapeName - 1) * 16, 0, 16, 16))), str(shapeName))
-        c.setCurrentIndex(self.selectedRoom().roomShape - 1)
+        c.setCurrentIndex(self.selectedRoom().info.shape - 1)
         c.currentIndexChanged.connect(self.changeSize)
         Shape.setDefaultWidget(c)
         menu.addAction(Shape)
@@ -2445,36 +2644,28 @@ class RoomSelector(QWidget):
 
             # Check if the right entity is in the room
             if self.entityToggle.checked and self.filterEntity:
-                entityCond = False
-
-                for x in room.roomSpawns:
-                    for y in x:
-                        for e in y:
-                            if int(self.filterEntity.ID) == e[0] and int(self.filterEntity.subtype) == e[2] and int(self.filterEntity.variant) == e[1]:
-                                entityCond = True
+                entityCond = any(int(self.filterEntity.ID) == e[0] and \
+                                 int(self.filterEntity.subtype) == e[2] and \
+                                 int(self.filterEntity.variant) == e[1] \
+                                 for stack, x, y in room.spawns() for e in stack)
 
             # Check if the room is the right type
             if self.filter.typeData is not -1:
                 if self.filter.typeData == 0: # This is a null room, but we'll look for empty rooms too
-                    typeCond = (self.filter.typeData == room.roomType) or (len(room.roomSpawns) == 0)
+                    typeCond = (self.filter.typeData == room.info.type) or not room.gridSpawns
 
                     uselessEntities = [0, 1, 2, 1940]
-                    hasUsefulEntities = False
-                    for y in enumerate(room.roomSpawns):
-                        for x in enumerate(y[1]):
-                            for entity in x[1]:
-                                if entity[0] not in uselessEntities:
-                                    hasUsefulEntities = True
+                    hasUsefulEntities = any(entity[0] not in uselessEntities \
+                                            for stack, x, y in room.spawns() for entity in stack)
 
-                    if typeCond == False and hasUsefulEntities == False:
-                        typeCond = True
+                    typeCond = not (typeCond or hasUsefulEntities)
 
                 else: # All the normal rooms
-                    typeCond = self.filter.typeData == room.roomType
+                    typeCond = self.filter.typeData == room.info.type
 
             # Check if the room is the right weight
             if self.filter.weightData is not -1:
-                weightCond = self.filter.weightData == room.roomWeight
+                weightCond = self.filter.weightData == room.weight
 
             # Check if the room is the right size
             if self.filter.sizeData is not -1:
@@ -2482,7 +2673,7 @@ class RoomSelector(QWidget):
 
                 shape = self.filter.sizeData
 
-                if room.roomShape == shape:
+                if room.info.shape == shape:
                     sizeCond = True
 
             # Filter em' out
@@ -2496,32 +2687,22 @@ class RoomSelector(QWidget):
         self.entityToggle.setIcon(entity.icon)
         self.changeFilter()
 
-    #@pyqtSlot(QAction)
     def changeSize(self, shapeIdx):
 
         # Set the Size - gotta lotta shit to do here
         s = shapeIdx + 1
 
-        w = 26
-        if s in [1, 2, 3, 4, 5]:
-            w = 13
-
-        h = 14
-        if s in [1, 2, 3, 6, 7]:
-            h = 7
-
         # No sense in doing work we don't have to!
-        if self.selectedRoom().roomWidth == w and self.selectedRoom().roomHeight == h and self.selectedRoom().roomShape == s:
+        if self.selectedRoom().info.shape == s:
             return
 
+        info = Room.Info(shape=s)
+        w, h = info.dims
+
         # Check to see if resizing will destroy any entities
-        warn = False
         mainWindow.storeEntityList()
 
-        for y, row in enumerate(self.selectedRoom().roomSpawns):
-            for x, entStack in enumerate(row):
-                if (x >= w or y >= h) and len(entStack) > 0:
-                    warn = True
+        warn = any(x >= w or y >= h for stack, x, y in self.selectedRoom().spawns())
 
         if warn:
             msgBox = QMessageBox(
@@ -2536,26 +2717,24 @@ class RoomSelector(QWidget):
                 # It's time for us to go now.
                 return
 
+        self.selectedRoom().reshape(s)
+
         # Clear the room and reset the size
         mainWindow.scene.clear()
-        self.selectedRoom().roomWidth = w
-        self.selectedRoom().roomHeight = h
-        self.selectedRoom().roomShape = s
 
-        self.selectedRoom().makeNewDoors()
         self.selectedRoom().clearDoors()
-        mainWindow.scene.newRoomSize(w, h, s)
+
+        mainWindow.scene.newRoomSize(s)
 
         mainWindow.editor.resizeEvent(QResizeEvent(mainWindow.editor.size(), mainWindow.editor.size()))
 
         # Spawn those entities
-        for y, row in enumerate(self.selectedRoom().roomSpawns):
-            for x, entStack in enumerate(row):
-                for entity in entStack:
-                    if x >= w or y >= h: continue
+        for entStack, x, y in self.selectedRoom().spawns():
+            if x >= w or y >= h: continue
 
-                    e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
-                    mainWindow.scene.addItem(e)
+            for entity in entStack:
+                e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
+                mainWindow.scene.addItem(e)
 
         self.selectedRoom().setToolTip()
         mainWindow.dirt()
@@ -2563,7 +2742,7 @@ class RoomSelector(QWidget):
     #@pyqtSlot(int)
     def changeType(self, rtype):
         for r in self.selectedRooms():
-            r.roomType = rtype
+            r.info.type = rtype
             r.renderDisplayIcon()
             r.setRoomBG()
 
@@ -2575,16 +2754,16 @@ class RoomSelector(QWidget):
     #@pyqtSlot(int)
     def changeVariant(self, var):
         for r in self.selectedRooms():
-            r.roomVariant = var
+            r.info.variant = var
             r.setToolTip()
-            r.setText("{0} - {1}".format(r.roomVariant, r.data(0x100)))
+            r.setText(f"{r.info.variant} - {r.data(0x100)}")
         mainWindow.dirt()
         mainWindow.scene.update()
 
     #@pyqtSlot(int)
-    def changeSubvariant(self, var):
+    def changeSubtype(self, var):
         for r in self.selectedRooms():
-            r.roomSubvariant = var
+            r.info.subtype = var
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
@@ -2592,7 +2771,7 @@ class RoomSelector(QWidget):
     #@pyqtSlot(QAction)
     def changeDifficulty(self, var):
         for r in self.selectedRooms():
-            r.setDifficulty(var)
+            r.difficulty = var
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
@@ -2600,8 +2779,8 @@ class RoomSelector(QWidget):
     #@pyqtSlot(QAction)
     def changeWeight(self, action):
         for r in self.selectedRooms():
-            #r.roomWeight = float(action.text())
-            r.roomWeight = action
+            #r.info.weight = float(action.text())
+            r.info.weight = action
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
@@ -2627,13 +2806,8 @@ class RoomSelector(QWidget):
         if rooms == None or len(rooms) == 0:
             return
 
-        if len(rooms) == 1:
-            s = "this room"
-        else:
-            s = "these rooms"
-
         msgBox = QMessageBox(QMessageBox.Warning,
-                "Delete Room?", "Are you sure you want to delete {0}? This action cannot be undone.".format(s),
+                "Delete Room?", "Are you sure you want to delete the selected rooms? This action cannot be undone.",
                 QMessageBox.NoButton, self)
         msgBox.addButton("Delete", QMessageBox.AcceptRole)
         msgBox.addButton("Cancel", QMessageBox.RejectRole)
@@ -2664,34 +2838,28 @@ class RoomSelector(QWidget):
         for room in reversed(rooms):
             if self.mirrorY:
                 v = 20000
+                extra = ' (flipped Y)'
             elif self.mirror:
                 v = 10000
+                extra = ' (flipped X)'
             else:
                 v = numRooms
+                extra = ' (copy)'
 
             r = Room(
-                deepcopy(room.data(0x100) + ' (copy)'),
-                deepcopy([list(door) for door in room.roomDoors]),
-                deepcopy(room.roomSpawns),
-                deepcopy(room.roomType),
-                deepcopy(room.roomVariant+v),
-                deepcopy(room.roomSubvariant),
-                deepcopy(room.roomDifficulty),
-                deepcopy(room.roomWeight),
-                deepcopy(room.roomWidth),
-                deepcopy(room.roomHeight),
-                deepcopy(room.roomShape)
+                deepcopy(room.data(0x100) + extra),
+                deepcopy(room.gridSpawns),
+                deepcopy(room.difficulty),
+                deepcopy(room.weight),
+                deepcopy(room.info.type),
+                deepcopy(room.info.variant+v),
+                deepcopy(room.info.subtype),
+                deepcopy(room.info.shape),
+                deepcopy([list(door) for door in room.info.doors])
             )
 
+            # Mirror the room
             if self.mirror:
-                # Change the name to mirrored.
-                flipName = ' (flipped X)'
-                if self.mirrorY:
-                    flipName = ' (flipped Y)'
-                r.setData(0x100, room.data(0x100) + flipName)
-                r.setText("{0} - {1}".format(r.roomVariant, room.data(0x100) + flipName))
-
-                # Mirror the room
                 if self.mirrorY:
                     r.mirrorY()
                 else:
@@ -3366,11 +3534,6 @@ class MainWindow(QMainWindow):
 
         self.setGeometry(100, 500, 1280, 600)
 
-        # Restore Settings
-        if not settings.value('GridEnabled', True) or settings.value('GridEnabled', True) == 'false': self.switchGrid()
-        if not settings.value('StatusEnabled', True) or settings.value('StatusEnabled', True) == 'false': self.switchInfo()
-        if not settings.value('BitfontEnabled', True) or settings.value('BitfontEnabled', True) == 'false': self.switchBitFont()
-
         self.restoreState(settings.value('MainWindowState', self.saveState()), 0)
         self.restoreGeometry(settings.value('MainWindowGeometry', self.saveGeometry()))
 
@@ -3427,6 +3590,9 @@ class MainWindow(QMainWindow):
         self.eg = self.e.addAction('Pin Entity Filter',           lambda: self.toggleSetting('PinEntityFilter'), QKeySequence("Ctrl+Alt+K"))
         self.eg.setCheckable(True)
         self.eg.setChecked(settings.value('PinEntityFilter') == '1')
+        self.el = self.e.addAction('Snap to Room Boundaries', lambda: self.toggleSetting('SnapToBounds'))
+        self.el.setCheckable(True)
+        self.el.setChecked(settings.value('SnapToBounds') == '1')
         self.e.addSeparator()
         self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
         self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
@@ -3434,9 +3600,15 @@ class MainWindow(QMainWindow):
         self.ek = self.e.addAction('Recompute Room IDs',          self.recomputeRoomIDs, QKeySequence("Ctrl+B"))
 
         v = mb.addMenu('View')
-        self.wa = v.addAction('Hide Grid',                        self.switchGrid, QKeySequence("Ctrl+G"))
-        self.we = v.addAction('Hide Info',                        self.switchInfo, QKeySequence("Ctrl+I"))
-        self.wd = v.addAction('Use Aliased Counter',              self.switchBitFont, QKeySequence("Ctrl+Alt+A"))
+        self.wa = v.addAction('Show Grid',                        lambda: self.toggleSetting('GridEnabled', onDefault=True), QKeySequence("Ctrl+G"))
+        self.wa.setCheckable(True)
+        self.wa.setChecked(settings.value('GridEnabled') != '0')
+        self.we = v.addAction('Show Room Info',                   lambda: self.toggleSetting('StatusEnabled', onDefault=True), QKeySequence("Ctrl+I"))
+        self.we.setCheckable(True)
+        self.we.setChecked(settings.value('StatusEnabled') != '0')
+        self.wd = v.addAction('Use Bitfont Counter',              lambda: self.toggleSetting('BitfontEnabled', onDefault=True))
+        self.wd.setCheckable(True)
+        self.wd.setChecked(settings.value('BitfontEnabled') != '0')
         v.addSeparator()
         self.wb = v.addAction('Hide Entity Painter',              self.showPainter, QKeySequence("Ctrl+Alt+P"))
         self.wc = v.addAction('Hide Room List',                   self.showRoomList, QKeySequence("Ctrl+Alt+R"))
@@ -3527,18 +3699,20 @@ class MainWindow(QMainWindow):
 
         eList = self.scene.items()
 
-        spawns = [[[] for y in range(26)] for x in range(14)]
+        spawns = [ [] for x in room.gridSpawns ]
         doors = []
+
+        width = room.info.dims[0]
 
         for e in eList:
             if isinstance(e, Door):
                 doors.append(e.doorItem)
 
             elif isinstance(e, Entity):
-                spawns[e.entity.y][e.entity.x].append([e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight])
+                spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append([ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ])
 
-        room.roomSpawns = spawns
-        room.roomDoors = doors
+        room.gridSpawns = spawns
+        room.info.doors = doors
 
     def closeEvent(self, event):
         """Handler for the main window close event"""
@@ -3577,7 +3751,7 @@ class MainWindow(QMainWindow):
 
         # Clear the room and reset the size
         self.scene.clear()
-        self.scene.newRoomSize(current.roomWidth, current.roomHeight, current.roomShape)
+        self.scene.newRoomSize(current.info.shape)
 
         self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
 
@@ -3585,11 +3759,9 @@ class MainWindow(QMainWindow):
         current.clearDoors()
 
         # Spawn those entities
-        for y, row in enumerate(current.roomSpawns):
-            for x, entStack in enumerate(row):
-                for entity in entStack:
-                    e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
-                    self.scene.addItem(e)
+        for stack, x, y in current.spawns():
+            for ent in stack:
+                self.scene.addItem(Entity(x, y, ent[0], ent[1], ent[2], ent[3]))
 
         # Make the current Room mark for clearer multi-selection
         current.setData(100, True)
@@ -3775,7 +3947,7 @@ class MainWindow(QMainWindow):
             roomData = struct.unpack_from('<IIIBH', stb, off)
             rtype, rvariant, rsubtype, difficulty, nameLen = roomData
             off += 0xF
-            # print ("Room Data: {0}".format(roomData))
+            #print ("Room Data: {0}".format(roomData))
 
             # Room Name
             roomName = struct.unpack_from('<{0}s'.format(nameLen), stb, off)[0].decode()
@@ -3792,7 +3964,7 @@ class MainWindow(QMainWindow):
             for door in range(numDoors):
                 # X, Y, exists
                 doorX, doorY, exists = struct.unpack_from('<hh?', stb, off)
-                doors.append([ doorX, doorY, exists ])
+                doors.append([ doorX + 1, doorY + 1, exists ])
                 off += 5
 
             def sameDoorLocs(a, b):
@@ -3801,27 +3973,32 @@ class MainWindow(QMainWindow):
                         return False
                 return True
 
+            roomInfo = Room.Info(rtype, rvariant, rsubtype, shape)
             def getRoomPrefix():
-                return Room.getDesc(rtype, rvariant, rsubtype, width, height, difficulty, rweight, shape)
+                return Room.getDesc(roomInfo, difficulty, rweight)
 
-            normalDoors = sorted(Room.ShapeDoors[shape], key=Room.DoorSortKey)
+            normalDoors = sorted(roomInfo.shapeData['Doors'], key=Room.DoorSortKey)
             sortedDoors = sorted(doors, key=Room.DoorSortKey)
             if len(normalDoors) != numDoors or not sameDoorLocs(normalDoors, sortedDoors):
                 print (f'Invalid doors in room {getRoomPrefix()}: Expected {normalDoors}, Got {sortedDoors}')
 
-            spawns = [[[] for y in range(26)] for x in range(14)]
+            realWidth = roomInfo.dims[0]
+            spawns = [ [] for x in range(roomInfo.gridLen()) ]
             for entity in range(numEnts):
                 # x, y, number of entities at this position
                 ex, ey, stackedEnts = struct.unpack_from('<hhB', stb, off)
+                ex += 1
+                ey += 1
+                spawnSquare = spawns[Room.Info.gridIndex(ex, ey, realWidth)]
                 off += 5
 
-                if ex < 0 or ex >= width or ey < 0 or ey >= height:
+                if not roomInfo.isInBounds(ex, ey):
                     print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex}, {ey}')
 
                 for spawn in range(stackedEnts):
                     #  type, variant, subtype, weight
                     etype, evariant, esubtype, eweight = struct.unpack_from('<HHHf', stb, off)
-                    spawns[ey][ex].append([ etype, evariant, esubtype, eweight ])
+                    spawnSquare.append([ etype, evariant, esubtype, eweight ])
 
                     if (etype, esubtype, evariant) not in seenSpawns:
                         global entityXML
@@ -3858,7 +4035,7 @@ class MainWindow(QMainWindow):
         try:
             self.save(self.roomList.getRooms())
         except Exception as e:
-            print(e)
+            traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", "Saving failed. Try saving to a new file instead.")
 
         self.clean()
@@ -3877,24 +4054,21 @@ class MainWindow(QMainWindow):
 
         for room in rooms:
 
+            width, height = room.info.dims
             out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.data(0x100))),
-                             room.roomType, room.roomVariant, room.roomSubvariant, room.roomDifficulty, len(room.data(0x100)),
-                             room.data(0x100).encode(), room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape)
+                             room.info.type, room.info.variant, room.info.subtype, room.difficulty, len(room.data(0x100)),
+                             room.data(0x100).encode(), room.weight, width - 2, height - 2, room.info.shape)
 
             # Doors and Entities
-            out += struct.pack('<BH', len(room.roomDoors), room.getSpawnCount())
+            out += struct.pack('<BH', len(room.info.doors), room.getSpawnCount())
 
-            for door in room.roomDoors:
-                out += struct.pack('<hh?', door[0], door[1], door[2])
+            for door in room.info.doors:
+                out += struct.pack('<hh?', door[0] - 1, door[1] - 1, door[2])
 
-            for y in enumerate(room.roomSpawns):
-                for x in enumerate(y[1]):
-                    if len(x[1]) == 0: continue
-
-                    out += struct.pack('<hhB', x[0], y[0], len(x[1]))
-
-                    for entity in x[1]:
-                        out += struct.pack('<HHHf', entity[0], entity[1], entity[2], entity[3])
+            for stack, x, y in room.spawns():
+                out += struct.pack('<hhB', x - 1, y - 1, len(stack))
+                for entity in stack:
+                    out += struct.pack('<HHHf', entity[0], entity[1], entity[2], entity[3])
 
         with open(path, 'wb') as stb:
             stb.write(out)
@@ -3936,12 +4110,13 @@ class MainWindow(QMainWindow):
             currRoom = self.roomList.list.item(i)
 
             n = 0
-            for row in currRoom.roomSpawns:
-                for entStack in row:
-                    for ent in entStack:
-                        if checkEq(ent, replaced):
-                            fixEnt(ent, replacement)
-                            n += 1
+            for stack, x, y in currRoom.spawns():
+                for ent in stack:
+                    if checkEq(ent, replaced):
+                        fixEnt(ent, replacement)
+                        n += 1
+
+
             if n > 0:
                 numRooms += 1
                 numEnts += n
@@ -3957,10 +4132,10 @@ class MainWindow(QMainWindow):
                         or "No entities to replace!")
 
     def sortRoomIDs(self):
-        self.sortRoomsByKey(lambda x: (x.roomType,x.roomVariant))
+        self.sortRoomsByKey(lambda x: (x.info.type,x.info.variant))
 
     def sortRoomNames(self):
-        self.sortRoomsByKey(lambda x: (x.roomType,x.data(0x100),x.roomVariant))
+        self.sortRoomsByKey(lambda x: (x.info.type,x.data(0x100),x.info.variant))
 
     def sortRoomsByKey(self, key):
         roomList = self.roomList.list
@@ -3985,13 +4160,13 @@ class MainWindow(QMainWindow):
         for i in range(roomList.count()):
             room = roomList.item(i)
 
-            if room.roomType not in roomsByType:
-                roomsByType[room.roomType] = room.roomVariant
+            if room.info.type not in roomsByType:
+                roomsByType[room.info.type] = room.info.variant
 
-            room.roomVariant = roomsByType[room.roomType]
+            room.info.variant = roomsByType[room.info.type]
             room.setToolTip()
 
-            roomsByType[room.roomType] += 1
+            roomsByType[room.info.type] += 1
 
         self.dirt()
         self.scene.update()
@@ -4001,8 +4176,8 @@ class MainWindow(QMainWindow):
         fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Graphics (*.png)')[0]
         if fn == '': return
 
-        g = self.scene.grid
-        self.scene.grid = False
+        g = settings.value('GridEnabled')
+        setttings.setValue('GridEnabled', '0')
 
         ScreenshotImage = QImage(self.scene.sceneRect().width(), self.scene.sceneRect().height(), QImage.Format_ARGB32)
         ScreenshotImage.fill(Qt.transparent)
@@ -4013,7 +4188,7 @@ class MainWindow(QMainWindow):
 
         ScreenshotImage.save(fn, 'PNG', 50)
 
-        self.scene.grid = g
+        setttings.setValue('GridEnabled', g)
 
     def getTestModPath(self):
         modFolder = findModsPath()
@@ -4062,10 +4237,10 @@ class MainWindow(QMainWindow):
     Stage = {floorInfo[1]},
     StageType = {floorInfo[2]},
     Name = "{testRoom.data(0x100).replace('"', quot)}",
-    Type = {testRoom.roomType},
-    Variant = {testRoom.roomVariant},
-    Subtype = {testRoom.roomSubvariant},
-    Shape = {testRoom.roomShape}
+    Type = {testRoom.info.type},
+    Variant = {testRoom.info.variant},
+    Subtype = {testRoom.info.subtype},
+    Shape = {testRoom.info.shape}
 }}
 ''')
 
@@ -4084,15 +4259,12 @@ class MainWindow(QMainWindow):
                 raise
 
             # Set the selected room to max weight
-            testRoom = Room(room.data(0x100), room.roomDoors, room.roomSpawns, 1, room.roomVariant, room.roomSubvariant, 1, 1000.0, room.roomWidth, room.roomHeight, room.roomShape)
+            testRoom = Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
 
             # Make a new STB with a blank room
-            padMe = True
-            if testRoom.roomShape not in [2, 3, 5, 7]: # Always pad these rooms
-                padMe = False
-                for door in testRoom.roomDoors:
-                    if not door[2]:
-                        padMe = True
+            # Always pad these rooms
+            padMe = testRoom.info.shape in [2, 3, 5, 7] \
+                    or any(not door[2] for door in testRoom.info.doors) # weird door layouts need padding
 
             # Needs a padded room
             newRooms = [testRoom]
@@ -4116,7 +4288,7 @@ class MainWindow(QMainWindow):
     def testStartMap(self):
         def setup(modPath, roomsPath, floorInfo, testRoom):
             # Sanity check for 1x1 room
-            if testRoom.roomShape in [2, 7, 9] :
+            if testRoom.info.shape in [2, 7, 9] :
                 QMessageBox.warning(self, "Error", "Room shapes 2 and 7 (Long and narrow) and 9 (L shaped with upper right corner missing) can't be tested as the Start Room.")
                 raise
 
@@ -4136,10 +4308,8 @@ class MainWindow(QMainWindow):
             rooms = self.open(roomPath, False)
             for room in rooms:
                 if "Start Room" in room.data(0x100):
-                    room.roomHeight = testRoom.roomHeight
-                    room.roomWidth  = testRoom.roomWidth
-                    room.roomShape  = testRoom.roomShape
-                    room.roomSpawns = testRoom.roomSpawns
+                    room.info.shape  = testRoom.info.shape
+                    room.gridSpawns = testRoom.gridSpawns
                     startRoom = room
                     break
 
@@ -4238,24 +4408,22 @@ class MainWindow(QMainWindow):
                 #out.write('<?xml version="1.0"?>\n<rooms>\n') # TODO restore this when BR has its own xml converter
                 out.write('<stage>\n')
             # Room header
+            width, height = room.info.dims
             out.write('<room type="%d" variant="%d" subtype="%d" name="%s" difficulty="%d" weight="%g" width="%d" height="%d" shape="%d">\n' % (
-                room.roomType, room.roomVariant, room.roomSubvariant, room.data(0x100), room.roomDifficulty,
-                room.roomWeight, room.roomWidth, room.roomHeight, room.roomShape
+                room.info.type, room.info.variant, room.info.subtype, room.data(0x100), room.difficulty,
+                room.weight, width - 2, height - 2, room.info.shape
             ))
 
             # Doors
-            for x, y, exists in room.roomDoors:
-                out.write(f'\t<door x="{x}" y="{y}" exists="{exists and "true" or "false"}" />\n')
+            for x, y, exists in room.info.doors:
+                out.write(f'\t<door x="{x-1}" y="{y-1}" exists="{exists and "true" or "false"}" />\n')
 
             # Spawns
-            for y, row in enumerate(room.roomSpawns):
-                for x, entStack in enumerate(row):
-                    if len(entStack) == 0: continue
-
-                    out.write(f'\t<spawn x="{x}" y="{y}">\n')
-                    for t, v, s, weight in entStack:
-                        out.write(f'\t\t<entity type="{t}" variant="{v}" subtype="{s}" weight="{weight}" />\n')
-                    out.write('\t</spawn>\n')
+            for entStack, x, y in room.spawns():
+                out.write(f'\t<spawn x="{x-1}" y="{y-1}">\n')
+                for t, v, s, weight in entStack:
+                    out.write(f'\t\t<entity type="{t}" variant="{v}" subtype="{s}" weight="{weight}" />\n')
+                out.write('\t</spawn>\n')
 
             out.write('</room>\n')
             if includeRooms:
@@ -4271,34 +4439,34 @@ class MainWindow(QMainWindow):
         # Floor type
         roomType = [
             # filename, stage, stage type
-            ('basement', 1, 0),
-            ('cellar', 1, 1),
-            ('burning basement', 1, 2),
-            ('caves', 3, 0),
-            ('catacombs', 3, 1),
-            ('flooded caves', 3, 2),
-            ('depths', 5, 0),
-            ('necropolis', 5, 1),
-            ('dank depths', 5, 2),
-            ('womb', 7, 0),
-            ('utero', 7, 1),
-            ('scarred womb', 7, 2),
-            ('blue womb', 9, 0),
-            ('sheol', 10, 0),
-            ('cathedral', 10, 1),
-            ('dark room', 11, 0),
-            ('chest', 11, 1),
+            ('01.basement.stb', 1, 0,         'basement'),
+            ('02.cellar.stb', 1, 1,           'cellar'),
+            ('03.burning basement.stb', 1, 2, 'burning basement'),
+            ('04.caves.stb', 3, 0,            'caves'),
+            ('05.catacombs.stb', 3, 1,        'catacombs'),
+            ('06.flooded caves.stb', 3, 2,    'flooded caves'),
+            ('07.depths.stb', 5, 0,           'depths'),
+            ('08.necropolis.stb', 5, 1,       'necropolis'),
+            ('09.dank depths.stb', 5, 2,      'dank depths'),
+            ('10.womb.stb', 7, 0,             'womb'),
+            ('11.utero.stb', 7, 1,            'utero'),
+            ('12.scarred womb.stb', 7, 2,     'scarred womb'),
+            ('13.blue womb.stb', 9, 0,        'blue womb'),
+            ('14.sheol.stb', 10, 0,           'sheol'),
+            ('15.cathedral.stb', 10, 1,       'cathedral'),
+            ('16.dark room.stb', 11, 0,       'dark room'),
+            ('17.chest.stb', 11, 1,           'chest'),
             # TODO update when repentance comes out
-            ('downpour', 1, 2),
-            ('mines', 3, 2),
-            ('mausoleum', 5, 2),
-            ('corpse', 7, 2),
-            ('forest', 11, 2)
+            ('downpour', 1, 2,  'downpour'),
+            ('mines', 3, 2,     'mines'),
+            ('mausoleum', 5, 2, 'mausoleum'),
+            ('corpse', 7, 2,    'corpse'),
+            ('forest', 11, 2,   'forest')
         ]
 
         floorInfo = roomType[0]
         for t in roomType:
-            if t[0] in mainWindow.path:
+            if t[3] in mainWindow.path:
                 floorInfo = t
 
         modPath, roomPath = self.makeTestMod()
@@ -4434,51 +4602,12 @@ class MainWindow(QMainWindow):
 # Miscellaneous
 ########################
 
-    def toggleSetting(self, setting):
+    def toggleSetting(self, setting, onDefault=False):
         settings = QSettings('settings.ini', QSettings.IniFormat)
-        settings.setValue(setting, settings.value(setting) == '1' and '0' or '1')
-
-    #@pyqtSlot()
-    def switchGrid(self):
-        """Handle toggling of the grid being showed"""
-
-        self.scene.grid = not self.scene.grid
-        settings.setValue('GridEnabled', self.scene.grid)
-
-        if self.scene.grid:
-            self.wa.setText("Hide Grid")
-        else:
-            self.wa.setText("Show Grid")
-
+        a, b = onDefault and ('0','1') or ('1','0')
+        settings.setValue(setting, settings.value(setting) == a and b or a)
         self.scene.update()
 
-    #@pyqtSlot()
-    def switchInfo(self):
-        """Handle toggling of the grid being showed"""
-
-        self.editor.statusBar = not self.editor.statusBar
-        settings.setValue('StatusEnabled', self.editor.statusBar)
-
-        if self.editor.statusBar:
-            self.we.setText("Hide Info Bar")
-        else:
-            self.we.setText("Show Info Bar")
-
-        self.scene.update()
-
-    #@pyqtSlot()
-    def switchBitFont(self):
-        """Handle toggling of the bitfont for entity counting"""
-
-        self.scene.bitText = not self.scene.bitText
-        settings.setValue('BitfontEnabled', self.scene.bitText)
-
-        if self.scene.bitText:
-            self.wd.setText("Use Aliased Counter")
-        else:
-            self.wd.setText("Use Bitfont Counter")
-
-        self.scene.update()
 
     #@pyqtSlot()
     def showPainter(self):
