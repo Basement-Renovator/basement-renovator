@@ -4009,7 +4009,8 @@ class MainWindow(QMainWindow):
 
                     off += 0xA
 
-            r = Room(roomName, doors, spawns, rtype, rvariant, rsubtype, difficulty, rweight, width, height, shape)
+
+            r = Room(roomName, spawns, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
             ret.append(r)
 
         # Update recent files
