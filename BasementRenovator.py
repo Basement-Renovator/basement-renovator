@@ -1951,7 +1951,7 @@ class Room(QListWidgetItem):
                 print(f'{name} ({variant}): Invalid doors!', doors)
             self.info.doors = doors
 
-        self.gridSpawns = spawns
+        self.gridSpawns = spawns or [ [] for x in range(self.info.gridLen()) ]
         if self.info.gridLen() != len(self.gridSpawns):
             print(f'{name} ({variant}): Invalid grid spawns!')
 
@@ -3993,7 +3993,7 @@ class MainWindow(QMainWindow):
                 off += 5
 
                 if not roomInfo.isInBounds(ex, ey):
-                    print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex}, {ey}')
+                    print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex-1}, {ey-1}')
 
                 for spawn in range(stackedEnts):
                     #  type, variant, subtype, weight
