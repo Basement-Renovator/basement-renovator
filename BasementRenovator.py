@@ -2639,8 +2639,7 @@ class RoomSelector(QWidget):
         for room in self.getRooms():
             IDCond = entityCond = typeCond = weightCond = sizeCond = True
 
-            if self.IDFilter.text().lower() not in room.text().lower():
-                IDCond = False
+            IDCond = self.IDFilter.text().lower() in room.text().lower()
 
             # Check if the right entity is in the room
             if self.entityToggle.checked and self.filterEntity:
@@ -2651,36 +2650,30 @@ class RoomSelector(QWidget):
 
             # Check if the room is the right type
             if self.filter.typeData is not -1:
-                if self.filter.typeData == 0: # This is a null room, but we'll look for empty rooms too
-                    typeCond = (self.filter.typeData == room.info.type) or not room.gridSpawns
+                # All the normal rooms
+                typeCond = self.filter.typeData == room.info.type
 
-                    uselessEntities = [0, 1, 2, 1940]
+                # For null rooms, include "empty" rooms regardless of type
+                if not typeCond and self.filter.typeData == 0:
+                    uselessEntities = [0, 1, 2, 1940] # 1940 == cobweb
                     hasUsefulEntities = any(entity[0] not in uselessEntities \
                                             for stack, x, y in room.spawns() for entity in stack)
 
-                    typeCond = not (typeCond or hasUsefulEntities)
+                    typeCond = not hasUsefulEntities
 
-                else: # All the normal rooms
-                    typeCond = self.filter.typeData == room.info.type
 
             # Check if the room is the right weight
             if self.filter.weightData is not -1:
-                weightCond = self.filter.weightData == room.weight
+                eps = 0.0001
+                weightCond = abs(self.filter.weightData - room.weight) < eps
 
             # Check if the room is the right size
             if self.filter.sizeData is not -1:
-                sizeCond = False
-
-                shape = self.filter.sizeData
-
-                if room.info.shape == shape:
-                    sizeCond = True
+                sizeCond = self.filter.sizeData == room.info.shape
 
             # Filter em' out
-            if IDCond and entityCond and typeCond and weightCond and sizeCond:
-                room.setHidden(False)
-            else:
-                room.setHidden(True)
+            isMatch = IDCond and entityCond and typeCond and weightCond and sizeCond
+            room.setHidden(not isMatch)
 
     def setEntityFilter(self, entity):
         self.filterEntity = entity
