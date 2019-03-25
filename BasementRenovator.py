@@ -549,7 +549,7 @@ class RoomScene(QGraphicsScene):
 
         self.roomWidth, self.roomHeight = self.roomInfo.dims
 
-        self.setSceneRect(-2 * 26, -2 * 26, (self.roomWidth + 4) * 26, (self.roomHeight + 4) * 26)
+        self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
 
     def clearDoors(self):
         for item in self.items():
@@ -577,13 +577,15 @@ class RoomScene(QGraphicsScene):
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
         white = QColor.fromRgb(255, 255, 255, 100)
-        bad = QColor.fromRgb(50, 255, 255, 100)
+        bad = QColor.fromRgb(100, 255, 255, 100)
 
+        showOutOfBounds = settings.value('BoundsGridEnabled') == '1'
         for y in range(self.roomHeight):
             for x in range(self.roomWidth):
                 if self.roomInfo.isInBounds(x,y):
                     painter.setPen(QPen(white, 1, Qt.DashLine))
                 else:
+                    if not showOutOfBounds: continue
                     painter.setPen(QPen(bad, 1, Qt.DashLine))
 
                 painter.drawLine(x * gs, y * gs, (x + 1) * gs, y * gs)
@@ -934,7 +936,6 @@ class RoomEditorWidget(QGraphicsView):
         self.setDragMode(self.RubberBandDrag)
         self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
         self.setAlignment(Qt.AlignTop | Qt.AlignLeft)
-        self.newScale = 1.0
 
         self.assignNewScene(scene)
 
@@ -1036,13 +1037,12 @@ class RoomEditorWidget(QGraphicsView):
         w = self.scene().roomWidth
         h = self.scene().roomHeight
 
-        xScale = event.size().width()  / (26 * (w + 4))
-        yScale = event.size().height() / (26 * (h + 4))
+        xScale = event.size().width()  / (26 * (w + 2))
+        yScale = event.size().height() / (26 * (h + 2))
         newScale = min([xScale, yScale])
 
         tr = QTransform()
         tr.scale(newScale, newScale)
-        self.newScale = newScale
 
         self.setTransform(tr)
 
@@ -2428,6 +2428,7 @@ class RoomSelector(QWidget):
         room = self.selectedRoom()
         room.setData(0x100, lineEdit.text())
         room.setText(f"{room.info.variant} - {room.data(0x100)}")
+        mainWindow.dirt()
 
     #@pyqtSlot(bool)
     def turnIDsOn(self):
@@ -2526,7 +2527,7 @@ class RoomSelector(QWidget):
         menu.addAction(Shape)
 
         # End it
-        menu.exec_(self.list.mapToGlobal(pos))
+        menu.exec(self.list.mapToGlobal(pos))
 
     #@pyqtSlot(bool)
     def clearAllFilter(self):
@@ -2749,7 +2750,6 @@ class RoomSelector(QWidget):
         for r in self.selectedRooms():
             r.info.variant = var
             r.setToolTip()
-            r.setText(f"{r.info.variant} - {r.data(0x100)}")
         mainWindow.dirt()
         mainWindow.scene.update()
 
@@ -2772,8 +2772,8 @@ class RoomSelector(QWidget):
     #@pyqtSlot(QAction)
     def changeWeight(self, action):
         for r in self.selectedRooms():
-            #r.info.weight = float(action.text())
-            r.info.weight = action
+            #r.weight = float(action.text())
+            r.weight = action
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
@@ -3583,9 +3583,9 @@ class MainWindow(QMainWindow):
         self.eg = self.e.addAction('Pin Entity Filter',           lambda: self.toggleSetting('PinEntityFilter'), QKeySequence("Ctrl+Alt+K"))
         self.eg.setCheckable(True)
         self.eg.setChecked(settings.value('PinEntityFilter') == '1')
-        self.el = self.e.addAction('Snap to Room Boundaries', lambda: self.toggleSetting('SnapToBounds'))
+        self.el = self.e.addAction('Snap to Room Boundaries', lambda: self.toggleSetting('SnapToBounds', onDefault=True))
         self.el.setCheckable(True)
-        self.el.setChecked(settings.value('SnapToBounds') == '1')
+        self.el.setChecked(settings.value('SnapToBounds') != '0')
         self.e.addSeparator()
         self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
         self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
@@ -3596,6 +3596,9 @@ class MainWindow(QMainWindow):
         self.wa = v.addAction('Show Grid',                        lambda: self.toggleSetting('GridEnabled', onDefault=True), QKeySequence("Ctrl+G"))
         self.wa.setCheckable(True)
         self.wa.setChecked(settings.value('GridEnabled') != '0')
+        self.wg = v.addAction('Show Out of Bounds Grid',          lambda: self.toggleSetting('BoundsGridEnabled'))
+        self.wg.setCheckable(True)
+        self.wg.setChecked(settings.value('BoundsGridEnabled') == '1')
         self.we = v.addAction('Show Room Info',                   lambda: self.toggleSetting('StatusEnabled', onDefault=True), QKeySequence("Ctrl+I"))
         self.we.setCheckable(True)
         self.we.setChecked(settings.value('StatusEnabled') != '0')
@@ -3976,17 +3979,25 @@ class MainWindow(QMainWindow):
                 print (f'Invalid doors in room {getRoomPrefix()}: Expected {normalDoors}, Got {sortedDoors}')
 
             realWidth = roomInfo.dims[0]
-            spawns = [ [] for x in range(roomInfo.gridLen()) ]
+            gridLen = roomInfo.gridLen()
+            spawns = [ [] for x in range(gridLen) ]
             for entity in range(numEnts):
                 # x, y, number of entities at this position
                 ex, ey, stackedEnts = struct.unpack_from('<hhB', stb, off)
                 ex += 1
                 ey += 1
-                spawnSquare = spawns[Room.Info.gridIndex(ex, ey, realWidth)]
                 off += 5
 
                 if not roomInfo.isInBounds(ex, ey):
                     print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex-1}, {ey-1}')
+
+                idx = Room.Info.gridIndex(ex, ey, realWidth)
+                if idx >= gridLen:
+                    print ('Discarding the current entity due to invalid position!')
+                    off += 0xA * stackedEnts
+                    continue
+
+                spawnSquare = spawns[idx]
 
                 for spawn in range(stackedEnts):
                     #  type, variant, subtype, weight
@@ -4017,13 +4028,12 @@ class MainWindow(QMainWindow):
 
         if target == '' or forceNewName:
             dialogDir = target == '' and self.getRecentFolder() or os.path.dirname(target)
-            target = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Binary (*.stb)')
+            target, ext = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Binary (*.stb)')
             self.restoreEditMenu()
 
-            if len(target) == 0:
-                return
+            if not target: return
 
-            self.path = target[0]
+            self.path = target
             self.updateTitlebar()
 
         try:
@@ -4226,10 +4236,12 @@ class MainWindow(QMainWindow):
         with open(os.path.join(folder, 'roomTest.lua'), 'w') as testData:
 
             quot = '\\"'
+            bs = '\\'
             testData.write(f'''return {{
     TestType = '{testType}',
     Stage = {floorInfo[1]},
     StageType = {floorInfo[2]},
+    RoomFile = "{str(Path(self.path)).replace(bs, bs + bs) or 'N/A'}",
     Name = "{testRoom.data(0x100).replace('"', quot)}",
     Type = {testRoom.info.type},
     Variant = {testRoom.info.variant},
@@ -4252,27 +4264,25 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Error", "Blue Womb cannot be tested with Stage Replacement, since it doesn't have normal room generation.")
                 raise
 
-            # Set the selected room to max weight
-            testRoom = Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
+            # Set the selected room to max weight, best spawn difficulty, default type, and enable all the doors
+            testRoom = Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape)
 
-            # Make a new STB with a blank room
             # Always pad these rooms
-            padMe = testRoom.info.shape in [2, 3, 5, 7] \
-                    or any(not door[2] for door in testRoom.info.doors) # weird door layouts need padding
+            padMe = testRoom.info.shape in [2, 3, 5, 7]
 
             # Needs a padded room
             newRooms = [testRoom]
             if padMe:
                 newRooms.append(Room(difficulty=10, weight=0.1))
 
+            # Make a new STB with a blank room
             path = os.path.join(roomsPath, floorInfo[0])
             self.save(newRooms, path, updateRecent=False)
 
             # Prompt to restore backup
-            message = ""
+            message = 'This method will not work properly if you have other mods that add rooms to the floor.'
             if padMe:
-                message += "As the room has a non-standard shape and/or missing doors, the floor is forced to XL to try and make it spawn. You may have to reset a few times for your room to appear.\n\n"
-            message += 'This method will not work properly if you have other mods that add rooms to the floor.\n\n'
+                message += "\n\nAs the room has a non-standard shape, you may have to reset a few times for your room to appear."
 
             return [], testRoom, message
 
@@ -4517,6 +4527,7 @@ class MainWindow(QMainWindow):
              QMessageBox.warning(self, "Error", f'Failed to test with {testType}: {e}')
              return
 
+        settings = QSettings('settings.ini', QSettings.IniFormat)
         if settings.value('DisableTestDialog') == '1':
             # disable mod in 5 minutes
             if self.disableTestModTimer: self.disableTestModTimer.disconnect()
@@ -4535,7 +4546,7 @@ class MainWindow(QMainWindow):
             # e.g. QMessageBox.information() or msg.exec(), isaac crashes on launch.
             # This is probably a bug in python or Qt
             msg = QMessageBox(QMessageBox.Information,
-                'Disable BR', extraMessage +
+                'Disable BR', (extraMessage and (extraMessage + '\n\n') or '') +
                 'Press "OK" when done testing to disable the BR helper mod.'
                 , QMessageBox.Ok, self)
 
