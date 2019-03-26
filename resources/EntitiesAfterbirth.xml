@@ -921,8 +921,7 @@
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.089 - Child Leash.png" Kind="Collect" Name="Child Leash" Subtype="89" Variant="350" />
 	<entity Group="Trinkets" ID="5" Image="resources/Entities/Trinkets/5.350.090 - Brown Cap.png" Kind="Collect" Name="Brown Cap" Subtype="90" Variant="350" />
 
-<!-- New Afterbirth Enemies, excluding trinkets and items -->
-
+	<!-- New Afterbirth Enemies, excluding trinkets and items -->
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.7 - Gold Heart.png" Kind="Pickups" Name="Gold Heart" Subtype="7" Variant="10" />
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.4 - Golden Bomb.png" Kind="Pickups" Name="Golden Bomb" Subtype="4" Variant="40" />
 	<entity ID="5" Image="resources/Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
@@ -1015,6 +1014,4 @@
 
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
-
-
 </data>
