@@ -1273,7 +1273,7 @@
 	<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Name="Pooter (no shoot)" Subtype="0" Variant="2" />
 	<entity Image="resources/Entities/1500.0.0 - Poop.png" Name="Pushable Poop" ID="245" Subtype="0" Variant="0" />
 
-    <!-- Tears -->
+        <!-- Tears -->
 	<entity ID="2" Image="resources/Entities/2.0.0 - Tear.png" Name="Tear" Subtype="0" Variant="0" />
 	<entity ID="2" Image="resources/Entities/2.0.1 - Blood Tear.png" Name="Blood Tear" Subtype="0" Variant="1" />
 	<entity ID="2" Image="resources/Entities/2.0.2 - Tooth Tear.png" Name="Tooth Tear" Subtype="0" Variant="2" />
