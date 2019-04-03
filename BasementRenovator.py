@@ -3874,7 +3874,7 @@ class MainWindow(QMainWindow):
         if self.checkDirty(): return
 
         target = QFileDialog.getOpenFileName(
-            self, 'Open Map', self.getRecentFolder(), 'Stage Binary (*.stb)')
+            self, 'Open Map', self.getRecentFolder(), "Stage Binary (*.stb);;TXT File (*.txt)")
         self.restoreEditMenu()
 
         # Looks like nothing was selected
@@ -3912,6 +3912,14 @@ class MainWindow(QMainWindow):
 
     def open(self, path=None, addToRecent=True):
         path = path or self.path
+
+        if os.path.splitext(path)[1] == '.txt':
+            try:
+                return self.openTXT(path)
+            except Exception as e:
+                traceback.print_exception(*sys.exc_info())
+                QMessageBox.warning(self, "Error", "You done goofed.")
+                return []
 
         # Let's read the file and parse it into our list items
         stb = None
@@ -4023,6 +4031,147 @@ class MainWindow(QMainWindow):
 
         return ret
 
+    # HA HA HA FUNNY MODE FUNNY MODE
+    def openTXT(self, path=None):
+        path = path or self.path
+
+        try:
+            text = Path(path).read_text('utf-8')
+        except:
+            QMessageBox.warning(self, "Error", "Failed opening rooms. The file may not exist.")
+            return
+
+        text = text.splitlines()
+        numLines = len(text)
+
+        def skipWS(i):
+            for j in range(i, numLines):
+                if text[j]: return j
+            return numLines
+
+        entMap = {}
+
+        # Initial section: entity definitions
+        # [Character]=[type].[variant].[subtype]
+        # one per line, continues until it hits a line starting with ---
+        roomBegin = 0
+        for i in range(numLines):
+            line = text[i]
+            line = re.sub(r'\s', '', line)
+            roomBegin = i
+
+            if line.startswith('---'): break
+            if not line: continue
+
+            char, t, v, s = re.findall(r'(.)=(\d+).(\d+).(\d+)', line)[0]
+
+            if char in [ '-', '|' ]:
+                print("Can't use - or | for entities!")
+                continue
+
+            t = int(t)
+            v = int(v)
+            s = int(s)
+            global entityXML
+            en = entityXML.find(f"entity[@ID='{t}'][@Subtype='{s}'][@Variant='{v}']")
+            if en == None or en.get('Invalid') == '1':
+                print(f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.get('Name')}'! ({t}.{v}.{s})")
+                continue
+
+            entMap[char] = (t, v, s, 0)
+
+        shapeNames = {
+            '1x1': 1,
+            '2x2': 8,
+            'closet': 2,
+            'vertcloset': 3,
+            '1x2': 4,
+            'long': 7,
+            'longvert': 5,
+            '2x1': 6,
+            'l': 10,
+            'mirrorl': 9,
+            'r': 12,
+            'mirrorr': 11
+        }
+
+        ret = []
+
+        # Main section: room definitions
+        # First line: [id]: [name]
+        # Second line, in no particular order: [Weight,] [Shape (within tolerance),] [Difficulty,] [Type[=1],] [Subtype[=0],]
+        # Next [room height] lines: room layout
+        # horizontal walls are indicated with -, vertical with |
+        #   there will be no validation for this, but if lines are the wrong length it prints an error message and skips the line
+        # coordinates to entities are 1:1, entity ids can be at most 1 char
+        # place xs at door positions to turn them off
+        roomBegin += 1
+        while roomBegin < numLines:
+            # 2 lines
+            i = skipWS(roomBegin)
+            if i == numLines: break
+
+            id, name = text[i].split(':', 1)
+            name = name.strip()
+            id = int(id)
+
+            infoParts = re.sub(r'\s', '', text[i+1]).lower().split(',')
+            shape = 1
+            difficulty = 5
+            weight = 1
+            rtype = 1
+            rsubtype = 0
+            for part in infoParts:
+                prop, val = re.findall(r'(.+)=(.+)', part)[0]
+                if prop == 'shape': shape = shapeNames.get(val) or int(val)
+                elif prop == 'difficulty': difficulty = shapeNames.get(val) or int(val)
+                elif prop == 'weight': weight = float(val)
+                elif prop == 'type': rtype = int(val)
+                elif prop == 'subtype': rsubtype = int(val)
+
+            r = Room(name, None, difficulty, weight, rtype, id, rsubtype, shape)
+            width, height = r.info.dims
+            spawns = r.gridSpawns
+
+            i = skipWS(i + 2)
+            for j in range(i, i + height):
+                if j == numLines:
+                    print('Could not finish room!')
+                    break
+
+                y = j - i
+                row = text[j]
+                for x in range(len(row)):
+                    char = row[x]
+                    if char in [ '-', '|', ' ' ]:
+                        continue
+                    if char.lower() == 'x':
+                        changed = False
+                        for door in r.info.doors:
+                            if door[0] == x and door[1] == y:
+                                door[2] = False
+                                changed = True
+                        if changed: continue
+
+                    ent = entMap.get(char)
+                    if ent:
+                        spawns[Room.Info.gridIndex(x,y,width)].append(ent[:])
+                    else:
+                        print(f"Unknown entity! '{char}'")
+
+            ret.append(r)
+
+            i = skipWS(i + height)
+            if i == numLines: break
+
+            if not text[i].strip().startswith('---'):
+                print('Could not find separator after room!')
+                break
+
+            roomBegin = i + 1
+
+        return ret
+
     def saveMap(self, forceNewName=False):
         target = self.path
 
@@ -4050,6 +4199,7 @@ class MainWindow(QMainWindow):
 
     def save(self, rooms, path=None, updateRecent=True):
         path = path or self.path
+        path = os.path.splitext(path)[0] + '.stb'
 
         self.storeEntityList()
 
