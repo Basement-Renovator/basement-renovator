@@ -580,6 +580,8 @@ class RoomScene(QGraphicsScene):
         bad = QColor.fromRgb(100, 255, 255, 100)
 
         showOutOfBounds = settings.value('BoundsGridEnabled') == '1'
+        showGridIndex = settings.value('ShowGridIndex') == '1'
+        showCoordinates = settings.value('ShowCoordinates') == '1'
         for y in range(self.roomHeight):
             for x in range(self.roomWidth):
                 if self.roomInfo.isInBounds(x,y):
@@ -592,6 +594,11 @@ class RoomScene(QGraphicsScene):
                 painter.drawLine(x * gs, (y + 1) * gs, (x + 1) * gs, (y + 1) * gs)
                 painter.drawLine(x * gs, y * gs, x * gs, (y + 1) * gs)
                 painter.drawLine((x + 1) * gs, y * gs, (x + 1) * gs, (y + 1) * gs)
+
+                if showGridIndex:
+                    painter.drawText(x * gs + 2, y * gs + 13, f"{Room.Info.gridIndex(x, y, self.roomWidth)}" )
+                if showCoordinates:
+                    painter.drawText(x * gs + 2, y * gs + 24, f"{x - 1},{y - 1}" )
 
         # Draw Walls (Debug)
         # painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
@@ -3421,6 +3428,7 @@ class HooksDialog(QDialog):
 
     def setPaths(self, val):
         self.content.clear()
+        if not val: return
         self.content.addItems(val)
 
     def displayHook(self, new, old):
@@ -3599,6 +3607,13 @@ class MainWindow(QMainWindow):
         self.wg = v.addAction('Show Out of Bounds Grid',          lambda: self.toggleSetting('BoundsGridEnabled'))
         self.wg.setCheckable(True)
         self.wg.setChecked(settings.value('BoundsGridEnabled') == '1')
+        self.wh = v.addAction('Show Grid Indexes',                lambda: self.toggleSetting('ShowGridIndex'))
+        self.wh.setCheckable(True)
+        self.wh.setChecked(settings.value('ShowGridIndex') == '1')
+        self.wi = v.addAction('Show Grid Coordinates',            lambda: self.toggleSetting('ShowCoordinates'))
+        self.wi.setCheckable(True)
+        self.wi.setChecked(settings.value('ShowCoordinates') == '1')
+        v.addSeparator()
         self.we = v.addAction('Show Room Info',                   lambda: self.toggleSetting('StatusEnabled', onDefault=True), QKeySequence("Ctrl+I"))
         self.we.setCheckable(True)
         self.we.setChecked(settings.value('StatusEnabled') != '0')
