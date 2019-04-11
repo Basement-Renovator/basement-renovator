@@ -50,6 +50,12 @@ def getEntityXML():
 
     return root
 
+def getStageXML():
+    tree = ET.parse('resources/StagesAfterbirthPlus.xml')
+    root = tree.getroot()
+
+    return root
+
 def findInstallPath():
     installPath = ''
     cantFindPath = False
@@ -201,7 +207,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
     if len(enList) == 0:
         return
 
-    print('-----------------------\nLoading entities from "%s"' % name)
+    print(f'-----------------------\nLoading entities from "{name}"')
 
     def mapEn(en):
         # Fix some shit
@@ -364,17 +370,12 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
     return result
 
-def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
-
-    brPath = os.path.join(modPath, 'basementrenovator')
-    if not os.path.isdir(brPath):
-        return
-
+def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     entFile = os.path.join(brPath, 'EntitiesMod.xml')
     if not os.path.isfile(entFile):
         return
 
-    print('-----------------------\nLoading entities from "%s"' % name)
+    print(f'-----------------------\nLoading entities from "{name}"')
 
     root = None
     try:
@@ -439,8 +440,41 @@ def loadFromMod(modPath, name, entRoot, fixIconFormat=False):
 
     return list(map(mapEn, enList))
 
+def loadStagesFromMod(modPath, brPath, name):
+    stageFile = os.path.join(brPath, 'StagesMod.xml')
+    if not os.path.isfile(stageFile):
+        return
+
+    print(f'-----------------------\nLoading stages from "{name}"')
+
+    root = None
+    try:
+        tree = ET.parse(stageFile)
+        root = tree.getroot()
+    except Exception as e:
+        print('Error loading BR xml:', e)
+        return
+
+    stageList = root.findall('stage')
+    if len(stageList) == 0: return
+
+    def mapStage(stage):
+        if stage.get('Stage') is None or stage.get('StageType') is None or stage.get('Name') is None:
+            print('Tried to load stage, but had missing stage, stage type, or name!', str(stage.attrib))
+            return None
+
+        prefix = stage.get('BGPrefix')
+        if prefix is not None:
+            prefixPath = linuxPathSensitivityTraining(os.path.join(brPath, prefix))
+            stage.set('BGPrefix', prefixPath)
+
+        return stage
+
+    return list(filter(lambda x: x != None, map(mapStage, stageList)))
+
 def loadMods(autogenerate, installPath, resourcePath):
     global entityXML
+    global stageXML
 
     # Each mod in the mod folder is a Group
     modsPath = findModsPath(installPath)
@@ -459,23 +493,24 @@ def loadMods(autogenerate, installPath, resourcePath):
     print('LOADING MOD CONTENT')
     for mod in modsInstalled:
         modPath = os.path.join(modsPath, mod)
+        brPath = os.path.join(modPath, 'basementrenovator')
 
         # Make sure we're a mod
         if not os.path.isdir(modPath) or os.path.isfile(os.path.join(modPath, 'disable.it')):
             continue
 
         # simple workaround for now
-        if not autogenerate and not os.path.exists(os.path.join(modPath, 'basementrenovator', 'EntitiesMod.xml')):
+        if not (autogenerate or os.path.exists(brPath)):
             continue
 
         # Get the mod name
-        name = mod
+        modName = mod
         try:
             tree = ET.parse(os.path.join(modPath, 'metadata.xml'))
             root = tree.getroot()
-            name = root.find("name").text
+            modName = root.find("name").text
         except ET.ParseError:
-            print('Failed to parse mod metadata "%s", falling back on default name' % name)
+            print(f'Failed to parse mod metadata "{modName}", falling back on default name')
 
         # add dedicated entities
         entPath = os.path.join(modPath, 'content/entities2.xml')
@@ -485,14 +520,14 @@ def loadMods(autogenerate, installPath, resourcePath):
             try:
                 entRoot = ET.parse(entPath).getroot()
             except ET.ParseError as e:
-                print(f'ERROR parsing entities2 xml for mod "{name}": {e}')
+                print(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
                 continue
 
             ents = None
             if autogenerate:
-                ents = loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=fixIconFormat)
+                ents = loadFromModXML(modPath, modName, entRoot, resourcePath, fixIconFormat=fixIconFormat)
             else:
-                ents = loadFromMod(modPath, name, entRoot, fixIconFormat=fixIconFormat)
+                ents = loadFromMod(modPath, brPath, modName, entRoot, fixIconFormat=fixIconFormat)
 
             if ents:
                 for ent in ents:
@@ -511,7 +546,9 @@ def loadMods(autogenerate, installPath, resourcePath):
 
                     entityXML.append(ent)
 
-    settings.setValue('FixIconFormat', '0')
+            stages = loadStagesFromMod(modPath, brPath, modName)
+            if stages:
+                stageXML.extend(stages)
 
 ########################
 #      Scene/View      #
@@ -522,17 +559,6 @@ class RoomScene(QGraphicsScene):
     def __init__(self):
         QGraphicsScene.__init__(self, 0, 0, 0, 0)
         self.newRoomSize(1)
-
-        self.BG = [
-            "01_basement", "02_cellar", "03_caves", "04_catacombs",
-            "05_depths", "06_necropolis", "07_the womb", "08_utero",
-            "09_sheol", "10_cathedral", "11_chest", "12_darkroom",
-            "13_burningbasement", "14_floodedcaves", "15_dankdepths", "16_scarredwomb",
-            "18_bluewomb",
-            "0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom",
-            "0e_arcade", "0e_diceroom", "0f_secretroom"
-        ]
-        self.grid = True
 
         # Make the bitfont
         q = QImage()
@@ -613,13 +639,14 @@ class RoomScene(QGraphicsScene):
     def loadBackground(self):
         gs = 26
 
-        roomBG = 1
-
+        roomBG = None
         if mainWindow.roomList.selectedRoom():
             roomBG = mainWindow.roomList.selectedRoom().roomBG
+        else:
+            roomBG = stageXML.find('stage[@Name="Basement"]')
 
         self.tile = QImage()
-        self.tile.load('resources/Backgrounds/{0}.png'.format(self.BG[roomBG-1]))
+        self.tile.load(roomBG.get('OuterBG'))
 
         # grab the images from the appropriate parts of the spritesheet
         self.corner = self.tile.copy(QRect(0,      0,      gs * 7, gs * 4))
@@ -627,7 +654,7 @@ class RoomScene(QGraphicsScene):
         self.horiz  = self.tile.copy(QRect(0,      gs * 4, gs * 9, gs * 2))
 
         self.innerCorner = QImage()
-        self.innerCorner.load('resources/Backgrounds/{0}Inner.png'.format(self.BG[roomBG - 1]))
+        self.innerCorner.load(roomBG.get('InnerBG'))
 
     def drawBackground(self, painter, rect):
 
@@ -1965,7 +1992,6 @@ class Room(QListWidgetItem):
         self.difficulty = difficulty
         self.weight = weight
 
-        self.roomBG = 1
         self.setRoomBG()
 
         self.setFlags(self.flags() | Qt.ItemIsEditable)
@@ -2054,78 +2080,91 @@ class Room(QListWidgetItem):
     def spawns(self):
         return Room._SpawnIter(self.gridSpawns, self.info.dims)
 
+    SpecialBG = [
+        "0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom",
+        "0e_arcade", "0e_diceroom", "0f_secretroom"
+    ]
+
+    for i in range(len(SpecialBG)):
+        prefix = SpecialBG[i]
+        SpecialBG[i] = ET.Element('room', {
+            "OuterBG": os.path.join("resources/Backgrounds", prefix + ".png"),
+            "InnerBG": os.path.join("resources/Backgrounds", prefix + "Inner.png")
+        })
+
     def setRoomBG(self):
-        roomType = ['basement', 'cellar',
-                    'caves','catacombs',
-                    'depths', 'necropolis',
-                    'womb', 'utero',
-                    'sheol', 'cathedral',
-                    'chest', 'dark room',
-                    'burning basement', 'flooded caves',
-                    'dank depths', 'scarred womb',
-                    'blue womb']
+        global stageXML
 
-        self.roomBG = 1
+        roomsByStage = stageXML.findall('stage')
 
-        for i in range(len(roomType)):
-            if roomType[i] in mainWindow.path:
-                self.roomBG = i + 1
+        getBG = lambda name: stageXML.find(f'stage[@Name="{name}"]')
+
+        self.roomBG = getBG('Basement')
+
+        for room in roomsByStage:
+            if room.get('Pattern') in mainWindow.path:
+                self.roomBG = room
 
         c = self.info.type
         v = self.info.variant
 
-        if c == 12:
-            self.roomBG = 18
-        elif c == 2:
-            self.roomBG = 19
-        elif c == 18:
-            self.roomBG = 20
-        elif c == 19:
-            self.roomBG = 21
-        elif c == 9:
-            self.roomBG = 22
-        elif c == 21:
-            self.roomBG = 23
-        elif c == 7:
-            self.roomBG = 24
+        if c == 12: # library
+            self.roomBG = Room.SpecialBG[0]
+        elif c == 2: # shop
+            self.roomBG = Room.SpecialBG[1]
+        elif c == 18: # bedroom
+            self.roomBG = Room.SpecialBG[2]
+        elif c == 19: # barren room
+            self.roomBG = Room.SpecialBG[3]
+        elif c == 9: # arcade
+            self.roomBG = Room.SpecialBG[4]
+        elif c == 21: # dice room
+            self.roomBG = Room.SpecialBG[5]
+        elif c == 7: # secret room
+            self.roomBG = Room.SpecialBG[6]
 
+        # curse, challenge, sacrifice, devil, boss rush, black market
         elif c in [10, 11, 13, 14, 17, 22]:
-            self.roomBG = 9
+            self.roomBG = getBG('Sheol')
+        # angel
         elif c in [15]:
-            self.roomBG = 10
+            self.roomBG = getBG('Cathedral')
+        # chest room
         elif c in [20]:
-            self.roomBG = 11
+            self.roomBG = getBG('Chest')
+        # error, crawlspace
         elif c in [3, 16]:
-            self.roomBG = 12
+            self.roomBG = getBG('Dark Room')
 
+        # super secret
         elif c in [8]:
             if v in [0, 11, 15]:
-                self.roomBG = 7
+                self.roomBG = getBG('Womb')
             elif v in [1, 12, 16]:
-                self.roomBG = 10
+                self.roomBG = getBG('Cathedral')
             elif v in [2, 13, 17]:
-                self.roomBG = 9
+                self.roomBG = getBG('Sheol')
             elif v in [3]:
-                self.roomBG = 4
+                self.roomBG = getBG('Necropolis')
             elif v in [4]:
-                self.roomBG = 2
+                self.roomBG = getBG('Cellar')
             elif v in [5, 19]:
-                self.roomBG = 1
+                self.roomBG = getBG('Basement')
             elif v in [6]:
-                self.roomBG = 18
+                self.roomBG = Room.SpecialBG[0]
             elif v in [7]:
-                self.roomBG = 12
+                self.roomBG = getBG('Dark Room')
             elif v in [8]:
-                self.roomBG = 13
+                self.roomBG = getBG('Burning Basement')
             elif v in [9]:
-                self.roomBG = 14
+                self.roomBG = getBG('Flooded Caves')
             elif v in [14, 18]:
-                self.roomBG = 19
+                self.roomBG = Room.SpecialBG[1]
             else:
-                self.roomBG = 12
+                self.roomBG = getBG('Dark Room')
         # grave rooms
         elif c == 1 and v > 2 and 'special rooms' in mainWindow.path:
-            self.roomBG = 12
+            self.roomBG = getBG('Dark Room')
 
     def mirrorX(self):
         # Flip Spawns
@@ -2454,7 +2493,7 @@ class RoomSelector(QWidget):
         types= [
             "Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room",
             "Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room",
-            "Library", "Sacrifice Room", "Devil Room", "Angel Room", "Item Dungeon", "Boss Rush Room",
+            "Library", "Sacrifice Room", "Devil Room", "Angel Room", "Crawlspace", "Boss Rush Room",
             "Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"
         ]
 
@@ -3483,36 +3522,6 @@ class MainWindow(QMainWindow):
         if event.key() == Qt.Key_Shift:
             self.roomList.mirrorYButtonOff()
 
-    defaultMapsDict = {
-        "Special Rooms": "00.special rooms.stb",
-        "Basement": "01.basement.stb",
-        "Cellar": "02.cellar.stb",
-        "Burning Basement": "03.burning basement.stb",
-        "Caves": "04.caves.stb",
-        "Catacombs": "05.catacombs.stb",
-        "Flooded Caves": "06.flooded caves.stb",
-        "Depths": "07.depths.stb",
-        "Necropolis": "08.necropolis.stb",
-        "Dank Depths": "09.dank depths.stb",
-        "Womb": "10.womb.stb",
-        "Utero": "11.utero.stb",
-        "Scarred Womb": "12.scarred womb.stb",
-        "Blue Womb": "13.blue womb.stb",
-        "Sheol": "14.sheol.stb",
-        "Cathedral": "15.cathedral.stb",
-        "Dark Room": "16.dark room.stb",
-        "Chest": "17.chest.stb",
-        "Special Rooms [Greed]": "18.greed special.stb",
-        "Basement [Greed]": "19.greed basement.stb",
-        "Caves [Greed]": "20.greed caves.stb",
-        "Depths [Greed]": "21.greed depths.stb",
-        "Womb [Greed]": "22.greed womb.stb",
-        "Sheol [Greed]": "23.greed sheol.stb",
-        "The Shop [Greed]": "24.greed the shop.stb",
-        "Ultra Greed [Greed]": "25.ultra greed.stb" }
-
-    defaultMapsOrdered = OrderedDict(sorted(defaultMapsDict.items(), key=lambda t: t[0]))
-
     def __init__(self):
         super(QMainWindow, self).__init__()
 
@@ -3530,6 +3539,8 @@ class MainWindow(QMainWindow):
         self.editor = RoomEditorWidget(self.scene)
         self.setCentralWidget(self.editor)
 
+        self.fixupStage()
+
         self.setupDocks()
         self.setupMenuBar()
 
@@ -3543,6 +3554,25 @@ class MainWindow(QMainWindow):
         # Setup a new map
         self.newMap()
         self.clean()
+
+    def fixupStage(self):
+        global stageXML
+
+        fixIconFormat = settings.value('FixIconFormat') == '1'
+
+        for stage in stageXML.findall('stage'):
+            prefix = stage.get('BGPrefix')
+            if prefix is None:
+                baseStage = stageXML.find(f"stage[@Stage='{stage.get('Stage')}'][@StageType='{stage.get('StageType')}'][@BGPrefix]")
+                prefix = baseStage.get('BGPrefix')
+            stage.set('OuterBG', prefix + '.png')
+            stage.set('InnerBG', prefix + 'Inner.png')
+
+            if fixIconFormat:
+                for imgPath in [ stage.get('OuterBG'), stage.get('InnerBG') ]:
+                    formatFix = QImage(imgPath)
+                    formatFix.save(imgPath)
+
 
     def setupFileMenuBar(self):
         f = self.fileMenu
@@ -3833,12 +3863,17 @@ class MainWindow(QMainWindow):
     def openMapDefault(self):
         if self.checkDirty(): return
 
-        selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", self.defaultMapsOrdered, 0, False)
+        global stageXML
+        selectMaps = {}
+        for x in stageXML.findall("stage[@BaseGamePath]"):
+            selectMaps[x.get('Name')] = x.get('BaseGamePath')
+
+        selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", selectMaps.keys(), 0, False)
         self.restoreEditMenu()
 
         if not selectedMapOk: return
 
-        mapFileName = self.defaultMapsDict[selectedMap]
+        mapFileName = selectMaps[selectedMap] + '.stb'
         roomPath = os.path.join(os.path.expanduser(self.findResourcePath()), "rooms", mapFileName)
 
         if not QFile.exists(roomPath):
@@ -4404,8 +4439,10 @@ class MainWindow(QMainWindow):
             bs = '\\'
             testData.write(f'''return {{
     TestType = '{testType}',
-    Stage = {floorInfo[1]},
-    StageType = {floorInfo[2]},
+    Stage = {floorInfo.get('Stage')},
+    StageType = {floorInfo.get('StageType')},
+    StageName = "{floorInfo.get('Name').replace(bs, bs + bs).replace('"', quot)}",
+    IsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
     RoomFile = "{str(Path(self.path)).replace(bs, bs + bs) or 'N/A'}",
     Name = "{testRoom.data(0x100).replace('"', quot)}",
     Type = {testRoom.info.type},
@@ -4425,7 +4462,12 @@ class MainWindow(QMainWindow):
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
         def setup(modPath, roomsPath, floorInfo, room):
-            if floorInfo[1] == 9:
+            basePath = floorInfo.get('BaseGamePath')
+            if basePath is None:
+                QMessageBox.warning(self, "Error", "Custom stages cannot be tested with Stage Replacement, since they don't have a room file to replace.")
+                raise
+
+            if floorInfo.get('Name') == 'Blue Womb':
                 QMessageBox.warning(self, "Error", "Blue Womb cannot be tested with Stage Replacement, since it doesn't have normal room generation.")
                 raise
 
@@ -4441,7 +4483,7 @@ class MainWindow(QMainWindow):
                 newRooms.append(Room(difficulty=10, weight=0.1))
 
             # Make a new STB with a blank room
-            path = os.path.join(roomsPath, floorInfo[0])
+            path = os.path.join(roomsPath, basePath + '.stb')
             self.save(newRooms, path, updateRecent=False)
 
             # Prompt to restore backup
@@ -4505,8 +4547,8 @@ class MainWindow(QMainWindow):
             self.writeRoomXML(path, room, isPreview = True)
 
             return [ f"--load-room={path}",
-                     f"--set-stage={floorInfo[1]}",
-                     f"--set-stage-type={floorInfo[2]}" ], None, ""
+                     f"--set-stage={floorInfo.get('Stage')}",
+                     f"--set-stage-type={floorInfo.get('StageType')}" ], None, ""
 
         self.testMapCommon('InstaPreview', setup)
 
@@ -4585,7 +4627,7 @@ class MainWindow(QMainWindow):
 
             # Doors
             for x, y, exists in room.info.doors:
-                out.write(f'\t<door x="{x-1}" y="{y-1}" exists="{exists and "true" or "false"}" />\n')
+                out.write(f'\t<door x="{x-1}" y="{y-1}" exists="{exists and "True" or "false"}" />\n')
 
             # Spawns
             for entStack, x, y in room.spawns():
@@ -4606,37 +4648,12 @@ class MainWindow(QMainWindow):
             return
 
         # Floor type
-        roomType = [
-            # filename, stage, stage type
-            ('01.basement.stb', 1, 0,         'basement'),
-            ('02.cellar.stb', 1, 1,           'cellar'),
-            ('03.burning basement.stb', 1, 2, 'burning basement'),
-            ('04.caves.stb', 3, 0,            'caves'),
-            ('05.catacombs.stb', 3, 1,        'catacombs'),
-            ('06.flooded caves.stb', 3, 2,    'flooded caves'),
-            ('07.depths.stb', 5, 0,           'depths'),
-            ('08.necropolis.stb', 5, 1,       'necropolis'),
-            ('09.dank depths.stb', 5, 2,      'dank depths'),
-            ('10.womb.stb', 7, 0,             'womb'),
-            ('11.utero.stb', 7, 1,            'utero'),
-            ('12.scarred womb.stb', 7, 2,     'scarred womb'),
-            ('13.blue womb.stb', 9, 0,        'blue womb'),
-            ('14.sheol.stb', 10, 0,           'sheol'),
-            ('15.cathedral.stb', 10, 1,       'cathedral'),
-            ('16.dark room.stb', 11, 0,       'dark room'),
-            ('17.chest.stb', 11, 1,           'chest'),
-            # TODO update when repentance comes out
-            ('downpour', 1, 2,  'downpour'),
-            ('mines', 3, 2,     'mines'),
-            ('mausoleum', 5, 2, 'mausoleum'),
-            ('corpse', 7, 2,    'corpse'),
-            ('forest', 11, 2,   'forest')
-        ]
-
-        floorInfo = roomType[0]
-        for t in roomType:
-            if t[3] in mainWindow.path:
-                floorInfo = t
+        # TODO cache this when loading a file
+        global stageXML
+        floorInfo = stageXML.find('stage[@Name="Basement"]')
+        for stage in stageXML.findall('stage'):
+            if stage.get('Pattern') in mainWindow.path:
+                floorInfo = stage
 
         modPath, roomPath = self.makeTestMod()
         if modPath == "":
@@ -4851,12 +4868,15 @@ if __name__ == '__main__':
 
     # XML Globals
     entityXML = getEntityXML()
+    stageXML = getStageXML()
     if settings.value('DisableMods') != '1':
         loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder', ''))
 
     print('-'.join([ '' for i in range(50) ]))
     print('INITIALIZING MAIN WINDOW')
     mainWindow = MainWindow()
+
+    settings.setValue('FixIconFormat', '0')
 
     startFile = None
 
