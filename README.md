@@ -84,12 +84,22 @@ There are some older packaged downloads on the [releases tab](https://github.com
   * Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
   * The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
 
+*How do I add custom stages?*
+
+* This is very similar to adding custom entities. Create a `basementrenovator` folder and add a file called `StagesMod.xml`. This should use the same format as `resources/StagesAfterbirthPlus.xml` and have the same conventions.
+* `BaseGamePath` is an extension-less version of the game's stb file name for that stage. (which most likely does not apply to your modded stage) If not present, a stage will be assumed to be from a mod.
+* `BGPrefix` is the path to the backdrop files relative to the `basementrenovator` folder, minus the -.png and -Inner.png for L rooms. If left out, the fallback will be the first stage with the same Stage and StageType with a valid backdrop.
+* `Pattern` is the pattern used to match a filename against to determine it's for that stage; if the file contains that prefix it will be set to that stage. The last stage loaded has prefix matching priority, so mods will always have priority over base game stages.
+* `Stage` and `StageType` correspond to the in-game enum values for the stage, for modded stages this should point to the stage being replaced.
+* Lastly, `Name` is the display name shown in BR, and also passed to room tests to allow for properly replacing the base game stage as needed.
+
 *Is there a fast way to set up BR compatibility?*
 
 * You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In BR's resource folder under Entities/ModTemp, there will be a folder with your mod's name.
 It will contain an icons folder and an EntitiesMod.xml file. However, this will generate entries for many things you may not want to have entries for, so you'll need to clean it up.
 * Some icons may not be what you want out of the box. For example, gapers will be missing their heads because they're overlays, or the first frame might not be a good representative.
 BR includes an Icon Generator script under resources to allow for more finegrained icon generation from any frame in an anm2. Run it with --help or -h for more details.
+* This method will not generate custom stages as it's indeterminate how a mod generates them. You'll need to do that step yourself.
 
 *Why does my custom entity appear with a yellow hazard sign on it?*
 

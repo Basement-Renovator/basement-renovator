@@ -41,7 +41,7 @@ if not BasementRenovator.TestRoomData then
 else
     local room = BasementRenovator.TestRoomData
     log('TEST METHOD: ' .. BasementRenovator.TestRoomData.TestType)
-    log('TEST STAGE: ' .. room.Stage .. '.' .. room.StageType)
+    log('TEST STAGE: ' .. room.StageName .. ' (' .. room.Stage .. '.' .. room.StageType .. ')' .. (room.IsModStage and ' MOD' or ''))
     log('TEST ROOM: ' .. room.Type .. '.' .. room.Variant .. '.' .. room.Subtype)
     log('TEST FILE: ' .. room.RoomFile)
 end
