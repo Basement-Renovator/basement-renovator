@@ -559,9 +559,9 @@
 	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" />
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" />
 	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" />
-	<entity Group="Grid" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" />
+	<entity Group="Grid" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" />
 	<entity Group="Grid" ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Kind="Stage" Name="Retracting Spikes" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" />
 	<entity Group="Grid" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" />
@@ -600,7 +600,7 @@
 	<entity ID="2" Kind="Stage" Group="Other" Image="resources/Entities/2.0.9 - Chaos Tear.png" Name="Chaos Tear" Subtype="0" Variant="9" />
 
 	<!-- Poop -->
-	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" />
+	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
 	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Kind="Stage" Name="Red Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Kind="Stage" Name="Golden Poop" Subtype="0" Variant="0" />
