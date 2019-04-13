@@ -546,24 +546,24 @@
 	<entity Group="Bums" ID="6" Image="resources/Entities/6.6.0 - Shell Game.png" Kind="Stage" Name="Shell Game" Subtype="0" Variant="6" />
 
 	<!-- Fireplaces -->
-	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire Place" Subtype="0" Variant="0" />
-	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire Place" Subtype="0" Variant="1" />
-	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.2.0 - Blue Fire Place.png" Kind="Stage" Name="Blue Fire Place" Subtype="0" Variant="2" />
-	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.3.0 - Purple Fire Place.png" Kind="Stage" Name="Purple Fire Place" Subtype="0" Variant="3" />
-	<entity Group="Fireplaces" ID="1400" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire" Subtype="0" Variant="0" />
-	<entity Group="Fireplaces" ID="1410" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire" Subtype="0" Variant="0" />
+	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire Place" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire Place" Subtype="0" Variant="1" InEmptyRooms="1" />
+	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.2.0 - Blue Fire Place.png" Kind="Stage" Name="Blue Fire Place" Subtype="0" Variant="2" InEmptyRooms="1" />
+	<entity BaseHP="5" Group="Fireplaces" ID="33" Image="resources/Entities/33.3.0 - Purple Fire Place.png" Kind="Stage" Name="Purple Fire Place" Subtype="0" Variant="3" InEmptyRooms="1" />
+	<entity Group="Fireplaces" ID="1400" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Fireplaces" ID="1410" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire" Subtype="0" Variant="0" InEmptyRooms="1" />
 
 	<!-- Grid -->
-	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" />
+	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" />
 	<entity Group="Grid" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Kind="Stage" Name="Retracting Spikes" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" />
+	<entity Group="Grid" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" />
 	<entity Group="Grid" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
@@ -609,11 +609,11 @@
 	<entity Group="Poop" ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Kind="Stage" Name="Holy Poop" Subtype="0" Variant="0" />
 
 	<!-- Props -->
-	<entity Group="Props" ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Kind="Stage" Name="Random Props A" Subtype="0" Variant="10" />
-	<entity Group="Props" ID="0" Image="resources/Entities/0.20.0 - Random Props B.png" Kind="Stage" Name="Random Props B" Subtype="0" Variant="20" />
-	<entity Group="Props" ID="0" Image="resources/Entities/0.30.0 - Random Props C.png" Kind="Stage" Name="Random Props C" Subtype="0" Variant="30" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Kind="Stage" Name="Random Props A" Subtype="0" Variant="10" InEmptyRooms="1" NoBlockDoors="1" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.20.0 - Random Props B.png" Kind="Stage" Name="Random Props B" Subtype="0" Variant="20" InEmptyRooms="1" NoBlockDoors="1" />
+	<entity Group="Props" ID="0" Image="resources/Entities/0.30.0 - Random Props C.png" Kind="Stage" Name="Random Props C" Subtype="0" Variant="30" InEmptyRooms="1" NoBlockDoors="1" />
 	<entity Group="Props" ID="5" Image="resources/Entities/5.380.0 - Isaac's Bed.png" PlaceVisual="0,1" Kind="Stage" Name="Isaac's Bed" Subtype="0" Variant="380" />
-	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="999" Name="Isaac's Carpet" Variant="74" Subtype="0" PlaceVisual="0,1.5" />
+	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="999" Name="Isaac's Carpet" Variant="74" Subtype="0" PlaceVisual="0,1.5" NoBlockDoors="1" />
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.0.0 - Keeper.png" Kind="Stage" Name="Keeper" Subtype="0" Variant="0" />
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.1.0 - Hanging Keeper.png" Kind="Stage" Name="Hanging Keeper" Subtype="0" Variant="1" />
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.2.0 - Error Room Keeper.png" Kind="Stage" Name="Error Room Keeper" Subtype="0" Variant="2" />
@@ -621,7 +621,7 @@
 	<entity BaseHP="5" Group="Props" ID="17" Image="resources/Entities/17.4.0 - Special Hanging Keeper.png" Kind="Stage" Name="Special Hanging Keeper" Subtype="0" Variant="4" />
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
 	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" />
-	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="999" Name="Dice Room Floor" Variant="76" Subtype="0" PlaceVisual="0,2.5" />
+	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="999" Name="Dice Room Floor" Variant="76" Subtype="0" PlaceVisual="0,2.5" NoBlockDoors="1" />
 
 	<!-- Special Exits -->
 	<entity Group="Special Exits" ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Kind="Stage" Name="Big Chest" Subtype="0" Variant="340" />

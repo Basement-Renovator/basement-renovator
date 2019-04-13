@@ -400,7 +400,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
         entXML = None
 
         if en.get('Metadata') != '1':
-            adjustedId = i == 999 and 1000 or i
+            adjustedId = i == '999' and '1000' or i
             query = f"entity[@id='{adjustedId}'][@variant='{v}']"
 
             validMissingSubtype = False
@@ -534,15 +534,17 @@ def loadMods(autogenerate, installPath, resourcePath):
                     name, i, v, s = ent.get('Name'), int(ent.get('ID')), int(ent.get('Variant')), int(ent.get('Subtype'))
 
                     if i >= 1000:
-                        print('Entity "%s" has a type outside the 0 - 999 range! (%d) It will not load properly from rooms!' % (name, i))
+                        print(f'Entity "{name}" has a type outside the 0 - 999 range! ({i}) It will not load properly from rooms!')
                     if v >= 4096:
-                        print('Entity "%s" has a variant outside the 0 - 4095 range! (%d)' % (name, v))
+                        print(f'Entity "{name}" has a variant outside the 0 - 4095 range! ({v})')
                     if s >= 256:
-                        print('Entity "%s" has a subtype outside the 0 - 255 range! (%d)' % (name, s))
+                        print(f'Entity "{name}" has a subtype outside the 0 - 255 range! ({s})')
 
                     existingEn = entityXML.find(f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']")
                     if existingEn != None:
-                        print(f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" has the same id, variant, and subtype ({i}.{v}.{s}) as "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!')
+                        print(f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" ({i}.{v}.{s}) is overriding "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!')
+                        entityXML.remove(existingEn)
+                        ent.set('Invalid', existingEn.get('Invalid'))
 
                     entityXML.append(ent)
 
@@ -2682,6 +2684,8 @@ class RoomSelector(QWidget):
     def changeFilter(self):
         self.colourizeClearFilterButtons()
 
+        uselessEntities = None
+
         # Here we go
         for room in self.getRooms():
             IDCond = entityCond = typeCond = weightCond = sizeCond = True
@@ -2702,8 +2706,12 @@ class RoomSelector(QWidget):
 
                 # For null rooms, include "empty" rooms regardless of type
                 if not typeCond and self.filter.typeData == 0:
-                    uselessEntities = [0, 1, 2, 1940] # 1940 == cobweb
-                    hasUsefulEntities = any(entity[0] not in uselessEntities \
+                    if uselessEntities is None:
+                        global entityXML
+                        uselessEntities = list(map(lambda e: [ int(e.get('ID')), int(e.get('Variant') or 0), int(e.get('Subtype') or 0) ],
+                                                entityXML.findall("entity[@InEmptyRooms='1']")))
+
+                    hasUsefulEntities = any(entity[:3] not in uselessEntities \
                                             for stack, x, y in room.spawns() for entity in stack)
 
                     typeCond = not hasUsefulEntities
