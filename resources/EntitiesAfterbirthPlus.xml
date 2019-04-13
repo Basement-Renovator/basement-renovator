@@ -601,12 +601,12 @@
 
 	<!-- Poop -->
 	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
-	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Kind="Stage" Name="Red Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Kind="Stage" Name="Golden Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Kind="Stage" Name="Rainbow Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Kind="Stage" Name="Holy Poop" Subtype="0" Variant="0" />
+	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Poop" ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Kind="Stage" Name="Red Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Poop" ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Kind="Stage" Name="Golden Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Poop" ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Kind="Stage" Name="Rainbow Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
+	<entity Group="Poop" ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Kind="Stage" Name="Holy Poop" Subtype="0" Variant="0" InEmptyRooms="1" />
 
 	<!-- Props -->
 	<entity Group="Props" ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Kind="Stage" Name="Random Props A" Subtype="0" Variant="10" InEmptyRooms="1" NoBlockDoors="1" />
