@@ -2024,10 +2024,11 @@ class Room(QListWidgetItem):
 
         return ret
 
-    def reshape(self, shape):
+    def reshape(self, shape, doors=None):
         spawnIter = self.spawns()
 
         self.info.shape = shape
+        if doors: self.info.doors = doors
         realWidth = self.info.dims[0]
 
         gridLen = self.info.gridLen()
@@ -2196,7 +2197,7 @@ class Room(QListWidgetItem):
         # Flip Shape
         shape = self.info.shapeData.get('MirrorX')
         if shape:
-            self.reshape(shape)
+            self.reshape(shape, self.info.doors)
 
     def mirrorY(self):
         # To flip, just reverse the signs then offset by room width (-1 for the indexing)
@@ -2228,7 +2229,7 @@ class Room(QListWidgetItem):
         # Flip Shape
         shape = self.info.shapeData.get('MirrorY')
         if shape:
-            self.reshape(shape)
+            self.reshape(shape, self.info.doors)
 
 class RoomDelegate(QStyledItemDelegate):
 
