@@ -3961,7 +3961,7 @@ class MainWindow(QMainWindow):
         self.path = path
 
         try:
-        rooms = self.open()
+            rooms = self.open()
         except Exception as e:
             rooms = None
             traceback.print_exception(*sys.exc_info())
