@@ -2009,6 +2009,17 @@ class Room(QListWidgetItem):
         self._difficulty = d
         self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
 
+    @property
+    def gridSpawns(self): return self._gridSpawns
+
+    @gridSpawns.setter
+    def gridSpawns(self, g):
+        self._gridSpawns = g
+
+        self._spawnCount = 0
+        for entStack in self.gridSpawns:
+            if entStack: self._spawnCount += 1
+
     DoorSortKey = lambda door: (door[0], door[1])
 
     def clearDoors(self):
@@ -2017,12 +2028,7 @@ class Room(QListWidgetItem):
             mainWindow.scene.addItem(Door(door))
 
     def getSpawnCount(self):
-        ret = 0
-
-        for entStack in self.gridSpawns:
-            if entStack: ret += 1
-
-        return ret
+        return self._spawnCount
 
     def reshape(self, shape, doors=None):
         spawnIter = self.spawns()
@@ -3954,7 +3960,12 @@ class MainWindow(QMainWindow):
         print (path)
         self.path = path
 
+        try:
         rooms = self.open()
+        except Exception as e:
+            rooms = None
+            traceback.print_exception(*sys.exc_info())
+
         if not rooms:
             QMessageBox.warning(self, "Error", "This is not a valid Afterbirth+ STB file. It may be a Rebirth STB, or it may be one of the prototype STB files accidentally included in the AB+ release.")
             return
@@ -4262,26 +4273,54 @@ class MainWindow(QMainWindow):
 
         self.storeEntityList()
 
-        out = struct.pack('<4s', "STB1".encode())
-        out += struct.pack('<I', len(rooms))
+        headerPacker = struct.Struct('<4sI')
+        roomBegPacker = struct.Struct('<IIIBH')
+        roomEndPacker = struct.Struct('<fBBB')
+        doorHeaderPacker = struct.Struct('<BH')
+        doorPacker = struct.Struct('<hh?')
+        stackPacker = struct.Struct('<hhB')
+        entPacker = struct.Struct('<HHHf')
+
+        totalBytes = headerPacker.size
+        totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
+        for room in rooms:
+            totalBytes += len(room.data(0x100))
+            totalBytes += doorHeaderPacker.size + doorPacker.size * len(room.info.doors)
+            totalBytes += room.getSpawnCount() * stackPacker.size
+            for stack, x, y in room.spawns():
+                totalBytes += len(stack) * entPacker.size
+
+        out = bytearray(totalBytes)
+        off = 0
+        headerPacker.pack_into(out, off, "STB1".encode(), len(rooms))
+        off += headerPacker.size
 
         for room in rooms:
-
             width, height = room.info.dims
-            out += struct.pack('<IIIBH{0}sfBBB'.format(len(room.data(0x100))),
-                             room.info.type, room.info.variant, room.info.subtype, room.difficulty, len(room.data(0x100)),
-                             room.data(0x100).encode(), room.weight, width - 2, height - 2, room.info.shape)
+            roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.info.subtype, room.difficulty, len(room.data(0x100)))
+            off += roomBegPacker.size
+            nameLen = len(room.data(0x100))
+            struct.pack_into(f'<{nameLen}s', out, off, room.data(0x100).encode())
+            off += nameLen
+            roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2, room.info.shape)
+            off += roomEndPacker.size
 
             # Doors and Entities
-            out += struct.pack('<BH', len(room.info.doors), room.getSpawnCount())
+            doorHeaderPacker.pack_into(out, off, len(room.info.doors), room.getSpawnCount())
+            off += doorHeaderPacker.size
 
             for door in room.info.doors:
-                out += struct.pack('<hh?', door[0] - 1, door[1] - 1, door[2])
+                doorPacker.pack_into(out, off, door[0] - 1, door[1] - 1, door[2])
+                off += doorPacker.size
 
             for stack, x, y in room.spawns():
-                out += struct.pack('<hhB', x - 1, y - 1, len(stack))
+                numEnts = len(stack)
+                stackPacker.pack_into(out, off, x - 1, y - 1, numEnts)
+                off += stackPacker.size
+
                 for entity in stack:
-                    out += struct.pack('<HHHf', entity[0], entity[1], entity[2], entity[3])
+                    entPacker.pack_into(out, off, entity[0], entity[1], entity[2], entity[3])
+                    off += entPacker.size
 
         with open(path, 'wb') as stb:
             stb.write(out)
