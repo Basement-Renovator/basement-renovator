@@ -2,6 +2,15 @@
 BasementRenovator = BasementRenovator or { subscribers = {} }
 BasementRenovator.mod = RegisterMod('BasementRenovator', 1)
 
+setmetatable(BasementRenovator.subscribers, {
+    __newindex = function(t, k, v)
+        if v.PostTestInit and BasementRenovator.Loaded then
+            v.PostTestInit(BasementRenovator.TestRoomData)
+        end
+        rawset(t, k, v)
+    end
+})
+
 local function log(msg)
     msg = '[BasementRenovator] ' .. tostring(msg)
     print(msg)
@@ -180,7 +189,11 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     parts = split(test.RoomFile, '/\\')
     filename = parts[#parts]
 
-    local pos = Game():GetRoom():GetRenderSurfaceTopLeft() * 2 + Vector(-20,286) --Vector(442,286)
+    local topLeft = Game():GetRoom():GetRenderSurfaceTopLeft();
+    local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
     Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. test.Name .. " (" .. test.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
     Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (desc and 'YES' or 'NO'), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
 end)
+
+fireCallback('PostTestInit', BasementRenovator.TestRoomData)
+BasementRenovator.Loaded = true

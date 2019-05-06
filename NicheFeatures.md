@@ -26,7 +26,7 @@ Did you know that when bulk replacing entities, the "replaced" entity is based o
 Ever have a room file where the organization has completely gotten away from you and everything is completely out of order? This fixes that by changing their variants to be in sequence by type, starting with the first one it sees. You can also sort the rooms by variant or name before doing this.
 
 ### Find Empty Rooms
-Hypothetically you've created a bunch of rooms with... nothing in them. You did this as part of a placeholder comedic naming scheme involving a certain rapping community member, perhaps. Well now you need to figure out which ones still need attention, but fear not. If you filter for the "Null" room type, since the type isn't used much normally the filter will also include "empty" rooms. The rooms can contain a few harmless entities, like decorations and cobwebs.
+Hypothetically you've created a bunch of rooms with... nothing in them. You did this as part of a placeholder comedic naming scheme involving a certain rapping community member, perhaps. Well now you need to figure out which ones still need attention, but fear not. If you filter for the "Null" room type, since the type isn't used much normally the filter will also include "empty" rooms. The rooms can contain a few harmless entities, like decorations and cobwebs. You can add your own entities with the 'InEmptyRooms' attribute.
 
 ### Turn off custom entities
 Sometimes you want BR to open as fast as possible and don't care about mods. For that, set DisableMods to 1 in your settings.ini file in the BR folder.
