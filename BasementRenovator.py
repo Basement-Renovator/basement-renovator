@@ -4601,12 +4601,15 @@ class MainWindow(QMainWindow):
         self.testMapCommon('InstaPreview', setup)
 
     def findExecutablePath(self):
-        installPath = findInstallPath()
-        if len(installPath) > 0:
-            exeName = "isaac-ng.exe"
-            if QFile.exists(os.path.join(installPath, "isaac-ng-rebirth.exe")):
-                exeName = "isaac-ng-rebirth.exe"
-            return os.path.join(installPath, exeName)
+        if "Windows" in platform.system():
+            installPath = findInstallPath()
+            if installPath:
+                exeName = "isaac-ng.exe"
+                if QFile.exists(os.path.join(installPath, "isaac-ng-rebirth.exe")):
+                    exeName = "isaac-ng-rebirth.exe"
+                return os.path.join(installPath, exeName)
+
+        return ''
 
     def findResourcePath(self):
 
@@ -4742,20 +4745,24 @@ class MainWindow(QMainWindow):
 
         # Launch Isaac
         installPath = findInstallPath()
-        try:
-            if installPath == '':
-                args = ' '.join(map(lambda x: ' ' in x and f'"{x}"' or x, launchArgs))
-                webbrowser.open(f'steam://rungameid/250900//{urllib.parse.quote(args)}')
-            else:
-                exePath = self.findExecutablePath()
-                if not QFile.exists(exePath):
-                    QMessageBox.warning(self, "Error", "The game executable could not be found in your install path! You may have the wrong directory, reconfigure in settings.ini")
-                    return
+        if not installPath:
+            QMessageBox.warning(self, "Error", "Your install path could not be found! You may have the wrong directory, reconfigure in settings.ini")
+            return
 
+        try:
+            exePath = self.findExecutablePath()
+            if exePath and QFile.exists(exePath):
                 subprocess.run([exePath] + launchArgs, cwd = installPath)
+            else:
+                args = ' '.join(map(lambda x: ' ' in x and f'"{x}"' or x, launchArgs))
+                urlArgs = urllib.parse.quote(args)
+                urlArgs = re.sub(r'/', '%2F', urlArgs)
+                webbrowser.open(f'steam://rungameid/250900//{urlArgs}')
+
         except Exception as e:
-             QMessageBox.warning(self, "Error", f'Failed to test with {testType}: {e}')
-             return
+            traceback.print_exception(*sys.exc_info())
+            QMessageBox.warning(self, "Error", f'Failed to test with {testType}: {e}')
+            return
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         if settings.value('DisableTestDialog') == '1':
