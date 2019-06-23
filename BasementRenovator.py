@@ -391,7 +391,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
 
     cleanUp = re.compile('[^\w\d]')
     def mapEn(en):
-        imgPath = linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
+        imgPath = en.get('Image') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
 
         i = en.get('ID')
         v = en.get('Variant') or '0'
@@ -1026,7 +1026,7 @@ class RoomEditorWidget(QGraphicsView):
         mainWindow.dirt()
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.RightButton:
+        if event.buttons() == Qt.RightButton:
             if mainWindow.roomList.selectedRoom() is not None:
                 self.lastTile = set()
                 self.tryToPaint(event)
@@ -2047,12 +2047,12 @@ class Room(QListWidgetItem):
 
         self.gridSpawns = newGridSpawns
 
-    def getDesc(info, difficulty, weight):
-        return f'{info.type}.{info.variant}.{info.subtype} ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}'
+    def getDesc(info, name, difficulty, weight):
+        return f'{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}'
 
     def setToolTip(self):
         self.setText(f"{self.info.variant} - {self.data(0x100)}")
-        tip = Room.getDesc(self.info, self.difficulty, self.weight)
+        tip = Room.getDesc(self.info, self.data(0x100), self.difficulty, self.weight)
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
@@ -2186,7 +2186,6 @@ class Room(QListWidgetItem):
                 self.gridSpawns[ox] = self.gridSpawns[mx]
                 self.gridSpawns[mx] = oxs
 
-        # To flip, just reverse the signs then offset by room width (-1 for the indexing)
         # Flip Doors
         for door in self.info.doors:
             door[0] = width - door[0] - 1
@@ -2206,8 +2205,6 @@ class Room(QListWidgetItem):
             self.reshape(shape, self.info.doors)
 
     def mirrorY(self):
-        # To flip, just reverse the signs then offset by room width (-1 for the indexing)
-
         # Flip Spawns
         width, height = self.info.dims
         for x in range(width):
@@ -3047,6 +3044,10 @@ class EntityGroupModel(QAbstractListModel):
                 if g and g not in self.groups:
                     self.groups[g] = EntityGroupItem(g)
 
+                imgPath = en.get('Image')
+                if not (imgPath and os.path.exists(imgPath)):
+                    en.set("Image", "resources/Entities/questionmark.png")
+
                 e = EntityItem(en.get('Name'), en.get('ID'), en.get('Subtype'), en.get('Variant'), en.get('Image'))
 
                 if g != None:
@@ -3517,6 +3518,106 @@ class HooksDialog(QDialog):
         if curr: curr.val = self.contentPaths()
         QWidget.closeEvent(self, evt)
 
+class TestConfigDialog(QDialog):
+
+    class ConfigItem(QLabel):
+        def __init__(self, text, setting, tooltip, default = None):
+            super(QLabel, self).__init__(text)
+            self.setToolTip(tooltip)
+            self.setting = setting
+            self.default = default
+
+        @property
+        def val(self):
+            settings =  QSettings('settings.ini', QSettings.IniFormat)
+            return settings.value(self.setting, self.default)
+
+        @val.setter
+        def val(self, v):
+            settings =  QSettings('settings.ini', QSettings.IniFormat)
+            res = v
+            settings.setValue(self.setting, res)
+
+    def __init__(self, parent):
+        super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Test Configuration")
+
+        self.layout = QVBoxLayout()
+
+        # character
+        characterLayout = QHBoxLayout()
+        self.characterConfig = TestConfigDialog.ConfigItem('Character', 'TestCharacter', "Character to switch to when testing. (Isaac, Magdalene, etc.) If omitted, use the game's default")
+        self.characterEntry = QLineEdit()
+        characterLayout.addWidget(self.characterConfig)
+        characterLayout.addWidget(self.characterEntry)
+        characterWidget = QWidget()
+        characterWidget.setLayout(characterLayout)
+        #self.layout.addWidget(characterWidget)
+
+        # commands
+        commandLayout = QHBoxLayout()
+        self.commandConfig = TestConfigDialog.ConfigItem('Debug Commands', 'TestCommands', 'Debug Console Commands that will get run one at a time after other BR initialization has finished', [])
+        pane = QVBoxLayout()
+        pane.setContentsMargins(0,0,0,0)
+        paneWidget = QWidget()
+        paneWidget.setLayout(pane)
+
+        self.commandList = QListWidget()
+        pane.addWidget(self.commandList)
+
+        addButton = QPushButton("Add")
+        editButton = QPushButton("Edit")
+        deleteButton = QPushButton("Delete")
+
+        buttons = QHBoxLayout()
+        buttons.addWidget(addButton)
+        buttons.addWidget(deleteButton)
+        pane.addLayout(buttons)
+
+        commandLayout.addWidget(self.commandConfig)
+        commandLayout.addWidget(paneWidget)
+
+        commandWidget = QWidget()
+        commandWidget.setLayout(commandLayout)
+
+        self.layout.addWidget(commandWidget, 1)
+
+        addButton.clicked.connect(self.addCommand)
+        deleteButton.clicked.connect(self.deleteCommand)
+
+        self.setValues()
+
+        self.setLayout(self.layout)
+
+    def character(self):
+        #return self.characterEntry.text() or None
+        return None
+
+    def commands(self):
+        return [ self.commandList.item(i).text() for i in range(self.commandList.count()) ]
+
+    def setValues(self):
+        #self.characterEntry.setText(self.characterConfig.val)
+        self.commandList.clear()
+        self.commandList.addItems(self.commandConfig.val)
+        for i in range(self.commandList.count()):
+            item = self.commandList.item(i)
+            item.setFlags(item.flags() | Qt.ItemIsEditable)
+
+    def addCommand(self):
+        item = QListWidgetItem('combo 2')
+        item.setFlags(item.flags() | Qt.ItemIsEditable)
+        self.commandList.addItem(item)
+
+    def deleteCommand(self):
+        if self.commandList.currentItem():
+            self.commandList.takeItem(self.commandList.currentRow())
+
+    def closeEvent(self, evt):
+        #self.characterConfig.val = self.character()
+        self.commandConfig.val = self.commands()
+        QWidget.closeEvent(self, evt)
+
 ########################
 #      Main Window     #
 ########################
@@ -3676,6 +3777,7 @@ class MainWindow(QMainWindow):
         self.rb = r.addAction('Test Current Room - Replace Stage', self.testMap,             QKeySequence("Ctrl+T"))
         self.rc = r.addAction('Test Current Room - Replace Start', self.testStartMap,        QKeySequence("Ctrl+Shift+T"))
         r.addSeparator()
+        self.re = r.addAction('Test Configuration', self.showTestConfigMenu)
         self.rd = r.addAction('Enable Test Mod Dialog',  lambda: self.toggleSetting('DisableTestDialog'))
         self.rd.setCheckable(True)
         self.rd.setChecked(settings.value('DisableTestDialog') != '1')
@@ -3875,6 +3977,10 @@ class MainWindow(QMainWindow):
         hooks = HooksDialog(self)
         hooks.show()
 
+    def showTestConfigMenu(self):
+        testConfig = TestConfigDialog(self)
+        testConfig.show()
+
     def openMapDefault(self):
         if self.checkDirty(): return
 
@@ -4049,7 +4155,7 @@ class MainWindow(QMainWindow):
 
             roomInfo = Room.Info(rtype, rvariant, rsubtype, shape)
             def getRoomPrefix():
-                return Room.getDesc(roomInfo, difficulty, rweight)
+                return Room.getDesc(roomInfo, roomName, difficulty, rweight)
 
             normalDoors = sorted(roomInfo.shapeData['Doors'], key=Room.DoorSortKey)
             sortedDoors = sorted(doors, key=Room.DoorSortKey)
@@ -4485,14 +4591,23 @@ class MainWindow(QMainWindow):
 
             quot = '\\"'
             bs = '\\'
+            strFix = lambda x: f'''"{x.replace(bs, bs + bs).replace('"', quot)}"'''
+
+            char = settings.value('TestCharacter')
+            if char: char = strFix(char)
+
+            commands = settings.value('TestCommands', [])
+
             testData.write(f'''return {{
-    TestType = '{testType}',
+    TestType = {strFix(testType)},
+    Character = {char or 'nil'}, -- currently unused due to instapreview limitations
+    Commands = {{ {', '.join(map(strFix, commands))} }},
     Stage = {floorInfo.get('Stage')},
     StageType = {floorInfo.get('StageType')},
-    StageName = "{floorInfo.get('Name').replace(bs, bs + bs).replace('"', quot)}",
+    StageName = {strFix(floorInfo.get('Name'))},
     IsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
-    RoomFile = "{str(Path(self.path)).replace(bs, bs + bs) or 'N/A'}",
-    Name = "{testRoom.data(0x100).replace('"', quot)}",
+    RoomFile = {strFix(str(Path(self.path)) or 'N/A')},
+    Name = {strFix(testRoom.data(0x100))},
     Type = {testRoom.info.type},
     Variant = {testRoom.info.variant},
     Subtype = {testRoom.info.subtype},
@@ -4830,8 +4945,9 @@ class MainWindow(QMainWindow):
 
         self.scene.clearSelection()
         for item in self.clipboard:
-            i = Entity(*item)
-            self.scene.addItem(i)
+            ent = Entity(*item)
+            ent.setSelected(True)
+            self.scene.addEntity(ent)
 
         self.dirt()
 

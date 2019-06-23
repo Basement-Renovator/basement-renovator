@@ -2,6 +2,8 @@
 BasementRenovator = BasementRenovator or { subscribers = {} }
 BasementRenovator.mod = RegisterMod('BasementRenovator', 1)
 
+local game = Game()
+
 setmetatable(BasementRenovator.subscribers, {
     __newindex = function(t, k, v)
         if v.PostTestInit and BasementRenovator.Loaded then
@@ -63,7 +65,7 @@ function BasementRenovator:IsTestRoom(data)
 end
 
 function BasementRenovator:InTestRoom()
-    local level = Game():GetLevel()
+    local level = game:GetLevel()
     local desc = level:GetCurrentRoomDesc()
     if BasementRenovator:IsTestRoom(desc.Data) then
         return desc
@@ -71,7 +73,7 @@ function BasementRenovator:InTestRoom()
 end
 
 function BasementRenovator:InTestStage(level)
-    level = level or Game():GetLevel()
+    level = level or game:GetLevel()
     local test = BasementRenovator.TestRoomData
     return level:GetStage() == test.Stage and level:GetStageType() == test.StageType
 end
@@ -98,21 +100,62 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function(_, c
     end
 end)
 
+local newGame = false
+BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
+    newGame = true
+end)
+
 local maxFloorRetries = 150
 local floorRetries = 0
 local loadingFloor = false
-BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
+BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
+    if not newGame then return end
+
+    log('BEGIN RUN')
+
     local test = BasementRenovator.TestRoomData
     floorRetries = 0
 
+    -- omitted pending some update with instapreview, which is the main test mode that would benefit
+    --[[if test.Character then
+        local char = Isaac.GetPlayerTypeByName(test.Character)
+        if char >= 0 then
+            if Isaac.GetPlayer(0):GetPlayerType() ~= char then
+                log('restart ' .. char)
+                Isaac.ExecuteCommand('restart ' .. char)
+                return
+            end
+        else
+            log("Invalid character! " .. test.Character)
+        end
+    end]]
+
     if test.TestType == 'StageReplace' then
-        local player = Game():GetPlayer(0)
+        local player = Isaac.GetPlayer(0)
         player:AddCollectible(CollectibleType.COLLECTIBLE_MIND, 0, false)
         player:AddCollectible(CollectibleType.COLLECTIBLE_DADS_KEY, 0, false)
         Isaac.ExecuteCommand('debug 8')
-        Game():GetSeeds():AddSeedEffect(SeedEffect.SEED_PREVENT_CURSE_LOST)
+        game:GetSeeds():AddSeedEffect(SeedEffect.SEED_PREVENT_CURSE_LOST)
         loadingFloor = true
     end
+
+    for i, command in ipairs(test.Commands) do
+        if command ~= "" then
+            log('COMMAND: ' .. command)
+            local parts = split(command, ' ')
+            -- repeat doesn't work with ExecuteCommand, so a shim is required
+            if i > 1 and parts[1] == 'repeat' then
+                local lastCommand = test.Commands[i - 1]
+                for i = 1, tonumber(parts[2]) do
+                    Isaac.ExecuteCommand(lastCommand)
+                end
+            else
+                Isaac.ExecuteCommand(command)
+            end
+        end
+    end
+
+    newGame = false
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function()
@@ -133,7 +176,6 @@ end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local test = BasementRenovator.TestRoomData
-    local game = Game()
     local level = game:GetLevel()
     if not loadingFloor or test.TestType ~= 'StageReplace' or not BasementRenovator:InTestStage(level) then
         return
@@ -189,7 +231,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     parts = split(test.RoomFile, '/\\')
     filename = parts[#parts]
 
-    local topLeft = Game():GetRoom():GetRenderSurfaceTopLeft();
+    local topLeft = game:GetRoom():GetRenderSurfaceTopLeft();
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
     Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. test.Name .. " (" .. test.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
     Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (desc and 'YES' or 'NO'), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
