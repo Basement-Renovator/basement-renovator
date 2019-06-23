@@ -3555,7 +3555,7 @@ class TestConfigDialog(QDialog):
         #self.layout.addWidget(characterWidget)
 
         # commands
-        commandLayout = QHBoxLayout()
+        commandLayout = QVBoxLayout()
         self.commandConfig = TestConfigDialog.ConfigItem('Debug Commands', 'TestCommands', 'Debug Console Commands that will get run one at a time after other BR initialization has finished', [])
         pane = QVBoxLayout()
         pane.setContentsMargins(0,0,0,0)
@@ -3582,12 +3582,25 @@ class TestConfigDialog(QDialog):
 
         self.layout.addWidget(commandWidget, 1)
 
+        # enable/disable
+        enableLayout = QHBoxLayout()
+        self.enableConfig = TestConfigDialog.ConfigItem('Enabled', 'TestConfigDisabled', "Enable/disable the test config bonus settings")
+        self.enableCheck = QCheckBox('Enabled')
+        self.enableCheck.setToolTip(self.enableConfig.toolTip())
+        enableLayout.addWidget(self.enableCheck)
+        enableWidget = QWidget()
+        enableWidget.setLayout(enableLayout)
+        self.layout.addWidget(enableWidget)
+
         addButton.clicked.connect(self.addCommand)
         deleteButton.clicked.connect(self.deleteCommand)
 
         self.setValues()
 
         self.setLayout(self.layout)
+
+    def enabled(self):
+        return None if self.enableCheck.isChecked() else '1'
 
     def character(self):
         #return self.characterEntry.text() or None
@@ -3597,6 +3610,7 @@ class TestConfigDialog(QDialog):
         return [ self.commandList.item(i).text() for i in range(self.commandList.count()) ]
 
     def setValues(self):
+        self.enableCheck.setChecked(self.enableConfig.val != '1')
         #self.characterEntry.setText(self.characterConfig.val)
         self.commandList.clear()
         self.commandList.addItems(self.commandConfig.val)
@@ -3614,6 +3628,7 @@ class TestConfigDialog(QDialog):
             self.commandList.takeItem(self.commandList.currentRow())
 
     def closeEvent(self, evt):
+        self.enableConfig.val = self.enabled()
         #self.characterConfig.val = self.character()
         self.commandConfig.val = self.commands()
         QWidget.closeEvent(self, evt)
@@ -4593,10 +4608,13 @@ class MainWindow(QMainWindow):
             bs = '\\'
             strFix = lambda x: f'''"{x.replace(bs, bs + bs).replace('"', quot)}"'''
 
-            char = settings.value('TestCharacter')
-            if char: char = strFix(char)
+            char = None
+            commands = []
+            if settings.value('TestConfigDisabled') != '1':
+                char = settings.value('TestCharacter')
+                if char: char = strFix(char)
 
-            commands = settings.value('TestCommands', [])
+                commands = settings.value('TestCommands', [])
 
             testData.write(f'''return {{
     TestType = {strFix(testType)},
