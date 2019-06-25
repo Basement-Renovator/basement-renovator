@@ -3432,7 +3432,10 @@ class HooksDialog(QDialog):
         def val(self, v):
             settings =  QSettings('settings.ini', QSettings.IniFormat)
             res = v
-            settings.setValue(self.setting, res)
+            if v == None:
+                settings.remove(self.setting)
+            else:
+                settings.setValue(self.setting, res)
 
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
@@ -3479,7 +3482,7 @@ class HooksDialog(QDialog):
         self.setLayout(self.layout)
 
     def contentPaths(self):
-        return [ self.content.item(i).text() for i in range(self.content.count()) ]
+        return [ self.content.item(i).text() for i in range(self.content.count()) ] or None
 
     def setPaths(self, val):
         self.content.clear()
@@ -3536,7 +3539,10 @@ class TestConfigDialog(QDialog):
         def val(self, v):
             settings =  QSettings('settings.ini', QSettings.IniFormat)
             res = v
-            settings.setValue(self.setting, res)
+            if v == None:
+                settings.remove(self.setting)
+            else:
+                settings.setValue(self.setting, res)
 
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
@@ -3607,7 +3613,7 @@ class TestConfigDialog(QDialog):
         return None
 
     def commands(self):
-        return [ self.commandList.item(i).text() for i in range(self.commandList.count()) ]
+        return [ self.commandList.item(i).text() for i in range(self.commandList.count()) ] or None
 
     def setValues(self):
         self.enableCheck.setChecked(self.enableConfig.val != '1')
