@@ -4965,7 +4965,7 @@ class MainWindow(QMainWindow):
         for item in self.clipboard:
             ent = Entity(*item)
             ent.setSelected(True)
-            self.scene.addEntity(ent)
+            self.scene.addItem(ent)
 
         self.dirt()
 
