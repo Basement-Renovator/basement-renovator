@@ -3722,7 +3722,8 @@ class MainWindow(QMainWindow):
         self.fd = f.addAction('Save',               self.saveMap, QKeySequence("Ctrl+S"))
         self.fe = f.addAction('Save As...',         self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
         f.addSeparator()
-        self.fg = f.addAction('Take Screenshot...', self.screenshot, QKeySequence("Ctrl+Alt+S"))
+        self.fk = f.addAction('Copy Screenshot to Clipboard', lambda: self.screenshot('clipboard'), QKeySequence("F10"))
+        self.fg = f.addAction('Save Screenshot to File...', lambda: self.screenshot('file'), QKeySequence("Ctrl+F10"))
         f.addSeparator()
         self.fh = f.addAction('Set Resources Path',   self.setDefaultResourcesPath, QKeySequence("Ctrl+Shift+P"))
         self.fi = f.addAction('Reset Resources Path', self.resetResourcesPath, QKeySequence("Ctrl+Shift+R"))
@@ -4551,12 +4552,14 @@ class MainWindow(QMainWindow):
         self.scene.update()
 
     #@pyqtSlot()
-    def screenshot(self):
-        fn = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Graphics (*.png)')[0]
-        if fn == '': return
+    def screenshot(self, mode):
+        filename = None
+        if mode == 'file':
+            filename = QFileDialog.getSaveFileName(self, 'Choose a new filename', 'untitled.png', 'Portable Network Graphics (*.png)')[0]
+            if filename == '': return
 
         g = settings.value('GridEnabled')
-        setttings.setValue('GridEnabled', '0')
+        settings.setValue('GridEnabled', '0')
 
         ScreenshotImage = QImage(self.scene.sceneRect().width(), self.scene.sceneRect().height(), QImage.Format_ARGB32)
         ScreenshotImage.fill(Qt.transparent)
@@ -4565,9 +4568,12 @@ class MainWindow(QMainWindow):
         self.scene.render(RenderPainter, QRectF(ScreenshotImage.rect()), self.scene.sceneRect())
         RenderPainter.end()
 
-        ScreenshotImage.save(fn, 'PNG', 50)
+        if mode == "file":
+            ScreenshotImage.save(filename, 'PNG', 50)
+        elif mode == "clipboard":
+            QApplication.clipboard().setImage(ScreenshotImage, QClipboard.Clipboard)
 
-        setttings.setValue('GridEnabled', g)
+        settings.setValue('GridEnabled', g)
 
     def getTestModPath(self):
         modFolder = findModsPath()
