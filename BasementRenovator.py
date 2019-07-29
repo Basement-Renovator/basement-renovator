@@ -35,10 +35,12 @@ from copy import deepcopy
 import traceback, sys
 import struct, os, subprocess, platform, webbrowser, urllib, re, shutil
 from pathlib import Path
-import xml.etree.ElementTree as ET
+import xml.etree.cElementTree as ET
 from xml.dom import minidom
 import psutil
 
+import src.roomconvert as StageConvert
+from src.core import Room as RoomData, Entity as EntityData
 
 ########################
 #       XML Data       #
@@ -2944,7 +2946,7 @@ class RoomSelector(QWidget):
 
         dialogDir = mainWindow.getRecentFolder()
 
-        target, match = QFileDialog.getSaveFileName(self, 'Select a new name or an existing STB', dialogDir, 'Stage Bundle (*.stb)', '', QFileDialog.DontConfirmOverwrite)
+        target, match = QFileDialog.getSaveFileName(self, 'Select a new name or an existing XML', dialogDir, 'XML File (*.xml)', '', QFileDialog.DontConfirmOverwrite)
         mainWindow.restoreEditMenu()
 
         if len(target) == 0:
@@ -3721,6 +3723,7 @@ class MainWindow(QMainWindow):
         f.addSeparator()
         self.fd = f.addAction('Save',               self.saveMap, QKeySequence("Ctrl+S"))
         self.fe = f.addAction('Save As...',         self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
+        self.fk = f.addAction('Export to STB',      self.exportSTB, QKeySequence("Shift+Alt+S"))
         f.addSeparator()
         self.fk = f.addAction('Copy Screenshot to Clipboard', lambda: self.screenshot('clipboard'), QKeySequence("F10"))
         self.fg = f.addAction('Save Screenshot to File...', lambda: self.screenshot('file'), QKeySequence("Ctrl+F10"))
@@ -4067,7 +4070,7 @@ class MainWindow(QMainWindow):
         if self.checkDirty(): return
 
         target = QFileDialog.getOpenFileName(
-            self, 'Open Map', self.getRecentFolder(), "Stage Binary (*.stb);;TXT File (*.txt)")
+            self, 'Open Map', self.getRecentFolder(), 'XML File (*.xml);;Stage Binary (*.stb);;TXT File (*.txt)')
         self.restoreEditMenu()
 
         # Looks like nothing was selected
@@ -4088,14 +4091,19 @@ class MainWindow(QMainWindow):
         print (path)
         self.path = path
 
+        rooms = None
         try:
             rooms = self.open()
-        except Exception as e:
-            rooms = None
+        except FileNotFoundError:
+            QMessageBox.warning(self, "Error", "Failed opening rooms. The file does not exist.")
+        except NotImplementedError:
             traceback.print_exception(*sys.exc_info())
+            QMessageBox.warning(self, "Error", "This is not a valid Afterbirth+ STB file. It may be a Rebirth STB, or it may be one of the prototype STB files accidentally included in the AB+ release.")
+        except:
+            traceback.print_exception(*sys.exc_info())
+            QMessageBox.warning(self, "Error", f"Failed opening rooms.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
 
         if not rooms:
-            QMessageBox.warning(self, "Error", "This is not a valid Afterbirth+ STB file. It may be a Rebirth STB, or it may be one of the prototype STB files accidentally included in the AB+ release.")
             return
 
         self.roomList.list.clear()
@@ -4110,64 +4118,21 @@ class MainWindow(QMainWindow):
 
     def open(self, path=None, addToRecent=True):
         path = path or self.path
+        global entityXML
 
-        if os.path.splitext(path)[1] == '.txt':
-            try:
-                return self.openTXT(path)
-            except Exception as e:
-                traceback.print_exception(*sys.exc_info())
-                QMessageBox.warning(self, "Error", "You done goofed.")
-                return []
 
-        # Let's read the file and parse it into our list items
-        stb = None
-        try:
-            stb = open(path, 'rb').read()
-        except:
-            QMessageBox.warning(self, "Error", "Failed opening rooms. The file may not exist.")
-            return
+        rooms = None
 
-        # Header
-        try:
-            header = struct.unpack_from('<4s', stb, 0)[0].decode()
-            if header != "STB1":
-                return
-        except:
-            return
-
-        off = 4
-
-        # Room count
-        rooms = struct.unpack_from('<I', stb, off)[0]
-        off += 4
-        ret = []
+        ext = os.path.splitext(path)[1]
+        if ext == '.xml':
+            rooms = StageConvert.xmlToCommon(path)
+        elif ext == '.txt':
+            rooms = StageConvert.txtToCommon(path, entityXML)
+        else:
+            rooms = StageConvert.stbABToCommon(path)
 
         seenSpawns = {}
-        for room in range(rooms):
-
-            # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
-            roomData = struct.unpack_from('<IIIBH', stb, off)
-            rtype, rvariant, rsubtype, difficulty, nameLen = roomData
-            off += 0xF
-            #print ("Room Data: {0}".format(roomData))
-
-            # Room Name
-            roomName = struct.unpack_from('<{0}s'.format(nameLen), stb, off)[0].decode()
-            off += nameLen
-            #print ("Room Name: {0}".format(roomName))
-
-            # Weight, width, height, shape, number of doors, number of entities
-            entityTable = struct.unpack_from('<fBBBBH', stb, off)
-            rweight, width, height, shape, numDoors, numEnts = entityTable
-            off += 0xA
-            #print ("Entity Table: {0}".format(entityTable))
-
-            doors = []
-            for door in range(numDoors):
-                # X, Y, exists
-                doorX, doorY, exists = struct.unpack_from('<hh?', stb, off)
-                doors.append([ doorX + 1, doorY + 1, exists ])
-                off += 5
+        for room in rooms:
 
             def sameDoorLocs(a, b):
                 for ad, bd in zip(a, b):
@@ -4175,207 +4140,45 @@ class MainWindow(QMainWindow):
                         return False
                 return True
 
-            roomInfo = Room.Info(rtype, rvariant, rsubtype, shape)
-            def getRoomPrefix():
-                return Room.getDesc(roomInfo, roomName, difficulty, rweight)
+            normalDoors = sorted(room.info.shapeData['Doors'], key=Room.DoorSortKey)
+            sortedDoors = sorted(room.info.doors, key=Room.DoorSortKey)
+            if len(normalDoors) != len(sortedDoors) or not sameDoorLocs(normalDoors, sortedDoors):
+                print(f'Invalid doors in room {room.getPrefix()}: Expected {normalDoors}, Got {sortedDoors}')
 
-            normalDoors = sorted(roomInfo.shapeData['Doors'], key=Room.DoorSortKey)
-            sortedDoors = sorted(doors, key=Room.DoorSortKey)
-            if len(normalDoors) != numDoors or not sameDoorLocs(normalDoors, sortedDoors):
-                print (f'Invalid doors in room {getRoomPrefix()}: Expected {normalDoors}, Got {sortedDoors}')
+            for stackedEnts, ex, ey in room.spawns():
 
-            realWidth = roomInfo.dims[0]
-            gridLen = roomInfo.gridLen()
-            spawns = [ [] for x in range(gridLen) ]
-            for entity in range(numEnts):
-                # x, y, number of entities at this position
-                ex, ey, stackedEnts = struct.unpack_from('<hhB', stb, off)
-                ex += 1
-                ey += 1
-                off += 5
+                if not room.info.isInBounds(ex, ey):
+                    print(f'Found entity with out of bounds spawn loc in room {room.getPrefix()}: {ex-1}, {ey-1}')
 
-                if not roomInfo.isInBounds(ex, ey):
-                    print (f'Found entity with out of bounds spawn loc in room {getRoomPrefix()}: {ex-1}, {ey-1}')
-
-                idx = Room.Info.gridIndex(ex, ey, realWidth)
-                if idx >= gridLen:
-                    print ('Discarding the current entity due to invalid position!')
-                    off += 0xA * stackedEnts
-                    continue
-
-                spawnSquare = spawns[idx]
-
-                for spawn in range(stackedEnts):
-                    #  type, variant, subtype, weight
-                    etype, evariant, esubtype, eweight = struct.unpack_from('<HHHf', stb, off)
-                    spawnSquare.append([ etype, evariant, esubtype, eweight ])
-
+                for ent in stackedEnts:
+                    etype, esubtype, evariant = ent.Type, ent.Subtype, ent.Variant
                     if (etype, esubtype, evariant) not in seenSpawns:
-                        global entityXML
                         en = entityXML.find(f"entity[@ID='{etype}'][@Subtype='{esubtype}'][@Variant='{evariant}']")
                         if en == None or en.get('Invalid') == '1':
-                            print(f"Room {getRoomPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})")
+                            print(f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})")
                         seenSpawns[(etype, esubtype, evariant)] = en == None or en.get('Invalid') == '1'
 
-                    off += 0xA
+        def coreToEntItem(e):
+            return [ e.Type, e.Variant, e.Subtype, e.weight ]
 
+        def coreToRoomItem(coreRoom):
+            spawns = list(map(lambda s: list(map(coreToEntItem, s)), coreRoom.gridSpawns))
+            return Room(coreRoom.name, spawns, coreRoom.difficulty, coreRoom.weight, coreRoom.info.type, coreRoom.info.variant, coreRoom.info.subtype, coreRoom.info.shape, coreRoom.info.doors)
 
-            r = Room(roomName, spawns, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
-            ret.append(r)
+        ret = list(map(coreToRoomItem, rooms))
 
         # Update recent files
-        if addToRecent:
+        if addToRecent: # and ext == '.xml': # if a non-xml was deliberately opened, add it to recent
             self.updateRecent(path)
-
-        return ret
-
-    # HA HA HA FUNNY MODE FUNNY MODE
-    def openTXT(self, path=None):
-        path = path or self.path
-
-        try:
-            text = Path(path).read_text('utf-8')
-        except:
-            QMessageBox.warning(self, "Error", "Failed opening rooms. The file may not exist.")
-            return
-
-        text = text.splitlines()
-        numLines = len(text)
-
-        def skipWS(i):
-            for j in range(i, numLines):
-                if text[j]: return j
-            return numLines
-
-        entMap = {}
-
-        # Initial section: entity definitions
-        # [Character]=[type].[variant].[subtype]
-        # one per line, continues until it hits a line starting with ---
-        roomBegin = 0
-        for i in range(numLines):
-            line = text[i]
-            line = re.sub(r'\s', '', line)
-            roomBegin = i
-
-            if line.startswith('---'): break
-            if not line: continue
-
-            char, t, v, s = re.findall(r'(.)=(\d+).(\d+).(\d+)', line)[0]
-
-            if char in [ '-', '|' ]:
-                print("Can't use - or | for entities!")
-                continue
-
-            t = int(t)
-            v = int(v)
-            s = int(s)
-            global entityXML
-            en = entityXML.find(f"entity[@ID='{t}'][@Subtype='{s}'][@Variant='{v}']")
-            if en == None or en.get('Invalid') == '1':
-                print(f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.get('Name')}'! ({t}.{v}.{s})")
-                continue
-
-            entMap[char] = (t, v, s, 0)
-
-        shapeNames = {
-            '1x1': 1,
-            '2x2': 8,
-            'closet': 2,
-            'vertcloset': 3,
-            '1x2': 4,
-            'long': 7,
-            'longvert': 5,
-            '2x1': 6,
-            'l': 10,
-            'mirrorl': 9,
-            'r': 12,
-            'mirrorr': 11
-        }
-
-        ret = []
-
-        # Main section: room definitions
-        # First line: [id]: [name]
-        # Second line, in no particular order: [Weight,] [Shape (within tolerance),] [Difficulty,] [Type[=1],] [Subtype[=0],]
-        # Next [room height] lines: room layout
-        # horizontal walls are indicated with -, vertical with |
-        #   there will be no validation for this, but if lines are the wrong length it prints an error message and skips the line
-        # coordinates to entities are 1:1, entity ids can be at most 1 char
-        # place xs at door positions to turn them off
-        roomBegin += 1
-        while roomBegin < numLines:
-            # 2 lines
-            i = skipWS(roomBegin)
-            if i == numLines: break
-
-            id, name = text[i].split(':', 1)
-            name = name.strip()
-            id = int(id)
-
-            infoParts = re.sub(r'\s', '', text[i+1]).lower().split(',')
-            shape = 1
-            difficulty = 5
-            weight = 1
-            rtype = 1
-            rsubtype = 0
-            for part in infoParts:
-                prop, val = re.findall(r'(.+)=(.+)', part)[0]
-                if prop == 'shape': shape = shapeNames.get(val) or int(val)
-                elif prop == 'difficulty': difficulty = shapeNames.get(val) or int(val)
-                elif prop == 'weight': weight = float(val)
-                elif prop == 'type': rtype = int(val)
-                elif prop == 'subtype': rsubtype = int(val)
-
-            r = Room(name, None, difficulty, weight, rtype, id, rsubtype, shape)
-            width, height = r.info.dims
-            spawns = r.gridSpawns
-
-            i = skipWS(i + 2)
-            for j in range(i, i + height):
-                if j == numLines:
-                    print('Could not finish room!')
-                    break
-
-                y = j - i
-                row = text[j]
-                for x in range(len(row)):
-                    char = row[x]
-                    if char in [ '-', '|', ' ' ]:
-                        continue
-                    if char.lower() == 'x':
-                        changed = False
-                        for door in r.info.doors:
-                            if door[0] == x and door[1] == y:
-                                door[2] = False
-                                changed = True
-                        if changed: continue
-
-                    ent = entMap.get(char)
-                    if ent:
-                        spawns[Room.Info.gridIndex(x,y,width)].append(ent[:])
-                    else:
-                        print(f"Unknown entity! '{char}'")
-
-            ret.append(r)
-
-            i = skipWS(i + height)
-            if i == numLines: break
-
-            if not text[i].strip().startswith('---'):
-                print('Could not find separator after room!')
-                break
-
-            roomBegin = i + 1
 
         return ret
 
     def saveMap(self, forceNewName=False):
         target = self.path
 
-        if target == '' or forceNewName:
+        if not target or forceNewName:
             dialogDir = target == '' and self.getRecentFolder() or os.path.dirname(target)
-            target, ext = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'Stage Binary (*.stb)')
+            target, ext = QFileDialog.getSaveFileName(self, 'Save Map', dialogDir, 'XML (*.xml)')
             self.restoreEditMenu()
 
             if not target: return
@@ -4385,7 +4188,7 @@ class MainWindow(QMainWindow):
 
         try:
             self.save(self.roomList.getRooms())
-        except Exception as e:
+        except:
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", "Saving failed. Try saving to a new file instead.")
 
@@ -4395,65 +4198,45 @@ class MainWindow(QMainWindow):
     def saveMapAs(self):
         self.saveMap(True)
 
-    def save(self, rooms, path=None, updateRecent=True):
-        path = path or self.path
-        path = os.path.splitext(path)[0] + '.stb'
+    def exportSTB(self):
+        target = self.path
+
+        if not target:
+            self.saveMap()
+            target = self.path
+
+        try:
+            target = os.path.splitext(target)[0] + ".stb"
+            self.save(self.roomList.getRooms(), target, updateRecent=False)
+        except:
+            traceback.print_exception(*sys.exc_info())
+            QMessageBox.warning(self, "Error", f"Exporting failed.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
+
+    def save(self, rooms, path=None, updateRecent=True, isPreview=False):
+        path = path or (os.path.splitext(self.path)[0] + '.xml')
 
         self.storeEntityList()
 
-        headerPacker = struct.Struct('<4sI')
-        roomBegPacker = struct.Struct('<IIIBH')
-        roomEndPacker = struct.Struct('<fBBB')
-        doorHeaderPacker = struct.Struct('<BH')
-        doorPacker = struct.Struct('<hh?')
-        stackPacker = struct.Struct('<hhB')
-        entPacker = struct.Struct('<HHHf')
+        def entItemToCore(e, i, w):
+            x = i % w
+            y = int(i / w)
+            return EntityData(x, y, e[0], e[1], e[2], e[3])
 
-        totalBytes = headerPacker.size
-        totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
-        for room in rooms:
-            totalBytes += len(room.data(0x100))
-            totalBytes += doorHeaderPacker.size + doorPacker.size * len(room.info.doors)
-            totalBytes += room.getSpawnCount() * stackPacker.size
-            for stack, x, y in room.spawns():
-                totalBytes += len(stack) * entPacker.size
+        def roomItemToCore(room):
+            realWidth = room.info.dims[0]
+            spawns = list(map(lambda s: list(map(lambda e: entItemToCore(e, s[0], realWidth), s[1])), enumerate(room.gridSpawns)))
+            return RoomData(room.data(0x100), spawns, room.difficulty, room.weight, room.info.type, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
 
-        out = bytearray(totalBytes)
-        off = 0
-        headerPacker.pack_into(out, off, "STB1".encode(), len(rooms))
-        off += headerPacker.size
+        rooms = list(map(roomItemToCore, rooms))
 
-        for room in rooms:
-            width, height = room.info.dims
-            roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.info.subtype, room.difficulty, len(room.data(0x100)))
-            off += roomBegPacker.size
-            nameLen = len(room.data(0x100))
-            struct.pack_into(f'<{nameLen}s', out, off, room.data(0x100).encode())
-            off += nameLen
-            roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2, room.info.shape)
-            off += roomEndPacker.size
+        ext = os.path.splitext(path)[1]
+        if ext == '.xml':
+            StageConvert.commonToXML(path, rooms, isPreview=isPreview)
+        else:
+            StageConvert.commonToSTBAB(path, rooms)
 
-            # Doors and Entities
-            doorHeaderPacker.pack_into(out, off, len(room.info.doors), room.getSpawnCount())
-            off += doorHeaderPacker.size
 
-            for door in room.info.doors:
-                doorPacker.pack_into(out, off, door[0] - 1, door[1] - 1, door[2])
-                off += doorPacker.size
-
-            for stack, x, y in room.spawns():
-                numEnts = len(stack)
-                stackPacker.pack_into(out, off, x - 1, y - 1, numEnts)
-                off += stackPacker.size
-
-                for entity in stack:
-                    entPacker.pack_into(out, off, entity[0], entity[1], entity[2], entity[3])
-                    off += entPacker.size
-
-        with open(path, 'wb') as stb:
-            stb.write(out)
-
-        if updateRecent:
+        if updateRecent and ext == '.xml':
             self.updateRecent(path)
 
             # if a save doesn't update the recent list, it's probably not a real save
@@ -4461,11 +4244,11 @@ class MainWindow(QMainWindow):
             settings = QSettings('settings.ini', QSettings.IniFormat)
             saveHooks = settings.value('HooksSave')
             if saveHooks:
-                stbPath = os.path.abspath(path)
+                fullPath = os.path.abspath(path)
                 for hook in saveHooks:
                     path, name = os.path.split(hook)
                     try:
-                        subprocess.run([hook, stbPath, '--save'], cwd = path, timeout=60)
+                        subprocess.run([hook, fullPath, '--save'], cwd = path, timeout=60)
                     except Exception as e:
                         print('Save hook failed! Reason:', e)
 
@@ -4737,7 +4520,7 @@ class MainWindow(QMainWindow):
             path = Path(modPath) / testfile
             path = path.resolve()
 
-            self.writeRoomXML(path, room, isPreview = True)
+            self.save([ room ], path, updateRecent=False, isPreview=True)
 
             return [ f"--load-room={path}",
                      f"--set-stage={floorInfo.get('Stage')}",
@@ -4808,35 +4591,6 @@ class MainWindow(QMainWindow):
                 # This is totally kosher, I'm just avoiding zombies.
                 pass
 
-    def writeRoomXML(self, path, room, isPreview = False):
-        includeRooms = not isPreview
-        with open(path, 'w') as out:
-            if includeRooms:
-                #out.write('<?xml version="1.0"?>\n<rooms>\n') # TODO restore this when BR has its own xml converter
-                out.write('<stage>\n')
-            # Room header
-            width, height = room.info.dims
-            out.write('<room type="%d" variant="%d" subtype="%d" name="%s" difficulty="%d" weight="%g" width="%d" height="%d" shape="%d">\n' % (
-                room.info.type, room.info.variant, room.info.subtype, room.data(0x100), room.difficulty,
-                room.weight, width - 2, height - 2, room.info.shape
-            ))
-
-            # Doors
-            for x, y, exists in room.info.doors:
-                out.write(f'\t<door x="{x-1}" y="{y-1}" exists="{exists and "True" or "false"}" />\n')
-
-            # Spawns
-            for entStack, x, y in room.spawns():
-                out.write(f'\t<spawn x="{x-1}" y="{y-1}">\n')
-                for t, v, s, weight in entStack:
-                    out.write(f'\t\t<entity type="{t}" variant="{v}" subtype="{s}" weight="{weight}" />\n')
-                out.write('\t</spawn>\n')
-
-            out.write('</room>\n')
-            if includeRooms:
-                #out.write('</rooms>\n') # TODO same here
-                out.write('</stage>\n')
-
     def testMapCommon(self, testType, setupFunc):
         room = self.roomList.selectedRoom()
         if not room:
@@ -4874,7 +4628,7 @@ class MainWindow(QMainWindow):
         testfile = 'testroom.xml'
         testPath = Path(modPath) / testfile
         testPath = testPath.resolve()
-        self.writeRoomXML(testPath, room)
+        self.save([ room ], testPath, updateRecent=False)
 
          # Trigger test hooks
         settings = QSettings('settings.ini', QSettings.IniFormat)
