@@ -1,7 +1,7 @@
 # Basement Renovator
 
 * Basement Renovator is a 3rd-party *[Binding of Isaac: Afterbirth(+)](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/)* room and level editor.
-  * It will **not** edit *Rebirth* rooms. If you need to edit *Rebirth* floors for some reason, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
+  * It will edit Rebirth rooms, but some entity IDs may be incorrect. If you need to edit Rebirth rooms for some reason and require perfect correctness, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c). (most entities should be fine in the current version, but just to be safe)
 * It is open-source and written in [Python 3](https://www.python.org/).
 * It makes it easy to create rooms and is even used by the game's official staff.
 * It was originally written by [Colin Naga](http://www.chronometry.ca/) and is now supported by the modding community.

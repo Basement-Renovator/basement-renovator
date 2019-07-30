@@ -153,28 +153,91 @@ def commonToSTBAB(path, rooms):
     with open(path, 'wb') as stb:
         stb.write(out)
 
+def commonToSTBRB(path, rooms):
+    """Converts the common format to Rebirth stb"""
+
+    headerPacker = struct.Struct('<I')
+    roomBegPacker = struct.Struct('<IIBH')
+    roomEndPacker = struct.Struct('<fBB')
+    doorHeaderPacker = struct.Struct('<BH')
+    doorPacker = struct.Struct('<hh?')
+    stackPacker = struct.Struct('<hhB')
+    entPacker = struct.Struct('<HHHf')
+
+    totalBytes = headerPacker.size
+    totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
+    for room in rooms:
+        totalBytes += len(room.name)
+        totalBytes += doorHeaderPacker.size + doorPacker.size * len(room.info.doors)
+        totalBytes += room.getSpawnCount() * stackPacker.size
+        for stack, x, y in room.spawns():
+            totalBytes += len(stack) * entPacker.size
+
+    out = bytearray(totalBytes)
+    off = 0
+    headerPacker.pack_into(out, off, len(rooms))
+    off += headerPacker.size
+
+    for room in rooms:
+        width, height = room.info.dims
+        nameLen = len(room.name)
+        roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.difficulty, nameLen)
+        off += roomBegPacker.size
+        struct.pack_into(f'<{nameLen}s', out, off, room.name.encode())
+        off += nameLen
+        roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2)
+        off += roomEndPacker.size
+
+        # Doors and Entities
+        doorHeaderPacker.pack_into(out, off, len(room.info.doors), room.getSpawnCount())
+        off += doorHeaderPacker.size
+
+        for door in room.info.doors:
+            doorPacker.pack_into(out, off, door[0] - 1, door[1] - 1, door[2])
+            off += doorPacker.size
+
+        for stack, x, y in room.spawns():
+            numEnts = len(stack)
+            stackPacker.pack_into(out, off, x - 1, y - 1, numEnts)
+            off += stackPacker.size
+
+            for entity in stack:
+                entPacker.pack_into(out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight)
+                off += entPacker.size
+
+    with open(path, 'wb') as stb:
+        stb.write(out)
+
+def stbToCommon(path):
+    header = open(path, 'rb').read(4)
+
+    try:
+        header = header.decode()
+    except UnicodeDecodeError:
+        header = 'STB0' # sometimes the header will actually decode successfully, so can't count on this value
+
+    if header == 'STB1':
+        return stbABToCommon(path)
+    else:
+        return stbRBToCommon(path)
 
 def stbABToCommon(path):
     """Converts an Afterbirth STB to the common format"""
     stb = open(path, 'rb').read()
 
-    headerPacker = struct.Struct('<4s')
+    headerPacker = struct.Struct('<4sI')
     roomBegPacker = struct.Struct('<IIIBH')
     roomEndPacker = struct.Struct('<fBBBBH')
     doorPacker = struct.Struct('<hh?')
     stackPacker = struct.Struct('<hhB')
     entPacker = struct.Struct('<HHHf')
 
-    # Header
-    header = headerPacker.unpack_from(stb, 0)[0].decode()
-    if header != "STB1":
-        raise NotImplementedError(f"Invalid STB version, expected STB1, got {header}")
+    # Header, Room count
+    header, rooms = headerPacker.unpack_from(stb, 0)
+    off = headerPacker.size
+    if header.decode() != "STB1":
+        raise ValueError("Afterbirth STBs must have the STB1 header")
 
-    off = 4
-
-    # Room count
-    rooms = struct.unpack_from('<I', stb, off)[0]
-    off += 4
     ret = []
 
     for r in range(rooms):
@@ -182,7 +245,7 @@ def stbABToCommon(path):
         # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, rsubtype, difficulty, nameLen = roomData
-        off += 0xF
+        off += roomBegPacker.size
         #print ("Room Data: {roomData}")
 
         # Room Name
@@ -193,14 +256,20 @@ def stbABToCommon(path):
         # Weight, width, height, shape, number of doors, number of entities
         entityTable = roomEndPacker.unpack_from(stb, off)
         rweight, width, height, shape, numDoors, numEnts = entityTable
-        off += 0xA
+        off += roomEndPacker.size
         #print (f"Entity Table: {entityTable}")
+
+        width += 2
+        height += 2
+        if shape == 0:
+            print(f'Bad room shape! {rvariant}, {roomName}, {width}, {height}')
+            shape = 1
 
         doors = []
         for d in range(numDoors):
             # X, Y, exists
             doorX, doorY, exists = doorPacker.unpack_from(stb, off)
-            off += 5
+            off += doorPacker.size
 
             doors.append([ doorX + 1, doorY + 1, exists ])
 
@@ -214,12 +283,12 @@ def stbABToCommon(path):
             ex, ey, stackedEnts = stackPacker.unpack_from(stb, off)
             ex += 1
             ey += 1
-            off += 5
+            off += stackPacker.size
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
                 print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
-                off += 0xA * stackedEnts
+                off += entPacker.size * stackedEnts
                 continue
 
             ents = room.gridSpawns[grindex]
@@ -227,7 +296,94 @@ def stbABToCommon(path):
             for s in range(stackedEnts):
                 #  type, variant, subtype, weight
                 etype, evariant, esubtype, eweight = entPacker.unpack_from(stb, off)
-                off += 0xA
+                off += entPacker.size
+
+                ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
+
+            #room.gridSpawns = room.gridSpawns # probably unneeded for now
+
+    return ret
+
+def stbRBToCommon(path):
+    """Converts an Rebirth STB to the common format"""
+    stb = open(path, 'rb').read()
+
+    headerPacker = struct.Struct('<I')
+    roomBegPacker = struct.Struct('<IIBH')
+    roomEndPacker = struct.Struct('<fBBBH')
+    doorPacker = struct.Struct('<hh?')
+    stackPacker = struct.Struct('<hhB')
+    entPacker = struct.Struct('<HHHf')
+
+    # Room count
+    # No header for rebirth
+    rooms = headerPacker.unpack_from(stb, 0)[0]
+    off = headerPacker.size
+    ret = []
+
+    for r in range(rooms):
+
+        # Room Type, Room Variant, Difficulty, Length of Room Name String
+        # No subtype for rebirth
+        roomData = roomBegPacker.unpack_from(stb, off)
+        rtype, rvariant, difficulty, nameLen = roomData
+        off += roomBegPacker.size
+        #print ("Room Data: {roomData}")
+
+        # Room Name
+        roomName = struct.unpack_from(f'<{nameLen}s', stb, off)[0].decode()
+        off += nameLen
+        #print (f"Room Name: {roomName}")
+
+        # Weight, width, height, number of doors, number of entities
+        # No shape for rebirth
+        entityTable = roomEndPacker.unpack_from(stb, off)
+        rweight, width, height, numDoors, numEnts = entityTable
+        off += roomEndPacker.size
+        #print (f"Entity Table: {entityTable}")
+
+        # We have to figure out the shape manually for rebirth
+        width += 2
+        height += 2
+        shape = 1
+        for s in [ 1, 4, 6, 8 ]: # only valid room shapes as of rebirth, defaults to 1x1
+            w, h = Room.Info(shape=s).dims
+            if w == width and h == height:
+                shape = s
+                break
+
+        doors = []
+        for d in range(numDoors):
+            # X, Y, exists
+            doorX, doorY, exists = doorPacker.unpack_from(stb, off)
+            off += doorPacker.size
+
+            doors.append([ doorX + 1, doorY + 1, exists ])
+
+        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, 0, shape, doors)
+        ret.append(room)
+
+        realWidth = room.info.dims[0]
+        gridLen = room.info.gridLen()
+        for e in range(numEnts):
+            # x, y, number of entities at this position
+            ex, ey, stackedEnts = stackPacker.unpack_from(stb, off)
+            ex += 1
+            ey += 1
+            off += stackPacker.size
+
+            grindex = Room.Info.gridIndex(ex, ey, realWidth)
+            if grindex >= gridLen:
+                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                off += entPacker.size * stackedEnts
+                continue
+
+            ents = room.gridSpawns[grindex]
+
+            for s in range(stackedEnts):
+                #  type, variant, subtype, weight
+                etype, evariant, esubtype, eweight = entPacker.unpack_from(stb, off)
+                off += entPacker.size
 
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
 
