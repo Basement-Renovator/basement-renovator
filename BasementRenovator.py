@@ -3721,9 +3721,10 @@ class MainWindow(QMainWindow):
         self.fc = f.addAction('Open',          		self.openMap, QKeySequence("Ctrl+O"))
         self.fb = f.addAction('Open by Stage',      self.openMapDefault, QKeySequence("Ctrl+Shift+O"))
         f.addSeparator()
-        self.fd = f.addAction('Save',               self.saveMap, QKeySequence("Ctrl+S"))
-        self.fe = f.addAction('Save As...',         self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
-        self.fk = f.addAction('Export to STB',      self.exportSTB, QKeySequence("Shift+Alt+S"))
+        self.fd = f.addAction('Save',                     self.saveMap, QKeySequence("Ctrl+S"))
+        self.fe = f.addAction('Save As...',               self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
+        self.fk = f.addAction('Export to STB',            lambda: self.exportSTB(), QKeySequence("Shift+Alt+S"))
+        self.fk = f.addAction('Export to STB (Rebirth)',  lambda: self.exportSTB(stbType="Rebirth"))
         f.addSeparator()
         self.fk = f.addAction('Copy Screenshot to Clipboard', lambda: self.screenshot('clipboard'), QKeySequence("F10"))
         self.fg = f.addAction('Save Screenshot to File...', lambda: self.screenshot('file'), QKeySequence("Ctrl+F10"))
@@ -4098,7 +4099,7 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Error", "Failed opening rooms. The file does not exist.")
         except NotImplementedError:
             traceback.print_exception(*sys.exc_info())
-            QMessageBox.warning(self, "Error", "This is not a valid Afterbirth+ STB file. It may be a Rebirth STB, or it may be one of the prototype STB files accidentally included in the AB+ release.")
+            QMessageBox.warning(self, "Error", "This is not a valid STB file. (i.e. Rebirth or Afterbirth format) It may be one of the prototype STB files accidentally included in the AB+ release.")
         except:
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", f"Failed opening rooms.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
@@ -4129,7 +4130,7 @@ class MainWindow(QMainWindow):
         elif ext == '.txt':
             rooms = StageConvert.txtToCommon(path, entityXML)
         else:
-            rooms = StageConvert.stbABToCommon(path)
+            rooms = StageConvert.stbToCommon(path)
 
         seenSpawns = {}
         for room in rooms:
@@ -4198,7 +4199,7 @@ class MainWindow(QMainWindow):
     def saveMapAs(self):
         self.saveMap(True)
 
-    def exportSTB(self):
+    def exportSTB(self, stbType=None):
         target = self.path
 
         if not target:
@@ -4207,12 +4208,12 @@ class MainWindow(QMainWindow):
 
         try:
             target = os.path.splitext(target)[0] + ".stb"
-            self.save(self.roomList.getRooms(), target, updateRecent=False)
+            self.save(self.roomList.getRooms(), target, updateRecent=False, stbType=stbType)
         except:
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", f"Exporting failed.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
 
-    def save(self, rooms, path=None, updateRecent=True, isPreview=False):
+    def save(self, rooms, path=None, updateRecent=True, isPreview=False, stbType=None):
         path = path or (os.path.splitext(self.path)[0] + '.xml')
 
         self.storeEntityList()
@@ -4233,7 +4234,10 @@ class MainWindow(QMainWindow):
         if ext == '.xml':
             StageConvert.commonToXML(path, rooms, isPreview=isPreview)
         else:
-            StageConvert.commonToSTBAB(path, rooms)
+            if stbType == 'Rebirth':
+                StageConvert.commonToSTBRB(path, rooms)
+            else:
+                StageConvert.commonToSTBAB(path, rooms)
 
 
         if updateRecent and ext == '.xml':
