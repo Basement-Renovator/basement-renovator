@@ -218,6 +218,8 @@ def stbToCommon(path):
 
     if header == 'STB1':
         return stbABToCommon(path)
+    if header == 'STB2':
+        return stbAntiToCommon(path)
     else:
         return stbRBToCommon(path)
 
@@ -275,6 +277,92 @@ def stbABToCommon(path):
 
         room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
         ret.append(room)
+
+        realWidth = room.info.dims[0]
+        gridLen = room.info.gridLen()
+        for e in range(numEnts):
+            # x, y, number of entities at this position
+            ex, ey, stackedEnts = stackPacker.unpack_from(stb, off)
+            ex += 1
+            ey += 1
+            off += stackPacker.size
+
+            grindex = Room.Info.gridIndex(ex, ey, realWidth)
+            if grindex >= gridLen:
+                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                off += entPacker.size * stackedEnts
+                continue
+
+            ents = room.gridSpawns[grindex]
+
+            for s in range(stackedEnts):
+                #  type, variant, subtype, weight
+                etype, evariant, esubtype, eweight = entPacker.unpack_from(stb, off)
+                off += entPacker.size
+
+                ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
+
+            #room.gridSpawns = room.gridSpawns # probably unneeded for now
+
+    return ret
+
+def stbAntiToCommon(path):
+    """Converts an Antibirth STB to the common format"""
+    stb = open(path, 'rb').read()
+
+    headerPacker = struct.Struct('<4sI')
+    roomBegPacker = struct.Struct('<IIIBH')
+    roomEndPacker = struct.Struct('<fBBBBH9s') # 9 padding bytes for some other room data
+    doorPacker = struct.Struct('<hh?')
+    stackPacker = struct.Struct('<hhB')
+    entPacker = struct.Struct('<HHHf')
+
+    # Header, Room count
+    header, rooms = headerPacker.unpack_from(stb, 0)
+    off = headerPacker.size
+    if header.decode() != "STB2":
+        raise ValueError("Antibirth STBs must have the STB2 header")
+
+    ret = []
+
+    for r in range(rooms):
+
+        # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
+        roomData = roomBegPacker.unpack_from(stb, off)
+        rtype, rvariant, rsubtype, difficulty, nameLen = roomData
+        off += roomBegPacker.size
+        #print ("Room Data: {roomData}")
+
+        # Room Name
+        roomName = struct.unpack_from(f'<{nameLen}s', stb, off)[0].decode()
+        off += nameLen
+        #print (f"Room Name: {roomName}")
+
+        # Weight, width, height, shape, number of doors, number of entities
+        entityTable = roomEndPacker.unpack_from(stb, off)
+        rweight, width, height, shape, numDoors, numEnts, extraData = entityTable
+        off += roomEndPacker.size
+        #print (f"Entity Table: {entityTable}")
+
+        width += 2
+        height += 2
+        if shape == 0:
+            print(f'Bad room shape! {rvariant}, {roomName}, {width}, {height}')
+            shape = 1
+
+        doors = []
+        for d in range(numDoors):
+            # X, Y, exists
+            doorX, doorY, exists = doorPacker.unpack_from(stb, off)
+            off += doorPacker.size
+
+            doors.append([ doorX + 1, doorY + 1, exists ])
+
+        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
+        ret.append(room)
+
+        if extraData != b'\x00\x00\x00\x00\x00\x00\x00\x00\x00':
+            print (f'Room {room.getPrefix()} uses the extra bytes:', extraData)
 
         realWidth = room.info.dims[0]
         gridLen = room.info.gridLen()
