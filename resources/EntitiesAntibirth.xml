@@ -1,0 +1,197 @@
+<data>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Enigma Bomb" Subtype="0" Variant="100"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Rocket Bomb" Subtype="0" Variant="101"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Blood Bomb" Subtype="0" Variant="102"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Big Blood Bomb" Subtype="0" Variant="103"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Big Rocket Bomb" Subtype="0" Variant="104"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Stone Bomb" Subtype="0" Variant="105"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Big Stone Bomb" Subtype="0" Variant="106"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Small Bomb" Subtype="0" Variant="107"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Bloody Sad Bomb" Subtype="0" Variant="108"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Brimstone Bomb" Subtype="0" Variant="109"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Live Bombs" ID="4" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Small Red Bomb" Subtype="0" Variant="110"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Hearts" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Heart (sun)" Subtype="8" Variant="10"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Hearts" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Heart (immortal)" Subtype="9" Variant="10"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Hearts" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Heart (soul half)" Subtype="10" Variant="10"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Hearts" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Heart (illusion)" Subtype="11" Variant="10"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Hearts" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Heart (rotten)" Subtype="12" Variant="10"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Rune#3" Subtype="5" Variant="300"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Magic Card" Subtype="6" Variant="300"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Card Against Humanity" Subtype="7" Variant="300"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="5" Image="resources/Entities/questionmark.png" Kind="Pickups" Name="Credit Card" Subtype="8" Variant="300"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Machines" ID="6" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Electrifier (Charge Machine)" Subtype="0" Variant="20"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Frowning Gaper (downpour)" Subtype="100" Variant="0"/>
+    <entity BaseHP="14" Boss="0" Champion="1" Group="Mines" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Frowning Gaper (mines)" Subtype="101" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gaper (downpour)" Subtype="100" Variant="1"/>
+    <entity BaseHP="14" Boss="0" Champion="1" Group="Mines" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gaper (mines)" Subtype="101" Variant="1"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Corpse" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rotten Gaper" Subtype="0" Variant="10"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Corpse" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rotten Gaper" Subtype="1" Variant="10"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Corpse" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rotten Gaper" Subtype="2" Variant="10"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Corpse" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rotten Gaper" Subtype="3" Variant="10"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Corpse" ID="10" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rotten Gaper" Subtype="4" Variant="10"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="11" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gusher (downpour)" Subtype="100" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Mines" ID="11" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gusher (mines)" Subtype="101" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="11" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Pacer (downpour)" Subtype="100" Variant="1"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Mines" ID="11" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Pacer (mines)" Subtype="101" Variant="1"/>
+    <entity BaseHP="15" Boss="0" Champion="1" Group="Downpour" ID="15" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Clotty (downpour)" Subtype="100" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Blobs" ID="15" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Grilled Clotty" Subtype="0" Variant="100"/>
+    <entity BaseHP="35" Boss="1" Champion="0" Group="Mines" ID="19" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Tuff Twin" Subtype="0" Variant="100"/>
+    <entity BaseHP="33" Boss="0" Champion="1" Group="Mausoleum" ID="24" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Cursed Globin" Subtype="0" Variant="100"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="25" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Dragon Fly" Subtype="0" Variant="100"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="25" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Dragon Fly X" Subtype="1" Variant="100"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Corpse" ID="25" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Sick Boom Fly" Subtype="0" Variant="101"/>
+    <entity BaseHP="15" Boss="0" Champion="1" Group="Mines" ID="27" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Hard Host" Subtype="0" Variant="100"/>
+    <entity BaseHP="5"  Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Bonfire" Subtype="0" Variant="100"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Coal" Subtype="0" Variant="101"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Coal" Subtype="1" Variant="101"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Coal" Subtype="2" Variant="101"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="41" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Loose Knight" Subtype="0" Variant="10"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="41" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Brainless Knight" Subtype="0" Variant="11"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="Mausoleum" ID="41" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Black Knight" Subtype="0" Variant="12"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="Mausoleum" ID="56" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Lump (corpse)" Subtype="100" Variant="0"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="Mausoleum" ID="56" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Lump (corpse 2)" Subtype="101" Variant="0"/>
+    <entity BaseHP="35" Boss="0" Champion="1" Group="Mausoleum" ID="58" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Para-Bite (corpse)" Subtype="100" Variant="0"/>
+    <entity BaseHP="35" Boss="0" Champion="1" Group="Mausoleum" ID="58" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Para-Bite (corpse 2)" Subtype="101" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Flies" ID="61" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Ink" Subtype="0" Variant="100"/>
+    <entity BaseHP="44" Boss="0" Champion="1" Group="Corpse" ID="61" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Mama Fly" Subtype="0" Variant="101"/>
+    <entity BaseHP="200" Boss="1" Champion="0" Group="Downpour" ID="62" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Wormwood" Subtype="0" Variant="100"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Mausoleum" ID="212" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Smoky" Subtype="0" Variant="100"/>
+    <entity BaseHP="8" Boss="0" Champion="1" Group="Mausoleum" ID="227" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Bony (mausoleum)" Subtype="100" Variant="0"/>
+    <entity BaseHP="48" Boss="0" Champion="0" Group="Mausoleum" ID="239" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Corpse Eater" Subtype="0" Variant="100"/>
+    <entity BaseHP="48" Boss="0" Champion="0" Group="Mausoleum" ID="239" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Carrion Rider" Subtype="0" Variant="101"/>
+    <entity BaseHP="13.5" Boss="0" Champion="0" Group="Spiders" ID="240" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Soi Creep" Subtype="0" Variant="100"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="260" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Lil' Haunt" Subtype="0" Variant="10"/>
+    <entity BaseHP="6" Boss="0" Champion="1" Group="Downpour" ID="260" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Lil' Haunt (downpour)" Subtype="0" Variant="20"/>
+    <entity BaseHP="580" Boss="1" Champion="0" Group="(Mod) Antibirth" ID="269" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Polycephalus" Subtype="0" Variant="1"/>
+    <entity BaseHP="7" Boss="0" Champion="1" Group="Blobs" ID="800" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Dumpling" Subtype="0" Variant="0"/>
+    <entity BaseHP="8" Boss="0" Champion="1" Group="Blobs" ID="800" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Skinling" Subtype="0" Variant="1"/>
+    <entity BaseHP="12" Boss="0" Champion="1" Group="Blobs" ID="800" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Scab" Subtype="0" Variant="2"/>
+    <entity BaseHP="15" Boss="0" Champion="1" Group="Spiders" ID="801" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Fissure" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="Stones" ID="802" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Stillborn" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="Corpse" ID="802" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Stillborn (corpse)" Subtype="1" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="Corpse" ID="802" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Stillborn (corpse 2)" Subtype="2" Variant="0"/>
+    <entity BaseHP="18" Boss="0" Champion="1" Group="Mines" ID="803" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Blind Bat" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Stones" ID="804" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Quake Grimace (left)" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Stones" ID="804" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Quake Grimace (up)" Subtype="1" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Stones" ID="804" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Quake Grimace (right)" Subtype="2" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Stones" ID="804" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Quake Grimace (down)" Subtype="3" Variant="0"/>
+    <entity BaseHP="5" Boss="0" Champion="0" Group="Mausoleum" ID="805" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Bishop" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Downpour" ID="806" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Bubbles" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="807" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Wraith" Subtype="0" Variant="0"/>
+    <entity BaseHP="6" Boss="0" Champion="0" Group="Downpour" ID="808" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Willo" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Stones" ID="809" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Bomb Grimace" Subtype="0" Variant="0"/>
+    <entity BaseHP="5" Boss="0" Champion="0" Group="Downpour" ID="810" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Small Leech" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="1" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="2" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="3" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="4" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="5" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Downpour" ID="811" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Deep Gaper" Subtype="6" Variant="0"/>
+    <entity BaseHP="14" Boss="0" Champion="1" Group="Downpour" ID="812" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Sub Horf" Subtype="0" Variant="0"/>
+    <entity BaseHP="16" Boss="0" Champion="1" Group="Downpour" ID="813" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Blurb" Subtype="0" Variant="0"/>
+    <entity BaseHP="24" Boss="0" Champion="1" Group="Gapers" ID="813" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Blurb (womb)" Subtype="1" Variant="0"/>
+    <entity BaseHP="6.5" Boss="0" Champion="0" Group="Downpour" ID="814" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Strider" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Downpour" ID="816" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Polty" Subtype="0" Variant="0"/>
+    <entity BaseHP="14" Boss="0" Champion="1" Group="Downpour" ID="817" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Prey" Subtype="0" Variant="0"/>
+    <entity BaseHP="14" Boss="0" Champion="1" Group="Downpour" ID="817" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Mullighoul" Subtype="0" Variant="1"/>
+    <entity BaseHP="12" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rock Spider" Subtype="0" Variant="0"/>
+    <entity BaseHP="12" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rock Spider" Subtype="1" Variant="0"/>
+    <entity BaseHP="12" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Rock Spider" Subtype="2" Variant="0"/>
+    <entity BaseHP="22" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Tinted Rock Spider" Subtype="0" Variant="1"/>
+    <entity BaseHP="22" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Tinted Rock Spider" Subtype="1" Variant="1"/>
+    <entity BaseHP="22" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Tinted Rock Spider" Subtype="2" Variant="1"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Coal Spider" Subtype="0" Variant="2"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Coal Spider" Subtype="1" Variant="2"/>
+    <entity BaseHP="15" Boss="0" Champion="0" Group="Mines" ID="818" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Coal Spider" Subtype="2" Variant="2"/>
+    <entity BaseHP="7" Boss="0" Champion="1" Group="Mines" ID="819" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Fly Bomb" Subtype="0" Variant="0"/>
+    <entity BaseHP="7" Boss="0" Champion="1" Group="Mines" ID="819" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Red Fly Bomb" Subtype="0" Variant="1"/>
+    <entity BaseHP="40" Boss="0" Champion="1" Group="Mines" ID="820" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Danny" Subtype="0" Variant="0"/>
+    <entity BaseHP="40" Boss="0" Champion="1" Group="Mines" ID="820" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Coal Boy" Subtype="0" Variant="1"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="821" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Blaster" Subtype="0" Variant="0"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="Mines" ID="822" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Bouncer" Subtype="0" Variant="0"/>
+    <entity BaseHP="45" Boss="0" Champion="1" Group="Mines" ID="823" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Quakey" Subtype="0" Variant="0"/>
+    <entity BaseHP="18" Boss="0" Champion="1" Group="Mines" ID="824" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gyro" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="824" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Grilled Gyro" Subtype="0" Variant="1"/>
+    <entity BaseHP="10" Boss="0" Champion="1" Group="Mines" ID="825" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Fire Worm" Subtype="0" Variant="0"/>
+    <entity BaseHP="42" Boss="0" Champion="1" Group="Mines" ID="826" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Hardy" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Gapers" ID="827" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Faceless" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="828" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Echo Bat" Subtype="0" Variant="0"/>
+    <entity BaseHP="12" Boss="0" Champion="1" Group="Mines" ID="829" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Mole" Subtype="0" Variant="0"/>
+    <entity BaseHP="50" Boss="0" Champion="1" Group="Mausoleum" ID="830" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Big Bony" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="831" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Necromancer" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="832" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Exorcist" Subtype="0" Variant="0"/>
+    <entity BaseHP="35" Boss="0" Champion="1" Group="Mausoleum" ID="832" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Fanatic" Subtype="0" Variant="1"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="833" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Candler" Subtype="0" Variant="0"/>
+    <entity BaseHP="35" Boss="0" Champion="1" Group="Mausoleum" ID="834" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Whipper" Subtype="0" Variant="0"/>
+    <entity BaseHP="35" Boss="0" Champion="1" Group="Mausoleum" ID="834" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Snapper" Subtype="0" Variant="1"/>
+    <entity BaseHP="42" Boss="0" Champion="1" Group="Mausoleum" ID="834" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Lunatic" Subtype="0" Variant="2"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="835" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Swapper" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="836" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Vis Versa" Subtype="0" Variant="0"/>
+    <entity BaseHP="40" Boss="0" Champion="1" Group="Mausoleum" ID="837" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Grave Robber" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="839" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Strifer" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="840" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Pon" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="841" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Revenant" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh" Subtype="1" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhh" Subtype="2" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhhh" Subtype="3" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch?" Subtype="10" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh?" Subtype="11" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch??" Subtype="12" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh??" Subtype="13" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch???" Subtype="20" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhh????" Subtype="21" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch????" Subtype="22" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh????" Subtype="23" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch?????" Subtype="30" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh?????" Subtype="31" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch???????" Subtype="32" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatcch???????" Subtype="33" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttch?????" Subtype="40" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttchh?????" Subtype="41" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttch???????" Subtype="42" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttcch???????" Subtype="43" Variant="0"/>
+    <entity BaseHP="70" Boss="0" Champion="1" Group="Corpse" ID="850" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Barfy" Subtype="0" Variant="0"/>
+    <entity BaseHP="40" Boss="0" Champion="1" Group="Corpse" ID="851" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Twitchy" Subtype="0" Variant="0"/>
+    <entity BaseHP="100" Boss="0" Champion="0" Group="Corpse" ID="852" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Spikeball" Subtype="0" Variant="0"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="Corpse" ID="853" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Small Maggot" Subtype="0" Variant="0"/>
+    <entity BaseHP="90" Boss="0" Champion="1" Group="Corpse" ID="854" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Adult Leech" Subtype="0" Variant="0"/>
+    <entity BaseHP="80" Boss="0" Champion="1" Group="Corpse" ID="856" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gasbag" Subtype="0" Variant="0"/>
+    <entity BaseHP="80" Boss="0" Champion="1" Group="Corpse" ID="856" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Gasbag" Subtype="1" Variant="0"/>
+    <entity BaseHP="125" Boss="0" Champion="1" Group="Blobs" ID="857" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Cohort" Subtype="0" Variant="0"/>
+    <entity BaseHP="60" Boss="0" Champion="1" Group="Corpse" ID="858" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Vessel" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="1" Group="Hosts" ID="859" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Floating Host" Subtype="0" Variant="0"/>
+    <entity BaseHP="32" Boss="0" Champion="1" Group="Corpse" ID="860" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Unborn" Subtype="0" Variant="0"/>
+    <entity BaseHP="19" Boss="0" Champion="1" Group="Corpse" ID="861" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Pustule" Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="1" Group="Corpse" ID="862" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Cyst" Subtype="0" Variant="0"/>
+    <entity BaseHP="20" Boss="0" Champion="0" Group="Corpse" ID="864" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Coil" Subtype="0" Variant="0"/>
+    <entity BaseHP="40" Boss="0" Champion="1" Group="Corpse" ID="865" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Evis" Subtype="0" Variant="0"/>
+    <entity BaseHP="100" Boss="0" Champion="0" Group="Mausoleum" ID="867" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Screamer" Subtype="0" Variant="0"/>
+    <entity BaseHP="690" Boss="1" Champion="0" Group="Mines" ID="900" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Reap Creep" Subtype="0" Variant="0"/>
+    <entity BaseHP="130" Boss="1" Champion="0" Group="Downpour" ID="901" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Beelzeblub" Subtype="0" Variant="0"/>
+    <entity BaseHP="200" Boss="1" Champion="0" Group="Downpour" ID="902" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Rainmaker" Subtype="0" Variant="0"/>
+    <entity BaseHP="620" Boss="1" Champion="0" Group="Mausoleum" ID="903" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Visage Heart" Subtype="0" Variant="0"/>
+    <entity BaseHP="100" Boss="1" Champion="0" Group="Mausoleum" ID="903" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Visage Mask" Subtype="0" Variant="1"/>
+    <entity BaseHP="666" Boss="1" Champion="0" Group="Mausoleum" ID="904" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Siren" Subtype="0" Variant="0"/>
+    <entity BaseHP="789" Boss="1" Champion="0" Group="Mausoleum" ID="905" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="The Heretic" Subtype="0" Variant="0"/>
+    <entity BaseHP="350" Boss="1" Champion="0" Group="Mines" ID="906" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Hornfel" Subtype="0" Variant="0"/>
+    <entity BaseHP="6" Boss="1" Champion="0" Group="Mines" ID="907" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Gideon" Subtype="0" Variant="0"/>
+    <entity BaseHP="234" Boss="1" Champion="0" Group="Chapter 1" ID="908" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Baby Plum" Subtype="0" Variant="0"/>
+    <entity BaseHP="950" Boss="1" Champion="0" Group="Corpse" ID="909" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="The Scourge" Subtype="0" Variant="0"/>
+    <entity BaseHP="1050" Boss="1" Champion="0" Group="Corpse" ID="910" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Chimera" Subtype="0" Variant="0"/>
+    <entity BaseHP="1050" Boss="1" Champion="0" Group="Corpse" ID="910" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Chimera (body)" Subtype="0" Variant="1"/>
+    <entity BaseHP="1050" Boss="1" Champion="0" Group="Corpse" ID="910" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Chimera (head)" Subtype="0" Variant="2"/>
+    <entity BaseHP="600" Boss="1" Champion="0" Group="Corpse" ID="911" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Rotgut" Subtype="0" Variant="0"/>
+    <entity BaseHP="600" Boss="1" Champion="0" Group="Corpse" ID="911" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Rotgut (maggot)" Subtype="0" Variant="1"/>
+    <entity BaseHP="600" Boss="1" Champion="0" Group="Corpse" ID="911" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="Rotgut (heart)" Subtype="0" Variant="2"/>
+    <entity BaseHP="2500" Boss="1" Champion="0" Group="Story Bosses" ID="912" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="The Witness" Subtype="0" Variant="0"/>
+    <entity BaseHP="2500" Boss="1" Champion="0" Group="Story Bosses" ID="912" Image="resources/Entities/questionmark.png" Kind="Bosses" Name="The Witness 2" Subtype="0" Variant="10"/>
+    <entity BaseHP="5" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="964" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0"/>
+    <entity BaseHP="5" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="964" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Pushable Red TNT" Subtype="0" Variant="1"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Mines" ID="965" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Minecart" Subtype="0" Variant="0"/>
+    <entity BaseHP="60" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="966" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Siren Helper" Subtype="0" Variant="0"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="971" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Entity Spawner" Subtype="0" Variant="0"/>
+
+    <entity BaseHP="0" Boss="0" Champion="0" Group="Mines" ID="970" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Room Darkness" Subtype="0" Variant="0"/>
+</data>
