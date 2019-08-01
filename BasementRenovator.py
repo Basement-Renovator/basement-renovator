@@ -33,7 +33,8 @@ from collections import OrderedDict
 from copy import deepcopy
 
 import traceback, sys
-import struct, os, subprocess, platform, webbrowser, urllib, re, shutil
+import struct, os, subprocess, platform, webbrowser, re, shutil
+import urllib.parse, urllib.request
 from pathlib import Path
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -968,16 +969,35 @@ class RoomScene(QGraphicsScene):
 class RoomEditorWidget(QGraphicsView):
 
     def __init__(self, scene, parent=None):
-        QGraphicsView.__init__(self, scene, parent)
+        super(RoomEditorWidget, self).__init__(parent)
 
-        self.setViewportUpdateMode(self.FullViewportUpdate)
-        self.setDragMode(self.RubberBandDrag)
+        self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
+        self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
         self.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.setAcceptDrops(True)
 
         self.assignNewScene(scene)
 
         self.canDelete = True
+
+
+    def dragEnterEvent(self, evt):
+        if evt.mimeData().hasFormat("text/uri-list"):
+            evt.setAccepted(True)
+            self.update()
+
+    # if this is unimplemented, warnings are spewed
+    def dragLeaveEvent(self, evt):
+        pass
+
+    # if this is unimplemented, drop does not work
+    def dragMoveEvent(self, evt):
+        pass
+
+    def dropEvent(self, evt):
+        if evt.mimeData().hasFormat("text/uri-list"):
+            mainWindow.dropEvent(evt)
 
     def assignNewScene(self, scene):
         self.setScene(scene)
@@ -3673,7 +3693,9 @@ class MainWindow(QMainWindow):
         self.disableTestModTimer = None
 
         self.scene = RoomScene()
+
         self.clipboard = None
+        self.setAcceptDrops(True)
 
         self.editor = RoomEditorWidget(self.scene)
         self.setCentralWidget(self.editor)
@@ -3693,6 +3715,16 @@ class MainWindow(QMainWindow):
         # Setup a new map
         self.newMap()
         self.clean()
+
+    def dragEnterEvent(self, evt):
+        if evt.mimeData().hasFormat("text/uri-list"):
+            evt.setAccepted(True)
+
+    def dropEvent(self, evt):
+        s = evt.mimeData().text()
+        target = urllib.request.url2pathname(urllib.parse.urlparse(s).path)
+        self.openWrapper(target)
+        evt.acceptProposedAction()
 
     def fixupStage(self):
         global stageXML
