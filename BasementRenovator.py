@@ -59,6 +59,13 @@ def getStageXML():
 
     return root
 
+STEAM_PATH = None
+def getSteamPath():
+    global STEAM_PATH
+    if not STEAM_PATH:
+        STEAM_PATH = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
+    return STEAM_PATH
+
 def findInstallPath():
     installPath = ''
     cantFindPath = False
@@ -69,7 +76,7 @@ def findInstallPath():
     else:
         # Windows path things
         if "Windows" in platform.system():
-            basePath = QSettings('HKEY_CURRENT_USER\\Software\\Valve\\Steam', QSettings.NativeFormat).value('SteamPath')
+            basePath = getSteamPath()
             if not basePath:
                 cantFindPath = True
 
@@ -4685,8 +4692,20 @@ class MainWindow(QMainWindow):
             return
 
         try:
-            exePath = self.findExecutablePath()
+            # try to run through steam to avoid steam confirmation popup, else run isaac directly
+            # if there exists drm free copies, allow the direct exe launch method
+            steamPath = None
+            if settings.value('ForceExeLaunch') != '1':
+                steamPath = getSteamPath() or ''
+
+            if steamPath:
+                exePath = f"{steamPath}\\Steam.exe"
+            else:
+                exePath = self.findExecutablePath()
+
             if exePath and QFile.exists(exePath):
+                if steamPath:
+                    launchArgs = [ "-applaunch", "250900" ] + launchArgs
                 subprocess.run([exePath] + launchArgs, cwd = installPath)
             else:
                 args = ' '.join(map(lambda x: ' ' in x and f'"{x}"' or x, launchArgs))

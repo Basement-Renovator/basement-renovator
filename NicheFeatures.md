@@ -33,3 +33,6 @@ Sometimes you want BR to open as fast as possible and don't care about mods. For
 
 ### Fix libpng warnings
 If you're running BR with a console window open, you may notice some warnings from libpng complaining about formats. This is because of issues with how your custom entities icons are saved. To fix these issues and silence the warning, set FixIconFormat to 1 in the settings.ini. It will turn itself off after BR loads mods once, since it shouldn't have any additional work to do.
+
+### DRM Free Isaac
+There are some subset of users who are using DRM free copies of Isaac, or test builds not through Steam. The test launcher uses Steam directly to avoid an annoying popup, but if the Isaac exe is DRM free launching through Steam is unintended behavior and undesired. To disable trying to launch Isaac through steam, set `ForceExeLaunch` to 1 in your settings.ini.
