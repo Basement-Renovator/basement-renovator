@@ -2492,7 +2492,7 @@ class RoomSelector(QWidget):
         self.addRoomButton       = self.toolbar.addAction(QIcon(), 'Add', self.addRoom)
         self.removeRoomButton    = self.toolbar.addAction(QIcon(), 'Delete', self.removeRoom)
         self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
-        self.exportRoomButton    = self.toolbar.addAction(QIcon(), 'Export...', self.exportRoom)
+        self.exportRoomButton    = self.toolbar.addAction(QIcon(), 'Copy to File...', self.exportRoom)
 
         self.mirror = False
         self.mirrorY = False
@@ -3728,7 +3728,8 @@ class MainWindow(QMainWindow):
             evt.setAccepted(True)
 
     def dropEvent(self, evt):
-        s = evt.mimeData().text()
+        files = evt.mimeData().text().split("\n")
+        s = files[0]
         target = urllib.request.url2pathname(urllib.parse.urlparse(s).path)
         self.openWrapper(target)
         evt.acceptProposedAction()
@@ -3756,9 +3757,10 @@ class MainWindow(QMainWindow):
         f = self.fileMenu
 
         f.clear()
-        self.fa = f.addAction('New',                self.newMap, QKeySequence("Ctrl+N"))
-        self.fc = f.addAction('Open',          		self.openMap, QKeySequence("Ctrl+O"))
-        self.fb = f.addAction('Open by Stage',      self.openMapDefault, QKeySequence("Ctrl+Shift+O"))
+        self.fa = f.addAction('New',                    self.newMap, QKeySequence("Ctrl+N"))
+        self.fc = f.addAction('Open (XML)...',          self.openMap, QKeySequence("Ctrl+O"))
+        self.fm = f.addAction('Import (STB)...',        self.importMap, QKeySequence("Ctrl+Shift+O"))
+        self.fb = f.addAction('Open/Import by Stage',   self.openMapDefault, QKeySequence("Ctrl+Alt+O"))
         f.addSeparator()
         self.fd = f.addAction('Save',                     self.saveMap, QKeySequence("Ctrl+S"))
         self.fe = f.addAction('Save As...',               self.saveMapAs, QKeySequence("Ctrl+Shift+S"))
@@ -3805,6 +3807,9 @@ class MainWindow(QMainWindow):
         self.el = self.e.addAction('Snap to Room Boundaries', lambda: self.toggleSetting('SnapToBounds', onDefault=True))
         self.el.setCheckable(True)
         self.el.setChecked(settings.value('SnapToBounds') != '0')
+        self.em = self.e.addAction('Export to STB on Save (slower saves)', lambda: self.toggleSetting('ExportSTBOnSave'))
+        self.em.setCheckable(True)
+        self.em.setChecked(settings.value('ExportSTBOnSave') == '1')
         self.e.addSeparator()
         self.eh = self.e.addAction('Bulk Replace Entities',       self.showReplaceDialog, QKeySequence("Ctrl+R"))
         self.ei = self.e.addAction('Sort Rooms by ID',            self.sortRoomIDs)
@@ -4106,18 +4111,25 @@ class MainWindow(QMainWindow):
         settings.setValue("RecentFiles", recent)
         self.setupFileMenuBar()
 
-    def openMap(self):
-        if self.checkDirty(): return
+    def openMapImpl(self, title, fileTypes, addToRecent=True):
+        if self.checkDirty(): return False
 
-        target = QFileDialog.getOpenFileName(
-            self, 'Open Map', self.getRecentFolder(), 'XML File (*.xml);;Stage Binary (*.stb);;TXT File (*.txt)')
+        target, ext = QFileDialog.getOpenFileName(
+            self, title, self.getRecentFolder(), fileTypes)
         self.restoreEditMenu()
 
         # Looks like nothing was selected
-        if len(target[0]) == 0:
-            return
+        if not target: return False
 
-        self.openWrapper(target[0])
+        self.openWrapper(target, addToRecent=addToRecent)
+        return True
+
+    def openMap(self):
+        self.openMapImpl('Open Room File', 'XML File (*.xml)')
+
+    def importMap(self, target=None):
+        # part of openWrapper re-saves the file if it was not xml
+        self.openMapImpl('Import Rooms', 'Stage Binary (*.stb);;TXT File (*.txt)', addToRecent=False, target=target)
 
     def openRecent(self):
         if self.checkDirty(): return
@@ -4127,9 +4139,12 @@ class MainWindow(QMainWindow):
 
         self.openWrapper(path)
 
-    def openWrapper(self, path=None):
+    def openWrapper(self, path, addToRecent=True):
         print (path)
         self.path = path
+
+        ext = os.path.splitext(self.path)[1]
+        isXml = ext == '.xml'
 
         rooms = None
         try:
@@ -4148,7 +4163,6 @@ class MainWindow(QMainWindow):
 
         self.roomList.list.clear()
         self.scene.clear()
-        self.updateTitlebar()
 
         for room in rooms:
             self.roomList.list.addItem(room)
@@ -4156,10 +4170,14 @@ class MainWindow(QMainWindow):
         self.clean()
         self.roomList.changeFilter()
 
+        if not isXml:
+            self.saveMap()
+
+        self.updateTitlebar()
+
     def open(self, path=None, addToRecent=True):
         path = path or self.path
         global entityXML
-
 
         rooms = None
 
@@ -4234,6 +4252,10 @@ class MainWindow(QMainWindow):
 
         self.clean()
         self.roomList.changeFilter()
+
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        if settings.value('ExportSTBOnSave') == '1':
+            self.exportSTB()
 
     def saveMapAs(self):
         self.saveMap(True)
