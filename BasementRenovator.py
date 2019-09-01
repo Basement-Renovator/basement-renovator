@@ -3694,6 +3694,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Basement Renovator')
         self.setIconSize(QSize(16, 16))
 
+        self._path = None
+
         self.dirty = False
 
         self.wroteModFolder = False
@@ -3722,6 +3724,16 @@ class MainWindow(QMainWindow):
         # Setup a new map
         self.newMap()
         self.clean()
+
+    @property
+    def path(self): return self._path
+
+    @path.setter
+    def path(self, val):
+        oldPath = self.path
+        self._path = val
+        if self.path != oldPath:
+            self.updateTitlebar()
 
     def dragEnterEvent(self, evt):
         if evt.mimeData().hasFormat("text/uri-list"):
@@ -4022,7 +4034,6 @@ class MainWindow(QMainWindow):
         self.scene.clear()
         self.path = ''
 
-        self.updateTitlebar()
         self.dirt()
         self.roomList.changeFilter()
 
@@ -4129,7 +4140,7 @@ class MainWindow(QMainWindow):
 
     def importMap(self, target=None):
         # part of openWrapper re-saves the file if it was not xml
-        self.openMapImpl('Import Rooms', 'Stage Binary (*.stb);;TXT File (*.txt)', addToRecent=False, target=target)
+        self.openMapImpl('Import Rooms', 'Stage Binary (*.stb);;TXT File (*.txt)', addToRecent=False)
 
     def openRecent(self):
         if self.checkDirty(): return
@@ -4148,7 +4159,7 @@ class MainWindow(QMainWindow):
 
         rooms = None
         try:
-            rooms = self.open()
+            rooms = self.open(addToRecent=addToRecent and isXml)
         except FileNotFoundError:
             QMessageBox.warning(self, "Error", "Failed opening rooms. The file does not exist.")
         except NotImplementedError:
@@ -4172,8 +4183,6 @@ class MainWindow(QMainWindow):
 
         if not isXml:
             self.saveMap()
-
-        self.updateTitlebar()
 
     def open(self, path=None, addToRecent=True):
         path = path or self.path
@@ -4245,7 +4254,7 @@ class MainWindow(QMainWindow):
             self.updateTitlebar()
 
         try:
-            self.save(self.roomList.getRooms())
+            self.save(self.roomList.getRooms(), updateActive=True)
         except:
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", "Saving failed. Try saving to a new file instead.")
@@ -4258,7 +4267,7 @@ class MainWindow(QMainWindow):
             self.exportSTB()
 
     def saveMapAs(self):
-        self.saveMap(True)
+        self.saveMap(forceNewName=True)
 
     def exportSTB(self, stbType=None):
         target = self.path
@@ -4274,7 +4283,7 @@ class MainWindow(QMainWindow):
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", f"Exporting failed.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
 
-    def save(self, rooms, path=None, updateRecent=True, isPreview=False, stbType=None):
+    def save(self, rooms, path=None, updateActive=False, updateRecent=True, isPreview=False, stbType=None):
         path = path or (os.path.splitext(self.path)[0] + '.xml')
 
         self.storeEntityList()
@@ -4300,6 +4309,8 @@ class MainWindow(QMainWindow):
             else:
                 StageConvert.commonToSTBAB(path, rooms)
 
+        if updateActive:
+            self.path = path
 
         if updateRecent and ext == '.xml':
             self.updateRecent(path)

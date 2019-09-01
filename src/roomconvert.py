@@ -4,11 +4,16 @@ import struct
 from pathlib import Path
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
+from xml.sax.saxutils import escape
 import re
 
 import cProfile
 
 from src.core import Room, Entity
+
+def _xmlStrFix(x):
+    quot = '&quot;'
+    return escape(x).replace('"', quot)
 
 def commonToXMLSlow(destPath, rooms, isPreview = False):
     """Converts the common format to xml nodes"""
@@ -24,7 +29,7 @@ def commonToXMLSlow(destPath, rooms, isPreview = False):
             "type":       str(room.info.type),
             "variant":    str(room.info.variant),
             "subtype":    str(room.info.subtype),
-            "name":       str(room.name),
+            "name":       _xmlStrFix(str(room.name)),
             "difficulty": str(room.difficulty),
             "weight":     str(room.weight),
             "shape":      str(room.info.shape),
@@ -77,7 +82,7 @@ def commonToXML(destPath, rooms, isPreview = False):
 
     for room in rooms:
         width, height = room.info.dims
-        output.append(f'\t<room variant="{room.info.variant}" name="{room.name}" type="{room.info.type}" subtype="{room.info.subtype}" shape="{room.info.shape}" width="{width - 2}" height="{height - 2}" difficulty="{room.difficulty}" weight="{room.weight}">\n')
+        output.append(f'\t<room variant="{room.info.variant}" name="{_xmlStrFix(room.name)}" type="{room.info.type}" subtype="{room.info.subtype}" shape="{room.info.shape}" width="{width - 2}" height="{height - 2}" difficulty="{room.difficulty}" weight="{room.weight}">\n')
 
         for door in room.info.doors:
             output.append(f'\t\t<door exists="{door[2]}" x="{door[0] - 1}" y="{door[1] - 1}"/>\n')
