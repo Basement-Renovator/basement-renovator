@@ -222,7 +222,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
     def mapEn(en):
         # Fix some shit
         i = int(en.get("id"))
-        if i == 1000: i = 999
+        isEffect = i == 1000
+        if isEffect: i = 999
         s = en.get("subtype") or '0'
         v = en.get("variant") or '0'
 
@@ -364,6 +365,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
             etmp.set("Kind", "Stage")
         elif en.get("boss") == '1':
             etmp.set("Kind", "Bosses")
+        elif isEffect:
+            etmp.set("Kind", "Effects")
         else:
             etmp.set("Kind", "Enemies")
 

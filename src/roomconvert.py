@@ -84,7 +84,7 @@ def commonToXML(destPath, rooms, isPreview = False):
         width, height = room.info.dims
         output.append(f'\t<room variant="{room.info.variant}" name="{_xmlStrFix(room.name)}" type="{room.info.type}" subtype="{room.info.subtype}" shape="{room.info.shape}" width="{width - 2}" height="{height - 2}" difficulty="{room.difficulty}" weight="{room.weight}">\n')
 
-        for door in room.info.doors:
+        for door in sorted(room.info.doors, key=Room.DoorSortKey):
             output.append(f'\t\t<door exists="{door[2]}" x="{door[0] - 1}" y="{door[1] - 1}"/>\n')
 
         for stack, x, y in room.spawns():
@@ -502,7 +502,19 @@ def xmlToCommon(path, destPath=None):
         difficulty = int(roomNode.get('difficulty') or '0')
         roomName   = roomNode.get('name') or ''
         rweight    = float(roomNode.get('weight') or '1')
-        shape      = int(roomNode.get('shape') or '1')
+        shape      = int(roomNode.get('shape') or '-1')
+
+        if shape == -1:
+            shape = None
+            width = int(roomNode.get('width') or '13') + 2
+            height = int(roomNode.get('height') or '7') + 2
+            dims = (width, height)
+            for k, s in Room.Shapes.items():
+                if s['Dims'] == dims:
+                    shape = k
+                    break
+
+        shape = shape or 1
 
         doors = list(map(lambda door: [ int(door.get('x')) + 1, int(door.get('y')) + 1, door.get('exists', "0")[0] in "1tTyY" ], roomNode.findall('door')))
 
