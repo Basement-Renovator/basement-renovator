@@ -14,7 +14,7 @@
     <stage Name="Scarred Womb"     BGPrefix="resources/Backgrounds/16_scarredwomb"     BaseGamePath="12.scarred womb"     Stage="7" StageType="2"  Pattern="scarred womb" />
     <stage Name="Blue Womb"        BGPrefix="resources/Backgrounds/18_bluewomb"        BaseGamePath="13.blue womb"        Stage="9" StageType="0"  Pattern="blue womb" />
     <stage Name="Sheol"            BGPrefix="resources/Backgrounds/09_sheol"           BaseGamePath="14.sheol"            Stage="10" StageType="0" Pattern="sheol" />
-    <stage Name="Cathedral"        BGPrefix="resources/Backgrounds/10_cathedral"       BaseGamePath="15.cathedral"        Stage="10" StageType="1" Pattern="cathedral" />
+    <stage Name="Cathedral"        BGPrefix="resources/Backgrounds/10_cathedral"       BaseGamePath="15.cathedral"        Stage="10" StageType="1" Pattern="cathedral" HasBigBG="1" />
     <stage Name="Dark Room"        BGPrefix="resources/Backgrounds/12_darkroom"        BaseGamePath="16.dark room"        Stage="11" StageType="0" Pattern="dark room" />
     <stage Name="Chest"            BGPrefix="resources/Backgrounds/11_chest"           BaseGamePath="17.chest"            Stage="11" StageType="1" Pattern="chest" />
 

@@ -2,12 +2,12 @@
 Generates icons for BR from an anm2 file
 '''
 import os, platform, re
-import xml.etree.ElementTree as ET
-from pathlib import Path
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+import anm2
+
+from PyQt5.QtCore import QSettings, QFile, QDir, QCommandLineOption, QCommandLineParser, QApplication
+from PyQt5.QtGui import QFileDialog
+from PyQt5.QtWidgets import QMessageBox
 
 def findInstallPath():
     installPath = ''
@@ -145,134 +145,24 @@ def linuxPathSensitivityTraining(path):
 
     return os.path.normpath(path)
 
-def extractFrames(anim, frameNumber, spritesheets, layers, anm2Dir, resourcePath):
-    framelayers = anim.findall(".//LayerAnimation[Frame]")
+def createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, resources):
+    anim = anm2.Config(fileArg, resources)
 
-    imgs = []
-    ignoreCount = 0
-    for layer in framelayers:
-        if layer.get('Visible') == 'false':
-            ignoreCount += 1
-            continue
+    anim.setAnimation(animArg)
+    if frameArg:
+        anim.frame = frameArg
 
-        frames = layer.findall('Frame')
-        currFrame = 0
-        correctFrame = None
-        for frame in frames:
-            duration = int(frame.get('Delay'))
-            if currFrame + duration > frameNumber:
-                correctFrame = frame
-                break
-            currFrame += duration
+    if overlayArg:
+        anim.setOverlay(overlayArg)
+        if overlayFrameArg:
+            anim.overlayFrame = overlayFrameArg
 
-        if correctFrame is None:
-            correctFrame = frames[-1]
-
-        frame = correctFrame
-        if frame.get('Visible') == 'false':
-            ignoreCount += 1
-            continue
-
-        sheetPath = spritesheets[int(layers[int(layer.get("LayerId"))].get("SpritesheetId"))].get("Path")
-
-        image = os.path.abspath(os.path.join(anm2Dir, sheetPath))
-        imgPath = linuxPathSensitivityTraining(image)
-        if not (imgPath and os.path.isfile(imgPath)):
-            image = re.sub(r'.*resources', resourcePath, image)
-            imgPath = linuxPathSensitivityTraining(image)
-
-        if imgPath and os.path.isfile(imgPath):
-            # Here's the anm specs
-            xp = -int(frame.get("XPivot")) # applied before rotation
-            yp = -int(frame.get("YPivot"))
-            r = int(frame.get("Rotation"))
-            x = int(frame.get("XPosition")) # applied after rotation
-            y = int(frame.get("YPosition"))
-            xc = int(frame.get("XCrop"))
-            yc = int(frame.get("YCrop"))
-            xs = float(frame.get("XScale")) / 100
-            ys = float(frame.get("YScale")) / 100
-            w = int(frame.get("Width"))
-            h = int(frame.get("Height"))
-
-            imgs.append([imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
-
-    if not imgs:
-        print(f'Entity Icon could not be generated from animation due to {ignoreCount > 0 and "visibility" or "missing files"}')
-
-    return imgs
-
-
-def createIcon(anmPath, animName, frameNumber, overlayAnim, overlayFrame, resourcePath):
-    if not os.path.isfile(anmPath):
-        print('Skipping: Invalid anm2!')
-        return None
-
-    anm2Dir, anm2File = os.path.split(anmPath)
-
-    # Grab the first frame of the anm
-    anmTree = ET.parse(anmPath)
-    spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
-    layers = anmTree.findall(".Content/Layers/Layer")
-
-    default = anmTree.find("Animations").get("DefaultAnimation")
-
-    animName = animName or default
-    anim = anmTree.find(f"./Animations/Animation[@Name='{animName}']")
-    if anim is None:
-        print('Invalid animation name given')
-        anim = anmTree.find(f"./Animations/Animation[@Name='{default}']")
-
-    print('Reading main animation...')
-    imgs = extractFrames(anim, frameNumber, spritesheets, layers, anm2Dir, resourcePath)
-
-    if overlayAnim:
-        overlay = anmTree.find(f"./Animations/Animation[@Name='{overlayAnim}']")
-        if overlay is None:
-            print('Invalid overlay animation name given')
-        else:
-            print('Reading overlay animation...')
-            imgs += extractFrames(overlay, overlayFrame, spritesheets, layers, anm2Dir, resourcePath)
+    img = anim.render()
 
     filename = "resources/Entities/questionmark.png"
-    if imgs:
-
-        # Fetch each layer and establish the needed dimensions for the final image
-        finalRect = QRect()
-        for img in imgs:
-            imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
-            cropRect = QRect(xc, yc, w, h)
-
-            mat = QTransform()
-            mat.rotate(r)
-            mat.scale(xs, ys)
-            mat.translate(xp, yp)
-
-            # Load the Image
-            qimg = QImage(imgPath)
-            sourceImage = qimg.copy(cropRect).transformed(mat)
-            img.append(sourceImage)
-
-            cropRect.moveTopLeft(QPoint())
-            cropRect = mat.mapRect(cropRect)
-            cropRect.translate(QPoint(x, y))
-            finalRect = finalRect.united(cropRect)
-            img.append(cropRect)
-
-        # Create the destination
-        pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
-        pixmapImg.fill(0)
-
-        # Paint all the layers to it
-        renderPainter = QPainter(pixmapImg)
-        for imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
-            # Transfer the crop area to the pixmap
-            boundingRect.translate(-finalRect.topLeft())
-            renderPainter.drawImage(boundingRect, sourceImage)
-        renderPainter.end()
-
-        filename = f'{os.path.splitext(anm2File)[0]}.png'
-        pixmapImg.save(filename, "PNG")
+    if img:
+        filename = f'{anim.file}.png'
+    img.save(filename, "PNG")
 
 if __name__ == '__main__':
     import sys

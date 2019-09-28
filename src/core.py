@@ -206,6 +206,10 @@ class Room:
             return y * w + x
 
         @staticmethod
+        def coords(g, w):
+            return g % w, int(g / w)
+
+        @staticmethod
         def _axisBounds(a, c, w):
             wmin, wmax, wlvl, wdir = w
             return a < wmin or a > wmax or ((c > wlvl) - (c < wlvl)) == wdir

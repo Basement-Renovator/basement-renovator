@@ -42,6 +42,7 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
+import src.anm2 as anm2
 
 ########################
 #       XML Data       #
@@ -242,100 +243,18 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
                 print('Skipping: Invalid anm2!')
                 return None
 
-        anm2Dir, anm2File = os.path.split(anmPath)
-
-        # Grab the first frame of the anm
-        anmTree = ET.parse(anmPath)
-        spritesheets = anmTree.findall(".Content/Spritesheets/Spritesheet")
-        layers = anmTree.findall(".Content/Layers/Layer")
-        default = anmTree.find("Animations").get("DefaultAnimation")
-
-        anim = anmTree.find(f"./Animations/Animation[@Name='{default}']")
-        framelayers = anim.findall(".//LayerAnimation[Frame]")
-
-        imgs = []
-        ignoreCount = 0
-        for layer in framelayers:
-            if layer.get('Visible') == 'false':
-                ignoreCount += 1
-                continue
-
-            frame = layer.find('Frame')
-            if frame.get('Visible') == 'false':
-                ignoreCount += 1
-                continue
-
-            sheetPath = spritesheets[int(layers[int(layer.get("LayerId"))].get("SpritesheetId"))].get("Path")
-            image = os.path.abspath(os.path.join(anm2Dir, sheetPath))
-            imgPath = linuxPathSensitivityTraining(image)
-            if not (imgPath and os.path.isfile(imgPath)):
-                image = re.sub(r'.*resources', resourcePath, image)
-                imgPath = linuxPathSensitivityTraining(image)
-
-            if imgPath and os.path.isfile(imgPath):
-                # Here's the anm specs
-                xp = -int(frame.get("XPivot")) # applied before rotation
-                yp = -int(frame.get("YPivot"))
-                r = int(frame.get("Rotation"))
-                x = int(frame.get("XPosition")) # applied after rotation
-                y = int(frame.get("YPosition"))
-                xc = int(frame.get("XCrop"))
-                yc = int(frame.get("YCrop"))
-                #xs = float(frame.get("XScale")) / 100
-                #ys = float(frame.get("YScale")) / 100
-                xs, ys = 1, 1 # this ended up being a bad idea since it's usually used for squash and stretch
-                w = int(frame.get("Width"))
-                h = int(frame.get("Height"))
-
-                imgs.append([imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
+        anim = anm2.Config(anmPath, resourcePath)
+        anim.setAnimation()
+        anim.frame = anim.animLen - 1
+        img = anim.render()
 
         filename = "resources/Entities/questionmark.png"
-        if len(imgs) == 0:
-            print(f'Entity Icon could not be generated due to {ignoreCount > 0 and "visibility" or "missing files"}')
-        else:
-
-            # Fetch each layer and establish the needed dimensions for the final image
-            finalRect = QRect()
-            for img in imgs:
-                imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
-                cropRect = QRect(xc, yc, w, h)
-
-                mat = QTransform()
-                mat.rotate(r)
-                mat.scale(xs, ys)
-                mat.translate(xp, yp)
-
-                # Load the Image
-                qimg = QImage(imgPath)
-                sourceImage = qimg.copy(cropRect).transformed(mat)
-                img.append(sourceImage)
-
-                if fixIconFormat:
-                    qimg.save(imgPath)
-
-                cropRect.moveTopLeft(QPoint())
-                cropRect = mat.mapRect(cropRect)
-                cropRect.translate(QPoint(x, y))
-                finalRect = finalRect.united(cropRect)
-                img.append(cropRect)
-
-            # Create the destination
-            pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
-            pixmapImg.fill(0)
-
-            # Paint all the layers to it
-            RenderPainter = QPainter(pixmapImg)
-            for imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
-                # Transfer the crop area to the pixmap
-                boundingRect.translate(-finalRect.topLeft())
-                RenderPainter.drawImage(boundingRect, sourceImage)
-            RenderPainter.end()
-
+        if img:
             # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
             resDir = os.path.join(outputDir, 'icons')
             if not os.path.isdir(resDir): os.mkdir(resDir)
             filename = os.path.join(resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png')
-            pixmapImg.save(filename, "PNG")
+            img.save(filename, "PNG")
 
         # Write the modded entity to the entityXML temporarily for runtime
         etmp = ET.Element("entity")
@@ -571,7 +490,7 @@ def loadMods(autogenerate, installPath, resourcePath):
 
 class RoomScene(QGraphicsScene):
 
-    def __init__(self):
+    def __init__(self, parent):
         QGraphicsScene.__init__(self, 0, 0, 0, 0)
         self.newRoomSize(1)
 
@@ -582,7 +501,10 @@ class RoomScene(QGraphicsScene):
         self.bitfont = [ QPixmap.fromImage(q.copy(i * 12, j * 12, 12, 12)) for j in range(int(q.height() / 12)) for i in range(int(q.width() / 12)) ]
         self.bitText = True
 
-        self.tile = None
+        self.floorAnim = anm2.Config('resources/Backgrounds/FloorBackdrop.anm2', 'resources')
+        self.floorImg = None
+        self.wallAnim = anm2.Config('resources/Backgrounds/WallBackdrop.anm2', 'resources')
+        self.wallImg = None
 
     def newRoomSize(self, shape):
         self.roomInfo = Room.Info(shape=shape)
@@ -652,329 +574,53 @@ class RoomScene(QGraphicsScene):
 
 
     def loadBackground(self):
-        gs = 26
-
         roomBG = None
-        if mainWindow.roomList.selectedRoom():
-            roomBG = mainWindow.roomList.selectedRoom().roomBG
+        currRoom = mainWindow.roomList.selectedRoom()
+        if currRoom:
+            roomBG = currRoom.roomBG
+            roomShape = currRoom.info.shape
         else:
             roomBG = stageXML.find('stage[@Name="Basement"]')
+            roomShape = 1
 
-        self.tile = QImage()
-        self.tile.load(roomBG.get('OuterBG'))
+        mainBG = roomBG.get('OuterBG')
+        overrideBG = roomBG.get('BigOuterBG')
 
-        # grab the images from the appropriate parts of the spritesheet
-        self.corner = self.tile.copy(QRect(0,      0,      gs * 7, gs * 4))
-        self.vert   = self.tile.copy(QRect(gs * 7, 0,      gs * 2, gs * 6))
-        self.horiz  = self.tile.copy(QRect(0,      gs * 4, gs * 9, gs * 2))
+        if roomShape != 1 and overrideBG:
+            self.floorAnim.spritesheets[0] = overrideBG
+        else:
+            self.floorAnim.spritesheets[0] = mainBG
 
-        self.innerCorner = QImage()
-        self.innerCorner.load(roomBG.get('InnerBG'))
+        self.floorAnim.spritesheets[1] = roomBG.get('LFloor') or 'resources/none.png'
+        self.floorAnim.spritesheets[2] = roomBG.get('NFloor') or 'resources/none.png'
+
+        self.wallAnim.spritesheets[0] = mainBG
+        self.wallAnim.spritesheets[1] = roomBG.get('InnerBG')
+
+        self.floorAnim.setAnimation(str(roomShape))
+
+        self.wallAnim.setAnimation(str(roomShape))
+
+        try: self.wallAnim.setOverlay(f'{roomShape}X')
+        except ValueError: pass
+
+        self.floorImg = self.floorAnim.render()
+        self.wallImg = self.wallAnim.render()
+
+        self.roomShape = roomShape
 
     def drawBackground(self, painter, rect):
 
         self.loadBackground()
 
-        if not self.roomInfo.shapeData:
-            print (f"This room has an unknown shape: {self.roomInfo.shape}")
-            self.drawBGRegularRooms(painter, rect)
+        xOff, yOff = 0, 0
+        shapeData = RoomData.Shapes[self.roomShape]
+        if shapeData.get('TopLeft'):
+            xOff, yOff = RoomData.Info.coords(shapeData['TopLeft'], shapeData['Dims'][0])
 
-        ########## SHAPE DEFINITIONS
-        # w x h
-        # 1 = 1x1, 2 = 1x0.5, 3 = 0.5x1, 4 = 2x1, 5 = 2x0.5, 6 = 1x2, 7 = 0.5x2, 8 = 2x2
-        # 9 = DR corner, 10 = DL corner, 11 = UR corner, 12 = UL corner
-
-        # Regular Rooms
-        if self.roomInfo.shape in [1, 4, 6, 8]:
-            self.drawBGRegularRooms(painter, rect)
-
-        # Slim Rooms
-        elif self.roomInfo.shape in [2, 3, 5, 7]:
-            self.drawBGSlimRooms(painter, rect)
-
-        # L Rooms
-        elif self.roomInfo.shape in [9, 10, 11, 12]:
-            self.drawBGCornerRooms(painter, rect)
-
-    def drawBGRegularRooms(self, painter, rect):
         gs = 26
-
-        width = self.roomWidth - 2
-        height = self.roomHeight - 2
-
-        t = -1 * gs
-        xm = gs * (width - 4)
-        ym = gs * (height - 1)
-
-        # Corner Painting
-        painter.drawPixmap(t,  t,  QPixmap().fromImage(self.corner.mirrored(False, False)))
-        painter.drawPixmap(xm, t,  QPixmap().fromImage(self.corner.mirrored(True, False)))
-        painter.drawPixmap(t,  ym, QPixmap().fromImage(self.corner.mirrored(False, True)))
-        painter.drawPixmap(xm, ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
-
-        # Mirrored Textures
-        uRect = QImage(gs * 4, gs * 6, QImage.Format_RGB32)
-        lRect = QImage(gs * 9, gs * 4, QImage.Format_RGB32)
-
-        uRect.fill(1)
-        lRect.fill(1)
-
-        # setup the image tiles
-        vp = QPainter()
-        vp.begin(uRect)
-        vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
-        vp.end()
-
-        vh = QPainter()
-        vh.begin(lRect)
-        vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
-        vh.end()
-
-        # paint the tiles onto the scene
-        painter.drawTiledPixmap(
-            gs * 5,
-            -1 * gs,
-            gs * (width - 9),
-            gs * 6,
-            QPixmap().fromImage(uRect)
-        )
-        painter.drawTiledPixmap(
-            -1 * gs,
-            gs * 2,
-            gs * 9,
-            gs * (height - 3),
-            QPixmap().fromImage(lRect)
-        )
-        painter.drawTiledPixmap(
-            gs * 5,
-            gs * (height - 3),
-            26 * (width - 9),
-            26 * 6,
-            QPixmap().fromImage(uRect.mirrored(False, True))
-        )
-        painter.drawTiledPixmap(
-            gs * (width - 6),
-            gs * 2,
-            gs * 9,
-            gs * (height - 3),
-            QPixmap().fromImage(lRect.mirrored(True, False))
-        )
-
-        if height == 14 and width == 26:
-
-            self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
-
-            painter.drawPixmap	(gs * 8,  gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
-            painter.drawPixmap	(gs * 14, gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
-            painter.drawPixmap	(gs * 8,  gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
-            painter.drawPixmap	(gs * 14, gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
-
-    def drawBGSlimRooms(self, painter, rect):
-        gs = 26
-
-        width = self.roomWidth - 2
-        height = self.roomHeight - 2
-
-        t = -1 * gs
-        yo = 0
-        xo = 0
-
-        # Thin in Height
-        if self.roomInfo.shape in [2, 7]:
-            height = 3
-            yo = (2 * gs)
-
-        # Thin in Width
-        if self.roomInfo.shape in [3, 5]:
-            width = 5
-            xo = (4 * gs)
-
-        xm = gs * (width - 4)
-        ym = gs * (height - 1)
-
-        # Corner Painting
-        painter.drawPixmap(t + xo,  t + yo,  QPixmap().fromImage(self.corner.mirrored(False, False)))
-        painter.drawPixmap(xm + xo, t + yo,  QPixmap().fromImage(self.corner.mirrored(True, False)))
-        painter.drawPixmap(t + xo,  ym + yo, QPixmap().fromImage(self.corner.mirrored(False, True)))
-        painter.drawPixmap(xm + xo, ym + yo, QPixmap().fromImage(self.corner.mirrored(True, True)))
-
-        # Mirrored Textures
-        uRect = QImage(gs * 4, gs * 4, QImage.Format_RGB32)
-        lRect = QImage(gs * 7, gs * 4, QImage.Format_RGB32)
-
-        uRect.fill(1)
-        lRect.fill(1)
-
-        vp = QPainter()
-        vp.begin(uRect)
-        vp.drawPixmap(0,  0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
-        vp.end()
-
-        vh = QPainter()
-        vh.begin(lRect)
-        vh.drawPixmap(0, 0,  QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
-        vh.end()
-
-        painter.drawTiledPixmap(
-            xo + gs * 5,
-            yo - 1 * gs,
-            gs * (width - 9),
-            gs * 4,
-            QPixmap().fromImage(uRect)
-        )
-        painter.drawTiledPixmap(
-            xo - 1 * gs,
-            yo + gs * 2,
-            gs * 7,
-            gs * (height - 3),
-            QPixmap().fromImage(lRect)
-        )
-        painter.drawTiledPixmap(
-            xo + gs * 5,
-            yo + gs * (height - 1),
-            gs * (width - 9),
-            gs * 4,
-            QPixmap().fromImage(uRect.mirrored(False, True))
-        )
-        painter.drawTiledPixmap(
-            xo + gs * (width - 4),
-            yo + gs * 3,
-            gs * 7,
-            gs * (height - 3),
-            QPixmap().fromImage(lRect.mirrored(True, False))
-        )
-
-        if height == 14 and width == 26:
-
-            self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
-
-            painter.drawPixmap(xo + gs * 8,  yo + gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
-            painter.drawPixmap(xo + gs * 14, yo + gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
-            painter.drawPixmap(xo + gs * 8,  yo + gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
-            painter.drawPixmap(xo + gs * 14, yo + gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
-
-    def drawBGCornerRooms(self, painter, rect):
-        gs = 26
-
-        width = self.roomWidth - 2
-        height = self.roomHeight - 2
-
-        t = -1 * gs
-        xm = gs * (width - 4)
-        ym = gs * (height - 1)
-
-        # Mirrored Textures
-        uRect = QImage(gs * 4, gs * 6, QImage.Format_RGB32)
-        lRect = QImage(gs * 9, gs * 4, QImage.Format_RGB32)
-
-        uRect.fill(1)
-        lRect.fill(1)
-
-        vp = QPainter()
-        vp.begin(uRect)
-        vp.drawPixmap(0,      0, QPixmap().fromImage(self.vert))
-        vp.drawPixmap(gs * 2, 0, QPixmap().fromImage(self.vert.mirrored(True, False)))
-        vp.end()
-
-        vh = QPainter()
-        vh.begin(lRect)
-        vh.drawPixmap(0, 0,      QPixmap().fromImage(self.horiz))
-        vh.drawPixmap(0, gs * 2, QPixmap().fromImage(self.horiz.mirrored(False, True)))
-        vh.end()
-
-        # Exterior Corner Painting
-        painter.drawPixmap(t,  t,  QPixmap().fromImage(self.corner.mirrored(False, False)))
-        painter.drawPixmap(xm, t,  QPixmap().fromImage(self.corner.mirrored(True, False)))
-        painter.drawPixmap(t,  ym, QPixmap().fromImage(self.corner.mirrored(False, True)))
-        painter.drawPixmap(xm, ym, QPixmap().fromImage(self.corner.mirrored(True, True)))
-
-        # Exterior Wall Painting
-        painter.drawTiledPixmap(gs * 5, gs * -1, gs * (width - 9), gs * 6, QPixmap().fromImage(uRect))
-        painter.drawTiledPixmap(-gs * 1, gs * 2, gs * 9, gs * (height - 3), QPixmap().fromImage(lRect))
-        painter.drawTiledPixmap(gs * 5, gs * (height - 3), gs * (width - 9), gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
-        painter.drawTiledPixmap(gs * (width - 6), gs * 2, gs * 9, gs * (height - 3), QPixmap().fromImage(lRect.mirrored(True, False)))
-
-        # Center Floor Painting
-        self.center = self.tile.copy(QRect(gs * 3, gs * 3, gs * 6, gs * 3))
-
-        painter.drawPixmap(gs * 8,  gs * 5, QPixmap().fromImage(self.center.mirrored(False, False)))
-        painter.drawPixmap(gs * 14, gs * 5, QPixmap().fromImage(self.center.mirrored(True, False)))
-        painter.drawPixmap(gs * 8,  gs * 8, QPixmap().fromImage(self.center.mirrored(False, True)))
-        painter.drawPixmap(gs * 14, gs * 8, QPixmap().fromImage(self.center.mirrored(True, True)))
-
-        # Interior Corner Painting (This is the annoying bit)
-        # New midpoints
-        xm = gs * (width / 2)
-        ym = gs * (height / 2)
-
-        # New half-lengths/heights
-        xl = xm + gs * 2
-        yl = ym + gs * 2
-
-
-        if self.roomInfo.shape == 9:
-            # Clear the dead area
-            painter.fillRect(t, t, xl, yl, QColor(0, 0, 0, 255))
-
-            # Draw the horizontal wall
-            painter.drawTiledPixmap(xm - gs * 7, ym + t, gs * 6, gs * 6, QPixmap().fromImage(uRect))
-
-            # Draw the vertical wall
-            painter.drawTiledPixmap(xm + t, ym - gs * 4, gs * 9, gs * 3, QPixmap().fromImage(lRect))
-
-            # Draw the three remaining corners
-            painter.drawPixmap(t,      ym + t, QPixmap().fromImage(self.corner.mirrored(False, False)))
-            painter.drawPixmap(xm + t, t,      QPixmap().fromImage(self.corner.mirrored(False, False)))
-            painter.drawPixmap(xm + t, ym + t, QPixmap().fromImage(self.innerCorner.mirrored(False, False)))
-
-        elif self.roomInfo.shape == 10:
-            # Clear the dead area
-            painter.fillRect(xm - t, t, xl, yl, QColor(0, 0, 0, 255))
-
-            # Draw the horizontal wall
-            painter.drawTiledPixmap(xm + gs * 3, ym + t, gs * 6, gs * 6, QPixmap().fromImage(uRect))
-
-            # Draw the vertical wall
-            painter.drawTiledPixmap(xm - gs * 6, ym - gs * 4, gs * 9, gs * 3, QPixmap().fromImage(lRect.mirrored(True, False)))
-
-            # Draw the three remaining corners
-            painter.drawPixmap(gs * (width - 4), ym + t, QPixmap().fromImage(self.corner.mirrored(True, False)))
-            painter.drawPixmap(xm - gs * 4, t, QPixmap().fromImage(self.corner.mirrored(True, False)))
-            painter.drawPixmap(xm + gs, ym + t, QPixmap().fromImage(self.innerCorner.mirrored(True, False)))
-
-        elif self.roomInfo.shape == 11:
-            # Clear the dead area
-            painter.fillRect(t, ym - t, xl, yl, QColor(0, 0, 0, 255))
-
-            # Draw the horizontal wall
-            painter.drawTiledPixmap(xm - gs * 7, ym + t * 3, gs * 6, gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
-
-            # Draw the vertical wall
-            painter.drawTiledPixmap(xm + t, ym - t * 2, gs * 9, gs * 4, QPixmap().fromImage(lRect))
-
-            # Draw the three remaining corners
-            painter.drawPixmap(t,      ym + t,     QPixmap().fromImage(self.corner.mirrored(False, True)))
-            painter.drawPixmap(xm + t, ym * 2 + t, QPixmap().fromImage(self.corner.mirrored(False, True)))
-            painter.drawPixmap(xm + t, ym - t,     QPixmap().fromImage(self.innerCorner.mirrored(False, True)))
-
-        elif self.roomInfo.shape == 12:
-            # Clear the dead area
-            painter.fillRect(xm - t, ym - t, xl, yl, QColor(0, 0, 0, 255))
-
-            # Draw the horizontal wall
-            painter.drawTiledPixmap(xm + gs * 3, ym + t * 3, gs * 6, gs * 6, QPixmap().fromImage(uRect.mirrored(False, True)))
-
-            # Draw the vertical wall
-            painter.drawTiledPixmap(xm - gs * 6, ym - t * 2, gs * 9, gs * 4, QPixmap().fromImage(lRect.mirrored(True, False)))
-
-            # Draw the three remaining corners
-            painter.drawPixmap(xm + gs * 9, ym + t,      QPixmap().fromImage(self.corner.mirrored(True, True)))
-            painter.drawPixmap(xm - gs * 4, ym + gs * 6, QPixmap().fromImage(self.corner.mirrored(True, True)))
-            painter.drawPixmap(xm + gs,     ym - t,      QPixmap().fromImage(self.innerCorner.mirrored(True, True)))
+        painter.drawPixmap( (1 + xOff) * gs, ( 1 + yOff) * gs, QPixmap().fromImage(self.floorImg))
+        painter.drawPixmap((-1 + xOff) * gs, (-1 + yOff) * gs, QPixmap().fromImage(self.wallImg))
 
 class RoomEditorWidget(QGraphicsView):
 
@@ -2130,6 +1776,8 @@ class Room(QListWidgetItem):
         prefix = SpecialBG[i]
         SpecialBG[i] = ET.Element('room', {
             "OuterBG": os.path.join("resources/Backgrounds", prefix + ".png"),
+            "NFloor": os.path.join("resources/Backgrounds", prefix + "_nfloor.png"),
+            "LFloor": os.path.join("resources/Backgrounds", prefix + "_lfloor.png"),
             "InnerBG": os.path.join("resources/Backgrounds", prefix + "Inner.png")
         })
 
@@ -3704,7 +3352,7 @@ class MainWindow(QMainWindow):
         self.wroteModFolder = False
         self.disableTestModTimer = None
 
-        self.scene = RoomScene()
+        self.scene = RoomScene(self)
 
         self.clipboard = None
         self.setAcceptDrops(True)
@@ -3760,6 +3408,10 @@ class MainWindow(QMainWindow):
                 baseStage = stageXML.find(f"stage[@Stage='{stage.get('Stage')}'][@StageType='{stage.get('StageType')}'][@BGPrefix]")
                 prefix = baseStage.get('BGPrefix')
             stage.set('OuterBG', prefix + '.png')
+            if stage.get('HasBigBG') == '1':
+                stage.set('BigOuterBG', prefix + '_big.png')
+            stage.set('NFloor', prefix + '_nfloor.png')
+            stage.set('LFloor', prefix + '_lfloor.png')
             stage.set('InnerBG', prefix + 'Inner.png')
 
             if fixIconFormat:
