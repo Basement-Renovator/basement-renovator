@@ -150,6 +150,7 @@ class Config:
 
             # Load the Image
             qimg = QImage(imgPath)
+            #qimg.save(imgPath)
             sourceImage = qimg.copy(cropRect).transformed(mat)
             img.append(sourceImage)
 

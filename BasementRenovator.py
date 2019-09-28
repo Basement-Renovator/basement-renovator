@@ -572,6 +572,7 @@ class RoomScene(QGraphicsScene):
         # for wmin, wmax, wlvl, wdir in walls['Y']:
         #     painter.drawLine(wlvl * gs + h, wmin * gs + h, wlvl * gs + h, wmax * gs + h)
 
+        QGraphicsScene.drawForeground(self, painter, rect)
 
     def loadBackground(self):
         roomBG = None
@@ -619,8 +620,10 @@ class RoomScene(QGraphicsScene):
             xOff, yOff = RoomData.Info.coords(shapeData['TopLeft'], shapeData['Dims'][0])
 
         gs = 26
-        painter.drawPixmap( (1 + xOff) * gs, ( 1 + yOff) * gs, QPixmap().fromImage(self.floorImg))
-        painter.drawPixmap((-1 + xOff) * gs, (-1 + yOff) * gs, QPixmap().fromImage(self.wallImg))
+        painter.drawImage( (1 + xOff) * gs, ( 1 + yOff) * gs, self.floorImg)
+        painter.drawImage((-1 + xOff) * gs, (-1 + yOff) * gs, self.wallImg)
+
+        QGraphicsScene.drawBackground(self, painter, rect)
 
 class RoomEditorWidget(QGraphicsView):
 
@@ -751,8 +754,8 @@ class RoomEditorWidget(QGraphicsView):
         w = self.scene().roomWidth
         h = self.scene().roomHeight
 
-        xScale = event.size().width()  / (26 * (w + 2))
-        yScale = event.size().height() / (26 * (h + 2))
+        xScale = (event.size().width()  - 2) / (26 * (w + 2))
+        yScale = (event.size().height() - 2) / (26 * (h + 2))
         newScale = min([xScale, yScale])
 
         tr = QTransform()
@@ -1774,12 +1777,20 @@ class Room(QListWidgetItem):
 
     for i in range(len(SpecialBG)):
         prefix = SpecialBG[i]
-        SpecialBG[i] = ET.Element('room', {
+        elem = ET.Element('room', {
             "OuterBG": os.path.join("resources/Backgrounds", prefix + ".png"),
-            "NFloor": os.path.join("resources/Backgrounds", prefix + "_nfloor.png"),
-            "LFloor": os.path.join("resources/Backgrounds", prefix + "_lfloor.png"),
             "InnerBG": os.path.join("resources/Backgrounds", prefix + "Inner.png")
         })
+
+        nfloor = os.path.join("resources/Backgrounds", prefix + "_nfloor.png")
+        if os.path.isfile(nfloor):
+            elem.set("NFloor", nfloor)
+
+        lfloor = os.path.join("resources/Backgrounds", prefix + "_lfloor.png")
+        if os.path.isfile(lfloor):
+            elem.set("LFloor", lfloor)
+
+        SpecialBG[i] = elem
 
     def setRoomBG(self):
         global stageXML
