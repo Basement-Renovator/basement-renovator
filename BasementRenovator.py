@@ -501,6 +501,8 @@ class RoomScene(QGraphicsScene):
         self.bitfont = [ QPixmap.fromImage(q.copy(i * 12, j * 12, 12, 12)) for j in range(int(q.height() / 12)) for i in range(int(q.width() / 12)) ]
         self.bitText = True
 
+        self.bgState = []
+
         self.floorAnim = anm2.Config('resources/Backgrounds/FloorBackdrop.anm2', 'resources')
         self.floorImg = None
         self.wallAnim = anm2.Config('resources/Backgrounds/WallBackdrop.anm2', 'resources')
@@ -583,6 +585,11 @@ class RoomScene(QGraphicsScene):
         else:
             roomBG = stageXML.find('stage[@Name="Basement"]')
             roomShape = 1
+
+        bgState = [ roomBG, roomShape ]
+        if bgState == self.bgState: return
+
+        self.bgState = bgState
 
         mainBG = roomBG.get('OuterBG')
         overrideBG = roomBG.get('BigOuterBG')
