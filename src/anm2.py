@@ -1,25 +1,9 @@
 import os, re
 import xml.etree.cElementTree as ET
+from pathlib import Path
 
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtGui import QTransform, QImage, QPainter
-
-def linuxPathSensitivityTraining(path):
-
-    path = path.replace("\\", "/")
-
-    directory, file = os.path.split(os.path.normpath(path))
-
-    if not os.path.isdir(directory):
-        return None
-
-    contents = os.listdir(directory)
-
-    for item in contents:
-        if item.lower() == file.lower():
-            return os.path.normpath(os.path.join(directory, item))
-
-    return os.path.normpath(path)
 
 class Config:
     def __init__(self, anmPath, resourcePath):
@@ -71,6 +55,18 @@ class Config:
         self.overlayLen = int(self.overlayAnim.get('FrameNum'))
         self.overlayFrame = 0
 
+    @staticmethod
+    def getFrameNode(frames, frameNumber):
+        currFrame = 0
+        for frame in frames:
+            duration = int(frame.get('Delay'))
+            if currFrame + duration > frameNumber:
+                return frame
+
+            currFrame += duration
+
+        return frames[-1]
+
     def extractFrame(self, frameLayers, frameNumber):
         imgs = []
         ignoreCount = 0
@@ -79,20 +75,7 @@ class Config:
                 ignoreCount += 1
                 continue
 
-            frames = layer.findall('Frame')
-            currFrame = 0
-            correctFrame = None
-            for frame in frames:
-                duration = int(frame.get('Delay'))
-                if currFrame + duration > frameNumber:
-                    correctFrame = frame
-                    break
-                currFrame += duration
-
-            if correctFrame is None:
-                correctFrame = frames[-1]
-
-            frame = correctFrame
+            frame = Config.getFrameNode(layer.findall('Frame'), frameNumber)
             if frame.get('Visible') == 'false':
                 ignoreCount += 1
                 continue
@@ -100,12 +83,12 @@ class Config:
             sheetPath = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ''
 
             image = os.path.abspath(os.path.join(self.dir, sheetPath))
-            imgPath = linuxPathSensitivityTraining(image)
-            if not (imgPath and os.path.isfile(imgPath)):
+            imgPath = Path(image)
+            if not (imgPath and imgPath.exists()):
                 image = re.sub(r'.*resources', self.resourcePath, image)
-                imgPath = linuxPathSensitivityTraining(image)
+                imgPath = Path(image)
 
-            if imgPath and os.path.isfile(imgPath):
+            if imgPath and imgPath.exists():
                 # Here's the anm specs
                 xp = -int(frame.get("XPivot")) # applied before rotation
                 yp = -int(frame.get("YPivot"))
@@ -119,7 +102,7 @@ class Config:
                 w = int(frame.get("Width"))
                 h = int(frame.get("Height"))
 
-                imgs.append([imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
+                imgs.append([str(imgPath), x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
                 print("Bad image! ", sheetPath, image)
 
@@ -137,6 +120,8 @@ class Config:
 
         if not imgs: return None
 
+        imgCache = {}
+
         # Fetch each layer and establish the needed dimensions for the final image
         finalRect = QRect()
         for img in imgs:
@@ -149,8 +134,12 @@ class Config:
             mat.translate(xp, yp)
 
             # Load the Image
-            qimg = QImage(imgPath)
-            #qimg.save(imgPath)
+            qimg = imgCache.get(imgPath)
+            if not qimg:
+                qimg = QImage(imgPath)
+                imgCache[imgPath] = qimg
+                #qimg.save(imgPath)
+
             sourceImage = qimg.copy(cropRect).transformed(mat)
             img.append(sourceImage)
 
