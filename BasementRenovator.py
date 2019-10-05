@@ -68,6 +68,9 @@ def getSteamPath():
     return STEAM_PATH
 
 def findInstallPath():
+    if settings.value('CompatibilityMode') == 'Antibirth':
+        return settings.value('AntibirthPath')
+
     installPath = ''
     cantFindPath = False
 
@@ -4186,7 +4189,11 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, room):
+        def setup(modPath, roomsPath, floorInfo, room, compatMode):
+            if compatMode not in [ 'Afterbirth+' ]:
+                QMessageBox.warning(self, "Error", "Stage Replacement disabled if not playing with AB+!")
+                raise
+
             basePath = floorInfo.get('BaseGamePath')
             if basePath is None:
                 QMessageBox.warning(self, "Error", "Custom stages cannot be tested with Stage Replacement, since they don't have a room file to replace.")
@@ -4222,7 +4229,11 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the starting room
     def testStartMap(self):
-        def setup(modPath, roomsPath, floorInfo, testRoom):
+        def setup(modPath, roomsPath, floorInfo, testRoom, compatMode):
+            if compatMode not in [ 'Afterbirth+' ]:
+                QMessageBox.warning(self, "Error", "Starting Room Replacement disabled if not playing with AB+!")
+                raise
+
             # Sanity check for 1x1 room
             if testRoom.info.shape in [2, 7, 9] :
                 QMessageBox.warning(self, "Error", "Room shapes 2 and 7 (Long and narrow) and 9 (L shaped with upper right corner missing) can't be tested as the Start Room.")
@@ -4264,12 +4275,19 @@ class MainWindow(QMainWindow):
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomPath, floorInfo, room):
+        def setup(modPath, roomPath, floorInfo, room, compatMode):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
 
+            # Because instapreview is xml, no special allowances have to be made for rebirth
             self.save([ room ], path, updateRecent=False, isPreview=True)
+
+            if compatMode in [ 'Rebirth', 'Antibirth' ]:
+                return [ "-room", str(path),
+                         "-floorType", floorInfo.get('Stage'),
+                         "-floorAlt", floorInfo.get('StageType'),
+                         "-console" ], None, ""
 
             return [ f"--load-room={path}",
                      f"--set-stage={floorInfo.get('Stage')}",
@@ -4346,6 +4364,9 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Error", "No room was selected to test.")
             return
 
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        compatMode = settings.value('CompatibilityMode') or 'Afterbirth+'
+
         # Floor type
         # TODO cache this when loading a file
         global stageXML
@@ -4366,7 +4387,7 @@ class MainWindow(QMainWindow):
         launchArgs, extraMessage = None, None
         try:
             # setup raises an exception if it can't continue
-            launchArgs, roomOverride, extraMessage = setupFunc(modPath, roomPath, floorInfo, room) or ([], None, '')
+            launchArgs, roomOverride, extraMessage = setupFunc(modPath, roomPath, floorInfo, room, compatMode) or ([], None, '')
         except Exception as e:
             print('Problem setting up test:', e)
             return
@@ -4380,7 +4401,6 @@ class MainWindow(QMainWindow):
         self.save([ room ], testPath, updateRecent=False)
 
          # Trigger test hooks
-        settings = QSettings('settings.ini', QSettings.IniFormat)
         testHooks = settings.value('HooksTest')
         if testHooks:
             tp = str(testPath)
@@ -4401,7 +4421,7 @@ class MainWindow(QMainWindow):
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
             # if there exists drm free copies, allow the direct exe launch method
             steamPath = None
-            if settings.value('ForceExeLaunch') != '1':
+            if compatMode != 'Antibirth' and settings.value('ForceExeLaunch') != '1':
                 steamPath = getSteamPath() or ''
 
             if steamPath:
