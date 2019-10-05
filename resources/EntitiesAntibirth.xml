@@ -132,26 +132,26 @@
     <entity BaseHP="25" Boss="0" Champion="1" Group="Mausoleum" ID="839" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Strifer" Subtype="0" Variant="0"/>
     <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="840" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Pon" Subtype="0" Variant="0"/>
     <entity BaseHP="20" Boss="0" Champion="1" Group="Mausoleum" ID="841" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Revenant" Subtype="0" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch" Subtype="0" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh" Subtype="1" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhh" Subtype="2" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhhh" Subtype="3" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch?" Subtype="10" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh?" Subtype="11" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch??" Subtype="12" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh??" Subtype="13" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch???" Subtype="20" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchhh????" Subtype="21" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch????" Subtype="22" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh????" Subtype="23" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch?????" Subtype="30" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatchh?????" Subtype="31" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch???????" Subtype="32" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatcch???????" Subtype="33" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttch?????" Subtype="40" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttchh?????" Subtype="41" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttch???????" Subtype="42" Variant="0"/>
-    <entity BaseHP="25" Boss="0" Champion="0" Group="Mausoleum" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatttcch???????" Subtype="43" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Bounce Left)"  Subtype="0" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Bounce Up)"    Subtype="1" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Bounce Right)" Subtype="2" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Bounce Down)"  Subtype="3" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleDown Left)"  Subtype="10" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleDown Up)"    Subtype="11" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleDown Right)" Subtype="12" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleDown Down)"  Subtype="13" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleUp Left)"  Subtype="20" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleUp Up)"    Subtype="21" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleUp Right)" Subtype="22" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (CircleUp Down)"  Subtype="23" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate Clockwise Left)"  Subtype="30" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate Clockwise Up)"    Subtype="31" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate Clockwise Right)" Subtype="32" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate Clockwise Down)"  Subtype="33" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate CounterClockwise Left)"  Subtype="40" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate CounterClockwise Up)"    Subtype="41" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate CounterClockwise Right)" Subtype="42" Variant="0"/>
+    <entity BaseHP="25" Boss="0" Champion="0" Group="Nightwatch" ID="842" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Nightwatch (Rotate CounterClockwise Down)"  Subtype="43" Variant="0"/>
     <entity BaseHP="70" Boss="0" Champion="1" Group="Corpse" ID="850" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Barfy" Subtype="0" Variant="0"/>
     <entity BaseHP="40" Boss="0" Champion="1" Group="Corpse" ID="851" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Twitchy" Subtype="0" Variant="0"/>
     <entity BaseHP="100" Boss="0" Champion="0" Group="Corpse" ID="852" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Spikeball" Subtype="0" Variant="0"/>

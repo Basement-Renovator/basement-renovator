@@ -52,6 +52,10 @@ def getEntityXML():
     tree = ET.parse('resources/EntitiesAfterbirthPlus.xml')
     root = tree.getroot()
 
+    if settings.value('CompatibilityMode') == 'Antibirth':
+        antiTree = ET.parse('resources/EntitiesAntibirth.xml')
+        root.extend([ child for child in antiTree.getroot() ])
+
     return root
 
 def getStageXML():
@@ -4432,7 +4436,7 @@ class MainWindow(QMainWindow):
             if exePath and QFile.exists(exePath):
                 if steamPath:
                     launchArgs = [ "-applaunch", "250900" ] + launchArgs
-                subprocess.run([exePath] + launchArgs, cwd = installPath)
+                subprocess.Popen([exePath] + launchArgs, cwd = installPath)
             else:
                 args = ' '.join(map(lambda x: ' ' in x and f'"{x}"' or x, launchArgs))
                 urlArgs = urllib.parse.quote(args)
