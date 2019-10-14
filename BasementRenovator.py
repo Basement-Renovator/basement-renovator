@@ -4579,13 +4579,21 @@ class MainWindow(QMainWindow):
     def aboutDialog(self):
         caption = "About the Basement Renovator"
 
-        text = "<big><b>Basement Renovator</b></big><br><br>    The Basement Renovator Editor is an editor for custom rooms, for use with the Binding of Isaac Afterbirth. In order to use it, you must have unpacked the .stb files from Binding of Isaac Afterbirth.<br><br>    The Basement Renovator was programmed by Tempus (u/Chronometrics).<br><br>    Find the source on <a href='https://github.com/Tempus/Basement-Renovator'>github</a>."
+        text = '''
+            <big><b>Basement Renovator</b></big><br />
+            <br />
+            Basement Renovator is a room editor for the Binding of Isaac Afterbirth+. You can use it to either edit existing rooms or create new ones.<br />
+            <br />
+            To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extracter. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br />
+            <br />
+            Basement Renovator was originally programmed by Tempus (u/Chronometrics). It is open source and hosted on <a href='https://github.com/Tempus/Basement-Renovator'>GitHub</a>.
+        '''
 
         msg = QMessageBox.about(mainWindow, caption, text)
 
     #@pyqtSlot(bool)
     def goToHelp(self):
-        QDesktopServices().openUrl(QUrl('http://www.reddit.com/r/themoddingofisaac'))
+        QDesktopServices().openUrl(QUrl('https://github.com/Tempus/Basement-Renovator/'))
 
 
 if __name__ == '__main__':
