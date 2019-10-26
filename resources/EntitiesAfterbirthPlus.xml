@@ -199,8 +199,8 @@
 	<entity BaseHP="10" Group="Flies" ID="289" Image="resources/Entities/289.0.0 - Ulcer.png" Kind="Enemies" Name="Ulcer" Subtype="0" Variant="0" />
 
 	<!-- Gapers -->
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.0.0 - Frowning Gaper.png" Kind="Enemies" Name="Frowning Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.1.0 - Gaper.png" Kind="Enemies" Name="Gaper" Subtype="0" Variant="1" />
+	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.0.0 - Frowning Gaper.png" Kind="Enemies" Name="Frowning Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.2.0 - Flaming Gaper.png" Kind="Enemies" Name="Flaming Gaper" Subtype="0" Variant="2" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="284" Image="resources/Entities/284.0.0 - Cyclopia.png" Kind="Enemies" Name="Cyclopia" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Gapers" ID="87" Image="resources/Entities/87.0.0 - Gurgle.png" Kind="Enemies" Name="Gurgle" Subtype="0" Variant="0" />

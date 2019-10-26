@@ -1435,8 +1435,12 @@ class Door(QGraphicsItem):
         else:
             self.moveBy(0, -13)
 
-        self.image = QImage('resources/Backgrounds/Door.png').transformed(tr)
-        self.disabledImage = QImage('resources/Backgrounds/DisabledDoor.png').transformed(tr)
+        if not hasattr(Door, 'Image'):
+            Door.Image = QImage('resources/Backgrounds/Door.png')
+            Door.DisabledImage = QImage('resources/Backgrounds/DisabledDoor.png')
+
+        self.image = Door.Image.transformed(tr)
+        self.disabledImage = Door.DisabledImage.transformed(tr)
 
     @property
     def exists(self): return self.doorItem[2]
@@ -1815,8 +1819,9 @@ class Room(QListWidgetItem):
 
         self.roomBG = getBG('Basement')
 
+        matchPath = mainWindow.path and os.path.split(mainWindow.path)[1]
         for room in roomsByStage:
-            if room.get('Pattern') in mainWindow.path:
+            if room.get('Pattern') in matchPath:
                 self.roomBG = room
 
         c = self.info.type
@@ -3620,19 +3625,14 @@ class MainWindow(QMainWindow):
         eList = self.scene.items()
 
         spawns = [ [] for x in room.gridSpawns ]
-        doors = []
 
         width = room.info.dims[0]
 
         for e in eList:
-            if isinstance(e, Door):
-                doors.append(e.doorItem)
-
-            elif isinstance(e, Entity):
+            if isinstance(e, Entity):
                 spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append([ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ])
 
         room.gridSpawns = spawns
-        room.info.doors = doors
 
     def closeEvent(self, event):
         """Handler for the main window close event"""
@@ -3832,10 +3832,16 @@ class MainWindow(QMainWindow):
 
     def openWrapper(self, path, addToRecent=True):
         print (path)
-        self.path = path
-
-        ext = os.path.splitext(self.path)[1]
+        file, ext = os.path.splitext(path)
         isXml = ext == '.xml'
+
+        if not isXml:
+            newPath = f'{file}.xml'
+            if os.path.exists(newPath):
+                reply = QMessageBox.question(self, "Import Map", f'"{newPath}" already exists; importing this file will overwrite it. Are you sure you want to import?', QMessageBox.Yes | QMessageBox.No)
+                if reply == QMessageBox.No: return
+
+        self.path = path
 
         rooms = None
         try:
@@ -3931,7 +3937,6 @@ class MainWindow(QMainWindow):
             if not target: return
 
             self.path = target
-            self.updateTitlebar()
 
         try:
             self.save(self.roomList.getRooms(), updateActive=True)
