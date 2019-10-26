@@ -8,7 +8,7 @@
 
 ### Downloads
 
-There are some older packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these are **out of date**. Please run Basement Renovator from source as described below.
+There are packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these releases are infrequent. Please run Basement Renovator from source as described below if possible.
 
 ### Running from Source
 
