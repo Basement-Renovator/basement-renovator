@@ -16,8 +16,8 @@ You can also invert the normal behavior by toggling Edit > Pin Entity Filter.
 ### Hooks
 While already detailed in the FAQ, this feature lets you run scripts as needed when BR performs various actions. Save hooks run scripts on newly saved stbs, Test hooks run on output xmls before the game launches, etc.
 
-### Export Rooms
-Occasionally you may decide to move certain rooms to another file, or want copies there. It would be painstaking to copy them by hand, so BR provides an Export option which lets you select a stb file to copy selected rooms to.
+### Copy Rooms to Another File
+Occasionally you may decide to move certain rooms to another file, or want copies there. It would be painstaking to copy them by hand, so BR provides an `Copy to File` option which lets you select a room file to copy selected rooms to.
 
 ### Better Bulk Replace Entities
 Did you know that when bulk replacing entities, the "replaced" entity is based on your currently selected entity in the room, and the "replacement" entity is based on your currently selected entity in the palette? This can save some time when performing this process as you don't have to remember the actual ids. Additionally, leaving the variants and/or subtypes as -1 will either match any, for the replaced entity, or preserve the original value, for the replacement.
