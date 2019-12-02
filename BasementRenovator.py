@@ -2368,21 +2368,21 @@ class RoomSelector(QWidget):
             self.clearEntity.setStyleSheet("")
 
         # Type Button
-        if self.filter.typeData is not -1:
+        if self.filter.typeData >= 0:
             self.clearType.setStyleSheet(colour)
             all = True
         else:
             self.clearType.setStyleSheet("")
 
         # Weight Button
-        if self.filter.weightData is not -1:
+        if self.filter.weightData >= 0:
             self.clearWeight.setStyleSheet(colour)
             all = True
         else:
             self.clearWeight.setStyleSheet("")
 
         # Size Button
-        if self.filter.sizeData is not -1:
+        if self.filter.sizeData >= 0:
             self.clearSize.setStyleSheet(colour)
             all = True
         else:
@@ -3445,9 +3445,10 @@ class MainWindow(QMainWindow):
             stage.set('InnerBG', prefix + 'Inner.png')
 
             if fixIconFormat:
-                for imgPath in [ stage.get('OuterBG'), stage.get('InnerBG') ]:
-                    formatFix = QImage(imgPath)
-                    formatFix.save(imgPath)
+                for imgPath in map(lambda s: stage.get(s), [ 'OuterBG', 'InnerBG', 'NFloor', 'LFloor', 'BigOuterBG' ]):
+                    if imgPath:
+                        formatFix = QImage(imgPath)
+                        formatFix.save(imgPath)
 
 
     def setupFileMenuBar(self):
@@ -3764,6 +3765,11 @@ class MainWindow(QMainWindow):
             if not QFile.exists(roomPath):
                 QMessageBox.warning(self, "Error", "Failed opening stage. Make sure that the resources path is set correctly (see File menu) and that the proper STB file is present in the rooms directory.")
                 return
+
+        # load the xml version if available
+        xmlVer = roomPath[:-3] + 'xml'
+        if QFile.exists(xmlVer):
+            roomPath = xmlVer
 
         self.openWrapper(roomPath)
 
@@ -4124,11 +4130,12 @@ class MainWindow(QMainWindow):
         name = 'basement-renovator-helper'
         return os.path.join(modFolder, name)
 
-    def makeTestMod(self):
+    def makeTestMod(self, forceClean):
         folder = self.getTestModPath()
         roomPath = os.path.join(folder, 'resources', 'rooms')
+        contentRoomPath = os.path.join(folder, 'content', 'rooms')
 
-        if not mainWindow.wroteModFolder and os.path.isdir(folder):
+        if (forceClean or not mainWindow.wroteModFolder) and os.path.isdir(folder):
             try:
                 shutil.rmtree(folder)
             except Exception as e:
@@ -4139,17 +4146,19 @@ class MainWindow(QMainWindow):
             dis = os.path.join(folder, 'disable.it')
             if os.path.isfile(dis): os.unlink(dis)
 
-            for f in os.listdir(roomPath):
-                f = os.path.join(roomPath, f)
-                try:
-                    if os.path.isfile(f): os.unlink(f)
-                except:
-                    pass
+            for path in [ roomPath, contentRoomPath ]:
+                for f in os.listdir(path):
+                    f = os.path.join(path, f)
+                    try:
+                        if os.path.isfile(f): os.unlink(f)
+                    except:
+                        pass
         # otherwise, make it fresh
         else:
             try:
                 shutil.copytree('./resources/modtemplate', folder)
                 os.makedirs(roomPath)
+                os.makedirs(contentRoomPath)
                 mainWindow.wroteModFolder = True
             except Exception as e:
                 print('Could not copy mod template!', e)
@@ -4157,7 +4166,7 @@ class MainWindow(QMainWindow):
 
         return folder, roomPath
 
-    def writeTestData(self, folder, testType, floorInfo, testRoom):
+    def writeTestData(self, folder, testType, floorInfo, testRooms):
         with open(os.path.join(folder, 'roomTest.lua'), 'w') as testData:
 
             quot = '\\"'
@@ -4172,6 +4181,14 @@ class MainWindow(QMainWindow):
 
                 commands = settings.value('TestCommands', [])
 
+            roomsStr = ',\n\t'.join(map(lambda testRoom: f'''{{
+        Name = {strFix(testRoom.data(0x100))},
+        Type = {testRoom.info.type},
+        Variant = {testRoom.info.variant},
+        Subtype = {testRoom.info.subtype},
+        Shape = {testRoom.info.shape}
+    }}''', testRooms))
+
             testData.write(f'''return {{
     TestType = {strFix(testType)},
     Character = {char or 'nil'}, -- currently unused due to instapreview limitations
@@ -4181,11 +4198,9 @@ class MainWindow(QMainWindow):
     StageName = {strFix(floorInfo.get('Name'))},
     IsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
     RoomFile = {strFix(str(Path(self.path)) or 'N/A')},
-    Name = {strFix(testRoom.data(0x100))},
-    Type = {testRoom.info.type},
-    Variant = {testRoom.info.variant},
-    Subtype = {testRoom.info.subtype},
-    Shape = {testRoom.info.shape}
+    Rooms = {{
+    {roomsStr}
+    }}
 }}
 ''')
 
@@ -4198,7 +4213,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, room, compatMode):
+        def setup(modPath, roomsPath, floorInfo, rooms, compatMode):
             if compatMode not in [ 'Afterbirth+' ]:
                 QMessageBox.warning(self, "Error", "Stage Replacement disabled if not playing with AB+!")
                 raise
@@ -4212,14 +4227,11 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Error", "Blue Womb cannot be tested with Stage Replacement, since it doesn't have normal room generation.")
                 raise
 
-            # Set the selected room to max weight, best spawn difficulty, default type, and enable all the doors
-            testRoom = Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape)
+            # Set the selected rooms to max weight, best spawn difficulty, default type, and enable all the doors
+            newRooms = list(map(lambda room: Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape), rooms))
 
-            # Always pad these rooms
-            padMe = testRoom.info.shape in [2, 3, 5, 7]
-
-            # Needs a padded room
-            newRooms = [testRoom]
+            # Needs a padding room if all are skinny
+            padMe = next((testRoom for testRoom in newRooms if testRoom.info.shape in [2, 3, 5, 7]), None) is not None
             if padMe:
                 newRooms.append(Room(difficulty=10, weight=0.1))
 
@@ -4232,13 +4244,18 @@ class MainWindow(QMainWindow):
             if padMe:
                 message += "\n\nAs the room has a non-standard shape, you may have to reset a few times for your room to appear."
 
-            return [], testRoom, message
+            return [], newRooms, message
 
         self.testMapCommon('StageReplace', setup)
 
     # Test by replacing the starting room
     def testStartMap(self):
         def setup(modPath, roomsPath, floorInfo, testRoom, compatMode):
+            if len(testRoom) > 1:
+                QMessageBox.warning(self, "Error", "Cannot test multiple rooms with Starting Room Replacement!")
+                raise
+            testRoom = testRoom[0]
+
             if compatMode not in [ 'Afterbirth+' ]:
                 QMessageBox.warning(self, "Error", "Starting Room Replacement disabled if not playing with AB+!")
                 raise
@@ -4278,19 +4295,47 @@ class MainWindow(QMainWindow):
             # Resave the file
             self.save(rooms, path, updateRecent=False)
 
-            return [], startRoom, ""
+            return [], [ startRoom ], ""
 
         self.testMapCommon('StartingRoom', setup)
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomPath, floorInfo, room, compatMode):
+        def setup(modPath, roomsPath, floorInfo, rooms, compatMode):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
 
+            roomsToUse = rooms
+
+            # if there's a base game room file, override that. otherwise use special rooms
+            newRooms = None
+            if len(rooms) > 1:
+                if compatMode == 'Afterbirth+' and next((testRoom for testRoom in rooms if testRoom.info.type == 0), None) is not None:
+                    QMessageBox.warning(self, "Error", "AB+ does not support the null room type.")
+                    raise
+
+                baseSpecialPath = "00.special rooms"
+                basePath = stageXML.find(f'''stage[@Stage="{floorInfo.get('Stage')}"][@StageType="{floorInfo.get('StageType')}"][@BaseGamePath]''').get('BaseGamePath')
+
+                # Set the selected rooms to have descending ids from max
+                baseId = (2 ** 31) - 1
+                newRooms = list(Room(f'{room.data(0x100)} [Real ID: {room.info.variant}]', room.gridSpawns, room.difficulty, room.weight,
+                                                         room.info.type, baseId - i, room.info.subtype,
+                                                         room.info.shape, room.info.doors) for i, room in enumerate(rooms))
+
+                specialRooms = list(filter(lambda room: room.info.type != 1, newRooms))
+                normalRooms = list(filter(lambda room: room.info.type <= 1, newRooms))
+
+                multiRoomPath = os.path.join(modPath, 'content', 'rooms', baseSpecialPath + '.stb')
+                self.save(specialRooms, multiRoomPath, updateRecent=False)
+                multiRoomPath = os.path.join(modPath, 'content', 'rooms', basePath + '.stb')
+                self.save(normalRooms, multiRoomPath, updateRecent=False)
+
+                roomsToUse = newRooms
+
             # Because instapreview is xml, no special allowances have to be made for rebirth
-            self.save([ room ], path, updateRecent=False, isPreview=True)
+            self.save([ roomsToUse[0] ], path, updateRecent=False, isPreview=True)
 
             if compatMode in [ 'Rebirth', 'Antibirth' ]:
                 return [ "-room", str(path),
@@ -4300,7 +4345,7 @@ class MainWindow(QMainWindow):
 
             return [ f"--load-room={path}",
                      f"--set-stage={floorInfo.get('Stage')}",
-                     f"--set-stage-type={floorInfo.get('StageType')}" ], None, ""
+                     f"--set-stage-type={floorInfo.get('StageType')}" ], newRooms, ""
 
         self.testMapCommon('InstaPreview', setup)
 
@@ -4368,9 +4413,9 @@ class MainWindow(QMainWindow):
                 pass
 
     def testMapCommon(self, testType, setupFunc):
-        room = self.roomList.selectedRoom()
-        if not room:
-            QMessageBox.warning(self, "Error", "No room was selected to test.")
+        rooms = self.roomList.selectedRooms()
+        if not rooms:
+            QMessageBox.warning(self, "Error", "No rooms were selected to test.")
             return
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -4384,30 +4429,31 @@ class MainWindow(QMainWindow):
             if stage.get('Pattern') in mainWindow.path:
                 floorInfo = stage
 
-        modPath, roomPath = self.makeTestMod()
+        forceCleanModFolder = settings.value('HelperModDev') == '1'
+        modPath, roomPath = self.makeTestMod(forceCleanModFolder)
         if modPath == "":
             QMessageBox.warning(self, "Error", "The basement renovator mod folder could not be copied over: " + str(roomPath))
             return
 
         # Ensure that the room data is up to date before writing
-        self.storeEntityList(room)
+        self.storeEntityList()
 
         # Call unique code for the test method
         launchArgs, extraMessage = None, None
         try:
             # setup raises an exception if it can't continue
-            launchArgs, roomOverride, extraMessage = setupFunc(modPath, roomPath, floorInfo, room, compatMode) or ([], None, '')
+            launchArgs, roomsOverride, extraMessage = setupFunc(modPath, roomPath, floorInfo, rooms, compatMode) or ([], None, '')
         except Exception as e:
             print('Problem setting up test:', e)
             return
 
-        room = roomOverride or room
-        self.writeTestData(modPath, testType, floorInfo, room)
+        rooms = roomsOverride or rooms
+        self.writeTestData(modPath, testType, floorInfo, rooms)
 
         testfile = 'testroom.xml'
         testPath = Path(modPath) / testfile
         testPath = testPath.resolve()
-        self.save([ room ], testPath, updateRecent=False)
+        self.save(rooms, testPath, updateRecent=False)
 
          # Trigger test hooks
         testHooks = settings.value('HooksTest')

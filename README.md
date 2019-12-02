@@ -54,7 +54,20 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 
 * **Other Things**: You can show or hide the grid in the edit menu, or by pressing Cmd-G (Ctrl-G on win). You can pick up any of the docks, and move them to new areas, have them as floating windows, or stack them as tabs. There are a few other options in the View menu to give you some choices.
 
-* **Test Menu**: There's a really useful Test feature in the menu bar. You can load up rooms to test easily anywhere in the Basement/Cellar, or in the start room directly. The start room only supports 1x1 rooms, however! You must be running the legal steam version of BoI:Afterbirth to use this feature. Makes testing a breeze.
+* **Test Menu**: To quickly test your rooms, you can load them from BR directly. You can select multiple rooms to test at a time, or just one. You will be teleported to the right floor for the current file. Here's a summary of the different test methods:
+  - Replace Stage
+    - Replaces the stage for the current file's rooms with the selected rooms
+    - Adds some helpful items and debug commands for each run
+    - If the room is skinny or long, (i.e. only two door slots) a padding 1x1 room will be added
+    - Note that this method can't replace rooms added by mods to the floor, so they will potentially interfere
+  - Replace Starting Room
+    - Replaces the global starting room with the currently selected room
+    - Does not work with multiple rooms
+    - Does not work with skinny rooms, long rooms, and standard L rooms (closets are fine)
+  - InstaPreview
+    - Opens the game directly into the first room in the selection, skipping all menus
+    - Cycle through multiple rooms with `,` and `.`
+    - Works most like the base game when testing one room at a time
 
 ---
 

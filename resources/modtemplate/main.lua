@@ -46,30 +46,51 @@ else
     log(data) -- error
 end
 
+local RoomIndex = {}
+
 if not BasementRenovator.TestRoomData then
     log('No room to test; please disable the mod')
     return
 else
-    local room = BasementRenovator.TestRoomData
-    log('TEST METHOD: ' .. BasementRenovator.TestRoomData.TestType)
-    log('TEST STAGE: ' .. room.StageName .. ' (' .. room.Stage .. '.' .. room.StageType .. ')' .. (room.IsModStage and ' MOD' or ''))
-    log('TEST ROOM: ' .. room.Type .. '.' .. room.Variant .. '.' .. room.Subtype)
-    log('TEST FILE: ' .. room.RoomFile)
+    local roomData = BasementRenovator.TestRoomData
+    log('TEST METHOD: ' .. roomData.TestType)
+    log('TEST STAGE: ' .. roomData.StageName .. ' (' .. roomData.Stage .. '.' .. roomData.StageType .. ')' .. (roomData.IsModStage and ' MOD' or ''))
+    log('TEST FILE: ' .. roomData.RoomFile)
+    log('TEST ROOMS:')
+    for i, room in pairs(roomData.Rooms) do
+        log(room.Type .. '.' .. room.Variant .. '.' .. room.Subtype)
+
+        if not RoomIndex[room.Type] then RoomIndex[room.Type] = {} end
+        local typeIndex = RoomIndex[room.Type]
+        typeIndex[room.Variant] = room
+
+        room.Index = i
+    end
+    roomData.CurrentIndex = 0
 end
 
-function BasementRenovator:IsTestRoom(data)
+function BasementRenovator:GetTestRoomFromData(data)
     local test = BasementRenovator.TestRoomData
 
-    local t, v, s, sh = test.Type, test.Variant, test.Subtype, test.Shape
-    return data.Type == t and data.Variant == v and data.Subtype == s and data.Shape == sh
+    local t, v, s, sh = data.Type, data.Variant, data.Subtype, data.Shape
+
+    local room = RoomIndex[t]
+    if not room then return nil end
+    room = room[v]
+    if not room then return nil end
+
+    if room.Type == t and room.Variant == v and room.Subtype == s and room.Shape == sh then
+        return room
+    end
 end
 
 function BasementRenovator:InTestRoom()
+    local test = BasementRenovator.TestRoomData
+
     local level = game:GetLevel()
     local desc = level:GetCurrentRoomDesc()
-    if BasementRenovator:IsTestRoom(desc.Data) then
-        return desc
-    end
+
+    return BasementRenovator:GetTestRoomFromData(desc.Data)
 end
 
 function BasementRenovator:InTestStage(level)
@@ -186,7 +207,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     for i = 0, roomsList.Size do
         local roomDesc = roomsList:Get(i)
 
-        hasRoom = roomDesc and BasementRenovator:IsTestRoom(roomDesc.Data)
+        hasRoom = roomDesc and BasementRenovator:GetTestRoomFromData(roomDesc.Data)
         if hasRoom then break end
     end
 
@@ -208,33 +229,92 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
-    local desc = BasementRenovator:InTestRoom()
-    if desc then
-        fireCallback('TestRoom', BasementRenovator.TestRoomData, desc)
+    local room = BasementRenovator:InTestRoom()
+    if room then
+        fireCallback('TestRoom', BasementRenovator.TestRoomData, room)
     end
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_PRE_ROOM_ENTITY_SPAWN, function(_, ...)
-    local desc = BasementRenovator:InTestRoom()
-    if desc then
-        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.TestRoomData, desc, ...)
+    local room = BasementRenovator:InTestRoom()
+    if room then
+        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.TestRoomData, room, ...)
         if replacement then
             return replacement
         end
     end
 end)
 
+local function SafeKeyboardTriggered(key, controllerIndex)
+    return Input.IsButtonTriggered(key, controllerIndex) and not Input.IsButtonTriggered(key % 32, controllerIndex)
+end
+
+local GotoTable = {
+    [0] = 'd',
+    [1] = 'd',
+    [2] = 's.shop',
+    [3] = 's.error',
+    [4] = 's.treasure',
+    [5] = 's.boss',
+    [6] = 's.miniboss',
+    [7] = 's.secret',
+    [8] = 's.supersecret',
+    [9] = 's.arcade',
+    [10] = 's.curse',
+    [11] = 's.challenge',
+    [12] = 's.library',
+    [13] = 's.sacrifice',
+    [14] = 's.angel',
+    [15] = 's.devil',
+    [16] = 's.itemdungeon',
+    [17] = 's.bossrush',
+    [18] = 's.isaacs',
+    [19] = 's.barren',
+    [20] = 's.chest',
+    [21] = 's.dice',
+    [22] = 's.blackmarket',
+    [23] = 'd' -- greed entrance room doesn't have a goto category???
+}
+
+local LastRoomChangeFrame = -1
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local test = BasementRenovator.TestRoomData
-    local desc = BasementRenovator:InTestRoom()
+    local room = BasementRenovator:InTestRoom() or { Name = 'N/A', Variant = -1, Invalid = true }
 
     parts = split(test.RoomFile, '/\\')
     filename = parts[#parts]
 
-    local topLeft = game:GetRoom():GetRenderSurfaceTopLeft();
+    local topLeft = game:GetRoom():GetRenderSurfaceTopLeft()
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
-    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. test.Name .. " (" .. test.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
-    Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (desc and 'YES' or 'NO'), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
+    Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (room.Invalid and 'NO' or 'YES'), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+
+    local enableCycling = false
+    if #test.Rooms > 1 and test.TestType == 'InstaPreview' then
+        enableCycling = true
+        Isaac.RenderScaledText("Press . (period) to cycle forward and , (comma) to go back. Current: " .. (test.CurrentIndex + 1) .. '/' .. #test.Rooms, pos.X, pos.Y - 36, 0.5, 0.5, 0, 255, 255, 0.75)
+    end
+
+    local frame = game:GetFrameCount()
+    if enableCycling and not game:IsPaused() and LastRoomChangeFrame ~= frame then
+        local oldIndex = test.CurrentIndex
+
+        local player = Isaac.GetPlayer(0)
+        local ci = player.ControllerIndex
+        if SafeKeyboardTriggered(Keyboard.KEY_COMMA, ci) then
+            -- go back one room
+            test.CurrentIndex = test.CurrentIndex - 1
+        elseif SafeKeyboardTriggered(Keyboard.KEY_PERIOD, ci) then
+            -- go forward one room
+            test.CurrentIndex = test.CurrentIndex + 1
+        end
+        test.CurrentIndex = (test.CurrentIndex + #test.Rooms) % #test.Rooms
+
+        if oldIndex ~= test.CurrentIndex then
+            local newRoom = test.Rooms[test.CurrentIndex + 1]
+            Isaac.ExecuteCommand('goto ' .. GotoTable[newRoom.Type] .. '.' .. newRoom.Variant)
+        end
+    end
 end)
 
 fireCallback('PostTestInit', BasementRenovator.TestRoomData)

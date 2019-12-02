@@ -5,9 +5,8 @@ import os, platform, re
 
 import anm2
 
-from PyQt5.QtCore import QSettings, QFile, QDir, QCommandLineOption, QCommandLineParser, QApplication
-from PyQt5.QtGui import QFileDialog
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import QSettings, QFile, QDir, QCommandLineOption, QCommandLineParser
+from PyQt5.QtWidgets import QMessageBox, QApplication, QFileDialog
 
 def findInstallPath():
     installPath = ''
@@ -161,7 +160,7 @@ def createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, resource
 
     filename = "resources/Entities/questionmark.png"
     if img:
-        filename = f'{anim.file}.png'
+        filename = f'{os.path.splitext(anim.file)[0]}.png'
     img.save(filename, "PNG")
 
 if __name__ == '__main__':
