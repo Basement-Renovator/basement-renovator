@@ -4316,21 +4316,26 @@ class MainWindow(QMainWindow):
                     raise
 
                 baseSpecialPath = "00.special rooms"
-                basePath = stageXML.find(f'''stage[@Stage="{floorInfo.get('Stage')}"][@StageType="{floorInfo.get('StageType')}"][@BaseGamePath]''').get('BaseGamePath')
+                basePath = floorInfo.get('BaseGamePath') or stageXML.find(f'''stage[@Stage="{floorInfo.get('Stage')}"][@StageType="{floorInfo.get('StageType')}"][@BaseGamePath]''').get('BaseGamePath')
 
                 # Set the selected rooms to have descending ids from max
+                # this should avoid any id conflicts
                 baseId = (2 ** 31) - 1
                 newRooms = list(Room(f'{room.data(0x100)} [Real ID: {room.info.variant}]', room.gridSpawns, room.difficulty, room.weight,
                                                          room.info.type, baseId - i, room.info.subtype,
                                                          room.info.shape, room.info.doors) for i, room in enumerate(rooms))
 
-                specialRooms = list(filter(lambda room: room.info.type != 1, newRooms))
-                normalRooms = list(filter(lambda room: room.info.type <= 1, newRooms))
+                if basePath != baseSpecialPath:
+                    specialRooms = list(filter(lambda room: room.info.type != 1, newRooms))
+                    normalRooms = list(filter(lambda room: room.info.type <= 1, newRooms))
 
-                multiRoomPath = os.path.join(modPath, 'content', 'rooms', baseSpecialPath + '.stb')
-                self.save(specialRooms, multiRoomPath, updateRecent=False)
-                multiRoomPath = os.path.join(modPath, 'content', 'rooms', basePath + '.stb')
-                self.save(normalRooms, multiRoomPath, updateRecent=False)
+                    multiRoomPath = os.path.join(modPath, 'content', 'rooms', baseSpecialPath + '.stb')
+                    self.save(specialRooms, multiRoomPath, updateRecent=False)
+                    multiRoomPath = os.path.join(modPath, 'content', 'rooms', basePath + '.stb')
+                    self.save(normalRooms, multiRoomPath, updateRecent=False)
+                else:
+                    multiRoomPath = os.path.join(modPath, 'content', 'rooms', basePath + '.stb')
+                    self.save(newRooms, multiRoomPath, updateRecent=False)
 
                 roomsToUse = newRooms
 
