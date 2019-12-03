@@ -2165,6 +2165,11 @@ class RoomSelector(QWidget):
         self.list.doubleClicked.connect(self.activateEdit)
         self.list.customContextMenuRequested.connect(self.customContextMenu)
 
+        model = self.list.model()
+        model.rowsInserted.connect(self.handleRoomListChanged)
+        model.rowsRemoved.connect(self.handleRoomListChanged)
+        model.modelReset.connect(self.handleRoomListChanged) # fired when cleared
+
         self.list.itemDelegate().closeEditor.connect(self.editComplete)
 
     def setupToolbar(self):
@@ -2174,12 +2179,21 @@ class RoomSelector(QWidget):
         self.removeRoomButton    = self.toolbar.addAction(QIcon(), 'Delete', self.removeRoom)
         self.duplicateRoomButton = self.toolbar.addAction(QIcon(), 'Duplicate', self.duplicateRoom)
         self.exportRoomButton    = self.toolbar.addAction(QIcon(), 'Copy to File...', self.exportRoom)
+        self.toolbar.addSeparator()
+
+        self.numRoomsLabel = QLabel()
+        self.numRoomsLabel.setIndent(10)
+        self.toolbar.addWidget(self.numRoomsLabel)
 
         self.mirror = False
         self.mirrorY = False
         # self.IDButton = self.toolbar.addAction(QIcon(), 'ID', self.turnIDsOn)
         # self.IDButton.setCheckable(True)
         # self.IDButton.setChecked(True)
+
+    def handleRoomListChanged(self):
+        numRooms = self.list.count()
+        self.numRoomsLabel.setText(f'Num Rooms: {numRooms}' if numRooms > 0 else '')
 
     def activateEdit(self):
         room = self.selectedRoom()
