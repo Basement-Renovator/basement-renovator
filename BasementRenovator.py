@@ -613,11 +613,7 @@ class RoomScene(QGraphicsScene):
         self.wallAnim.spritesheets[1] = roomBG.get('InnerBG')
 
         self.floorAnim.setAnimation(str(roomShape))
-
         self.wallAnim.setAnimation(str(roomShape))
-
-        try: self.wallAnim.setOverlay(f'{roomShape}X')
-        except ValueError: pass
 
         self.floorImg = self.floorAnim.render()
         self.wallImg = self.wallAnim.render()
