@@ -9,7 +9,10 @@ import re
 
 import cProfile
 
-from src.core import Room, Entity
+if not __package__:
+    from core import Room, Entity
+else:
+    from src.core import Room, Entity
 
 def _xmlStrFix(x):
     quot = '&quot;'
@@ -108,8 +111,7 @@ def commonToSTBAB(path, rooms):
 
     headerPacker = struct.Struct('<4sI')
     roomBegPacker = struct.Struct('<IIIBH')
-    roomEndPacker = struct.Struct('<fBBB')
-    doorHeaderPacker = struct.Struct('<BH')
+    roomEndPacker = struct.Struct('<fBBBBH')
     doorPacker = struct.Struct('<hh?')
     stackPacker = struct.Struct('<hhB')
     entPacker = struct.Struct('<HHHf')
@@ -118,7 +120,7 @@ def commonToSTBAB(path, rooms):
     totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
     for room in rooms:
         totalBytes += len(room.name)
-        totalBytes += doorHeaderPacker.size + doorPacker.size * len(room.info.doors)
+        totalBytes += doorPacker.size * len(room.info.doors)
         totalBytes += room.getSpawnCount() * stackPacker.size
         for stack, x, y in room.spawns():
             totalBytes += len(stack) * entPacker.size
@@ -131,16 +133,16 @@ def commonToSTBAB(path, rooms):
     for room in rooms:
         width, height = room.info.dims
         nameLen = len(room.name)
+
         roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.info.subtype, room.difficulty, nameLen)
         off += roomBegPacker.size
+
         struct.pack_into(f'<{nameLen}s', out, off, room.name.encode())
         off += nameLen
-        roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2, room.info.shape)
-        off += roomEndPacker.size
 
-        # Doors and Entities
-        doorHeaderPacker.pack_into(out, off, len(room.info.doors), room.getSpawnCount())
-        off += doorHeaderPacker.size
+        # Other room info, Doors and Entities
+        roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2, room.info.shape, len(room.info.doors), room.getSpawnCount())
+        off += roomEndPacker.size
 
         for door in room.info.doors:
             doorPacker.pack_into(out, off, door[0] - 1, door[1] - 1, door[2])
@@ -307,7 +309,7 @@ def stbABToCommon(path):
 
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
 
-            #room.gridSpawns = room.gridSpawns # probably unneeded for now
+            room.gridSpawns = room.gridSpawns
 
     return ret
 
@@ -393,7 +395,7 @@ def stbAntiToCommon(path):
 
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
 
-            #room.gridSpawns = room.gridSpawns # probably unneeded for now
+            room.gridSpawns = room.gridSpawns
 
     return ret
 
@@ -480,7 +482,7 @@ def stbRBToCommon(path):
 
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
 
-            #room.gridSpawns = room.gridSpawns # probably unneeded for now
+            room.gridSpawns = room.gridSpawns # used to update spawn count
 
     return ret
 
@@ -535,6 +537,8 @@ def xmlToCommon(path, destPath=None):
             for ent in stackedEnts:
                 etype, evariant, esubtype, eweight = int(ent.get('type')), int(ent.get('variant')), int(ent.get('subtype')), float(ent.get('weight'))
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
+
+            room.gridSpawns = room.gridSpawns
 
     return ret
 
@@ -668,6 +672,7 @@ def txtToCommon(path, entityXML):
                 else:
                     print(f"Unknown entity! '{char}'")
 
+        r.gridSpawns = r.gridSpawns
         ret.append(r)
 
         i = skipWS(i + height)
