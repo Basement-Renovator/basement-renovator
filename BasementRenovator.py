@@ -598,7 +598,7 @@ class RoomScene(QGraphicsScene):
 
         self.bgState = bgState
 
-        mainBG = roomBG.get('OuterBG')
+        mainBG = roomBG.get('OuterBG') or 'resources/none.png'
         overrideBG = roomBG.get('BigOuterBG')
 
         if roomShape != 1 and overrideBG:
@@ -610,7 +610,7 @@ class RoomScene(QGraphicsScene):
         self.floorAnim.spritesheets[2] = roomBG.get('NFloor') or 'resources/none.png'
 
         self.wallAnim.spritesheets[0] = mainBG
-        self.wallAnim.spritesheets[1] = roomBG.get('InnerBG')
+        self.wallAnim.spritesheets[1] = roomBG.get('InnerBG') or 'resources/none.png'
 
         self.floorAnim.setAnimation(str(roomShape))
         self.wallAnim.setAnimation(str(roomShape))
@@ -3447,12 +3447,14 @@ class MainWindow(QMainWindow):
             if prefix is None:
                 baseStage = stageXML.find(f"stage[@Stage='{stage.get('Stage')}'][@StageType='{stage.get('StageType')}'][@BGPrefix]")
                 prefix = baseStage.get('BGPrefix')
-            stage.set('OuterBG', prefix + '.png')
-            if stage.get('HasBigBG') == '1':
-                stage.set('BigOuterBG', prefix + '_big.png')
-            stage.set('NFloor', prefix + '_nfloor.png')
-            stage.set('LFloor', prefix + '_lfloor.png')
-            stage.set('InnerBG', prefix + 'Inner.png')
+
+            for p in [ (prefix + '.png', 'OuterBG'), \
+                       (prefix + '_big.png' if stage.get('HasBigBG') == '1' else '', 'BigOuterBG'), \
+                       (prefix + 'Inner.png', 'InnerBG'), \
+                       (prefix + '_nfloor.png', 'NFloor'), \
+                       (prefix + '_lfloor.png', 'LFloor') ]:
+                if os.path.isfile(p[0]):
+                    stage.set(p[1], p[0])
 
             if fixIconFormat:
                 for imgPath in map(lambda s: stage.get(s), [ 'OuterBG', 'InnerBG', 'NFloor', 'LFloor', 'BigOuterBG' ]):

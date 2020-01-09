@@ -73,6 +73,7 @@ if __name__ == '__main__':
     with open(configArg) as configFile:
         config = json.load(configFile)
 
+        totalRooms = 0
         print('Replacing entities:', config['entities'])
         for rf in config['files']:
             print('File: ', rf)
@@ -81,10 +82,12 @@ if __name__ == '__main__':
                 continue
 
             rooms = cvt.xmlToCommon(rf)
+            print('Room Count:', len(rooms))
+            totalRooms += len(rooms)
             for entPair in config['entities']:
                 replaceEntities(rooms, entPair['from'], entPair['to'])
             cvt.commonToXML(rf, rooms)
             if stbArg:
                 cvt.commonToSTBAB(rf.replace('.xml', '.stb'), rooms)
 
-    print('Success!')
+    print('Success!', totalRooms, 'affected')
