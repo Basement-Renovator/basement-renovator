@@ -2061,8 +2061,8 @@ class RoomSelector(QWidget):
         act.setIconVisibleInMenu(False)
         self.weightToggle.setDefaultAction(act)
 
-        w = [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 1000.0]
-        for i in range(9):
+        w = [0, 0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 1000.0]
+        for i in range(len(w)):
             act = weightMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i * 24, 0, 24, 24))), '')
             act.setData(w[i])
             act.setIconVisibleInMenu(False)
