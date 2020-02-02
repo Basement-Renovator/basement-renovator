@@ -144,19 +144,19 @@ def linuxPathSensitivityTraining(path):
 
     return os.path.normpath(path)
 
-def createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, resources):
-    anim = anm2.Config(fileArg, resources)
+def createIcon(file, animName, frame, overlayName, overlayFrame, noScale, resourcesPath):
+    anim = anm2.Config(file, resourcesPath)
 
-    anim.setAnimation(animArg)
-    if frameArg:
-        anim.frame = frameArg
+    anim.setAnimation(animName)
+    if frame:
+        anim.frame = frame
 
-    if overlayArg:
-        anim.setOverlay(overlayArg)
-        if overlayFrameArg:
-            anim.overlayFrame = overlayFrameArg
+    if overlayName:
+        anim.setOverlay(overlayName)
+        if overlayFrame:
+            anim.overlayFrame = overlayFrame
 
-    img = anim.render()
+    img = anim.render(noScale=noScale)
 
     filename = "resources/Entities/questionmark.png"
     if img:
@@ -186,6 +186,9 @@ if __name__ == '__main__':
     overlayFrameOpt = QCommandLineOption(['of', 'overlay-frame'], 'frame in the overlay animation to use, defaults to 0', 'of', '0')
     cmdParser.addOption(overlayFrameOpt)
 
+    noScaleOpt = QCommandLineOption('noscale', 'turns off scaling in anm2')
+    cmdParser.addOption(noScaleOpt)
+
     cmdParser.process(app)
 
     args = cmdParser.positionalArguments()
@@ -197,10 +200,12 @@ if __name__ == '__main__':
     overlayArg = cmdParser.value(overlayOpt)
     overlayFrameArg = int(cmdParser.value(overlayFrameOpt))
 
+    noScaleArg = cmdParser.isSet(noScaleOpt)
+
     settings = QSettings('../settings.ini', QSettings.IniFormat)
 
     resources = settings.value('ResourceFolder', '')
     print('Resource Path:', resources)
 
-    createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, resources)
+    createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, noScaleArg, resources)
     print('Success!')

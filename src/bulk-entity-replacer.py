@@ -38,6 +38,8 @@ def replaceEntities(rooms, replaced, replacement):
         (numEnts > 0 and f"Replaced {numEnts} entities in {numRooms} rooms"
         or "No entities to replace!"))
 
+    return numEnts
+
 if __name__ == '__main__':
     import sys
 
@@ -81,13 +83,19 @@ if __name__ == '__main__':
                 print('Must be xml! Skipping!')
                 continue
 
-            rooms = cvt.xmlToCommon(rf)
+            roomFile = cvt.xmlToCommon(rf)
+            rooms = roomFile.rooms
+
             print('Room Count:', len(rooms))
             totalRooms += len(rooms)
+
+            numEnts = 0
             for entPair in config['entities']:
-                replaceEntities(rooms, entPair['from'], entPair['to'])
-            cvt.commonToXML(rf, rooms)
-            if stbArg:
-                cvt.commonToSTBAB(rf.replace('.xml', '.stb'), rooms)
+                numEnts += replaceEntities(rooms, entPair['from'], entPair['to'])
+
+            if numEnts > 0:
+                cvt.commonToXML(rf, rooms, file=roomFile)
+                if stbArg:
+                    cvt.commonToSTBAB(rf.replace('.xml', '.stb'), rooms)
 
     print('Success!', totalRooms, 'affected')

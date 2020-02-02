@@ -112,7 +112,7 @@ class Config:
         return imgs
 
 
-    def render(self):
+    def render(self, noScale=False):
         imgs = self.extractFrame(self.frameLayers, self.frame)
 
         if self.overlayAnim:
@@ -130,7 +130,8 @@ class Config:
 
             mat = QTransform()
             mat.rotate(r)
-            mat.scale(xs, ys)
+            if not noScale:
+                mat.scale(xs, ys)
             mat.translate(xp, yp)
 
             # Load the Image
