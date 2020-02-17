@@ -124,6 +124,41 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
     newGame = true
 end)
 
+local GotoTable = {
+    [0] = 'd', -- null rooms crash the game if added to files
+    [1] = 'd', -- note that grave rooms don't work properly
+    [2] = 's.shop',
+    [3] = 's.error',
+    [4] = 's.treasure',
+    [5] = 's.boss',
+    [6] = 's.miniboss',
+    [7] = 's.secret',
+    [8] = 's.supersecret',
+    [9] = 's.arcade',
+    [10] = 's.curse',
+    [11] = 's.challenge',
+    [12] = 's.library',
+    [13] = 's.sacrifice',
+    [14] = 's.devil',
+    [15] = 's.angel',
+    [16] = 's.itemdungeon',
+    [17] = 's.bossrush',
+    [18] = 's.isaacs',
+    [19] = 's.barren',
+    [20] = 's.chest',
+    [21] = 's.dice',
+    [22] = 's.blackmarket',
+    [23] = 'd' -- greed entrance room doesn't have a goto category??? so they don't work either
+}
+
+local function GotoTestRoomIndex()
+    local test = BasementRenovator.TestRoomData
+    local newRoom = test.Rooms[test.CurrentIndex + 1]
+    local gotoStr = 'goto ' .. GotoTable[newRoom.Type] .. '.' .. newRoom.Variant
+    log(gotoStr)
+    Isaac.ExecuteCommand(gotoStr)
+end
+
 local maxFloorRetries = 150
 local floorRetries = 0
 local loadingFloor = false
@@ -156,6 +191,10 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
         Isaac.ExecuteCommand('debug 8')
         game:GetSeeds():AddSeedEffect(SeedEffect.SEED_PREVENT_CURSE_LOST)
         loadingFloor = true
+    end
+
+    if test.CurrentIndex ~= 0 then
+        GotoTestRoomIndex()
     end
 
     for i, command in ipairs(test.Commands) do
@@ -247,33 +286,6 @@ local function SafeKeyboardTriggered(key, controllerIndex)
     return Input.IsButtonTriggered(key, controllerIndex) and not Input.IsButtonTriggered(key % 32, controllerIndex)
 end
 
-local GotoTable = {
-    [0] = 'd', -- null rooms crash the game if added to files
-    [1] = 'd', -- note that grave rooms don't work properly
-    [2] = 's.shop',
-    [3] = 's.error',
-    [4] = 's.treasure',
-    [5] = 's.boss',
-    [6] = 's.miniboss',
-    [7] = 's.secret',
-    [8] = 's.supersecret',
-    [9] = 's.arcade',
-    [10] = 's.curse',
-    [11] = 's.challenge',
-    [12] = 's.library',
-    [13] = 's.sacrifice',
-    [14] = 's.devil',
-    [15] = 's.angel',
-    [16] = 's.itemdungeon',
-    [17] = 's.bossrush',
-    [18] = 's.isaacs',
-    [19] = 's.barren',
-    [20] = 's.chest',
-    [21] = 's.dice',
-    [22] = 's.blackmarket',
-    [23] = 'd' -- greed entrance room doesn't have a goto category??? so they don't work either
-}
-
 local LastRoomChangeFrame = -1
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local test = BasementRenovator.TestRoomData
@@ -309,10 +321,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
         test.CurrentIndex = (test.CurrentIndex + #test.Rooms) % #test.Rooms
 
         if oldIndex ~= test.CurrentIndex then
-            local newRoom = test.Rooms[test.CurrentIndex + 1]
-            local gotoStr = 'goto ' .. GotoTable[newRoom.Type] .. '.' .. newRoom.Variant
-            log(gotoStr)
-            Isaac.ExecuteCommand(gotoStr)
+            GotoTestRoomIndex()
         end
     end
 end)
