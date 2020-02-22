@@ -2232,11 +2232,12 @@ class RoomSelector(QWidget):
 
         numRooms = selectedRooms
         if numRooms < 2:
+            numRooms = 0
             for room in self.getRooms():
                 if not room.isHidden():
                     numRooms += 1
 
-        self.numRoomsLabel.setText(f"{'Num selected rooms' if selectedRooms > 1 else 'Num Rooms'}: {numRooms}" if numRooms > 0 else '')
+        self.numRoomsLabel.setText(f"{'Selected rooms' if selectedRooms > 1 else 'Num Rooms'}: {numRooms}" if numRooms > 0 else '')
 
     def activateEdit(self):
         room = self.selectedRoom()
@@ -3497,8 +3498,8 @@ class FilterDialog(QDialog):
                 minVal = self.conversionType(self.minVal.text())
                 maxVal = self.conversionType(self.maxVal.text())
             elif isinstance(self.minVal, QDateTimeEdit):
-                minVal = self.minVal.dateTime().toUTC().toPyDateTime().astimezone(datetime.timezone.utc)
-                maxVal = self.maxVal.dateTime().toUTC().toPyDateTime().astimezone(datetime.timezone.utc)
+                minVal = self.minVal.dateTime().toPyDateTime().astimezone(datetime.timezone.utc)
+                maxVal = self.maxVal.dateTime().toPyDateTime().astimezone(datetime.timezone.utc)
 
             filterData['min'] = minVal
             filterData['max'] = maxVal
