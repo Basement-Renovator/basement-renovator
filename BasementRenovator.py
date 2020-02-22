@@ -2036,6 +2036,12 @@ class RoomSelector(QWidget):
                 'useRange': False,
                 'enabled': False
             },
+            'subtype': {
+                'min': 0,
+                'max': 10,
+                'useRange': False,
+                'enabled': False
+            },
             'lastTestTime': {
                 'min': None,
                 'max': None,
