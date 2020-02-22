@@ -2231,12 +2231,12 @@ class RoomSelector(QWidget):
         selectedRooms = len(self.selectedRooms())
 
         numRooms = selectedRooms
-        if numRooms == 0:
+        if numRooms < 2:
             for room in self.getRooms():
                 if not room.isHidden():
                     numRooms += 1
 
-        self.numRoomsLabel.setText(f"{'Num selected rooms' if selectedRooms > 0 else 'Num Rooms'}: {numRooms}" if numRooms > 0 else '')
+        self.numRoomsLabel.setText(f"{'Num selected rooms' if selectedRooms > 1 else 'Num Rooms'}: {numRooms}" if numRooms > 0 else '')
 
     def activateEdit(self):
         room = self.selectedRoom()
