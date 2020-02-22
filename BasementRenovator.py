@@ -2197,13 +2197,14 @@ class RoomSelector(QWidget):
         self.list.setItemDelegate(d)
 
         self.list.itemSelectionChanged.connect(self.setButtonStates)
+        self.list.itemSelectionChanged.connect(self.handleRoomListDisplayChanged)
         self.list.doubleClicked.connect(self.activateEdit)
         self.list.customContextMenuRequested.connect(self.customContextMenu)
 
         model = self.list.model()
-        model.rowsInserted.connect(self.handleRoomListChanged)
-        model.rowsRemoved.connect(self.handleRoomListChanged)
-        model.modelReset.connect(self.handleRoomListChanged) # fired when cleared
+        model.rowsInserted.connect(self.handleRoomListDisplayChanged)
+        model.rowsRemoved.connect(self.handleRoomListDisplayChanged)
+        model.modelReset.connect(self.handleRoomListDisplayChanged) # fired when cleared
 
         self.list.itemDelegate().closeEditor.connect(self.editComplete)
 
@@ -2226,9 +2227,16 @@ class RoomSelector(QWidget):
         # self.IDButton.setCheckable(True)
         # self.IDButton.setChecked(True)
 
-    def handleRoomListChanged(self):
-        numRooms = self.list.count()
-        self.numRoomsLabel.setText(f'Num Rooms: {numRooms}' if numRooms > 0 else '')
+    def handleRoomListDisplayChanged(self):
+        selectedRooms = len(self.selectedRooms())
+
+        numRooms = selectedRooms
+        if numRooms == 0:
+            for room in self.getRooms():
+                if not room.isHidden():
+                    numRooms += 1
+
+        self.numRoomsLabel.setText(f"{'Num selected rooms' if selectedRooms > 0 else 'Num Rooms'}: {numRooms}" if numRooms > 0 else '')
 
     def activateEdit(self):
         room = self.selectedRoom()
@@ -2524,6 +2532,8 @@ class RoomSelector(QWidget):
             # Filter em' out
             isMatch = IDCond and entityCond and typeCond and sizeCond and extraCond
             room.setHidden(not isMatch)
+
+        self.handleRoomListDisplayChanged()
 
     def setEntityFilter(self, entity):
         self.filterEntity = entity
