@@ -13,6 +13,12 @@ Sometimes it's desirable to replace a few entities in a room with another one. S
 Sometimes you'd like to keep an entity filter active while selecting new entities to paint for the current room. Ctrl+Click the entity you'd like to paint and the current entity filter will not change.
 You can also invert the normal behavior by toggling Edit > Pin Entity Filter.
 
+### Filter by other properties
+If you'd like to filter rooms by things other than entities, type, and size, you can filter for other room properties through the *Other* filter. This includes properties like weight, difficulty, subtype, and the last time the room was tested.
+  - As an aside, last test time is filtered differently from other properties.
+  - If no range is used, rooms that have never been tested or were tested before the left time are included.
+  - If a range is used, only rooms tested between the times are included, starting with the right time and ending with the left.
+
 ### Hooks
 While already detailed in the FAQ, this feature lets you run scripts as needed when BR performs various actions. Save hooks run scripts on newly saved stbs, Test hooks run on output xmls before the game launches, etc.
 

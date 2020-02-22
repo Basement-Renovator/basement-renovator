@@ -1,10 +1,13 @@
 class Entity:
 
-    def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0):
+    def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, xmlProps=None):
         # Supplied entity info
         self.x = x
         self.y = y
         self.weight = weight
+
+        self.xmlProps = xmlProps or {}
+        self.lastTestTime = None
 
         self.clearValues()
         self.Type = t
@@ -230,7 +233,7 @@ class Room:
             return (x, y)
 
 
-    def __init__(self, name="New Room", spawns=[], difficulty=1, weight=1.0, mytype=1, variant=0, subtype=0, shape=1, doors=None):
+    def __init__(self, name="New Room", spawns=None, difficulty=1, weight=1.0, mytype=1, variant=0, subtype=0, shape=1, doors=None):
         """Initializes the room item."""
         self.name = name
 
@@ -246,6 +249,9 @@ class Room:
 
         self.difficulty = difficulty
         self.weight = weight
+
+        self.lastTestTime = None
+        self.xmlProps = {}
 
     @property
     def gridSpawns(self): return self._gridSpawns
@@ -310,3 +316,8 @@ class Room:
 
     def spawns(self):
         return Room._SpawnIter(self.gridSpawns, self.info.dims)
+
+class File:
+    def __init__(self, rooms, xmlProps=None):
+        self.rooms = rooms
+        self.xmlProps = xmlProps or {}

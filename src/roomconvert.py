@@ -5,25 +5,29 @@ from pathlib import Path
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 from xml.sax.saxutils import escape
-import re
+import re, datetime
 
 import cProfile
 
 if not __package__:
-    from core import Room, Entity
+    from core import Room, Entity, File
 else:
-    from src.core import Room, Entity
+    from src.core import Room, Entity, File
 
 def _xmlStrFix(x):
     quot = '&quot;'
     return escape(x).replace('"', quot)
 
-def commonToXMLSlow(destPath, rooms, isPreview = False):
+def commonToXMLSlow(destPath, rooms, file=None, isPreview = False):
     """Converts the common format to xml nodes"""
     if isPreview and len(rooms) != 1:
         raise ValueError("Previews must be one room!")
 
     outputRoot = ET.Element('rooms')
+
+    if file:
+        for key, val in file.xmlProps.items():
+            outputRoot.set(key, _xmlStrFix(str(val)))
 
     nodes = []
     for room in rooms:
@@ -38,7 +42,14 @@ def commonToXMLSlow(destPath, rooms, isPreview = False):
             "shape":      str(room.info.shape),
             "width":      str(width - 2),
             "height":     str(height - 2),
+            # extra props here
+            "lastTestTime": room.lastTestTime and room.lastTestTime.replace(tzinfo=datetime.timezone.utc).isoformat(timespec='hours') or None
         })
+
+        # if BR version is out of sync, this acts as a failsafe to ensure
+        # any extra props are written properly
+        for key, val in room.xmlProps.items():
+            roomNode.extend(key, _xmlStrFix(str(val)))
 
         roomNode.extend(map(lambda door: ET.Element('door', {
             'x': str(door[0] - 1),
@@ -53,12 +64,20 @@ def commonToXMLSlow(destPath, rooms, isPreview = False):
                 'y': str(y - 1)
             })
 
-            stackNode.extend(list(map(lambda ent: ET.Element('entity', {
-                "type":       str(ent.Type),
-                "variant":    str(ent.Variant),
-                "subtype":    str(ent.Subtype),
-                "weight":     str(ent.weight),
-            }), stack)))
+            def entToAttrs(ent):
+                attrs = {
+                    "type":       str(ent.Type),
+                    "variant":    str(ent.Variant),
+                    "subtype":    str(ent.Subtype),
+                    "weight":     str(ent.weight),
+                }
+
+                for key, val in ent.xmlProps.items():
+                    attrs[key] = _xmlStrFix(str(val))
+
+                return attrs
+
+            stackNode.extend(list(map(lambda ent: ET.Element('entity', entToAttrs(ent)), stack)))
 
             stackNodes.append(stackNode)
 
@@ -74,18 +93,42 @@ def commonToXMLSlow(destPath, rooms, isPreview = False):
         xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
         out.write(xml)
 
-def commonToXML(destPath, rooms, isPreview = False):
+def commonToXML(destPath, rooms, file=None, isPreview = False):
     """Converts the common format to xml nodes"""
     if isPreview and len(rooms) != 1:
         raise ValueError("Previews must be one room!")
 
+    def flattenDictList(l):
+        return ' '.join(map(lambda p: f'{p[0]}="{p[1]}"', l))
+
+    # if BR version is out of sync, xml acts as a failsafe to ensure
+    # any extra props are written properly
+    def flattenXml(d):
+        return ''.join(map(lambda key, val: f' {key}="{_xmlStrFix(str(val))}"', d.items()))
+
     output = [ '<?xml version="1.0" ?>\n' ]
     if not isPreview:
-        output.append('<rooms>\n')
+        output.append(f'<rooms{file and flattenXml(file.xmlProps) or ""}>\n')
 
     for room in rooms:
         width, height = room.info.dims
-        output.append(f'\t<room variant="{room.info.variant}" name="{_xmlStrFix(room.name)}" type="{room.info.type}" subtype="{room.info.subtype}" shape="{room.info.shape}" width="{width - 2}" height="{height - 2}" difficulty="{room.difficulty}" weight="{room.weight}">\n')
+
+        attrs = [
+            ("variant", room.info.variant),
+            ("name", _xmlStrFix(room.name)),
+            ("type", room.info.type),
+            ("subtype", room.info.subtype),
+            ("shape", room.info.shape),
+            ("width", width - 2),
+            ("height", height - 2),
+            ("difficulty", room.difficulty),
+            ("weight", room.weight),
+        ]
+        # extra props here
+        if room.lastTestTime:
+            attrs.append(("lastTestTime", room.lastTestTime.astimezone(datetime.timezone.utc).isoformat(timespec='minutes')))
+
+        output.append(f'\t<room {flattenDictList(attrs)}{flattenXml(room.xmlProps)}>\n')
 
         for door in sorted(room.info.doors, key=Room.DoorSortKey):
             output.append(f'\t\t<door exists="{door[2]}" x="{door[0] - 1}" y="{door[1] - 1}"/>\n')
@@ -94,7 +137,7 @@ def commonToXML(destPath, rooms, isPreview = False):
             output.append(f'\t\t<spawn x="{x - 1}" y="{y - 1}">\n')
 
             for ent in stack:
-                output.append(f'\t\t\t<entity type="{ent.Type}" variant="{ent.Variant}" subtype="{ent.Subtype}" weight="{ent.weight}"/>\n')
+                output.append(f'\t\t\t<entity type="{ent.Type}" variant="{ent.Variant}" subtype="{ent.Subtype}" weight="{ent.weight}"{flattenXml(ent.xmlProps)}/>\n')
 
             output.append('\t\t</spawn>\n')
 
@@ -311,7 +354,7 @@ def stbABToCommon(path):
 
             room.gridSpawns = room.gridSpawns
 
-    return ret
+    return File(ret)
 
 def stbAntiToCommon(path):
     """Converts an Antibirth STB to the common format"""
@@ -397,7 +440,7 @@ def stbAntiToCommon(path):
 
             room.gridSpawns = room.gridSpawns
 
-    return ret
+    return File(ret)
 
 def stbRBToCommon(path):
     """Converts an Rebirth STB to the common format"""
@@ -484,7 +527,7 @@ def stbRBToCommon(path):
 
             room.gridSpawns = room.gridSpawns # used to update spawn count
 
-    return ret
+    return File(ret)
 
 def xmlToCommon(path, destPath=None):
     """Converts an Afterbirth xml to the common format"""
@@ -498,13 +541,22 @@ def xmlToCommon(path, destPath=None):
 
     for roomNode in rooms:
 
+        roomXmlProps = dict(roomNode.attrib)
+
         rtype      = int(roomNode.get('type') or '1')
+        del roomXmlProps['type']
         rvariant   = int(roomNode.get('variant') or '0')
+        del roomXmlProps['variant']
         rsubtype   = int(roomNode.get('subtype') or '0')
+        del roomXmlProps['subtype']
         difficulty = int(roomNode.get('difficulty') or '0')
+        del roomXmlProps['difficulty']
         roomName   = roomNode.get('name') or ''
+        del roomXmlProps['name']
         rweight    = float(roomNode.get('weight') or '1')
+        del roomXmlProps['weight']
         shape      = int(roomNode.get('shape') or '-1')
+        del roomXmlProps['shape']
 
         if shape == -1:
             shape = None
@@ -518,9 +570,22 @@ def xmlToCommon(path, destPath=None):
 
         shape = shape or 1
 
+        del roomXmlProps['width']
+        del roomXmlProps['height']
+
+        lastTestTime = roomXmlProps.get('lastTestTime', None)
+        if lastTestTime:
+            try:
+                lastTestTime = datetime.datetime.fromisoformat(lastTestTime)
+                del roomXmlProps['lastTestTime']
+            except:
+                print('Invalid test time string found', lastTestTime)
+
         doors = list(map(lambda door: [ int(door.get('x')) + 1, int(door.get('y')) + 1, door.get('exists', "0")[0] in "1tTyY" ], roomNode.findall('door')))
 
         room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
+        room.xmlProps = roomXmlProps
+        room.lastTestTime = lastTestTime
         ret.append(room)
 
         realWidth = room.info.dims[0]
@@ -535,12 +600,18 @@ def xmlToCommon(path, destPath=None):
 
             ents = room.gridSpawns[grindex]
             for ent in stackedEnts:
+                entityXmlProps = dict(ent.attrib)
                 etype, evariant, esubtype, eweight = int(ent.get('type')), int(ent.get('variant')), int(ent.get('subtype')), float(ent.get('weight'))
-                ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
+                del entityXmlProps['type']
+                del entityXmlProps['variant']
+                del entityXmlProps['subtype']
+                del entityXmlProps['weight']
+                ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight, entityXmlProps))
 
             room.gridSpawns = room.gridSpawns
 
-    return ret
+    fileXmlProps = dict(root.attrib)
+    return File(ret, fileXmlProps)
 
 def stbABToXML(path, destPath=None):
     destPath = destPath or Path(path).with_suffix('.xml')

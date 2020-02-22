@@ -33,7 +33,7 @@ from collections import OrderedDict
 from copy import deepcopy
 
 import traceback, sys
-import struct, os, subprocess, platform, webbrowser, re, shutil
+import struct, os, subprocess, platform, webbrowser, re, shutil, datetime
 import urllib.parse, urllib.request
 from pathlib import Path
 import xml.etree.cElementTree as ET
@@ -332,9 +332,9 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     def mapEn(en):
         imgPath = en.get('Image') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
 
-        i = en.get('ID')
-        v = en.get('Variant') or '0'
-        s = en.get('Subtype') or '0'
+        i = en.get('ID', '-1')
+        v = en.get('Variant', '0')
+        s = en.get('Subtype', '0')
 
         entXML = None
 
@@ -472,11 +472,11 @@ def loadMods(autogenerate, installPath, resourcePath):
                 for ent in ents:
                     name, i, v, s = ent.get('Name'), int(ent.get('ID')), int(ent.get('Variant')), int(ent.get('Subtype'))
 
-                    if i >= 1000:
+                    if i >= 1000 or i < 0:
                         print(f'Entity "{name}" has a type outside the 0 - 999 range! ({i}) It will not load properly from rooms!')
-                    if v >= 4096:
+                    if v >= 4096 or v < 0:
                         print(f'Entity "{name}" has a variant outside the 0 - 4095 range! ({v})')
-                    if s >= 256:
+                    if s >= 256 or s < 0:
                         print(f'Entity "{name}" has a subtype outside the 0 - 255 range! ({s})')
 
                     existingEn = entityXML.find(f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']")
@@ -1689,6 +1689,9 @@ class Room(QListWidgetItem):
         self.difficulty = difficulty
         self.weight = weight
 
+        self.xmlProps = {}
+        self._lastTestTime = None
+
         self.setRoomBG()
 
         self.setFlags(self.flags() | Qt.ItemIsEditable)
@@ -1714,6 +1717,14 @@ class Room(QListWidgetItem):
         self._spawnCount = 0
         for entStack in self.gridSpawns:
             if entStack: self._spawnCount += 1
+
+    @property
+    def lastTestTime(self): return self._lastTestTime
+
+    @lastTestTime.setter
+    def lastTestTime(self, t):
+        self._lastTestTime = t
+        self.setToolTip()
 
     DoorSortKey = lambda door: (door[0], door[1])
 
@@ -1747,7 +1758,11 @@ class Room(QListWidgetItem):
 
     def setToolTip(self):
         self.setText(f"{self.info.variant} - {self.data(0x100)}")
-        tip = Room.getDesc(self.info, self.data(0x100), self.difficulty, self.weight)
+
+        lastTest = 'Never' if not self.lastTestTime else self.lastTestTime.astimezone().strftime('%x %I:%M %p')
+
+        tip = Room.getDesc(self.info, self.data(0x100), self.difficulty, self.weight) + f"\nLast Tested: {lastTest}"
+
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
@@ -2006,8 +2021,28 @@ class RoomSelector(QWidget):
 
         # Set the custom data
         self.filter.typeData = -1
-        self.filter.weightData = -1
         self.filter.sizeData = -1
+        self.filter.extraData = {
+            'enabled': False,
+            'weight': {
+                'min': 0,
+                'max': 100000,
+                'useRange': False,
+                'enabled': False
+            },
+            'difficulty': {
+                'min': 1,
+                'max': 15,
+                'useRange': False,
+                'enabled': False
+            },
+            'lastTestTime': {
+                'min': None,
+                'max': None,
+                'useRange': False,
+                'enabled': False
+            }
+        }
 
         # ID Filter
         self.IDFilter = QLineEdit()
@@ -2046,29 +2081,27 @@ class RoomSelector(QWidget):
         self.typeToggle.setMenu(typeMenu)
 
         # Weight Toggle Button
-        self.weightToggle = QToolButton()
-        self.weightToggle.setIconSize(QSize(24, 24))
-        self.weightToggle.setPopupMode(QToolButton.InstantPopup)
+        class ExtraFilterToggle(QToolButton):
+            def __init__(self):
+                super(QToolButton, self).__init__()
 
-        weightMenu = FilterMenu()
+            rightClicked = pyqtSignal()
 
-        q = QImage()
-        q.load('resources/UI/WeightIcons.png')
+            def mousePressEvent(self, e):
+                if e.buttons() == Qt.RightButton:
+                    self.rightClicked.emit()
+                else:
+                    self.clicked.emit()
+                e.accept()
 
-        self.weightToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(2 * 24, 0, 24, 24))))
-        act = weightMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(2 * 24, 0, 24, 24))), '')
-        act.setData(-1)
-        act.setIconVisibleInMenu(False)
-        self.weightToggle.setDefaultAction(act)
+        self.extraToggle = ExtraFilterToggle()
+        self.extraToggle.setIconSize(QSize(24, 24))
+        self.extraToggle.setPopupMode(QToolButton.InstantPopup)
 
-        w = [0, 0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 1000.0]
-        for i in range(len(w)):
-            act = weightMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i * 24, 0, 24, 24))), '')
-            act.setData(w[i])
-            act.setIconVisibleInMenu(False)
+        self.extraToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(4 * 24, 0, 24, 24))))
 
-        self.weightToggle.triggered.connect(self.setWeightFilter)
-        self.weightToggle.setMenu(weightMenu)
+        self.extraToggle.clicked.connect(self.setExtraFilter)
+        self.extraToggle.rightClicked.connect(lambda: FilterDialog(self).exec())
 
         # Size Toggle Button
         self.sizeToggle = QToolButton()
@@ -2099,8 +2132,8 @@ class RoomSelector(QWidget):
         self.filter.addWidget(self.IDFilter, 0, 1)
         self.filter.addWidget(self.entityToggle, 0, 2)
         self.filter.addWidget(self.typeToggle, 0, 3)
-        self.filter.addWidget(self.weightToggle, 0, 4)
-        self.filter.addWidget(self.sizeToggle, 0, 5)
+        self.filter.addWidget(self.sizeToggle, 0, 4)
+        self.filter.addWidget(self.extraToggle, 0, 5)
         self.filter.setContentsMargins(4, 0, 0, 4)
 
         # Filter active notification and clear buttons
@@ -2124,9 +2157,9 @@ class RoomSelector(QWidget):
         self.clearType.setIconSize(QSize(24, 0))
         self.clearType.clicked.connect(self.clearTypeFilter)
 
-        self.clearWeight = QToolButton()
-        self.clearWeight.setIconSize(QSize(24, 0))
-        self.clearWeight.clicked.connect(self.clearWeightFilter)
+        self.clearExtra = QToolButton()
+        self.clearExtra.setIconSize(QSize(24, 0))
+        self.clearExtra.clicked.connect(self.clearExtraFilter)
 
         self.clearSize = QToolButton()
         self.clearSize.setIconSize(QSize(24, 0))
@@ -2136,8 +2169,8 @@ class RoomSelector(QWidget):
         self.filter.addWidget(self.clearName, 1, 1)
         self.filter.addWidget(self.clearEntity, 1, 2)
         self.filter.addWidget(self.clearType, 1, 3)
-        self.filter.addWidget(self.clearWeight, 1, 4)
-        self.filter.addWidget(self.clearSize, 1, 5)
+        self.filter.addWidget(self.clearSize, 1, 4)
+        self.filter.addWidget(self.clearExtra, 1, 5)
 
     def setupList(self):
         self.list = QListWidget()
@@ -2307,10 +2340,11 @@ class RoomSelector(QWidget):
         self.entityToggle.setChecked(False)
         self.filter.typeData = -1
         self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
-        self.filter.weightData = -1
-        self.weightToggle.setIcon(self.weightToggle.defaultAction().icon())
         self.filter.sizeData = -1
         self.sizeToggle.setIcon(self.sizeToggle.defaultAction().icon())
+
+        self.filter.extraData['enabled'] = False
+
         self.changeFilter()
 
     def clearNameFilter(self):
@@ -2326,9 +2360,8 @@ class RoomSelector(QWidget):
         self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
         self.changeFilter()
 
-    def clearWeightFilter(self):
-        self.filter.weightData = -1
-        self.weightToggle.setIcon(self.weightToggle.defaultAction().icon())
+    def clearExtraFilter(self):
+        self.filter.extraData['enabled'] = False
         self.changeFilter()
 
     def clearSizeFilter(self):
@@ -2347,9 +2380,11 @@ class RoomSelector(QWidget):
         self.changeFilter()
 
     #@pyqtSlot(QAction)
-    def setWeightFilter(self, action):
-        self.filter.weightData = action.data()
-        self.weightToggle.setIcon(action.icon())
+    def setExtraFilter(self, checked, force = None):
+        if force is None:
+            force = not self.filter.extraData['enabled'] # toggle on click
+
+        self.filter.extraData['enabled'] = force
         self.changeFilter()
 
     #@pyqtSlot(QAction)
@@ -2364,7 +2399,7 @@ class RoomSelector(QWidget):
         all = False
 
         # Name Button
-        if len(self.IDFilter.text()) > 0:
+        if self.IDFilter.text():
             self.clearName.setStyleSheet(colour)
             all = True
         else:
@@ -2384,19 +2419,19 @@ class RoomSelector(QWidget):
         else:
             self.clearType.setStyleSheet("")
 
-        # Weight Button
-        if self.filter.weightData >= 0:
-            self.clearWeight.setStyleSheet(colour)
-            all = True
-        else:
-            self.clearWeight.setStyleSheet("")
-
         # Size Button
         if self.filter.sizeData >= 0:
             self.clearSize.setStyleSheet(colour)
             all = True
         else:
             self.clearSize.setStyleSheet("")
+
+        # Extra filters Button
+        if self.filter.extraData['enabled']:
+            self.clearExtra.setStyleSheet(colour)
+            all = True
+        else:
+            self.clearExtra.setStyleSheet("")
 
         # All Button
         if all:
@@ -2412,7 +2447,7 @@ class RoomSelector(QWidget):
 
         # Here we go
         for room in self.getRooms():
-            IDCond = entityCond = typeCond = weightCond = sizeCond = True
+            IDCond = entityCond = typeCond = sizeCond = extraCond = True
 
             IDCond = self.IDFilter.text().lower() in room.text().lower()
 
@@ -2424,7 +2459,7 @@ class RoomSelector(QWidget):
                                  for stack, x, y in room.spawns() for e in stack)
 
             # Check if the room is the right type
-            if self.filter.typeData is not -1:
+            if self.filter.typeData != -1:
                 # All the normal rooms
                 typeCond = self.filter.typeData == room.info.type
 
@@ -2440,18 +2475,48 @@ class RoomSelector(QWidget):
 
                     typeCond = not hasUsefulEntities
 
+            if self.filter.extraData['enabled']:
+                # Check if the room is the right weight
+                weightData = self.filter.extraData['weight']
+                if extraCond and weightData['enabled']:
+                    if weightData['useRange']:
+                        extraCond = extraCond and weightData['min'] <= room.weight <= weightData['max']
+                    else:
+                        eps = 0.0001
+                        extraCond = extraCond and abs(weightData['min'] - room.weight) < eps
 
-            # Check if the room is the right weight
-            if self.filter.weightData is not -1:
-                eps = 0.0001
-                weightCond = abs(self.filter.weightData - room.weight) < eps
+                # Check if the room is the right difficulty
+                difficultyData = self.filter.extraData['difficulty']
+                if extraCond and difficultyData['enabled']:
+                    if difficultyData['useRange']:
+                        extraCond = extraCond and difficultyData['min'] <= room.difficulty <= difficultyData['max']
+                    else:
+                        extraCond = difficultyData['min'] == room.difficulty
+
+                # Check if the room is the right subtype
+                subtypeData = self.filter.extraData['subtype']
+                if extraCond and subtypeData['enabled']:
+                    if subtypeData['useRange']:
+                        extraCond = extraCond and subtypeData['min'] <= room.info.subtype <= subtypeData['max']
+                    else:
+                        extraCond = subtypeData['min'] == room.info.subtype
+
+                # Check if the room has been tested between a specific time range,
+                # or tested before a certain date
+                lastTestTimeData = self.filter.extraData['lastTestTime']
+                if extraCond and lastTestTimeData['enabled']:
+                    if lastTestTimeData['useRange']:
+                        # intentionally reversed; min is always the main value, but the default comparison for last time is for earlier times
+                        extraCond = extraCond and room.lastTestTime and lastTestTimeData['max'] <= room.lastTestTime <= lastTestTimeData['min']
+                    else:
+                        extraCond = extraCond and (not room.lastTestTime or room.lastTestTime <= lastTestTimeData['min'])
 
             # Check if the room is the right size
-            if self.filter.sizeData is not -1:
+            if self.filter.sizeData != -1:
                 sizeCond = self.filter.sizeData == room.info.shape
 
             # Filter em' out
-            isMatch = IDCond and entityCond and typeCond and weightCond and sizeCond
+            isMatch = IDCond and entityCond and typeCond and sizeCond and extraCond
             room.setHidden(not isMatch)
 
     def setEntityFilter(self, entity):
@@ -2628,6 +2693,7 @@ class RoomSelector(QWidget):
                 deepcopy(room.info.shape),
                 deepcopy([list(door) for door in room.info.doors])
             )
+            r.xmlProps = deepcopy(room.xmlProps)
 
             # Mirror the room
             if self.mirror:
@@ -2672,15 +2738,15 @@ class RoomSelector(QWidget):
 
         path = target
 
-        # Append these rooms onto the new STB
         rooms = self.orderedSelectedRooms()
+        # Append these rooms onto the existing file
         if os.path.exists(path):
             oldRooms = mainWindow.open(path)
-            oldRooms.extend(rooms)
-            mainWindow.save(oldRooms, path)
-        # Make a new STB with the selected rooms
+            oldRooms.rooms.extend(rooms)
+            mainWindow.save(oldRooms.rooms, path, fileObj=oldRooms)
+        # Make a new file with the selected rooms
         else:
-            mainWindow.save(rooms, path)
+            mainWindow.save(rooms, path, fileObj=oldRooms)
 
     def setButtonStates(self):
         rooms = len(self.selectedRooms()) > 0
@@ -3010,7 +3076,7 @@ class EntityList(QListView):
 
         index = self.indexAt(event.pos()).row()
 
-        if index is not -1:
+        if index != -1:
             item = self.model().getItem(index)
 
             if isinstance(item, EntityItem):
@@ -3358,6 +3424,105 @@ class TestConfigDialog(QDialog):
         #self.characterConfig.val = self.character()
         self.commandConfig.val = self.commands()
         QWidget.closeEvent(self, evt)
+
+class FilterDialog(QDialog):
+
+    class FilterEntry(QWidget):
+        def __init__(self, roomList, text, key, EntryType = QLineEdit, ConversionType = int):
+            super(QWidget, self).__init__()
+            self.setContentsMargins(0,0,0,0)
+
+            self.layout = QVBoxLayout()
+
+            self.enabledToggle = QCheckBox(text)
+            self.roomList = roomList
+            self.key = key
+            self.rangeEnabled = QCheckBox('Use Range')
+            self.minVal = EntryType()
+            self.maxVal = EntryType()
+            self.conversionType = ConversionType
+
+            self.layout.addWidget(self.enabledToggle)
+
+            tweaks = QHBoxLayout()
+            tweaks.addWidget(self.minVal)
+            tweaks.addWidget(self.rangeEnabled)
+            tweaks.addWidget(self.maxVal)
+            self.layout.addLayout(tweaks)
+
+            self.setVals()
+
+            self.enabledToggle.stateChanged.connect(self.updateVals)
+            self.rangeEnabled.stateChanged.connect(self.updateVals)
+            self.minVal.editingFinished.connect(self.updateVals)
+            self.maxVal.editingFinished.connect(self.updateVals)
+
+            self.setLayout(self.layout)
+
+        def setVals(self):
+            filterData = self.roomList.filter.extraData[self.key]
+            minVal = filterData['min']
+            maxVal = filterData['max']
+            if isinstance(self.minVal, QLineEdit):
+                self.minVal.setText(str(minVal))
+                self.maxVal.setText(str(maxVal))
+            elif isinstance(self.minVal, QDateTimeEdit):
+                self.minVal.setDateTime(minVal.astimezone())
+                self.maxVal.setDateTime(maxVal.astimezone())
+
+            self.enabledToggle.setChecked(filterData['enabled'])
+            self.rangeEnabled.setChecked(filterData['useRange'])
+
+        def updateVals(self):
+            filterData = self.roomList.filter.extraData[self.key]
+            minVal = None
+            maxVal = None
+            if isinstance(self.minVal, QLineEdit):
+                minVal = self.conversionType(self.minVal.text())
+                maxVal = self.conversionType(self.maxVal.text())
+            elif isinstance(self.minVal, QDateTimeEdit):
+                minVal = self.minVal.dateTime().toUTC().toPyDateTime().astimezone(datetime.timezone.utc)
+                maxVal = self.maxVal.dateTime().toUTC().toPyDateTime().astimezone(datetime.timezone.utc)
+
+            filterData['min'] = minVal
+            filterData['max'] = maxVal
+            filterData['enabled'] = self.enabledToggle.isChecked()
+            filterData['useRange'] = self.rangeEnabled.isChecked()
+
+    def __init__(self, parent):
+        super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Room Filter Configuration")
+
+        self.roomList = parent
+        roomList = self.roomList
+
+        self.layout = QVBoxLayout()
+
+        self.weightEntry = FilterDialog.FilterEntry(roomList, 'Weight', 'weight', ConversionType = float)
+        self.layout.addWidget(self.weightEntry)
+
+        self.difficultyEntry = FilterDialog.FilterEntry(roomList, 'Difficulty', 'difficulty')
+        self.layout.addWidget(self.difficultyEntry)
+
+        self.subtypeEntry = FilterDialog.FilterEntry(roomList, 'SubType', 'subtype')
+        self.layout.addWidget(self.subtypeEntry)
+
+        ltt = roomList.filter.extraData['lastTestTime']
+        if not ltt['min']:
+            ltt['min'] = datetime.datetime.now(datetime.timezone.utc)
+            ltt['max'] = ltt['min'] - datetime.timedelta(days=30)
+
+        self.lastTestTimeEntry = FilterDialog.FilterEntry(roomList, 'Last Test Time', 'lastTestTime', EntryType = QDateTimeEdit)
+        self.lastTestTimeEntry.setToolTip('If no range, searches for never tested rooms and rooms before this date-time. Else searches for rooms tested within the range, starting from the righthand datetime')
+        self.layout.addWidget(self.lastTestTimeEntry)
+
+        self.setLayout(self.layout)
+
+    def closeEvent(self, evt):
+        self.roomList.setExtraFilter(None, force = True)
+        self.roomList.changeFilter()
+        QWidget.closeEvent(self, evt)
+
 
 ########################
 #      Main Window     #
@@ -3861,9 +4026,9 @@ class MainWindow(QMainWindow):
 
         self.path = path
 
-        rooms = None
+        roomFile = None
         try:
-            rooms = self.open(addToRecent=addToRecent and isXml)
+            roomFile = self.open(addToRecent=addToRecent and isXml)
         except FileNotFoundError:
             QMessageBox.warning(self, "Error", "Failed opening rooms. The file does not exist.")
         except NotImplementedError:
@@ -3873,13 +4038,14 @@ class MainWindow(QMainWindow):
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", f"Failed opening rooms.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
 
-        if not rooms:
+        if not roomFile:
             return
 
         self.roomList.list.clear()
         self.scene.clear()
 
-        for room in rooms:
+        self.roomList.file = roomFile
+        for room in roomFile.rooms:
             self.roomList.list.addItem(room)
 
         self.clean()
@@ -3892,15 +4058,17 @@ class MainWindow(QMainWindow):
         path = path or self.path
         global entityXML
 
-        rooms = None
+        roomFile = None
 
         ext = os.path.splitext(path)[1]
         if ext == '.xml':
-            rooms = StageConvert.xmlToCommon(path)
+            roomFile = StageConvert.xmlToCommon(path)
         elif ext == '.txt':
-            rooms = StageConvert.txtToCommon(path, entityXML)
+            roomFile = StageConvert.txtToCommon(path, entityXML)
         else:
-            rooms = StageConvert.stbToCommon(path)
+            roomFile = StageConvert.stbToCommon(path)
+
+        rooms = roomFile.rooms
 
         seenSpawns = {}
         for room in rooms:
@@ -3934,15 +4102,18 @@ class MainWindow(QMainWindow):
 
         def coreToRoomItem(coreRoom):
             spawns = list(map(lambda s: list(map(coreToEntItem, s)), coreRoom.gridSpawns))
-            return Room(coreRoom.name, spawns, coreRoom.difficulty, coreRoom.weight, coreRoom.info.type, coreRoom.info.variant, coreRoom.info.subtype, coreRoom.info.shape, coreRoom.info.doors)
+            r = Room(coreRoom.name, spawns, coreRoom.difficulty, coreRoom.weight, coreRoom.info.type, coreRoom.info.variant, coreRoom.info.subtype, coreRoom.info.shape, coreRoom.info.doors)
+            r.xmlProps = dict(coreRoom.xmlProps)
+            r.lastTestTime = coreRoom.lastTestTime
+            return r
 
-        ret = list(map(coreToRoomItem, rooms))
+        roomFile.rooms = list(map(coreToRoomItem, rooms))
 
         # Update recent files
         if addToRecent: # and ext == '.xml': # if a non-xml was deliberately opened, add it to recent
             self.updateRecent(path)
 
-        return ret
+        return roomFile
 
     def saveMap(self, forceNewName=False):
         target = self.path
@@ -3957,7 +4128,7 @@ class MainWindow(QMainWindow):
             self.path = target
 
         try:
-            self.save(self.roomList.getRooms(), updateActive=True)
+            self.save(self.roomList.getRooms(), fileObj=self.roomList.file, updateActive=True)
         except:
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", "Saving failed. Try saving to a new file instead.")
@@ -3986,7 +4157,7 @@ class MainWindow(QMainWindow):
             traceback.print_exception(*sys.exc_info())
             QMessageBox.warning(self, "Error", f"Exporting failed.\n{''.join(traceback.format_exception(*sys.exc_info()))}")
 
-    def save(self, rooms, path=None, updateActive=False, updateRecent=True, isPreview=False, stbType=None):
+    def save(self, rooms, path=None, fileObj=None, updateActive=False, updateRecent=True, isPreview=False, stbType=None):
         path = path or (os.path.splitext(self.path)[0] + '.xml')
 
         self.storeEntityList()
@@ -3999,13 +4170,16 @@ class MainWindow(QMainWindow):
         def roomItemToCore(room):
             realWidth = room.info.dims[0]
             spawns = list(map(lambda s: list(map(lambda e: entItemToCore(e, s[0], realWidth), s[1])), enumerate(room.gridSpawns)))
-            return RoomData(room.data(0x100), spawns, room.difficulty, room.weight, room.info.type, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
+            r = RoomData(room.data(0x100), spawns, room.difficulty, room.weight, room.info.type, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
+            r.xmlProps = dict(room.xmlProps)
+            r.lastTestTime = room.lastTestTime
+            return r
 
         rooms = list(map(roomItemToCore, rooms))
 
         ext = os.path.splitext(path)[1]
         if ext == '.xml':
-            StageConvert.commonToXML(path, rooms, isPreview=isPreview)
+            StageConvert.commonToXML(path, rooms, file=fileObj, isPreview=isPreview)
         else:
             if stbType == 'Rebirth':
                 StageConvert.commonToSTBRB(path, rooms)
@@ -4290,8 +4464,8 @@ class MainWindow(QMainWindow):
                 raise
 
             startRoom = None
-            rooms = self.open(roomPath, False)
-            for room in rooms:
+            roomFile = self.open(roomPath, False)
+            for room in roomFile.rooms:
                 if "Start Room" in room.data(0x100):
                     room.info.shape  = testRoom.info.shape
                     room.gridSpawns = testRoom.gridSpawns
@@ -4305,7 +4479,7 @@ class MainWindow(QMainWindow):
             path = os.path.join(roomsPath, "00.special rooms.stb")
 
             # Resave the file
-            self.save(rooms, path, updateRecent=False)
+            self.save(roomFile.rooms, path, updateRecent=False)
 
             return [], [ startRoom ], ""
 
@@ -4464,13 +4638,13 @@ class MainWindow(QMainWindow):
             print('Problem setting up test:', e)
             return
 
-        rooms = roomsOverride or rooms
-        self.writeTestData(modPath, testType, floorInfo, rooms)
+        testRooms = roomsOverride or rooms
+        self.writeTestData(modPath, testType, floorInfo, testRooms)
 
         testfile = 'testroom.xml'
         testPath = Path(modPath) / testfile
         testPath = testPath.resolve()
-        self.save(rooms, testPath, updateRecent=False)
+        self.save(testRooms, testPath, fileObj=self.roomList.file, updateRecent=False)
 
          # Trigger test hooks
         testHooks = settings.value('HooksTest')
@@ -4488,6 +4662,11 @@ class MainWindow(QMainWindow):
         if not installPath:
             QMessageBox.warning(self, "Error", "Your install path could not be found! You may have the wrong directory, reconfigure in settings.ini")
             return
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+        for room in rooms:
+            room.lastTestTime = now
+        self.dirt() # dirty for test timestamps
 
         try:
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
