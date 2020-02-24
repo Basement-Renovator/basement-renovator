@@ -223,6 +223,7 @@
 	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.1.0 - Gazing Globin.png" Kind="Enemies" Name="Gazing Globin" Subtype="0" Variant="1" />
 	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.2.0 - Dank Globin.png" Kind="Enemies" Name="Dank Globin" Subtype="0" Variant="2" />
 	<entity BaseHP="33" Champion="1" Group="Gapers" ID="278" Image="resources/Entities/278.0.0 - Black Globin.png" Kind="Enemies" Name="Black Globin" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Champion="1" Group="Gapers" ID="279" Image="resources/Entities/279.0.0 - Black Globin's Head.png" Kind="Enemies" Name="Black Globin's Head" Subtype="0" Variant="0" />
 
 	<!-- Hosts -->
 	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.0.0 - Host.png" Kind="Enemies" Name="Host" Subtype="0" Variant="0" />
@@ -288,7 +289,6 @@
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Kind="Enemies" Name="Bloodshot Eye" Subtype="0" Variant="1" />
-	<entity BaseHP="1" Group="Organs" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Kind="Enemies" Name="Stone Eye" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Group="Organs" ID="92" Image="resources/Entities/92.0.0 - Heart.png" Kind="Enemies" Name="Heart" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Group="Organs" ID="93" Image="resources/Entities/93.0.0 - Mask.png" Kind="Enemies" Name="Mask" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="213" Image="resources/Entities/213.0.0 - Mom's Hand.png" Kind="Enemies" Name="Mom's Hand" Subtype="0" Variant="0" />
@@ -311,7 +311,6 @@
 	<entity BaseHP="50" Group="Other" ID="258" Image="resources/Entities/258.0.0 - Fat Bat.png" Kind="Enemies" Name="Fat Bat" Subtype="0" Variant="0" />
 	<entity BaseHP="24" Champion="1" Group="Other" ID="237" Image="resources/Entities/237.0.0 - Gurgling.png" Kind="Enemies" Name="Gurgling" Subtype="0" Variant="0" />
 	<entity BaseHP="25" Group="Other" ID="260" Image="resources/Entities/260.10.0 - Lil' Haunt.png" Kind="Enemies" Name="Lil' Haunt" Subtype="0" Variant="10" />
-	<entity BaseHP="20" Champion="1" Group="Other" ID="279" Image="resources/Entities/279.0.0 - Black Globin's Head.png" Kind="Enemies" Name="Black Globin's Head" Subtype="0" Variant="0" />
 	<entity Group="Other" Kind="Enemies" Image="resources/Entities/306.0.0 - Portal.png" BaseHP="10" ID="306" Name="Portal" Variant="0" Subtype="0" />
 	<entity Group="Other" Kind="Enemies" Image="resources/Entities/308.0.0 - Fistuloid.png" BaseHP="30" Champion="1" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
 	<entity BaseHP="5" Champion="0" Group="Other" ID="310" Image="resources/Entities/311.1.0 - Leper Flesh.png" Kind="Enemies" Name="Leper Flesh" Subtype="0" Variant="1" />
@@ -370,6 +369,7 @@
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
 	<entity BaseHP="100" Group="Stones" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="100" Group="Stones" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Kind="Enemies" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
+	<entity BaseHP="1" Group="Stones" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Kind="Enemies" Name="Stone Eye" Subtype="0" Variant="0" />
 
 	<!-- Twins -->
 	<entity BaseHP="20" Champion="1" Group="Twins" ID="53" Image="resources/Entities/53.0.0 - Dople.png" Kind="Enemies" Name="Dople" Subtype="0" Variant="0" />
@@ -567,7 +567,7 @@
 	<entity Group="Grid" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
-	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" />
+	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" />
 
 	<!-- Live Bombs -->
 	<entity Group="Live Bombs" ID="4" Image="resources/Entities/4.0.0 - Bomb.png" Kind="Stage" Name="Active Bomb" Subtype="0" Variant="0" />

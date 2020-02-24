@@ -959,6 +959,7 @@ class Entity(QGraphicsItem):
             self.boss = en.get('Boss') == '1'
             self.champion = en.get('Champion') == '1'
             self.placeVisual = en.get('PlaceVisual')
+            self.disableOffsetIndicator = en.get('DisableOffsetIndicator') == '1'
 
             def getEnt(s):
                 return list(map(int, s.split('.')))
@@ -1199,7 +1200,7 @@ class Entity(QGraphicsItem):
             painter.drawPixmap(x, y, self.entity.pixmap)
 
             # if the offset is high enough, draw an indicator of the actual position
-            if abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5:
+            if not self.entity.disableOffsetIndicator and (abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5):
                 painter.setPen(self.OFFSET_SELECTION_PEN)
                 painter.setBrush(Qt.NoBrush)
                 painter.drawLine(13, 13, x + w / 2, y + h - 13)
