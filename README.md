@@ -67,6 +67,9 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
   - InstaPreview
     - Opens the game directly into the first room in the selection, skipping all menus
     - Cycle through multiple rooms with `,` and `.`
+    - Resetting in a room will move the player to the next door in the room going clockwise
+        - Toggle whether to stay at the current door using `;`
+        - Invalid doors for the room will be indicated by a red barred door
     - Works most like the base game when testing one room at a time
 
 ---

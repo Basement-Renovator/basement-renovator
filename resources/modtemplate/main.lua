@@ -3,6 +3,7 @@ BasementRenovator = BasementRenovator or { subscribers = {} }
 BasementRenovator.mod = RegisterMod('BasementRenovator', 1)
 
 local game = Game()
+local veczero = Vector(0,0)
 
 setmetatable(BasementRenovator.subscribers, {
     __newindex = function(t, k, v)
@@ -123,6 +124,29 @@ local newGame = false
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
     newGame = true
 end)
+
+local bigDoorSlots = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 }
+local hDoorSlots = { DoorSlot.LEFT0, DoorSlot.RIGHT0 }
+local vDoorSlots = { DoorSlot.UP0, DoorSlot.DOWN0 }
+BasementRenovator.DoorSlotOrder = {
+    [RoomShape.ROOMSHAPE_1x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_1x2] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_2x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.DOWN0, DoorSlot.DOWN1 },
+
+    [RoomShape.ROOMSHAPE_2x2] = bigDoorSlots,
+    [RoomShape.ROOMSHAPE_LTL] = bigDoorSlots,
+    [RoomShape.ROOMSHAPE_LTR] = bigDoorSlots,
+    [RoomShape.ROOMSHAPE_LBL] = bigDoorSlots,
+    [RoomShape.ROOMSHAPE_LBR] = bigDoorSlots,
+
+    [RoomShape.ROOMSHAPE_IH]  = hDoorSlots,
+    [RoomShape.ROOMSHAPE_IIH] = hDoorSlots,
+    [RoomShape.ROOMSHAPE_IV]  = vDoorSlots,
+    [RoomShape.ROOMSHAPE_IIV] = vDoorSlots,
+}
+
+BasementRenovator.CurrentSlotIndex = -1
+BasementRenovator.LockDoorSlot = false
 
 local GotoTable = {
     [0] = 'd', -- null rooms crash the game if added to files
@@ -269,10 +293,71 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     end
 end)
 
+local IsFlippedDoor = {
+    [DoorSlot.DOWN0] = true,
+    [DoorSlot.DOWN1] = true,
+    [DoorSlot.RIGHT0] = true,
+    [DoorSlot.RIGHT1] = true,
+}
+
+local IsVertDoor = {
+    [DoorSlot.UP0] = true,
+    [DoorSlot.UP1] = true,
+    [DoorSlot.DOWN0] = true,
+    [DoorSlot.DOWN1] = true,
+}
+
+local FakeDoorVariant = Isaac.GetEntityVariantByName("Fake Door [BR]")
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
-    local room = BasementRenovator:InTestRoom()
-    if room then
-        fireCallback('TestRoom', BasementRenovator.TestRoomData, room)
+    local test = BasementRenovator.TestRoomData
+    local testRoom = BasementRenovator:InTestRoom()
+    if testRoom then
+        if test.TestType == 'InstaPreview' then
+            local room = game:GetRoom()
+            local doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
+
+            -- render invalid door slots as effects
+            -- TODO does not work with xml L rooms properly due to vanilla bug
+            for _, slot in pairs(doorSlots) do
+                if not room:IsDoorSlotAllowed(slot) then
+                    local isFlipped = IsFlippedDoor[slot]
+                    local isVert = IsVertDoor[slot]
+                    local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
+                    local sprite = door:GetSprite()
+                    if not isVert then
+                        sprite.Rotation = -90
+                    end
+                    sprite[isVert and 'FlipY' or 'FlipX'] = isFlipped
+
+                    local offMult = isFlipped and -1 or 1
+                    sprite.Offset = Vector((isVert and 0 or 15) * offMult, (isVert and 15 or 0)) -- bug? in FlipY, offset is flipped with sprite
+                    REVEL.DebugLog(slot, sprite.Offset)
+                end
+            end
+
+            -- move the player's position to the next available door slot
+            if not BasementRenovator.LockDoorSlot then
+                BasementRenovator.CurrentSlotIndex = (BasementRenovator.CurrentSlotIndex + 1) % #doorSlots
+                for i = 0, #doorSlots - 1 do
+                    local slotIndex = (BasementRenovator.CurrentSlotIndex + i) % #doorSlots
+                    local currentSlot = doorSlots[slotIndex + 1]
+                    if room:IsDoorSlotAllowed(currentSlot) then
+                        BasementRenovator.CurrentSlotIndex = slotIndex
+                        break
+                    end
+                end
+            end
+
+            local player = Isaac.GetPlayer(0)
+            local slot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
+
+            local playerPos = room:GetDoorSlotPosition(slot)
+            playerPos = room:GetClampedPosition(playerPos, player.Size * 2)
+
+            player.Position = playerPos
+        end
+
+        fireCallback('TestRoom', BasementRenovator.TestRoomData, testRoom)
     end
 end)
 
@@ -301,7 +386,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local topLeft = game:GetRoom():GetRenderSurfaceTopLeft()
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
     Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
-    Isaac.RenderScaledText("Test Type: " .. test.TestType .. " --- In Test Room: " .. (room.Invalid and 'NO' or 'YES'), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+    Isaac.RenderScaledText("Test Type: " .. test.TestType ..  " --- In Test Room: " .. (room.Invalid and 'NO' or ('YES' .. (BasementRenovator.LockDoorSlot and ' [DOOR SLOT LOCKED]' or ''))), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
 
     local enableCycling = false
     if #test.Rooms > 1 and test.TestType == 'InstaPreview' then
@@ -310,22 +395,32 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     end
 
     local frame = game:GetFrameCount()
-    if enableCycling and not game:IsPaused() and LastRoomChangeFrame ~= frame then
-        local oldIndex = test.CurrentIndex
-
+    if not game:IsPaused() and LastRoomChangeFrame ~= frame then
         local player = Isaac.GetPlayer(0)
         local ci = player.ControllerIndex
-        if SafeKeyboardTriggered(Keyboard.KEY_COMMA, ci) then
-            -- go back one room
-            test.CurrentIndex = test.CurrentIndex - 1
-        elseif SafeKeyboardTriggered(Keyboard.KEY_PERIOD, ci) then
-            -- go forward one room
-            test.CurrentIndex = test.CurrentIndex + 1
-        end
-        test.CurrentIndex = (test.CurrentIndex + #test.Rooms) % #test.Rooms
 
-        if oldIndex ~= test.CurrentIndex then
-            GotoTestRoomIndex()
+        if SafeKeyboardTriggered(Keyboard.KEY_SEMICOLON, ci) then
+            -- toggle lock door slot
+            BasementRenovator.LockDoorSlot = not BasementRenovator.LockDoorSlot
+        end
+
+        if enableCycling then
+            local oldIndex = test.CurrentIndex
+
+            if SafeKeyboardTriggered(Keyboard.KEY_COMMA, ci) then
+                -- go back one room
+                test.CurrentIndex = test.CurrentIndex - 1
+            elseif SafeKeyboardTriggered(Keyboard.KEY_PERIOD, ci) then
+                -- go forward one room
+                test.CurrentIndex = test.CurrentIndex + 1
+            end
+            test.CurrentIndex = (test.CurrentIndex + #test.Rooms) % #test.Rooms
+
+            if oldIndex ~= test.CurrentIndex then
+                BasementRenovator.CurrentSlotIndex = -1
+                BasementRenovator.LockDoorSlot = false
+                GotoTestRoomIndex()
+            end
         end
     end
 end)
