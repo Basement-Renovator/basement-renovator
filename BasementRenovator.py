@@ -931,6 +931,7 @@ class Entity(QGraphicsItem):
             self.known = False
             self.invalid = False
             self.placeVisual = None
+            self.disableOffsetIndicator = None
 
             self.mirrorX = None
             self.mirrorY = None
