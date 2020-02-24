@@ -191,6 +191,10 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
         Isaac.ExecuteCommand('debug 8')
         game:GetSeeds():AddSeedEffect(SeedEffect.SEED_PREVENT_CURSE_LOST)
         loadingFloor = true
+    elseif test.TestType == 'InstaPreview' then
+        local player = Isaac.GetPlayer(0)
+        player:AddCollectible(CollectibleType.COLLECTIBLE_D7, 0, false)
+        Isaac.ExecuteCommand('debug 8')
     end
 
     if test.CurrentIndex ~= 0 then
