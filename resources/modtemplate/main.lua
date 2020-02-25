@@ -292,19 +292,27 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     end
 end)
 
-local IsFlippedDoor = {
-    [DoorSlot.DOWN0] = true,
-    [DoorSlot.DOWN1] = true,
-    [DoorSlot.RIGHT0] = true,
-    [DoorSlot.RIGHT1] = true,
+local DoorToDirection = {
+    [DoorSlot.DOWN0] = Direction.DOWN,
+    [DoorSlot.DOWN1] = Direction.DOWN,
+    [DoorSlot.LEFT0] = Direction.LEFT,
+    [DoorSlot.LEFT1] = Direction.LEFT,
+    [DoorSlot.RIGHT0] = Direction.RIGHT,
+    [DoorSlot.RIGHT1] = Direction.RIGHT,
+    [DoorSlot.UP0] = Direction.UP,
+    [DoorSlot.UP1] = Direction.UP
 }
 
-local IsVertDoor = {
-    [DoorSlot.UP0] = true,
-    [DoorSlot.UP1] = true,
-    [DoorSlot.DOWN0] = true,
-    [DoorSlot.DOWN1] = true,
+local DoorOffsetsByDirection = {
+    [Direction.DOWN] = Vector(0, -15),
+    [Direction.UP] = Vector(0, 15),
+    [Direction.LEFT] = Vector(15, 0),
+    [Direction.RIGHT] = Vector(-15, 0)
 }
+
+local function DirectionToDegrees(dir)
+    return dir * 90 - 90
+end
 
 local FakeDoorVariant = Isaac.GetEntityVariantByName("Fake Door [BR]")
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
@@ -319,17 +327,14 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
             -- TODO does not work with xml L rooms properly due to vanilla bug
             for _, slot in pairs(doorSlots) do
                 if not room:IsDoorSlotAllowed(slot) then
-                    local isFlipped = IsFlippedDoor[slot]
-                    local isVert = IsVertDoor[slot]
                     local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
-                    local sprite = door:GetSprite()
-                    if not isVert then
-                        sprite.Rotation = -90
-                    end
-                    sprite[isVert and 'FlipY' or 'FlipX'] = isFlipped
+                    door:AddEntityFlags(EntityFlag.FLAG_RENDER_WALL)
 
-                    local offMult = isFlipped and -1 or 1
-                    sprite.Offset = Vector((isVert and 0 or 15) * offMult, (isVert and 15 or 0)) -- bug? in FlipY, offset is flipped with sprite
+                    local doorDir = DoorToDirection[slot]
+
+                    local sprite = door:GetSprite()
+                    sprite.Rotation = DirectionToDegrees(doorDir)
+                    sprite.Offset = DoorOffsetsByDirection[doorDir]
                 end
             end
 
