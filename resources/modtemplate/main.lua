@@ -125,7 +125,6 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, function()
     newGame = true
 end)
 
-local bigDoorSlots = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 }
 local hDoorSlots = { DoorSlot.LEFT0, DoorSlot.RIGHT0 }
 local vDoorSlots = { DoorSlot.UP0, DoorSlot.DOWN0 }
 BasementRenovator.DoorSlotOrder = {
@@ -133,11 +132,11 @@ BasementRenovator.DoorSlotOrder = {
     [RoomShape.ROOMSHAPE_1x2] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN0 },
     [RoomShape.ROOMSHAPE_2x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.DOWN0, DoorSlot.DOWN1 },
 
-    [RoomShape.ROOMSHAPE_2x2] = bigDoorSlots,
-    [RoomShape.ROOMSHAPE_LTL] = bigDoorSlots,
-    [RoomShape.ROOMSHAPE_LTR] = bigDoorSlots,
-    [RoomShape.ROOMSHAPE_LBL] = bigDoorSlots,
-    [RoomShape.ROOMSHAPE_LBR] = bigDoorSlots,
+    [RoomShape.ROOMSHAPE_2x2] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_LTL] = { DoorSlot.LEFT1, DoorSlot.UP0, DoorSlot.LEFT0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_LTR] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.UP1, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_LBL] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.LEFT1, DoorSlot.DOWN0 },
+    [RoomShape.ROOMSHAPE_LBR] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.DOWN1, DoorSlot.RIGHT1, DoorSlot.DOWN0 },
 
     [RoomShape.ROOMSHAPE_IH]  = hDoorSlots,
     [RoomShape.ROOMSHAPE_IIH] = hDoorSlots,
@@ -331,7 +330,6 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
 
                     local offMult = isFlipped and -1 or 1
                     sprite.Offset = Vector((isVert and 0 or 15) * offMult, (isVert and 15 or 0)) -- bug? in FlipY, offset is flipped with sprite
-                    REVEL.DebugLog(slot, sprite.Offset)
                 end
             end
 
@@ -353,6 +351,9 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
 
             local playerPos = room:GetDoorSlotPosition(slot)
             playerPos = room:GetClampedPosition(playerPos, player.Size * 2)
+
+            -- makes transitions smoother kinda?
+            game:GetLevel().EnterDoor = slot
 
             player.Position = playerPos
         end
@@ -398,6 +399,11 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     if not game:IsPaused() and LastRoomChangeFrame ~= frame then
         local player = Isaac.GetPlayer(0)
         local ci = player.ControllerIndex
+
+        if SafeKeyboardTriggered(Keyboard.KEY_R, ci) then
+            -- fast reset
+            Isaac.ExecuteCommand('restart')
+        end
 
         if SafeKeyboardTriggered(Keyboard.KEY_SEMICOLON, ci) then
             -- toggle lock door slot

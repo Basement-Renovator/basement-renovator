@@ -131,7 +131,24 @@ def commonToXML(destPath, rooms, file=None, isPreview = False):
         output.append(f'\t<room {flattenDictList(attrs)}{flattenXml(room.xmlProps)}>\n')
 
         for door in sorted(room.info.doors, key=Room.DoorSortKey):
-            output.append(f'\t\t<door exists="{door[2]}" x="{door[0] - 1}" y="{door[1] - 1}"/>\n')
+            x, y, exists = door
+
+            # HACK there's a vanilla bug with xml reading that messes up L rooms
+            # remove this when rep is out or only apply it for ab+
+            if isPreview:
+                if room.info.shape == 9:
+                    if x == 7 and y == 7:
+                        y = 0
+                    elif x == 13 and y == 4:
+                        x = 0
+                elif room.info.shape == 10:
+                    if x == 20 and y == 7:
+                        y = 0
+                elif room.info.shape == 11:
+                    if x == 13 and y == 11:
+                        x = 0
+
+            output.append(f'\t\t<door exists="{exists}" x="{x - 1}" y="{y - 1}"/>\n')
 
         for stack, x, y in room.spawns():
             output.append(f'\t\t<spawn x="{x - 1}" y="{y - 1}">\n')
