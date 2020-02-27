@@ -953,8 +953,7 @@ class Entity(QGraphicsItem):
                 return
 
             self.name = en.get('Name')
-            self.isGridEnt = en.get('Kind') == 'Stage' and \
-                            en.get('Group') in [ 'Grid', 'Poop', 'Fireplaces', 'Other', 'Props', 'Special Exits', 'Broken' ]
+            self.isGridEnt = en.get('IsGrid') == '1'
 
             self.baseHP = en.get('BaseHP')
             self.boss = en.get('Boss') == '1'
@@ -1020,10 +1019,10 @@ class Entity(QGraphicsItem):
         self.updateTooltip()
 
         self.updatePosition()
-        if self.entity.Type < 999:
-            self.setZValue(1)
-        else:
+        if self.entity.isGridEnt:
             self.setZValue(0)
+        else:
+            self.setZValue(1)
 
         if not hasattr(Entity, 'SELECTION_PEN'):
             Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
