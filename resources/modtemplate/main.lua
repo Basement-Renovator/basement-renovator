@@ -315,6 +315,42 @@ local function DirectionToDegrees(dir)
 end
 
 local FakeDoorVariant = Isaac.GetEntityVariantByName("Fake Door [BR]")
+function BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
+    if not room then
+        -- intended for external callers, e.g. stageapi
+        if BasementRenovator.TestRoomData.TestType ~= 'InstaPreview' then
+            return
+        end
+
+        room = game:GetRoom()
+        doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
+        enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
+    end
+
+    -- render invalid door slots as effects
+    for _, slot in pairs(doorSlots) do
+        local doorDir = DoorToDirection[slot]
+
+        local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
+        local sprite = door:GetSprite()
+        sprite.Rotation = DirectionToDegrees(doorDir)
+        sprite.Offset = DoorOffsetsByDirection[doorDir]
+
+        if not room:IsDoorSlotAllowed(slot) then
+            sprite:ReplaceSpritesheet(0, 'basementrenovator/grid/invaliddoor.png')
+            sprite:ReplaceSpritesheet(1, 'basementrenovator/grid/invaliddoor.png')
+            sprite:ReplaceSpritesheet(2, 'basementrenovator/grid/invaliddoor.png')
+            sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/invaliddoor.png')
+            sprite:LoadGraphics()
+            sprite:Play('Closed', true)
+            door:AddEntityFlags(EntityFlag.FLAG_RENDER_WALL)
+        elseif slot == enterSlot then
+            sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/entrydoor.png')
+            sprite:LoadGraphics()
+        end
+    end
+end
+
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
     local test = BasementRenovator.TestRoomData
     local testRoom = BasementRenovator:InTestRoom()
@@ -322,21 +358,6 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
         if test.TestType == 'InstaPreview' then
             local room = game:GetRoom()
             local doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
-
-            -- render invalid door slots as effects
-            -- TODO does not work with xml L rooms properly due to vanilla bug
-            for _, slot in pairs(doorSlots) do
-                if not room:IsDoorSlotAllowed(slot) then
-                    local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
-                    door:AddEntityFlags(EntityFlag.FLAG_RENDER_WALL)
-
-                    local doorDir = DoorToDirection[slot]
-
-                    local sprite = door:GetSprite()
-                    sprite.Rotation = DirectionToDegrees(doorDir)
-                    sprite.Offset = DoorOffsetsByDirection[doorDir]
-                end
-            end
 
             -- move the player's position to the next available door slot
             if not BasementRenovator.LockDoorSlot then
@@ -352,13 +373,20 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
             end
 
             local player = Isaac.GetPlayer(0)
-            local slot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
+            local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
 
-            local playerPos = room:GetDoorSlotPosition(slot)
-            playerPos = room:GetClampedPosition(playerPos, player.Size * 2)
+            local doorPos = room:GetDoorSlotPosition(enterSlot)
+            local playerPos = room:GetClampedPosition(doorPos, player.Size * 2)
+
+            BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
+
+            -- TODO for rep? change entry door to sync with our choice
+            --room:RemoveGridEntity(room:GetGridIndex(doorPos), 0, false)
 
             -- makes transitions smoother kinda?
-            game:GetLevel().EnterDoor = slot
+            local level = game:GetLevel()
+            --room:RemoveDoor(level.EnterDoor)
+            level.EnterDoor = enterSlot
 
             player.Position = playerPos
         end
