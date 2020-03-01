@@ -521,6 +521,11 @@ class RoomScene(QGraphicsScene):
 
         self.roomWidth, self.roomHeight = self.roomInfo.dims
 
+        self.roomRows = [ QGraphicsWidget() for i in range(self.roomHeight) ]
+        for i, row in enumerate(self.roomRows):
+            self.addItem(row)
+            row.setZValue(i)
+
         self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
 
     def clearDoors(self):
@@ -712,8 +717,9 @@ class RoomEditorWidget(QGraphicsView):
         self.lastTile.add((x, y))
 
         en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
+        if en.entity.isGridEnt:
+            en.updateCoords(x, y, depth = 0)
 
-        self.scene().addItem(en)
         mainWindow.dirt()
 
     def mousePressEvent(self, event):
@@ -1004,7 +1010,7 @@ class Entity(QGraphicsItem):
 
 
     def __init__(self, x, y, mytype, variant, subtype, weight):
-        QGraphicsItem.__init__(self)
+        super(QGraphicsItem, self).__init__()
         self.setFlags(
             self.ItemSendsGeometryChanges |
             self.ItemIsSelectable |
@@ -1016,13 +1022,10 @@ class Entity(QGraphicsItem):
         mainWindow.scene.selectionChanged.connect(self.hideWeightPopup)
 
         self.entity = Entity.Info(x, y, mytype, variant, subtype, weight)
+        self.updateCoords(x, y)
         self.updateTooltip()
 
         self.updatePosition()
-        if self.entity.isGridEnt:
-            self.setZValue(0)
-        else:
-            self.setZValue(1)
 
         if not hasattr(Entity, 'SELECTION_PEN'):
             Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
@@ -1052,6 +1055,46 @@ class Entity(QGraphicsItem):
             tooltipStr += '\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!'
 
         self.setToolTip(tooltipStr)
+
+    def updateCoords(self, x, y, depth=-1):
+        scene = mainWindow.scene
+
+        room = mainWindow.roomList.selectedRoom()
+
+        def entsInCoord(x, y):
+            return filter(lambda e: e.entity.x == x and e is not self, scene.roomRows[y].childItems())
+
+        adding = self.parentItem() is None
+        if adding:
+            self.setParentItem(scene.roomRows[y])
+            return
+
+        z = self.zValue()
+        moving = adding and self.entity.x != x or self.entity.y != y
+
+        if (depth < 0 and moving) or depth != z:
+            topOfStack = False
+            if depth < 0:
+                depth = sum(1 for _ in entsInCoord(x, y))
+                topOfStack = True
+
+            if not topOfStack:
+                for entity in entsInCoord(x, y):
+                    z2 = entity.zValue()
+                    if z2 >= depth:
+                        entity.setZValue(z2 + 1)
+
+            if moving:
+                for entity in entsInCoord(self.entity.x, self.entity.y):
+                    z2 = entity.zValue()
+                    if z2 > z:
+                        entity.setZValue(z2 - 1)
+
+            self.setParentItem(scene.roomRows[y])
+            self.setZValue(depth)
+
+        self.entity.x = x
+        self.entity.y = y
 
     def itemChange(self, change, value):
 
@@ -1084,8 +1127,7 @@ class Entity(QGraphicsItem):
             yc = y * Entity.GRID_SIZE
 
             if xc != currentX or yc != currentY:
-                self.entity.x = x
-                self.entity.y = y
+                self.updateCoords(x, y)
 
                 self.updateTooltip()
                 if self.isSelected():
@@ -2002,6 +2044,8 @@ class RoomSelector(QWidget):
 
         self.filterEntity = None
 
+        self.file = None
+
         self.setupFilters()
         self.setupList()
         self.setupToolbar()
@@ -2589,7 +2633,6 @@ class RoomSelector(QWidget):
 
             for entity in entStack:
                 e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
-                mainWindow.scene.addItem(e)
 
         self.selectedRoom().setToolTip()
         mainWindow.dirt()
@@ -3818,15 +3861,17 @@ class MainWindow(QMainWindow):
         room = room or self.roomList.selectedRoom()
         if not room: return
 
-        eList = self.scene.items()
-
         spawns = [ [] for x in room.gridSpawns ]
 
-        width = room.info.dims[0]
+        width, height = room.info.dims
 
-        for e in eList:
-            if isinstance(e, Entity):
-                spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append([ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ])
+        for y in range(height):
+            for e in self.scene.roomRows[y].childItems():
+                spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append(e)
+
+        for i, spawn in enumerate(spawns):
+            spawns[i] = map(lambda e: [ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ], \
+                            sorted(spawn, key=QGraphicsItem.zValue))
 
         room.gridSpawns = spawns
 
@@ -3877,7 +3922,7 @@ class MainWindow(QMainWindow):
         # Spawn those entities
         for stack, x, y in current.spawns():
             for ent in stack:
-                self.scene.addItem(Entity(x, y, ent[0], ent[1], ent[2], ent[3]))
+                e = Entity(x, y, ent[0], ent[1], ent[2], ent[3])
 
         # Make the current Room mark for clearer multi-selection
         current.setData(100, True)
@@ -4781,7 +4826,6 @@ class MainWindow(QMainWindow):
         for item in self.clipboard:
             ent = Entity(*item)
             ent.setSelected(True)
-            self.scene.addItem(ent)
 
         self.dirt()
 
