@@ -508,6 +508,9 @@ class RoomScene(QGraphicsScene):
         self.bitfont = [ QPixmap.fromImage(q.copy(i * 12, j * 12, 12, 12)) for j in range(int(q.height() / 12)) for i in range(int(q.width() / 12)) ]
         self.bitText = True
 
+        self.roomDoorRoot = None
+        self.clearDoors()
+
         self.bgState = []
 
         self.floorAnim = anm2.Config('resources/Backgrounds/FloorBackdrop.anm2', 'resources')
@@ -529,9 +532,13 @@ class RoomScene(QGraphicsScene):
         self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
 
     def clearDoors(self):
-        for item in self.items():
-            if isinstance(item, Door):
-                item.remove()
+        if self.roomDoorRoot:
+            # wrap if the underlying object is deleted
+            try: self.roomDoorRoot.remove()
+            except RuntimeError: pass
+
+        self.roomDoorRoot = QGraphicsWidget()
+        self.addItem(self.roomDoorRoot)
 
     def drawForeground(self, painter, rect):
 
@@ -717,6 +724,7 @@ class RoomEditorWidget(QGraphicsView):
         self.lastTile.add((x, y))
 
         en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
+        en.updateBlockedDoor(False)
         if en.entity.isGridEnt:
             en.updateCoords(x, y, depth = 0)
 
@@ -966,6 +974,7 @@ class Entity(QGraphicsItem):
             self.champion = en.get('Champion') == '1'
             self.placeVisual = en.get('PlaceVisual')
             self.disableOffsetIndicator = en.get('DisableOffsetIndicator') == '1'
+            self.blocksDoor = en.get('NoBlockDoors') != '1'
 
             def getEnt(s):
                 return list(map(int, s.split('.')))
@@ -1068,7 +1077,7 @@ class Entity(QGraphicsItem):
             return
 
         z = self.zValue()
-        moving = adding and self.entity.x != x or self.entity.y != y
+        moving = self.entity.x != x or self.entity.y != y
 
         if (depth < 0 and moving) or depth != z:
             topOfStack = False
@@ -1091,8 +1100,26 @@ class Entity(QGraphicsItem):
             self.setParentItem(scene.roomRows[y])
             self.setZValue(depth)
 
+        if moving:
+            self.updateBlockedDoor(True)
+
         self.entity.x = x
         self.entity.y = y
+
+        if moving:
+            self.updateBlockedDoor(False)
+
+    def updateBlockedDoor(self, val):
+        if self.entity.blocksDoor:
+            blockedDoor = self.scene().roomInfo.inFrontOfDoor(self.entity.x, self.entity.y)
+            if blockedDoor:
+                for door in self.scene().roomDoorRoot.childItems():
+                    if door.doorItem[:2] == blockedDoor[:2]:
+                        doorFollowsBlockRule = (door.blockingCount == 0) == door.exists
+                        door.blockingCount += val and -1 or 1
+                        if doorFollowsBlockRule:
+                            door.exists = door.blockingCount == 0
+                        break
 
     def itemChange(self, change, value):
 
@@ -1277,6 +1304,8 @@ class Entity(QGraphicsItem):
         if self.popup:
             self.popup.remove()
             self.scene().views()[0].canDelete = True
+        self.updateBlockedDoor(True)
+        self.setParentItem(None)
         self.scene().removeItem(self)
 
     def mouseReleaseEvent(self, event):
@@ -1457,7 +1486,10 @@ class Door(QGraphicsItem):
         # Supplied entity info
         self.doorItem = doorItem
 
+        self.blockingCount = 0
+
         self.setPos(self.doorItem[0] * 26 - 13, self.doorItem[1] * 26 - 13)
+        self.setParentItem(mainWindow.scene.roomDoorRoot)
 
         tr = QTransform()
         if doorItem[0] in [0, 13]:
@@ -1649,8 +1681,16 @@ class Room(QListWidgetItem):
         }
 
         for shape in Shapes.values():
+            doorWalls = shape['DoorWalls'] = []
             for door in shape['Doors']:
                 door.append(True)
+                for wall in shape['Walls']['X']:
+                    if door[0] >= wall[0] and door[0] <= wall[1] and door[1] == wall[2]:
+                        doorWalls.append((door, wall, 'X'))
+                        break
+                for wall in shape['Walls']['Y']:
+                    if door[1] >= wall[0] and door[1] <= wall[1] and door[0] == wall[2]:
+                        doorWalls.append((door, wall, 'Y'))
 
         def __init__(self, t=0, v=0, s=0, shape=1):
             self.type = t
@@ -1689,6 +1729,14 @@ class Room(QListWidgetItem):
 
         def gridIndex(x,y,w):
             return y * w + x
+
+        def inFrontOfDoor(self, x, y):
+            for door, wall, axis in self.shapeData['DoorWalls']:
+                if axis == 'X' and door[0] == x and y - door[1] == wall[3]:
+                    return door
+                if axis == 'Y' and door[1] == y and x - door[0] == wall[3]:
+                    return door
+            return None
 
         def _axisBounds(a, c, w):
             wmin, wmax, wlvl, wdir = w
@@ -1772,7 +1820,7 @@ class Room(QListWidgetItem):
     def clearDoors(self):
         mainWindow.scene.clearDoors()
         for door in self.info.doors:
-            mainWindow.scene.addItem(Door(door))
+            d = Door(door)
 
     def getSpawnCount(self):
         return self._spawnCount

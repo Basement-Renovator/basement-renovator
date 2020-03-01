@@ -165,8 +165,16 @@ class Room:
     }
 
     for shape in Shapes.values():
+        doorWalls = shape['DoorWalls'] = []
         for door in shape['Doors']:
             door.append(True)
+            for wall in shape['Walls']['X']:
+                if door[0] >= wall[0] and door[0] <= wall[1] and door[1] == wall[2]:
+                    doorWalls.append((door, wall, 'X'))
+                    break
+            for wall in shape['Walls']['Y']:
+                if door[1] >= wall[0] and door[1] <= wall[1] and door[0] == wall[2]:
+                    doorWalls.append((door, wall, 'Y'))
 
     class Info:
         def __init__(self, t=0, v=0, s=0, shape=1):
@@ -216,6 +224,14 @@ class Room:
         def _axisBounds(a, c, w):
             wmin, wmax, wlvl, wdir = w
             return a < wmin or a > wmax or ((c > wlvl) - (c < wlvl)) == wdir
+
+        def inFrontOfDoor(self, x, y):
+            for door, wall, axis in self.shapeData['DoorWalls']:
+                if axis == 'X' and door[0] == x and y - door[1] == wall[3]:
+                    return door
+                if axis == 'Y' and door[1] == y and x - door[0] == wall[3]:
+                    return door
+            return None
 
         def isInBounds(self, x,y):
             return all(Room.Info._axisBounds(x,y,w) for w in self.shapeData['Walls']['X']) and \

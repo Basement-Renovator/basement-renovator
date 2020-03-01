@@ -51,6 +51,8 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 * **The Room List continued**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new stb, or if you choose an existing stb it will append those rooms onto the one you chose.
 
 * **The Entity Palette**: The entity palette on the left is a moveable dock just like the Room List. You can use it to paint entities onto the Editor just like Mario Paint. Simply select an entity from the palette, then right click in the Editor window where you want the entity to paint. You're basically stamping them into the room. All known game entities are listed.
+  - When adding, moving, or removing entities, doors will automatically be enabled or disabled based on if entities are in front of them. To override the normal setting, double click the door to toggle its enablement
+    - To prevent an entity from blocking doors, give it the `NoBlockDoors` attribute
 
 * **Other Things**: You can show or hide the grid in the edit menu, or by pressing Cmd-G (Ctrl-G on win). You can pick up any of the docks, and move them to new areas, have them as floating windows, or stack them as tabs. There are a few other options in the View menu to give you some choices.
 
@@ -83,7 +85,7 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 
 *When is the next update?*
 
-* The project doesn't really do formal releases anymore. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
+* There's no formal release schedule. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
 
 *Why can't I edit door position? Why can't I make a custom room size?*
 
