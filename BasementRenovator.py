@@ -1059,8 +1059,6 @@ class Entity(QGraphicsItem):
     def updateCoords(self, x, y, depth=-1):
         scene = mainWindow.scene
 
-        room = mainWindow.roomList.selectedRoom()
-
         def entsInCoord(x, y):
             return filter(lambda e: e.entity.x == x and e is not self, scene.roomRows[y].childItems())
 
@@ -3870,8 +3868,8 @@ class MainWindow(QMainWindow):
                 spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append(e)
 
         for i, spawn in enumerate(spawns):
-            spawns[i] = map(lambda e: [ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ], \
-                            sorted(spawn, key=QGraphicsItem.zValue))
+            spawns[i] = list(map(lambda e: [ e.entity.Type, e.entity.Variant, e.entity.Subtype, e.entity.weight ], \
+                            sorted(spawn, key=QGraphicsItem.zValue)))
 
         room.gridSpawns = spawns
 
