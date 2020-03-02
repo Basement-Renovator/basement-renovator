@@ -1,5 +1,6 @@
 """Functions for converting to and from the various stb formats"""
 
+import traceback, sys
 import struct
 from pathlib import Path
 import xml.etree.cElementTree as ET
@@ -597,6 +598,8 @@ def xmlToCommon(path, destPath=None):
                 del roomXmlProps['lastTestTime']
             except:
                 print('Invalid test time string found', lastTestTime)
+                traceback.print_exception(*sys.exc_info())
+                lastTestTime = None
 
         doors = list(map(lambda door: [ int(door.get('x')) + 1, int(door.get('y')) + 1, door.get('exists', "0")[0] in "1tTyY" ], roomNode.findall('door')))
 

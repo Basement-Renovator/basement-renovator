@@ -7,7 +7,6 @@ class Entity:
         self.weight = weight
 
         self.xmlProps = xmlProps or {}
-        self.lastTestTime = None
 
         self.clearValues()
         self.Type = t

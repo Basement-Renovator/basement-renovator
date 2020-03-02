@@ -4955,6 +4955,11 @@ if __name__ == '__main__':
 
     import sys
 
+    min_version = [ 3, 7 ]
+    if not (sys.version_info[0] > min_version[0] \
+        or (sys.version_info[0] == min_version[0] and sys.version_info[1] >= min_version[1])):
+        raise NotImplementedError(f"Basement Renovator requires minimum Python {min_version[0]}.{min_version[1]}, your version: {sys.version_info[0]}.{sys.version_info[0]}")
+
     # Application
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon('resources/UI/BasementRenovator.png'))
