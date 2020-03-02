@@ -724,7 +724,6 @@ class RoomEditorWidget(QGraphicsView):
         self.lastTile.add((x, y))
 
         en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
-        en.updateBlockedDoor(False)
         if en.entity.isGridEnt:
             en.updateCoords(x, y, depth = 0)
 
@@ -1074,6 +1073,7 @@ class Entity(QGraphicsItem):
         adding = self.parentItem() is None
         if adding:
             self.setParentItem(scene.roomRows[y])
+            self.updateBlockedDoor(False)
             return
 
         z = self.zValue()
