@@ -945,7 +945,7 @@ class Entity(QGraphicsItem):
             self.invalid = False
             self.placeVisual = None
             self.disableOffsetIndicator = None
-            self.blocksDoor = None
+            self.blocksDoor = True
 
             self.mirrorX = None
             self.mirrorY = None
