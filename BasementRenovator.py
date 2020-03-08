@@ -944,7 +944,7 @@ class Entity(QGraphicsItem):
             self.known = False
             self.invalid = False
             self.placeVisual = None
-            self.disableOffsetIndicator = None
+            self.disableOffsetIndicator = False
             self.blocksDoor = True
 
             self.mirrorX = None
@@ -2854,7 +2854,7 @@ class RoomSelector(QWidget):
             mainWindow.save(oldRooms.rooms, path, fileObj=oldRooms)
         # Make a new file with the selected rooms
         else:
-            mainWindow.save(rooms, path, fileObj=oldRooms)
+            mainWindow.save(rooms, path, fileObj=self.file)
 
     def setButtonStates(self):
         rooms = len(self.selectedRooms()) > 0
