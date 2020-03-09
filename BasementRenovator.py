@@ -1394,7 +1394,7 @@ class EntityStack(QGraphicsItem):
 
         for i in range(activeSpinners - len(self.spinners)):
             weight = self.WeightSpinner()
-            weight.valueChanged.connect(lambda: self.weightChanged(i))
+            weight.valueChanged.connect((lambda v: lambda: self.weightChanged(v))(i))
             self.spinners.append(self.Proxy(weight, self))
 
         for i in range(activeSpinners, len(self.spinners)):
