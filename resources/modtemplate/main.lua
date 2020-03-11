@@ -148,30 +148,30 @@ BasementRenovator.CurrentSlotIndex = -1
 BasementRenovator.LockDoorSlot = false
 
 local GotoTable = {
-    [0] = 'd', -- null rooms crash the game if added to files
-    [1] = 'd', -- note that grave rooms don't work properly
-    [2] = 's.shop',
-    [3] = 's.error',
-    [4] = 's.treasure',
-    [5] = 's.boss',
-    [6] = 's.miniboss',
-    [7] = 's.secret',
-    [8] = 's.supersecret',
-    [9] = 's.arcade',
-    [10] = 's.curse',
-    [11] = 's.challenge',
-    [12] = 's.library',
-    [13] = 's.sacrifice',
-    [14] = 's.devil',
-    [15] = 's.angel',
-    [16] = 's.itemdungeon',
-    [17] = 's.bossrush',
-    [18] = 's.isaacs',
-    [19] = 's.barren',
-    [20] = 's.chest',
-    [21] = 's.dice',
-    [22] = 's.blackmarket',
-    [23] = 'd' -- greed entrance room doesn't have a goto category??? so they don't work either
+    [RoomType.ROOM_NULL]         = 'd', -- null rooms crash the game if added to files
+    [RoomType.ROOM_DEFAULT]      = 'd', -- note that grave rooms don't work properly
+    [RoomType.ROOM_SHOP]         = 's.shop',
+    [RoomType.ROOM_ERROR]        = 's.error',
+    [RoomType.ROOM_TREASURE]     = 's.treasure',
+    [RoomType.ROOM_BOSS]         = 's.boss',
+    [RoomType.ROOM_MINIBOSS]     = 's.miniboss',
+    [RoomType.ROOM_SECRET]       = 's.secret',
+    [RoomType.ROOM_SUPERSECRET]  = 's.supersecret',
+    [RoomType.ROOM_ARCADE]       = 's.arcade',
+    [RoomType.ROOM_CURSE]        = 's.curse',
+    [RoomType.ROOM_CHALLENGE]    = 's.challenge',
+    [RoomType.ROOM_LIBRARY]      = 's.library',
+    [RoomType.ROOM_SACRIFICE]    = 's.sacrifice',
+    [RoomType.ROOM_DEVIL]        = 's.devil',
+    [RoomType.ROOM_ANGEL]        = 's.angel',
+    [RoomType.ROOM_DUNGEON]      = 's.itemdungeon',
+    [RoomType.ROOM_BOSSRUSH]     = 's.bossrush',
+    [RoomType.ROOM_ISAACS]       = 's.isaacs',
+    [RoomType.ROOM_BARREN]       = 's.barren',
+    [RoomType.ROOM_CHEST]        = 's.chest',
+    [RoomType.ROOM_DICE]         = 's.dice',
+    [RoomType.ROOM_BLACK_MARKET] = 's.blackmarket',
+    [RoomType.ROOM_GREED_EXIT]   = 'd' -- greed entrance room doesn't have a goto category??? so they don't work either
 }
 
 local function GotoTestRoomIndex()
@@ -357,37 +357,62 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
     if testRoom then
         if test.TestType == 'InstaPreview' then
             local room = game:GetRoom()
-            local doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
+            local doorPos
+            if room:GetType() ~= RoomType.ROOM_DUNGEON then
+                local doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
 
-            -- move the player's position to the next available door slot
-            if not BasementRenovator.LockDoorSlot then
-                BasementRenovator.CurrentSlotIndex = (BasementRenovator.CurrentSlotIndex + 1) % #doorSlots
-                for i = 0, #doorSlots - 1 do
-                    local slotIndex = (BasementRenovator.CurrentSlotIndex + i) % #doorSlots
-                    local currentSlot = doorSlots[slotIndex + 1]
-                    if room:IsDoorSlotAllowed(currentSlot) then
-                        BasementRenovator.CurrentSlotIndex = slotIndex
-                        break
+                -- move the player's position to the next available door slot
+                if not BasementRenovator.LockDoorSlot then
+                    BasementRenovator.CurrentSlotIndex = (BasementRenovator.CurrentSlotIndex + 1) % #doorSlots
+                    for i = 0, #doorSlots - 1 do
+                        local slotIndex = (BasementRenovator.CurrentSlotIndex + i) % #doorSlots
+                        local currentSlot = doorSlots[slotIndex + 1]
+                        if room:IsDoorSlotAllowed(currentSlot) then
+                            BasementRenovator.CurrentSlotIndex = slotIndex
+                            break
+                        end
                     end
                 end
+
+                local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
+                doorPos = room:GetDoorSlotPosition(enterSlot)
+
+                BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
+
+                -- TODO for rep? change entry door to sync with our choice
+                --room:RemoveGridEntity(room:GetGridIndex(doorPos), 0, false)
+
+                -- makes transitions smoother kinda?
+                local level = game:GetLevel()
+                --room:RemoveDoor(level.EnterDoor)
+                level.EnterDoor = enterSlot
+            else
+                -- special logic for crawlspace doors
+                -- only use black market entrance when wall is open
+                doorSlots = {
+                    { Door = 17, Enter = 17 },
+                    { Door = 74, Enter = 71 }
+                }
+
+                -- move the player's position to the next available door slot
+                if not BasementRenovator.LockDoorSlot then
+                    BasementRenovator.CurrentSlotIndex = (BasementRenovator.CurrentSlotIndex + 1) % #doorSlots
+                    for i = 0, #doorSlots - 1 do
+                        local slotIndex = (BasementRenovator.CurrentSlotIndex + i) % #doorSlots
+                        local currentSlot = doorSlots[slotIndex + 1]
+                        if currentSlot.Door == currentSlot.Enter or room:GetGridCollision(currentSlot.Door) == GridCollisionClass.COLLISION_NONE then
+                            BasementRenovator.CurrentSlotIndex = slotIndex
+                            break
+                        end
+                    end
+                end
+
+                local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
+                doorPos = room:GetGridPosition(enterSlot.Enter)
             end
 
             local player = Isaac.GetPlayer(0)
-            local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
-
-            local doorPos = room:GetDoorSlotPosition(enterSlot)
             local playerPos = room:GetClampedPosition(doorPos, player.Size * 2)
-
-            BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
-
-            -- TODO for rep? change entry door to sync with our choice
-            --room:RemoveGridEntity(room:GetGridIndex(doorPos), 0, false)
-
-            -- makes transitions smoother kinda?
-            local level = game:GetLevel()
-            --room:RemoveDoor(level.EnterDoor)
-            level.EnterDoor = enterSlot
-
             player.Position = playerPos
         end
 
