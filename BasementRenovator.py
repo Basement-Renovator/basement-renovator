@@ -1134,7 +1134,7 @@ class Entity(QGraphicsItem):
 
         if change == self.ItemPositionChange:
 
-            currentX, currentY = self.x(), self.y()
+            currentX, currentY = self.entity.x, self.entity.y
 
             xc, yc = value.x(), value.y()
 
@@ -1153,19 +1153,19 @@ class Entity(QGraphicsItem):
             x = min(max(x, 0), w - 1)
             y = min(max(y, 0), h - 1)
 
+            if x != currentX or y != currentY:
             # TODO above hack is here too
             if settings.value('SnapToBounds') == '1' and self.scene():
                 x, y = self.scene().roomInfo.snapToBounds(x, y)
 
-            xc = x * Entity.GRID_SIZE
-            yc = y * Entity.GRID_SIZE
-
-            if xc != currentX or yc != currentY:
                 self.updateCoords(x, y)
 
                 self.updateTooltip()
                 if self.isSelected():
                     mainWindow.dirt()
+
+            xc = x * Entity.GRID_SIZE
+            yc = y * Entity.GRID_SIZE
 
             value.setX(xc)
             value.setY(yc)
