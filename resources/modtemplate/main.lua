@@ -357,7 +357,9 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
     if testRoom then
         if test.TestType == 'InstaPreview' then
             local room = game:GetRoom()
-            local doorPos
+            local player = Isaac.GetPlayer(0)
+
+            local playerPos
             if room:GetType() ~= RoomType.ROOM_DUNGEON then
                 local doorSlots = BasementRenovator.DoorSlotOrder[room:GetRoomShape()]
 
@@ -375,7 +377,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
                 end
 
                 local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
-                doorPos = room:GetDoorSlotPosition(enterSlot)
+                local doorPos = room:GetDoorSlotPosition(enterSlot)
 
                 BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
 
@@ -386,12 +388,25 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
                 local level = game:GetLevel()
                 --room:RemoveDoor(level.EnterDoor)
                 level.EnterDoor = enterSlot
+
+                playerPos = room:GetClampedPosition(doorPos, player.Size * 2)
             else
                 -- special logic for crawlspace doors
                 -- only use black market entrance when wall is open
                 doorSlots = {
-                    { Door = 17, Enter = 17 },
-                    { Door = 74, Enter = 71 }
+                    -- the main entrance is always in grid 2; in TL L rooms you're snapped right above the wall
+                    { EnterPos = room:GetGridPosition(2) },
+                    -- it's always this position regardless of room shape
+                    { EnterPos = Vector(480, 280), DoorCheck = function()
+                        local coords = room:GetGridPosition(14)
+                        for i = 0, room:GetGridHeight() do
+                            if room:GetGridCollisionAtPos(coords) == GridCollisionClass.COLLISION_NONE then
+                                return true
+                            end
+                            coords.Y = coords.Y + 40
+                        end
+                        return false
+                    end }
                 }
 
                 -- move the player's position to the next available door slot
@@ -400,7 +415,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
                     for i = 0, #doorSlots - 1 do
                         local slotIndex = (BasementRenovator.CurrentSlotIndex + i) % #doorSlots
                         local currentSlot = doorSlots[slotIndex + 1]
-                        if currentSlot.Door == currentSlot.Enter or room:GetGridCollision(currentSlot.Door) == GridCollisionClass.COLLISION_NONE then
+                        if not currentSlot.DoorCheck or currentSlot.DoorCheck() then
                             BasementRenovator.CurrentSlotIndex = slotIndex
                             break
                         end
@@ -408,11 +423,11 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
                 end
 
                 local enterSlot = doorSlots[math.max(BasementRenovator.CurrentSlotIndex, 0) + 1]
-                doorPos = room:GetGridPosition(enterSlot.Enter)
+                local doorPos = enterSlot.EnterPos
+
+                playerPos = doorPos
             end
 
-            local player = Isaac.GetPlayer(0)
-            local playerPos = room:GetClampedPosition(doorPos, player.Size * 2)
             player.Position = playerPos
         end
 
