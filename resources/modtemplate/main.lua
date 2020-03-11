@@ -399,7 +399,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
                     -- it's always this position regardless of room shape
                     { EnterPos = Vector(480, 280), DoorCheck = function()
                         local coords = room:GetGridPosition(14)
-                        for i = 0, room:GetGridHeight() do
+                        for i = 0, room:GetGridHeight() - 1 do
                             if room:GetGridCollisionAtPos(coords) == GridCollisionClass.COLLISION_NONE then
                                 return true
                             end
