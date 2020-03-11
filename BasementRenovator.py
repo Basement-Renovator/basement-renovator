@@ -527,9 +527,17 @@ class RoomScene(QGraphicsScene):
         self.roomRows = [ QGraphicsWidget() for i in range(self.roomHeight) ]
         for i, row in enumerate(self.roomRows):
             self.addItem(row)
-            row.setZValue(i)
 
         self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
+
+    def updateRoomDepth(self, room):
+        if not room.invertZOrder:
+            for i, row in enumerate(self.roomRows):
+                row.setZValue(i)
+        else:
+            last = len(self.roomRows) - 1
+            for i, row in enumerate(self.roomRows):
+                row.setZValue(last - i)
 
     def clearDoors(self):
         if self.roomDoorRoot:
@@ -1782,6 +1790,7 @@ class Room(QListWidgetItem):
         self.xmlProps = {}
         self._lastTestTime = None
 
+        self.invertZOrder = False
         self.setRoomBG()
 
         self.setFlags(self.flags() | Qt.ItemIsEditable)
@@ -1985,6 +1994,11 @@ class Room(QListWidgetItem):
         # grave rooms
         elif c == 1 and v > 2 and 'special rooms' in mainWindow.path:
             self.roomBG = getBG('Dark Room')
+
+        if c == 16: # crawlspace
+            self.invertZOrder = True
+        else:
+            self.invertZOrder = False
 
     def mirrorX(self):
         # Flip Spawns
@@ -2693,6 +2707,7 @@ class RoomSelector(QWidget):
 
             r.setToolTip()
 
+        mainWindow.scene.updateRoomDepth(self.selectedRoom())
         mainWindow.scene.update()
         mainWindow.dirt()
 
@@ -3960,6 +3975,7 @@ class MainWindow(QMainWindow):
         # Clear the room and reset the size
         self.scene.clear()
         self.scene.newRoomSize(current.info.shape)
+        self.scene.updateRoomDepth(current)
 
         self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
 
