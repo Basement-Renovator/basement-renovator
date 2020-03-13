@@ -1154,9 +1154,9 @@ class Entity(QGraphicsItem):
             y = min(max(y, 0), h - 1)
 
             if x != currentX or y != currentY:
-            # TODO above hack is here too
-            if settings.value('SnapToBounds') == '1' and self.scene():
-                x, y = self.scene().roomInfo.snapToBounds(x, y)
+                # TODO above hack is here too
+                if settings.value('SnapToBounds') == '1' and self.scene():
+                    x, y = self.scene().roomInfo.snapToBounds(x, y)
 
                 self.updateCoords(x, y)
 
