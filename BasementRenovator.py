@@ -1082,7 +1082,7 @@ class Entity(QGraphicsItem):
         adding = self.parentItem() is None
         if adding:
             self.setParentItem(scene.roomRows[y])
-            self.updateBlockedDoor(False)
+            self.updateBlockedDoor(False, countOnly=True)
             return
 
         z = self.zValue()
@@ -1118,7 +1118,7 @@ class Entity(QGraphicsItem):
         if moving:
             self.updateBlockedDoor(False)
 
-    def updateBlockedDoor(self, val):
+    def updateBlockedDoor(self, val, countOnly=False):
         if self.entity.blocksDoor:
             blockedDoor = self.scene().roomInfo.inFrontOfDoor(self.entity.x, self.entity.y)
             if blockedDoor:
@@ -1126,7 +1126,7 @@ class Entity(QGraphicsItem):
                     if door.doorItem[:2] == blockedDoor[:2]:
                         doorFollowsBlockRule = (door.blockingCount == 0) == door.exists
                         door.blockingCount += val and -1 or 1
-                        if doorFollowsBlockRule:
+                        if doorFollowsBlockRule and not countOnly:
                             door.exists = door.blockingCount == 0
                         break
 
