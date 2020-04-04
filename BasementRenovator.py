@@ -4967,6 +4967,10 @@ class MainWindow(QMainWindow):
     def goToHelp(self):
         QDesktopServices().openUrl(QUrl('https://github.com/Tempus/Basement-Renovator/'))
 
+def applyDefaultSettings(settings, defaults):
+    for key, val in defaults.items():
+        if settings.value(key) is None:
+            settings.setValue(key, val)
 
 if __name__ == '__main__':
 
@@ -4990,6 +4994,11 @@ if __name__ == '__main__':
     cmdParser.process(app)
 
     settings = QSettings('settings.ini', QSettings.IniFormat)
+
+    applyDefaultSettings(settings, {
+        'SnapToBounds': '1',
+        'ExportSTBOnSave': '1'
+    })
 
     # XML Globals
     entityXML = getEntityXML()
