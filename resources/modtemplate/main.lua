@@ -89,7 +89,7 @@ function BasementRenovator:InTestRoom()
     local level = game:GetLevel()
     local desc = level:GetCurrentRoomDesc()
 
-    return BasementRenovator:GetTestRoomFromData(desc.Data)
+    return BasementRenovator:GetTestRoomFromData(desc.Data), desc
 end
 
 function BasementRenovator:InTestStage(level)
@@ -452,14 +452,16 @@ end
 local LastRoomChangeFrame = -1
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local test = BasementRenovator.TestRoomData
-    local room = BasementRenovator:InTestRoom() or { Name = 'N/A', Variant = -1, Invalid = true }
+    local room, roomDesc = BasementRenovator:InTestRoom()
 
-    parts = split(test.RoomFile, '/\\')
-    filename = parts[#parts]
+    room = room or { Name = 'N/A', Variant = -1, Difficulty = -1, Invalid = true }
+
+    local parts = split(test.RoomFile, '/\\')
+    local filename = parts[#parts]
 
     local topLeft = game:GetRoom():GetRenderSurfaceTopLeft()
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
-    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
+    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ", Difficulty: " .. roomDesc.Data.Difficulty .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
     Isaac.RenderScaledText("Test Type: " .. test.TestType ..  " --- In Test Room: " .. (room.Invalid and 'NO' or ('YES' .. (BasementRenovator.LockDoorSlot and ' [DOOR SLOT LOCKED]' or ''))), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
 
     local enableCycling = false
