@@ -1026,8 +1026,13 @@ class Entity(QGraphicsItem):
             self.known = True
 
 
-    def __init__(self, x, y, mytype, variant, subtype, weight):
+    def __init__(self, x, y, mytype, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
+
+        # used when the ent is coming in from a previous state and should not update permanent things,
+        # e.g. door enablement
+        self.respawning = respawning
+
         self.setFlags(
             self.ItemSendsGeometryChanges |
             self.ItemIsSelectable |
@@ -1051,6 +1056,8 @@ class Entity(QGraphicsItem):
             Entity.OUT_OF_RANGE_WARNING_IMG = QPixmap('resources/UI/ent-warning.png')
 
         self.setAcceptHoverEvents(True)
+
+        self.respawning = False
 
     def setData(self, t, v, s):
         self.entity.changeTo(t, v, s)
@@ -1082,7 +1089,7 @@ class Entity(QGraphicsItem):
         adding = self.parentItem() is None
         if adding:
             self.setParentItem(scene.roomRows[y])
-            self.updateBlockedDoor(False, countOnly=True)
+            self.updateBlockedDoor(False, countOnly=self.respawning)
             return
 
         z = self.zValue()
@@ -1126,7 +1133,9 @@ class Entity(QGraphicsItem):
                     if door.doorItem[:2] == blockedDoor[:2]:
                         doorFollowsBlockRule = (door.blockingCount == 0) == door.exists
                         door.blockingCount += val and -1 or 1
-                        if doorFollowsBlockRule and not countOnly:
+                        if doorFollowsBlockRule and door.exists and not countOnly:
+                            # if the door was already following the blocking rules
+                            # AND it was open (do not open closed doors) then close it
                             door.exists = door.blockingCount == 0
                         break
 
@@ -2693,7 +2702,7 @@ class RoomSelector(QWidget):
             if x >= w or y >= h: continue
 
             for entity in entStack:
-                e = Entity(x, y, entity[0], entity[1], entity[2], entity[3])
+                e = Entity(x, y, entity[0], entity[1], entity[2], entity[3], respawning=True)
 
         self.selectedRoom().setToolTip()
         mainWindow.dirt()
@@ -3985,7 +3994,7 @@ class MainWindow(QMainWindow):
         # Spawn those entities
         for stack, x, y in current.spawns():
             for ent in stack:
-                e = Entity(x, y, ent[0], ent[1], ent[2], ent[3])
+                e = Entity(x, y, ent[0], ent[1], ent[2], ent[3], respawning=True)
 
         # Make the current Room mark for clearer multi-selection
         current.setData(100, True)
