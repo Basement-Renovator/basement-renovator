@@ -130,7 +130,7 @@ local vDoorSlots = { DoorSlot.UP0, DoorSlot.DOWN0 }
 BasementRenovator.DoorSlotOrder = {
     [RoomShape.ROOMSHAPE_1x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.DOWN0 },
     [RoomShape.ROOMSHAPE_1x2] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN0 },
-    [RoomShape.ROOMSHAPE_2x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.DOWN0, DoorSlot.DOWN1 },
+    [RoomShape.ROOMSHAPE_2x1] = { DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.DOWN1, DoorSlot.DOWN0 },
 
     [RoomShape.ROOMSHAPE_2x2] = { DoorSlot.LEFT1, DoorSlot.LEFT0, DoorSlot.UP0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 },
     [RoomShape.ROOMSHAPE_LTL] = { DoorSlot.LEFT1, DoorSlot.UP0, DoorSlot.LEFT0, DoorSlot.UP1, DoorSlot.RIGHT0, DoorSlot.RIGHT1, DoorSlot.DOWN1, DoorSlot.DOWN0 },
