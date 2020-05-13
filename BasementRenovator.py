@@ -546,6 +546,7 @@ class RoomScene(QGraphicsScene):
             except RuntimeError: pass
 
         self.roomDoorRoot = QGraphicsWidget()
+        self.roomDoorRoot.setZValue(-1000) # make sure doors display under entities
         self.addItem(self.roomDoorRoot)
 
     def drawForeground(self, painter, rect):
