@@ -80,33 +80,31 @@ def runmain():
     i = -1
     while (i + 1) < len(paths):
         i += 1
-        print('----')
 
         file = paths[i]
+
+        path = Path(file)
+        if path.is_dir():
+            files = list(filter(lambda f: f.suffix == '.xml', path.iterdir()))
+            print('Adding xml files to queue from: ', path)
+            del paths[i]
+            i -= 1
+            paths.extend(files)
+
+    paths = list(filter(lambda f: Path(f).exists(), paths))
+
+    if lastModified:
+        anyModified = next((file for file in paths if file.stat().st_mtime > lastModified), None) is not None
+        if not anyModified:
+            print('----')
+            print('Skipping since no xmls in folder have been modified since last update')
+            return
+
+    for file in paths:
+        print('----')
         print('Path:', file)
 
         path = Path(file)
-        if not path.exists():
-            print('Path does not exist! Skipping!')
-            continue
-
-        if path.is_dir():
-            files = list(filter(lambda f: f.suffix == '.xml', path.iterdir()))
-
-            if lastModified:
-                anyModified = False
-                for file in files:
-                    if file.stat().st_mtime > lastModified:
-                        anyModified = True
-                        break
-
-                if not anyModified:
-                    print('Skipping since no xmls in folder have been modified since last update')
-                    continue
-
-            print('Adding xml files to queue', files)
-            paths.extend(files)
-            continue
 
         print('Merging file...')
         if path.suffix != '.xml':
