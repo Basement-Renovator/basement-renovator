@@ -459,6 +459,10 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local parts = split(test.RoomFile, '/\\')
     local filename = parts[#parts]
 
+    if filename == '.' then
+        filename = 'New File'
+    end
+
     local topLeft = game:GetRoom():GetRenderSurfaceTopLeft()
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
     Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ", Difficulty: " .. roomDesc.Data.Difficulty .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
