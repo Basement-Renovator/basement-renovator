@@ -4816,7 +4816,7 @@ class MainWindow(QMainWindow):
             else:
                 exePath = self.findExecutablePath()
 
-            if exePath and QFile.exists(exePath):
+            if exePath and QFile.exists(exePath) and settings.value('ForceUrlLaunch') != '1':
                 if steamPath:
                     launchArgs = [ "-applaunch", "250900" ] + launchArgs
                 subprocess.Popen([exePath] + launchArgs, cwd = installPath)
