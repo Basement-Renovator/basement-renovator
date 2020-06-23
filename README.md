@@ -117,6 +117,8 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 
 * Some mods like Revelations add specialized room types, e.g. Chill rooms, where it's helpful to have some kind of visual indicator.
 * Create a `basementrenovator` folder and add a file called `RoomTypesMod.xml`. This should use the same format as `resources/RoomTypesAfterbirthPlus.xml` and have the same conventions.
+* Entities can also have a child Gfx element following the same format as the RoomTypes file. When this entity is in a room, the backdrop will be overridden to that Gfx
+    * If multiple are in the same room, the one with the largest x+y will take priority
 
 *Is there a fast way to set up BR compatibility?*
 

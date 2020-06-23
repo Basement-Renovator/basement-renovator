@@ -321,13 +321,19 @@ class MainLookup:
         if prefix is None:
             raise ValueError('Invalid gfx node!', node.tag, node.attrib)
 
-        return {
+        ret = {
             'Paths': {
                 'OuterBG':    prefix + '.png',
-                'BigOuterBG': prefix + '_big.png' if node.get('HasBigBG') == '1' else None,
+                'BigOuterBG': prefix + '_big.png' if node.get('HasBigBG') == '1' else '',
                 'InnerBG':    prefix + 'Inner.png',
                 'NFloor':     prefix + '_nfloor.png',
                 'LFloor':     prefix + '_lfloor.png',
             },
             'Gfx': node
         }
+
+        for key, val in ret['Paths'].items():
+            if not os.path.isfile(val):
+                ret['Paths'][key] = ''
+
+        return ret

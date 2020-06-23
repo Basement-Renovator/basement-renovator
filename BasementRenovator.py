@@ -327,6 +327,12 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     def mapEn(en):
         imgPath = en.get('Image') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
 
+        gfx = en.find('Gfx')
+        if gfx is not None:
+            bgPrefix = gfx.get('BGPrefix')
+            if bgPrefix:
+                gfx.set('BGPrefix', linuxPathSensitivityTraining(os.path.join(brPath, bgPrefix)))
+
         i = en.get('ID', '-1')
         v = en.get('Variant', '0')
         s = en.get('Subtype', '0')
@@ -947,6 +953,8 @@ class Entity(QGraphicsItem):
             self.disableOffsetIndicator = en.get('DisableOffsetIndicator') == '1'
             self.blocksDoor = en.get('NoBlockDoors') != '1'
 
+            self.gfx = en.find('Gfx')
+
             def getEnt(s):
                 return list(map(int, s.split('.')))
 
@@ -1052,6 +1060,12 @@ class Entity(QGraphicsItem):
         adding = self.parentItem() is None
         if adding:
             self.setParentItem(scene.roomRows[y])
+
+            if self.entity.gfx is not None:
+                currRoom = mainWindow.roomList.selectedRoom()
+                if currRoom:
+                    currRoom.setRoomBG(self.entity.gfx)
+
             self.updateBlockedDoor(False, countOnly=self.respawning)
             return
 
@@ -1872,8 +1886,12 @@ class Room(QListWidgetItem):
     def spawns(self):
         return Room._SpawnIter(self.gridSpawns, self.info.dims)
 
-    def setRoomBG(self):
+    def setRoomBG(self, val=None):
         global xmlLookups
+
+        if val is not None:
+            self.roomBG = val
+            return
 
         matchPath = mainWindow.path and os.path.split(mainWindow.path)[1]
         self.roomBG = xmlLookups.getRoomGfx(room=self, roomfile=mainWindow.roomList.file, path=matchPath)
