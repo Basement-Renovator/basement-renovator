@@ -1,29 +1,81 @@
 <data>
-    <stage Name="Special Rooms" BaseGamePath="00.special rooms" Stage="1" StageType="0" Pattern="special rooms" />
-    <stage Name="Basement"         BGPrefix="resources/Backgrounds/01_basement"        BaseGamePath="01.basement"         Stage="1" StageType="0"  Pattern="basement" />
-    <stage Name="Cellar"           BGPrefix="resources/Backgrounds/02_cellar"          BaseGamePath="02.cellar"           Stage="1" StageType="1"  Pattern="cellar" />
-    <stage Name="Burning Basement" BGPrefix="resources/Backgrounds/13_burningbasement" BaseGamePath="03.burning basement" Stage="1" StageType="2"  Pattern="burning" />
-    <stage Name="Caves"            BGPrefix="resources/Backgrounds/03_caves"           BaseGamePath="04.caves"            Stage="3" StageType="0"  Pattern="caves" />
-    <stage Name="Catacombs"        BGPrefix="resources/Backgrounds/04_catacombs"       BaseGamePath="05.catacombs"        Stage="3" StageType="1"  Pattern="catacombs" />
-    <stage Name="Flooded Caves"    BGPrefix="resources/Backgrounds/14_floodedcaves"    BaseGamePath="06.flooded caves"    Stage="3" StageType="2"  Pattern="flooded" />
-    <stage Name="Depths"           BGPrefix="resources/Backgrounds/05_depths"          BaseGamePath="07.depths"           Stage="5" StageType="0"  Pattern="depths" />
-    <stage Name="Necropolis"       BGPrefix="resources/Backgrounds/06_necropolis"      BaseGamePath="08.necropolis"       Stage="5" StageType="1"  Pattern="necropolis" />
-    <stage Name="Dank Depths"      BGPrefix="resources/Backgrounds/15_dankdepths"      BaseGamePath="09.dank depths"      Stage="5" StageType="2"  Pattern="dank" />
-    <stage Name="Womb"             BGPrefix="resources/Backgrounds/07_womb"            BaseGamePath="10.womb"             Stage="7" StageType="0"  Pattern="womb" />
-    <stage Name="Utero"            BGPrefix="resources/Backgrounds/08_utero"           BaseGamePath="11.utero"            Stage="7" StageType="1"  Pattern="utero" />
-    <stage Name="Scarred Womb"     BGPrefix="resources/Backgrounds/16_scarredwomb"     BaseGamePath="12.scarred womb"     Stage="7" StageType="2"  Pattern="scarred" />
-    <stage Name="Blue Womb"        BGPrefix="resources/Backgrounds/18_bluewomb"        BaseGamePath="13.blue womb"        Stage="9" StageType="0"  Pattern="blue" />
-    <stage Name="Sheol"            BGPrefix="resources/Backgrounds/09_sheol"           BaseGamePath="14.sheol"            Stage="10" StageType="0" Pattern="sheol" />
-    <stage Name="Cathedral"        BGPrefix="resources/Backgrounds/10_cathedral"       BaseGamePath="15.cathedral"        Stage="10" StageType="1" Pattern="cathedral" HasBigBG="1" />
-    <stage Name="Dark Room"        BGPrefix="resources/Backgrounds/12_darkroom"        BaseGamePath="16.dark room"        Stage="11" StageType="0" Pattern="dark" />
-    <stage Name="Chest"            BGPrefix="resources/Backgrounds/11_chest"           BaseGamePath="17.chest"            Stage="11" StageType="1" Pattern="chest" />
+    <stage Name="Special Rooms"    BaseGamePath="00.special rooms"    Stage="1" StageType="0"  Pattern="special rooms">
+        <Gfx StageGfx="Basement" />
+    </stage>
+    <stage Name="Basement"         BaseGamePath="01.basement"         Stage="1" StageType="0"  Pattern="basement">
+        <Gfx BGPrefix="resources/Backgrounds/01_basement" />
+    </stage>
+    <stage Name="Cellar"           BaseGamePath="02.cellar"           Stage="1" StageType="1"  Pattern="cellar">
+        <Gfx BGPrefix="resources/Backgrounds/02_cellar" />
+    </stage>
+    <stage Name="Burning Basement" BaseGamePath="03.burning basement" Stage="1" StageType="2"  Pattern="burning">
+        <Gfx BGPrefix="resources/Backgrounds/13_burningbasement"/>
+    </stage>
+    <stage Name="Caves"            BaseGamePath="04.caves"            Stage="3" StageType="0"  Pattern="caves">
+        <Gfx BGPrefix="resources/Backgrounds/03_caves" />
+    </stage>
+    <stage Name="Catacombs"        BaseGamePath="05.catacombs"        Stage="3" StageType="1"  Pattern="catacombs">
+        <Gfx BGPrefix="resources/Backgrounds/04_catacombs" />
+    </stage>
+    <stage Name="Flooded Caves"    BaseGamePath="06.flooded caves"    Stage="3" StageType="2"  Pattern="flooded">
+        <Gfx BGPrefix="resources/Backgrounds/14_floodedcaves" />
+    </stage>
+    <stage Name="Depths"           BaseGamePath="07.depths"           Stage="5" StageType="0"  Pattern="depths">
+        <Gfx BGPrefix="resources/Backgrounds/05_depths" />
+    </stage>
+    <stage Name="Necropolis"       BaseGamePath="08.necropolis"       Stage="5" StageType="1"  Pattern="necropolis">
+        <Gfx BGPrefix="resources/Backgrounds/06_necropolis" />
+    </stage>
+    <stage Name="Dank Depths"      BaseGamePath="09.dank depths"      Stage="5" StageType="2"  Pattern="dank">
+        <Gfx BGPrefix="resources/Backgrounds/15_dankdepths" />
+    </stage>
+    <stage Name="Womb"             BaseGamePath="10.womb"             Stage="7" StageType="0"  Pattern="womb">
+        <Gfx BGPrefix="resources/Backgrounds/07_womb" />
+    </stage>
+    <stage Name="Utero"            BaseGamePath="11.utero"            Stage="7" StageType="1"  Pattern="utero">
+        <Gfx BGPrefix="resources/Backgrounds/08_utero" />
+    </stage>
+    <stage Name="Scarred Womb"     BaseGamePath="12.scarred womb"     Stage="7" StageType="2"  Pattern="scarred">
+        <Gfx BGPrefix="resources/Backgrounds/16_scarredwomb" />
+    </stage>
+    <stage Name="Blue Womb"        BaseGamePath="13.blue womb"        Stage="9" StageType="0"  Pattern="blue">
+        <Gfx BGPrefix="resources/Backgrounds/18_bluewomb" />
+    </stage>
+    <stage Name="Sheol"            BaseGamePath="14.sheol"            Stage="10" StageType="0" Pattern="sheol">
+        <Gfx BGPrefix="resources/Backgrounds/09_sheol" />
+    </stage>
+    <stage Name="Cathedral"        BaseGamePath="15.cathedral"        Stage="10" StageType="1" Pattern="cathedral">
+        <Gfx BGPrefix="resources/Backgrounds/10_cathedral" HasBigBG="1" />
+    </stage>
+    <stage Name="Dark Room"        BaseGamePath="16.dark room"        Stage="11" StageType="0" Pattern="dark">
+        <Gfx BGPrefix="resources/Backgrounds/12_darkroom" />
+    </stage>
+    <stage Name="Chest"            BaseGamePath="17.chest"            Stage="11" StageType="1" Pattern="chest">
+        <Gfx BGPrefix="resources/Backgrounds/11_chest" />
+    </stage>
 
-    <stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special" />
-    <stage Name="Basement [Greed]"    BGPrefix="resources/Backgrounds/01_basement" BaseGamePath="19.greed basement"   Stage="1" StageType="3" Pattern="greed basement" />
-    <stage Name="Caves [Greed]"       BGPrefix="resources/Backgrounds/03_caves"    BaseGamePath="20.greed caves"      Stage="2" StageType="3" Pattern="greed caves" />
-    <stage Name="Depths [Greed]"      BGPrefix="resources/Backgrounds/05_depths"   BaseGamePath="21.greed depths"     Stage="3" StageType="3" Pattern="greed depths" />
-    <stage Name="Womb [Greed]"        BGPrefix="resources/Backgrounds/07_womb"     BaseGamePath="22.greed womb"       Stage="4" StageType="3" Pattern="greed womb" />
-    <stage Name="Sheol [Greed]"       BGPrefix="resources/Backgrounds/09_sheol"    BaseGamePath="23.greed sheol"      Stage="5" StageType="3" Pattern="greed sheol" />
-    <stage Name="The Shop [Greed]"    BGPrefix="resources/Backgrounds/0b_shop"     BaseGamePath="24.greed the shop"   Stage="6" StageType="3" Pattern="the shop" />
-    <stage Name="Ultra Greed [Greed]" BGPrefix="resources/Backgrounds/0b_shop"     BaseGamePath="25.ultra greed"      Stage="7" StageType="3" Pattern="ultra greed" />
+    <stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
+        <Gfx StageGfx="Basement [Greed]" />
+    </stage>
+    <stage Name="Basement [Greed]"    BaseGamePath="19.greed basement"   Stage="1" StageType="3" Pattern="greed basement">
+        <Gfx StageGfx="Basement" />
+    </stage>
+    <stage Name="Caves [Greed]"       BaseGamePath="20.greed caves"      Stage="2" StageType="3" Pattern="greed caves">
+        <Gfx StageGfx="Caves" />
+    </stage>
+    <stage Name="Depths [Greed]"      BaseGamePath="21.greed depths"     Stage="3" StageType="3" Pattern="greed depths">
+        <Gfx StageGfx="Depths" />
+    </stage>
+    <stage Name="Womb [Greed]"        BaseGamePath="22.greed womb"       Stage="4" StageType="3" Pattern="greed womb">
+        <Gfx StageGfx="Womb" />
+    </stage>
+    <stage Name="Sheol [Greed]"       BaseGamePath="23.greed sheol"      Stage="5" StageType="3" Pattern="greed sheol">
+        <Gfx StageGfx="Sheol" />
+    </stage>
+    <stage Name="The Shop [Greed]"    BaseGamePath="24.greed the shop"   Stage="6" StageType="3" Pattern="the shop">
+        <Gfx RoomGfx="Shop" />
+    </stage>
+    <stage Name="Ultra Greed [Greed]" BaseGamePath="25.ultra greed"      Stage="7" StageType="3" Pattern="ultra greed">
+        <Gfx RoomGfx="Shop" />
+    </stage>
 </data>

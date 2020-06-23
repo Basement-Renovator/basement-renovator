@@ -45,5 +45,8 @@ If you're running BR with a console window open, you may notice some warnings fr
 ### DRM Free Isaac
 There is some subset of users who are using DRM free copies of Isaac, or test builds not through Steam. The test launcher uses Steam directly to avoid an annoying popup, but if the Isaac exe is DRM free launching through Steam is unintended behavior and undesired. To disable trying to launch Isaac through steam, set `ForceExeLaunch` to 1 in your settings.ini.
 
+### Permissions Issues while Testing
+There is some subset of users who have found that the normal test launch method for InstaPreview is rejected by their OS. To get around this, set `ForceUrlLaunch` to 1 in your settings.ini.
+
 ### Test Antibirth
 Anitbirth is capable of Instapreview testing for goofing around. In the absence of a true compatibility mode, you can quickly test rooms for poking its behavior. To test rooms in Anti, go to `settings.ini` and set `AntibirthPath` to the folder you have Antibirth installed in (formatted like `InstallPath`) and set `CompatibilityMode` to `Antibirth`. This only supports Instapreview. For Antibirth enemies, check out `resources/EntitiesAntibirth.xml`. Icon PRs welcome!

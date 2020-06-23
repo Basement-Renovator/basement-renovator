@@ -113,6 +113,11 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 * `Stage` and `StageType` correspond to the in-game enum values for the stage, for modded stages this should point to the stage being replaced.
 * Lastly, `Name` is the display name shown in BR, and also passed to room tests to allow for properly replacing the base game stage as needed.
 
+*How do I get some rooms to display different backdrops?*
+
+* Some mods like Revelations add specialized room types, e.g. Chill rooms, where it's helpful to have some kind of visual indicator.
+* Create a `basementrenovator` folder and add a file called `RoomTypesMod.xml`. This should use the same format as `resources/RoomTypesAfterbirthPlus.xml` and have the same conventions.
+
 *Is there a fast way to set up BR compatibility?*
 
 * You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In BR's resource folder under Entities/ModTemp, there will be a folder with your mod's name.

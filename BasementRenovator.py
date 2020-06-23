@@ -42,6 +42,7 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
+from src.lookup import MainLookup
 import src.anm2 as anm2
 
 ########################
@@ -55,12 +56,6 @@ def getEntityXML():
     if settings.value('CompatibilityMode') == 'Antibirth':
         antiTree = ET.parse('resources/EntitiesAntibirth.xml')
         root.extend([ child for child in antiTree.getroot() ])
-
-    return root
-
-def getStageXML():
-    tree = ET.parse('resources/StagesAfterbirthPlus.xml')
-    root = tree.getroot()
 
     return root
 
@@ -338,7 +333,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
 
         entXML = None
 
-        if en.get('Metadata') != '1':
+        if en.get('Metadata') != '1' and en.get('IsGrid') != '1':
             adjustedId = i == '999' and '1000' or i
             query = f"entity[@id='{adjustedId}'][@variant='{v}']"
 
@@ -379,41 +374,9 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
 
     return list(map(mapEn, enList))
 
-def loadStagesFromMod(modPath, brPath, name):
-    stageFile = os.path.join(brPath, 'StagesMod.xml')
-    if not os.path.isfile(stageFile):
-        return
-
-    print(f'-----------------------\nLoading stages from "{name}"')
-
-    root = None
-    try:
-        tree = ET.parse(stageFile)
-        root = tree.getroot()
-    except Exception as e:
-        print('Error loading BR xml:', e)
-        return
-
-    stageList = root.findall('stage')
-    if len(stageList) == 0: return
-
-    def mapStage(stage):
-        if stage.get('Stage') is None or stage.get('StageType') is None or stage.get('Name') is None:
-            print('Tried to load stage, but had missing stage, stage type, or name!', str(stage.attrib))
-            return None
-
-        prefix = stage.get('BGPrefix')
-        if prefix is not None:
-            prefixPath = linuxPathSensitivityTraining(os.path.join(brPath, prefix))
-            stage.set('BGPrefix', prefixPath)
-
-        return stage
-
-    return list(filter(lambda x: x != None, map(mapStage, stageList)))
-
 def loadMods(autogenerate, installPath, resourcePath):
     global entityXML
-    global stageXML
+    global xmlLookups
 
     # Each mod in the mod folder is a Group
     modsPath = findModsPath(installPath)
@@ -487,9 +450,7 @@ def loadMods(autogenerate, installPath, resourcePath):
 
                     entityXML.append(ent)
 
-            stages = loadStagesFromMod(modPath, brPath, modName)
-            if stages:
-                stageXML.extend(stages)
+            xmlLookups.loadFromMod(modPath, brPath, modName)
 
 ########################
 #      Scene/View      #
@@ -531,7 +492,7 @@ class RoomScene(QGraphicsScene):
         self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
 
     def updateRoomDepth(self, room):
-        if not room.invertZOrder:
+        if room.roomBG.get('InvertDepth') != '1':
             for i, row in enumerate(self.roomRows):
                 row.setZValue(i)
         else:
@@ -611,13 +572,14 @@ class RoomScene(QGraphicsScene):
             roomBG = currRoom.roomBG
             roomShape = currRoom.info.shape
         else:
-            roomBG = stageXML.find('stage[@Name="Basement"]')
             roomShape = 1
 
         bgState = [ roomBG, roomShape ]
         if bgState == self.bgState: return
 
         self.bgState = bgState
+
+        roomBG = xmlLookups.getGfxData(roomBG)['Paths']
 
         mainBG = roomBG.get('OuterBG') or 'resources/none.png'
         overrideBG = roomBG.get('BigOuterBG')
@@ -817,16 +779,16 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            q = QPixmap()
-            q.load('resources/UI/RoomIcons.png')
+            iconType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)[0]
+            q = QPixmap(iconType.get('Icon'))
 
-            painter.drawPixmap(2, 3, q.copy(room.info.type * 16, 0, 16, 16))
+            painter.drawPixmap(2, 3, q)
 
             # Top Text
             font = painter.font()
             font.setPixelSize(13)
             painter.setFont(font)
-            painter.drawText(20, 16, f"{room.info.variant} - {room.data(0x100)}" )
+            painter.drawText(20, 16, f"{room.info.variant} - {room.name}" )
 
             # Bottom Text
             font = painter.font()
@@ -1265,23 +1227,23 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 22, 26)
                 painter.drawLine(26, 26, 26, 22)
 
-            # Curse room special case
-            if typ == 5 and var == 50 and mainWindow.roomList.selectedRoom().info.type == 10:
-                self.entity.pixmap = QPixmap('resources/Entities/5.360.0 - Red Chest.png')
+            override = None
 
-            # Crawlspace special case
-            if (typ == 0 or typ == 1900) and mainWindow.roomList.selectedRoom().info.type == 16:
-                if typ == 1900 and var == 0:
-                    self.entity.pixmap = QPixmap('resources/Entities/1900.0.0 - Crawlspace Brick.png')
+            room = mainWindow.roomList.selectedRoom()
+            if room and room.roomBG:
+                for ent in room.roomBG.findall('Entity'):
+                    if int(ent.get('ID')) == self.entity.Type and \
+                       int(ent.get('Variant', 0)) == self.entity.Variant and \
+                       int(ent.get('Subtype', 0)) == self.entity.Subtype:
+                        override = ent
+                        break
+
+            if override is not None:
+                img = override.get('Image')
+                if img:
+                    self.entity.pixmap = QPixmap(img)
+                if override.get('InvertDepth') == '1':
                     self.setZValue(-1 * self.entity.y)
-                    recenter = (0, 0)
-                elif typ == 0:
-                    if var == 10:
-                        self.entity.pixmap = QPixmap('resources/Entities/0.10.0 - Ladder.png')
-                    elif var == 20:
-                        self.entity.pixmap = QPixmap('resources/Entities/0.20.0 - Ladder Base.png')
-                    elif var == 30:
-                        self.entity.pixmap = QPixmap('resources/Entities/0.30.0 - Ladder Through.png')
 
             painter.drawPixmap(x, y, self.entity.pixmap)
 
@@ -1782,7 +1744,7 @@ class Room(QListWidgetItem):
 
         QListWidgetItem.__init__(self)
 
-        self.setData(0x100, name)
+        self.name = name
 
         self.info = Room.Info(mytype, variant, subtype, shape)
         if doors:
@@ -1800,9 +1762,6 @@ class Room(QListWidgetItem):
         self.xmlProps = {}
         self._lastTestTime = None
 
-        self.invertZOrder = False
-        self.setRoomBG()
-
         self.setFlags(self.flags() | Qt.ItemIsEditable)
         self.setToolTip()
 
@@ -1815,6 +1774,13 @@ class Room(QListWidgetItem):
     def difficulty(self, d):
         self._difficulty = d
         self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
+
+    @property
+    def name(self): return self.data(0x100)
+
+    @name.setter
+    def name(self, n):
+        self.setData(0x100, n)
 
     @property
     def gridSpawns(self): return self._gridSpawns
@@ -1866,21 +1832,19 @@ class Room(QListWidgetItem):
         return f'{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}'
 
     def setToolTip(self):
-        self.setText(f"{self.info.variant} - {self.data(0x100)}")
+        self.setText(f"{self.info.variant} - {self.name}")
 
         lastTest = 'Never' if not self.lastTestTime else self.lastTestTime.astimezone().strftime('%x %I:%M %p')
 
-        tip = Room.getDesc(self.info, self.data(0x100), self.difficulty, self.weight) + f"\nLast Tested: {lastTest}"
+        tip = Room.getDesc(self.info, self.name, self.difficulty, self.weight) + f"\nLast Tested: {lastTest}"
 
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        q = QImage()
-        q.load('resources/UI/RoomIcons.png')
-
-        i = QIcon(QPixmap.fromImage(q.copy(self.info.type * 16, 0, 16, 16)))
+        iconType = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)[0]
+        i = QIcon(iconType.get('Icon'))
 
         self.setIcon(i)
 
@@ -1908,107 +1872,11 @@ class Room(QListWidgetItem):
     def spawns(self):
         return Room._SpawnIter(self.gridSpawns, self.info.dims)
 
-    SpecialBG = [
-        "0a_library", "0b_shop", "0c_isaacsroom", "0d_barrenroom",
-        "0e_arcade", "0e_diceroom", "0f_secretroom"
-    ]
-
-    for i in range(len(SpecialBG)):
-        prefix = SpecialBG[i]
-        elem = ET.Element('room', {
-            "OuterBG": os.path.join("resources/Backgrounds", prefix + ".png"),
-            "InnerBG": os.path.join("resources/Backgrounds", prefix + "Inner.png")
-        })
-
-        nfloor = os.path.join("resources/Backgrounds", prefix + "_nfloor.png")
-        if os.path.isfile(nfloor):
-            elem.set("NFloor", nfloor)
-
-        lfloor = os.path.join("resources/Backgrounds", prefix + "_lfloor.png")
-        if os.path.isfile(lfloor):
-            elem.set("LFloor", lfloor)
-
-        SpecialBG[i] = elem
-
     def setRoomBG(self):
-        global stageXML
-
-        roomsByStage = stageXML.findall('stage')
-
-        getBG = lambda name: stageXML.find(f'stage[@Name="{name}"]')
-
-        self.roomBG = getBG('Basement')
+        global xmlLookups
 
         matchPath = mainWindow.path and os.path.split(mainWindow.path)[1]
-        for room in roomsByStage:
-            if room.get('Pattern') in matchPath:
-                self.roomBG = room
-
-        c = self.info.type
-        v = self.info.variant
-
-        if c == 12: # library
-            self.roomBG = Room.SpecialBG[0]
-        elif c == 2: # shop
-            self.roomBG = Room.SpecialBG[1]
-        elif c == 18: # bedroom
-            self.roomBG = Room.SpecialBG[2]
-        elif c == 19: # barren room
-            self.roomBG = Room.SpecialBG[3]
-        elif c == 9: # arcade
-            self.roomBG = Room.SpecialBG[4]
-        elif c == 21: # dice room
-            self.roomBG = Room.SpecialBG[5]
-        elif c == 7: # secret room
-            self.roomBG = Room.SpecialBG[6]
-
-        # curse, challenge, sacrifice, devil, boss rush, black market
-        elif c in [10, 11, 13, 14, 17, 22]:
-            self.roomBG = getBG('Sheol')
-        # angel
-        elif c in [15]:
-            self.roomBG = getBG('Cathedral')
-        # chest room
-        elif c in [20]:
-            self.roomBG = getBG('Chest')
-        # error, crawlspace
-        elif c in [3, 16]:
-            self.roomBG = getBG('Dark Room')
-
-        # super secret
-        elif c in [8]:
-            if v in [0, 11, 15]:
-                self.roomBG = getBG('Womb')
-            elif v in [1, 12, 16]:
-                self.roomBG = getBG('Cathedral')
-            elif v in [2, 13, 17]:
-                self.roomBG = getBG('Sheol')
-            elif v in [3]:
-                self.roomBG = getBG('Necropolis')
-            elif v in [4]:
-                self.roomBG = getBG('Cellar')
-            elif v in [5, 19]:
-                self.roomBG = getBG('Basement')
-            elif v in [6]:
-                self.roomBG = Room.SpecialBG[0]
-            elif v in [7]:
-                self.roomBG = getBG('Dark Room')
-            elif v in [8]:
-                self.roomBG = getBG('Burning Basement')
-            elif v in [9]:
-                self.roomBG = getBG('Flooded Caves')
-            elif v in [14, 18]:
-                self.roomBG = Room.SpecialBG[1]
-            else:
-                self.roomBG = getBG('Dark Room')
-        # grave rooms
-        elif c == 1 and v > 2 and 'special rooms' in mainWindow.path:
-            self.roomBG = getBG('Dark Room')
-
-        if c == 16: # crawlspace
-            self.invertZOrder = True
-        else:
-            self.invertZOrder = False
+        self.roomBG = xmlLookups.getRoomGfx(room=self, roomfile=mainWindow.roomList.file, path=matchPath)
 
     def mirrorX(self):
         # Flip Spawns
@@ -2187,17 +2055,14 @@ class RoomSelector(QWidget):
 
         typeMenu = QMenu()
 
-        q = QImage()
-        q.load('resources/UI/RoomIcons.png')
-
         self.typeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(1 * 24 + 4, 4, 16, 16))))
         act = typeMenu.addAction(QIcon(QPixmap.fromImage(fq.copy(1 * 24 + 4, 4, 16, 16))), '')
         act.setData(-1)
         self.typeToggle.setDefaultAction(act)
 
-        for i in range(24):
-            act = typeMenu.addAction(QIcon(QPixmap.fromImage(q.copy(i * 16, 0, 16, 16))), '')
-            act.setData(i)
+        for iconType in xmlLookups.roomTypes.lookup(showInMenu=True):
+            act = typeMenu.addAction(QIcon(iconType.get('Icon')), '')
+            act.setData(int(iconType.get('Type')))
 
         self.typeToggle.triggered.connect(self.setTypeFilter)
         self.typeToggle.setMenu(typeMenu)
@@ -2357,13 +2222,13 @@ class RoomSelector(QWidget):
 
     def activateEdit(self):
         room = self.selectedRoom()
-        room.setText(room.data(0x100))
+        room.setText(room.name)
         self.list.editItem(self.selectedRoom())
 
     def editComplete(self, lineEdit):
         room = self.selectedRoom()
-        room.setData(0x100, lineEdit.text())
-        room.setText(f"{room.info.variant} - {room.data(0x100)}")
+        room.name = lineEdit.text()
+        room.setText(f"{room.info.variant} - {room.name}")
         mainWindow.dirt()
 
     #@pyqtSlot(bool)
@@ -2380,18 +2245,12 @@ class RoomSelector(QWidget):
         Type = QWidgetAction(menu)
         c = QComboBox()
 
-        types= [
-            "Null Room", "Normal Room", "Shop", "Error Room", "Treasure Room", "Boss Room",
-            "Mini-Boss Room", "Secret Room", "Super Secret Room", "Arcade", "Curse Room", "Challenge Room",
-            "Library", "Sacrifice Room", "Devil Room", "Angel Room", "Crawlspace", "Boss Rush Room",
-            "Isaac's Room", "Barren Room", "Chest Room", "Dice Room", "Black Market", "Greed Mode Descent"
-        ]
-
-        q = QImage()
-        q.load('resources/UI/RoomIcons.png')
+        global xmlLookups
+        types = xmlLookups.roomTypes.lookup(showInMenu=True)
 
         for i, t in enumerate(types):
-            c.addItem(QIcon(QPixmap.fromImage(q.copy(i * 16, 0, 16, 16))), t)
+            c.addItem(QIcon(t.get('Icon')), t.get('Name'))
+
         c.setCurrentIndex(self.selectedRoom().info.type)
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
@@ -2709,9 +2568,9 @@ class RoomSelector(QWidget):
         mainWindow.dirt()
 
     #@pyqtSlot(int)
-    def changeType(self, rtype):
+    def changeType(self, index):
         for r in self.selectedRooms():
-            r.info.type = rtype
+            r.info.type = index
             r.renderDisplayIcon()
             r.setRoomBG()
 
@@ -2816,7 +2675,7 @@ class RoomSelector(QWidget):
                 extra = ' (copy)'
 
             r = Room(
-                deepcopy(room.data(0x100) + extra),
+                deepcopy(room.name + extra),
                 deepcopy(room.gridSpawns),
                 deepcopy(room.difficulty),
                 deepcopy(room.weight),
@@ -3698,7 +3557,7 @@ class MainWindow(QMainWindow):
         self.editor = RoomEditorWidget(self.scene)
         self.setCentralWidget(self.editor)
 
-        self.fixupStage()
+        self.fixupLookups()
 
         self.setupDocks()
         self.setupMenuBar()
@@ -3735,28 +3594,29 @@ class MainWindow(QMainWindow):
         self.openWrapper(target)
         evt.acceptProposedAction()
 
-    def fixupStage(self):
-        global stageXML
+    def fixupLookups(self):
+        global xmlLookups
 
         fixIconFormat = settings.value('FixIconFormat') == '1'
+        if not fixIconFormat: return
 
-        for stage in stageXML.findall('stage'):
-            prefix = stage.get('BGPrefix')
-            if prefix is None:
-                baseStage = stageXML.find(f"stage[@Stage='{stage.get('Stage')}'][@StageType='{stage.get('StageType')}'][@BGPrefix]")
-                prefix = baseStage.get('BGPrefix')
+        nodes = xmlLookups.stages.lookup()
+        nodes.extend(xmlLookups.roomTypes.lookup())
 
-            for p in [ (prefix + '.png', 'OuterBG'), \
-                       (prefix + '_big.png' if stage.get('HasBigBG') == '1' else '', 'BigOuterBG'), \
-                       (prefix + 'Inner.png', 'InnerBG'), \
-                       (prefix + '_nfloor.png', 'NFloor'), \
-                       (prefix + '_lfloor.png', 'LFloor') ]:
-                if os.path.isfile(p[0]):
-                    stage.set(p[1], p[0])
+        for node in nodes:
+            gfxs = node.findall('Gfx')
+            if node.get('BGPrefix') is not None:
+                gfx.append(node)
 
-            if fixIconFormat:
-                for imgPath in map(lambda s: stage.get(s), [ 'OuterBG', 'InnerBG', 'NFloor', 'LFloor', 'BigOuterBG' ]):
-                    if imgPath:
+            for gfx in gfxs:
+                for key, imgPath in xmlLookups.getGfxData(gfx)['Paths'].items():
+                    if imgPath and os.path.isfile(imgPath):
+                        formatFix = QImage(imgPath)
+                        formatFix.save(imgPath)
+
+                for ent in gfx.findall('Entity'):
+                    imgPath = ent.get('Image')
+                    if imgPath and os.path.isfile(imgPath):
                         formatFix = QImage(imgPath)
                         formatFix.save(imgPath)
 
@@ -3985,6 +3845,7 @@ class MainWindow(QMainWindow):
         # Clear the room and reset the size
         self.scene.clear()
         self.scene.newRoomSize(current.info.shape)
+        current.setRoomBG()
         self.scene.updateRoomDepth(current)
 
         self.editor.resizeEvent(QResizeEvent(self.editor.size(), self.editor.size()))
@@ -4059,9 +3920,9 @@ class MainWindow(QMainWindow):
     def openMapDefault(self):
         if self.checkDirty(): return
 
-        global stageXML
+        global xmlLookups
         selectMaps = {}
-        for x in stageXML.findall("stage[@BaseGamePath]"):
+        for x in xmlLookups.stages.lookup(baseGamePath=True):
             selectMaps[x.get('Name')] = x.get('BaseGamePath')
 
         selectedMap, selectedMapOk = QInputDialog.getItem(self, "Map selection", "Select floor", selectMaps.keys(), 0, False)
@@ -4306,7 +4167,7 @@ class MainWindow(QMainWindow):
         def roomItemToCore(room):
             realWidth = room.info.dims[0]
             spawns = list(map(lambda s: list(map(lambda e: entItemToCore(e, s[0], realWidth), s[1])), enumerate(room.gridSpawns)))
-            r = RoomData(room.data(0x100), spawns, room.difficulty, room.weight, room.info.type, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
+            r = RoomData(room.name, spawns, room.difficulty, room.weight, room.info.type, room.info.variant, room.info.subtype, room.info.shape, room.info.doors)
             r.xmlProps = dict(room.xmlProps)
             r.lastTestTime = room.lastTestTime
             return r
@@ -4387,7 +4248,7 @@ class MainWindow(QMainWindow):
         self.sortRoomsByKey(lambda x: (x.info.type,x.info.variant))
 
     def sortRoomNames(self):
-        self.sortRoomsByKey(lambda x: (x.info.type,x.data(0x100),x.info.variant))
+        self.sortRoomsByKey(lambda x: (x.info.type,x.name,x.info.variant))
 
     def sortRoomsByKey(self, key):
         roomList = self.roomList.list
@@ -4504,7 +4365,7 @@ class MainWindow(QMainWindow):
                 commands = settings.value('TestCommands', [])
 
             roomsStr = ',\n\t'.join(map(lambda testRoom: f'''{{
-        Name = {strFix(testRoom.data(0x100))},
+        Name = {strFix(testRoom.name)},
         Type = {testRoom.info.type},
         Variant = {testRoom.info.variant},
         Subtype = {testRoom.info.subtype},
@@ -4550,7 +4411,7 @@ class MainWindow(QMainWindow):
                 raise
 
             # Set the selected rooms to max weight, best spawn difficulty, default type, and enable all the doors
-            newRooms = list(map(lambda room: Room(room.data(0x100), room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape), rooms))
+            newRooms = list(map(lambda room: Room(room.name, room.gridSpawns, 5, 1000.0, 1, room.info.variant, room.info.subtype, room.info.shape), rooms))
 
             # Needs a padding room if all are skinny
             padMe = next((testRoom for testRoom in newRooms if testRoom.info.shape in [2, 3, 5, 7]), None) is not None
@@ -4602,7 +4463,7 @@ class MainWindow(QMainWindow):
             startRoom = None
             roomFile = self.open(roomPath, False)
             for room in roomFile.rooms:
-                if "Start Room" in room.data(0x100):
+                if "Start Room" in room.name:
                     room.info.shape  = testRoom.info.shape
                     room.gridSpawns = testRoom.gridSpawns
                     startRoom = room
@@ -4638,12 +4499,12 @@ class MainWindow(QMainWindow):
                     raise
 
                 baseSpecialPath = "00.special rooms"
-                basePath = floorInfo.get('BaseGamePath') or stageXML.find(f'''stage[@Stage="{floorInfo.get('Stage')}"][@StageType="{floorInfo.get('StageType')}"][@BaseGamePath]''').get('BaseGamePath')
+                basePath = floorInfo.get('BaseGamePath') or xmlLookups.stages.lookup(stage=floorInfo.get('Stage'), stageType=floorInfo.get('StageType'), baseGamePath=True).get('BaseGamePath')
 
                 # Set the selected rooms to have descending ids from max
                 # this should avoid any id conflicts
                 baseId = (2 ** 31) - 1
-                newRooms = list(Room(f'{room.data(0x100)} [Real ID: {room.info.variant}]', room.gridSpawns, room.difficulty, room.weight,
+                newRooms = list(Room(f'{room.name} [Real ID: {room.info.variant}]', room.gridSpawns, room.difficulty, room.weight,
                                                          room.info.type, baseId - i, room.info.subtype,
                                                          room.info.shape, room.info.doors) for i, room in enumerate(rooms))
 
@@ -4750,11 +4611,8 @@ class MainWindow(QMainWindow):
 
         # Floor type
         # TODO cache this when loading a file
-        global stageXML
-        floorInfo = stageXML.find('stage[@Name="Basement"]')
-        for stage in stageXML.findall('stage'):
-            if stage.get('Pattern') in mainWindow.path:
-                floorInfo = stage
+        global xmlLookups
+        floorInfo = (xmlLookups.stages.lookup(path=mainWindow.path) or xmlLookups.stages.lookup(name='Basement'))[-1]
 
         forceCleanModFolder = settings.value('HelperModDev') == '1'
         modPath, roomPath = self.makeTestMod(forceCleanModFolder)
@@ -4771,7 +4629,7 @@ class MainWindow(QMainWindow):
             # setup raises an exception if it can't continue
             launchArgs, roomsOverride, extraMessage = setupFunc(modPath, roomPath, floorInfo, rooms, compatMode) or ([], None, '')
         except Exception as e:
-            print('Problem setting up test:', e)
+            print('Problem setting up test:', ''.join(traceback.format_exception(*sys.exc_info())))
             return
 
         testRooms = roomsOverride or rooms
@@ -5012,7 +4870,7 @@ if __name__ == '__main__':
 
     # XML Globals
     entityXML = getEntityXML()
-    stageXML = getStageXML()
+    xmlLookups = MainLookup(settings.value('CompatibilityMode'))
     if settings.value('DisableMods') != '1':
         loadMods(settings.value('ModAutogen') == '1', findInstallPath(), settings.value('ResourceFolder', ''))
 
