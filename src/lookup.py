@@ -172,7 +172,7 @@ class StageLookup(Lookup):
             st = str(stageType)
             stages = filter(lambda s: s.get('StageType') == st)
 
-        if path:
+        if path is not None:
             doList = True
             stages = filter(lambda s: s.get('Pattern') in path, stages)
 
