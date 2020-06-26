@@ -326,6 +326,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     cleanUp = re.compile('[^\w\d]')
     def mapEn(en):
         imgPath = en.get('Image') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
+        editorImgPath = en.get('EditorImage') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('EditorImage')))
 
         gfx = en.find('Gfx')
         if gfx is not None:
@@ -364,10 +365,14 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
         if not en.get('Group'):
             en.set('Group', '(Mod) %s' % name)
         en.set("Image", imgPath)
+        en.set("EditorImage", editorImgPath)
 
         if fixIconFormat:
             formatFix = QImage(imgPath)
             formatFix.save(imgPath)
+            if editorImgPath:
+                formatFix = QImage(editorImgPath)
+                formatFix.save(editorImgPath)
 
         en.set("Subtype", s)
         en.set("Variant", v)
@@ -479,6 +484,7 @@ class RoomScene(QGraphicsScene):
         self.clearDoors()
 
         self.bgState = []
+        self.framecache = {}
 
         self.floorAnim = anm2.Config('resources/Backgrounds/FloorBackdrop.anm2', 'resources')
         self.floorImg = None
@@ -490,6 +496,7 @@ class RoomScene(QGraphicsScene):
         if not self.roomInfo.shapeData: return
 
         self.roomWidth, self.roomHeight = self.roomInfo.dims
+        self.entcache = [ [] for i in range(self.roomWidth * self.roomHeight) ]
 
         self.roomRows = [ QGraphicsWidget() for i in range(self.roomHeight) ]
         for i, row in enumerate(self.roomRows):
@@ -506,8 +513,8 @@ class RoomScene(QGraphicsScene):
             for i, row in enumerate(self.roomRows):
                 row.setZValue(last - i)
 
-    def getAdjacentEnts(self, x, y):
-        height = self.roomHeight
+    def getAdjacentEnts(self, x, y, useCache=False):
+        width, height = self.roomWidth, self.roomHeight
 
         # [ L, R, U, D, UL, DL, UR, DR ]
         lookup = {
@@ -517,6 +524,16 @@ class RoomScene(QGraphicsScene):
         }
 
         res = [ [] for i in range(8) ]
+        if useCache:
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    spot = lookup[i][j + 1]
+                    if spot is not None:
+                        idx = Room.Info.gridIndex(x + j, y + i, width)
+                        if idx < 0 or idx >= width * height: continue
+                        res[spot] = self.entcache[idx]
+            return res
+
         for yc in [ y - 1, y, y + 1 ]:
             if yc < 0 or yc >= height:
                 continue
@@ -530,6 +547,19 @@ class RoomScene(QGraphicsScene):
                         res[spots[i]].append(item)
 
         return res
+
+    def getFrame(self, key, anm2):
+        cache = self.framecache.get(key)
+        if not cache:
+            cache = {}
+            self.framecache[key] = cache
+
+        frame = cache.get(anm2.frame)
+        if frame is None:
+            frame = anm2.render()
+            cache[anm2.frame] = frame
+
+        return frame
 
     def clearDoors(self):
         if self.roomDoorRoot:
@@ -646,6 +676,17 @@ class RoomScene(QGraphicsScene):
         gs = 26
         painter.drawImage( (1 + xOff) * gs, ( 1 + yOff) * gs, self.floorImg)
         painter.drawImage((-1 + xOff) * gs, (-1 + yOff) * gs, self.wallImg)
+
+        self.framecache = {}
+
+        for stack in self.entcache:
+            stack.clear()
+
+        for item in self.items():
+            if isinstance(item, Entity):
+                xc = item.entity.x
+                yc = item.entity.y
+                self.entcache[Room.Info.gridIndex(xc, yc, self.roomWidth)].append(item)
 
         QGraphicsScene.drawBackground(self, painter, rect)
 
@@ -980,10 +1021,9 @@ class Entity(QGraphicsItem):
 
             self.gfx = en.find('Gfx')
 
-            self.imgPath = en.get('Image')
-            self.renderPit = en.get('UsePitTiling')
-            if self.renderPit:
-                self.imgPath = self.renderPit
+            self.imgPath = en.get('EditorImage') or en.get('Image')
+
+            self.renderPit = en.get('UsePitTiling') == '1'
 
             def getEnt(s):
                 return list(map(int, s.split('.')))
@@ -1149,14 +1189,14 @@ class Entity(QGraphicsItem):
     PitAnm2 = anm2.Config('resources/Backgrounds/PitGrid.anm2', 'resources')
     PitAnm2.setAnimation()
 
-    def setPitFrame(self):
+    def getPitFrame(self):
         def matchInStack(stack):
             for ent in stack:
                 if ent.entity.Type == self.entity.Type and ent.entity.Variant == self.entity.Variant:
                     return True
             return False
 
-        adjEnts = self.scene().getAdjacentEnts(self.entity.x, self.entity.y)
+        adjEnts = self.scene().getAdjacentEnts(self.entity.x, self.entity.y, useCache=True)
 
         [ L, R, U, D, UL, DL, UR, DR ] = list(map(matchInStack, adjEnts))
         hasExtraFrames = self.entity.pixmap.height() > 260
@@ -1209,9 +1249,6 @@ class Entity(QGraphicsItem):
             if U and R and D and L and DL and DR and not UL and not UR:         F = 47
             if U and R and D and L and DL and UL and not UR and not DR:         F = 48
             if U and R and D and L and DR and UR and not UL and not DL:         F = 49
-
-        Entity.PitAnm2.spritesheets[0] = self.entity.pixmap
-        Entity.PitAnm2.frame = F
 
         return F
 
@@ -1337,6 +1374,8 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 22, 26)
                 painter.drawLine(26, 26, 26, 22)
 
+            imgPath = self.entity.imgPath
+
             override = None
 
             room = mainWindow.roomList.selectedRoom()
@@ -1349,6 +1388,7 @@ class Entity(QGraphicsItem):
                 img = override.get('Image')
                 if img:
                     self.entity.pixmap = QPixmap(img)
+                    imgPath = img
                 if override.get('InvertDepth') == '1':
                     self.setZValue(-1 * self.entity.y)
 
@@ -1356,8 +1396,9 @@ class Entity(QGraphicsItem):
             renderFunc = painter.drawPixmap
 
             if self.entity.renderPit:
-                self.setPitFrame()
-                rendered = Entity.PitAnm2.render()
+                Entity.PitAnm2.frame = self.getPitFrame()
+                Entity.PitAnm2.spritesheets[0] = self.entity.pixmap
+                rendered = self.scene().getFrame(imgPath + ' - pit', Entity.PitAnm2)
                 renderFunc = painter.drawImage
 
             width, height = rendered.width(), rendered.height()

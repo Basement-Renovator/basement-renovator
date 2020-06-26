@@ -62,7 +62,6 @@ def parseCriteria(txt):
 
 def applyGfxReplacement(replacement, gfxchildren):
     for origgfx, newgfx in zip_longest(replacement.findall('Gfx'), gfxchildren):
-        print(origgfx and origgfx.attrib, newgfx and newgfx.attrib)
         if newgfx is None:
             continue
         elif origgfx is None:
@@ -149,7 +148,6 @@ class StageLookup(Lookup):
 
             replacement = self.xml.find(f'stage[@Name="{name}"]')
             if replacement:
-                print('Replacing gfx!')
                 applyGfxReplacement(replacement, children)
                 return None
 
