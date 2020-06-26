@@ -636,11 +636,14 @@ class RoomScene(QGraphicsScene):
             roomShape = 1
 
         bgState = [ roomBG, roomShape ]
-        if bgState == self.bgState: return
+        if bgState == self.bgState[:1]: return
 
         self.bgState = bgState
 
-        roomBG = xmlLookups.getGfxData(roomBG)['Paths']
+        gfxData = xmlLookups.getGfxData(roomBG)
+        self.bgState.append(gfxData)
+
+        roomBG = gfxData['Paths']
 
         mainBG = roomBG.get('OuterBG') or 'resources/none.png'
         overrideBG = roomBG.get('BigOuterBG')
@@ -663,6 +666,9 @@ class RoomScene(QGraphicsScene):
         self.wallImg = self.wallAnim.render()
 
         self.roomShape = roomShape
+
+    def getBGGfxData(self):
+        return self.bgState[2] if self.bgState else None
 
     def drawBackground(self, painter, rect):
 
@@ -1382,9 +1388,8 @@ class Entity(QGraphicsItem):
 
             override = None
 
-            room = mainWindow.roomList.selectedRoom()
-            if room and room.roomBG is not None:
-                gfxData = xmlLookups.getGfxData(room.roomBG)
+            gfxData = self.scene().getBGGfxData()
+            if gfxData is not None:
                 entid = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
                 override = gfxData['Entities'].get(entid)
 
