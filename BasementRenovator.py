@@ -506,6 +506,31 @@ class RoomScene(QGraphicsScene):
             for i, row in enumerate(self.roomRows):
                 row.setZValue(last - i)
 
+    def getAdjacentEnts(self, x, y):
+        height = self.roomHeight
+
+        # [ L, R, U, D, UL, DL, UR, DR ]
+        lookup = {
+            -1: [ 4,   2,   6 ],
+            0:  [ 0, None,  1 ],
+            1:  [ 5,   3,   7 ],
+        }
+
+        res = [ [] for i in range(8) ]
+        for yc in [ y - 1, y, y + 1 ]:
+            if yc < 0 or yc >= height:
+                continue
+
+            for item in self.roomRows[yc].childItems():
+                xc = item.entity.x
+                i = (xc - x) + 1
+                if i > -1 and i < 3:
+                    spots = lookup[yc - y]
+                    if spots[i] is not None:
+                        res[spots[i]].append(item)
+
+        return res
+
     def clearDoors(self):
         if self.roomDoorRoot:
             # wrap if the underlying object is deleted
@@ -955,6 +980,11 @@ class Entity(QGraphicsItem):
 
             self.gfx = en.find('Gfx')
 
+            self.imgPath = en.get('Image')
+            self.renderPit = en.get('UsePitTiling')
+            if self.renderPit:
+                self.imgPath = self.renderPit
+
             def getEnt(s):
                 return list(map(int, s.split('.')))
 
@@ -968,7 +998,7 @@ class Entity(QGraphicsItem):
                 i = i.convertToFormat(QImage.Format_ARGB32)
 
                 d = QImage()
-                d.load(en.get('Image'))
+                d.load(self.imgPath)
 
                 p = QPainter(i)
                 p.drawImage(0, 0, d)
@@ -977,7 +1007,7 @@ class Entity(QGraphicsItem):
                 self.pixmap = QPixmap.fromImage(i)
 
             else:
-                self.pixmap = QPixmap(en.get('Image'))
+                self.pixmap = QPixmap(self.imgPath)
 
             def checkNum(s):
                 try:
@@ -1116,6 +1146,76 @@ class Entity(QGraphicsItem):
                             door.exists = door.blockingCount == 0
                         break
 
+    PitAnm2 = anm2.Config('resources/Backgrounds/PitGrid.anm2', 'resources')
+    PitAnm2.setAnimation()
+
+    def setPitFrame(self):
+        def matchInStack(stack):
+            for ent in stack:
+                if ent.entity.Type == self.entity.Type and ent.entity.Variant == self.entity.Variant:
+                    return True
+            return False
+
+        [ L, R, U, D, UL, DL, UR, DR ] = list(map( \
+            matchInStack, \
+            self.scene().getAdjacentEnts(self.entity.x, self.entity.y) \
+        ))
+        hasExtraFrames = self.entity.pixmap.height() > 260
+
+        # copied from stageapi
+        # Words were shortened to make writing code simpler.
+        F = 0 # Sprite frame to set
+
+        # First bitwise frames (works for all combinations of just left up right and down)
+        if L: F = F | 1
+        if U: F = F | 2
+        if R: F = F | 4
+        if D: F = F | 8
+
+        # Then a bunch of other combinations
+        if U and L and not UL and not R and not D:          F = 17
+        if U and R and not UR and not L and not D:          F = 18
+        if L and D and not DL and not U and not R:          F = 19
+        if R and D and not DR and not L and not U:          F = 20
+        if L and U and R and D and not UL:                  F = 21
+        if L and U and R and D and not UR:                  F = 22
+        if U and R and D and not L and not UR:              F = 25
+        if L and U and D and not R and not UL:              F = 26
+        if hasExtraFrames:
+            if U and L and D and UL and not DL:             F = 35
+            if U and R and D and UR and not DR:             F = 36
+
+        if L and U and R and D and not DL and not DR:       F = 24
+        if L and U and R and D and not UR and not UL:       F = 23
+        if L and U and R and UL and not UR and not D:       F = 27
+        if L and U and R and UR and not UL and not D:       F = 28
+        if L and U and R and not D and not UR and not UL:   F = 29
+        if L and R and D and DL and not U and not DR:       F = 30
+        if L and R and D and DR and not U and not DL:       F = 31
+        if L and R and D and not U and not DL and not DR:   F = 32
+
+        if hasExtraFrames:
+            if U and R and D and not L and not UR and not DR:                   F = 33
+            if U and L and D and not R and not UL and not DL:                   F = 34
+            if U and R and D and L and UL and UR and DL and not DR:             F = 37
+            if U and R and D and L and UL and UR and DR and not DL:             F = 38
+            if U and R and D and L and not UL and not UR and not DR and not DL: F = 39
+            if U and R and D and L and DL and DR and not UL and not UR:         F = 40
+            if U and R and D and L and DL and UR and not UL and not DR:         F = 41
+            if U and R and D and L and UL and DR and not DL and not UR:         F = 42
+            if U and R and D and L and UL and not DL and not UR and not DR:     F = 43
+            if U and R and D and L and UR and not UL and not DL and not DR:     F = 44
+            if U and R and D and L and DL and not UL and not UR and not DR:     F = 45
+            if U and R and D and L and DR and not UL and not UR and not DL:     F = 46
+            if U and R and D and L and DL and DR and not UL and not UR:         F = 47
+            if U and R and D and L and DL and UL and not UR and not DR:         F = 48
+            if U and R and D and L and DR and UR and not UL and not DL:         F = 49
+
+        Entity.PitAnm2.spritesheets[0] = self.entity.pixmap
+        Entity.PitAnm2.frame = F
+
+        return F
+
     def itemChange(self, change, value):
 
         if change == self.ItemPositionChange:
@@ -1181,7 +1281,6 @@ class Entity(QGraphicsItem):
         painter.setPen(QPen(Qt.white))
 
         if self.entity.pixmap:
-            w, h = self.entity.pixmap.width(), self.entity.pixmap.height()
             xc, yc = 0, 0
 
             typ, var, sub = self.entity.Type, self.entity.Variant, self.entity.Subtype
@@ -1225,8 +1324,6 @@ class Entity(QGraphicsItem):
 
             xc += 1
             yc += 1
-            x = (xc * 26 - w) / 2
-            y = (yc * 26 - h)
 
             def drawGridBorders():
                 painter.drawLine(0, 0, 0, 4)
@@ -1244,8 +1341,9 @@ class Entity(QGraphicsItem):
             override = None
 
             room = mainWindow.roomList.selectedRoom()
-            if room and room.roomBG:
-                for ent in room.roomBG.findall('Entity'):
+            if room and room.roomBG is not None:
+                gfxData = xmlLookups.getGfxData(room.roomBG)
+                for ent in gfxData['Entities']:
                     if int(ent.get('ID')) == self.entity.Type and \
                        int(ent.get('Variant', 0)) == self.entity.Variant and \
                        int(ent.get('Subtype', 0)) == self.entity.Subtype:
@@ -1259,20 +1357,33 @@ class Entity(QGraphicsItem):
                 if override.get('InvertDepth') == '1':
                     self.setZValue(-1 * self.entity.y)
 
-            painter.drawPixmap(x, y, self.entity.pixmap)
+            rendered = self.entity.pixmap
+            renderFunc = painter.drawPixmap
+
+            if self.entity.renderPit:
+                self.setPitFrame()
+                rendered = Entity.PitAnm2.render()
+                renderFunc = painter.drawImage
+
+            width, height = rendered.width(), rendered.height()
+
+            x = (xc * 26 - width) / 2
+            y = (yc * 26 - height)
+
+            renderFunc(x, y, rendered)
 
             # if the offset is high enough, draw an indicator of the actual position
             if not self.entity.disableOffsetIndicator and (abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5):
                 painter.setPen(self.OFFSET_SELECTION_PEN)
                 painter.setBrush(Qt.NoBrush)
-                painter.drawLine(13, 13, x + w / 2, y + h - 13)
+                painter.drawLine(13, 13, x + width / 2, y + height - 13)
                 drawGridBorders()
-                painter.fillRect(x + w / 2 - 3, y + h - 13 - 3, 6, 6, Qt.red)
+                painter.fillRect(x + width / 2 - 3, y + height - 13 - 3, 6, 6, Qt.red)
 
             if self.isSelected():
                 painter.setPen(self.SELECTION_PEN)
                 painter.setBrush(Qt.NoBrush)
-                painter.drawRect(x, y, w, h)
+                painter.drawRect(x, y, width, height)
 
                 # Grid space boundary
                 painter.setPen(Qt.green)

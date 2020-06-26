@@ -558,7 +558,7 @@
 	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" UsePitTiling="resources/Backgrounds/pit_generic.png" />
 	<entity Group="Grid" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />

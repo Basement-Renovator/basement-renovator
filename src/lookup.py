@@ -313,23 +313,31 @@ class MainLookup:
             if roomType:
                 baseGfx = self.getGfxData(self.roomTypes.getGfx(roomType[0]))
 
-        if baseGfx:
-            baseGfx['Gfx'] = node
-            return baseGfx
-
         prefix = node.get('BGPrefix')
-        if prefix is None:
-            raise ValueError('Invalid gfx node!', node.tag, node.attrib)
 
-        ret = {
-            'Paths': {
+        paths = None
+        entities = []
+
+        if baseGfx:
+            paths = baseGfx['Paths']
+            entities = baseGfx['Entities']
+
+        if prefix:
+            paths = {
                 'OuterBG':    prefix + '.png',
                 'BigOuterBG': prefix + '_big.png' if node.get('HasBigBG') == '1' else '',
                 'InnerBG':    prefix + 'Inner.png',
                 'NFloor':     prefix + '_nfloor.png',
                 'LFloor':     prefix + '_lfloor.png',
-            },
-            'Gfx': node
+            }
+
+        if paths is None:
+            raise ValueError('Invalid gfx node!', node.tag, node.attrib)
+
+        entities.extend(node.findall('Entity'))
+        ret = {
+            'Paths': paths,
+            'Entities': entities
         }
 
         for key, val in ret['Paths'].items():

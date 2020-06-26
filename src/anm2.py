@@ -80,15 +80,20 @@ class Config:
                 ignoreCount += 1
                 continue
 
-            sheetPath = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ''
+            image = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ''
 
-            image = os.path.abspath(os.path.join(self.dir, sheetPath))
-            imgPath = Path(image)
-            if not (imgPath and imgPath.exists()):
-                image = re.sub(r'.*resources', self.resourcePath, image)
+            imgPath = None
+            sheetPath = None
+            if isinstance(image, str):
+                sheetPath = image
+                image = os.path.abspath(os.path.join(self.dir, image))
                 imgPath = Path(image)
+                if not (imgPath and imgPath.exists()):
+                    image = re.sub(r'.*resources', self.resourcePath, image)
+                    imgPath = Path(image)
+                    image = str(imgPath) if imgPath.exists else None
 
-            if imgPath and imgPath.exists():
+            if image is not None:
                 # Here's the anm specs
                 xp = -int(frame.get("XPivot")) # applied before rotation
                 yp = -int(frame.get("YPivot"))
@@ -102,7 +107,7 @@ class Config:
                 w = int(frame.get("Width"))
                 h = int(frame.get("Height"))
 
-                imgs.append([str(imgPath), x, y, xc, yc, w, h, xs, ys, r, xp, yp])
+                imgs.append([image, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
                 print("Bad image! ", sheetPath, image)
 
@@ -125,7 +130,7 @@ class Config:
         # Fetch each layer and establish the needed dimensions for the final image
         finalRect = QRect()
         for img in imgs:
-            imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
+            image, x, y, xc, yc, w, h, xs, ys, r, xp, yp = img
             cropRect = QRect(xc, yc, w, h)
 
             mat = QTransform()
@@ -135,11 +140,15 @@ class Config:
             mat.translate(xp, yp)
 
             # Load the Image
-            qimg = imgCache.get(imgPath)
-            if not qimg:
-                qimg = QImage(imgPath)
-                imgCache[imgPath] = qimg
-                #qimg.save(imgPath)
+            qimg = None
+            if isinstance(image, str):
+                qimg = imgCache.get(image)
+                if qimg is None:
+                    qimg = QImage(image)
+                    imgCache[image] = qimg
+                    #qimg.save(image)
+            else:
+                qimg = QImage(image)
 
             sourceImage = qimg.copy(cropRect).transformed(mat)
             img.append(sourceImage)
@@ -156,7 +165,7 @@ class Config:
 
         # Paint all the layers to it
         renderPainter = QPainter(pixmapImg)
-        for imgPath, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
+        for image, x, y, xc, yc, w, h, xs, ys, r, xp, yp, sourceImage, boundingRect in imgs:
             # Transfer the crop area to the pixmap
             boundingRect.translate(-finalRect.topLeft())
             renderPainter.drawImage(boundingRect, sourceImage)
