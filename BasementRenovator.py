@@ -1156,10 +1156,9 @@ class Entity(QGraphicsItem):
                     return True
             return False
 
-        [ L, R, U, D, UL, DL, UR, DR ] = list(map( \
-            matchInStack, \
-            self.scene().getAdjacentEnts(self.entity.x, self.entity.y) \
-        ))
+        adjEnts = self.scene().getAdjacentEnts(self.entity.x, self.entity.y)
+
+        [ L, R, U, D, UL, DL, UR, DR ] = list(map(matchInStack, adjEnts))
         hasExtraFrames = self.entity.pixmap.height() > 260
 
         # copied from stageapi
@@ -1343,12 +1342,8 @@ class Entity(QGraphicsItem):
             room = mainWindow.roomList.selectedRoom()
             if room and room.roomBG is not None:
                 gfxData = xmlLookups.getGfxData(room.roomBG)
-                for ent in gfxData['Entities']:
-                    if int(ent.get('ID')) == self.entity.Type and \
-                       int(ent.get('Variant', 0)) == self.entity.Variant and \
-                       int(ent.get('Subtype', 0)) == self.entity.Subtype:
-                        override = ent
-                        break
+                entid = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+                override = gfxData['Entities'].get(entid)
 
             if override is not None:
                 img = override.get('Image')

@@ -1,6 +1,8 @@
 import xml.etree.cElementTree as ET
 import os, abc, re
 
+from itertools import zip_longest
+
 def linuxPathSensitivityTraining(path):
 
     path = path.replace("\\", "/")
@@ -58,6 +60,31 @@ def parseCriteria(txt):
     tokens = list(map(int, tokens))
     return lambda v: v in tokens
 
+def applyGfxReplacement(replacement, gfxchildren):
+    for origgfx, newgfx in zip_longest(replacement.findall('Gfx'), gfxchildren):
+        print(origgfx and origgfx.attrib, newgfx and newgfx.attrib)
+        if newgfx is None:
+            continue
+        elif origgfx is None:
+            replacement.append(newgfx)
+            continue
+
+        for key, val in newgfx.attrib.items():
+            origgfx.set(key, val)
+
+        for ent in newgfx.findall('Entity'):
+            origent = None
+            for orig in origgfx.findall(f'Entity[@ID="{ent.get("ID")}"]'):
+                if orig.get('Variant', '0') == ent.get('Variant', '0') and \
+                   orig.get('SubType', '0') == ent.get('SubType', '0'):
+                    origent = orig
+                    break
+            if origent is not None:
+                for key, val in ent.attrib.items():
+                    origent.set(key, val)
+            else:
+                origgfx.append(ent)
+
 class Lookup(metaclass=abc.ABCMeta):
     def __init__(self, prefix, mode):
         self.setup(prefix, mode)
@@ -101,19 +128,30 @@ class StageLookup(Lookup):
         if not stageList: return
 
         def mapStage(stage):
-            if stage.get('Stage') is None or stage.get('StageType') is None or stage.get('Name') is None:
-                print('Tried to load stage, but had missing stage, stage type, or name!', str(stage.attrib))
+            name = stage.get('Name')
+            if name is None:
+                print('Tried to load stage, but had missing name!', str(stage.attrib))
                 return None
 
             print('Loading stage:', str(stage.attrib))
 
+            if stage.get('Stage') is None or stage.get('StageType') is None:
+                print('Stage has missing stage/stage type; this may not load properly in testing')
+
             sanitizePath(stage, 'BGPrefix', brPath)
 
-            for gfx in stage.findall('Gfx'):
+            children = stage.findall('Gfx')
+            for gfx in children:
                 sanitizePath(gfx, 'BGPrefix', brPath)
 
                 for ent in gfx.findall('Entity'):
                     sanitizePath(ent, 'Image', brPath)
+
+            replacement = self.xml.find(f'stage[@Name="{name}"]')
+            if replacement:
+                print('Replacing gfx!')
+                applyGfxReplacement(replacement, children)
+                return None
 
             return stage
 
@@ -188,7 +226,8 @@ class RoomTypeLookup(Lookup):
         if not roomTypeList: return
 
         def mapRoomType(roomType):
-            if roomType.get('Name') is None:
+            name = roomType.get('Name')
+            if name is None:
                 print('Tried to load room type, but had missing name!', str(roomType.attrib))
                 return None
 
@@ -196,11 +235,17 @@ class RoomTypeLookup(Lookup):
 
             sanitizePath(roomType, 'Icon', brPath)
 
-            for gfx in roomType.findall('Gfx'):
+            children = roomType.findall('Gfx')
+            for gfx in children:
                 sanitizePath(gfx, 'BGPrefix', brPath)
 
                 for ent in gfx.findall('Entity'):
                     sanitizePath(ent, 'Image', brPath)
+
+            replacement = self.xml.find(f'room[@Name="{name}"]')
+            if replacement:
+                applyGfxReplacement(replacement, children)
+                return None
 
             return roomType
 
@@ -316,7 +361,7 @@ class MainLookup:
         prefix = node.get('BGPrefix')
 
         paths = None
-        entities = []
+        entities = {}
 
         if baseGfx:
             paths = baseGfx['Paths']
@@ -334,7 +379,10 @@ class MainLookup:
         if paths is None:
             raise ValueError('Invalid gfx node!', node.tag, node.attrib)
 
-        entities.extend(node.findall('Entity'))
+        for ent in node.findall('Entity'):
+            entid = f"{ent.get('ID')}.{ent.get('Variant', '0')}.{ent.get('SubType', '0')}"
+            entities[entid] = ent
+
         ret = {
             'Paths': paths,
             'Entities': entities
