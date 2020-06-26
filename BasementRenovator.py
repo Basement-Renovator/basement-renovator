@@ -677,8 +677,6 @@ class RoomScene(QGraphicsScene):
         painter.drawImage( (1 + xOff) * gs, ( 1 + yOff) * gs, self.floorImg)
         painter.drawImage((-1 + xOff) * gs, (-1 + yOff) * gs, self.wallImg)
 
-        self.framecache = {}
-
         for stack in self.entcache:
             stack.clear()
 
@@ -1048,6 +1046,12 @@ class Entity(QGraphicsItem):
 
             else:
                 self.pixmap = QPixmap(self.imgPath)
+
+            iconPath = en.get('Image')
+            if self.imgPath != iconPath:
+                self.iconpixmap = QPixmap(iconPath)
+            else:
+                self.iconpixmap = self.pixmap
 
             def checkNum(s):
                 try:
@@ -1580,7 +1584,7 @@ class EntityStack(QGraphicsItem):
 
         w = 0
         for i, item in enumerate(self.items):
-            pix = item.entity.pixmap
+            pix = item.entity.iconpixmap
             self.spinners[i].setPos(w-8, r.bottom()-26)
             w += 4
             painter.drawPixmap(w, r.bottom()-20-pix.height(), pix)
@@ -1595,7 +1599,7 @@ class EntityStack(QGraphicsItem):
         # Calculate the combined size
         for item in self.items:
             dx, dy = 26, 26
-            pix = item.entity.pixmap
+            pix = item.entity.iconpixmap
             if pix:
                 dx, dy = pix.rect().width(), pix.rect().height()
             width = width + dx
