@@ -27,7 +27,9 @@ class Config:
         self.overlayAnim = None
         self.overlayLen = 0
 
+        self.rootFrames = []
         self.frameLayers = []
+        self.overlayRootFrames = []
         self.overlayFrameLayers = []
 
         self.frame = -1
@@ -43,6 +45,7 @@ class Config:
         self.anim = self.getAnim(animName or self.defaultAnim)
         if not self.anim:
             raise ValueError(f"Invalid animation! {animName or '[Default]'}")
+        self.rootFrames = self.anim.findall(".//RootAnimation/Frame")
         self.frameLayers = self.anim.findall(".//LayerAnimation[Frame]")
         self.animLen = int(self.anim.get('FrameNum'))
         self.frame = 0
@@ -51,6 +54,8 @@ class Config:
         self.overlayAnim = self.getAnim(animName)
         if not self.overlayAnim:
             raise ValueError(f"Invalid animation! {animName}")
+        # not supported for now
+        # self.overlayRootFrames = self.anim.findall(".//RootAnimation/Frame")
         self.overlayFrameLayers = self.overlayAnim.findall(".//LayerAnimation[Frame]")
         self.overlayLen = int(self.overlayAnim.get('FrameNum'))
         self.overlayFrame = 0
@@ -118,7 +123,11 @@ class Config:
 
 
     def render(self, noScale=False):
-        imgs = self.extractFrame(self.frameLayers, self.frame)
+        imgs = []
+
+        root = Config.getFrameNode(self.rootFrames, self.frame)
+        if root is not None and root.get('Visible') != 'false':
+            imgs += self.extractFrame(self.frameLayers, self.frame)
 
         if self.overlayAnim:
             imgs += self.extractFrame(self.overlayFrameLayers, self.overlayFrame)
@@ -170,5 +179,14 @@ class Config:
             boundingRect.translate(-finalRect.topLeft())
             renderPainter.drawImage(boundingRect, sourceImage)
         renderPainter.end()
+
+        if root is not None:
+            mat = QTransform()
+            mat.rotate(int(root.get('Rotation')))
+            if not noScale:
+                mat.scale(float(root.get('XScale')) / 100, float(root.get('YScale')) / 100)
+            mat.translate(int(root.get('XPosition')), int(root.get('YPosition')))
+
+            pixmapImg = pixmapImg.transformed(mat)
 
         return pixmapImg

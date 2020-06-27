@@ -33,7 +33,7 @@ from collections import OrderedDict
 from copy import deepcopy
 
 import traceback, sys
-import struct, os, subprocess, platform, webbrowser, re, shutil, datetime
+import struct, os, subprocess, platform, webbrowser, re, shutil, datetime, random
 import urllib.parse, urllib.request
 from pathlib import Path
 import xml.etree.cElementTree as ET
@@ -692,6 +692,15 @@ class RoomScene(QGraphicsScene):
                 yc = item.entity.y
                 self.entcache[Room.Info.gridIndex(xc, yc, self.roomWidth)].append(item)
 
+        # have to set rock tiling ahead of time due to render order not being guaranteed left to right
+        room = mainWindow.roomList.selectedRoom()
+        if room:
+            seed = room.seed
+            for i, stack in enumerate(self.entcache):
+                for ent in stack:
+                    if ent.entity.renderRock and ent.entity.rockFrame is None:
+                        ent.setRockFrame(seed + i)
+
         QGraphicsScene.drawBackground(self, painter, rect)
 
 class RoomEditorWidget(QGraphicsView):
@@ -1028,6 +1037,8 @@ class Entity(QGraphicsItem):
             self.imgPath = en.get('EditorImage') or en.get('Image')
 
             self.renderPit = en.get('UsePitTiling') == '1'
+            self.renderRock = en.get('UseRockTiling') == '1'
+            self.rockFrame = None
 
             def getEnt(s):
                 return list(map(int, s.split('.')))
@@ -1199,6 +1210,9 @@ class Entity(QGraphicsItem):
     PitAnm2 = anm2.Config('resources/Backgrounds/PitGrid.anm2', 'resources')
     PitAnm2.setAnimation()
 
+    RockAnm2 = anm2.Config('resources/Backgrounds/RockGrid.anm2', 'resources')
+    RockAnm2.setAnimation()
+
     def getPitFrame(self):
         def matchInStack(stack):
             for ent in stack:
@@ -1261,6 +1275,65 @@ class Entity(QGraphicsItem):
             if U and R and D and L and DR and UR and not UL and not DL:         F = 49
 
         return F
+
+    def setRockFrame(self, seed):
+        random.seed(seed)
+        self.entity.rockFrame = random.randint(0, 2)
+        self.entity.placeVisual = (0, 3 / 26)
+
+        if seed & 3 != 0: return
+
+        def findMatchInStack(stack):
+            for ent in stack:
+                if ent.entity.Type == self.entity.Type and ent.entity.Variant == self.entity.Variant:
+                    return ent
+            return None
+
+        [ _, right, _, down, _, _, _, downRight ] = self.scene().getAdjacentEnts(self.entity.x, self.entity.y, useCache=True)
+
+        candidates = []
+
+        R = findMatchInStack(right)
+        if R is not None and R.entity.rockFrame is None:
+            candidates.append('2x1')
+
+        D = findMatchInStack(down)
+        if D is not None and D.entity.rockFrame is None:
+            candidates.append('1x2')
+
+        DR = None
+        if len(candidates) == 2:
+            DR = findMatchInStack(downRight)
+            if DR is not None and DR.entity.rockFrame is None:
+                candidates.append('2x2')
+
+        if not candidates: return
+
+        g = 6 / 26
+        h = 0.21 # 3/26 rounded
+        nh = -0.235 # -3/26 rounded, weird asymmetric offset issues
+
+        choice = random.choice(candidates)
+        if choice == '2x1':
+            self.entity.rockFrame = 3
+            self.entity.placeVisual = (nh, 0)
+            R.entity.rockFrame    = 4
+            R.entity.placeVisual    = (h, 0)
+        elif choice == '1x2':
+            self.entity.rockFrame = 5
+            self.entity.placeVisual = (0, 0)
+            D.entity.rockFrame    = 6
+            D.entity.placeVisual    = (0, g)
+        elif choice == '2x2':
+            self.entity.rockFrame = 7
+            self.entity.placeVisual = (nh, 0)
+            R.entity.rockFrame    = 8
+            R.entity.placeVisual    = (h, 0)
+            D.entity.rockFrame    = 9
+            D.entity.placeVisual    = (nh, g)
+            DR.entity.rockFrame   = 10
+            DR.entity.placeVisual   = (h, g)
+
 
     def itemChange(self, change, value):
 
@@ -1409,6 +1482,14 @@ class Entity(QGraphicsItem):
                 Entity.PitAnm2.spritesheets[0] = self.entity.pixmap
                 rendered = self.scene().getFrame(imgPath + ' - pit', Entity.PitAnm2)
                 renderFunc = painter.drawImage
+            elif self.entity.renderRock and self.entity.rockFrame is not None:
+                Entity.RockAnm2.frame = self.entity.rockFrame
+                Entity.RockAnm2.spritesheets[0] = self.entity.pixmap
+                rendered = self.scene().getFrame(imgPath + ' - rock', Entity.RockAnm2)
+                renderFunc = painter.drawImage
+
+                # clear frame after rendering to reset for next frame
+                self.entity.rockFrame = None
 
             width, height = rendered.width(), rendered.height()
 
@@ -1951,6 +2032,7 @@ class Room(QListWidgetItem):
     @name.setter
     def name(self, n):
         self.setData(0x100, n)
+        self.seed = hash(n)
 
     @property
     def gridSpawns(self): return self._gridSpawns

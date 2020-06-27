@@ -554,7 +554,7 @@
 	<entity Group="Fireplaces" ID="1410" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 
 	<!-- Grid -->
-	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/rocks_generic.png" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
 	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />

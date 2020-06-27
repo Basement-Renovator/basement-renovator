@@ -39,7 +39,9 @@
     <room Name="Boss Room"          Type="5"  Icon="resources/UI/roomicons/boss.png" ShowInMenu="1" />
     <room Name="Mini-Boss Room"     Type="6"  Icon="resources/UI/roomicons/miniboss.png" ShowInMenu="1" />
     <room Name="Secret Room"        Type="7"  Icon="resources/UI/roomicons/secret.png" ShowInMenu="1">
-        <Gfx BGPrefix="resources/Backgrounds/0f_secretroom" />
+        <Gfx BGPrefix="resources/Backgrounds/0f_secretroom">
+            <Entity ID="1000" Image="resources/Backgrounds/rocks_secretroom.png" />
+        </Gfx>
     </room>
     <room Name="Super Secret Room"  Type="8"  Icon="resources/UI/roomicons/supersecret.png" ShowInMenu="1">
         <Gfx StageGfx="Womb"             ID="0,11,15" />

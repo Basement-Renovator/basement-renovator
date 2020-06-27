@@ -2,7 +2,7 @@
 	<Info CreatedBy="robot" CreatedOn="8/10/2018 9:14:59 PM" Version="112" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="none.png" Id="0"/>
+			<Spritesheet Path="pit_generic.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="layer0" Id="0" SpritesheetId="0"/>
