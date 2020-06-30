@@ -1003,6 +1003,15 @@ class Entity(QGraphicsItem):
             self.disableOffsetIndicator = False
             self.blocksDoor = True
 
+            self.imgPath = None
+            self.gfx = None
+            self.renderPit = None
+            self.renderRock = None
+            self.rockFrame = None
+
+            self.pixmap = None
+            self.iconpixmap = None
+
             self.mirrorX = None
             self.mirrorY = None
 
@@ -1020,6 +1029,7 @@ class Entity(QGraphicsItem):
 
             if en == None:
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
+                self.iconpixmap = self.pixmap
                 return
 
             self.name = en.get('Name')
