@@ -4765,7 +4765,8 @@ class MainWindow(QMainWindow):
                     raise
 
                 baseSpecialPath = "00.special rooms"
-                basePath = floorInfo.get('BaseGamePath') or xmlLookups.stages.lookup(stage=floorInfo.get('Stage'), stageType=floorInfo.get('StageType'), baseGamePath=True).get('BaseGamePath')
+                extraInfo = xmlLookups.stages.lookup(stage=floorInfo.get('Stage'), stageType=floorInfo.get('StageType'), baseGamePath=True)
+                basePath = floorInfo.get('BaseGamePath') or extraInfo[-1].get('BaseGamePath')
 
                 # Set the selected rooms to have descending ids from max
                 # this should avoid any id conflicts

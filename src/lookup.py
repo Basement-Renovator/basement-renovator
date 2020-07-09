@@ -134,7 +134,9 @@ class StageLookup(Lookup):
 
             print('Loading stage:', str(stage.attrib))
 
-            if stage.get('Stage') is None or stage.get('StageType') is None:
+            replacement = self.xml.find(f'stage[@Name="{name}"]')
+
+            if replacement is None and (stage.get('Stage') is None or stage.get('StageType') is None):
                 print('Stage has missing stage/stage type; this may not load properly in testing')
 
             sanitizePath(stage, 'BGPrefix', brPath)
@@ -146,8 +148,7 @@ class StageLookup(Lookup):
                 for ent in gfx.findall('Entity'):
                     sanitizePath(ent, 'Image', brPath)
 
-            replacement = self.xml.find(f'stage[@Name="{name}"]')
-            if replacement:
+            if replacement is not None:
                 applyGfxReplacement(replacement, children)
                 return None
 
@@ -160,36 +161,27 @@ class StageLookup(Lookup):
     def lookup(self, path=None, name=None, stage=None, stageType=None, baseGamePath=None):
         stages = self.xml.findall('stage')
 
-        doList = False
-
         if stage:
-            doList = True
             st = str(stage)
-            stages = filter(lambda s: s.get('Stage') == st)
+            stages = list(filter(lambda s: s.get('Stage') == st, stages))
 
         if stageType:
-            doList = True
             st = str(stageType)
-            stages = filter(lambda s: s.get('StageType') == st)
+            stages = list(filter(lambda s: s.get('StageType') == st, stages))
 
         if path is not None:
-            doList = True
-            stages = filter(lambda s: s.get('Pattern') in path, stages)
+            stages = list(filter(lambda s: s.get('Pattern') in path, stages))
 
         if name:
-            doList = True
-            stages = filter(lambda s: s.get('Name') == name, stages)
+            stages = list(filter(lambda s: s.get('Name') == name, stages))
 
         if baseGamePath:
-            doList = True
             hasBasePath = None
             if isinstance(baseGamePath, bool):
                 hasBasePath = lambda s: s.get('BaseGamePath') is not None
             else:
                 hasBasePath = lambda s: s.get('BaseGamePath') == baseGamePath
-            stages = filter(hasBasePath, stages)
-
-        if doList: stages = list(stages)
+            stages = list(filter(hasBasePath, stages))
 
         return stages
 
@@ -231,6 +223,8 @@ class RoomTypeLookup(Lookup):
 
             print('Loading room type:', str(roomType.attrib))
 
+            replacement = self.xml.find(f'room[@Name="{name}"]')
+
             sanitizePath(roomType, 'Icon', brPath)
 
             children = roomType.findall('Gfx')
@@ -240,8 +234,7 @@ class RoomTypeLookup(Lookup):
                 for ent in gfx.findall('Entity'):
                     sanitizePath(ent, 'Image', brPath)
 
-            replacement = self.xml.find(f'room[@Name="{name}"]')
-            if replacement:
+            if replacement is not None:
                 applyGfxReplacement(replacement, children)
                 return None
 
@@ -275,21 +268,15 @@ class RoomTypeLookup(Lookup):
     def lookup(self, room=None, name=None, roomfile=None, path=None, showInMenu=None):
         rooms = self.xml.findall('room')
 
-        doList = False
-
         if name:
-            doList = True
-            rooms = filter(lambda r: r.get('Name') == name, rooms)
+            rooms = list(filter(lambda r: r.get('Name') == name, rooms))
 
         if showInMenu is not None:
-            doList = True
-            rooms = filter(lambda node: (node.get('ShowInMenu') == '1') == showInMenu, rooms)
+            rooms = list(filter(lambda node: (node.get('ShowInMenu') == '1') == showInMenu, rooms))
 
         if room:
-            doList = True
-            rooms = filter(lambda node: self.filterRoom(node, room, path=path), rooms)
+            rooms = list(filter(lambda node: self.filterRoom(node, room, path=path), rooms))
 
-        if doList: rooms = list(rooms)
         return rooms
 
     def getMainType(self, room=None, roomfile=None, path=None):
