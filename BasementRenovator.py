@@ -45,6 +45,13 @@ from src.core import Room as RoomData, Entity as EntityData
 from src.lookup import MainLookup
 import src.anm2 as anm2
 
+def checkNum(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 ########################
 #       XML Data       #
 ########################
@@ -1080,13 +1087,6 @@ class Entity(QGraphicsItem):
             else:
                 self.iconpixmap = self.pixmap
 
-            def checkNum(s):
-                try:
-                    float(s)
-                    return True
-                except ValueError:
-                    return False
-
             if self.placeVisual:
                 parts = list(map(lambda x: x.strip(), self.placeVisual.split(',')))
                 if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
@@ -1443,6 +1443,32 @@ class Entity(QGraphicsItem):
             }
 
             recenter = self.entity.placeVisual
+
+            override = None
+
+            gfxData = self.scene().getBGGfxData()
+            if gfxData is not None:
+                entid = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+                override = gfxData['Entities'].get(entid)
+
+            if override is not None:
+                img = override.get('Image')
+                if img:
+                    self.entity.pixmap = QPixmap(img)
+                    imgPath = img
+
+                    placeVisual = override.get('PlaceVisual')
+                    if placeVisual is not None:
+                        parts = list(map(lambda x: x.strip(), placeVisual.split(',')))
+                        if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
+                            placeVisual = (float(parts[0]), float(parts[1]))
+                        else:
+                            placeVisual = parts[0]
+                        recenter = placeVisual
+
+                if override.get('InvertDepth') == '1':
+                    self.setZValue(-1 * self.entity.y)
+
             if recenter:
                 if isinstance(recenter, str):
                     recenter = customPlaceVisuals.get(recenter, None)
@@ -1468,21 +1494,6 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             imgPath = self.entity.imgPath
-
-            override = None
-
-            gfxData = self.scene().getBGGfxData()
-            if gfxData is not None:
-                entid = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-                override = gfxData['Entities'].get(entid)
-
-            if override is not None:
-                img = override.get('Image')
-                if img:
-                    self.entity.pixmap = QPixmap(img)
-                    imgPath = img
-                if override.get('InvertDepth') == '1':
-                    self.setZValue(-1 * self.entity.y)
 
             rendered = self.entity.pixmap
             renderFunc = painter.drawPixmap
