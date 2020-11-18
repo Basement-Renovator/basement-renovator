@@ -1444,6 +1444,11 @@ class Entity(QGraphicsItem):
 
             recenter = self.entity.placeVisual
 
+            imgPath = self.entity.imgPath
+
+            rendered = self.entity.pixmap
+            renderFunc = painter.drawPixmap
+
             override = None
 
             gfxData = self.scene().getBGGfxData()
@@ -1454,7 +1459,7 @@ class Entity(QGraphicsItem):
             if override is not None:
                 img = override.get('Image')
                 if img:
-                    self.entity.pixmap = QPixmap(img)
+                    rendered = QPixmap(img)
                     imgPath = img
 
                     placeVisual = override.get('PlaceVisual')
@@ -1493,19 +1498,14 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 22, 26)
                 painter.drawLine(26, 26, 26, 22)
 
-            imgPath = self.entity.imgPath
-
-            rendered = self.entity.pixmap
-            renderFunc = painter.drawPixmap
-
             if self.entity.renderPit:
                 Entity.PitAnm2.frame = self.getPitFrame()
-                Entity.PitAnm2.spritesheets[0] = self.entity.pixmap
+                Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + ' - pit', Entity.PitAnm2)
                 renderFunc = painter.drawImage
             elif self.entity.renderRock and self.entity.rockFrame is not None:
                 Entity.RockAnm2.frame = self.entity.rockFrame
-                Entity.RockAnm2.spritesheets[0] = self.entity.pixmap
+                Entity.RockAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + ' - rock', Entity.RockAnm2)
                 renderFunc = painter.drawImage
 
