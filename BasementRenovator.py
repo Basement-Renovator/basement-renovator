@@ -626,19 +626,19 @@ class RoomScene(QGraphicsScene):
         # painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
         # h = gs / 2
         # walls = self.roomInfo.shapeData['Walls']
-        # for wmin, wmax, wlvl, wdir in walls['X']:
-        #     painter.drawLine(wmin * gs + h, wlvl * gs + h, wmax * gs + h, wlvl * gs + h)
-        # for wmin, wmax, wlvl, wdir in walls['Y']:
-        #     painter.drawLine(wlvl * gs + h, wmin * gs + h, wlvl * gs + h, wmax * gs + h)
+        # for wMin, wMax, wLvl, wDir in walls['X']:
+        #     painter.drawLine(wMin * gs + h, wLvl * gs + h, wMax * gs + h, wLvl * gs + h)
+        # for wMin, wMax, wLvl, wDir in walls['Y']:
+        #     painter.drawLine(wLvl * gs + h, wMin * gs + h, wLvl * gs + h, wMax * gs + h)
 
         QGraphicsScene.drawForeground(self, painter, rect)
 
     def loadBackground(self):
         roomBG = None
-        currRoom = mainWindow.roomList.selectedRoom()
-        if currRoom:
-            roomBG = currRoom.roomBG
-            roomShape = currRoom.info.shape
+        currentRoom = mainWindow.roomList.selectedRoom()
+        if currentRoom:
+            roomBG = currentRoom.roomBG
+            roomShape = currentRoom.info.shape
         else:
             roomShape = 1
 
@@ -762,10 +762,10 @@ class RoomEditorWidget(QGraphicsView):
         x = int(x / 26)
         y = int(y / 26)
 
-        xmax, ymax = self.scene().roomWidth, self.scene().roomHeight
+        xMax, yMax = self.scene().roomWidth, self.scene().roomHeight
 
-        x = min(max(x, 0), xmax - 1)
-        y = min(max(y, 0), ymax - 1)
+        x = min(max(x, 0), xMax - 1)
+        y = min(max(y, 0), yMax - 1)
 
         if settings.value('SnapToBounds') == '1':
             x, y = self.scene().roomInfo.snapToBounds(x, y)
@@ -1163,9 +1163,9 @@ class Entity(QGraphicsItem):
             self.setParentItem(scene.roomRows[y])
 
             if self.entity.gfx is not None:
-                currRoom = mainWindow.roomList.selectedRoom()
-                if currRoom:
-                    currRoom.setRoomBG(self.entity.gfx)
+                currentRoom = mainWindow.roomList.selectedRoom()
+                if currentRoom:
+                    currentRoom.setRoomBG(self.entity.gfx)
 
             self.updateBlockedDoor(False, countOnly=self.respawning)
             return
@@ -1992,8 +1992,8 @@ class Room(QListWidgetItem):
             return None
 
         def _axisBounds(a, c, w):
-            wmin, wmax, wlvl, wdir = w
-            return a < wmin or a > wmax or ((c > wlvl) - (c < wlvl)) == wdir
+            wMin, wMax, wLvl, wDir = w
+            return a < wMin or a > wMax or ((c > wLvl) - (c < wLvl)) == wDir
 
         def isInBounds(self, x,y):
             return all(Room.Info._axisBounds(x,y,w) for w in self.shapeData['Walls']['X']) and \
@@ -3198,7 +3198,7 @@ class EntityGroupModel(QAbstractListModel):
 class EntityPalette(QWidget):
 
     def __init__(self):
-        """Initialises the widget. Remember to call setTileset() on it
+        """Initializes the widget. Remember to call setTileset() on it
         whenever the layer changes."""
 
         QWidget.__init__(self)
@@ -3297,19 +3297,19 @@ class EntityPalette(QWidget):
     def objSelected(self):
         """Throws a signal emitting the current object when changed"""
 
-        curr = self.currentSelectedObject()
-        if curr == None: return
+        current = self.currentSelectedObject()
+        if current == None: return
 
         # holding ctrl skips the filter change step
         kb = int(QGuiApplication.keyboardModifiers())
 
         holdCtrl = kb & Qt.ControlModifier != 0
         pinEntityFilter = settings.value('PinEntityFilter') == '1'
-        self.objChanged.emit(curr, holdCtrl == pinEntityFilter)
+        self.objChanged.emit(current, holdCtrl == pinEntityFilter)
 
         # Throws a signal when the selected object is used as a replacement
         if kb & Qt.AltModifier != 0:
-            self.objReplaced.emit(curr)
+            self.objReplaced.emit(current)
 
     #@pyqtSlot()
     def updateSearch(self, text):
@@ -3572,8 +3572,9 @@ class HooksDialog(QDialog):
             self.content.takeItem(self.content.currentRow())
 
     def closeEvent(self, evt):
-        curr = self.hooks.currentItem()
-        if curr: curr.val = self.contentPaths()
+        current = self.hooks.currentItem()
+        if current:
+            current.val = self.contentPaths()
         QWidget.closeEvent(self, evt)
 
 class TestConfigDialog(QDialog):
@@ -4497,10 +4498,10 @@ class MainWindow(QMainWindow):
             if b[2] >= 0: a[2] = b[2]
 
         for i in range(self.roomList.list.count()):
-            currRoom = self.roomList.list.item(i)
+            currentRoom = self.roomList.list.item(i)
 
             n = 0
-            for stack, x, y in currRoom.spawns():
+            for stack, x, y in currentRoom.spawns():
                 for ent in stack:
                     if checkEq(ent, replaced):
                         fixEnt(ent, replacement)
@@ -5102,7 +5103,7 @@ class MainWindow(QMainWindow):
             <br />
             Basement Renovator is a room editor for the Binding of Isaac Afterbirth+. You can use it to either edit existing rooms or create new ones.<br />
             <br />
-            To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extracter. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br />
+            To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extractor. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br />
             <br />
             Basement Renovator was originally programmed by Tempus (u/Chronometrics). It is open source and hosted on <a href='https://github.com/Tempus/Basement-Renovator'>GitHub</a>.
         '''
