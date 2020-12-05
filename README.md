@@ -1,24 +1,30 @@
 # Basement Renovator
 
 * Basement Renovator is a 3rd-party *[Binding of Isaac: Afterbirth+](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/)* room and level editor.
-  * It will edit [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) (non-DLC) rooms, but some entity IDs may be incorrect. If you need to edit Rebirth rooms, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
-* It is open-source and written in [Python 3](https://www.python.org/).
 * It makes it easy to create rooms and is even used by the game's official staff.
-* It was originally written by [Colin Naga](http://www.chronometry.ca/) and is now supported by the modding community.
+* It is open-source and written in [Python 3](https://www.python.org/).
+* It was originally written by [Chronometrics](http://www.chronometry.ca/) and is now supported by [budjmt](https://github.com/budjmt).
+* It will also edit [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) (non-DLC) rooms, but some entity IDs may be incorrect. If you need to edit Rebirth rooms, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
 
 ### Downloads
 
-There are packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these releases are infrequent. Please run Basement Renovator from source as described below if possible.
+There are packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these releases are infrequent. Please run Basement Renovator from source as described below.
 
-### Running from Source
+### Running from Source (for people who have experience with coding)
 
-1. Download a copy of the source code, either through git or using `Clone or download > Download zip`
+This section is for advanced users. If you are a noob, see the [section below]().
 
-2. Install Python 3 from the [Python website](https://www.python.org/downloads/) or from a package manager (apt, brew, chocolatey, etc.). Make sure to check the box to add Python to your PATH; if you don't, the next steps will complain about the `python` command not existing. If you forget, re-run the installer and check the box. If you use another installation method, make sure you have *pip* installed. (pip is the Python package manager, used to grab dependencies).
+1. Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
 
-3. Run `pip install pyqt5 psutil` (from cmd, terminal, etc.) to install dependencies.
+2. Install Python 3. If you are manually installing it, then make sure to check the box to add Python to your PATH. (If you don't, the next steps will complain about the `python` command not existing.) Installing Python 3 should also install `pip`, the Python package manager.
+
+3. Run `pip install pyqt5 psutil` to install dependencies.
 
 4. Double click the "BasementRenovator.py" script.
+
+### Running from Source (for complete noobs)
+
+TODO
 
 ---
 
@@ -46,9 +52,9 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 
 * **The Editor**: Smack in the middle is the main editor. You can drag any entity in this editor by clicking it, or select multiple entities by dragging a box around them. You can move entities wherever you'd like in the room. You can cut or paste entities, using the menu or keyboard shortcuts, and you can delete them by selecting them and hitting backspace or delete. Alt-click an entity to replace it with the chosen entity in your palette. You can choose whether doors are active or inactive by double clicking them.
 
-* **The Room List**: On the right of the window is the room list dock. This dock is moveable by grabbing the titlebar. Click any room in the list to load it into the editor. The type of the room is indicated by the icon to the left of the name, and the ID is the number beside the name. Room type determines the item pool and tileset. Create new rooms by hitting 'add', delete a room by selecting a room and either pressing the backspace/delete key or clicking 'delete', and duplicate a selected room by clicking 'duplicate' (duplicates will have a different variant number).
+* **The Room List**: On the right of the window is the room list dock. This dock is moveable by grabbing the title bar. Click any room in the list to load it into the editor. The type of the room is indicated by the icon to the left of the name, and the ID is the number beside the name. Room type determines the item pool and tileset. Create new rooms by hitting 'add', delete a room by selecting a room and either pressing the backspace/delete key or clicking 'delete', and duplicate a selected room by clicking 'duplicate' (duplicates will have a different variant number).
 
-* **The Room List continued**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new stb, or if you choose an existing stb it will append those rooms onto the one you chose.
+* **The Room List continued**: Double click a room to change it's name. Mouse over a room to see some info in the tooltip, and right click a room to change the room size, room type, weight (how often it is spawned) and difficulty (how difficult the room is, used to control floor difficulty). Drag and drop rooms in the list to change their position. Use the filters on the top to only show certain rooms. The Export button on the bottom will export all selected rooms to a new STB, or if you choose an existing STB it will append those rooms onto the one you chose.
 
 * **The Entity Palette**: The entity palette on the left is a moveable dock just like the Room List. You can use it to paint entities onto the Editor just like Mario Paint. Simply select an entity from the palette, then right click in the Editor window where you want the entity to paint. You're basically stamping them into the room. All known game entities are listed.
   - When adding, moving, or removing entities, doors will automatically be enabled or disabled based on if entities are in front of them. To override the normal setting, double click the door to toggle its enablement
@@ -94,8 +100,8 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 *How do I add custom entities?*
 
 * This will only work for Afterbirth+ mods. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirthPlus.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
-* If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesAfterbirthPlus` for some examples. It can either be `X,Y` in +/- grid squares of offset or precoded dynamic behaviors like `WallSnap`.
-  * If you're using this property to add additional visual indicators to your icon or the sprite is assymmetric, you can use `DisableOffsetIndicator` to disable the visual indicator for this offset (only needed if offset is > half a grid)
+* If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesAfterbirthPlus` for some examples. It can either be `X,Y` in +/- grid squares of offset or pre-coded dynamic behaviors like `WallSnap`.
+  * If you're using this property to add additional visual indicators to your icon or the sprite is asymmetric, you can use `DisableOffsetIndicator` to disable the visual indicator for this offset (only needed if offset is > half a grid)
 * When newly placed, grid entities will be placed underneath any regular entities in their stack. To give entities this property, add the `IsGrid` attribute.
 * If you have an entity that does not exist in your `entities2.xml` for some reason, you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows BR to load entities it normally wouldn't. (This kind of thing is mostly relevant to helper entities used with [Stage API](https://github.com/Meowlala/BOIStageAPI15))
 * If for some reason this is too much hassle, or you want to quickly create rooms with entities from large mods that don't have support, you can toggle the *Autogenerate mod content* setting. This will crawl mods' `content/entities2.xml` instead of the `basementrenovator` folder and work automagically without any additional work. HOWEVER this comes with a number of downsides:
@@ -107,7 +113,7 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 *How do I add custom stages?*
 
 * This is very similar to adding custom entities. Create a `basementrenovator` folder and add a file called `StagesMod.xml`. This should use the same format as `resources/StagesAfterbirthPlus.xml` and have the same conventions.
-* `BaseGamePath` is an extension-less version of the game's stb file name for that stage. (which most likely does not apply to your modded stage) If not present, a stage will be assumed to be from a mod.
+* `BaseGamePath` is an extension-less version of the game's STB file name for that stage. (which most likely does not apply to your modded stage) If not present, a stage will be assumed to be from a mod.
 * `BGPrefix` is the path to the backdrop files relative to the `basementrenovator` folder, minus the -.png and -Inner.png for L rooms. If left out, the fallback will be the first stage with the same Stage and StageType with a valid backdrop.
 * `Pattern` is the pattern used to match a filename against to determine it's for that stage; if the file contains that prefix it will be set to that stage. The last stage loaded has prefix matching priority, so mods will always have priority over base game stages.
 * `Stage` and `StageType` correspond to the in-game enum values for the stage, for modded stages this should point to the stage being replaced.
@@ -125,7 +131,7 @@ There are packaged downloads on the [releases tab](https://github.com/Tempus/Bas
 * You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In BR's resource folder under Entities/ModTemp, there will be a folder with your mod's name.
 It will contain an icons folder and an EntitiesMod.xml file. However, this will generate entries for many things you may not want to have entries for, so you'll need to clean it up.
 * Some icons may not be what you want out of the box. For example, gapers will be missing their heads because they're overlays, or the first frame might not be a good representative.
-BR includes an Icon Generator script under resources to allow for more finegrained icon generation from any frame in an anm2. Run it with --help or -h for more details.
+BR includes an Icon Generator script under resources to allow for more fine-grained icon generation from any frame in an anm2. Run it with --help or -h for more details.
 * This method will not generate custom stages as it's indeterminate how a mod generates them. You'll need to do that step yourself.
 
 *Why does my custom entity appear with a yellow hazard sign on it?*
@@ -139,14 +145,14 @@ BR includes an Icon Generator script under resources to allow for more finegrain
 
 *What about a red one?*
 
-* This is because Basement Renovator loaded this entity from one of its own xmls without finding a matching one in an `entities2.xml` file. That means the type, variant, or subtype in the BR xml is invalid. This is a very dangerous error, as loading a room with an unmatched entity will crash the game when it loads the room! This will take precendence over the yellow hazard sign, but it may have that problem as well. (Check the entity's tooltip for more information)
+* This is because Basement Renovator loaded this entity from one of its own XMLs without finding a matching one in an `entities2.xml` file. That means the type, variant, or subtype in the Basement Renovator XML file is invalid. This is a very dangerous error, as loading a room with an unmatched entity will crash the game when it loads the room! This will take precedence over the yellow hazard sign, but it may have that problem as well. (Check the entity's tooltip for more information)
 
 *What is a hook?*
 
-* Certain work patterns in Basement Renovator require repeatedly taking an outputted file and performing a manual process on it. The most prominent example of this is the AB+ mod [Stage API](https://github.com/Meowlala/BOIStageAPI15) which requires stbs to be converted to lua files in order for it to properly use them.
+* Certain work patterns in Basement Renovator require repeatedly taking an outputted file and performing a manual process on it. The most prominent example of this is the AB+ mod [Stage API](https://github.com/Meowlala/BOIStageAPI15) which requires STBs to be converted to Lua files in order for it to properly use them.
 * As such a process is error prone and tedious, BR allows users to set up lists of scripts that will be executed on relevant files at various points before it finishes processing them.
-  - Save Hook: when a room file is saved, all of these scripts are run with the resulting stb like so: `script.exe "path to file" --save" The bonus --save argument can be used if it's desirable to reuse a single script file.
-    - Stage API uses this to convert stbs to lua files every time you save them
-  - Test Hook: when a room is tested, it is output to an xml file. This xml file is passed to a script like so: `script.exe "path to file" --test`
+  - Save Hook: when a room file is saved, all of these scripts are run with the resulting STB like so: `script.exe "path to file" --save" The bonus --save argument can be used if it's desirable to reuse a single script file.
+    - Stage API uses this to convert STBs to Lua files every time you save them
+  - Test Hook: when a room is tested, it is output to an XML file. This XML file is passed to a script like so: `script.exe "path to file" --test`
     - Stage API uses this to set up a test room file when testing rooms
 * You can add hooks in File > Set Hooks
