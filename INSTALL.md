@@ -2,12 +2,12 @@
 
 We recommend that end-users run Basement Renovator directly from the source code.
 
-* [Installation For Noobs using Chocolatey](#installation-for-noobs-using-chocolatey)
-* [Installation For Advanced Users](#installation-for-advanced-users)
+* [Installation for Noobs using Chocolatey](#installation-for-noobs-using-chocolatey)
+* [Installation for Advanced Users](#installation-for-advanced-users)
 
 <br />
 
-## Installation For Noobs Using Chocolatey
+## Installation for Noobs Using Chocolatey
 
 If you are not using Windows 10, see the [section below](#installation-for-advanced-users).
 
@@ -32,7 +32,7 @@ If you are not using Windows 10, see the [section below](#installation-for-advan
 
 <br />
 
-## Installation For Advanced Users
+## Installation for Advanced Users
 
 - Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
 - Install Python 3.
