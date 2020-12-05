@@ -330,7 +330,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     if len(enList) == 0:
         return
 
-    cleanUp = re.compile('[^\w\d]')
+    cleanUp = re.compile(r'[^\w\d]')
     def mapEn(en):
         imgPath = en.get('Image') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('Image')))
         editorImgPath = en.get('EditorImage') and linuxPathSensitivityTraining(os.path.join(brPath, en.get('EditorImage')))
@@ -1098,7 +1098,7 @@ class Entity(QGraphicsItem):
             self.known = True
 
 
-    def __init__(self, x, y, mytype, variant, subtype, weight, respawning=False):
+    def __init__(self, x, y, myType, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
 
         # used when the ent is coming in from a previous state and should not update permanent things,
@@ -1115,7 +1115,7 @@ class Entity(QGraphicsItem):
         self.popup = None
         mainWindow.scene.selectionChanged.connect(self.hideWeightPopup)
 
-        self.entity = Entity.Info(x, y, mytype, variant, subtype, weight)
+        self.entity = Entity.Info(x, y, myType, variant, subtype, weight)
         self.updateCoords(x, y)
         self.updateTooltip()
 
@@ -2011,14 +2011,14 @@ class Room(QListWidgetItem):
             return (x, y)
 
 
-    def __init__(self, name="New Room", spawns=[], difficulty=1, weight=1.0, mytype=1, variant=0, subtype=0, shape=1, doors=None):
+    def __init__(self, name="New Room", spawns=[], difficulty=1, weight=1.0, myType=1, variant=0, subtype=0, shape=1, doors=None):
         """Initializes the room item."""
 
         QListWidgetItem.__init__(self)
 
         self.name = name
 
-        self.info = Room.Info(mytype, variant, subtype, shape)
+        self.info = Room.Info(myType, variant, subtype, shape)
         if doors:
             if len(self.info.doors) != len(doors):
                 print(f'{name} ({variant}): Invalid doors!', doors)
