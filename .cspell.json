@@ -1,0 +1,31 @@
+{
+    "version": "0.1",
+    "language": "en",
+    "dictionaries": [
+        "en_US",
+        "companies",
+        "softwareTerms",
+        "html"
+    ],
+    "words": [
+        "allusersprofile",
+        "autogenerate",
+        "automagically",
+        "basementrenovator",
+        "budjmt",
+        "choco",
+        "chronometrics",
+        "cinst",
+        "insta",
+        "noob",
+        "noobs",
+        "psutil",
+        "pyqt",
+        "refreshenv",
+        "stbs",
+        "steamapps",
+        "tileset",
+        "userprofile",
+        "xmls"
+    ]
+}
