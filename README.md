@@ -6,22 +6,13 @@
 - It was originally written by [Chronometrics](http://www.chronometry.ca/) and is now supported by [budjmt](https://github.com/budjmt).
 - It will also edit [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) (non-DLC) rooms, but some entity IDs may be incorrect. If you need to edit Rebirth rooms, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
 
-### Downloads
+### Download
 
-There are packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these releases are infrequent. Please run Basement Renovator from source as described below.
+Basement Renovator is [not released regularly](https://github.com/Tempus/Basement-Renovator/releases), so we recommend that you do **not** download a release, and instead run it directly from the source code.
 
-### Running from Source
+### Running From Source
 
-- Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
-- Install Python 3 from the [Python website](https://www.python.org/downloads/).
-  - If you are manually installing it, then make sure to check the box to add Python to your PATH. Otherwise, the next steps will complain about the `python` command not existing.
-  - Installing Python 3 should also install `pip`, the Python package manager.
-- Shift + Right Click in the Basement Renovator folder and click Open Powershell.
-- Copy-paste `pip install -r requirements.txt` and press enter to install the Python dependencies. (this runs the command)
-- Run `python ./BasementRenovator.py`, or double click the "BasementRenovator.py" script.
-  - Errors will only stay on screen if you run from Powershell
-
-More detailed instructions and other methods can be found in `installation.md`.
+Please see the [installation instructions](INSTALL.md).
 
 ---
 
