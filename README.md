@@ -30,7 +30,7 @@ This section is for noobs. If you are not a noob, or you are not using Windows 1
   - `pip install -r requirements.txt`
 - Run it:
   - `python BasementRenovator.py`
-- Wait up to 30 seconds for Basement Renovator to open. If it opens, you are done. In the future, you can just double click on the "BasementRenovator.py" file to open the program.
+- Wait up to 30 seconds or so for Basement Renovator to open. If it opens, you are done. In the future, you can just double click on the "BasementRenovator.py" file to open the program.
 - Otherwise, read the error messages in the command prompt and try to figure out what went wrong.
 
 ### Running from Source (for advanced users)
