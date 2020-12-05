@@ -89,23 +89,23 @@ def findInstallPath():
             basePath = getSteamPath()
             if not basePath:
                 cantFindPath = True
+            else:
+                installPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth")
+                if not QFile.exists(installPath):
+                    cantFindPath = True
 
-            installPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth")
-            if not QFile.exists(installPath):
-                cantFindPath = True
-
-                libconfig = os.path.join(basePath, "steamapps", "libraryfolders.vdf")
-                if os.path.isfile(libconfig):
-                    libLines = list(open(libconfig, 'r'))
-                    matcher = re.compile(r'"\d+"\s*"(.*?)"')
-                    installDirs = map(lambda res: os.path.normpath(res.group(1)),
-                                        filter(lambda res: res,
-                                            map(lambda line: matcher.search(line), libLines)))
-                    for root in installDirs:
-                        installPath = os.path.join(root, 'steamapps', 'common', 'The Binding of Isaac Rebirth')
-                        if QFile.exists(installPath):
-                            cantFindPath = False
-                            break
+                    libconfig = os.path.join(basePath, "steamapps", "libraryfolders.vdf")
+                    if os.path.isfile(libconfig):
+                        libLines = list(open(libconfig, 'r'))
+                        matcher = re.compile(r'"\d+"\s*"(.*?)"')
+                        installDirs = map(lambda res: os.path.normpath(res.group(1)),
+                                            filter(lambda res: res,
+                                                map(lambda line: matcher.search(line), libLines)))
+                        for root in installDirs:
+                            installPath = os.path.join(root, 'steamapps', 'common', 'The Binding of Isaac Rebirth')
+                            if QFile.exists(installPath):
+                                cantFindPath = False
+                                break
 
         # Mac Path things
         elif "Darwin" in platform.system():

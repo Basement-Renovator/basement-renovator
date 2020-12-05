@@ -10,20 +10,9 @@
 
 There are packaged downloads on the [releases tab](https://github.com/Tempus/Basement-Renovator/releases), but these releases are infrequent. Please run Basement Renovator from source as described below.
 
-### Running from Source (for people who have coding experience)
+### Running from Source (for noobs)
 
-This section is for advanced users. If you are a noob, see the [section below](#running-from-source-for-complete-noobs).
-
-- Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
-- Install Python 3.
-  - If you are manually installing it, then make sure to check the box to add Python to your PATH. Otherwise, the next steps will complain about the `python` command not existing.
-  - Installing Python 3 should also install `pip`, the Python package manager.
-- Run `pip install -r requirements.txt` to install the Python dependencies.
-- Double click the "BasementRenovator.py" script.
-
-### Running from Source (for complete noobs)
-
-This section is for noobs. If you are not a noob, or you are not using Windows 10, see the [section above](#running-from-source-for-people-who-have-coding-experience).
+This section is for noobs. If you are not a noob, or you are not using Windows 10, see the [section below](#running-from-source-for-advanced-users).
 
 - Open a [Command Prompt as an administrator](https://www.howtogeek.com/194041/how-to-open-the-command-prompt-as-administrator-in-windows-8.1/). (Read the link if you don't know how.)
 - Install [Chocolatey](https://chocolatey.org/) by copy-pasting the following command:
@@ -42,7 +31,18 @@ This section is for noobs. If you are not a noob, or you are not using Windows 1
 - Run it:
   - `python BasementRenovator.py`
 - Wait up to 30 seconds for Basement Renovator to open. If it opens, you are done. In the future, you can just double click on the "BasementRenovator.py" file to open the program.
-- Otherwise, read the error messages and try to figure out what went wrong.
+- Otherwise, read the error messages in the command prompt and try to figure out what went wrong.
+
+### Running from Source (for advanced users)
+
+This section is for advanced users. If you are a noob, see the [section above](#running-from-source-for-noobs).
+
+- Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
+- Install Python 3.
+  - If you are manually installing it, then make sure to check the box to add Python to your PATH. Otherwise, the next steps will complain about the `python` command not existing.
+  - Installing Python 3 should also install `pip`, the Python package manager.
+- Run `pip install -r requirements.txt` to install the Python dependencies.
+- Double click the "BasementRenovator.py" script.
 
 ---
 
