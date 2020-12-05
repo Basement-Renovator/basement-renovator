@@ -214,7 +214,7 @@ def linuxPathSensitivityTraining(path):
 
 def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
-    cleanUp = re.compile('[^\w\d]')
+    cleanUp = re.compile(r'[^\w\d]')
     outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', name)}"
     if not os.path.isdir(outputDir): os.mkdir(outputDir)
 
@@ -503,10 +503,10 @@ class RoomScene(QGraphicsScene):
         if not self.roomInfo.shapeData: return
 
         self.roomWidth, self.roomHeight = self.roomInfo.dims
-        self.entcache = [ [] for i in range(self.roomWidth * self.roomHeight) ]
+        self.entCache = [ [] for i in range(self.roomWidth * self.roomHeight) ]
 
         self.roomRows = [ QGraphicsWidget() for i in range(self.roomHeight) ]
-        for i, row in enumerate(self.roomRows):
+        for _, row in enumerate(self.roomRows):
             self.addItem(row)
 
         self.setSceneRect(-1 * 26, -1 * 26, (self.roomWidth + 2) * 26, (self.roomHeight + 2) * 26)
@@ -538,7 +538,7 @@ class RoomScene(QGraphicsScene):
                     if spot is not None:
                         idx = Room.Info.gridIndex(x + j, y + i, width)
                         if idx < 0 or idx >= width * height: continue
-                        res[spot] = self.entcache[idx]
+                        res[spot] = self.entCache[idx]
             return res
 
         for yc in [ y - 1, y, y + 1 ]:
@@ -690,20 +690,20 @@ class RoomScene(QGraphicsScene):
         painter.drawImage( (1 + xOff) * gs, ( 1 + yOff) * gs, self.floorImg)
         painter.drawImage((-1 + xOff) * gs, (-1 + yOff) * gs, self.wallImg)
 
-        for stack in self.entcache:
+        for stack in self.entCache:
             stack.clear()
 
         for item in self.items():
             if isinstance(item, Entity):
                 xc = item.entity.x
                 yc = item.entity.y
-                self.entcache[Room.Info.gridIndex(xc, yc, self.roomWidth)].append(item)
+                self.entCache[Room.Info.gridIndex(xc, yc, self.roomWidth)].append(item)
 
         # have to set rock tiling ahead of time due to render order not being guaranteed left to right
         room = mainWindow.roomList.selectedRoom()
         if room:
             seed = room.seed
-            for i, stack in enumerate(self.entcache):
+            for i, stack in enumerate(self.entCache):
                 for ent in stack:
                     if ent.entity.renderRock and ent.entity.rockFrame is None:
                         ent.setRockFrame(seed + i)
@@ -2660,7 +2660,7 @@ class RoomSelector(QWidget):
         self.sizeToggle.setIcon(action.icon())
         self.changeFilter()
 
-    def colourizeClearFilterButtons(self):
+    def colorizeClearFilterButtons(self):
         colour = "background-color: #F00;"
 
         all = False
@@ -2708,7 +2708,7 @@ class RoomSelector(QWidget):
 
     #@pyqtSlot()
     def changeFilter(self):
-        self.colourizeClearFilterButtons()
+        self.colorizeClearFilterButtons()
 
         uselessEntities = None
 
