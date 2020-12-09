@@ -2,12 +2,12 @@
 
 We recommend that end-users run Basement Renovator directly from the source code.
 
-* [Installation for Noobs using Chocolatey](#installation-for-noobs-using-chocolatey)
+* [Installation for Beginners using Chocolatey](#installation-for-noobs-using-chocolatey)
 * [Installation for Advanced Users](#installation-for-advanced-users)
 
 <br />
 
-## Installation for Noobs Using Chocolatey
+## Installation for Beginners Using Chocolatey
 
 If you are not using Windows 10, see the [section below](#installation-for-advanced-users).
 
