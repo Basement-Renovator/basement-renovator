@@ -39,7 +39,7 @@ If you are not using Windows 10, see the [section below](#installation-for-advan
 ## Installation for Advanced Users
 
 - Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
-- Install [Python 3](https://www.python.org/). (Installing with [Chocolately](https://chocolatey.org/) is recommended if you do not have it installed already, but you can also manually download the MSI file and click "next" through the install wizard yourself.)
+- Install [Python 3](https://www.python.org/) if you do not have it installed already. (Installing with [Chocolately](https://chocolatey.org/) is recommended, but you can also manually download the MSI file and click "next" through the install wizard yourself if you want.)
 - Run the following in the Basement Renovator directory to install the Python dependencies:
   - `pip install -r requirements.txt`
 - Run the following in the Basement Renovator directory to start the program:
