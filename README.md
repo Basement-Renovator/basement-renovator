@@ -12,8 +12,8 @@ Basement Renovator is [not released regularly](https://github.com/Tempus/Basemen
 
 ### Running From Source / Installation
 
-* [Installation for Beginners using Chocolatey](INSTALL.md/#installation-for-noobs-using-chocolatey)
-* [Installation for Advanced Users](INSTALL.md/#installation-for-advanced-users)
+* [Installation for Beginners using Chocolatey](INSTALL.md#installation-for-noobs-using-chocolatey)
+* [Installation for Advanced Users](INSTALL.md#installation-for-advanced-users)
 
 ---
 
