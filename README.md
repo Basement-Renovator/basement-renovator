@@ -10,9 +10,10 @@
 
 Basement Renovator is [not released regularly](https://github.com/Tempus/Basement-Renovator/releases), so we recommend that you do **not** download a release, and instead run it directly from the source code.
 
-### Running From Source
+### Running From Source / Installation
 
-Please see the [installation instructions](INSTALL.md).
+* [Installation for Beginners using Chocolatey](INSTALL.md/#installation-for-noobs-using-chocolatey)
+* [Installation for Advanced Users](INSTALL.md/#installation-for-advanced-users)
 
 ---
 
