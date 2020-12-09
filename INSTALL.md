@@ -12,7 +12,7 @@ We recommend that end-users run Basement Renovator directly from the source code
 If you are not using Windows 10, see the [section below](#installation-for-advanced-users).
 
 - Open a [Command Prompt as an administrator](https://www.howtogeek.com/194041/how-to-open-the-command-prompt-as-administrator-in-windows-8.1/). (Read the link if you don't know how.)
-- Install [Chocolatey](https://chocolatey.org/) by copy-pasting the following command:
+- Install [Chocolatey](https://chocolatey.org/) by copy-pasting the following command. (Skip this step if you have already have Chocolatey installed on your computer.)
   - `@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"`
 - Install [Git](https://git-scm.com/) by copy-pasting the following command. (Skip this step if you have already have Git installed on your computer.)
   - `choco install git -y`
