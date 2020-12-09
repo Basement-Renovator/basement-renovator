@@ -41,7 +41,8 @@ If you are not using Windows 10, see the [section below](#installation-for-advan
 - Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
 - Install [Python 3](https://www.python.org/) if you do not have it installed already. (Installing with [Chocolately](https://chocolatey.org/) is recommended, but you can also manually download the MSI file and click "next" through the install wizard yourself if you want.)
 - Open a command prompt / terminal and run the following in the Basement Renovator directory to install the Python dependencies:
-  - `pip install -r requirements.txt`
+  - `pip install -r requirements.txt` <br />
+    (you might also need to install Microsoft Visual C++ Build Tools 2015 in order for the dependencies to compile, if you do not have it installed already)
 - Run the following in the Basement Renovator directory to start the program:
   - `python BasementRenovator.py` <br />
   (or you can just double click on the "BasementRenovator.py" file)
