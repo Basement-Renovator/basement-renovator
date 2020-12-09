@@ -20,9 +20,9 @@ If you are not using Windows 10, see the [section below](#installation-for-advan
   - `choco install python3 -y`
 - Install the [Microsoft Visual C++ Build Tools 2015](https://chocolatey.org/packages/microsoft-visual-cpp-build-tools) by copy-pasting the following command. (This is needed in order to install the Python dependencies. Skip this step if you have already have it installed on your computer.)
   - `choco install microsoft-visual-cpp-build-tools -y`
-- Clone the repository:
+- Clone the Basement Renoavtor repository:
   - `cd %userprofile%\Documents` <br />
-  (this changes the directory to your Documents directory; if you want the repository to live somewhere else, then change the command accordingly)
+  (this changes the directory to your Documents directory; if you want the Basement Renoavtor repository to live somewhere else, then change the command accordingly)
   - `refreshenv`
   - `git clone https://github.com/Tempus/Basement-Renovator.git`
 - Go into the cloned directory:
