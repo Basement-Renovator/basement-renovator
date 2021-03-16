@@ -1000,7 +1000,7 @@
 	<entity Boss="1" Group="Boss Rooms" ID="407" Image="resources/Entities/407.0.0 - Hush.png" Kind="Bosses" Name="Hush" Subtype="0" Variant="0" />
 	<entity Boss="1" Group="Boss Rooms" ID="408" Image="resources/Entities/408.0.0 - Skinless Hush.png" Kind="Bosses" Name="Skinless Hush" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" />
+	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.1 - Reward Plate.png" Kind="Stage" Name="Reward Plate" Subtype="0" Variant="1" />
 	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" />
 
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
