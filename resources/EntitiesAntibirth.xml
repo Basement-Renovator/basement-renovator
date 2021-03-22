@@ -41,7 +41,7 @@
     <entity BaseHP="20" Boss="0" Champion="1" Group="Mines" ID="25" Image="resources/Entities/Antibirth/25.100.1 - Dragon Fly X.png" Kind="Enemies" Name="Dragon Fly X" Subtype="1" Variant="100"/>
     <entity BaseHP="20" Boss="0" Champion="1" Group="Corpse" ID="25" Image="resources/Entities/Antibirth/25.101.0 - Sick Boom Fly.png" Kind="Enemies" Name="Sick Boom Fly" Subtype="0" Variant="101"/>
     <entity BaseHP="15" Boss="0" Champion="1" Group="Mines" ID="27" Image="resources/Entities/Antibirth/27.100.0 - Hard Host.png" Kind="Enemies" Name="Hard Host" Subtype="0" Variant="100"/>
-    <entity BaseHP="5"  Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Bonfire" Subtype="0" Variant="100"/>
+    <entity BaseHP="5"  Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/9.0.2 - Fire.png" Kind="Stage" Name="Bonfire" Subtype="0" Variant="100"/>
     <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/Antibirth/33.101.0 - Coal.png" Kind="Stage" Name="Coal" Subtype="0" Variant="101"/>
     <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/Antibirth/33.101.1 - Coal.png" Kind="Stage" Name="Coal" Subtype="1" Variant="101"/>
     <entity BaseHP="15" Boss="0" Champion="0" Group="Fireplaces" ID="33" Image="resources/Entities/Antibirth/33.101.2 - Coal.png" Kind="Stage" Name="Coal" Subtype="2" Variant="101"/>
@@ -210,77 +210,77 @@
 	<entity Group="Events" ID="969" Image="resources/Entities/Antibirth/969.2.0 - Event (group 2).png" Kind="Stage" Name="Event (group 2)" Subtype="0" Variant="2" />
 	<entity Group="Events" ID="969" Image="resources/Entities/Antibirth/969.3.0 - Event (group 3).png" Kind="Stage" Name="Event (group 3)" Subtype="0" Variant="3" />
 	<entity Group="Events" ID="969" Image="resources/Entities/Antibirth/969.8.0 - Event (Nightwatch Alarm).png" Kind="Stage" Name="Event (Nightwatch Alarm)" Subtype="0" Variant="8" />
-	<entity Group="Events" ID="969" Image="resources/Entities/Antibirth/969.9.0 - Event (After Cleaning).png" Kind="Stage" Name="Event (After Cleaning)" Subtype="0" Variant="9" />
+	<entity Group="Events" ID="969" Image="resources/Entities/Antibirth/969.9.0 - Event (After Cleaning).png" Kind="Stage" Name="Event (Room Clear)" Subtype="0" Variant="9" />
 
     <entity BaseHP="60" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="966" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Siren Helper" Subtype="0" Variant="0"/>
     <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Antibirth" ID="971" Image="resources/Entities/questionmark.png" Kind="Enemies" Name="Entity Spawner" Subtype="0" Variant="0"/>
 
     <entity BaseHP="0" Boss="0" Champion="0" Group="Mines" ID="970" Image="resources/Entities/Antibirth/970.0.0 - Room Darkness.png" Kind="Stage" Name="Room Darkness" Subtype="0" Variant="0"/>
 
-	<entity Group="Grid" ID="10001" Image="resources/Entities/Antibirth/10001.0.0 - Red TNT.png" Kind="Stage" Name="Red TNT" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10002" Image="resources/Entities/Antibirth/10002.0.0 - Spike Rock.png" Kind="Stage" Name="Spike Rock" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10003" Image="resources/Entities/Antibirth/10003.0.0 - Tall Block.png" Kind="Stage" Name="Tall Block" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10004" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Another Rock" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10005" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Another Poop" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10008" Image="resources/Entities/Antibirth/10008.0.0 - Rock (event).png" Kind="Stage" Name="Rock (event)" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10009" Image="resources/Entities/Antibirth/10009.0.0 - Pit (event).png" Kind="Stage" Name="Pit (event)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10010" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(?)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10011" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(??)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10012" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(???)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10013" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10014" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(?????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10015" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(??????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10016" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(???????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10017" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(????????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10018" Image="resources/Entities/questionmark.png" Kind="Stage" Name="Spikes(?????????)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10019" Image="rresources/Entities/questionmark.png" Kind="Stage" Name="Spikes(??????????)" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10040" Image="resources/Entities/Antibirth/10040.0.0 - Event Plate (group 0).png" Kind="Stage" Name="Event Plate (group 0)" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10041" Image="resources/Entities/Antibirth/10041.0.0 - Event Plate (group 1).png" Kind="Stage" Name="Event Plate (group 1)" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10042" Image="resources/Entities/Antibirth/10042.0.0 - Event Plate (group 2).png" Kind="Stage" Name="Event Plate (group 2)" Subtype="0" Variant="0" />
-	<entity Group="Events" ID="10043" Image="resources/Entities/Antibirth/10043.0.0 - Event Plate (group 3).png" Kind="Stage" Name="Event Plate (group 3)" Subtype="0" Variant="0" />
-	<entity Group="Grid" ID="10050" Image="resources/Entities/Antibirth/10050.0.0 - Kill Plate.png" Kind="Stage" Name="Kill Plate" Subtype="0" Variant="0" />
+	<entity Group="Grid" ID="10001" Image="resources/Entities/Antibirth/10001.0.0 - Red TNT.png" Kind="Stage" Name="Red TNT" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10002" Image="resources/Entities/Antibirth/10002.0.0 - Spike Rock.png" Kind="Stage" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10003" Image="resources/Entities/Antibirth/10003.0.0 - Tall Block.png" Kind="Stage" Name="Tall Block" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10004" Image="resources/Entities/Antibirth/10004.0.0 - Rock (non-replaceable).png" Kind="Stage" Name="Rock (non-replaceable)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10005" Image="resources/Entities/Antibirth/10005.0.0 - Poop (non-replaceable).png" Kind="Stage" Name="Poop (non-replaceable)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10008" Image="resources/Entities/Antibirth/10008.0.0 - Rock (event).png" Kind="Stage" Name="Rock (event)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10009" Image="resources/Entities/Antibirth/10009.0.0 - Pit (event).png" Kind="Stage" Name="Pit (event)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10010" Image="resources/Entities/Antibirth/10010.0.0 - Retracting Spikes (Down 1).png" Kind="Stage" Name="Retracting Spikes (Down 1/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10011" Image="resources/Entities/Antibirth/10011.0.0 - Retracting Spikes (Down 2).png" Kind="Stage" Name="Retracting Spikes (Down 2/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10012" Image="resources/Entities/Antibirth/10012.0.0 - Retracting Spikes (Down 3).png" Kind="Stage" Name="Retracting Spikes (Down 3/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10013" Image="resources/Entities/Antibirth/10013.0.0 - Retracting Spikes (Down 4).png" Kind="Stage" Name="Retracting Spikes (Down 4/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10014" Image="resources/Entities/Antibirth/10014.0.0 - Retracting Spikes (Down 5).png" Kind="Stage" Name="Retracting Spikes (Down 5/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10015" Image="resources/Entities/Antibirth/10015.0.0 - Retracting Spikes (Up 1).png" Kind="Stage" Name="Retracting Spikes (Up 1/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10016" Image="resources/Entities/Antibirth/10016.0.0 - Retracting Spikes (Up 2).png" Kind="Stage" Name="Retracting Spikes (Up 2/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10017" Image="resources/Entities/Antibirth/10017.0.0 - Retracting Spikes (Up 3).png" Kind="Stage" Name="Retracting Spikes (Up 3/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10018" Image="resources/Entities/Antibirth/10018.0.0 - Retracting Spikes (Up 4).png" Kind="Stage" Name="Retracting Spikes (Up 4/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10019" Image="resources/Entities/Antibirth/10019.0.0 - Retracting Spikes (Up 5).png" Kind="Stage" Name="Retracting Spikes (Up 5/5)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10040" Image="resources/Entities/Antibirth/10040.0.0 - Event Plate (group 0).png" Kind="Stage" Name="Event Plate (group 0)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10041" Image="resources/Entities/Antibirth/10041.0.0 - Event Plate (group 1).png" Kind="Stage" Name="Event Plate (group 1)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10042" Image="resources/Entities/Antibirth/10042.0.0 - Event Plate (group 2).png" Kind="Stage" Name="Event Plate (group 2)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="10043" Image="resources/Entities/Antibirth/10043.0.0 - Event Plate (group 3).png" Kind="Stage" Name="Event Plate (group 3)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="10050" Image="resources/Entities/Antibirth/10050.0.0 - Kill Plate.png" Kind="Stage" Name="Kill Plate" Subtype="0" Variant="0" IsGrid="1" />
 
-	<entity Group="Teleporters" ID="10080" Image="resources/Entities/Antibirth/10080.0.0 - Teleporter(Square).png" Kind="Stage" Name="Teleporter(Square)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10081" Image="resources/Entities/Antibirth/10081.0.0 - Teleporter(Moon).png" Kind="Stage" Name="Teleporter(Moon)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10082" Image="resources/Entities/Antibirth/10082.0.0 - Teleporter(Rhombus).png" Kind="Stage" Name="Teleporter(Rhombus)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10083" Image="resources/Entities/Antibirth/10083.0.0 - Teleporter(M).png" Kind="Stage" Name="Teleporter(M)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10084" Image="resources/Entities/Antibirth/10084.0.0 - Teleporter(Pentagram).png" Kind="Stage" Name="Teleporter(Pentagram)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10085" Image="resources/Entities/Antibirth/10085.0.0 - Teleporter(Cross).png" Kind="Stage" Name="Teleporter(Cross)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10086" Image="resources/Entities/Antibirth/10086.0.0 - Teleporter(Triangle).png" Kind="Stage" Name="Teleporter(Triangle)" Subtype="0" Variant="0" />
+	<entity Group="Teleporters" ID="10080" Image="resources/Entities/Antibirth/10080.0.0 - Teleporter(Square).png" Kind="Stage" Name="Teleporter(Square)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10081" Image="resources/Entities/Antibirth/10081.0.0 - Teleporter(Moon).png" Kind="Stage" Name="Teleporter(Moon)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10082" Image="resources/Entities/Antibirth/10082.0.0 - Teleporter(Rhombus).png" Kind="Stage" Name="Teleporter(Rhombus)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10083" Image="resources/Entities/Antibirth/10083.0.0 - Teleporter(M).png" Kind="Stage" Name="Teleporter(M)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10084" Image="resources/Entities/Antibirth/10084.0.0 - Teleporter(Pentagram).png" Kind="Stage" Name="Teleporter(Pentagram)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10085" Image="resources/Entities/Antibirth/10085.0.0 - Teleporter(Cross).png" Kind="Stage" Name="Teleporter(Cross)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10086" Image="resources/Entities/Antibirth/10086.0.0 - Teleporter(Triangle).png" Kind="Stage" Name="Teleporter(Triangle)" Subtype="0" Variant="0" IsGrid="1" />
 
-	<entity Group="Teleporters" ID="10090" Image="resources/Entities/Antibirth/10090.0.0 - Teleporter(Square-off).png" Kind="Stage" Name="Teleporter(Square-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10091" Image="resources/Entities/Antibirth/10091.0.0 - Teleporter(Moon-off).png" Kind="Stage" Name="Teleporter(Moon-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10092" Image="resources/Entities/Antibirth/10092.0.0 - Teleporter(Rhombus-off).png" Kind="Stage" Name="Teleporter(Rhombus-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10093" Image="resources/Entities/Antibirth/10093.0.0 - Teleporter(M-off).png" Kind="Stage" Name="Teleporter(M-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10094" Image="resources/Entities/Antibirth/10094.0.0 - Teleporter(Pentagram-off).png" Kind="Stage" Name="Teleporter(Pentagram-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10095" Image="resources/Entities/Antibirth/10095.0.0 - Teleporter(Cross-off).png" Kind="Stage" Name="Teleporter(Cross-off)" Subtype="0" Variant="0" />
-	<entity Group="Teleporters" ID="10096" Image="resources/Entities/Antibirth/10096.0.0 - Teleporter(Triangle-off).png" Kind="Stage" Name="Teleporter(Triangle-off)" Subtype="0" Variant="0" />
+	<entity Group="Teleporters" ID="10090" Image="resources/Entities/Antibirth/10090.0.0 - Teleporter(Square-off).png" Kind="Stage" Name="Teleporter(Square-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10091" Image="resources/Entities/Antibirth/10091.0.0 - Teleporter(Moon-off).png" Kind="Stage" Name="Teleporter(Moon-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10092" Image="resources/Entities/Antibirth/10092.0.0 - Teleporter(Rhombus-off).png" Kind="Stage" Name="Teleporter(Rhombus-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10093" Image="resources/Entities/Antibirth/10093.0.0 - Teleporter(M-off).png" Kind="Stage" Name="Teleporter(M-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10094" Image="resources/Entities/Antibirth/10094.0.0 - Teleporter(Pentagram-off).png" Kind="Stage" Name="Teleporter(Pentagram-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10095" Image="resources/Entities/Antibirth/10095.0.0 - Teleporter(Cross-off).png" Kind="Stage" Name="Teleporter(Cross-off)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Teleporters" ID="10096" Image="resources/Entities/Antibirth/10096.0.0 - Teleporter(Triangle-off).png" Kind="Stage" Name="Teleporter(Triangle-off)" Subtype="0" Variant="0" IsGrid="1" />
 
-	<entity Group="Rails" ID="10100" Image="resources/Entities/Antibirth/10100.0.0 - Rail (left-to-right).png" Kind="Stage" Name="Rail (left-to-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10101" Image="resources/Entities/Antibirth/10101.0.0 - Rail (up-to-down).png" Kind="Stage" Name="Rail (up-to-down)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10102" Image="resources/Entities/Antibirth/10102.0.0 - Rail (up-to-right).png" Kind="Stage" Name="Rail (up-to-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10103" Image="resources/Entities/Antibirth/10103.0.0 - Rail (up-to-left).png" Kind="Stage" Name="Rail (up-to-left)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10104" Image="resources/Entities/Antibirth/10104.0.0 - Rail (left-to-up).png" Kind="Stage" Name="Rail (left-to-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10105" Image="resources/Entities/Antibirth/10105.0.0 - Rail (right-to-up).png" Kind="Stage" Name="Rail (right-to-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10106" Image="resources/Entities/Antibirth/10106.0.0 - Rail (stop-to-right).png" Kind="Stage" Name="Rail (stop-to-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10107" Image="resources/Entities/Antibirth/10107.0.0 - Rail (left-to-stop).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10108" Image="resources/Entities/Antibirth/10108.0.0 - Rail (up-to-stop).png" Kind="Stage" Name="Rail (up-to-stop)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10109" Image="resources/Entities/Antibirth/10109.0.0 - Rail (stop-to-down).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10110" Image="resources/Entities/Antibirth/10110.0.0 - Rail (cart-right).png" Kind="Stage" Name="Rail (cart-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10111" Image="resources/Entities/Antibirth/10111.0.0 - Rail (cart-left).png" Kind="Stage" Name="Rail (cart-left)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10112" Image="resources/Entities/Antibirth/10112.0.0 - Rail (cart-down).png" Kind="Stage" Name="Rail (cart-down)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10113" Image="resources/Entities/Antibirth/10113.0.0 - Rail (cart-up).png" Kind="Stage" Name="Rail (cart-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10114" Image="resources/Entities/Antibirth/10114.0.0 - Rail (crossroad).png" Kind="Stage" Name="Rail (crossroad)" Subtype="0" Variant="0" />
+	<entity Group="Rails" ID="10100" Image="resources/Entities/Antibirth/10100.0.0 - Rail (left-to-right).png" Kind="Stage" Name="Rail (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10101" Image="resources/Entities/Antibirth/10101.0.0 - Rail (up-to-down).png" Kind="Stage" Name="Rail (up-to-down)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10102" Image="resources/Entities/Antibirth/10102.0.0 - Rail (up-to-right).png" Kind="Stage" Name="Rail (up-to-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10103" Image="resources/Entities/Antibirth/10103.0.0 - Rail (up-to-left).png" Kind="Stage" Name="Rail (up-to-left)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10104" Image="resources/Entities/Antibirth/10104.0.0 - Rail (left-to-up).png" Kind="Stage" Name="Rail (left-to-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10105" Image="resources/Entities/Antibirth/10105.0.0 - Rail (right-to-up).png" Kind="Stage" Name="Rail (right-to-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10106" Image="resources/Entities/Antibirth/10106.0.0 - Rail (stop-to-right).png" Kind="Stage" Name="Rail (stop-to-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10107" Image="resources/Entities/Antibirth/10107.0.0 - Rail (left-to-stop).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10108" Image="resources/Entities/Antibirth/10108.0.0 - Rail (up-to-stop).png" Kind="Stage" Name="Rail (up-to-stop)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10109" Image="resources/Entities/Antibirth/10109.0.0 - Rail (stop-to-down).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10110" Image="resources/Entities/Antibirth/10110.0.0 - Rail (cart-right).png" Kind="Stage" Name="Rail (cart-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10111" Image="resources/Entities/Antibirth/10111.0.0 - Rail (cart-left).png" Kind="Stage" Name="Rail (cart-left)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10112" Image="resources/Entities/Antibirth/10112.0.0 - Rail (cart-down).png" Kind="Stage" Name="Rail (cart-down)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10113" Image="resources/Entities/Antibirth/10113.0.0 - Rail (cart-up).png" Kind="Stage" Name="Rail (cart-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10114" Image="resources/Entities/Antibirth/10114.0.0 - Rail (crossroad).png" Kind="Stage" Name="Rail (crossroad)" Subtype="0" Variant="0" IsGrid="1" />
 
-	<entity Group="Rails" ID="10200" Image="resources/Entities/Antibirth/10200.0.0 - Rail (Pit) (left-to-right).png" Kind="Stage" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10201" Image="resources/Entities/Antibirth/10201.0.0 - Rail (Pit) (up-to-down).png" Kind="Stage" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10202" Image="resources/Entities/Antibirth/10202.0.0 - Rail (Pit) (up-to-right).png" Kind="Stage" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10203" Image="resources/Entities/Antibirth/10203.0.0 - Rail (Pit) (up-to-left).png" Kind="Stage" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10204" Image="resources/Entities/Antibirth/10204.0.0 - Rail (Pit) (left-to-up).png" Kind="Stage" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10205" Image="resources/Entities/Antibirth/10205.0.0 - Rail (Pit) (right-to-up).png" Kind="Stage" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10210" Image="resources/Entities/Antibirth/10210.0.0 - Rail (Pit) (cart-right).png" Kind="Stage" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10211" Image="resources/Entities/Antibirth/10211.0.0 - Rail (Pit) (cart-left).png" Kind="Stage" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10212" Image="resources/Entities/Antibirth/10212.0.0 - Rail (Pit) (cart-down).png" Kind="Stage" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10213" Image="resources/Entities/Antibirth/10213.0.0 - Rail (Pit) (cart-up).png" Kind="Stage" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="0" />
-	<entity Group="Rails" ID="10214" Image="resources/Entities/Antibirth/10214.0.0 - Rail (Pit) (crossroad).png" Kind="Stage" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="0" />
+	<entity Group="Rails" ID="10200" Image="resources/Entities/Antibirth/10200.0.0 - Rail (Pit) (left-to-right).png" Kind="Stage" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10201" Image="resources/Entities/Antibirth/10201.0.0 - Rail (Pit) (up-to-down).png" Kind="Stage" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10202" Image="resources/Entities/Antibirth/10202.0.0 - Rail (Pit) (up-to-right).png" Kind="Stage" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10203" Image="resources/Entities/Antibirth/10203.0.0 - Rail (Pit) (up-to-left).png" Kind="Stage" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10204" Image="resources/Entities/Antibirth/10204.0.0 - Rail (Pit) (left-to-up).png" Kind="Stage" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10205" Image="resources/Entities/Antibirth/10205.0.0 - Rail (Pit) (right-to-up).png" Kind="Stage" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10210" Image="resources/Entities/Antibirth/10210.0.0 - Rail (Pit) (cart-right).png" Kind="Stage" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10211" Image="resources/Entities/Antibirth/10211.0.0 - Rail (Pit) (cart-left).png" Kind="Stage" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10212" Image="resources/Entities/Antibirth/10212.0.0 - Rail (Pit) (cart-down).png" Kind="Stage" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10213" Image="resources/Entities/Antibirth/10213.0.0 - Rail (Pit) (cart-up).png" Kind="Stage" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Rails" ID="10214" Image="resources/Entities/Antibirth/10214.0.0 - Rail (Pit) (crossroad).png" Kind="Stage" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="0" IsGrid="1"/>
 </data>
