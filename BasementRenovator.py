@@ -2116,7 +2116,12 @@ class Room(QListWidgetItem):
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        iconType = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)[0]
+        room = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
+        if room == None or len(room) == 0:
+            print("Warning: Unknown room type.")
+            return
+
+        iconType = room[0]
         i = QIcon(iconType.get('Icon'))
 
         self.setIcon(i)
