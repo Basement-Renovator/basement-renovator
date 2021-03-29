@@ -871,10 +871,12 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            iconType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)[0]
-            q = QPixmap(iconType.get('Icon'))
-
-            painter.drawPixmap(2, 3, q)
+            roomType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
+            if roomType != None and len(roomType) > 0:
+                print("Warning: Unknown room type.")
+                iconType = roomType[0]
+                q = QPixmap(iconType.get('Icon'))
+                painter.drawPixmap(2, 3, q)
 
             # Top Text
             font = painter.font()
@@ -2116,12 +2118,12 @@ class Room(QListWidgetItem):
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        room = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
-        if room == None or len(room) == 0:
+        roomType = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
+        if roomType == None or len(roomType) == 0:
             print("Warning: Unknown room type.")
             return
 
-        iconType = room[0]
+        iconType = roomType[0]
         i = QIcon(iconType.get('Icon'))
 
         self.setIcon(i)
