@@ -1006,7 +1006,7 @@
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" />
 	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" />
 
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Null Card.png" Kind="Pickups" Name="Blank Rune" Subtype="36" Variant="300" />	
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Null Card.png" Kind="Pickups" Name="Blank Rune" Subtype="36" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.42 - Get Out of Jail Free Card.png" Kind="Pickups" Name="Get Out of Jail Free Card" Subtype="42" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.43 - Question Card.png" Kind="Pickups" Name="? Card" Subtype="43" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.44 - Dice Shard.png" Kind="Pickups" Name="Dice Shard" Subtype="44" Variant="300" />
