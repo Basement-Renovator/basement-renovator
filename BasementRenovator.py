@@ -342,39 +342,39 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
             img.save(filename, "PNG")
 
         # Write the modded entity to the entityXML temporarily for runtime
-        etmp = ET.Element("entity")
-        etmp.set("Name", en.get("name"))
-        etmp.set("ID", str(i))
-        etmp.set("Subtype", s)
-        etmp.set("Variant", v)
-        etmp.set("Image", filename)
+        entityTemp = ET.Element("entity")
+        entityTemp.set("Name", en.get("name"))
+        entityTemp.set("ID", str(i))
+        entityTemp.set("Subtype", s)
+        entityTemp.set("Variant", v)
+        entityTemp.set("Image", filename)
 
         def condSet(setName, name):
             val = en.get(name)
             if val is not None:
-                etmp.set(setName, val)
+                entityTemp.set(setName, val)
 
         condSet("BaseHP", "baseHP")
         condSet("Boss", "boss")
         condSet("Champion", "champion")
 
         i = int(i)
-        etmp.set("Group", "(Mod) %s" % name)
-        etmp.set("Kind", "Mods")
+        entityTemp.set("Group", "(Mod) %s" % name)
+        entityTemp.set("Kind", "Mods")
         if i == 5:  # pickups
             if v == 100:  # collectible
                 return None
-            etmp.set("Kind", "Pickups")
+            entityTemp.set("Kind", "Pickups")
         elif i in (2, 4, 6):  # tears, live bombs, machines
-            etmp.set("Kind", "Stage")
+            entityTemp.set("Kind", "Stage")
         elif en.get("boss") == "1":
-            etmp.set("Kind", "Bosses")
+            entityTemp.set("Kind", "Bosses")
         elif isEffect:
-            etmp.set("Kind", "Effects")
+            entityTemp.set("Kind", "Effects")
         else:
-            etmp.set("Kind", "Enemies")
+            entityTemp.set("Kind", "Enemies")
 
-        return etmp
+        return entityTemp
 
     result = list(filter(lambda x: x != None, map(mapEn, enList)))
 
