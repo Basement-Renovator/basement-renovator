@@ -1056,7 +1056,6 @@ class RoomEditorWidget(QGraphicsView):
             r = event.rect()
 
             # Entity Icon
-            i = QIcon()
             painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
 
             # Top Text
@@ -1099,7 +1098,6 @@ class RoomEditorWidget(QGraphicsView):
 
             # Case Two: more than one type of entity
             # Entity Icon
-            i = QIcon()
             painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
 
             # Top Text
