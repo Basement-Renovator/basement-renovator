@@ -26,16 +26,25 @@
 # 		Bosscolours for the alternate boss entities
 #
 
-
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from collections import OrderedDict
 from copy import deepcopy
 
-import traceback, sys
-import struct, os, subprocess, platform, webbrowser, re, shutil, datetime, random
-import urllib.parse, urllib.request
+import traceback
+import sys
+import struct
+import os
+import subprocess
+import platform
+import webbrowser
+import re
+import shutil
+import datetime
+import random
+import urllib.parse
+import urllib.request
 from pathlib import Path
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -170,9 +179,9 @@ def findModsPath(installPath=None):
     else:
         installPath = installPath or findInstallPath()
         if len(installPath) > 0:
-            modd = os.path.join(installPath, "savedatapath.txt")
-            if os.path.isfile(modd):
-                lines = list(open(modd, "r"))
+            modDirectory = os.path.join(installPath, "savedatapath.txt")
+            if os.path.isfile(modDirectory):
+                lines = list(open(modDirectory, "r"))
                 modDirs = list(
                     filter(
                         lambda parts: parts[0] == "Modding Data Path",
@@ -273,8 +282,7 @@ def linuxPathSensitivityTraining(path):
     return os.path.normpath(path)
 
 
-def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
-
+def loadFromModXML(modPath, name, entRoot, resourcePath):
     cleanUp = re.compile(r"[^\w\d]")
     outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', name)}"
     if not os.path.isdir(outputDir):
@@ -376,7 +384,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath, fixIconFormat=False):
 
         return entityTemp
 
-    result = list(filter(lambda x: x != None, map(mapEn, enList)))
+    result = list(filter(lambda x: x is not None, map(mapEn, enList)))
 
     outputRoot = ET.Element("data")
     outputRoot.extend(result)
@@ -443,7 +451,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
                 entXML = entRoot.find(query)
                 validMissingSubtype = entXML is not None
 
-            if entXML == None:
+            if entXML is None:
                 print(
                     "Loading invalid entity (no entry in entities2 xml): "
                     + str(en.attrib)
@@ -554,9 +562,7 @@ def loadMods(autogenerate, installPath, resourcePath):
 
             ents = None
             if autogenerate:
-                ents = loadFromModXML(
-                    modPath, modName, entRoot, resourcePath, fixIconFormat=fixIconFormat
-                )
+                ents = loadFromModXML(modPath, modName, entRoot, resourcePath)
             else:
                 ents = loadFromMod(
                     modPath, brPath, modName, entRoot, fixIconFormat=fixIconFormat
@@ -587,7 +593,7 @@ def loadMods(autogenerate, installPath, resourcePath):
                     existingEn = entityXML.find(
                         f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']"
                     )
-                    if existingEn != None:
+                    if existingEn is not None:
                         print(
                             f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" ({i}.{v}.{s}) is overriding "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!'
                         )
@@ -726,7 +732,7 @@ class RoomScene(QGraphicsScene):
         # Bitfont drawing: moved to the RoomEditorWidget.drawForeground for easier anti-aliasing
 
         # Grey out the screen to show it's inactive if there are no rooms selected
-        if mainWindow.roomList.selectedRoom() == None:
+        if mainWindow.roomList.selectedRoom() is None:
             b = QBrush(QColor(255, 255, 255, 100))
             painter.setPen(Qt.white)
             painter.setBrush(b)
@@ -905,7 +911,7 @@ class RoomEditorWidget(QGraphicsView):
         """Called when a paint attempt is initiated"""
 
         paint = self.objectToPaint
-        if paint == None:
+        if paint is None:
             return
 
         clicked = self.mapToScene(event.x(), event.y())
@@ -1026,7 +1032,7 @@ class RoomEditorWidget(QGraphicsView):
         if room:
             # Room Type Icon
             roomType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
-            if roomType != None and len(roomType) > 0:
+            if roomType is not None and len(roomType) > 0:
                 print("Warning: Unknown room type.")
                 iconType = roomType[0]
                 q = QPixmap(iconType.get("Icon"))
@@ -1248,7 +1254,7 @@ class Entity(QGraphicsItem):
                 )
                 en = None
 
-            if en == None:
+            if en is None:
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
                 self.iconpixmap = self.pixmap
                 return
@@ -1726,10 +1732,10 @@ class Entity(QGraphicsItem):
 
             gfxData = self.scene().getBGGfxData()
             if gfxData is not None:
-                entid = (
+                entID = (
                     f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
                 )
-                override = gfxData["Entities"].get(entid)
+                override = gfxData["Entities"].get(entID)
 
             if override is not None:
                 img = override.get("Image")
@@ -2007,7 +2013,7 @@ class EntityStack(QGraphicsItem):
         return QRectF(0.0, 0.0, width, height)
 
     def remove(self):
-        # Fix for the nullptr left by the scene parent of the widget, avoids a segfault from the dangling pointer
+        # Fix for the null pointer left by the scene parent of the widget, avoids a segfault from the dangling pointer
         for spin in self.spinners:
             # spin.widget().setParent(None)
             spin.setWidget(
@@ -2628,7 +2634,7 @@ class FilterMenu(QMenu):
 
 class RoomSelector(QWidget):
     def __init__(self):
-        """Initialises the widget."""
+        """Initializes the widget."""
 
         QWidget.__init__(self)
 
@@ -5011,16 +5017,16 @@ class MainWindow(QMainWindow):
                     )
 
                 for ent in stackedEnts:
-                    etype, esubtype, evariant = ent.Type, ent.Subtype, ent.Variant
-                    if (etype, esubtype, evariant) not in seenSpawns:
+                    eType, eSubtype, eVariant = ent.Type, ent.Subtype, ent.Variant
+                    if (eType, eSubtype, eVariant) not in seenSpawns:
                         en = entityXML.find(
-                            f"entity[@ID='{etype}'][@Subtype='{esubtype}'][@Variant='{evariant}']"
+                            f"entity[@ID='{eType}'][@Subtype='{eSubtype}'][@Variant='{eVariant}']"
                         )
                         if en == None or en.get("Invalid") == "1":
                             print(
-                                f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({etype}.{evariant}.{esubtype})"
+                                f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({eType}.{eVariant}.{eSubtype})"
                             )
-                        seenSpawns[(etype, esubtype, evariant)] = (
+                        seenSpawns[(eType, eSubtype, eVariant)] = (
                             en == None or en.get("Invalid") == "1"
                         )
 
@@ -5164,9 +5170,9 @@ class MainWindow(QMainWindow):
             StageConvert.commonToXML(path, rooms, file=fileObj, isPreview=isPreview)
         else:
             if stbType == "Rebirth":
-                StageConvert.commonToSTBRB(path, rooms)
+                StageConvert.commonToSTBRB(path, rooms)  # cspell:disable-line
             else:
-                StageConvert.commonToSTBAB(path, rooms)
+                StageConvert.commonToSTBAB(path, rooms)  # cspell:disable-line
 
         if updateActive:
             self.path = path
