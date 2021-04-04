@@ -1332,16 +1332,45 @@
 
 	<!-- Tears -->
 	<entity ID="2" Image="resources/Entities/2.0.0 - Tear.png" Name="Tear" Subtype="0" Variant="0" />
-	<entity ID="2" Image="resources/Entities/2.0.1 - Blood Tear.png" Name="Blood Tear" Subtype="0" Variant="1" />
-	<entity ID="2" Image="resources/Entities/2.0.2 - Tooth Tear.png" Name="Tooth Tear" Subtype="0" Variant="2" />
-	<entity ID="2" Image="resources/Entities/2.0.3 - Metallic Tear.png" Name="Metallic Tear" Subtype="0" Variant="3" />
-	<entity ID="2" Image="resources/Entities/2.0.4 - Bob's Tear.png" Name="Bob's Tear" Subtype="0" Variant="4" />
-	<entity ID="2" Image="resources/Entities/2.0.5 - Fire Tear.png" Name="Fire Tear" Subtype="0" Variant="5" />
-	<entity ID="2" Image="resources/Entities/2.0.6 - Dark Matter Tear.png" Name="Dark Matter Tear" Subtype="0" Variant="6" />
-	<entity ID="2" Image="resources/Entities/2.0.7 - Mysterious Tear.png" Name="Mysterious Tear" Subtype="0" Variant="7" />
-	<entity ID="2" Image="resources/Entities/2.0.8 - Scythe Tear.png" Name="Scythe Tear" Subtype="0" Variant="8" />
-	<entity ID="2" Image="resources/Entities/2.0.10 - Shield Tear.png" Name="Shield Tear" Subtype="0" Variant="10" />
-	<entity ID="2" Image="resources/Entities/2.0.11 - Cupid Tear.png" Name="Cupid Tear" Subtype="0" Variant="11" />
+	<entity ID="2" Image="resources/Entities/2.1.0 - Blood Tear.png" Name="Blood Tear" Subtype="0" Variant="1" />
+	<entity ID="2" Image="resources/Entities/2.2.0 - Tooth Tear.png" Name="Tooth Tear" Subtype="0" Variant="2" />
+	<entity ID="2" Image="resources/Entities/2.3.0 - Metallic Tear.png" Name="Metallic Tear" Subtype="0" Variant="3" />
+	<entity ID="2" Image="resources/Entities/2.4.0 - Bob's Tear.png" Name="Bob's Tear" Subtype="0" Variant="4" />
+	<entity ID="2" Image="resources/Entities/2.5.0 - Fire Tear.png" Name="Fire Tear" Subtype="0" Variant="5" />
+	<entity ID="2" Image="resources/Entities/2.6.0 - Dark Matter Tear.png" Name="Dark Matter Tear" Subtype="0" Variant="6" />
+	<entity ID="2" Image="resources/Entities/2.7.0 - Mysterious Tear.png" Name="Mysterious Tear" Subtype="0" Variant="7" />
+	<entity ID="2" Image="resources/Entities/2.8.0 - Scythe Tear.png" Name="Scythe Tear" Subtype="0" Variant="8" />
+	<entity ID="2" Image="resources/Entities/2.10.0 - Shield Tear.png" Name="Shield Tear" Subtype="0" Variant="10" />
+	<entity ID="2" Image="resources/Entities/2.11.0 - Cupid Tear.png" Name="Cupid Tear" Subtype="0" Variant="11" />
+	<!-- 
+	<entity ID="2" Image="resources/Entities/2.12.0 - Blood Tear.png" Name="Blood Tear" Variant="12" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.13.0 - Nail Tear.png" Name="Nail Tear" Variant="13" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.14.0 - Pupula Tear.png" Name="Pupula Tear" Variant="14" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.15.0 - Pupula Blood Tear.png" Name="Pupula Blood Tear" Variant="15" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.16.0 - God's Flesh Tear.png" Name="God's Flesh Tear" Variant="16" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.17.0 - God's Flesh Blood Tear.png" Name="God's Flesh Blood Tear" Variant="17" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.18.0 - Diamond Tear.png" Name="Diamond Tear" Variant="18" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.19.0 - Explosivo Tear.png" Name="Explosivo Tear" Variant="19" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.20.0 - Coin Tear.png" Name="Coin Tear" Variant="20" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.21.0 - Multidimensional Tear.png" Name="Multidimensional Tear" Variant="21" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.22.0 - Stone Tear.png" Name="Stone Tear" Variant="22" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.23.0 - Nail Blood Tear.png" Name="Nail Blood Tear" Variant="23" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.24.0 - Glaucoma Tear.png" Name="Glaucoma Tear" Variant="24" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.25.0 - Glaucoma Blood Tear.png" Name="Glaucoma Blood Tear" Variant="25" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.26.0 - Booger Tear.png" Name="Booger Tear" Variant="26" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.27.0 - Egg Tear.png" Name="Egg Tear" Variant="27" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.28.0 - Razor Tear.png" Name="Razor Tear" Variant="28" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.29.0 - Bone Tear.png" Name="Bone Tear" Variant="29" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.30.0 - Black Tooth Tear.png" Name="Black Tooth Tear" Variant="30" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.31.0 - Needle Tear.png" Name="Needle Tear" Variant="31" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.32.0 - Belial Tear.png" Name="Belial Tear" Variant="32" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.33.0 - Pop Tear.png" Name="Pop Tear" Variant="33" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.34.0 - Pop Blood Tear.png" Name="Pop Blood Tear" Variant="34" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.35.0 - Balloon Tear.png" Name="Balloon Tear" Variant="35" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.36.0 - Hungry Tear.png" Name="Hungry Tear" Variant="36" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.37.0 - Brimstone Balloon Tear.png" Name="Brimstone Balloon Tear" Variant="37" Subtype="0" />
+	<entity ID="2" Image="resources/Entities/2.38.0 - Bomb Balloon Tear.png" Name="Bomb Balloon Tear" Variant="38" Subtype="0" />
+	 -->
 	<entity ID="9" Image="resources/Entities/9.0.0 - Enemy Tear.png" Name="Enemy Tear" Subtype="0" Variant="0" />
 	<entity ID="9" Image="resources/Entities/9.0.1 - Bone.png" Name="Bone" Subtype="0" Variant="1" />
 	<entity ID="9" Image="resources/Entities/9.0.2 - Fire.png" Name="Fire" Subtype="0" Variant="2" />
