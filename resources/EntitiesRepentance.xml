@@ -113,7 +113,7 @@
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.4 - Heart (eternal).png" Kind="Pickups" Name="Heart (eternal)" Subtype="4" Variant="10" />
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.7 - Gold Heart.png" Kind="Pickups" Name="Gold Heart" Subtype="7" Variant="10" />
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.11 - Bone Heart.png" Kind="Pickups" Name="Bone Heart" Subtype="11" Variant="10" />
-	<entity Group="Hearts" ID="5" Image="resources/Entities/Antibirth/5.10.12 - Rotten Heart.png" Kind="Pickups" Name="Heart (rotten)" Subtype="12" Variant="10"/>
+	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.12 - Rotten Heart.png" Kind="Pickups" Name="Heart (rotten)" Subtype="12" Variant="10"/>
 
 	<!-- Keys -->
 	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.0 - RKey.png" Kind="Pickups" Name="Random Key" Subtype="0" Variant="30" />
@@ -1496,12 +1496,12 @@
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.14.0 - Lava Projectile.png" Kind="" Name="Lava Projectile" Variant="14" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.15.0 - Head Projectile.png" Kind="" Name="Head Projectile" Variant="15" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.16.0 - Eyeball Projectile.png" Kind="" Name="Eyeball Projectile" Variant="16" Subtype="0" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.0 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="0" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.1 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="1" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.2 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="2" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.3 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="3" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.4 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="4" />
-	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.5 - Rotten Gaper.png" Kind="" Name="Rotten Gaper" Variant="3" Subtype="5" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.0 - Rotten Gaper (random).png" Kind="" Name="Rotten Gaper (random)" Variant="3" Subtype="0" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.1 - Rotten Gaper (subtype 1).png" Kind="" Name="Rotten Gaper (subtype 1)" Variant="3" Subtype="1" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.2 - Rotten Gaper (subtype 2).png" Kind="" Name="Rotten Gaper (subtype 2)" Variant="3" Subtype="2" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.3 - Rotten Gaper (subtype 3).png" Kind="" Name="Rotten Gaper (subtype 3)" Variant="3" Subtype="3" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.4 - Rotten Gaper (subtype 4).png" Kind="" Name="Rotten Gaper (subtype 4)" Variant="3" Subtype="4" />
+	<entity BaseHP="24" Champion="1" Group="" ID="10" Image="resources/Entities/10.3.5 - Rotten Gaper (subtype 5).png" Kind="" Name="Rotten Gaper (subtype 5)" Variant="3" Subtype="5" />
 	<entity BaseHP="20" Champion="1" Group="" ID="15" Image="resources/Entities/15.3.0 - Grilled Clotty.png" Kind="" Name="Grilled Clotty" Variant="3" Subtype="0" />
 	<entity BaseHP="35" Boss="1" Group="" ID="19" Image="resources/Entities/19.2.0 - Tuff Twin.png" Kind="" Name="Tuff Twin" Variant="2" Subtype="0" />
 	<entity BaseHP="35" Boss="1" Group="" ID="19" Image="resources/Entities/19.3.0 - The Shell.png" Kind="" Name="The Shell" Variant="3" Subtype="0" />
