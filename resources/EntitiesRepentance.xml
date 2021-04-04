@@ -15,13 +15,18 @@
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.300.0 - Random Card.png" Kind="Pickups" Name="Random Card" Subtype="0" Variant="300" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.350.0 - Trinket.png" Kind="Pickups" Name="Random Trinket" Subtype="0" Variant="350" />
-	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.0 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Subtype="0" Variant="90" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.0 - Lil' Battery.png" Kind="Pickups" Name="Random Battery" Subtype="0" Variant="90" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.69.0 - RGrab Bag.png" Kind="Pickups" Name="Random Grab Bag" Subtype="0" Variant="69" />
 
 	<!-- Bombs -->
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.0 - RBomb.png" Kind="Pickups" Name="Random Bomb" Subtype="0" Variant="40" />
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.1 - Bomb.png" Kind="Pickups" Name="Bomb" Subtype="1" Variant="40" />
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.2 - Double Bomb.png" Kind="Pickups" Name="Double Bomb" Subtype="2" Variant="40" />
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.4 - Golden Bomb.png" Kind="Pickups" Name="Golden Bomb" Subtype="4" Variant="40" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.7 - Giga Bomb.png" Kind="Pickups" Name="Giga Bomb" Variant="40" Subtype="7" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.41.0 - Throwable Bomb (pickup).png" Kind="Pickups" Name="Throwable Bomb (pickup)" Variant="41" Subtype="0" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.42.0 - Poop Nugget.png" Kind="Pickups" Name="Poop Nugget" Variant="42" Subtype="0" />
+	<entity Group="Bombs" ID="5" Image="resources/Entities/5.42.1 - Big Poop Nugget.png" Kind="Pickups" Name="Big Poop Nugget" Variant="42" Subtype="1" />
 
 	<!-- Cards -->
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.0 - Random Card.png" Kind="Pickups" Name="Random Card" Subtype="0" Variant="300" />
@@ -78,7 +83,12 @@
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.53.0 - Eternal Chest.png" Kind="Pickups" Name="Eternal Chest" Subtype="0" Variant="53" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.52.0 - Spiked Chest.png" Kind="Pickups" Name="Spiked Chest" Subtype="0" Variant="52" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.54.0 - Mimic Chest.png" Kind="Pickups" Name="Mimic Chest" Subtype="0" Variant="54" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.0 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Subtype="0" Variant="69" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.55.0 - Old Chest.png" Kind="Pickups" Name="Old Chest" Variant="55" Subtype="0" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.56.0 - Wooden Chest.png" Kind="Pickups" Name="Wooden Chest" Variant="56" Subtype="0" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.57.0 - Mega Chest.png" Kind="Pickups" Name="Mega Chest" Variant="57" Subtype="0" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.58.0 - Haunted Chest.png" Kind="Pickups" Name="Haunted Chest" Variant="58" Subtype="0" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.1 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Variant="69" Subtype="1" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.2 - Black Sack.png" Kind="Pickups" Name="Black Sack" Variant="69" Subtype="2" />
 
 	<!-- Coins -->
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.0 - RCoin.png" Kind="Pickups" Name="Random Coin" Subtype="0" Variant="20" />
@@ -88,6 +98,7 @@
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.3 - Dime.png" Kind="Pickups" Name="Dime" Subtype="3" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.5 - Lucky Penny.png" Kind="Pickups" Name="Lucky Penny" Subtype="5" Variant="20" />
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.6 - Sticky Nickel.png" Kind="Pickups" Name="Sticky Nickel" Subtype="6" Variant="20" />
+	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.7 - Golden Penny.png" Kind="Pickups" Name="Golden Penny" Variant="20" Subtype="7" />
 
 	<!-- Hearts -->
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.0 - RHeart.png" Kind="Pickups" Name="Random Heart" Subtype="0" Variant="10" />
@@ -126,24 +137,6 @@
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.11 - Black-Yellow Pill.png" Kind="Pickups" Name="Black-Yellow Pill" Subtype="11" Variant="70" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.12 - White-Black Pill.png" Kind="Pickups" Name="White-Black Pill" Subtype="12" Variant="70" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.13 - White-Yellow Pill.png" Kind="Pickups" Name="White-Yellow Pill" Subtype="13" Variant="70" />
-
-	<!-- Runes -->
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.32 - Hagalaz.png" Kind="Pickups" Name="Hagalaz" Subtype="32" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.33 - Jera.png" Kind="Pickups" Name="Jera" Subtype="33" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.34 - Ehwaz.png" Kind="Pickups" Name="Ehwaz" Subtype="34" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.35 - Dagaz.png" Kind="Pickups" Name="Dagaz" Subtype="35" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.36 - Ansuz.png" Kind="Pickups" Name="Ansuz" Subtype="36" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.37 - Perthro.png" Kind="Pickups" Name="Perthro" Subtype="37" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.38 - Berkano.png" Kind="Pickups" Name="Berkano" Subtype="38" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.39 - Algiz.png" Kind="Pickups" Name="Algiz" Subtype="39" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.40 - Blank Rune.png" Kind="Pickups" Name="Blank Rune" Subtype="40" Variant="300" />
-	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Black Rune.png" Kind="Pickups" Name="Black Rune" Subtype="41" Variant="300" />
-	
-	<!-- TODO Repentance (Missing Images)-->
-	<!-- 
-	<entity Group="Bombs" ID="5" Image="resources/Entities/5.41.0 - Throwable Bomb (pickup).png" Kind="Pickups" Name="Throwable Bomb (pickup)" Variant="41" Subtype="0" />
-	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.7 - Golden Penny.png" Kind="Pickups" Name="Golden Penny" Variant="20" Subtype="7" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.14 - Pill Gold-Gold.png" Kind="Pickups" Name="Pill Gold-Gold" Variant="70" Subtype="14" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2049 - Horse Pill Blue-Blue.png" Kind="Pickups" Name="Horse Pill Blue-Blue" Variant="70" Subtype="2049" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2050 - Horse Pill White-Blue.png" Kind="Pickups" Name="Horse Pill White-Blue" Variant="70" Subtype="2050" />
@@ -159,22 +152,27 @@
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2060 - Horse Pill White-Black.png" Kind="Pickups" Name="Horse Pill White-Black" Variant="70" Subtype="2060" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2061 - Horse Pill White-Yellow.png" Kind="Pickups" Name="Horse Pill White-Yellow" Variant="70" Subtype="2061" />
 	<entity Group="Pills" ID="5" Image="resources/Entities/5.70.2062 - Horse Pill Gold-Gold.png" Kind="Pickups" Name="Horse Pill Gold-Gold" Variant="70" Subtype="2062" />
-	<entity Group="Misc" ID="5" Image="resources/Entities/5.42.0 - Poop Nugget.png" Kind="Pickups" Name="Poop Nugget" Variant="42" Subtype="0" />
-	<entity Group="Misc" ID="5" Image="resources/Entities/5.42.1 - Big Poop Nugget.png" Kind="Pickups" Name="Big Poop Nugget" Variant="42" Subtype="1" />
-	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.7 - Giga Bomb.png" Kind="Pickups" Name="Giga Bomb" Variant="40" Subtype="7" />
+
+	<!-- Runes -->
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.32 - Hagalaz.png" Kind="Pickups" Name="Hagalaz" Subtype="32" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.33 - Jera.png" Kind="Pickups" Name="Jera" Subtype="33" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.34 - Ehwaz.png" Kind="Pickups" Name="Ehwaz" Subtype="34" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.35 - Dagaz.png" Kind="Pickups" Name="Dagaz" Subtype="35" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.36 - Ansuz.png" Kind="Pickups" Name="Ansuz" Subtype="36" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.37 - Perthro.png" Kind="Pickups" Name="Perthro" Subtype="37" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.38 - Berkano.png" Kind="Pickups" Name="Berkano" Subtype="38" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.39 - Algiz.png" Kind="Pickups" Name="Algiz" Subtype="39" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.40 - Blank Rune.png" Kind="Pickups" Name="Blank Rune" Subtype="40" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Black Rune.png" Kind="Pickups" Name="Black Rune" Subtype="41" Variant="300" />
+	
+	<!-- Batteries -->
+	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.0 - RBattery.png" Kind="Pickups" Name="Random Battery" Subtype="0" Variant="90" />
 	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.1 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Variant="90" Subtype="1" />
 	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.2 - Micro Battery.png" Kind="Pickups" Name="Micro Battery" Variant="90" Subtype="2" />
 	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.3 - Mega Battery.png" Kind="Pickups" Name="Mega Battery" Variant="90" Subtype="3" />
 	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.4 - Golden Battery.png" Kind="Pickups" Name="Golden Battery" Variant="90" Subtype="4" />
-	<entity Group="Misc" ID="5" Image="resources/Entities/5.380.10 - Mom's Bed.png" Kind="Pickups" Name="Mom's Bed" Variant="380" Subtype="10" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.1 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Variant="69" Subtype="1" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.2 - Black Sack.png" Kind="Pickups" Name="Black Sack" Variant="69" Subtype="2" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.390.0 - Mom's Chest.png" Kind="Pickups" Name="Mom's Chest" Variant="390" Subtype="0" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.55.0 - Old Chest.png" Kind="Pickups" Name="Old Chest" Variant="55" Subtype="0" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.56.0 - Wooden Chest.png" Kind="Pickups" Name="Wooden Chest" Variant="56" Subtype="0" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.57.0 - Mega Chest.png" Kind="Pickups" Name="Mega Chest" Variant="57" Subtype="0" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.58.0 - Haunted Chest.png" Kind="Pickups" Name="Haunted Chest" Variant="58" Subtype="0" />
-	-->
+	
 
 	<!--——— Enemies ———-->
 
@@ -659,6 +657,9 @@
 	<entity Group="Props" ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Props" ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Props" Kind="Stage" Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="999" Name="Dice Room Floor" Variant="76" Subtype="0" PlaceVisual="0,2.5" NoBlockDoors="1" IsGrid="1" />
+	
+	<entity Group="Props" ID="5" Image="resources/Entities/5.380.10 - Mom's Bed.png" Kind="Stage" Name="Mom's Bed" Variant="380" Subtype="10" />
+	<entity Group="Props" ID="5" Image="resources/Entities/5.390.0 - Mom's Chest.png" Kind="Stage" Name="Mom's Chest" Variant="390" Subtype="0" />
 
 	<!-- Special Exits -->
 	<entity Group="Special Exits" ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Kind="Stage" Name="Big Chest" Subtype="0" Variant="340" />
@@ -1433,6 +1434,8 @@
 	<entity BaseHP="30" Champion="1" ID="294" Image="resources/Entities/294.0.0 - Ultra Greed Door.png" Kind="Stage" Subtype="0" Variant="0" />
 	
 	<!-- UNORDERED Repentance-->
+	
+	<!--
 	<entity BaseHP="10" Group="" ID="1" Image="resources/Entities/1.1.0 - Coplayer.png" Kind="" Name="Coplayer" Variant="1" Subtype="0" />
 
 	<entity Group="" ID="4" Image="resources/Entities/4.12.0 - Glitter Bomb.png" Kind="" Name="Glitter Bomb" Variant="12" Subtype="0" />
@@ -1774,7 +1777,7 @@
 	<entity Group="" ID="965" Image="resources/Entities/965.0.0 - Minecart.png" Kind="" Name="Minecart" Variant="0" Subtype="0" />
 	<entity BaseHP="60" Group="" ID="966" Image="resources/Entities/966.0.0 - Siren Helper.png" Kind="" Name="Siren Helper" Variant="0" Subtype="0" />
 	<entity Group="" ID="967" Image="resources/Entities/967.0.0 - Hornfel Door.png" Kind="Effect" Name="Hornfel Door" Variant="0" Subtype="0" />
-	<!--
+	
 	<entity Group="" ID="1000" Image="resources/Entities/1000.1.0 - Bomb Explosion.png" Kind="Effect" Name="Bomb Explosion" Variant="1" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.2.0 - Blood Explosion.png" Kind="Effect" Name="Blood Explosion" Variant="2" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.3.0 - Fly Explosion.png" Kind="Effect" Name="Fly Explosion" Variant="3" Subtype="0" />
