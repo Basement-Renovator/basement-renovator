@@ -2021,5 +2021,6 @@
 	<entity Group="" ID="1000" Image="resources/Entities/1000.197.0 - Dead Bird.png" Kind="Effect" Name="Dead Bird" Variant="197" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.198.0 - Generic Tracer.png" Kind="Effect" Name="Generic Tracer" Variant="198" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.199.0 - Ultra Death Scythe.png" Kind="Effect" Name="Ultra Death Scythe" Variant="199" Subtype="0" />
+	<entity Group="Grid" ID="1901" Image="resources/Entities/1901.0.0 - Tall Block.png" Kind="Stage" Name="Tall Block" Variant="0" Subtype="0" InEmptyRooms="1" IsGrid="1" />
 	-->
 </data>
