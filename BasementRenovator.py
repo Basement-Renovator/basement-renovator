@@ -68,14 +68,30 @@ def checkNum(s):
 #       XML Data       #
 ########################
 
+"""
+Returns the current compatibility mode, and the sub version if it exists
+"""
+def getGameVersion():
+    # default mode if not set
+    mode = settings.value("CompatibilityMode", "Afterbirth+")
+
+    if mode == "Antibirth":
+        # assumes rebirth only is present for anti
+        return "Rebirth", "Antibirth"
+
+    return mode, None
+
 
 def getEntityXML():
-    tree = ET.parse("resources/EntitiesAfterbirthPlus.xml")
+    version, subVer = getGameVersion()
+    version = version.replace("+", "Plus")
+
+    tree = ET.parse(f"resources/Entities{version}.xml")
     root = tree.getroot()
 
-    if settings.value("CompatibilityMode") == "Antibirth":
-        antiTree = ET.parse("resources/EntitiesAntibirth.xml")
-        root.extend([child for child in antiTree.getroot()])
+    if subVer is not None:
+        extraTree = ET.parse(f"resources/Entities{subVer}.xml")
+        root.extend([child for child in extraTree.getroot()])
 
     return root
 
@@ -93,7 +109,8 @@ def getSteamPath():
 
 
 def findInstallPath():
-    if settings.value("CompatibilityMode") == "Antibirth":
+    version, subVer = getGameVersion()
+    if subVer == "Antibirth":
         return settings.value("AntibirthPath")
 
     installPath = ""
@@ -160,7 +177,7 @@ def findInstallPath():
         # Looks like nothing was selected
         if cantFindPath or installPath == "" or not os.path.isdir(installPath):
             print(
-                f"Could not find The Binding of Isaac: Afterbirth+ install folder ({installPath})"
+                f"Could not find The Binding of Isaac: {version} install folder ({installPath})"
             )
             return ""
 
@@ -194,6 +211,12 @@ def findModsPath(installPath=None):
     if modsPath == "" or not os.path.isdir(modsPath):
         cantFindPath = True
 
+    version, subVer = getGameVersion()
+
+    if version not in ["Afterbirth+", "Repentance"]:
+        print(f"INFO: {subVer or version} does not support mod folders")
+        return ""
+
     if cantFindPath:
         cantFindPath = False
         # Windows path things
@@ -202,7 +225,7 @@ def findModsPath(installPath=None):
                 os.path.expanduser("~"),
                 "Documents",
                 "My Games",
-                "Binding of Isaac Afterbirth+ Mods",
+                f"Binding of Isaac {version} Mods",
             )
             if not QFile.exists(modsPath):
                 cantFindPath = True
@@ -210,7 +233,7 @@ def findModsPath(installPath=None):
         # Mac Path things
         elif "Darwin" in platform.system():
             modsPath = os.path.expanduser(
-                "~/Library/Application Support/Binding of Isaac Afterbirth+ Mods"
+                f"~/Library/Application Support/Binding of Isaac {version} Mods"
             )
             if not QFile.exists(modsPath):
                 cantFindPath = True
@@ -218,7 +241,7 @@ def findModsPath(installPath=None):
         # Linux and others
         else:
             modsPath = os.path.expanduser(
-                "~/.local/share/binding of isaac afterbirth+ mods/"
+                f"~/.local/share/binding of isaac {version.lower()} mods/"
             )
             if not QFile.exists(modsPath):
                 cantFindPath = True
@@ -226,7 +249,7 @@ def findModsPath(installPath=None):
         # Fallback Resource Folder Locating
         if cantFindPath:
             modsPathOut = QFileDialog.getExistingDirectory(
-                None, "Please Locate The Binding of Isaac: Afterbirth+ Mods Folder"
+                None, f"Please Locate The Binding of Isaac: {version} Mods Folder"
             )
             if not modsPathOut:
                 QMessageBox.warning(
@@ -255,7 +278,7 @@ def findModsPath(installPath=None):
             QMessageBox.warning(
                 None,
                 "Error",
-                f"Could not find The Binding of Isaac: Afterbirth+ Mods folder ({modsPath})",
+                f"Could not find The Binding of Isaac: {version} Mods folder ({modsPath})",
             )
             return ""
 
@@ -4949,7 +4972,7 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(
                 self,
                 "Error",
-                "This is not a valid STB file. (i.e. Rebirth or Afterbirth format) It may be one of the prototype STB files accidentally included in the AB+ release.",
+                "This is not a valid STB file. (e.g. Rebirth or Afterbirth format) It may be one of the prototype STB files accidentally included in the AB+ release.",
             )
         except:
             traceback.print_exception(*sys.exc_info())
@@ -5418,10 +5441,10 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, compatMode):
-            if compatMode not in ["Afterbirth+"]:
+        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+            if version not in ["Afterbirth+", "Repentance"]:
                 QMessageBox.warning(
-                    self, "Error", "Stage Replacement disabled if not playing with AB+!"
+                    self, "Error", f"Stage Replacement not supported for {version}!"
                 )
                 raise
 
@@ -5489,7 +5512,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the starting room
     def testStartMap(self):
-        def setup(modPath, roomsPath, floorInfo, testRoom, compatMode):
+        def setup(modPath, roomsPath, floorInfo, testRoom, version, subVer):
             if len(testRoom) > 1:
                 QMessageBox.warning(
                     self,
@@ -5499,11 +5522,11 @@ class MainWindow(QMainWindow):
                 raise
             testRoom = testRoom[0]
 
-            if compatMode not in ["Afterbirth+"]:
+            if version not in ["Afterbirth+", "Repentance"]:
                 QMessageBox.warning(
                     self,
                     "Error",
-                    "Starting Room Replacement disabled if not playing with AB+!",
+                    f"Starting Room Replacement not supported for {version}!",
                 )
                 raise
 
@@ -5547,9 +5570,7 @@ class MainWindow(QMainWindow):
 
             if not startRoom:
                 QMessageBox.warning(
-                    self,
-                    "Error",
-                    "00.special rooms.stb has been tampered with, and is no longer a valid STB file.",
+                    self, "Error", "00.special rooms.stb is not a valid STB file."
                 )
                 raise
 
@@ -5564,7 +5585,7 @@ class MainWindow(QMainWindow):
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, compatMode):
+        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
@@ -5575,7 +5596,7 @@ class MainWindow(QMainWindow):
             newRooms = None
             if len(rooms) > 1:
                 if (
-                    compatMode == "Afterbirth+"
+                    version == "Afterbirth+"
                     and next(
                         (testRoom for testRoom in rooms if testRoom.info.type == 0),
                         None,
@@ -5583,7 +5604,7 @@ class MainWindow(QMainWindow):
                     is not None
                 ):
                     QMessageBox.warning(
-                        self, "Error", "AB+ does not support the null room type."
+                        self, "Error", f"{version} does not support the null room type."
                     )
                     raise
 
@@ -5642,7 +5663,7 @@ class MainWindow(QMainWindow):
             # Because instapreview is xml, no special allowances have to be made for rebirth
             self.save([roomsToUse[0]], path, updateRecent=False, isPreview=True)
 
-            if compatMode in ["Rebirth", "Antibirth"]:
+            if version == "Rebirth":
                 return (
                     [
                         "-room",
@@ -5689,6 +5710,7 @@ class MainWindow(QMainWindow):
 
         else:
             installPath = findInstallPath()
+            version, subVer = getGameVersion()
 
             if len(installPath) != 0:
                 resourcesPath = os.path.join(installPath, "resources")
@@ -5696,7 +5718,7 @@ class MainWindow(QMainWindow):
             else:
                 resourcesPathOut = QFileDialog.getExistingDirectory(
                     self,
-                    "Please Locate The Binding of Isaac: Afterbirth+ Resources Folder",
+                    f"Please Locate The Binding of Isaac: {version} Resources Folder",
                 )
                 if not resourcesPathOut:
                     QMessageBox.warning(
@@ -5734,7 +5756,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(
                     self,
                     "Error",
-                    "Could not find The Binding of Isaac: Afterbirth+ Resources folder (%s)"
+                    f"Could not find The Binding of Isaac: {version} Resources folder (%s)"
                     % resourcesPath,
                 )
                 return ""
@@ -5763,7 +5785,7 @@ class MainWindow(QMainWindow):
             return
 
         settings = QSettings("settings.ini", QSettings.IniFormat)
-        compatMode = settings.value("CompatibilityMode") or "Afterbirth+"
+        version, subVer = getGameVersion()
 
         # Floor type
         # TODO cache this when loading a file
@@ -5792,7 +5814,7 @@ class MainWindow(QMainWindow):
         try:
             # setup raises an exception if it can't continue
             launchArgs, roomsOverride, extraMessage = setupFunc(
-                modPath, roomPath, floorInfo, rooms, compatMode
+                modPath, roomPath, floorInfo, rooms, version, subVer
             ) or ([], None, "")
         except Exception as e:
             print(
@@ -5839,7 +5861,7 @@ class MainWindow(QMainWindow):
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
             # if there exists drm free copies, allow the direct exe launch method
             steamPath = None
-            if compatMode != "Antibirth" and settings.value("ForceExeLaunch") != "1":
+            if subVer is None and settings.value("ForceExeLaunch") != "1":
                 steamPath = getSteamPath() or ""
 
             if steamPath:
@@ -6025,7 +6047,7 @@ class MainWindow(QMainWindow):
         text = """
             <big><b>Basement Renovator</b></big><br />
             <br />
-            Basement Renovator is a room editor for the Binding of Isaac Afterbirth+. You can use it to either edit existing rooms or create new ones.<br />
+            Basement Renovator is a room editor for the Binding of Isaac Rebirth and its DLCs and mods. You can use it to either edit existing rooms or create new ones.<br />
             <br />
             To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extractor. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br />
             <br />
@@ -6069,7 +6091,7 @@ if __name__ == "__main__":
 
     cmdParser = QCommandLineParser()
     cmdParser.setApplicationDescription(
-        "Basement Renovator is a room editor for The Binding of Isaac: Afterbirth[+]"
+        "Basement Renovator is a room editor for The Binding of Isaac: Rebirth and its DLCs and mods"
     )
     cmdParser.addHelpOption()
 
@@ -6084,8 +6106,9 @@ if __name__ == "__main__":
     applyDefaultSettings(settings, {"SnapToBounds": "1", "ExportSTBOnSave": "1"})
 
     # XML Globals
+    version, subVer = getGameVersion()
     entityXML = getEntityXML()
-    xmlLookups = MainLookup(settings.value("CompatibilityMode"))
+    xmlLookups = MainLookup(version, subVer)
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",

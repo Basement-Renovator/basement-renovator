@@ -85,13 +85,14 @@ def applyGfxReplacement(replacement, gfxchildren):
                 origgfx.append(ent)
 
 class Lookup(metaclass=abc.ABCMeta):
-    def __init__(self, prefix, mode):
-        self.setup(prefix, mode)
+    def __init__(self, prefix, version, subVer):
+        version = version.replace('+', 'Plus')
+        self.setup(prefix, version, subVer)
 
-    def setup(self, prefix, mode):
-        file = f'resources/{prefix}AfterbirthPlus.xml'
-        if mode == 'Antibirth':
-            fileN = f'resources/{prefix}Antibirth.xml'
+    def setup(self, prefix, version, subVer):
+        file = f'resources/{prefix}{version}.xml'
+        if subVer is not None:
+            fileN = f'resources/{prefix}{subVer}.xml'
             if os.path.exists(fileN):
                 file = fileN
 
@@ -104,8 +105,8 @@ class Lookup(metaclass=abc.ABCMeta):
     def lookup(self): pass
 
 class StageLookup(Lookup):
-    def __init__(self, mode, parent):
-        super().__init__('Stages', mode)
+    def __init__(self, version, subVer, parent):
+        super().__init__('Stages', version, subVer)
         self.parent = parent
 
     def loadFromMod(self, modPath, brPath, name):
@@ -193,8 +194,8 @@ class StageLookup(Lookup):
 
 
 class RoomTypeLookup(Lookup):
-    def __init__(self, mode, parent):
-        super().__init__('RoomTypes', mode)
+    def __init__(self, version, subVer, parent):
+        super().__init__('RoomTypes', version, subVer)
         self.parent = parent
 
     def loadFromMod(self, modPath, brPath, name):
@@ -306,9 +307,9 @@ class RoomTypeLookup(Lookup):
 
 
 class MainLookup:
-    def __init__(self, mode):
-        self.stages = StageLookup(mode, self)
-        self.roomTypes = RoomTypeLookup(mode, self)
+    def __init__(self, version, subVer):
+        self.stages = StageLookup(version, subVer, self)
+        self.roomTypes = RoomTypeLookup(version, subVer, self)
 
     def loadFromMod(self, modPath, brPath, name):
         self.stages.loadFromMod(modPath, brPath, name)
