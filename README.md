@@ -12,8 +12,8 @@ Basement Renovator is [not released regularly](https://github.com/Tempus/Basemen
 
 ### Running From Source / Installation
 
-* [Installation for Beginners using Chocolatey](INSTALL.md#installation-for-beginners-using-chocolatey)
-* [Installation for Advanced Users](INSTALL.md#installation-for-advanced-users)
+* [Simple Installation: Chocolatey](INSTALL.md#chocolatey)
+* [Minimal Installation: Python](INSTALL.md#python)
 
 ---
 
@@ -72,6 +72,11 @@ Basement Renovator is [not released regularly](https://github.com/Tempus/Basemen
 ---
 
 ### F.A.Q.
+
+*How do I edit Repentance rooms?*
+
+- Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, and `Antibirth`
+- The room files have the same format as AB and AB+
 
 *I found a bug!*
 

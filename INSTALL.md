@@ -1,15 +1,16 @@
-# Installation Instructions
+# Run the Latest Release
 
-We recommend that end-users run Basement Renovator directly from the source code.
+The latest release can be found in the [releases tab](https://github.com/Tempus/Basement-Renovator/releases). This is most likely out of date, so running from source is recommended.
 
-* [Installation for Beginners using Chocolatey](#installation-for-beginners-using-chocolatey)
-* [Installation for Advanced Users](#installation-for-advanced-users)
+# Running from Source
 
-<br />
+Because Basement Renovator's build schedule is irregular, it's recommended to run it directly from the source code
 
-## Installation for Beginners Using Chocolatey
+## Chocolatey
 
-If you are not using Windows 10, see the [section below](#installation-for-advanced-users).
+The advantage of Chocolatey is that while you have to install another piece of software your installation will be simple to keep up to date in the future. Setup can also be less errorprone.
+
+If you are not using Windows 10, see the [section below](#python).
 
 - Open a [Command Prompt as an administrator](https://www.howtogeek.com/194041/how-to-open-the-command-prompt-as-administrator-in-windows-8.1/). (Read the link if you don't know how.)
 - Install [Chocolatey](https://chocolatey.org/) by copy-pasting the following command. (Skip this step if you have already have Chocolatey installed on your computer.)
@@ -36,13 +37,13 @@ If you are not using Windows 10, see the [section below](#installation-for-advan
 
 <br />
 
-## Installation for Advanced Users
+## Python
+
+This installation only installs what is explicitly needed to run Basement Renovator from source.
 
 - Download a copy of the source code, either by cloning the repository or by clicking [here](https://github.com/Tempus/Basement-Renovator/archive/master.zip).
-- Install [Python 3](https://www.python.org/) if you do not have it installed already. (If you are on Windows, installing with [Chocolately](https://chocolatey.org/) is recommended, but you can also manually download the MSI file and click "next" through the install wizard yourself if you want.)
-- Open a command prompt / terminal and run the following in the Basement Renovator directory to install the Python dependencies:
-  - `pip install -r requirements.txt` <br />
-    (if you are on Windows, you might also need to install Microsoft Visual C++ Build Tools 2015 in order for the dependencies to compile, if you do not have it installed already)
-- Run the following in the Basement Renovator directory to start the program:
-  - `python BasementRenovator.py` <br />
-  (or you can just double click on the "BasementRenovator.py" file)
+- Install Python 3 from the [Python website](https://www.python.org/downloads/)
+  - If you are manually installing it, then make sure to check the box to add Python to your PATH. Otherwise, the next steps will complain about the `python` command not existing
+  - Double-click `BR.bat` in the root of the install folder
+    - This will print your Python version, run `pip` to install BR's dependencies, and and then run BasementRenovator.py
+    - After BR is closed or crashes, the console window will remain open to read the error logs

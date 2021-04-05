@@ -7,13 +7,13 @@ from PyQt5.QtGui import QTransform, QImage, QPainter
 
 class Config:
     def __init__(self, anmPath, resourcePath):
-        self.path = anmPath
+        self.path = Path(anmPath).resolve()
         self.resourcePath = resourcePath
 
-        if not os.path.isfile(self.path):
-            raise FileNotFoundError('Invalid anm2!')
+        if not self.path.is_file():
+            raise FileNotFoundError('Invalid anm2! ' + self.path)
 
-        self.dir, self.file = os.path.split(self.path)
+        self.dir, self.file = self.path.parent, self.path.name
 
         self.tree = ET.parse(self.path)
         self.spritesheets = list(map(lambda x: x.get('Path'), self.tree.findall(".Content/Spritesheets/Spritesheet")))
@@ -96,7 +96,7 @@ class Config:
                 if not (imgPath and imgPath.exists()):
                     image = re.sub(r'.*resources', self.resourcePath, image)
                     imgPath = Path(image)
-                    image = str(imgPath) if imgPath.exists else None
+                    image = str(imgPath) if imgPath.exists() else None
 
             if image is not None:
                 # Here's the anm specs

@@ -7,7 +7,7 @@ pydir = os.path.split(sys.executable)[0]
 
 def exe(pyfile,name="",dest="",creator="PyInstaller",ico="",noconsole=False,versionFile="",addtlFiles=[]):
     args = [
-        'python', '-m', creator, pyfile, '-F', '--clean',
+        'python', '-u', '-m', creator, pyfile, '-F', '--clean',
         '--distpath', str(dest or os.path.split(pyfile)[0])
     ]
     if name: args.extend(('-n', name))
