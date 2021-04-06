@@ -160,7 +160,7 @@ class StageLookup(Lookup):
             self.xml.extend(stages)
 
     def lookup(self, path=None, name=None, stage=None, stageType=None, baseGamePath=None):
-        stages = self.xml.findall('stage')
+        stages = list(self.xml.findall('stage'))
 
         if stage:
             st = str(stage)
@@ -188,9 +188,7 @@ class StageLookup(Lookup):
 
     def getGfx(self, node):
         gfx = node.find('Gfx')
-
-        if gfx is None: return node
-        return gfx
+        return node if gfx is None else gfx
 
 
 class RoomTypeLookup(Lookup):
@@ -267,7 +265,7 @@ class RoomTypeLookup(Lookup):
         return True
 
     def lookup(self, room=None, name=None, roomfile=None, path=None, showInMenu=None):
-        rooms = self.xml.findall('room')
+        rooms = list(self.xml.findall('room'))
 
         if name:
             rooms = list(filter(lambda r: r.get('Name') == name, rooms))

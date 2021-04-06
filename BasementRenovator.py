@@ -1054,12 +1054,12 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            roomType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
-            if roomType is not None and len(roomType) > 0:
-                print("Warning: Unknown room type.")
-                iconType = roomType[0]
-                q = QPixmap(iconType.get("Icon"))
+            [roomType] = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
+            if roomType is not None:
+                q = QPixmap(roomType.get("Icon"))
                 painter.drawPixmap(2, 3, q)
+            else:
+                print("Warning: Unknown room type during paintEvent:", room.getDesc())
 
             # Top Text
             font = painter.font()
@@ -1825,7 +1825,7 @@ class Entity(QGraphicsItem):
             x = (xc * 26 - width) / 2
             y = yc * 26 - height
 
-            renderFunc(x, y, rendered)
+            renderFunc(int(x), int(y), rendered)
 
             # if the offset is high enough, draw an indicator of the actual position
             if not self.entity.disableOffsetIndicator and (
@@ -2008,7 +2008,7 @@ class EntityStack(QGraphicsItem):
             pix = item.entity.iconpixmap
             self.spinners[i].setPos(w - 8, r.bottom() - 26)
             w += 4
-            painter.drawPixmap(w, r.bottom() - 20 - pix.height(), pix)
+            painter.drawPixmap(int(w), int(r.bottom() - 20 - pix.height()), pix)
 
             # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity.weight))
             w += pix.width()
@@ -2486,7 +2486,11 @@ class Room(QListWidgetItem):
 
         self.gridSpawns = newGridSpawns
 
-    def getDesc(info, name, difficulty, weight):
+    def getDesc(self):
+        name = self.name
+        difficulty = self.difficulty
+        weight = self.weight
+        info = self.info
         return f"{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}"
 
     def setToolTip(self):
@@ -2499,7 +2503,7 @@ class Room(QListWidgetItem):
         )
 
         tip = (
-            Room.getDesc(self.info, self.name, self.difficulty, self.weight)
+            self.getDesc()
             + f"\nLast Tested: {lastTest}"
         )
 
@@ -2508,14 +2512,12 @@ class Room(QListWidgetItem):
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        roomType = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
-        if roomType == None or len(roomType) == 0:
-            print("Warning: Unknown room type.")
+        [roomType] = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
+        if roomType is None:
+            print("Warning: Unknown room type during renderDisplayIcon:", self.getDesc())
             return
 
-        iconType = roomType[0]
-        i = QIcon(iconType.get("Icon"))
-
+        i = QIcon(roomType.get("Icon"))
         self.setIcon(i)
 
     class _SpawnIter:
@@ -3367,7 +3369,7 @@ class RoomSelector(QWidget):
         """Removes selected room (no takebacks)"""
 
         rooms = self.selectedRooms()
-        if rooms == None or len(rooms) == 0:
+        if rooms is None or len(rooms) == 0:
             return
 
         msgBox = QMessageBox(
@@ -3572,11 +3574,9 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
+            if self.kind is None or self.kind == en.get("Kind"):
             g = en.get("Group")
-            k = en.get("Kind")
-
-            if self.kind == k or self.kind == None:
-                if g and g not in self.groups:
+                if not (g is None or g in self.groups):
                     self.groups[g] = EntityGroupItem(g)
 
                 imgPath = en.get("Image")
@@ -3591,7 +3591,7 @@ class EntityGroupModel(QAbstractListModel):
                     en.get("Image"),
                 )
 
-                if g != None:
+                if g is not None:
                     self.groups[g].objects.append(e)
 
         i = 0
@@ -3792,7 +3792,7 @@ class EntityPalette(QWidget):
         """Throws a signal emitting the current object when changed"""
 
         current = self.currentSelectedObject()
-        if current == None:
+        if current is None:
             return
 
         # holding ctrl skips the filter change step
@@ -3981,7 +3981,7 @@ class HooksDialog(QDialog):
         def val(self, v):
             settings = QSettings("settings.ini", QSettings.IniFormat)
             res = v
-            if v == None:
+            if v is None:
                 settings.remove(self.setting)
             else:
                 settings.setValue(self.setting, res)
@@ -4104,7 +4104,7 @@ class TestConfigDialog(QDialog):
         def val(self, v):
             settings = QSettings("settings.ini", QSettings.IniFormat)
             res = v
-            if v == None:
+            if v is None:
                 settings.remove(self.setting)
             else:
                 settings.setValue(self.setting, res)
@@ -5045,12 +5045,12 @@ class MainWindow(QMainWindow):
                         en = entityXML.find(
                             f"entity[@ID='{eType}'][@Subtype='{eSubtype}'][@Variant='{eVariant}']"
                         )
-                        if en == None or en.get("Invalid") == "1":
+                        if en is None or en.get("Invalid") == "1":
                             print(
                                 f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({eType}.{eVariant}.{eSubtype})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
-                            en == None or en.get("Invalid") == "1"
+                            en is None or en.get("Invalid") == "1"
                         )
 
         def coreToEntItem(e):
