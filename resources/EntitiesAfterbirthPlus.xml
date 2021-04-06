@@ -15,7 +15,7 @@
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.301.0 - Random Rune.png" Kind="Pickups" Name="Random Rune" Subtype="0" Variant="301" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.300.0 - Random Card.png" Kind="Pickups" Name="Random Card" Subtype="0" Variant="300" />
 	<entity Group=" Random" ID="5" Image="resources/Entities/5.350.0 - Trinket.png" Kind="Pickups" Name="Random Trinket" Subtype="0" Variant="350" />
-	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.0 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Subtype="0" Variant="90" />
+	<entity Group=" Random" ID="5" Image="resources/Entities/5.90.1 - Lil' Battery.png" Kind="Pickups" Name="Lil' Battery" Subtype="0" Variant="90" />
 
 	<!-- Bombs -->
 	<entity Group="Bombs" ID="5" Image="resources/Entities/5.40.0 - RBomb.png" Kind="Pickups" Name="Random Bomb" Subtype="0" Variant="40" />
@@ -78,7 +78,7 @@
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.53.0 - Eternal Chest.png" Kind="Pickups" Name="Eternal Chest" Subtype="0" Variant="53" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.52.0 - Spiked Chest.png" Kind="Pickups" Name="Spiked Chest" Subtype="0" Variant="52" />
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.54.0 - Mimic Chest.png" Kind="Pickups" Name="Mimic Chest" Subtype="0" Variant="54" />
-	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.0 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Subtype="0" Variant="69" />
+	<entity Group="Chests" ID="5" Image="resources/Entities/5.69.1 - Grab Bag.png" Kind="Pickups" Name="Grab Bag" Subtype="0" Variant="69" />
 
 	<!-- Coins -->
 	<entity Group="Coins" ID="5" Image="resources/Entities/5.20.0 - RCoin.png" Kind="Pickups" Name="Random Coin" Subtype="0" Variant="20" />
@@ -295,7 +295,7 @@
 	<entity BaseHP="20" Group="Organs" ID="287" Image="resources/Entities/287.0.0 - Mom's Dead Hand.png" Kind="Enemies" Name="Mom's Dead Hand" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Group="Organs" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
-	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr..png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr.png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.0.0 - Nerve Ending.png" Kind="Enemies" Name="Nerve Ending" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.1.0 - Nerve Ending 2.png" Kind="Enemies" Name="Nerve Ending 2" Subtype="0" Variant="1" />
 
@@ -566,7 +566,7 @@
 	<entity Group="Grid" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
 	<entity Group="Grid" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" IsGrid="1" />
-	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" IsGrid="1" />
+	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Reward Plate.png" Kind="Stage" Name="Reward Plate" Subtype="0" Variant="1" IsGrid="1" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" IsGrid="1" />
 
 	<!-- Live Bombs -->
@@ -597,7 +597,7 @@
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" IsGrid="1" />
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" IsGrid="1" />
 	<entity BaseHP="0" Group="Other" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Kind="Stage" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1" />
-	<entity ID="2" Kind="Stage" Group="Other" Image="resources/Entities/2.0.9 - Chaos Tear.png" Name="Chaos Tear" Subtype="0" Variant="9" />
+	<entity ID="2" Kind="Stage" Group="Other" Image="resources/Entities/2.9.0 - Chaos Tear.png" Name="Chaos Tear" Subtype="0" Variant="9" />
 
 	<!-- Poop -->
 	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
@@ -1324,23 +1324,23 @@
 	<!--——— Unused ———-->
 
 	<!-- Misc -->
-	<entity Image="resources/Entities/216.1.0 - Swinger Head.png" ID="216" Variant="1" Name="Swinger Head" BaseHP="38" />
+	<entity Image="resources/Entities/221.1.0 - Swinger Head.png" ID="216" Variant="1" Name="Swinger Head" BaseHP="38" />
 	<entity Image="resources/Entities/216.10.0 - Swinger Neck.png" ID="216" Variant="10" Name="Swinger Neck" BaseHP="25" />
 	<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Name="Pooter (no shoot)" Subtype="0" Variant="2" />
 	<entity Image="resources/Entities/1500.0.0 - Poop.png" Name="Pushable Poop" ID="245" Subtype="0" Variant="0" />
 
 	<!-- Tears -->
 	<entity ID="2" Image="resources/Entities/2.0.0 - Tear.png" Name="Tear" Subtype="0" Variant="0" />
-	<entity ID="2" Image="resources/Entities/2.0.1 - Blood Tear.png" Name="Blood Tear" Subtype="0" Variant="1" />
-	<entity ID="2" Image="resources/Entities/2.0.2 - Tooth Tear.png" Name="Tooth Tear" Subtype="0" Variant="2" />
-	<entity ID="2" Image="resources/Entities/2.0.3 - Metallic Tear.png" Name="Metallic Tear" Subtype="0" Variant="3" />
-	<entity ID="2" Image="resources/Entities/2.0.4 - Bob's Tear.png" Name="Bob's Tear" Subtype="0" Variant="4" />
-	<entity ID="2" Image="resources/Entities/2.0.5 - Fire Tear.png" Name="Fire Tear" Subtype="0" Variant="5" />
-	<entity ID="2" Image="resources/Entities/2.0.6 - Dark Matter Tear.png" Name="Dark Matter Tear" Subtype="0" Variant="6" />
-	<entity ID="2" Image="resources/Entities/2.0.7 - Mysterious Tear.png" Name="Mysterious Tear" Subtype="0" Variant="7" />
-	<entity ID="2" Image="resources/Entities/2.0.8 - Scythe Tear.png" Name="Scythe Tear" Subtype="0" Variant="8" />
-	<entity ID="2" Image="resources/Entities/2.0.10 - Shield Tear.png" Name="Shield Tear" Subtype="0" Variant="10" />
-	<entity ID="2" Image="resources/Entities/2.0.11 - Cupid Tear.png" Name="Cupid Tear" Subtype="0" Variant="11" />
+	<entity ID="2" Image="resources/Entities/2.1.0 - Blood Tear.png" Name="Blood Tear" Subtype="0" Variant="1" />
+	<entity ID="2" Image="resources/Entities/2.2.0 - Tooth Tear.png" Name="Tooth Tear" Subtype="0" Variant="2" />
+	<entity ID="2" Image="resources/Entities/2.3.0 - Metallic Tear.png" Name="Metallic Tear" Subtype="0" Variant="3" />
+	<entity ID="2" Image="resources/Entities/2.4.0 - Bob's Tear.png" Name="Bob's Tear" Subtype="0" Variant="4" />
+	<entity ID="2" Image="resources/Entities/2.5.0 - Fire Tear.png" Name="Fire Tear" Subtype="0" Variant="5" />
+	<entity ID="2" Image="resources/Entities/2.6.0 - Dark Matter Tear.png" Name="Dark Matter Tear" Subtype="0" Variant="6" />
+	<entity ID="2" Image="resources/Entities/2.7.0 - Mysterious Tear.png" Name="Mysterious Tear" Subtype="0" Variant="7" />
+	<entity ID="2" Image="resources/Entities/2.8.0 - Scythe Tear.png" Name="Scythe Tear" Subtype="0" Variant="8" />
+	<entity ID="2" Image="resources/Entities/2.10.0 - Shield Tear.png" Name="Shield Tear" Subtype="0" Variant="10" />
+	<entity ID="2" Image="resources/Entities/2.11.0 - Cupid Tear.png" Name="Cupid Tear" Subtype="0" Variant="11" />
 	<entity ID="9" Image="resources/Entities/9.0.0 - Enemy Tear.png" Name="Enemy Tear" Subtype="0" Variant="0" />
 	<entity ID="9" Image="resources/Entities/9.0.1 - Bone.png" Name="Bone" Subtype="0" Variant="1" />
 	<entity ID="9" Image="resources/Entities/9.0.2 - Fire.png" Name="Fire" Subtype="0" Variant="2" />

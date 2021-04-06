@@ -431,7 +431,7 @@
 	<entity BaseHP="20" Group="Organs" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="229" Image="resources/Entities/229.1.0 - Planetoid.png" Kind="Enemies" Name="Planetoid" Variant="1" Subtype="0" />
 	<entity BaseHP="40" Group="Organs" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
-	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr..png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr.png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.0.0 - Nerve Ending.png" Kind="Enemies" Name="Nerve Ending" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.1.0 - Nerve Ending 2.png" Kind="Enemies" Name="Nerve Ending 2" Subtype="0" Variant="1" />
 	<entity BaseHP="80" Champion="1" Group="Organs" ID="856" Image="resources/Entities/856.0.0 - Gasbag.png" Kind="Enemies" Name="Gasbag" Variant="0" Subtype="0" />

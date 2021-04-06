@@ -68,10 +68,10 @@ def checkNum(s):
 #       XML Data       #
 ########################
 
-"""
-Returns the current compatibility mode, and the sub version if it exists
-"""
 def getGameVersion():
+    """
+    Returns the current compatibility mode, and the sub version if it exists
+    """
     # default mode if not set
     mode = settings.value("CompatibilityMode", "Afterbirth+")
 
@@ -328,8 +328,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         isEffect = i == 1000
         if isEffect:
             i = 999
-        s = en.get("subtype") or "0"
         v = en.get("variant") or "0"
+        s = en.get("subtype") or "0"
 
         if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
             print("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
@@ -342,7 +342,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
             )
             or ""
         )
-        print("LOADING: %s" % anmPath)
+        print("LOADING:", anmPath)
         if not os.path.isfile(anmPath):
             anmPath = (
                 linuxPathSensitivityTraining(
@@ -351,7 +351,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
                 or ""
             )
 
-            print("REDIRECT LOADING: %s" % anmPath)
+            print("REDIRECT LOADING:", anmPath)
             if not os.path.isfile(anmPath):
                 print("Skipping: Invalid anm2!")
                 return None
@@ -371,13 +371,15 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
                 resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png'
             )
             img.save(filename, "PNG")
+        else:
+            print(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
 
         # Write the modded entity to the entityXML temporarily for runtime
         entityTemp = ET.Element("entity")
         entityTemp.set("Name", en.get("name"))
         entityTemp.set("ID", str(i))
-        entityTemp.set("Subtype", s)
         entityTemp.set("Variant", v)
+        entityTemp.set("Subtype", s)
         entityTemp.set("Image", filename)
 
         def condSet(setName, name):
@@ -516,8 +518,8 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
                 formatFix = QImage(editorImgPath)
                 formatFix.save(editorImgPath)
 
-        en.set("Subtype", s)
         en.set("Variant", v)
+        en.set("Subtype", s)
 
         en.set("BaseHP", entXML and entXML.get("baseHP") or en.get("BaseHP"))
         en.set("Boss", entXML and entXML.get("boss") or en.get("Boss"))
@@ -1054,12 +1056,12 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            roomType = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
-            if roomType is not None and len(roomType) > 0:
-                print("Warning: Unknown room type.")
-                iconType = roomType[0]
-                q = QPixmap(iconType.get("Icon"))
+            roomTypes = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
+            if len(roomTypes) > 0:
+                q = QPixmap(roomTypes[0].get("Icon"))
                 painter.drawPixmap(2, 3, q)
+            else:
+                print("Warning: Unknown room type during paintEvent:", room.getDesc())
 
             # Top Text
             font = painter.font()
@@ -1242,7 +1244,6 @@ class Entity(QGraphicsItem):
             self.baseHP = None
             self.boss = None
             self.champion = None
-            self.pixmap = None
             self.known = False
             self.invalid = False
             self.placeVisual = None
@@ -1273,7 +1274,7 @@ class Entity(QGraphicsItem):
                 )
             except:
                 print(
-                    f"Entity {t}, Variant {variant}, Subtype {subtype} expected, but was not found"
+                    f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
                 )
                 en = None
 
@@ -1825,7 +1826,7 @@ class Entity(QGraphicsItem):
             x = (xc * 26 - width) / 2
             y = yc * 26 - height
 
-            renderFunc(x, y, rendered)
+            renderFunc(int(x), int(y), rendered)
 
             # if the offset is high enough, draw an indicator of the actual position
             if not self.entity.disableOffsetIndicator and (
@@ -2008,7 +2009,7 @@ class EntityStack(QGraphicsItem):
             pix = item.entity.iconpixmap
             self.spinners[i].setPos(w - 8, r.bottom() - 26)
             w += 4
-            painter.drawPixmap(w, r.bottom() - 20 - pix.height(), pix)
+            painter.drawPixmap(int(w), int(r.bottom() - 20 - pix.height()), pix)
 
             # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity.weight))
             w += pix.width()
@@ -2021,7 +2022,7 @@ class EntityStack(QGraphicsItem):
         for item in self.items:
             dx, dy = 26, 26
             pix = item.entity.iconpixmap
-            if pix:
+            if pix is not None:
                 dx, dy = pix.rect().width(), pix.rect().height()
             width = width + dx
             height = max(height, dy)
@@ -2049,6 +2050,9 @@ class EntityStack(QGraphicsItem):
 
 
 class Door(QGraphicsItem):
+    Image = None
+    DisabledImage = None
+
     def __init__(self, doorItem):
         QGraphicsItem.__init__(self)
 
@@ -2073,7 +2077,7 @@ class Door(QGraphicsItem):
         else:
             self.moveBy(0, -13)
 
-        if not hasattr(Door, "Image"):
+        if not Door.Image:
             Door.Image = QImage("resources/Backgrounds/Door.png")
             Door.DisabledImage = QImage("resources/Backgrounds/DisabledDoor.png")
 
@@ -2486,7 +2490,11 @@ class Room(QListWidgetItem):
 
         self.gridSpawns = newGridSpawns
 
-    def getDesc(info, name, difficulty, weight):
+    def getDesc(self):
+        name = self.name
+        difficulty = self.difficulty
+        weight = self.weight
+        info = self.info
         return f"{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}"
 
     def setToolTip(self):
@@ -2498,24 +2506,21 @@ class Room(QListWidgetItem):
             else self.lastTestTime.astimezone().strftime("%x %I:%M %p")
         )
 
-        tip = (
-            Room.getDesc(self.info, self.name, self.difficulty, self.weight)
-            + f"\nLast Tested: {lastTest}"
-        )
+        tip = self.getDesc() + f"\nLast Tested: {lastTest}"
 
         QListWidgetItem.setToolTip(self, tip)
 
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        roomType = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
-        if roomType == None or len(roomType) == 0:
-            print("Warning: Unknown room type.")
+        roomTypes = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
+        if len(roomTypes) == 0:
+            print(
+                "Warning: Unknown room type during renderDisplayIcon:", self.getDesc()
+            )
             return
 
-        iconType = roomType[0]
-        i = QIcon(iconType.get("Icon"))
-
+        i = QIcon(roomTypes[0].get("Icon"))
         self.setIcon(i)
 
     class _SpawnIter:
@@ -2630,7 +2635,7 @@ class RoomDelegate(QStyledItemDelegate):
         QStyledItemDelegate.paint(self, painter, option, index)
 
         item = mainWindow.roomList.list.item(index.row())
-        if item and item.data(100):
+        if item is not None and item.data(100):
             painter.drawPixmap(option.rect.right() - 19, option.rect.top(), self.pixmap)
 
 
@@ -3367,7 +3372,7 @@ class RoomSelector(QWidget):
         """Removes selected room (no takebacks)"""
 
         rooms = self.selectedRooms()
-        if rooms == None or len(rooms) == 0:
+        if rooms is None or len(rooms) == 0:
             return
 
         msgBox = QMessageBox(
@@ -3545,15 +3550,15 @@ class EntityGroupItem(object):
 
 
 class EntityItem(QStandardItem):
-    """A single entity, pretty much just an icon and a few params."""
+    """A single entity palette entry, not the in-editor Entity"""
 
-    def __init__(self, name, ID, subtype, variant, iconPath):
+    def __init__(self, name, ID, variant, subtype, iconPath):
         QStandardItem.__init__(self)
 
         self.name = name
         self.ID = ID
-        self.subtype = subtype
         self.variant = variant
+        self.subtype = subtype
         self.icon = QIcon(iconPath)
 
         self.setToolTip(name)
@@ -3572,26 +3577,31 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
-            g = en.get("Group")
-            k = en.get("Kind")
-
-            if self.kind == k or self.kind == None:
-                if g and g not in self.groups:
+            if self.kind is None or self.kind == en.get("Kind"):
+                g = en.get("Group")
+                if not (g is None or g in self.groups):
                     self.groups[g] = EntityGroupItem(g)
 
-                imgPath = en.get("Image")
-                if not (imgPath and os.path.exists(imgPath)):
+                t = en.get("ID")
+                variant = en.get("Variant")
+                subtype = en.get("Subtype")
+
+                try:
+                    imgPath = Path(en.get("Image"))
+                except:
+                    traceback.print_exception(*sys.exc_info())
+                    imgPath = Path()
+
+                if not imgPath.exists():
+                    print(
+                        f"Could not find Entity {t}.{variant}.{subtype}'s palette icon:",
+                        imgPath,
+                    )
                     en.set("Image", "resources/Entities/questionmark.png")
 
-                e = EntityItem(
-                    en.get("Name"),
-                    en.get("ID"),
-                    en.get("Subtype"),
-                    en.get("Variant"),
-                    en.get("Image"),
-                )
+                e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
 
-                if g != None:
+                if g is not None:
                     self.groups[g].objects.append(e)
 
         i = 0
@@ -3792,7 +3802,7 @@ class EntityPalette(QWidget):
         """Throws a signal emitting the current object when changed"""
 
         current = self.currentSelectedObject()
-        if current == None:
+        if current is None:
             return
 
         # holding ctrl skips the filter change step
@@ -3981,7 +3991,7 @@ class HooksDialog(QDialog):
         def val(self, v):
             settings = QSettings("settings.ini", QSettings.IniFormat)
             res = v
-            if v == None:
+            if v is None:
                 settings.remove(self.setting)
             else:
                 settings.setValue(self.setting, res)
@@ -4104,7 +4114,7 @@ class TestConfigDialog(QDialog):
         def val(self, v):
             settings = QSettings("settings.ini", QSettings.IniFormat)
             res = v
-            if v == None:
+            if v is None:
                 settings.remove(self.setting)
             else:
                 settings.setValue(self.setting, res)
@@ -5045,12 +5055,12 @@ class MainWindow(QMainWindow):
                         en = entityXML.find(
                             f"entity[@ID='{eType}'][@Subtype='{eSubtype}'][@Variant='{eVariant}']"
                         )
-                        if en == None or en.get("Invalid") == "1":
+                        if en is None or en.get("Invalid") == "1":
                             print(
                                 f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({eType}.{eVariant}.{eSubtype})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
-                            en == None or en.get("Invalid") == "1"
+                            en is None or en.get("Invalid") == "1"
                         )
 
         def coreToEntItem(e):
