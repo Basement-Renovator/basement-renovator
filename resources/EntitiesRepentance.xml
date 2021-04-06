@@ -330,7 +330,7 @@
 	<entity BaseHP="20" Group="Organs" ID="287" Image="resources/Entities/287.0.0 - Mom's Dead Hand.png" Kind="Enemies" Name="Mom's Dead Hand" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Group="Organs" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
-	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr..png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
+	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr.png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.0.0 - Nerve Ending.png" Kind="Enemies" Name="Nerve Ending" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="231" Image="resources/Entities/231.1.0 - Nerve Ending 2.png" Kind="Enemies" Name="Nerve Ending 2" Subtype="0" Variant="1" />
 
@@ -601,7 +601,7 @@
 	<entity Group="Grid" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
 	<entity Group="Grid" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" IsGrid="1" />
-	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Gift Plate.png" Kind="Stage" Name="Gift Plate" Subtype="0" Variant="1" IsGrid="1" />
+	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.1 - Reward Plate.png" Kind="Stage" Name="Reward Plate" Subtype="0" Variant="1" IsGrid="1" />
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Kind="Stage" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" IsGrid="1" />
 
 	<!-- Live Bombs -->

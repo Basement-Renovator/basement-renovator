@@ -68,10 +68,10 @@ def checkNum(s):
 #       XML Data       #
 ########################
 
-"""
-Returns the current compatibility mode, and the sub version if it exists
-"""
 def getGameVersion():
+    """
+    Returns the current compatibility mode, and the sub version if it exists
+    """
     # default mode if not set
     mode = settings.value("CompatibilityMode", "Afterbirth+")
 
@@ -328,8 +328,8 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         isEffect = i == 1000
         if isEffect:
             i = 999
-        s = en.get("subtype") or "0"
         v = en.get("variant") or "0"
+        s = en.get("subtype") or "0"
 
         if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
             print("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
@@ -342,7 +342,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
             )
             or ""
         )
-        print("LOADING: %s" % anmPath)
+        print("LOADING:", anmPath)
         if not os.path.isfile(anmPath):
             anmPath = (
                 linuxPathSensitivityTraining(
@@ -351,7 +351,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
                 or ""
             )
 
-            print("REDIRECT LOADING: %s" % anmPath)
+            print("REDIRECT LOADING:", anmPath)
             if not os.path.isfile(anmPath):
                 print("Skipping: Invalid anm2!")
                 return None
@@ -371,13 +371,15 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
                 resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png'
             )
             img.save(filename, "PNG")
+        else:
+            print(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
 
         # Write the modded entity to the entityXML temporarily for runtime
         entityTemp = ET.Element("entity")
         entityTemp.set("Name", en.get("name"))
         entityTemp.set("ID", str(i))
-        entityTemp.set("Subtype", s)
         entityTemp.set("Variant", v)
+        entityTemp.set("Subtype", s)
         entityTemp.set("Image", filename)
 
         def condSet(setName, name):
@@ -516,8 +518,8 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
                 formatFix = QImage(editorImgPath)
                 formatFix.save(editorImgPath)
 
-        en.set("Subtype", s)
         en.set("Variant", v)
+        en.set("Subtype", s)
 
         en.set("BaseHP", entXML and entXML.get("baseHP") or en.get("BaseHP"))
         en.set("Boss", entXML and entXML.get("boss") or en.get("Boss"))
@@ -1242,7 +1244,6 @@ class Entity(QGraphicsItem):
             self.baseHP = None
             self.boss = None
             self.champion = None
-            self.pixmap = None
             self.known = False
             self.invalid = False
             self.placeVisual = None
@@ -1273,7 +1274,7 @@ class Entity(QGraphicsItem):
                 )
             except:
                 print(
-                    f"Entity {t}, Variant {variant}, Subtype {subtype} expected, but was not found"
+                    f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
                 )
                 en = None
 
@@ -2021,7 +2022,7 @@ class EntityStack(QGraphicsItem):
         for item in self.items:
             dx, dy = 26, 26
             pix = item.entity.iconpixmap
-            if pix:
+            if pix is not None:
                 dx, dy = pix.rect().width(), pix.rect().height()
             width = width + dx
             height = max(height, dy)
@@ -2049,6 +2050,9 @@ class EntityStack(QGraphicsItem):
 
 
 class Door(QGraphicsItem):
+    Image = None
+    DisabledImage = None
+
     def __init__(self, doorItem):
         QGraphicsItem.__init__(self)
 
@@ -2073,7 +2077,7 @@ class Door(QGraphicsItem):
         else:
             self.moveBy(0, -13)
 
-        if not hasattr(Door, "Image"):
+        if not Door.Image:
             Door.Image = QImage("resources/Backgrounds/Door.png")
             Door.DisabledImage = QImage("resources/Backgrounds/DisabledDoor.png")
 
@@ -2502,10 +2506,7 @@ class Room(QListWidgetItem):
             else self.lastTestTime.astimezone().strftime("%x %I:%M %p")
         )
 
-        tip = (
-            self.getDesc()
-            + f"\nLast Tested: {lastTest}"
-        )
+        tip = self.getDesc() + f"\nLast Tested: {lastTest}"
 
         QListWidgetItem.setToolTip(self, tip)
 
@@ -2514,7 +2515,9 @@ class Room(QListWidgetItem):
 
         [roomType] = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
         if roomType is None:
-            print("Warning: Unknown room type during renderDisplayIcon:", self.getDesc())
+            print(
+                "Warning: Unknown room type during renderDisplayIcon:", self.getDesc()
+            )
             return
 
         i = QIcon(roomType.get("Icon"))
@@ -2632,7 +2635,7 @@ class RoomDelegate(QStyledItemDelegate):
         QStyledItemDelegate.paint(self, painter, option, index)
 
         item = mainWindow.roomList.list.item(index.row())
-        if item and item.data(100):
+        if item is not None and item.data(100):
             painter.drawPixmap(option.rect.right() - 19, option.rect.top(), self.pixmap)
 
 
@@ -3547,15 +3550,15 @@ class EntityGroupItem(object):
 
 
 class EntityItem(QStandardItem):
-    """A single entity, pretty much just an icon and a few params."""
+    """A single entity palette entry, not the in-editor Entity"""
 
-    def __init__(self, name, ID, subtype, variant, iconPath):
+    def __init__(self, name, ID, variant, subtype, iconPath):
         QStandardItem.__init__(self)
 
         self.name = name
         self.ID = ID
-        self.subtype = subtype
         self.variant = variant
+        self.subtype = subtype
         self.icon = QIcon(iconPath)
 
         self.setToolTip(name)
@@ -3575,21 +3578,28 @@ class EntityGroupModel(QAbstractListModel):
 
         for en in enList:
             if self.kind is None or self.kind == en.get("Kind"):
-            g = en.get("Group")
+                g = en.get("Group")
                 if not (g is None or g in self.groups):
                     self.groups[g] = EntityGroupItem(g)
 
-                imgPath = en.get("Image")
-                if not (imgPath and os.path.exists(imgPath)):
+                t = en.get("ID")
+                variant = en.get("Variant")
+                subtype = en.get("Subtype")
+
+                try:
+                    imgPath = Path(en.get("Image"))
+                except:
+                    traceback.print_exception(*sys.exc_info())
+                    imgPath = Path()
+
+                if not imgPath.exists():
+                    print(
+                        f"Could not find Entity {t}.{variant}.{subtype}'s palette icon:",
+                        imgPath,
+                    )
                     en.set("Image", "resources/Entities/questionmark.png")
 
-                e = EntityItem(
-                    en.get("Name"),
-                    en.get("ID"),
-                    en.get("Subtype"),
-                    en.get("Variant"),
-                    en.get("Image"),
-                )
+                e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
 
                 if g is not None:
                     self.groups[g].objects.append(e)
