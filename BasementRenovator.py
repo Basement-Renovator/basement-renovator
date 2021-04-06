@@ -1056,9 +1056,9 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            [roomType] = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
-            if roomType is not None:
-                q = QPixmap(roomType.get("Icon"))
+            roomTypes = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
+            if len(roomTypes) > 0:
+                q = QPixmap(roomTypes[0].get("Icon"))
                 painter.drawPixmap(2, 3, q)
             else:
                 print("Warning: Unknown room type during paintEvent:", room.getDesc())
@@ -2513,14 +2513,14 @@ class Room(QListWidgetItem):
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        [roomType] = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
-        if roomType is None:
+        roomTypes = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
+        if len(roomTypes) == 0:
             print(
                 "Warning: Unknown room type during renderDisplayIcon:", self.getDesc()
             )
             return
 
-        i = QIcon(roomType.get("Icon"))
+        i = QIcon(roomTypes[0].get("Icon"))
         self.setIcon(i)
 
     class _SpawnIter:
