@@ -93,6 +93,55 @@
 	<stage Name="Chest" BaseGamePath="17.chest" Stage="11" StageType="1" Pattern="chest">
 		<Gfx BGPrefix="resources/Backgrounds/11_chest" />
 	</stage>
+	
+	<stage Name="Downpour" BaseGamePath="27.downpour" Stage="1" StageType="4" Pattern="downpour">
+		<Gfx BGPrefix="resources/Backgrounds/01x_downpour">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_downpour.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_downpour.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Dross" BaseGamePath="28.dross" Stage="1" StageType="5" Pattern="dross">
+		<Gfx BGPrefix="resources/Backgrounds/02x_dross">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_dross.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_dross.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Mines" BaseGamePath="29.mines" Stage="3" StageType="4" Pattern="mines">
+		<Gfx BGPrefix="resources/Backgrounds/03x_mines">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_mines.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_secretroom.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Ashpit" BaseGamePath="30.ashpit" Stage="3" StageType="5" Pattern="ashpit">
+		<Gfx BGPrefix="resources/Backgrounds/04x_ashpit">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_ashpit.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_ashpit.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Mausoleum" BaseGamePath="31.mausoleum" Stage="5" StageType="4" Pattern="mausoleum">
+		<Gfx BGPrefix="resources/Backgrounds/05x_mausoleum">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_mausoleum.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_mausoleum.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Gehenna" BaseGamePath="32.gehenna" Stage="5" StageType="5" Pattern="gehenna">
+		<Gfx BGPrefix="resources/Backgrounds/06x_gehenna">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_gehenna.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_gehenna.png" />
+		</Gfx>
+	</stage>
+	<stage Name="Corpse" BaseGamePath="33.corpse" Stage="7" StageType="4" Pattern="corpse">
+		<Gfx BGPrefix="resources/Backgrounds/07x_corpse">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_corpse.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_corpse.png" />
+		</Gfx>
+	</stage>
+	<!-- <stage Name="Mortis" BaseGamePath="34.mortis" Stage="7" StageType="5" Pattern="mortis">
+		<Gfx BGPrefix="resources/Backgrounds/08x_mortis">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_mortis.png" />
+			<Entity ID="1000" Image="resources/Backgrounds/rocks_mortis.png" />
+		</Gfx>
+	</stage> -->
 
 	<stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
 		<Gfx StageGfx="Basement [Greed]" />
