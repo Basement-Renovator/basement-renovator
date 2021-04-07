@@ -194,6 +194,7 @@
 	<entity BaseHP="15" Champion="1" Group="Blobs" ID="872" Image="resources/Entities/872.0.0 - Cloggy.png" Kind="Enemies" Name="Cloggy" Variant="0" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Blobs" ID="282" Image="resources/Entities/282.0.0 - Mega Clotty.png" Kind="Enemies" Name="Mega Clotty" Subtype="0" Variant="0" />
 	<entity BaseHP="15" Champion="1" Group="Blobs" ID="290" Image="resources/Entities/290.0.0 - Meatball.png" Kind="Enemies" Name="Meatball" Subtype="0" Variant="0" />
+	<entity BaseHP="20" Group="Blobs" ID="892" Image="resources/Entities/892.0.0 - Poofer.png" Kind="Enemies" Name="Poofer" Variant="0" Subtype="0" />
 
 	<!-- Boils -->
 	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Kind="Enemies" Name="Boil" Subtype="0" Variant="0" />
@@ -229,6 +230,7 @@
 	<entity BaseHP="80" Group="Fatties" ID="831" Image="resources/Entities/831.10.0 - Gutted Fatty Eye.png" Kind="Enemies" Name="Gutted Fatty Eye" Variant="10" Subtype="0" />
 	<entity BaseHP="22" Champion="1" Group="Fatties" ID="831" Image="resources/Entities/831.20.0 - Festering Guts.png" Kind="Enemies" Name="Festering Guts" Variant="20" Subtype="0" />
 	<entity BaseHP="60" Champion="1" Group="Fatties" ID="858" Image="resources/Entities/858.0.0 - Vessel.png" Kind="Enemies" Name="Vessel" Variant="0" Subtype="0" />
+	<entity BaseHP="80" Group="Fatties" ID="888" Image="resources/Entities/888.0.0 - Shady.png" Kind="Enemies" Name="Shady" Variant="0" Subtype="0" />
 
 	<!-- Flies -->
 	<entity BaseHP="3" Group="Flies" ID="13" Image="resources/Entities/13.0.0 - Fly.png" Kind="Enemies" Name="Fly" Subtype="0" Variant="0" />
@@ -248,6 +250,7 @@
 	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.2.0 - Drowned Boom Fly.png" Kind="Enemies" Name="Drowned Boom Fly" Subtype="0" Variant="2" />
 	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.3.0 - Dragon Fly.png" Kind="Enemies" Name="Dragon Fly" Variant="3" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.3.1 - Dragon Fly X.png" Kind="Enemies" Name="Dragon Fly X" Variant="3" Subtype="1" />
+	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.3.100 - Dragon Fly (random).png" Kind="Enemies" Name="Dragon Fly (random)" Variant="3" Subtype="100" />
 	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.4.0 - Bone Fly.png" Kind="Enemies" Name="Bone Fly" Variant="4" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Flies" ID="25" Image="resources/Entities/25.5.0 - Sick Boom Fly.png" Kind="Enemies" Name="Sick Boom Fly" Variant="5" Subtype="0" />
 	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Kind="Enemies" Name="Sucker" Subtype="0" Variant="0" />
@@ -305,6 +308,10 @@
 	<entity BaseHP="16" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.0.0 - Canary.png" Kind="Enemies" Name="Canary" Variant="0" Subtype="0" />
 	<entity BaseHP="18" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.1.0 - Foreigner.png" Kind="Enemies" Name="Foreigner" Variant="1" Subtype="0" />
 	<entity BaseHP="26" Champion="1" Group="Gapers" ID="844" Image="resources/Entities/844.0.0 - Bombgagger.png" Kind="Enemies" Name="Bombgagger" Variant="0" Subtype="0" />
+	<entity BaseHP="12" Champion="1" Group="Gapers" ID="890" Image="resources/Entities/890.0.0 - Maze Roamer (white).png" Kind="Enemies" Name="Maze Roamer (white)" Variant="0" Subtype="0" />
+	<entity BaseHP="12" Champion="1" Group="Gapers" ID="890" Image="resources/Entities/890.0.1 - Maze Roamer (red).png" Kind="Enemies" Name="Maze Roamer (red)" Variant="0" Subtype="1" />
+	<entity BaseHP="18" Champion="1" Group="Gapers" ID="891" Image="resources/Entities/891.0.0 - Goat.png" Kind="Enemies" Name="Goat" Variant="0" Subtype="0" />
+	<entity BaseHP="24" Champion="1" Group="Gapers" ID="891" Image="resources/Entities/891.1.0 - Black Goat.png" Kind="Enemies" Name="Black Goat" Variant="1" Subtype="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="11" Image="resources/Entities/11.1.0 - Pacer.png" Kind="Enemies" Name="Pacer" Subtype="0" Variant="1" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="11" Image="resources/Entities/11.0.0 - Gusher.png" Kind="Enemies" Name="Gusher" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Gapers" ID="238" Image="resources/Entities/238.0.0 - Splasher.png" Kind="Enemies" Name="Splasher" Subtype="0" Variant="0" />
@@ -380,6 +387,7 @@
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.2.0 - Cursed Death's Head.png" Kind="Enemies" Name="Cursed Death's Head" Variant="2" Subtype="0" />
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.3.0 - Brimstone Death's Head.png" Kind="Enemies" Name="Brimstone Death's Head" Variant="3" Subtype="0" />
 	<entity BaseHP="80" Group="Maws" ID="212" Image="resources/Entities/212.4.0 - Redskull.png" Kind="Enemies" Name="Redskull" Variant="4" Subtype="0" />
+	<entity BaseHP="20" Group="Maws" ID="887" Image="resources/Entities/887.0.0 - Dusty Death's Head.png" Kind="Enemies" Name="Dusty Death's Head" Variant="0" Subtype="0" />
 	<entity BaseHP="22" Champion="1" Group="Maws" ID="828" Image="resources/Entities/828.0.0 - Necro.png" Kind="Enemies" Name="Necro" Variant="0" Subtype="0" />
 
 	<!-- Mulligans -->
@@ -414,8 +422,16 @@
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Kind="Enemies" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Kind="Enemies" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Kind="Enemies" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.0 - Slog.png" Kind="Enemies" Name="Slog" Variant="2" Subtype="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.0 - Cyst.png" Kind="Enemies" Name="Cyst" Variant="0" Subtype="0" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.0 - Slog (random).png" Kind="Enemies" Name="Slog (random)" Variant="2" Subtype="0"/>
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.1 - Slog (left).png" Kind="Enemies" Name="Slog (left)" Variant="2" Subtype="1" MirrorX="40.2.3" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.2 - Slog (up).png" Kind="Enemies" Name="Slog (up)" Variant="2" Subtype="2" MirrorY="40.2.4" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.3 - Slog (right).png" Kind="Enemies" Name="Slog (right)" Variant="2" Subtype="3" MirrorX="40.2.1" />
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.4 - Slog (down).png" Kind="Enemies" Name="Slog (down)" Variant="2" Subtype="4" MirrorY="40.2.2" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.0 - Cyst (random).png" Kind="Enemies" Name="Cyst (random)" Variant="0" Subtype="0" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.1 - Cyst (left).png" Kind="Enemies" Name="Cyst (left)" Variant="0" Subtype="1" MirrorX="862.0.3" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.2 - Cyst (up).png" Kind="Enemies" Name="Cyst (up)" Variant="0" Subtype="2" MirrorY="862.0.4" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.3 - Cyst (right).png" Kind="Enemies" Name="Cyst (right)" Variant="0" Subtype="3" MirrorX="862.0.1" />
+	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.4 - Cyst (down).png" Kind="Enemies" Name="Cyst (down)" Variant="0" Subtype="4" MirrorY="862.0.2" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.2.0 - Dead Meat.png" Kind="Enemies" Name="Dead Meat" Variant="2" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
@@ -489,6 +505,8 @@
 	<entity BaseHP="20" Group="Spiders" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Kind="Enemies" Name="Big Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="6.5" Group="Spiders" ID="814" Image="resources/Entities/814.0.0 - Strider.png" Kind="Enemies" Name="Strider" Variant="0" Subtype="0" />
 	<entity BaseHP="4.5" Group="Spiders" ID="884" Image="resources/Entities/884.0.0 - Swarm Spider.png" Kind="Enemies" Name="Swarm Spider" Variant="0" Subtype="0" />
+	<entity BaseHP="4.5" Group="Spiders" ID="884" Image="resources/Entities/884.0.2 - Swarm Spider (two).png" Kind="Enemies" Name="Swarm Spider (two)" Variant="0" Subtype="2" />
+	<entity BaseHP="4.5" Group="Spiders" ID="884" Image="resources/Entities/884.0.4 - Swarm Spider (four).png" Kind="Enemies" Name="Swarm Spider (four)" Variant="0" Subtype="4" />
 	<entity BaseHP="12" Group="Spiders" ID="818" Image="resources/Entities/818.0.0 - Rock Spider.png" Kind="Enemies" Name="Rock Spider" Variant="0" Subtype="0" />
 	<entity BaseHP="12" Group="Spiders" ID="818" Image="resources/Entities/818.0.1 - Rock Spider.png" Kind="Enemies" Name="Rock Spider" Variant="0" Subtype="1" />
 	<entity BaseHP="12" Group="Spiders" ID="818" Image="resources/Entities/818.0.2 - Rock Spider.png" Kind="Enemies" Name="Rock Spider" Variant="0" Subtype="2" />
@@ -530,7 +548,11 @@
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.3 - Wall Hugger (Right).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" MirrorX="218.0.1" />
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.4 - Wall Hugger (Down).png" PlaceVisual="0,0.25" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" MirrorY="218.0.2" />
 	<entity BaseHP="100" Group="Spikes" ID="877" Image="resources/Entities/877.0.0 - Grudge.png" Kind="Enemies" Name="Grudge" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.0 - Spikeball.png" Kind="Enemies" Name="Spikeball" Variant="0" Subtype="0" />
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.0 - Spikeball (left).png" Kind="Enemies" Name="Spikeball (left)" Subtype="0" Variant="0" MirrorX="852.0.2"/>
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.1 - Spikeball (up).png" Kind="Enemies" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3"/>
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.2 - Spikeball (right).png" Kind="Enemies" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0"/>
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.3 - Spikeball (down).png" Kind="Enemies" Name="Spikeball (down)" Subtype="3" Variant="0" MirrorY="852.0.1" />
+	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" />
 
 	<!-- Stones -->
 	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />
@@ -573,6 +595,8 @@
 	<!-- Worms -->
 	<entity BaseHP="15" Champion="1" Group="Worms" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.0.0 - Small Maggot.png" Kind="Enemies" Name="Small Maggot" Variant="0" Subtype="0" />
+	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.3 - Small Maggot (three).png" Kind="Enemies" Name="Small Maggot (three)" Variant="10" Subtype="3"/>
+	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.5 - Small Maggot (five).png" Kind="Enemies" Name="Small Maggot (five)" Variant="10" Subtype="5"/>
 	<entity BaseHP="20" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Kind="Enemies" Name="Charger" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Worms" ID="855" Image="resources/Entities/855.0.0 - Level 2 Charger.png" Kind="Enemies" Name="Level 2 Charger" Variant="0" Subtype="0" />
 	<entity BaseHP="22" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.1.0 - Drowned Charger.png" Kind="Enemies" Name="Drowned Charger" Subtype="0" Variant="1" />
@@ -629,6 +653,10 @@
 	<entity BaseHP="200" Boss="1" Group="Chapter 1.5" ID="62" Image="resources/Entities/62.3.0 - Wormwood.png" Kind="Bosses" Name="Wormwood" Variant="3" Subtype="0" />
 	<entity BaseHP="200" Boss="1" Group="Chapter 1.5" ID="901" Image="resources/Entities/901.0.0 - Lil Blub.png" Kind="Bosses" Name="Lil Blub" Variant="0" Subtype="0" />
 	<entity BaseHP="240" Boss="1" Group="Chapter 1.5" ID="902" Image="resources/Entities/902.0.0 - Rainmaker.png" Kind="Bosses" Name="Rainmaker" Variant="0" Subtype="0" />
+	<entity BaseHP="280" Boss="1" Group="Chapter 1.5" ID="913" Image="resources/Entities/913.0.0 - Min Min.png" Kind="Bosses" Name="Min Min" Variant="0" Subtype="0" />
+	<entity BaseHP="420" Boss="1" Group="Chapter 1.5" ID="914" Image="resources/Entities/914.0.0 - Clog.png" Kind="Bosses" Name="Clog" Variant="0" Subtype="0" />
+	<entity BaseHP="380" Boss="1" Group="Chapter 1.5" ID="917" Image="resources/Entities/917.0.0 - Colostomia.png" Kind="Bosses" Name="Colostomia" Variant="0" Subtype="0" />
+	<entity BaseHP="190" Boss="1" Group="Chapter 1.5" ID="918" Image="resources/Entities/918.0.0 - Turdlet.png" Kind="Bosses" Name="Turdlet" Variant="0" Subtype="0" />
 	
 	<!-- Chapter 2 -->
 	<entity BaseHP="350" Boss="1" Group="Chapter 2" ID="28" Image="resources/Entities/28.0.0 - Chub.png" Kind="Bosses" Name="Chub" Subtype="0" Variant="0" />
@@ -653,6 +681,7 @@
 	<entity BaseHP="220" Boss="1" Group="Chapter 2" ID="403" Image="resources/Entities/403.0.0 - The Forsaken.png" Kind="Bosses" Name="The Forsaken" Subtype="0" Variant="0" />
 	<entity BaseHP="110" Boss="1" Group="Chapter 2" Kind="Bosses" ID="409" Image="resources/Entities/409.0.0 - RagMega.png" Name="Rag Mega" Variant="0" Subtype="0" />
 	<entity BaseHP="600" Boss="1" Group="Chapter 2" Kind="Bosses" ID="411" Image="resources/Entities/411.0.0 - BigHorn.png" Name="Big Horn" Variant="0" Subtype="0" />
+	<entity BaseHP="385" Boss="1" Group="Chapter 2" ID="916" Image="resources/Entities/916.0.0 - Bumbino.png" Kind="Bosses" Name="Bumbino" Variant="0" Subtype="0" />
 	
 	<!-- Chapter 2.5 -->
 	<entity BaseHP="35" Boss="1" Group="Chapter 2.5" ID="19" Image="resources/Entities/19.2.0 - Tuff Twin.png" Kind="Bosses" Name="Tuff Twin" Variant="2" Subtype="0" />
@@ -662,6 +691,8 @@
 	<entity BaseHP="240" Boss="1" Group="Chapter 2.5" ID="906" Image="resources/Entities/906.0.0 - Hornfel.png" Kind="Bosses" Name="Hornfel" Variant="0" Subtype="0" />
 	<entity BaseHP="6" Boss="1" Group="Chapter 2.5" ID="907" Image="resources/Entities/907.0.0 - Great Gideon.png" Kind="Bosses" Name="Great Gideon" Variant="0" Subtype="0" />
 	<entity BaseHP="6" Boss="1" Group="Chapter 2.5" ID="907" Image="resources/Entities/907.0.1 - Great Gideon (defeated).png" Kind="Bosses" Name="Great Gideon (defeated)" Variant="0" Subtype="1" />
+	<entity BaseHP="444" Boss="1" Group="Chapter 2.5" ID="915" Image="resources/Entities/915.0.0 - Singe.png" Kind="Bosses" Name="Singe" Variant="0" Subtype="0" />
+	<entity BaseHP="100" Group="Chapter 2.5" ID="915" Image="resources/Entities/915.1.0 - Singe's Ball.png" Kind="Bosses" Name="Singe's Ball" Variant="1" Subtype="0" />
 
 	<!-- Chapter 3 -->
 	<entity BaseHP="632.5" Boss="1" Group="Chapter 3" ID="43" Image="resources/Entities/43.0.0 - Monstro II.png" Kind="Bosses" Name="Monstro II" Subtype="0" Variant="0" />
@@ -679,14 +710,18 @@
 	<entity BaseHP="800" Boss="1" Group="Chapter 3" ID="410" Image="resources/Entities/265.1.0 - SistersVis.png" Kind="Bosses" Name="Sisters Vis" Subtype="0" Variant="0" />
 	
 	<!-- Chapter 3.5 -->
-	<entity BaseHP="620" Boss="1" Group="Chapter 3.5" ID="903" Image="resources/Entities/903.0.0 - Visage Heart.png" Kind="Bosses" Name="Visage Heart" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Boss="1" Group="Chapter 3.5" ID="903" Image="resources/Entities/903.1.0 - Visage Mask.png" Kind="Bosses" Name="Visage Mask" Variant="1" Subtype="0" />
 	<entity BaseHP="666" Boss="1" Group="Chapter 3.5" ID="904" Image="resources/Entities/904.0.0 - Siren.png" Kind="Bosses" Name="Siren" Variant="0" Subtype="0" />
 	<entity BaseHP="20" Group="Chapter 3.5" ID="904" Image="resources/Entities/904.1.0 - Siren's Skull.png" Kind="Bosses" Name="Siren's Skull" Variant="1" Subtype="0" />
 	<entity BaseHP="789" Boss="1" Group="Chapter 3.5" ID="905" Image="resources/Entities/905.0.0 - The Heretic.png" Kind="Bosses" Name="The Heretic" Variant="0" Subtype="0" />
+	<entity BaseHP="620" Boss="1" Group="Chapter 3.5" ID="903" Image="resources/Entities/903.0.0 - Visage Heart.png" Kind="Bosses" Name="Visage Heart" Variant="0" Subtype="0" />
+	<entity BaseHP="100" Boss="1" Group="Chapter 3.5" ID="903" Image="resources/Entities/903.1.0 - Visage Mask.png" Kind="Bosses" Name="Visage Mask" Variant="1" Subtype="0" />
+	<entity BaseHP="707" Boss="1" Group="Chapter 3.5" ID="920" Image="resources/Entities/920.0.0 - Horny Boys.png" Kind="Bosses" Name="Horny Boys" Variant="0" Subtype="0" />
+	<!--<entity BaseHP="792" Boss="1" Group="Chapter x.x" ID="919" Image="resources/Entities/919.0.0 - Raglich.png" Kind="Bosses" Name="Raglich" Variant="0" Subtype="0" />
+	<entity BaseHP="792" Boss="1" Group="Chapter x.x" ID="919" Image="resources/Entities/919.1.0 - Raglich Arm.png" Kind="Bosses" Name="Raglich Arm" Variant="1" Subtype="0" />
+	<entity BaseHP="500" Boss="1" Group="Chapter x.x" ID="921" Image="resources/Entities/921.0.0 - Clutch.png" Kind="Bosses" Name="Clutch" Variant="0" Subtype="0" />
+	<entity BaseHP="200" Group="Chapter x.x" ID="921" Image="resources/Entities/921.1.0 - Clutch Orbital.png" Kind="Bosses" Name="Clutch Orbital" Variant="1" Subtype="0" /> 
+	<entity BaseHP="20" Champion="1" Group="Chapter x.x" ID="889" Image="resources/Entities/889.0.0 - Clickety Clack.png" Kind="Bosses" Name="Clickety Clack" Variant="0" Subtype="0" />-->
 	
-	
-
 	<!-- Chapter 4 -->
 	<entity BaseHP="300" Boss="1" Group="Chapter 4" ID="62" Image="resources/Entities/62.1.0 - Scolex.png" Kind="Bosses" Name="Scolex" Subtype="0" Variant="1" />
 	<entity BaseHP="30" Boss="1" Group="Chapter 4" ID="76" Image="resources/Entities/76.0.0 - Blastocyst Small.png" Kind="Bosses" Name="Blastocyst Small" Subtype="0" Variant="0" />
@@ -714,6 +749,7 @@
 	<entity BaseHP="600" Boss="1" Group="Chapter 4.5" ID="911" Image="resources/Entities/911.0.0 - Rotgut.png" Kind="Bosses" Name="Rotgut" Variant="0" Subtype="0" />
 	<entity BaseHP="600" Boss="1" Group="Chapter 4.5" ID="911" Image="resources/Entities/911.1.0 - Rotgut (maggot).png" Kind="Bosses" Name="Rotgut (maggot)" Variant="1" Subtype="0" />
 	<entity BaseHP="600" Boss="1" Group="Chapter 4.5" ID="911" Image="resources/Entities/911.2.0 - Rotgut (heart).png" Kind="Bosses" Name="Rotgut (heart)" Variant="2" Subtype="0" />
+	
 
 	<!-- Special -->
 	<entity BaseHP="60" Boss="1" Group="Special" ID="82" Image="resources/Entities/82.0.0 - Headless Horseman Body.png" PlaceVisual="0.5,0" Kind="Bosses" Name="Headless Horseman Body" Subtype="0" Variant="0" />
@@ -744,6 +780,15 @@
 	<entity BaseHP="250" Boss="1" Group="Story Bosses" ID="867" Image="resources/Entities/867.0.0 - Mother's Shadow.png" Kind="Bosses" Name="Mother's Shadow" Variant="0" Subtype="0" />
 	<entity BaseHP="2222" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.0.0 - Mother.png" Kind="Bosses" Name="Mother" Variant="0" Subtype="0" />
 	<entity BaseHP="2000" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.10.0 - Mother 2.png" Kind="Bosses" Name="Mother 2" Variant="10" Subtype="0" />
+	<entity BaseHP="40" Group="Story Bosses" ID="912" Image="resources/Entities/912.20.0 - Dead Isaac.png" Kind="Bosses" Name="Dead Isaac" Variant="20" Subtype="0" />
+	<entity BaseHP="1" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.30.0 - Mother Worm.png" Kind="Bosses" Name="Mother Worm" Variant="30" Subtype="0" />
+	<entity BaseHP="10" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.100.0 - Mother Ball.png" Kind="Bosses" Name="Mother Ball" Variant="100" Subtype="0" />
+	<entity BaseHP="10" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.100.1 - Mother Ball (Medium).png" Kind="Bosses" Name="Mother Ball (Medium)" Variant="100" Subtype="1" />
+	<entity BaseHP="10" Boss="1" Group="Story Bosses" ID="912" Image="resources/Entities/912.100.2 - Mother Ball (Small).png" Kind="Bosses" Name="Mother Ball (Small)" Variant="100" Subtype="2" />
+	<entity BaseHP="1200" Boss="1" Group="Story Bosses" ID="950" Image="resources/Entities/950.0.0 - Dogma.png" Kind="Bosses" Name="Dogma" Variant="0" Subtype="0" />
+	<entity BaseHP="1200" Boss="1" Group="Story Bosses" ID="950" Image="resources/Entities/950.1.0 - Dogma's TV.png" Kind="Bosses" Name="Dogma's TV" Variant="1" Subtype="0" />
+	<entity BaseHP="1200" Boss="1" Group="Story Bosses" ID="950" Image="resources/Entities/950.2.0 - Dogma Angel.png" Kind="Bosses" Name="Dogma Angel" Variant="2" Subtype="0" />
+	<entity BaseHP="30" Group="Story Bosses" ID="950" Image="resources/Entities/950.10.0 - Dogma Angel Baby.png" Kind="Bosses" Name="Dogma Angel Baby" Variant="10" Subtype="0" />
 
 	<!-- Ultra Greed -->
 	<entity BaseHP="3500" Boss="1" Group="Ultra Greed" ID="406" Image="resources/Entities/406.0.0 - Ultra Greed.png" Kind="Bosses" Name="Ultra Greed" Subtype="0" Variant="0" />
@@ -805,9 +850,11 @@
 
 	<!-- Grid -->
 	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/rocks_generic.png" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
+	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Kind="Stage" Name="Rock (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1010" Image="resources/Entities/1010.0.0 - Spike Rock.png" Kind="Stage" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Grid" ID="1008" Image="resources/Entities/1008.0.0 - Marked Skull.png" Kind="Stage" Name="Marked Skull" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1901" Image="resources/Entities/1901.0.0 - Tall Block.png" Kind="Stage" Name="Tall Block" Variant="0" Subtype="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/pit_generic.png" InEmptyRooms="1" IsGrid="1" UsePitTiling="1" />
@@ -934,6 +981,7 @@
 	<entity BaseHP="100" Group="Other" ID="866" Image="resources/Entities/866.1.0 - Dark Esau's Pit.png" Kind="Stage" Name="Dark Esau's Pit" Variant="1" Subtype="0" />
 	<entity BaseHP="0" Group="Other" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Kind="Stage" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1" />
 	<entity ID="2" Kind="Stage" Group="Other" Image="resources/Entities/2.0.9 - Chaos Tear.png" Name="Chaos Tear" Subtype="0" Variant="9" />
+	<entity Group="Other" ID="6" Image="resources/Entities/6.14.0 - Isaac (secret).png" Kind="Stage" Name="Isaac (secret)" Variant="14" Subtype="0" />
 
 	<!-- Poop -->
 	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
@@ -962,6 +1010,12 @@
 	
 	<entity Group="Props" ID="5" Image="resources/Entities/5.380.10 - Mom's Bed.png" Kind="Stage" Name="Mom's Bed" Variant="380" Subtype="10" />
 	<entity Group="Props" ID="5" Image="resources/Entities/5.390.0 - Mom's Chest.png" Kind="Stage" Name="Mom's Chest" Variant="390" Subtype="0" />
+	<entity BaseHP="1" Group="Props" ID="960" Image="resources/Entities/960.1.0 - Mom's Dresser.png" Kind="Stages" Name="Mom's Dresser" Variant="1" Subtype="0" />
+	<entity BaseHP="1" Group="Props" ID="960" Image="resources/Entities/960.2.0 - Mom's Vanity.png" Kind="Stages" Name="Mom's Vanity" Variant="2" Subtype="0" />
+	<entity BaseHP="1" Group="Props" ID="960" Image="resources/Entities/960.3.0 - Couch.png" Kind="Stages" Name="Couch" Variant="3" Subtype="0" />
+	<entity BaseHP="1" Group="Props" ID="960" Image="resources/Entities/960.4.0 - TV.png" Kind="Stages" Name="TV" Variant="4" Subtype="0" />
+	<entity Group="Props" ID="999" Image="resources/Entities/1000.74.1 - Moms Room Carpet.png" Kind="Stage" Name="Moms Room Carpet" Variant="74" Subtype="1" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
+	<entity Group="Props" ID="999" Image="resources/Entities/1000.74.2 - Living Room Carpet.png" Kind="Stage" Name="Living Room Carpet" Variant="74" Subtype="2" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
 
 	<!-- Special Exits -->
 	<entity Group="Special Exits" ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Kind="Stage" Name="Big Chest" Subtype="0" Variant="340" />
@@ -1795,9 +1849,6 @@
 	<entity BaseHP="480" Boss="1" Group="" ID="411" Image="resources/Entities/411.1.0 - Small Hole.png" Kind="" Name="Small Hole" Variant="1" Subtype="0" />
 	<entity BaseHP="480" Boss="1" Group="" ID="411" Image="resources/Entities/411.2.0 - Big Hole.png" Kind="" Name="Big Hole" Variant="2" Subtype="0" />
 	
-	
-	<entity Group="" ID="6" Image="resources/Entities/6.14.0 - Isaac (secret).png" Kind="" Name="Isaac (secret)" Variant="14" Subtype="0" />
-	
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.8.0 - Grid Projectile.png" Kind="" Name="Grid Projectile" Variant="8" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.9.0 - Rock Projectile.png" Kind="" Name="Rock Projectile" Variant="9" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="9" Image="resources/Entities/9.11.0 - Meat Projectile.png" Kind="" Name="Meat Projectile" Variant="11" Subtype="0" />
@@ -1812,47 +1863,18 @@
 	<entity Group="" ID="865" Image="resources/Entities/865.10.0 - Evis Guts.png" Kind="" Name="Evis Guts" Variant="10" Subtype="0" />
 	
 	<entity BaseHP="8" Group="" ID="885" Image="resources/Entities/885.10.0 - Bone Trap.png" Kind="" Name="Bone Trap" Variant="10" Subtype="0" />
-	<entity BaseHP="20" Group="" ID="887" Image="resources/Entities/887.0.0 - Dusty Death's Head.png" Kind="" Name="Dusty Death's Head" Variant="0" Subtype="0" />
-	<entity BaseHP="80" Group="" ID="888" Image="resources/Entities/888.0.0 - Shady.png" Kind="" Name="Shady" Variant="0" Subtype="0" />
-	<entity BaseHP="20" Champion="1" Group="" ID="889" Image="resources/Entities/889.0.0 - Clickety Clack.png" Kind="" Name="Clickety Clack" Variant="0" Subtype="0" />
-	<entity BaseHP="12" Champion="1" Group="" ID="890" Image="resources/Entities/890.0.0 - Maze Roamer.png" Kind="" Name="Maze Roamer" Variant="0" Subtype="0" />
-	<entity BaseHP="12" Champion="1" Group="" ID="890" Image="resources/Entities/890.0.1 - Maze Roamer.png" Kind="" Name="Maze Roamer" Variant="0" Subtype="1" />
-	<entity BaseHP="18" Champion="1" Group="" ID="891" Image="resources/Entities/891.0.0 - Goat.png" Kind="" Name="Goat" Variant="0" Subtype="0" />
-	<entity BaseHP="24" Champion="1" Group="" ID="891" Image="resources/Entities/891.1.0 - Black Goat.png" Kind="" Name="Black Goat" Variant="1" Subtype="0" />
-	<entity BaseHP="20" Group="" ID="892" Image="resources/Entities/892.0.0 - Poofer.png" Kind="" Name="Poofer" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Group="" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="" Name="Ball and Chain" Variant="0" Subtype="0" />
 	
 	<entity BaseHP="150" Group="" ID="903" Image="resources/Entities/903.10.0 - Visage Chain.png" Kind="" Name="Visage Chain" Variant="10" Subtype="0" />
 	<entity BaseHP="50" Group="" ID="903" Image="resources/Entities/903.20.0 - Visage Plasma.png" Kind="" Name="Visage Plasma" Variant="20" Subtype="0" />
 	<entity Group="" ID="904" Image="resources/Entities/904.10.0 - Siren Helper Projectile.png" Kind="" Name="Siren Helper Projectile" Variant="10" Subtype="0" />
 	<entity BaseHP="4" Boss="1" Group="" ID="906" Image="resources/Entities/906.1.0 - Hornfel Decoy.png" Kind="" Name="Hornfel Decoy" Variant="1" Subtype="0" />
 	<entity BaseHP="400" Group="" ID="909" Image="resources/Entities/909.10.0 - The Scourge (chain).png" Kind="" Name="The Scourge (chain)" Variant="10" Subtype="0" />
-	<entity BaseHP="40" Group="" ID="912" Image="resources/Entities/912.20.0 - Dead Isaac.png" Kind="" Name="Dead Isaac" Variant="20" Subtype="0" />
-	<entity BaseHP="1" Boss="1" Group="" ID="912" Image="resources/Entities/912.30.0 - Mother Worm.png" Kind="" Name="Mother Worm" Variant="30" Subtype="0" />
-	<entity BaseHP="10" Boss="1" Group="" ID="912" Image="resources/Entities/912.100.0 - Mother Ball.png" Kind="" Name="Mother Ball" Variant="100" Subtype="0" />
-	<entity BaseHP="10" Boss="1" Group="" ID="912" Image="resources/Entities/912.100.1 - Mother Ball (Medium).png" Kind="" Name="Mother Ball (Medium)" Variant="100" Subtype="1" />
-	<entity BaseHP="10" Boss="1" Group="" ID="912" Image="resources/Entities/912.100.2 - Mother Ball (Small).png" Kind="" Name="Mother Ball (Small)" Variant="100" Subtype="2" />
-	<entity BaseHP="280" Boss="1" Group="" ID="913" Image="resources/Entities/913.0.0 - Min Min.png" Kind="" Name="Min Min" Variant="0" Subtype="0" />
-	<entity BaseHP="420" Boss="1" Group="" ID="914" Image="resources/Entities/914.0.0 - Clog.png" Kind="" Name="Clog" Variant="0" Subtype="0" />
-	<entity BaseHP="444" Boss="1" Group="" ID="915" Image="resources/Entities/915.0.0 - Singe.png" Kind="" Name="Singe" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Group="" ID="915" Image="resources/Entities/915.1.0 - Singe's Ball.png" Kind="" Name="Singe's Ball" Variant="1" Subtype="0" />
-	<entity BaseHP="385" Boss="1" Group="" ID="916" Image="resources/Entities/916.0.0 - Bumbino.png" Kind="" Name="Bumbino" Variant="0" Subtype="0" />
-	<entity BaseHP="380" Boss="1" Group="" ID="917" Image="resources/Entities/917.0.0 - Colostomia.png" Kind="" Name="Colostomia" Variant="0" Subtype="0" />
-	<entity BaseHP="190" Boss="1" Group="" ID="918" Image="resources/Entities/918.0.0 - Turdlet.png" Kind="" Name="Turdlet" Variant="0" Subtype="0" />
-	<entity BaseHP="792" Boss="1" Group="" ID="919" Image="resources/Entities/919.0.0 - Raglich.png" Kind="" Name="Raglich" Variant="0" Subtype="0" />
-	<entity BaseHP="792" Boss="1" Group="" ID="919" Image="resources/Entities/919.1.0 - Raglich Arm.png" Kind="" Name="Raglich Arm" Variant="1" Subtype="0" />
-	<entity BaseHP="707" Boss="1" Group="" ID="920" Image="resources/Entities/920.0.0 - Horny Boys.png" Kind="" Name="Horny Boys" Variant="0" Subtype="0" />
-	<entity BaseHP="500" Boss="1" Group="" ID="921" Image="resources/Entities/921.0.0 - Clutch.png" Kind="" Name="Clutch" Variant="0" Subtype="0" />
-	<entity BaseHP="200" Group="" ID="921" Image="resources/Entities/921.1.0 - Clutch Orbital.png" Kind="" Name="Clutch Orbital" Variant="1" Subtype="0" />
-	<entity BaseHP="1200" Boss="1" Group="" ID="950" Image="resources/Entities/950.0.0 - Dogma.png" Kind="" Name="Dogma" Variant="0" Subtype="0" />
-	<entity BaseHP="1200" Boss="1" Group="" ID="950" Image="resources/Entities/950.1.0 - Dogma's TV.png" Kind="" Name="Dogma's TV" Variant="1" Subtype="0" />
-	<entity BaseHP="1200" Boss="1" Group="" ID="950" Image="resources/Entities/950.2.0 - Dogma Angel.png" Kind="" Name="Dogma Angel" Variant="2" Subtype="0" />
-	<entity BaseHP="30" Group="" ID="950" Image="resources/Entities/950.10.0 - Dogma Angel Baby.png" Kind="" Name="Dogma Angel Baby" Variant="10" Subtype="0" />
-	<entity BaseHP="100" Group="" ID="951" Image="resources/Entities/951.1.0 - Stalactite.png" Kind="" Name="Stalactite" Variant="1" Subtype="0" />
+
+	<entity BaseHP="100" Group="Other" ID="951" Image="resources/Entities/951.1.0 - Stalactite.png" Kind="Stages" Name="Stalactite" Variant="1" Subtype="0" />
 	<entity BaseHP="2.5" Group="" ID="951" Image="resources/Entities/951.2.0 - Beast Rock Projectile.png" Kind="" Name="Beast Rock Projectile" Variant="2" Subtype="0" />
 	<entity BaseHP="100" Group="" ID="951" Image="resources/Entities/951.3.0 - Beast Soul.png" Kind="" Name="Beast Soul" Variant="3" Subtype="0" />
-	<entity BaseHP="2000" Boss="1" Group="" ID="951" Image="resources/Entities/951.10.0 - Ultra Famine.png" Kind="" Name="Ultra Famine" Variant="10" Subtype="0" />
-	<entity BaseHP="10" Group="" ID="951" Image="resources/Entities/951.11.0 - Ultra Famine Fly.png" Kind="" Name="Ultra Famine Fly" Variant="11" Subtype="0" />
+	<entity BaseHP="2000" Boss="1" Group="Story Bosses - The Beast" ID="951" Image="resources/Entities/951.10.0 - Ultra Famine.png" Kind="Bosses" Name="Ultra Famine" Variant="10" Subtype="0" />
+	<entity BaseHP="10" Group="Story Bosses - The Beast" ID="951" Image="resources/Entities/951.11.0 - Ultra Famine Fly.png" Kind="Bosses" Name="Ultra Famine Fly" Variant="11" Subtype="0" />
 	<entity BaseHP="1800" Boss="1" Group="" ID="951" Image="resources/Entities/951.20.0 - Ultra Pestilence.png" Kind="" Name="Ultra Pestilence" Variant="20" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="951" Image="resources/Entities/951.21.0 - Ultra Pestilence Fly.png" Kind="" Name="Ultra Pestilence Fly" Variant="21" Subtype="0" />
 	<entity Group="" ID="951" Image="resources/Entities/951.22.0 - Ultra Pestilence Maggot.png" Kind="" Name="Ultra Pestilence Maggot" Variant="22" Subtype="0" />
@@ -1868,11 +1890,7 @@
 	<entity BaseHP="1000" Boss="1" Group="" ID="951" Image="resources/Entities/951.102.0 - Background (Pestilence).png" Kind="" Name="Background (Pestilence)" Variant="102" Subtype="0" />
 	<entity BaseHP="1000" Boss="1" Group="" ID="951" Image="resources/Entities/951.103.0 - Background (War).png" Kind="" Name="Background (War)" Variant="103" Subtype="0" />
 	<entity BaseHP="1000" Boss="1" Group="" ID="951" Image="resources/Entities/951.104.0 - Background (Death).png" Kind="" Name="Background (Death)" Variant="104" Subtype="0" />
-	<entity BaseHP="1" Group="" ID="960" Image="resources/Entities/960.0.0 - Generic Prop.png" Kind="" Name="Generic Prop" Variant="0" Subtype="0" />
-	<entity BaseHP="1" Group="" ID="960" Image="resources/Entities/960.1.0 - Mom's Dresser.png" Kind="" Name="Mom's Dresser" Variant="1" Subtype="0" />
-	<entity BaseHP="1" Group="" ID="960" Image="resources/Entities/960.2.0 - Mom's Vanity.png" Kind="" Name="Mom's Vanity" Variant="2" Subtype="0" />
-	<entity BaseHP="1" Group="" ID="960" Image="resources/Entities/960.3.0 - Couch.png" Kind="" Name="Couch" Variant="3" Subtype="0" />
-	<entity BaseHP="1" Group="" ID="960" Image="resources/Entities/960.4.0 - TV.png" Kind="" Name="TV" Variant="4" Subtype="0" />
+	<entity BaseHP="1" Group="Props" ID="960" Image="resources/Entities/960.0.0 - Generic Prop.png" Kind="Stages" Name="Generic Prop" Variant="0" Subtype="0" />
 	<entity BaseHP="10" Group="" ID="963" Image="resources/Entities/963.0.0 - Frozen Enemy.png" Kind="" Name="Frozen Enemy" Variant="0" Subtype="0" />
 	<entity BaseHP="10000" Boss="1" Group="" ID="964" Image="resources/Entities/964.0.0 - Dummy.png" Kind="" Name="Dummy" Variant="0" Subtype="0" />
 	<entity Group="" ID="965" Image="resources/Entities/965.0.0 - Minecart.png" Kind="" Name="Minecart" Variant="0" Subtype="0" />
@@ -2036,8 +2054,6 @@
 	<entity Group="" ID="1000" Image="resources/Entities/1000.123.4 - Static Halo.png" Kind="Effect" Name="Static Halo" Variant="123" Subtype="4" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.123.5 - Saturnus Halo.png" Kind="Effect" Name="Saturnus Halo" Variant="123" Subtype="5" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.123.6 - Thorns Halo.png" Kind="Effect" Name="Thorns Halo" Variant="123" Subtype="6" />
-	<entity Group="" ID="1000" Image="resources/Entities/1000.74.1 - Mom's Carpet.png" Kind="Effect" Name="Mom's Carpet" Variant="74" Subtype="1" />
-	<entity Group="" ID="1000" Image="resources/Entities/1000.74.2 - Mom's Carpet.png" Kind="Effect" Name="Mom's Carpet" Variant="74" Subtype="2" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.130.0 - Leech Explosion.png" Kind="Effect" Name="Leech Explosion" Variant="130" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.131.0 - Maggot Explosion.png" Kind="Effect" Name="Maggot Explosion" Variant="131" Subtype="0" />
 	<entity Group="" ID="1000" Image="resources/Entities/1000.132.0 - Big Water Splash.png" Kind="Effect" Name="Big Water Splash" Variant="132" Subtype="0" />
