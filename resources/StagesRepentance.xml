@@ -142,6 +142,10 @@
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_mortis.png" />
 		</Gfx>
 	</stage> -->
+	
+	<stage Name="Home" BaseGamePath="35.home" Stage="13" StageType="0" Pattern="home">
+		<Gfx BGPrefix="resources/Backgrounds/0fx_hallway" />
+	</stage>
 
 	<stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
 		<Gfx StageGfx="Basement [Greed]" />
