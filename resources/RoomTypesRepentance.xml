@@ -29,6 +29,13 @@
 	<room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,infinity)">
 		<Gfx StageGfx="Dark Room" />
 	</room>
+	<room Name="Home Room" Type="1" StageName="Home">
+		<Gfx BGPrefix="resources/Backgrounds/0ex_isaacs_bedroom" ID="1" />
+		<Gfx BGPrefix="resources/Backgrounds/0gx_moms_bedroom" ID="3" />
+		<Gfx BGPrefix="resources/Backgrounds/house_closet" ID="5" />
+		<Gfx BGPrefix="resources/Backgrounds/house_closet_b" ID="6" />
+		<Gfx BGPrefix="resources/Backgrounds/special_closet" ID="(99,126)" />
+	</room>
 	<room Name="Shop" Type="2" Icon="resources/UI/roomicons/shop.png" ShowInMenu="1">
 		<Gfx BGPrefix="resources/Backgrounds/0b_shop" />
 	</room>
@@ -126,5 +133,8 @@
 	</room>
 	<room Name="Blue Room" Type="28" Icon="resources/UI/roomicons/altpathdescent.png" ShowInMenu="1">
 		<Gfx StageGfx="Blue Womb" />
+	</room>
+	<room Name="Ultra Secret Room" Type="29" Icon="resources/UI/roomicons/ultrasecret.png" ShowInMenu="1">
+		<Gfx BGPrefix="resources/Backgrounds/0fx_hallway_ultrasecret" />
 	</room>
 </data>
