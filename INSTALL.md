@@ -2,9 +2,13 @@
 
 The latest release can be found in the [releases tab](https://github.com/Tempus/Basement-Renovator/releases). This is most likely out of date, so running from source is recommended.
 
+<br />
+
 # Running from Source
 
 Because Basement Renovator's build schedule is irregular, it's recommended to run it directly from the source code.
+
+<br />
 
 ## Chocolatey
 
