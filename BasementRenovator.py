@@ -73,7 +73,7 @@ def getGameVersion():
     Returns the current compatibility mode, and the sub version if it exists
     """
     # default mode if not set
-    mode = settings.value("CompatibilityMode", "Afterbirth+")
+    mode = settings.value("CompatibilityMode", "Repentance")
 
     if mode == "Antibirth":
         # assumes rebirth only is present for anti
