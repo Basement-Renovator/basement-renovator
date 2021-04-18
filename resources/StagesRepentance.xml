@@ -70,6 +70,7 @@
 	</stage>
 	<stage Name="Blue Womb" BaseGamePath="13.blue womb" Stage="9" StageType="0" Pattern="blue">
 		<Gfx BGPrefix="resources/Backgrounds/18_bluewomb">
+			<Entity ID="3000" Image="resources/Backgrounds/pit_bluewomb.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_bluewomb.png" />
 		</Gfx>
 	</stage>
@@ -147,7 +148,7 @@
 		<Gfx BGPrefix="resources/Backgrounds/0fx_hallway" />
 	</stage>
 
-	<stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
+	<!-- <stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
 		<Gfx StageGfx="Basement [Greed]" />
 	</stage>
 	<stage Name="Basement [Greed]" BaseGamePath="19.greed basement" Stage="1" StageType="3" Pattern="greed basement">
@@ -170,5 +171,5 @@
 	</stage>
 	<stage Name="Ultra Greed [Greed]" BaseGamePath="25.ultra greed" Stage="7" StageType="3" Pattern="ultra greed">
 		<Gfx RoomGfx="Shop" />
-	</stage>
+	</stage> -->
 </data>
