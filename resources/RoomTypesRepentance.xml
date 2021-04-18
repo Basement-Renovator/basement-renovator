@@ -131,10 +131,10 @@
 		<Gfx RoomGfx="Secret Room" ID="2"/> <!-- Mines Entrance -->
 		<Gfx BGPrefix="resources/Backgrounds/0Dx_Mausoleum Entrance" ID="3"/> <!-- Mausoleum Entrance -->
 	</room>
-	<room Name="Blue Room" Type="28" Icon="resources/UI/roomicons/altpathdescent.png" ShowInMenu="1">
+	<room Name="Blue Room" Type="28" Icon="resources/UI/roomicons/blueroom.png" ShowInMenu="1">
 		<Gfx StageGfx="Blue Womb" />
 	</room>
 	<room Name="Ultra Secret Room" Type="29" Icon="resources/UI/roomicons/ultrasecret.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0fx_hallway_ultrasecret" />
+		<Gfx StageGfx ="Home" />
 	</room>
 </data>
