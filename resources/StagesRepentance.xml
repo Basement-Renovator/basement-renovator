@@ -111,12 +111,14 @@
 		<Gfx BGPrefix="resources/Backgrounds/03x_mines">
 			<Entity ID="3000" Image="resources/Backgrounds/pit_mines.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_secretroom.png" />
+			<Entity ID="970" Variant="2" Image="resources/Entities/970.2.0 - Quest Door_mines.png" />
 		</Gfx>
 	</stage>
 	<stage Name="Ashpit" BaseGamePath="30.ashpit" Stage="3" StageType="5" Pattern="ashpit">
 		<Gfx BGPrefix="resources/Backgrounds/04x_ashpit">
 			<Entity ID="3000" Image="resources/Backgrounds/pit_ashpit.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_ashpit.png" />
+			<Entity ID="970" Variant="2" Image="resources/Entities/970.2.0 - Quest Door_mines.png" />
 		</Gfx>
 	</stage>
 	<stage Name="Mausoleum" BaseGamePath="31.mausoleum" Stage="5" StageType="4" Pattern="mausoleum">
