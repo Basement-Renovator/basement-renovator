@@ -74,6 +74,31 @@
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.52 - Huge Growth.png" Kind="Pickups" Name="Huge Growth" Subtype="52" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.53 - Ancient Recall.png" Kind="Pickups" Name="Ancient Recall" Subtype="53" Variant="300" />
 	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.54 - Era Walk.png" Kind="Pickups" Name="Era Walk" Subtype="54" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.56 - The Fool (Reverse).png" Kind="Pickups" Name="The Fool?" Subtype="56" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.57 - The Magician (Reverse).png" Kind="Pickups" Name="Magician?" Subtype="57" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.58 - The High Priestess (Reverse).png" Kind="Pickups" Name="The High Priestess?" Subtype="58" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.59 - The Empress (Reverse).png" Kind="Pickups" Name="The Empress?" Subtype="59" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.60 - The Emperor (Reverse).png" Kind="Pickups" Name="The Emperor?" Subtype="60" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.61 - The Hierophant (Reverse).png" Kind="Pickups" Name="The Hierophant?" Subtype="61" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.62 - The Lovers (Reverse).png" Kind="Pickups" Name="The Lovers?" Subtype="62" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.63 - The Chariot (Reverse).png" Kind="Pickups" Name="The Chariot?" Subtype="63" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.64 - Justice (Reverse).png" Kind="Pickups" Name="Justice?" Subtype="64" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.65 - The Hermit (Reverse).png" Kind="Pickups" Name="The Hermit?" Subtype="65" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.66 - Wheel of Fortune (Reverse).png" Kind="Pickups" Name="Wheel of Fortune?" Subtype="66" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.67 - Strength (Reverse).png" Kind="Pickups" Name="Strength?" Subtype="67" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.68 - The Hanged Man (Reverse).png" Kind="Pickups" Name="The Hanged Man?" Subtype="68" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.69 - Death (Reverse).png" Kind="Pickups" Name="Death?" Subtype="69" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.70 - Temperance (Reverse).png" Kind="Pickups" Name="Temperance?" Subtype="70" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.71 - The Devil (Reverse).png" Kind="Pickups" Name="The Devil?" Subtype="71" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.72 - The Tower (Reverse).png" Kind="Pickups" Name="The Tower?" Subtype="72" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.73 - The Stars (Reverse).png" Kind="Pickups" Name="The Stars?" Subtype="73" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.74 - The Moon (Reverse).png" Kind="Pickups" Name="The Moon?" Subtype="74" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.75 - The Sun (Reverse).png" Kind="Pickups" Name="The Sun?" Subtype="75" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.76 - Judgement (Reverse).png" Kind="Pickups" Name="Judgement?" Subtype="76" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.77 - The World (Reverse).png" Kind="Pickups" Name="The World?" Subtype="77" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.78 - Cracked Key.png" Kind="Pickups" Name="Cracked Key" Subtype="78" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.79 - Queen of Hearts.png" Kind="Pickups" Name="Queen of Hearts" Subtype="79" Variant="300" />
+	<entity Group="Cards" ID="5" Image="resources/Entities/5.300.80 - Wild Card.png" Kind="Pickups" Name="Wild Card" Subtype="80" Variant="300" />
 
 	<!-- Chests -->
 	<entity Group="Chests" ID="5" Image="resources/Entities/5.50.0 - Chest.png" Kind="Pickups" Name="Chest" Subtype="0" Variant="50" />
@@ -165,6 +190,24 @@
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.39 - Algiz.png" Kind="Pickups" Name="Algiz" Subtype="39" Variant="300" />
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.40 - Blank Rune.png" Kind="Pickups" Name="Blank Rune" Subtype="40" Variant="300" />
 	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.41 - Black Rune.png" Kind="Pickups" Name="Black Rune" Subtype="41" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.55 - Rune Shard.png" Kind="Pickups" Name="Rune Shard" Subtype="55" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.81 - Soul of Isaac.png" Kind="Pickups" Name="Soul of Isaac" Subtype="81" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.82 - Soul of Magdalene.png" Kind="Pickups" Name="Soul of Magdalene" Subtype="82" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.83 - Soul of Cain.png" Kind="Pickups" Name="Soul of Cain" Subtype="83" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.84 - Soul of Judas.png" Kind="Pickups" Name="Soul of Judas" Subtype="84" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.85 - Soul of Blue Baby.png" Kind="Pickups" Name="Soul of ???" Subtype="85" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.86 - Soul of Eve.png" Kind="Pickups" Name="Soul of Eve" Subtype="86" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.87 - Soul of Samson.png" Kind="Pickups" Name="Soul of Samson" Subtype="87" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.88 - Soul of Azazel.png" Kind="Pickups" Name="Soul of Azazel" Subtype="88" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.89 - Soul of Lazarus.png" Kind="Pickups" Name="Soul of Lazarus" Subtype="89" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.90 - Soul of Eden.png" Kind="Pickups" Name="Soul of Eden" Subtype="90" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.91 - Soul of the Lost.png" Kind="Pickups" Name="Soul of the Lost" Subtype="91" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.92 - Soul of Lilith.png" Kind="Pickups" Name="Soul of Lilith" Subtype="92" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.93 - Soul of the Keeper.png" Kind="Pickups" Name="Soul of the Keeper" Subtype="93" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.94 - Soul of Apollyon.png" Kind="Pickups" Name="Soul of Apollyon" Subtype="94" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.95 - Soul of the Forgotten.png" Kind="Pickups" Name="Soul of the Forgotten" Subtype="95" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.96 - Soul of Bethany.png" Kind="Pickups" Name="Soul of Bethany" Subtype="96" Variant="300" />
+	<entity Group="Runes" ID="5" Image="resources/Entities/5.300.97 - Soul of Jacob and Esau.png" Kind="Pickups" Name="Soul of Jacob and Esau" Subtype="97" Variant="300" />
 	
 	<!-- Batteries -->
 	<entity Group="Batteries" ID="5" Image="resources/Entities/5.90.0 - RBattery.png" Kind="Pickups" Name="Random Battery" Subtype="0" Variant="90" />
@@ -869,6 +912,7 @@
 	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Kind="Stage" Name="Rock (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1010" Image="resources/Entities/1010.0.0 - Spike Rock.png" Kind="Stage" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="1011" Image="resources/Entities/1011.0.0 - Fool's Gold Rock.png" Kind="Stage" Name="Fool's Gold Rock" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1008" Image="resources/Entities/1008.0.0 - Marked Skull.png" Kind="Stage" Name="Marked Skull" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
@@ -904,6 +948,7 @@
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="2" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1"/>
+	<entity Group="Events" ID="970" Image="resources/Entities/970.2.0 - Quest Door.png" Kind="Stage" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2"/>
 	<entity Group="Events" ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Kind="Stage" Name="Event (group 0)" Subtype="0" Variant="0" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.1.0 - Event (group 1).png" Kind="Stage" Name="Event (group 1)" Subtype="0" Variant="1" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.2.0 - Event (group 2).png" Kind="Stage" Name="Event (group 2)" Subtype="0" Variant="2" />
