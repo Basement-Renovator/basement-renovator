@@ -72,19 +72,19 @@
 		</Gfx>
 	</stage>
 	<stage Name="Mines" BaseGamePath="02x.mines" Stage="3" StageType="2" Pattern="mines">
-		<Gfx BGPrefix="resources/Backgrounds/02x_mines">
+		<Gfx BGPrefix="resources/Backgrounds/03x_mines">
 			<Entity ID="3000" Image="resources/Backgrounds/pit_mines.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_secretroom.png" />
 		</Gfx>
 	</stage>
 	<stage Name="Mausoleum" BaseGamePath="03x.mausoleum" Stage="5" StageType="2" Pattern="mausoleum">
-		<Gfx BGPrefix="resources/Backgrounds/03x_mausoleum">
+		<Gfx BGPrefix="resources/Backgrounds/05x_mausoleum">
 			<Entity ID="3000" Image="resources/Backgrounds/pit_mausoleum.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_mausoleum.png" />
 		</Gfx>
 	</stage>
 	<stage Name="Corpse" BaseGamePath="04x.corpse" Stage="7" StageType="2" Pattern="corpse">
-		<Gfx BGPrefix="resources/Backgrounds/04x_corpse">
+		<Gfx BGPrefix="resources/Backgrounds/07x_corpse">
 			<Entity ID="3000" Image="resources/Backgrounds/pit_corpse.png" />
 			<Entity ID="1000" Image="resources/Backgrounds/rocks_corpse.png" />
 		</Gfx>
