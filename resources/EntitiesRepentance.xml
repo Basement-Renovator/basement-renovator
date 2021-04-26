@@ -948,6 +948,7 @@
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="2" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1"/>
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.20 - Lava Disabler.png" Kind="Stage" Name="Lava Disabler" Subtype="20" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.2.0 - Quest Door.png" Kind="Stage" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2"/>
 	<entity Group="Events" ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Kind="Stage" Name="Event (group 0)" Subtype="0" Variant="0" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.1.0 - Event (group 1).png" Kind="Stage" Name="Event (group 1)" Subtype="0" Variant="1" />
@@ -956,6 +957,7 @@
 	<entity Group="Events" ID="969" Image="resources/Entities/969.9.0 - Event (After Cleaning).png" Kind="Stage" Name="Event (Room Clear)" Subtype="0" Variant="9" />
 	<entity Group="Events" ID="1009" Image="resources/Entities/1009.0.0 - Rock (event).png" Kind="Stage" Name="Rock (event)" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Events" ID="3009" Image="resources/Entities/3009.0.0 - Pit (event).png" Kind="Stage" Name="Pit (event)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="3002" Image="resources/Entities/3002.0.0 - Button Rail.png" Kind="Stage" Name="Button Rail" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.10.0 - Event Plate (group 0).png" Kind="Stage" Name="Event Plate (group 0)" Subtype="0" Variant="10" IsGrid="1" />
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.11.0 - Event Plate (group 1).png" Kind="Stage" Name="Event Plate (group 1)" Subtype="0" Variant="11" IsGrid="1" />
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.12.0 - Event Plate (group 2).png" Kind="Stage" Name="Event Plate (group 2)" Subtype="0" Variant="12" IsGrid="1" />
@@ -977,6 +979,20 @@
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.32.0 - Rail (cart-right).png" Kind="Stage" Name="Rail (cart-right)" Subtype="0" Variant="32" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.17.0 - Rail (cart-up).png" Kind="Stage" Name="Rail (cart-up)" Subtype="0" Variant="17" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.33.0 - Rail (cart-down).png" Kind="Stage" Name="Rail (cart-down)" Subtype="0" Variant="33" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.80.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="80" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.81.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="81" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.82.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="82" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.83.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="83" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.84.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="84" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.85.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="85" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.96.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="96" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.97.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="97" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.98.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="98" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.99.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="99" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.100.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="100" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.101.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="101" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.112.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="112" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.113.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="113" IsGrid="1" />
 
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.0.0 - Rail (Pit) (left-to-right).png" Kind="Stage" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.1.0 - Rail (Pit) (up-to-down).png" Kind="Stage" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="1" IsGrid="1" />
@@ -1045,6 +1061,7 @@
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" IsGrid="1" />
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" IsGrid="1" />
 	<entity BaseHP="100" Group="Other" ID="866" Image="resources/Entities/866.1.0 - Dark Esau's Pit.png" Kind="Stage" Name="Dark Esau's Pit" Variant="1" Subtype="0" />
+	<entity BaseHP="0" Group="Other" ID="965" Image="resources/Entities/965.10.0 - Quest Minecart.png" Kind="Stage" Name="Quest Minecart" Variant="10" Subtype="0" />
 	<entity BaseHP="0" Group="Other" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Kind="Stage" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1" />
 	<entity Group="Other" ID="999" Image="resources/Entities/1000.141.1 - Smoke Cloud.png" Kind="Stage" Name="Smoke Cloud" Variant="141" Subtype="1" />
 	<entity ID="2" Kind="Stage" Group="Other" Image="resources/Entities/2.9.0 - Chaos Tear.png" Name="Chaos Tear" Subtype="0" Variant="9" />

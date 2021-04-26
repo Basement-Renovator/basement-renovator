@@ -105,11 +105,11 @@
 		<Gfx BGPrefix="resources/Backgrounds/planetarium_floor" />
 		<Entity ID="1000" Image="resources/Backgrounds/rocks_cathedral.png" />
 	</room>
-	<room Name="Maus.Bridge Entrance" Type="24" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
+	<room Name="Teleporter" Type="24" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
 		<Gfx StageGfx="Mausoleum" />
 	</room>
-	<room Name="Maus.Bridge Exit" Type="25" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/06x_Mausoleum2" />
+	<room Name="Teleporter Exit" Type="25" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
+		<Gfx BGPrefix="resources/Backgrounds/05x_mausoleumb" />
 		<Entity ID="3000" Image="resources/Backgrounds/pit_mausoleum.png" />
 		<Entity ID="1000" Image="resources/Backgrounds/rocks_mausoleum.png" />
 	</room>
