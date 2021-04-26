@@ -366,23 +366,23 @@
 	<entity BaseHP="600" Boss="1" Group="Heaven and Hell" ID="274" Image="resources/Entities/274.1.0 - Mega Satan's Right Hand.png" Kind="Bosses" Name="Mega Satan's Right Hand" Subtype="0" Variant="1" />
 	<entity BaseHP="600" Boss="1" Group="Heaven and Hell" ID="274" Image="resources/Entities/274.2.0 - Mega Satan's Left Hand.png" Kind="Bosses" Name="Mega Satan's Left Hand" Subtype="0" Variant="2" />
 
-	<entity Group="Obstacles" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" />
-	<entity Group="Obstacles" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" />
-	<entity Group="Fireplaces" ID="1400" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire" Subtype="0" Variant="0" />
-	<entity Group="Fireplaces" ID="1410" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire" Subtype="0" Variant="0" />
+	<entity Group="Obstacles" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
+	<entity Group="Traps" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Obstacles" ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Kind="Stage" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Traps" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Fireplaces" ID="1400" Image="resources/Entities/33.0.0 - Fire Place.png" Kind="Stage" Name="Fire" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Fireplaces" ID="1410" Image="resources/Entities/33.1.0 - Red Fire Place.png" Kind="Stage" Name="Red Fire" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Poop" ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Kind="Stage" Name="Red Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Kind="Stage" Name="Rainbow Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" />
 	<entity Group="Poop" ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Kind="Stage" Name="Golden Poop" Subtype="0" Variant="0" />
-	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" />
-	<entity Group="Obstacles" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Kind="Stage" Name="Retracting Spikes" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" />
-	<entity Group="Obstacles" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" />
-	<entity Group="Traps" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" />
+	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Obstacles" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Traps" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Traps" ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Kind="Stage" Name="Retracting Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Traps" ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Kind="Stage" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Obstacles" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" UsePitTiling="1" />
+	<entity Group="Traps" ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Kind="Stage" Name="Key Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Traps" ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Kind="Stage" Name="Pressure Plate" Subtype="0" Variant="0" />
 	<entity Group="Special Exits" ID="9000" Image="resources/Entities/9000.0.0 - Trap Door.png" Kind="Stage" Name="Trap Door" Subtype="0" Variant="0" />
 	<entity Group="Special Exits" ID="9100" Image="resources/Entities/9100.0.0 - Ladder Door.png" Kind="Stage" Name="Ladder Door" Subtype="0" Variant="0" />
