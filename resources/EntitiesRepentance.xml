@@ -966,19 +966,19 @@
 	<!-- Rails -->
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.0.0 - Rail (left-to-right).png" Kind="Stage" Name="Rail (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.1.0 - Rail (up-to-down).png" Kind="Stage" Name="Rail (up-to-down)" Subtype="0" Variant="1" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.2.0 - Rail (up-to-right).png" Kind="Stage" Name="Rail (up-to-right)" Subtype="0" Variant="2" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.3.0 - Rail (up-to-left).png" Kind="Stage" Name="Rail (up-to-left)" Subtype="0" Variant="3" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.4.0 - Rail (left-to-up).png" Kind="Stage" Name="Rail (left-to-up)" Subtype="0" Variant="4" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.5.0 - Rail (right-to-up).png" Kind="Stage" Name="Rail (right-to-up)" Subtype="0" Variant="5" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.2.0 - Rail (up-to-right).png" Kind="Stage" Name="Rail (up-to-right)" Subtype="0" Variant="2" IsGrid="1" MirrorX="6000.3.0" MirrorY="6000.4.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.3.0 - Rail (up-to-left).png" Kind="Stage" Name="Rail (up-to-left)" Subtype="0" Variant="3" IsGrid="1" MirrorX="6000.2.0" MirrorY="6000.5.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.4.0 - Rail (left-to-up).png" Kind="Stage" Name="Rail (left-to-up)" Subtype="0" Variant="4" IsGrid="1" MirrorX="6000.5.0" MirrorY="6000.2.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.5.0 - Rail (right-to-up).png" Kind="Stage" Name="Rail (right-to-up)" Subtype="0" Variant="5" IsGrid="1" MirrorX="6000.4.0" MirrorY="6000.3.0" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.6.0 - Rail (crossroad).png" Kind="Stage" Name="Rail (crossroad)" Subtype="0" Variant="6" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.7.0 - Rail (stop-to-right).png" Kind="Stage" Name="Rail (stop-to-right)" Subtype="0" Variant="7" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.8.0 - Rail (left-to-stop).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="8" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.9.0 - Rail (up-to-stop).png" Kind="Stage" Name="Rail (up-to-stop)" Subtype="0" Variant="9" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.10.0 - Rail (stop-to-down).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="10" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.16.0 - Rail (cart-left).png" Kind="Stage" Name="Rail (cart-left)" Subtype="0" Variant="16" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.32.0 - Rail (cart-right).png" Kind="Stage" Name="Rail (cart-right)" Subtype="0" Variant="32" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.17.0 - Rail (cart-up).png" Kind="Stage" Name="Rail (cart-up)" Subtype="0" Variant="17" IsGrid="1" />
-	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.33.0 - Rail (cart-down).png" Kind="Stage" Name="Rail (cart-down)" Subtype="0" Variant="33" IsGrid="1" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.7.0 - Rail (stop-to-right).png" Kind="Stage" Name="Rail (stop-to-right)" Subtype="0" Variant="7" IsGrid="1" MirrorX="6000.8.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.8.0 - Rail (left-to-stop).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="8" IsGrid="1" MirrorX="6000.7.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.9.0 - Rail (up-to-stop).png" Kind="Stage" Name="Rail (up-to-stop)" Subtype="0" Variant="9" IsGrid="1" MirrorY="6000.10.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.10.0 - Rail (stop-to-down).png" Kind="Stage" Name="Rail (left-to-stop)" Subtype="0" Variant="10" IsGrid="1" MirrorY="6000.9.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.16.0 - Rail (cart-left).png" Kind="Stage" Name="Rail (cart-left)" Subtype="0" Variant="16" IsGrid="1" MirrorX="6000.32.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.32.0 - Rail (cart-right).png" Kind="Stage" Name="Rail (cart-right)" Subtype="0" Variant="32" IsGrid="1" MirrorX="6000.16.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.17.0 - Rail (cart-up).png" Kind="Stage" Name="Rail (cart-up)" Subtype="0" Variant="17" IsGrid="1" MirrorY="6000.33.0" />
+	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.33.0 - Rail (cart-down).png" Kind="Stage" Name="Rail (cart-down)" Subtype="0" Variant="33" IsGrid="1" MirrorY="6000.17.0" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.80.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="80" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.81.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="81" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.82.0 - Rail (Mineshaft).png" Kind="Stage" Name="Rail (Mineshaft)" Subtype="0" Variant="82" IsGrid="1" />
@@ -996,15 +996,15 @@
 
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.0.0 - Rail (Pit) (left-to-right).png" Kind="Stage" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.1.0 - Rail (Pit) (up-to-down).png" Kind="Stage" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="1" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.2.0 - Rail (Pit) (up-to-right).png" Kind="Stage" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="2" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.3.0 - Rail (Pit) (up-to-left).png" Kind="Stage" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="3" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.4.0 - Rail (Pit) (left-to-up).png" Kind="Stage" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="4" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.5.0 - Rail (Pit) (right-to-up).png" Kind="Stage" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="5" IsGrid="1" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.2.0 - Rail (Pit) (up-to-right).png" Kind="Stage" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="2" IsGrid="1" MirrorX="6001.3.0" MirrorY="6001.4.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.3.0 - Rail (Pit) (up-to-left).png" Kind="Stage" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="3" IsGrid="1" MirrorX="6001.2.0" MirrorY="6001.5.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.4.0 - Rail (Pit) (left-to-up).png" Kind="Stage" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="4" IsGrid="1" MirrorX="6001.5.0" MirrorY="6001.2.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.5.0 - Rail (Pit) (right-to-up).png" Kind="Stage" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="5" IsGrid="1" MirrorX="6001.4.0" MirrorY="6001.3.0" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.6.0 - Rail (Pit) (crossroad).png" Kind="Stage" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="6" IsGrid="1"/>
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.16.0 - Rail (Pit) (cart-left).png" Kind="Stage" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="16" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.32.0 - Rail (Pit) (cart-right).png" Kind="Stage" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="32" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.17.0 - Rail (Pit) (cart-up).png" Kind="Stage" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="17" IsGrid="1" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.33.0 - Rail (Pit) (cart-down).png" Kind="Stage" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="33" IsGrid="1" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.16.0 - Rail (Pit) (cart-left).png" Kind="Stage" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="16" IsGrid="1" MirrorX="6001.32.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.32.0 - Rail (Pit) (cart-right).png" Kind="Stage" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="32" IsGrid="1" MirrorX="6000.16.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.17.0 - Rail (Pit) (cart-up).png" Kind="Stage" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="17" IsGrid="1" MirrorY="6001.33.0" />
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.33.0 - Rail (Pit) (cart-down).png" Kind="Stage" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="33" IsGrid="1" MirrorY="6001.17.0" />
 	
 	<!-- Teleporters -->
 	<entity Group="Teleporters" ID="6100" Image="resources/Entities/6100.0.0 - Teleporter(Square).png" Kind="Stage" Name="Teleporter(Square)" Subtype="0" Variant="0" IsGrid="1" />
@@ -2037,7 +2037,6 @@
 	<!-- Misc -->
 	<entity Image="resources/Entities/216.1.0 - Swinger Head.png" ID="216" Variant="1" Name="Swinger Head" BaseHP="38" />
 	<entity Image="resources/Entities/216.10.0 - Swinger Neck.png" ID="216" Variant="10" Name="Swinger Neck" BaseHP="25" />
-	<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Name="Pooter (no shoot)" Subtype="0" Variant="2" />
 	<entity Image="resources/Entities/1500.0.0 - Poop.png" Name="Pushable Poop" ID="245" Subtype="0" Variant="0" />
 
 	<!-- Tears -->
@@ -2112,6 +2111,7 @@
 	<entity BaseHP="25" Group="Nightwatchers" ID="842" Image="resources/Entities/842.0.0 - Nightwatch.png" Kind="Enemies" Name="Nightwatch" Variant="0" Subtype="0" />
 	
 	<!-- Tainted -->
+	<entity BaseHP="75" Group="Tainted" ID="14" Image="resources/Entities/14.2.0 - Tainted Pooter.png" Kind="Enemies" Name="Tainted Pooter" Subtype="0" Variant="2" />
 	<entity BaseHP="120" Group="Tainted" ID="22" Image="resources/Entities/22.3.0 - Tainted Mulligan.png" Kind="Enemies" Name="Tainted Mulligan" Variant="3" Subtype="0" />
 	<entity BaseHP="20" Group="Tainted" ID="25" Image="resources/Entities/25.6.0 - Tainted Boom Fly.png" Kind="Enemies" Name="Tainted Boom Fly" Variant="6" Subtype="0" />
 	<entity BaseHP="80" Group="Tainted" ID="29" Image="resources/Entities/29.3.0 - Tainted Hopper.png" Kind="Enemies" Name="Tainted Hopper" Variant="3" Subtype="0" />
