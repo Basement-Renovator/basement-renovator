@@ -3540,7 +3540,7 @@ class EntityGroupItem(object):
         self.alignment = Qt.AlignCenter
 
     def getItem(self, index):
-        """ Retrieves an item of a specific index. The index is already checked for validity """
+        """Retrieves an item of a specific index. The index is already checked for validity"""
 
         if index == self.startIndex:
             return self
