@@ -26,7 +26,7 @@
 <data>
 	<room Name="Null Room" Type="0" Icon="resources/UI/roomicons/null.png" ShowInMenu="1" />
 	<room Name="Normal Room" Type="1" Icon="resources/UI/roomicons/default.png" ShowInMenu="1" />
-	<room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,infinity)">
+	<room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,9]">
 		<Gfx StageGfx="Dark Room" />
 	</room>
 	<room Name="Home Room" Type="1" StageName="Home">

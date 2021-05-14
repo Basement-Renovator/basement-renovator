@@ -1823,10 +1823,10 @@ class Entity(QGraphicsItem):
 
             width, height = rendered.width(), rendered.height()
 
-            x = (xc * 26 - width) / 2
-            y = yc * 26 - height
+            x = int((xc * 26 - width) / 2)
+            y = int(yc * 26 - height)
 
-            renderFunc(int(x), int(y), rendered)
+            renderFunc(x, y, rendered)
 
             # if the offset is high enough, draw an indicator of the actual position
             if not self.entity.disableOffsetIndicator and (
@@ -2429,7 +2429,10 @@ class Room(QListWidgetItem):
     @difficulty.setter
     def difficulty(self, d):
         self._difficulty = d
-        self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
+        if d == 20:
+            self.setForeground(QColor(190, 0, 255))
+        else:
+            self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
 
     @property
     def name(self):
@@ -2697,7 +2700,7 @@ class RoomSelector(QWidget):
         self.filter.extraData = {
             "enabled": False,
             "weight": {"min": 0, "max": 100000, "useRange": False, "enabled": False},
-            "difficulty": {"min": 1, "max": 15, "useRange": False, "enabled": False},
+            "difficulty": {"min": 1, "max": 20, "useRange": False, "enabled": False},
             "subtype": {"min": 0, "max": 10, "useRange": False, "enabled": False},
             "lastTestTime": {
                 "min": None,
@@ -2967,7 +2970,7 @@ class RoomSelector(QWidget):
         # Difficulty
         Difficulty = QWidgetAction(menu)
         dv = QSpinBox()
-        dv.setRange(0, 15)
+        dv.setRange(0, 20)
         dv.setPrefix("Difficulty - ")
 
         dv.setValue(self.selectedRoom().difficulty)
@@ -5886,12 +5889,18 @@ class MainWindow(QMainWindow):
             ):
                 if steamPath:
                     launchArgs = ["-applaunch", "250900"] + launchArgs
-                subprocess.Popen([exePath] + launchArgs, cwd=installPath)
+
+                appArgs = [exePath] + launchArgs
+                print('Test: Running executable', " ".join(appArgs))
+                subprocess.Popen(appArgs, cwd=installPath)
             else:
                 args = " ".join(map(lambda x: " " in x and f'"{x}"' or x, launchArgs))
                 urlArgs = urllib.parse.quote(args)
                 urlArgs = re.sub(r"/", "%2F", urlArgs)
-                webbrowser.open(f"steam://rungameid/250900//{urlArgs}")
+
+                url = f"steam://rungameid/250900//{urlArgs}"
+                print("Test: Opening url", url)
+                webbrowser.open(url)
 
         except Exception as e:
             traceback.print_exception(*sys.exc_info())
