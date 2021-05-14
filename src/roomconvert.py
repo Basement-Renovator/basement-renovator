@@ -15,16 +15,18 @@ if not __package__:
 else:
     from src.core import Room, Entity, File
 
+
 def _xmlStrFix(x):
-    quot = '&quot;'
+    quot = "&quot;"
     return escape(x).replace('"', quot)
 
-def commonToXMLSlow(destPath, rooms, file=None, isPreview = False):
+
+def commonToXMLSlow(destPath, rooms, file=None, isPreview=False):
     """Converts the common format to xml nodes"""
     if isPreview and len(rooms) != 1:
         raise ValueError("Previews must be one room!")
 
-    outputRoot = ET.Element('rooms')
+    outputRoot = ET.Element("rooms")
 
     if file:
         for key, val in file.xmlProps.items():
@@ -33,44 +35,56 @@ def commonToXMLSlow(destPath, rooms, file=None, isPreview = False):
     nodes = []
     for room in rooms:
         width, height = room.info.dims
-        roomNode = ET.Element('room', {
-            "type":       str(room.info.type),
-            "variant":    str(room.info.variant),
-            "subtype":    str(room.info.subtype),
-            "name":       _xmlStrFix(str(room.name)),
-            "difficulty": str(room.difficulty),
-            "weight":     str(room.weight),
-            "shape":      str(room.info.shape),
-            "width":      str(width - 2),
-            "height":     str(height - 2),
-            # extra props here
-            "lastTestTime": room.lastTestTime and room.lastTestTime.replace(tzinfo=datetime.timezone.utc).isoformat(timespec='hours') or None
-        })
+        roomNode = ET.Element(
+            "room",
+            {
+                "type": str(room.info.type),
+                "variant": str(room.info.variant),
+                "subtype": str(room.info.subtype),
+                "name": _xmlStrFix(str(room.name)),
+                "difficulty": str(room.difficulty),
+                "weight": str(room.weight),
+                "shape": str(room.info.shape),
+                "width": str(width - 2),
+                "height": str(height - 2),
+                # extra props here
+                "lastTestTime": room.lastTestTime
+                and room.lastTestTime.replace(tzinfo=datetime.timezone.utc).isoformat(
+                    timespec="hours"
+                )
+                or None,
+            },
+        )
 
         # if BR version is out of sync, this acts as a failsafe to ensure
         # any extra props are written properly
         for key, val in room.xmlProps.items():
             roomNode.extend(key, _xmlStrFix(str(val)))
 
-        roomNode.extend(map(lambda door: ET.Element('door', {
-            'x': str(door[0] - 1),
-            'y': str(door[1] - 1),
-            'exists': str(door[2])
-        }), room.info.doors))
+        roomNode.extend(
+            map(
+                lambda door: ET.Element(
+                    "door",
+                    {
+                        "x": str(door[0] - 1),
+                        "y": str(door[1] - 1),
+                        "exists": str(door[2]),
+                    },
+                ),
+                room.info.doors,
+            )
+        )
 
         stackNodes = []
         for stack, x, y in room.spawns():
-            stackNode = ET.Element('spawn', {
-                'x': str(x - 1),
-                'y': str(y - 1)
-            })
+            stackNode = ET.Element("spawn", {"x": str(x - 1), "y": str(y - 1)})
 
             def entToAttrs(ent):
                 attrs = {
-                    "type":       str(ent.Type),
-                    "variant":    str(ent.Variant),
-                    "subtype":    str(ent.Subtype),
-                    "weight":     str(ent.weight),
+                    "type": str(ent.Type),
+                    "variant": str(ent.Variant),
+                    "subtype": str(ent.Subtype),
+                    "weight": str(ent.weight),
                 }
 
                 for key, val in ent.xmlProps.items():
@@ -78,7 +92,9 @@ def commonToXMLSlow(destPath, rooms, file=None, isPreview = False):
 
                 return attrs
 
-            stackNode.extend(list(map(lambda ent: ET.Element('entity', entToAttrs(ent)), stack)))
+            stackNode.extend(
+                list(map(lambda ent: ET.Element("entity", entToAttrs(ent)), stack))
+            )
 
             stackNodes.append(stackNode)
 
@@ -90,24 +106,27 @@ def commonToXMLSlow(destPath, rooms, file=None, isPreview = False):
         outputRoot = nodes[0]
     else:
         outputRoot.extend(nodes)
-    with open(destPath, 'w') as out:
+    with open(destPath, "w") as out:
         xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
         out.write(xml)
 
-def commonToXML(destPath, rooms, file=None, isPreview = False):
+
+def commonToXML(destPath, rooms, file=None, isPreview=False):
     """Converts the common format to xml nodes"""
     if isPreview and len(rooms) != 1:
         raise ValueError("Previews must be one room!")
 
     def flattenDictList(l):
-        return ' '.join(map(lambda p: f'{p[0]}="{p[1]}"', l))
+        return " ".join(map(lambda p: f'{p[0]}="{p[1]}"', l))
 
     # if BR version is out of sync, xml acts as a failsafe to ensure
     # any extra props are written properly
     def flattenXml(d):
-        return ''.join(map(lambda key, val: f' {key}="{_xmlStrFix(str(val))}"', d.items()))
+        return "".join(
+            map(lambda key, val: f' {key}="{_xmlStrFix(str(val))}"', d.items())
+        )
 
-    output = [ '<?xml version="1.0" ?>\n' ]
+    output = ['<?xml version="1.0" ?>\n']
     if not isPreview:
         output.append(f'<rooms{file and flattenXml(file.xmlProps) or ""}>\n')
 
@@ -127,9 +146,16 @@ def commonToXML(destPath, rooms, file=None, isPreview = False):
         ]
         # extra props here
         if room.lastTestTime:
-            attrs.append(("lastTestTime", room.lastTestTime.astimezone(datetime.timezone.utc).isoformat(timespec='minutes')))
+            attrs.append(
+                (
+                    "lastTestTime",
+                    room.lastTestTime.astimezone(datetime.timezone.utc).isoformat(
+                        timespec="minutes"
+                    ),
+                )
+            )
 
-        output.append(f'\t<room {flattenDictList(attrs)}{flattenXml(room.xmlProps)}>\n')
+        output.append(f"\t<room {flattenDictList(attrs)}{flattenXml(room.xmlProps)}>\n")
 
         for door in sorted(room.info.doors, key=Room.DoorSortKey):
             x, y, exists = door
@@ -155,27 +181,30 @@ def commonToXML(destPath, rooms, file=None, isPreview = False):
             output.append(f'\t\t<spawn x="{x - 1}" y="{y - 1}">\n')
 
             for ent in stack:
-                output.append(f'\t\t\t<entity type="{ent.Type}" variant="{ent.Variant}" subtype="{ent.Subtype}" weight="{ent.weight}"{flattenXml(ent.xmlProps)}/>\n')
+                output.append(
+                    f'\t\t\t<entity type="{ent.Type}" variant="{ent.Variant}" subtype="{ent.Subtype}" weight="{ent.weight}"{flattenXml(ent.xmlProps)}/>\n'
+                )
 
-            output.append('\t\t</spawn>\n')
+            output.append("\t\t</spawn>\n")
 
-        output.append('\t</room>\n')
+        output.append("\t</room>\n")
 
     if not isPreview:
         output.append("</rooms>\n")
 
-    with open(destPath, 'w') as out:
-        out.write(''.join(output))
+    with open(destPath, "w") as out:
+        out.write("".join(output))
+
 
 def commonToSTBAB(path, rooms):
     """Converts the common format to Afterbirth stb"""
 
-    headerPacker = struct.Struct('<4sI')
-    roomBegPacker = struct.Struct('<IIIBH')
-    roomEndPacker = struct.Struct('<fBBBBH')
-    doorPacker = struct.Struct('<hh?')
-    stackPacker = struct.Struct('<hhB')
-    entPacker = struct.Struct('<HHHf')
+    headerPacker = struct.Struct("<4sI")
+    roomBegPacker = struct.Struct("<IIIBH")
+    roomEndPacker = struct.Struct("<fBBBBH")
+    doorPacker = struct.Struct("<hh?")
+    stackPacker = struct.Struct("<hhB")
+    entPacker = struct.Struct("<HHHf")
 
     totalBytes = headerPacker.size
     totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
@@ -195,14 +224,31 @@ def commonToSTBAB(path, rooms):
         width, height = room.info.dims
         nameLen = len(room.name)
 
-        roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.info.subtype, room.difficulty, nameLen)
+        roomBegPacker.pack_into(
+            out,
+            off,
+            room.info.type,
+            room.info.variant,
+            room.info.subtype,
+            room.difficulty,
+            nameLen,
+        )
         off += roomBegPacker.size
 
-        struct.pack_into(f'<{nameLen}s', out, off, room.name.encode())
+        struct.pack_into(f"<{nameLen}s", out, off, room.name.encode())
         off += nameLen
 
         # Other room info, Doors and Entities
-        roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2, room.info.shape, len(room.info.doors), room.getSpawnCount())
+        roomEndPacker.pack_into(
+            out,
+            off,
+            room.weight,
+            width - 2,
+            height - 2,
+            room.info.shape,
+            len(room.info.doors),
+            room.getSpawnCount(),
+        )
         off += roomEndPacker.size
 
         for door in room.info.doors:
@@ -215,22 +261,25 @@ def commonToSTBAB(path, rooms):
             off += stackPacker.size
 
             for entity in stack:
-                entPacker.pack_into(out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight)
+                entPacker.pack_into(
+                    out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight
+                )
                 off += entPacker.size
 
-    with open(path, 'wb') as stb:
+    with open(path, "wb") as stb:
         stb.write(out)
+
 
 def commonToSTBRB(path, rooms):
     """Converts the common format to Rebirth stb"""
 
-    headerPacker = struct.Struct('<I')
-    roomBegPacker = struct.Struct('<IIBH')
-    roomEndPacker = struct.Struct('<fBB')
-    doorHeaderPacker = struct.Struct('<BH')
-    doorPacker = struct.Struct('<hh?')
-    stackPacker = struct.Struct('<hhB')
-    entPacker = struct.Struct('<HHHf')
+    headerPacker = struct.Struct("<I")
+    roomBegPacker = struct.Struct("<IIBH")
+    roomEndPacker = struct.Struct("<fBB")
+    doorHeaderPacker = struct.Struct("<BH")
+    doorPacker = struct.Struct("<hh?")
+    stackPacker = struct.Struct("<hhB")
+    entPacker = struct.Struct("<HHHf")
 
     totalBytes = headerPacker.size
     totalBytes += len(rooms) * (roomBegPacker.size + roomEndPacker.size)
@@ -249,9 +298,11 @@ def commonToSTBRB(path, rooms):
     for room in rooms:
         width, height = room.info.dims
         nameLen = len(room.name)
-        roomBegPacker.pack_into(out, off, room.info.type, room.info.variant, room.difficulty, nameLen)
+        roomBegPacker.pack_into(
+            out, off, room.info.type, room.info.variant, room.difficulty, nameLen
+        )
         off += roomBegPacker.size
-        struct.pack_into(f'<{nameLen}s', out, off, room.name.encode())
+        struct.pack_into(f"<{nameLen}s", out, off, room.name.encode())
         off += nameLen
         roomEndPacker.pack_into(out, off, room.weight, width - 2, height - 2)
         off += roomEndPacker.size
@@ -270,37 +321,41 @@ def commonToSTBRB(path, rooms):
             off += stackPacker.size
 
             for entity in stack:
-                entPacker.pack_into(out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight)
+                entPacker.pack_into(
+                    out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight
+                )
                 off += entPacker.size
 
-    with open(path, 'wb') as stb:
+    with open(path, "wb") as stb:
         stb.write(out)
 
+
 def stbToCommon(path):
-    header = open(path, 'rb').read(4)
+    header = open(path, "rb").read(4)
 
     try:
         header = header.decode()
     except UnicodeDecodeError:
-        header = 'STB0' # sometimes the header will actually decode successfully, so can't count on this value
+        header = "STB0"  # sometimes the header will actually decode successfully, so can't count on this value
 
-    if header == 'STB1':
+    if header == "STB1":
         return stbABToCommon(path)
-    if header == 'STB2':
+    if header == "STB2":
         return stbAntiToCommon(path)
     else:
         return stbRBToCommon(path)
 
+
 def stbABToCommon(path):
     """Converts an Afterbirth STB to the common format"""
-    stb = open(path, 'rb').read()
+    stb = open(path, "rb").read()
 
-    headerPacker = struct.Struct('<4sI')
-    roomBegPacker = struct.Struct('<IIIBH')
-    roomEndPacker = struct.Struct('<fBBBBH')
-    doorPacker = struct.Struct('<hh?')
-    stackPacker = struct.Struct('<hhB')
-    entPacker = struct.Struct('<HHHf')
+    headerPacker = struct.Struct("<4sI")
+    roomBegPacker = struct.Struct("<IIIBH")
+    roomEndPacker = struct.Struct("<fBBBBH")
+    doorPacker = struct.Struct("<hh?")
+    stackPacker = struct.Struct("<hhB")
+    entPacker = struct.Struct("<HHHf")
 
     # Header, Room count
     header, rooms = headerPacker.unpack_from(stb, 0)
@@ -316,23 +371,23 @@ def stbABToCommon(path):
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, rsubtype, difficulty, nameLen = roomData
         off += roomBegPacker.size
-        #print ("Room Data: {roomData}")
+        # print ("Room Data: {roomData}")
 
         # Room Name
-        roomName = struct.unpack_from(f'<{nameLen}s', stb, off)[0].decode()
+        roomName = struct.unpack_from(f"<{nameLen}s", stb, off)[0].decode()
         off += nameLen
-        #print (f"Room Name: {roomName}")
+        # print (f"Room Name: {roomName}")
 
         # Weight, width, height, shape, number of doors, number of entities
         entityTable = roomEndPacker.unpack_from(stb, off)
         rweight, width, height, shape, numDoors, numEnts = entityTable
         off += roomEndPacker.size
-        #print (f"Entity Table: {entityTable}")
+        # print (f"Entity Table: {entityTable}")
 
         width += 2
         height += 2
         if shape == 0:
-            print(f'Bad room shape! {rvariant}, {roomName}, {width}, {height}')
+            print(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
             shape = 1
 
         doors = []
@@ -341,9 +396,11 @@ def stbABToCommon(path):
             doorX, doorY, exists = doorPacker.unpack_from(stb, off)
             off += doorPacker.size
 
-            doors.append([ doorX + 1, doorY + 1, exists ])
+            doors.append([doorX + 1, doorY + 1, exists])
 
-        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
+        room = Room(
+            roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors
+        )
         ret.append(room)
 
         realWidth = room.info.dims[0]
@@ -357,7 +414,9 @@ def stbABToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                print(
+                    f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
+                )
                 off += entPacker.size * stackedEnts
                 continue
 
@@ -374,16 +433,19 @@ def stbABToCommon(path):
 
     return File(ret)
 
+
 def stbAntiToCommon(path):
     """Converts an Antibirth STB to the common format"""
-    stb = open(path, 'rb').read()
+    stb = open(path, "rb").read()
 
-    headerPacker = struct.Struct('<4sI')
-    roomBegPacker = struct.Struct('<IIIBH')
-    roomEndPacker = struct.Struct('<fBBBBH9s') # 9 padding bytes for some other room data
-    doorPacker = struct.Struct('<hh?')
-    stackPacker = struct.Struct('<hhB')
-    entPacker = struct.Struct('<HHHf')
+    headerPacker = struct.Struct("<4sI")
+    roomBegPacker = struct.Struct("<IIIBH")
+    roomEndPacker = struct.Struct(
+        "<fBBBBH9s"
+    )  # 9 padding bytes for some other room data
+    doorPacker = struct.Struct("<hh?")
+    stackPacker = struct.Struct("<hhB")
+    entPacker = struct.Struct("<HHHf")
 
     # Header, Room count
     header, rooms = headerPacker.unpack_from(stb, 0)
@@ -399,23 +461,23 @@ def stbAntiToCommon(path):
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, rsubtype, difficulty, nameLen = roomData
         off += roomBegPacker.size
-        #print ("Room Data: {roomData}")
+        # print ("Room Data: {roomData}")
 
         # Room Name
-        roomName = struct.unpack_from(f'<{nameLen}s', stb, off)[0].decode()
+        roomName = struct.unpack_from(f"<{nameLen}s", stb, off)[0].decode()
         off += nameLen
-        #print (f"Room Name: {roomName}")
+        # print (f"Room Name: {roomName}")
 
         # Weight, width, height, shape, number of doors, number of entities
         entityTable = roomEndPacker.unpack_from(stb, off)
         rweight, width, height, shape, numDoors, numEnts, extraData = entityTable
         off += roomEndPacker.size
-        #print (f"Entity Table: {entityTable}")
+        # print (f"Entity Table: {entityTable}")
 
         width += 2
         height += 2
         if shape == 0:
-            print(f'Bad room shape! {rvariant}, {roomName}, {width}, {height}')
+            print(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
             shape = 1
 
         doors = []
@@ -424,13 +486,15 @@ def stbAntiToCommon(path):
             doorX, doorY, exists = doorPacker.unpack_from(stb, off)
             off += doorPacker.size
 
-            doors.append([ doorX + 1, doorY + 1, exists ])
+            doors.append([doorX + 1, doorY + 1, exists])
 
-        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
+        room = Room(
+            roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors
+        )
         ret.append(room)
 
-        if extraData != b'\x00\x00\x00\x00\x00\x00\x00\x00\x00':
-            print (f'Room {room.getPrefix()} uses the extra bytes:', extraData)
+        if extraData != b"\x00\x00\x00\x00\x00\x00\x00\x00\x00":
+            print(f"Room {room.getPrefix()} uses the extra bytes:", extraData)
 
         realWidth = room.info.dims[0]
         gridLen = room.info.gridLen()
@@ -443,7 +507,9 @@ def stbAntiToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                print(
+                    f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
+                )
                 off += entPacker.size * stackedEnts
                 continue
 
@@ -460,16 +526,17 @@ def stbAntiToCommon(path):
 
     return File(ret)
 
+
 def stbRBToCommon(path):
     """Converts an Rebirth STB to the common format"""
-    stb = open(path, 'rb').read()
+    stb = open(path, "rb").read()
 
-    headerPacker = struct.Struct('<I')
-    roomBegPacker = struct.Struct('<IIBH')
-    roomEndPacker = struct.Struct('<fBBBH')
-    doorPacker = struct.Struct('<hh?')
-    stackPacker = struct.Struct('<hhB')
-    entPacker = struct.Struct('<HHHf')
+    headerPacker = struct.Struct("<I")
+    roomBegPacker = struct.Struct("<IIBH")
+    roomEndPacker = struct.Struct("<fBBBH")
+    doorPacker = struct.Struct("<hh?")
+    stackPacker = struct.Struct("<hhB")
+    entPacker = struct.Struct("<HHHf")
 
     # Room count
     # No header for rebirth
@@ -484,25 +551,25 @@ def stbRBToCommon(path):
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, difficulty, nameLen = roomData
         off += roomBegPacker.size
-        #print ("Room Data: {roomData}")
+        # print ("Room Data: {roomData}")
 
         # Room Name
-        roomName = struct.unpack_from(f'<{nameLen}s', stb, off)[0].decode()
+        roomName = struct.unpack_from(f"<{nameLen}s", stb, off)[0].decode()
         off += nameLen
-        #print (f"Room Name: {roomName}")
+        # print (f"Room Name: {roomName}")
 
         # Weight, width, height, number of doors, number of entities
         # No shape for rebirth
         entityTable = roomEndPacker.unpack_from(stb, off)
         rweight, width, height, numDoors, numEnts = entityTable
         off += roomEndPacker.size
-        #print (f"Entity Table: {entityTable}")
+        # print (f"Entity Table: {entityTable}")
 
         # We have to figure out the shape manually for rebirth
         width += 2
         height += 2
         shape = 1
-        for s in [ 1, 4, 6, 8 ]: # only valid room shapes as of rebirth, defaults to 1x1
+        for s in [1, 4, 6, 8]:  # only valid room shapes as of rebirth, defaults to 1x1
             w, h = Room.Info(shape=s).dims
             if w == width and h == height:
                 shape = s
@@ -514,9 +581,11 @@ def stbRBToCommon(path):
             doorX, doorY, exists = doorPacker.unpack_from(stb, off)
             off += doorPacker.size
 
-            doors.append([ doorX + 1, doorY + 1, exists ])
+            doors.append([doorX + 1, doorY + 1, exists])
 
-        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, 0, shape, doors)
+        room = Room(
+            roomName, None, difficulty, rweight, rtype, rvariant, 0, shape, doors
+        )
         ret.append(room)
 
         realWidth = room.info.dims[0]
@@ -530,7 +599,9 @@ def stbRBToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                print(
+                    f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
+                )
                 off += entPacker.size * stackedEnts
                 continue
 
@@ -543,9 +614,10 @@ def stbRBToCommon(path):
 
                 ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight))
 
-            room.gridSpawns = room.gridSpawns # used to update spawn count
+            room.gridSpawns = room.gridSpawns  # used to update spawn count
 
     return File(ret)
+
 
 def xmlToCommon(path, destPath=None):
     """Converts an Afterbirth xml to the common format"""
@@ -554,104 +626,132 @@ def xmlToCommon(path, destPath=None):
 
     root = xml.getroot()  # can be stage, rooms, etc
 
-    rooms = root.findall('room')
+    rooms = root.findall("room")
     ret = []
 
     for roomNode in rooms:
 
         roomXmlProps = dict(roomNode.attrib)
 
-        rtype      = int(roomNode.get('type') or '1')
-        del roomXmlProps['type']
-        rvariant   = int(roomNode.get('variant') or '0')
-        del roomXmlProps['variant']
-        rsubtype   = int(roomNode.get('subtype') or '0')
-        del roomXmlProps['subtype']
-        difficulty = int(roomNode.get('difficulty') or '0')
-        del roomXmlProps['difficulty']
-        roomName   = roomNode.get('name') or ''
-        del roomXmlProps['name']
-        rweight    = float(roomNode.get('weight') or '1')
-        del roomXmlProps['weight']
-        shape      = int(roomNode.get('shape') or '-1')
-        del roomXmlProps['shape']
+        rtype = int(roomNode.get("type") or "1")
+        del roomXmlProps["type"]
+        rvariant = int(roomNode.get("variant") or "0")
+        del roomXmlProps["variant"]
+        rsubtype = int(roomNode.get("subtype") or "0")
+        del roomXmlProps["subtype"]
+        difficulty = int(roomNode.get("difficulty") or "0")
+        del roomXmlProps["difficulty"]
+        roomName = roomNode.get("name") or ""
+        del roomXmlProps["name"]
+        rweight = float(roomNode.get("weight") or "1")
+        del roomXmlProps["weight"]
+        shape = int(roomNode.get("shape") or "-1")
+        del roomXmlProps["shape"]
 
         if shape == -1:
             shape = None
-            width = int(roomNode.get('width') or '13') + 2
-            height = int(roomNode.get('height') or '7') + 2
+            width = int(roomNode.get("width") or "13") + 2
+            height = int(roomNode.get("height") or "7") + 2
             dims = (width, height)
             for k, s in Room.Shapes.items():
-                if s['Dims'] == dims:
+                if s["Dims"] == dims:
                     shape = k
                     break
 
         shape = shape or 1
 
-        del roomXmlProps['width']
-        del roomXmlProps['height']
+        del roomXmlProps["width"]
+        del roomXmlProps["height"]
 
-        lastTestTime = roomXmlProps.get('lastTestTime', None)
+        lastTestTime = roomXmlProps.get("lastTestTime", None)
         if lastTestTime:
             try:
                 lastTestTime = datetime.datetime.fromisoformat(lastTestTime)
-                del roomXmlProps['lastTestTime']
+                del roomXmlProps["lastTestTime"]
             except:
-                print('Invalid test time string found', lastTestTime)
+                print("Invalid test time string found", lastTestTime)
                 traceback.print_exception(*sys.exc_info())
                 lastTestTime = None
 
-        doors = list(map(lambda door: [ int(door.get('x')) + 1, int(door.get('y')) + 1, door.get('exists', "0")[0] in "1tTyY" ], roomNode.findall('door')))
+        doors = list(
+            map(
+                lambda door: [
+                    int(door.get("x")) + 1,
+                    int(door.get("y")) + 1,
+                    door.get("exists", "0")[0] in "1tTyY",
+                ],
+                roomNode.findall("door"),
+            )
+        )
 
-        room = Room(roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors)
+        room = Room(
+            roomName, None, difficulty, rweight, rtype, rvariant, rsubtype, shape, doors
+        )
         room.xmlProps = roomXmlProps
         room.lastTestTime = lastTestTime
         ret.append(room)
 
         realWidth = room.info.dims[0]
         gridLen = room.info.gridLen()
-        for spawn in roomNode.findall('spawn'):
-            ex, ey, stackedEnts = int(spawn.get('x')) + 1, int(spawn.get('y')) + 1, spawn.findall('entity')
+        for spawn in roomNode.findall("spawn"):
+            ex, ey, stackedEnts = (
+                int(spawn.get("x")) + 1,
+                int(spawn.get("y")) + 1,
+                spawn.findall("entity"),
+            )
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(f'Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}')
+                print(
+                    f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
+                )
                 continue
 
             ents = room.gridSpawns[grindex]
             for ent in stackedEnts:
                 entityXmlProps = dict(ent.attrib)
-                etype, evariant, esubtype, eweight = int(ent.get('type')), int(ent.get('variant')), int(ent.get('subtype')), float(ent.get('weight'))
-                del entityXmlProps['type']
-                del entityXmlProps['variant']
-                del entityXmlProps['subtype']
-                del entityXmlProps['weight']
-                ents.append(Entity(ex, ey, etype, evariant, esubtype, eweight, entityXmlProps))
+                etype, evariant, esubtype, eweight = (
+                    int(ent.get("type")),
+                    int(ent.get("variant")),
+                    int(ent.get("subtype")),
+                    float(ent.get("weight")),
+                )
+                del entityXmlProps["type"]
+                del entityXmlProps["variant"]
+                del entityXmlProps["subtype"]
+                del entityXmlProps["weight"]
+                ents.append(
+                    Entity(ex, ey, etype, evariant, esubtype, eweight, entityXmlProps)
+                )
 
             room.gridSpawns = room.gridSpawns
 
     fileXmlProps = dict(root.attrib)
     return File(ret, fileXmlProps)
 
+
 def stbABToXML(path, destPath=None):
-    destPath = destPath or Path(path).with_suffix('.xml')
+    destPath = destPath or Path(path).with_suffix(".xml")
     return commonToXML(destPath, stbABToCommon(path))
 
+
 def xmlToSTBAB(path, destPath=None):
-    destPath = destPath or Path(path).with_suffix('.stb')
+    destPath = destPath or Path(path).with_suffix(".stb")
     return commonToSTBAB(destPath, xmlToCommon(path))
+
 
 # HA HA HA FUNNY MODE FUNNY MODE
 def txtToCommon(path, entityXML):
     """Convert a txt file to the common format"""
-    text = Path(path).read_text('utf-8')
+    text = Path(path).read_text("utf-8")
 
     text = text.splitlines()
     numLines = len(text)
 
     def skipWS(i):
         for j in range(i, numLines):
-            if text[j]: return j
+            if text[j]:
+                return j
         return numLines
 
     entMap = {}
@@ -662,15 +762,17 @@ def txtToCommon(path, entityXML):
     roomBegin = 0
     for i in range(numLines):
         line = text[i]
-        line = re.sub(r'\s', '', line)
+        line = re.sub(r"\s", "", line)
         roomBegin = i
 
-        if not line: continue
-        if line.startswith('---'): break
+        if not line:
+            continue
+        if line.startswith("---"):
+            break
 
-        char, t, v, s = re.findall(r'(.)=(\d+).(\d+).(\d+)', line)[0]
+        char, t, v, s = re.findall(r"(.)=(\d+).(\d+).(\d+)", line)[0]
 
-        if char in [ '-', '|' ]:
+        if char in ["-", "|"]:
             print("Can't use - or | for entities!")
             continue
 
@@ -679,25 +781,27 @@ def txtToCommon(path, entityXML):
         s = int(s)
 
         en = entityXML.find(f"entity[@ID='{t}'][@Subtype='{s}'][@Variant='{v}']")
-        if en is None or en.get('Invalid') == '1':
-            print(f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.get('Name')}'! ({t}.{v}.{s})")
+        if en is None or en.get("Invalid") == "1":
+            print(
+                f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.get('Name')}'! ({t}.{v}.{s})"
+            )
             continue
 
         entMap[char] = (t, v, s)
 
     shapeNames = {
-        '1x1': 1,
-        '2x2': 8,
-        'closet': 2,
-        'vertcloset': 3,
-        '1x2': 4,
-        'long': 7,
-        'longvert': 5,
-        '2x1': 6,
-        'l': 10,
-        'mirrorl': 9,
-        'r': 12,
-        'mirrorr': 11
+        "1x1": 1,
+        "2x2": 8,
+        "closet": 2,
+        "vertcloset": 3,
+        "1x2": 4,
+        "long": 7,
+        "longvert": 5,
+        "2x1": 6,
+        "l": 10,
+        "mirrorl": 9,
+        "r": 12,
+        "mirrorr": 11,
     }
 
     ret = []
@@ -714,25 +818,31 @@ def txtToCommon(path, entityXML):
     while roomBegin < numLines:
         # 2 lines
         i = skipWS(roomBegin)
-        if i == numLines: break
+        if i == numLines:
+            break
 
-        rvariant, name = text[i].split(':', 1)
+        rvariant, name = text[i].split(":", 1)
         name = name.strip()
         rvariant = int(rvariant)
 
-        infoParts = re.sub(r'\s', '', text[i+1]).lower().split(',')
+        infoParts = re.sub(r"\s", "", text[i + 1]).lower().split(",")
         shape = 1
         difficulty = 5
         weight = 1
         rtype = 1
         rsubtype = 0
         for part in infoParts:
-            prop, val = re.findall(r'(.+)=(.+)', part)[0]
-            if prop == 'shape': shape = shapeNames.get(val) or int(val)
-            elif prop == 'difficulty': difficulty = shapeNames.get(val) or int(val)
-            elif prop == 'weight': weight = float(val)
-            elif prop == 'type': rtype = int(val)
-            elif prop == 'subtype': rsubtype = int(val)
+            prop, val = re.findall(r"(.+)=(.+)", part)[0]
+            if prop == "shape":
+                shape = shapeNames.get(val) or int(val)
+            elif prop == "difficulty":
+                difficulty = shapeNames.get(val) or int(val)
+            elif prop == "weight":
+                weight = float(val)
+            elif prop == "type":
+                rtype = int(val)
+            elif prop == "subtype":
+                rsubtype = int(val)
 
         r = Room(name, None, difficulty, weight, rtype, rvariant, rsubtype, shape)
         width, height = r.info.dims
@@ -741,25 +851,28 @@ def txtToCommon(path, entityXML):
         i = skipWS(i + 2)
         for j in range(i, i + height):
             if j == numLines:
-                print('Could not finish room!')
+                print("Could not finish room!")
                 break
 
             y = j - i
             row = text[j]
             for x, char in enumerate(row):
-                if char in [ '-', '|', ' ' ]:
+                if char in ["-", "|", " "]:
                     continue
-                if char.lower() == 'x':
+                if char.lower() == "x":
                     changed = False
                     for door in r.info.doors:
                         if door[0] == x and door[1] == y:
                             door[2] = False
                             changed = True
-                    if changed: continue
+                    if changed:
+                        continue
 
                 ent = entMap.get(char)
                 if ent:
-                    spawns[Room.Info.gridIndex(x,y,width)].append(Entity(x, y, ent[0], ent[1], ent[2], 0))
+                    spawns[Room.Info.gridIndex(x, y, width)].append(
+                        Entity(x, y, ent[0], ent[1], ent[2], 0)
+                    )
                 else:
                     print(f"Unknown entity! '{char}'")
 
@@ -767,10 +880,11 @@ def txtToCommon(path, entityXML):
         ret.append(r)
 
         i = skipWS(i + height)
-        if i == numLines: break
+        if i == numLines:
+            break
 
-        if not text[i].strip().startswith('---'):
-            print('Could not find separator after room!')
+        if not text[i].strip().startswith("---"):
+            print("Could not find separator after room!")
             break
 
         roomBegin = i + 1
