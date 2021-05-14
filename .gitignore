@@ -67,9 +67,6 @@ Thumbs.db
 # Repository specific stuff
 hooks/
 
-# Editor files
-.vscode
-
 # Modded Entities
 resources/Entities/ModTemp
 

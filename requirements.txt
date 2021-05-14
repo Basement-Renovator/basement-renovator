@@ -1,2 +1,3 @@
+black
 psutil
 pyqt5

@@ -1,0 +1,30 @@
+// These are Visual Studio Code settings that should apply to this particular repository
+{
+  // ----------------
+  // Vanilla settings
+  // ----------------
+
+  "editor.rulers": [100],
+  "editor.tabSize": 2,
+
+  // Linux line endings are used in this project
+  "files.eol": "\n",
+
+  // Automatically removing all trailing whitespace when saving a file
+  "files.trimTrailingWhitespace": true,
+
+  // ------
+  // Python
+  // ------
+
+  // Use "black" to automatically format Python files
+  // https://github.com/psf/black
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+
+  // Automatically run the formatter when a Python file is saved
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+  },
+}
