@@ -68,6 +68,7 @@ def checkNum(s):
 #       XML Data       #
 ########################
 
+
 def getGameVersion():
     """
     Returns the current compatibility mode, and the sub version if it exists
@@ -5891,7 +5892,7 @@ class MainWindow(QMainWindow):
                     launchArgs = ["-applaunch", "250900"] + launchArgs
 
                 appArgs = [exePath] + launchArgs
-                print('Test: Running executable', " ".join(appArgs))
+                print("Test: Running executable", " ".join(appArgs))
                 subprocess.Popen(appArgs, cwd=installPath)
             else:
                 args = " ".join(map(lambda x: " " in x and f'"{x}"' or x, launchArgs))
