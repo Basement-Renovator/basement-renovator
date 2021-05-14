@@ -1,0 +1,39 @@
+name: Build & Lint & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_lint_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./image-generator/requirements.txt
+
+      - name: Check that code is formatted with Black (1/2)
+        uses: lgeiger/black-action@master
+        with:
+          args: ./BasementRenovator.py --check
+
+      - name: Check that code is formatted with Black (2/2)
+        uses: lgeiger/black-action@master
+        with:
+          args: ./src/*.py --check
+
+      #- name: Run PyLint
+      #  run: ./lint.sh
