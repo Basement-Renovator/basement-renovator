@@ -25,7 +25,7 @@
 
   // Automatically run the formatter when a Python file is saved
   "[python]": {
-    "editor.formatOnSave": true,
+    //"editor.formatOnSave": true, // disabling until BR.py is refactored
     "editor.tabSize": 4,
   },
 }
