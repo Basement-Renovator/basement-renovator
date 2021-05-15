@@ -516,6 +516,7 @@
 	<entity BaseHP="25" Champion="1" Group="Other" ID="833" Image="resources/Entities/833.0.0 - Candler.png" Kind="Enemies" Name="Candler" Variant="0" Subtype="0" />
 	<entity Group="Other" Kind="Enemies" Image="resources/Entities/306.0.0 - Portal.png" BaseHP="10" ID="306" Name="Portal" Variant="0" Subtype="0" />
 	<entity BaseHP="15" Group="Other" ID="306" Image="resources/Entities/306.1.0 - Lil Portal.png" Kind="Enemies" Name="Lil Portal" Variant="1" Subtype="0" />
+	<entity BaseHP="15" Group="Other" ID="306" Image="resources/Entities/306.1.1 - Lil Portal (flies only).png" Kind="Enemies" Name="Lil Portal (flies only)" Variant="1" Subtype="1" />
 	<entity Group="Other" Kind="Enemies" Image="resources/Entities/308.0.0 - Fistuloid.png" BaseHP="30" Champion="1" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
 	<entity BaseHP="5" Champion="0" Group="Other" ID="310" Image="resources/Entities/311.1.0 - Leper Flesh.png" Kind="Enemies" Name="Leper Flesh" Subtype="0" Variant="1" />
 	<entity BaseHP="18" Champion="1" Group="Other" ID="824" Image="resources/Entities/824.0.0 - Gyro.png" Kind="Enemies" Name="Gyro" Variant="0" Subtype="0" />
