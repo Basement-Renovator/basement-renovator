@@ -1486,14 +1486,18 @@ class Entity(QGraphicsItem):
     RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
     RockAnm2.setAnimation()
 
-    def getPitFrame(self):
+    def getPitFrame(self, pitImg):
         def matchInStack(stack):
             for ent in stack:
-                if (
-                    ent.entity.Type == self.entity.Type
-                    and ent.entity.Variant == self.entity.Variant
-                ):
+                
+                override = ent.getGfxOverride()
+                
+                if (override is not None and
+                    override.get('Image') != pitImg):
+                    return False
+                elif ent.entity.imgPath == self.entity.imgPath:
                     return True
+                
             return False
 
         adjEnts = self.scene().getAdjacentEnts(
@@ -1712,7 +1716,19 @@ class Entity(QGraphicsItem):
 
     def updatePosition(self):
         self.setPos(self.entity.x * 26, self.entity.y * 26)
-
+    
+    def getGfxOverride(self):
+        override = None
+        
+        gfxData = self.scene().getBGGfxData()
+        if gfxData is not None:
+            entID = (
+                f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+            )
+            override = gfxData["Entities"].get(entID)
+        
+        return override
+    
     def paint(self, painter, option, widget):
 
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -1765,14 +1781,7 @@ class Entity(QGraphicsItem):
             rendered = self.entity.pixmap
             renderFunc = painter.drawPixmap
 
-            override = None
-
-            gfxData = self.scene().getBGGfxData()
-            if gfxData is not None:
-                entID = (
-                    f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-                )
-                override = gfxData["Entities"].get(entID)
+            override = self.getGfxOverride()
 
             if override is not None:
                 img = override.get("Image")
@@ -1821,7 +1830,7 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             if self.entity.renderPit:
-                Entity.PitAnm2.frame = self.getPitFrame()
+                Entity.PitAnm2.frame = self.getPitFrame(imgPath)
                 Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - pit", Entity.PitAnm2)
                 renderFunc = painter.drawImage
