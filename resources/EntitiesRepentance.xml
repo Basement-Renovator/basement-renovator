@@ -910,7 +910,7 @@
 
 	<!-- Grid -->
 	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Kind="Stage" Name="Rock" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/rocks_generic.png" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
-	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Kind="Stage" Name="Rock (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" />
+	<entity Group="Grid" ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Kind="Stage" Name="Rock (non-replaceable)" Subtype="1" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/NonRandom.png" />
 	<entity Group="Grid" ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Kind="Stage" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1010" Image="resources/Entities/1010.0.0 - Spike Rock.png" Kind="Stage" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Grid" ID="1011" Image="resources/Entities/1011.0.0 - Fool's Gold Rock.png" Kind="Stage" Name="Fool's Gold Rock" Subtype="0" Variant="0" IsGrid="1" />
@@ -919,7 +919,7 @@
 	<entity Group="Grid" ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Kind="Stage" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1901" Image="resources/Entities/1901.0.0 - Tall Block.png" Kind="Stage" Name="Tall Block" Variant="0" Subtype="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1999" Image="resources/Entities/1999.0.0 - Invisible Block.png" Kind="Stage" Name="Invisible Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/pit_generic.png" InEmptyRooms="1" IsGrid="1" UsePitTiling="1" />
+	<entity Group="Grid" ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Kind="Stage" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" />
 	<entity Group="Grid" ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Kind="Stage" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Kind="Stage" Name="Pushable TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Grid" ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Kind="Stage" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
@@ -956,8 +956,8 @@
 	<entity Group="Events" ID="969" Image="resources/Entities/969.2.0 - Event (group 2).png" Kind="Stage" Name="Event (group 2)" Subtype="0" Variant="2" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.3.0 - Event (group 3).png" Kind="Stage" Name="Event (group 3)" Subtype="0" Variant="3" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.9.0 - Event (After Cleaning).png" Kind="Stage" Name="Event (Room Clear)" Subtype="0" Variant="9" />
-	<entity Group="Events" ID="1009" Image="resources/Entities/1009.0.0 - Rock (event).png" Kind="Stage" Name="Rock (event)" Subtype="0" Variant="0" IsGrid="1" />
-	<entity Group="Events" ID="3009" Image="resources/Entities/3009.0.0 - Pit (event).png" Kind="Stage" Name="Pit (event)" Subtype="0" Variant="0" IsGrid="1" />
+	<entity Group="Events" ID="1009" Image="resources/Entities/1009.0.0 - Rock (event).png" Kind="Stage" Name="Rock (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/Event.png" />
+	<entity Group="Events" ID="3009" Image="resources/Entities/3009.0.0 - Pit (event).png" Kind="Stage" Name="Pit (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="resources/Overlays/Event.png" />
 	<entity Group="Events" ID="3002" Image="resources/Entities/3002.0.0 - Button Rail.png" Kind="Stage" Name="Button Rail" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.10.0 - Event Plate (group 0).png" Kind="Stage" Name="Event Plate (group 0)" Subtype="0" Variant="10" IsGrid="1" />
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.11.0 - Event Plate (group 1).png" Kind="Stage" Name="Event Plate (group 1)" Subtype="0" Variant="11" IsGrid="1" />
@@ -1070,8 +1070,9 @@
 
 	<!-- Poop -->
 	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Kind="Stage" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.1 - Poop (non-replaceable).png" Kind="Stage" Name="Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" />
+	<entity Group="Poop" ID="1500" Image="resources/Entities/1500.0.1 - Poop (non-replaceable).png" Kind="Stage" Name="Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1500.0.0 - Poop.png" />
 	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Kind="Stage" Name="Chunky Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Poop" ID="1495" Image="resources/Entities/1495.0.1 - Chunky Poop (non-replaceable).png" Kind="Stage" Name="Chunky Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1495.0.0 - Chunky Poop.png" />
 	<entity Group="Poop" ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Kind="Stage" Name="Red Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Poop" ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Kind="Stage" Name="Golden Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Poop" ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Kind="Stage" Name="Rainbow Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
