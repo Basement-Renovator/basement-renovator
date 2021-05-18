@@ -1303,9 +1303,9 @@ class Entity(QGraphicsItem):
             self.gfx = en.find("Gfx")
 
             self.imgPath = en.get("EditorImage") or en.get("Image")
-            
+
             self.overlayImgPath = en.get("OverlayImage")
-            
+
             self.renderPit = en.get("UsePitTiling") == "1"
             self.renderRock = en.get("UseRockTiling") == "1"
             self.rockFrame = None
@@ -1348,7 +1348,7 @@ class Entity(QGraphicsItem):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
                     self.placeVisual = parts[0]
-            
+
             if self.overlayImgPath:
                 self.overlaypixmap = QPixmap(self.overlayImgPath)
                 print(self.overlayImgPath)
@@ -1489,15 +1489,14 @@ class Entity(QGraphicsItem):
     def getPitFrame(self, pitImg):
         def matchInStack(stack):
             for ent in stack:
-                
+
                 override = ent.getGfxOverride()
-                
-                if (override is not None and
-                    override.get('Image') != pitImg):
+
+                if override is not None and override.get("Image") != pitImg:
                     return False
                 elif ent.entity.imgPath == self.entity.imgPath:
                     return True
-                
+
             return False
 
         adjEnts = self.scene().getAdjacentEnts(
@@ -1716,19 +1715,17 @@ class Entity(QGraphicsItem):
 
     def updatePosition(self):
         self.setPos(self.entity.x * 26, self.entity.y * 26)
-    
+
     def getGfxOverride(self):
         override = None
-        
+
         gfxData = self.scene().getBGGfxData()
         if gfxData is not None:
-            entID = (
-                f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-            )
+            entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
             override = gfxData["Entities"].get(entID)
-        
+
         return override
-    
+
     def paint(self, painter, option, widget):
 
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -1868,7 +1865,7 @@ class Entity(QGraphicsItem):
                 # Grid space boundary
                 painter.setPen(Qt.green)
                 drawGridBorders()
-                
+
             if self.entity.overlaypixmap:
                 painter.drawPixmap(0, 0, self.entity.overlaypixmap)
 

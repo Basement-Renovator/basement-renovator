@@ -416,8 +416,8 @@ class MainLookup:
         if paths is None:
             raise ValueError("Invalid gfx node!", node.tag, node.attrib)
 
-        for ent in node.findall('Entity'):
-            idList = ent.get('ID').split(',')
+        for ent in node.findall("Entity"):
+            idList = ent.get("ID").split(",")
 
             for id in idList:
                 entid = f"{id}.{ent.get('Variant', '0')}.{ent.get('SubType', '0')}"
