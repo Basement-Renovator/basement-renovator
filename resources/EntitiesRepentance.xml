@@ -1077,6 +1077,7 @@
 	<entity Group="Poop" ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Kind="Stage" Name="Black Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Poop" ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Kind="Stage" Name="Holy Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 	<entity Group="Poop" ID="1499" Image="resources/Entities/1499.0.0 - Giant Poop.png" Kind="Stage" Name="Giant Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+	<entity Group="Poop" ID="1501" Image="resources/Entities/1501.0.0 - Charming Poop.png" Kind="Stage" Name="Charming Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
 
 	<!-- Props -->
 	<entity Group="Props" ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Kind="Stage" Name="Random Props A" Subtype="0" Variant="10" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
