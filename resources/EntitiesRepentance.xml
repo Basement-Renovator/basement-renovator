@@ -945,8 +945,8 @@
 	<!-- Events -->
 	<entity Group="Events" ID="970" Image="resources/Entities/970.0.0 - Room Darkness.png" Kind="Stage" Name="Room Darkness" Subtype="0" Variant="0"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.0 - Water Flow (left).png" Kind="Stage" Name="Water Flow (left)" Subtype="0" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.1 - Water Flow (right).png" Kind="Stage" Name="Water Flow (right)" Subtype="1" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="2" Variant="1"/>
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.1 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="1" Variant="1"/>
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (right).png" Kind="Stage" Name="Water Flow (right)" Subtype="2" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1"/>
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.20 - Lava Disabler.png" Kind="Stage" Name="Lava Disabler" Subtype="20" Variant="1"/>
