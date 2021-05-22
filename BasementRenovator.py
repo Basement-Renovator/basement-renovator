@@ -1223,6 +1223,7 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
+    ENTITIES_WITH_PROPERTIES = (893, 3001)
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1273,7 +1274,7 @@ class Entity(QGraphicsItem):
                 en = entityXML.find(
                     f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']"
                 )
-                if t in (893, 3001):
+                if t in Entity.ENTITIES_WITH_PROPERTIES:
                     en = entityXML.find(
                         f"entity[@ID='{t}'][@Subtype='0'][@Variant='0']"
                     )
@@ -1391,7 +1392,7 @@ class Entity(QGraphicsItem):
             tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
         if e.Variant >= 4096:
             tooltipStr += "\nVariant is outside the valid range of 0 - 4095!"
-        if e.Type not in (893, 3001) and e.Subtype >= 255:
+        if e.Type not in Entity.ENTITIES_WITH_PROPERTIES and e.Subtype >= 255:
             tooltipStr += "\nSubtype is outside the valid range of 0 - 255!"
         if e.invalid:
             tooltipStr += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
@@ -1399,7 +1400,7 @@ class Entity(QGraphicsItem):
             tooltipStr += (
                 "\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!"
             )
-        if e.Type in (893, 3001):
+        if e.Type in Entity.ENTITIES_WITH_PROPERTIES:
             tooltipStr += "\nMiddle-click to configure entity properties"
 
         self.setToolTip(tooltipStr)
@@ -1865,7 +1866,11 @@ class Entity(QGraphicsItem):
             warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
-        elif var >= 4096 or (sub >= 256 and typ not in (893, 3001)) or (typ >= 1000 and not self.entity.isGridEnt):
+        elif (
+            var >= 4096
+            or (sub >= 256 and typ not in Entity.ENTITIES_WITH_PROPERTIES)
+            or (typ >= 1000 and not self.entity.isGridEnt)
+        ):
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
 
         if warningIcon:
@@ -1873,7 +1878,10 @@ class Entity(QGraphicsItem):
 
     def mousePressEvent(self, event):
         e = self.entity
-        if event.buttons() == Qt.MiddleButton and e.Type in (893,3001):
+        if (
+            event.buttons() == Qt.MiddleButton
+            and e.Type in Entity.ENTITIES_WITH_PROPERTIES
+        ):
             EntityMenu(e)
 
     def remove(self):
@@ -1940,7 +1948,7 @@ class EntityMenu(QWidget):
         self.layout = QVBoxLayout()
 
         self.entity = entity
-        self.binarySubtype = str(bin(self.entity.Subtype)).replace('0b','').zfill(12)
+        self.binarySubtype = str(bin(self.entity.Subtype)).replace("0b", "").zfill(12)
         self.property1 = int(self.binarySubtype[0:4], 2)
         self.property2 = int(self.binarySubtype[4:8], 2)
         self.property3 = int(self.binarySubtype[8:12], 2)
@@ -2023,7 +2031,7 @@ class EntityMenu(QWidget):
         Distance = QWidgetAction(menu)
         d = QSpinBox()
         d.setRange(0, 15)
-        if self.entity.Type == 893 :
+        if self.entity.Type == 893:
             d.setPrefix("Distance - ")
         elif self.entity.Type == 3001:
             d.setPrefix("Angle - ")
