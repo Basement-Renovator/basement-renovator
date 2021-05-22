@@ -1387,7 +1387,7 @@ class Entity(QGraphicsItem):
         e = self.entity
         tooltipStr = f"{e.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
 
-        if e.Type != 3001 and e.Type >= 1000 and not e.isGridEnt:
+        if e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
         if e.Variant >= 4096:
             tooltipStr += "\nVariant is outside the valid range of 0 - 4095!"
@@ -1873,7 +1873,6 @@ class Entity(QGraphicsItem):
 
     def mousePressEvent(self, event):
         e = self.entity
-        print(event.buttons())
         if event.buttons() == Qt.MiddleButton and e.Type in (893,3001):
             EntityMenu(e)
 
@@ -1986,16 +1985,28 @@ class EntityMenu(QWidget):
     def customContextMenu(self, pos):
         menu = QMenu(self.list)
 
-        # Rotation
-        Rotation = QWidgetAction(menu)
-        r = QComboBox()
-        r.addItem("Clockwise")
-        r.addItem("Counter clockwise")
-        r.setCurrentIndex(self.property1)
+        if self.entity.Type == 893:
+            # Rotation
+            Rotation = QWidgetAction(menu)
+            r = QComboBox()
+            r.addItem("Clockwise")
+            r.addItem("Counter clockwise")
+            r.setCurrentIndex(self.property1)
 
-        Rotation.setDefaultWidget(r)
-        r.currentIndexChanged.connect(self.changeProperty1)
-        menu.addAction(Rotation)
+            Rotation.setDefaultWidget(r)
+            r.currentIndexChanged.connect(self.changeProperty1)
+            menu.addAction(Rotation)
+        elif self.entity.Type == 3001:
+            # Delay
+            Delay = QWidgetAction(menu)
+            d = QSpinBox()
+            d.setRange(0, 15)
+            d.setPrefix("Delay - ")
+            d.setValue(self.property1)
+
+            Delay.setDefaultWidget(d)
+            d.valueChanged.connect(self.changeProperty1)
+            menu.addAction(Delay)
 
         # Speed
         Speed = QWidgetAction(menu)
@@ -2008,11 +2019,14 @@ class EntityMenu(QWidget):
         v.valueChanged.connect(self.changeProperty2)
         menu.addAction(Speed)
 
-        # Distance
+        # Distance/Angle
         Distance = QWidgetAction(menu)
         d = QSpinBox()
         d.setRange(0, 15)
-        d.setPrefix("Distance - ")
+        if self.entity.Type == 893 :
+            d.setPrefix("Distance - ")
+        elif self.entity.Type == 3001:
+            d.setPrefix("Angle - ")
         d.setValue(self.property3)
 
         Distance.setDefaultWidget(d)
