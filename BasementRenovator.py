@@ -1273,6 +1273,10 @@ class Entity(QGraphicsItem):
                 en = entityXML.find(
                     f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']"
                 )
+                if t in (893, 3001):
+                    en = entityXML.find(
+                        f"entity[@ID='{t}'][@Subtype='0'][@Variant='0']"
+                    )
             except:
                 print(
                     f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
@@ -1383,11 +1387,11 @@ class Entity(QGraphicsItem):
         e = self.entity
         tooltipStr = f"{e.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
 
-        if e.Type >= 1000 and not e.isGridEnt:
+        if e.Type != 3001 and e.Type >= 1000 and not e.isGridEnt:
             tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
         if e.Variant >= 4096:
             tooltipStr += "\nVariant is outside the valid range of 0 - 4095!"
-        if e.Subtype >= 255:
+        if e.Type not in (893, 3001) and e.Subtype >= 255:
             tooltipStr += "\nSubtype is outside the valid range of 0 - 255!"
         if e.invalid:
             tooltipStr += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
@@ -1395,6 +1399,8 @@ class Entity(QGraphicsItem):
             tooltipStr += (
                 "\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!"
             )
+        if e.Type in (893, 3001):
+            tooltipStr += "\nMiddle-click to configure entity properties"
 
         self.setToolTip(tooltipStr)
 
@@ -1859,11 +1865,17 @@ class Entity(QGraphicsItem):
             warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
-        elif var >= 4096 or sub >= 256 or (typ >= 1000 and not self.entity.isGridEnt):
+        elif var >= 4096 or (sub >= 256 and typ not in (893, 3001)) or (typ >= 1000 and not self.entity.isGridEnt):
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
 
         if warningIcon:
             painter.drawPixmap(18, -8, warningIcon)
+
+    def mousePressEvent(self, event):
+        e = self.entity
+        print(event.buttons())
+        if event.buttons() == Qt.MiddleButton and e.Type in (893,3001):
+            EntityMenu(e)
 
     def remove(self):
         if self.popup:
@@ -1918,6 +1930,97 @@ class Entity(QGraphicsItem):
             self.popup.setVisible(False)
             if self.scene():
                 self.scene().views()[0].canDelete = True
+
+
+class EntityMenu(QWidget):
+    def __init__(self, entity):
+        """Initializes the widget."""
+
+        QWidget.__init__(self)
+
+        self.layout = QVBoxLayout()
+
+        self.entity = entity
+        self.binarySubtype = str(bin(self.entity.Subtype)).replace('0b','').zfill(12)
+        self.property1 = int(self.binarySubtype[0:4], 2)
+        self.property2 = int(self.binarySubtype[4:8], 2)
+        self.property3 = int(self.binarySubtype[8:12], 2)
+
+        self.setupList()
+
+        self.layout.addWidget(self.list)
+        self.setLayout(self.layout)
+
+    def setupList(self):
+        self.list = QListWidget()
+        self.list.setViewMode(self.list.ListMode)
+        self.list.setSelectionMode(self.list.ExtendedSelection)
+        self.list.setResizeMode(self.list.Adjust)
+        self.list.setContextMenuPolicy(Qt.CustomContextMenu)
+
+        cursor = QCursor()
+        self.customContextMenu(cursor.pos())
+
+    # @pyqtSlot(int)
+    def changeProperty1(self, var):
+        self.entity.Subtype = 256 * var + 16 * self.property2 + self.property3
+        self.property1 = var
+        mainWindow.dirt()
+        mainWindow.scene.update()
+
+    # @pyqtSlot(int)
+    def changeProperty2(self, var):
+        self.entity.Subtype = 256 * self.property1 + 16 * var + self.property3
+        self.property2 = var
+        mainWindow.dirt()
+        mainWindow.scene.update()
+
+    # @pyqtSlot(int)
+    def changeProperty3(self, var):
+        self.entity.Subtype = 256 * self.property1 + 16 * self.property2 + var
+        self.property3 = var
+        mainWindow.dirt()
+        mainWindow.scene.update()
+
+    # @pyqtSlot(QPoint)
+    def customContextMenu(self, pos):
+        menu = QMenu(self.list)
+
+        # Rotation
+        Rotation = QWidgetAction(menu)
+        r = QComboBox()
+        r.addItem("Clockwise")
+        r.addItem("Counter clockwise")
+        r.setCurrentIndex(self.property1)
+
+        Rotation.setDefaultWidget(r)
+        r.currentIndexChanged.connect(self.changeProperty1)
+        menu.addAction(Rotation)
+
+        # Speed
+        Speed = QWidgetAction(menu)
+        v = QSpinBox()
+        v.setRange(0, 15)
+        v.setPrefix("Speed - ")
+        v.setValue(self.property2)
+
+        Speed.setDefaultWidget(v)
+        v.valueChanged.connect(self.changeProperty2)
+        menu.addAction(Speed)
+
+        # Distance
+        Distance = QWidgetAction(menu)
+        d = QSpinBox()
+        d.setRange(0, 15)
+        d.setPrefix("Distance - ")
+        d.setValue(self.property3)
+
+        Distance.setDefaultWidget(d)
+        d.valueChanged.connect(self.changeProperty3)
+        menu.addAction(Distance)
+
+        # End it
+        menu.exec(self.list.mapToGlobal(pos))
 
 
 class EntityStack(QGraphicsItem):
