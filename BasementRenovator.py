@@ -2892,7 +2892,9 @@ class RoomSelector(QWidget):
         self.duplicateRoomButton = self.toolbar.addAction(
             QIcon(), "Duplicate", self.duplicateRoom
         )
-        self.duplicateRoomButton.setToolTip("Duplicate selected room.\nAlt: Mirror X and Duplicate\nAlt+Shift: Mirror Y and Duplicate")
+        self.duplicateRoomButton.setToolTip(
+            "Duplicate selected room.\nAlt: Mirror X and Duplicate\nAlt+Shift: Mirror Y and Duplicate"
+        )
         self.exportRoomButton = self.toolbar.addAction(
             QIcon(), "Copy to File...", self.exportRoom
         )
@@ -4670,24 +4672,27 @@ class MainWindow(QMainWindow):
 
     def setupStatusBar(self):
         self.statusBar = QStatusBar()
-        self.statusBar.setStyleSheet('QStatusBar::item {border: None;}')
+        self.statusBar.setStyleSheet("QStatusBar::item {border: None;}")
         tooltipElements = [
-            {"label": ": Select", "icons": [[0,0]]},
-            {"label": ": Move Selection", "icons": [[64,0]]},
-            {"label": ": Multi Selection", "icons": [[0,0],[16,16]]},
-            {"label": ": Replace with Palette selection", "icons": [[0,0],[32,16]]},
-            {"label":": Place Object", "icons": [[32,0]]} ]
+            {"label": ": Select", "icons": [[0, 0]]},
+            {"label": ": Move Selection", "icons": [[64, 0]]},
+            {"label": ": Multi Selection", "icons": [[0, 0], [16, 16]]},
+            {"label": ": Replace with Palette selection", "icons": [[0, 0], [32, 16]]},
+            {"label": ": Place Object", "icons": [[32, 0]]},
+        ]
 
         q = QImage()
         q.load("resources/UI/uiIcons.png")
         for infoObj in tooltipElements:
             for subicon in infoObj["icons"]:
                 iconObj = QLabel()
-                iconObj.setPixmap(QPixmap.fromImage(q.copy(subicon[0], subicon[1], 16, 16)))
+                iconObj.setPixmap(
+                    QPixmap.fromImage(q.copy(subicon[0], subicon[1], 16, 16))
+                )
                 iconObj.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
                 self.statusBar.addWidget(iconObj)
             label = QLabel(infoObj["label"])
-            label.setContentsMargins(0,0,20,0)
+            label.setContentsMargins(0, 0, 20, 0)
             label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
             label.setAlignment(Qt.AlignTop)
             self.statusBar.addWidget(label)
