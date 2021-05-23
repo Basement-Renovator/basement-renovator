@@ -1099,7 +1099,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 400,
                 16,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.name}",
             )
 
@@ -1112,7 +1112,7 @@ class RoomEditorWidget(QGraphicsView):
                 20,
                 400,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"Boss: {e.entity.boss}, Champion: {e.entity.champion}",
             )
             painter.drawText(
@@ -1120,7 +1120,7 @@ class RoomEditorWidget(QGraphicsView):
                 36,
                 200,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"Base HP : {e.entity.baseHP}",
             )
 
@@ -1141,7 +1141,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 200,
                 16,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"{len(selectedEntities)} Entities Selected",
             )
 
@@ -1154,7 +1154,7 @@ class RoomEditorWidget(QGraphicsView):
                 20,
                 200,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 ", ".join(set([x.entity.name or "INVALID" for x in selectedEntities])),
             )
 
@@ -1213,7 +1213,7 @@ class RoomEditorWidget(QGraphicsView):
                         y * 26,
                         26,
                         26,
-                        Qt.AlignBottom | Qt.AlignRight,
+                        int(Qt.AlignBottom | Qt.AlignRight),
                         str(count),
                     )
 
