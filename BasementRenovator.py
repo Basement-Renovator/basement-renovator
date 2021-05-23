@@ -2767,7 +2767,7 @@ class RoomSelector(QWidget):
         self.extraToggle.setPopupMode(QToolButton.InstantPopup)
 
         self.extraToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(4 * 24, 0, 24, 24))))
-
+        self.extraToggle.setToolTip("Right click for additional filter options")
         self.extraToggle.clicked.connect(self.setExtraFilter)
         self.extraToggle.rightClicked.connect(lambda: FilterDialog(self).exec())
 
@@ -2813,28 +2813,34 @@ class RoomSelector(QWidget):
         # Palette
         self.clearAll = QToolButton()
         self.clearAll.setIconSize(QSize(24, 0))
+        self.clearAll.setToolTip("Clear all filters")
         self.clearAll.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
         self.clearAll.clicked.connect(self.clearAllFilter)
 
         self.clearName = QToolButton()
         self.clearName.setIconSize(QSize(24, 0))
+        self.clearName.setToolTip("Clear name filter")
         self.clearName.setSizePolicy(self.IDFilter.sizePolicy())
         self.clearName.clicked.connect(self.clearNameFilter)
 
         self.clearEntity = QToolButton()
         self.clearEntity.setIconSize(QSize(24, 0))
+        self.clearEntity.setToolTip("Clear entity filter")
         self.clearEntity.clicked.connect(self.clearEntityFilter)
 
         self.clearType = QToolButton()
         self.clearType.setIconSize(QSize(24, 0))
+        self.clearType.setToolTip("Clear type filter")
         self.clearType.clicked.connect(self.clearTypeFilter)
 
         self.clearExtra = QToolButton()
         self.clearExtra.setIconSize(QSize(24, 0))
+        self.clearExtra.setToolTip("Clear extra filter")
         self.clearExtra.clicked.connect(self.clearExtraFilter)
 
         self.clearSize = QToolButton()
         self.clearSize.setIconSize(QSize(24, 0))
+        self.clearSize.setToolTip("Clear size filter")
         self.clearSize.clicked.connect(self.clearSizeFilter)
 
         self.filter.addWidget(self.clearAll, 1, 0)
@@ -2886,6 +2892,7 @@ class RoomSelector(QWidget):
         self.duplicateRoomButton = self.toolbar.addAction(
             QIcon(), "Duplicate", self.duplicateRoom
         )
+        self.duplicateRoomButton.setToolTip("Duplicate selected room.\nAlt: Mirror X and Duplicate\nAlt+Shift: Mirror Y and Duplicate")
         self.exportRoomButton = self.toolbar.addAction(
             QIcon(), "Copy to File...", self.exportRoom
         )
