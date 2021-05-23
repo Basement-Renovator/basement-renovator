@@ -1099,7 +1099,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 400,
                 16,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.name}",
             )
 
@@ -1112,7 +1112,7 @@ class RoomEditorWidget(QGraphicsView):
                 20,
                 400,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"Boss: {e.entity.boss}, Champion: {e.entity.champion}",
             )
             painter.drawText(
@@ -1120,7 +1120,7 @@ class RoomEditorWidget(QGraphicsView):
                 36,
                 200,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"Base HP : {e.entity.baseHP}",
             )
 
@@ -1141,7 +1141,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 200,
                 16,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 f"{len(selectedEntities)} Entities Selected",
             )
 
@@ -1154,7 +1154,7 @@ class RoomEditorWidget(QGraphicsView):
                 20,
                 200,
                 12,
-                Qt.AlignRight | Qt.AlignBottom,
+                int(Qt.AlignRight | Qt.AlignBottom),
                 ", ".join(set([x.entity.name or "INVALID" for x in selectedEntities])),
             )
 
@@ -1213,7 +1213,7 @@ class RoomEditorWidget(QGraphicsView):
                         y * 26,
                         26,
                         26,
-                        Qt.AlignBottom | Qt.AlignRight,
+                        int(Qt.AlignBottom | Qt.AlignRight),
                         str(count),
                     )
 
@@ -2767,7 +2767,7 @@ class RoomSelector(QWidget):
         self.extraToggle.setPopupMode(QToolButton.InstantPopup)
 
         self.extraToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(4 * 24, 0, 24, 24))))
-
+        self.extraToggle.setToolTip("Right click for additional filter options")
         self.extraToggle.clicked.connect(self.setExtraFilter)
         self.extraToggle.rightClicked.connect(lambda: FilterDialog(self).exec())
 
@@ -2813,28 +2813,34 @@ class RoomSelector(QWidget):
         # Palette
         self.clearAll = QToolButton()
         self.clearAll.setIconSize(QSize(24, 0))
+        self.clearAll.setToolTip("Clear all filters")
         self.clearAll.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
         self.clearAll.clicked.connect(self.clearAllFilter)
 
         self.clearName = QToolButton()
         self.clearName.setIconSize(QSize(24, 0))
+        self.clearName.setToolTip("Clear name filter")
         self.clearName.setSizePolicy(self.IDFilter.sizePolicy())
         self.clearName.clicked.connect(self.clearNameFilter)
 
         self.clearEntity = QToolButton()
         self.clearEntity.setIconSize(QSize(24, 0))
+        self.clearEntity.setToolTip("Clear entity filter")
         self.clearEntity.clicked.connect(self.clearEntityFilter)
 
         self.clearType = QToolButton()
         self.clearType.setIconSize(QSize(24, 0))
+        self.clearType.setToolTip("Clear type filter")
         self.clearType.clicked.connect(self.clearTypeFilter)
 
         self.clearExtra = QToolButton()
         self.clearExtra.setIconSize(QSize(24, 0))
+        self.clearExtra.setToolTip("Clear extra filter")
         self.clearExtra.clicked.connect(self.clearExtraFilter)
 
         self.clearSize = QToolButton()
         self.clearSize.setIconSize(QSize(24, 0))
+        self.clearSize.setToolTip("Clear size filter")
         self.clearSize.clicked.connect(self.clearSizeFilter)
 
         self.filter.addWidget(self.clearAll, 1, 0)
@@ -2885,6 +2891,9 @@ class RoomSelector(QWidget):
         )
         self.duplicateRoomButton = self.toolbar.addAction(
             QIcon(), "Duplicate", self.duplicateRoom
+        )
+        self.duplicateRoomButton.setToolTip(
+            "Duplicate selected room.\nAlt: Mirror X and Duplicate\nAlt+Shift: Mirror Y and Duplicate"
         )
         self.exportRoomButton = self.toolbar.addAction(
             QIcon(), "Copy to File...", self.exportRoom
@@ -4395,6 +4404,7 @@ class MainWindow(QMainWindow):
 
         self.setupDocks()
         self.setupMenuBar()
+        self.setupStatusBar()
 
         self.setGeometry(100, 500, 1280, 600)
 
@@ -4659,6 +4669,35 @@ class MainWindow(QMainWindow):
         self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
 
         self.addDockWidget(Qt.LeftDockWidgetArea, self.EntityPaletteDock)
+
+    def setupStatusBar(self):
+        self.statusBar = QStatusBar()
+        self.statusBar.setStyleSheet("QStatusBar::item {border: None;}")
+        tooltipElements = [
+            {"label": ": Select", "icons": [[0, 0]]},
+            {"label": ": Move Selection", "icons": [[64, 0]]},
+            {"label": ": Multi Selection", "icons": [[0, 0], [16, 16]]},
+            {"label": ": Replace with Palette selection", "icons": [[0, 0], [32, 16]]},
+            {"label": ": Place Object", "icons": [[32, 0]]},
+        ]
+
+        q = QImage()
+        q.load("resources/UI/uiIcons.png")
+        for infoObj in tooltipElements:
+            for subicon in infoObj["icons"]:
+                iconObj = QLabel()
+                iconObj.setPixmap(
+                    QPixmap.fromImage(q.copy(subicon[0], subicon[1], 16, 16))
+                )
+                iconObj.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+                self.statusBar.addWidget(iconObj)
+            label = QLabel(infoObj["label"])
+            label.setContentsMargins(0, 0, 20, 0)
+            label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+            label.setAlignment(Qt.AlignTop)
+            self.statusBar.addWidget(label)
+
+        self.setStatusBar(self.statusBar)
 
     def restoreEditMenu(self):
         a = self.e.actions()
