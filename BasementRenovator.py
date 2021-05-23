@@ -3441,8 +3441,21 @@ class RoomSelector(QWidget):
                 v = numRooms
                 extra = " (copy)"
 
+            usedRoomName = room.name
+            if extra in room.name and extra != "":
+                extraCount = room.name.count(extra)
+                regSearch = QRegularExpression(" \((\d*)\)")
+                counterMatches = regSearch.match(room.name)
+                if counterMatches.hasMatch():
+                    counter = counterMatches.captured(
+                        counterMatches.lastCapturedIndex()
+                    )
+                    extraCount = extraCount + int(counter)
+                usedRoomName = room.name.split(extra)[0]
+                extra = extra + " (" + str(extraCount) + ")"
+
             r = Room(
-                deepcopy(room.name + extra),
+                deepcopy(usedRoomName + extra),
                 deepcopy(room.gridSpawns),
                 deepcopy(room.difficulty),
                 deepcopy(room.weight),
