@@ -4402,6 +4402,7 @@ class MainWindow(QMainWindow):
 
         self.setupDocks()
         self.setupMenuBar()
+        self.setupStatusBar()
 
         self.setGeometry(100, 500, 1280, 600)
 
@@ -4666,6 +4667,32 @@ class MainWindow(QMainWindow):
         self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
 
         self.addDockWidget(Qt.LeftDockWidgetArea, self.EntityPaletteDock)
+
+    def setupStatusBar(self):
+        self.statusBar = QStatusBar()
+        self.statusBar.setStyleSheet('QStatusBar::item {border: None;}')
+        tooltipElements = [
+            {"label": ": Select", "icons": [[0,0]]},
+            {"label": ": Move Selection", "icons": [[64,0]]},
+            {"label": ": Multi Selection", "icons": [[0,0],[16,16]]},
+            {"label": ": Replace with Palette selection", "icons": [[0,0],[32,16]]},
+            {"label":": Place Object", "icons": [[32,0]]} ]
+
+        q = QImage()
+        q.load("resources/UI/uiIcons.png")
+        for infoObj in tooltipElements:
+            for subicon in infoObj["icons"]:
+                iconObj = QLabel()
+                iconObj.setPixmap(QPixmap.fromImage(q.copy(subicon[0], subicon[1], 16, 16)))
+                iconObj.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+                self.statusBar.addWidget(iconObj)
+            label = QLabel(infoObj["label"])
+            label.setContentsMargins(0,0,20,0)
+            label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+            label.setAlignment(Qt.AlignTop)
+            self.statusBar.addWidget(label)
+
+        self.setStatusBar(self.statusBar)
 
     def restoreEditMenu(self):
         a = self.e.actions()
