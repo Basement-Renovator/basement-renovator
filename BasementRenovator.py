@@ -1351,7 +1351,6 @@ class Entity(QGraphicsItem):
 
             if self.overlayImgPath:
                 self.overlaypixmap = QPixmap(self.overlayImgPath)
-                print(self.overlayImgPath)
 
             self.invalid = en.get("Invalid") == "1"
             self.known = True
