@@ -1835,9 +1835,11 @@ class Entity(QGraphicsItem):
             ):
                 painter.setPen(self.OFFSET_SELECTION_PEN)
                 painter.setBrush(Qt.NoBrush)
-                painter.drawLine(13, 13, x + width / 2, y + height - 13)
+                painter.drawLine(13, 13, int(x + width / 2), y + height - 13)
                 drawGridBorders()
-                painter.fillRect(x + width / 2 - 3, y + height - 13 - 3, 6, 6, Qt.red)
+                painter.fillRect(
+                    int(x + width / 2 - 3), y + height - 13 - 3, 6, 6, Qt.red
+                )
 
             if self.isSelected():
                 painter.setPen(self.SELECTION_PEN)
@@ -2657,10 +2659,14 @@ class FilterMenu(QMenu):
         for act in self.actions():
             rect = self.actionGeometry(act)
             painter.fillRect(
-                rect.right() / 2 - 12, rect.top() - 2, 24, 24, QBrush(Qt.transparent)
+                int(rect.right() / 2 - 12),
+                rect.top() - 2,
+                24,
+                24,
+                QBrush(Qt.transparent),
             )
             painter.drawPixmap(
-                rect.right() / 2 - 12, rect.top() - 2, act.icon().pixmap(24, 24)
+                int(rect.right() / 2 - 12), rect.top() - 2, act.icon().pixmap(24, 24)
             )
 
 
