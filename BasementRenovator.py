@@ -1489,12 +1489,9 @@ class Entity(QGraphicsItem):
         def matchInStack(stack):
             for ent in stack:
 
-                override = ent.getGfxOverride()
+                img = ent.getCurrentImg()
 
-                if override is not None and override.get("Image") != pitImg:
-                    return False
-                elif ent.entity.imgPath == self.entity.imgPath:
-                    return True
+                return img == pitImg
 
             return False
 
@@ -1601,12 +1598,13 @@ class Entity(QGraphicsItem):
         if seed & 3 != 0:
             return
 
+        rockImg = self.getCurrentImg()
+
         def findMatchInStack(stack):
             for ent in stack:
-                if (
-                    ent.entity.Type == self.entity.Type
-                    and ent.entity.Variant == self.entity.Variant
-                ):
+                img = ent.getCurrentImg()
+
+                if img == rockImg:
                     return ent
             return None
 
@@ -1716,14 +1714,16 @@ class Entity(QGraphicsItem):
         self.setPos(self.entity.x * 26, self.entity.y * 26)
 
     def getGfxOverride(self):
-        override = None
-
         gfxData = self.scene().getBGGfxData()
-        if gfxData is not None:
-            entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-            override = gfxData["Entities"].get(entID)
+        if gfxData is None:
+            return None
 
-        return override
+        entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+        return gfxData["Entities"].get(entID)
+
+    def getCurrentImg(self):
+        override = self.getGfxOverride()
+        return self.entity.imgPath if override is None else override.get("Image")
 
     def paint(self, painter, option, widget):
 
