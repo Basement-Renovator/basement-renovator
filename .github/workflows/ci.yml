@@ -37,3 +37,20 @@ jobs:
 
       #- name: Run PyLint
       #  run: ./lint.sh
+
+  discord:
+    name: Discord Failure Notification
+    needs: [build_lint_deploy]
+    # "always()" is needed to always run this job, even if the other jobs fail
+    # We don't want to spam the Discord channel when people have failing pull requests
+    if: always() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      # The "workflow-conclusion-action" creates a "WORKFLOW_CONCLUSION" environment variable
+      - uses: technote-space/workflow-conclusion-action@v2
+      - if: env.WORKFLOW_CONCLUSION != 'success' && env.WORKFLOW_CONCLUSION != 'cancelled'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          title: ""
