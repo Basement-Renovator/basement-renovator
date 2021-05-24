@@ -1948,11 +1948,15 @@ class EntityMenu(QWidget):
         self.layout = QVBoxLayout()
 
         self.entity = entity
-        self.binarySubtype = str(bin(self.entity.Subtype)).replace("0b", "").zfill(12)
-        self.property1 = int(self.binarySubtype[0:4], 2)
-        self.property2 = int(self.binarySubtype[4:8], 2)
-        self.property3 = int(self.binarySubtype[8:12], 2)
-
+        self.format = [ 4, 4, 4 ]
+        self.properties = [ 0 for i in self.format ]
+        subtype = self.entity.Subtype
+        for i, numBits in enumerate(self.format):
+            # clear all but the lower numBits bits of subtype
+            self.properties[i] = subtype & (1 << numBits) - 1
+            # shift subtype right, which also clears the upper numBits bits
+            subtype >>= numBits
+        self.properties = self.properties[::-1]
         self.setupList()
 
         self.layout.addWidget(self.list)
@@ -1968,24 +1972,18 @@ class EntityMenu(QWidget):
         cursor = QCursor()
         self.customContextMenu(cursor.pos())
 
-    # @pyqtSlot(int)
-    def changeProperty1(self, var):
-        self.entity.Subtype = 256 * var + 16 * self.property2 + self.property3
-        self.property1 = var
-        mainWindow.dirt()
-        mainWindow.scene.update()
+    def changeProperty(self, index, val):
+        self.properties[index] = val
 
-    # @pyqtSlot(int)
-    def changeProperty2(self, var):
-        self.entity.Subtype = 256 * self.property1 + 16 * var + self.property3
-        self.property2 = var
-        mainWindow.dirt()
-        mainWindow.scene.update()
+        subtype = 0
+        # since we're building the subtype by shifting left, go in reverse order
+        for i, numBits in enumerate(reversed(self.format)):
+            # shift the subtype left in order to leave behind numBits 0s in its place
+            subtype <<= numBits
+            # set only the lower numBits bits of the property corresponding to the reversed format index
+            subtype |= self.properties[i] & (1 << numBits) - 1
+        self.entity.Subtype = subtype
 
-    # @pyqtSlot(int)
-    def changeProperty3(self, var):
-        self.entity.Subtype = 256 * self.property1 + 16 * self.property2 + var
-        self.property3 = var
         mainWindow.dirt()
         mainWindow.scene.update()
 
@@ -1999,10 +1997,10 @@ class EntityMenu(QWidget):
             r = QComboBox()
             r.addItem("Clockwise")
             r.addItem("Counter clockwise")
-            r.setCurrentIndex(self.property1)
+            r.setCurrentIndex(self.properties[0])
 
             Rotation.setDefaultWidget(r)
-            r.currentIndexChanged.connect(self.changeProperty1)
+            r.currentIndexChanged.connect(lambda x : self.changeProperty(0, x))
             menu.addAction(Rotation)
         elif self.entity.Type == 3001:
             # Delay
@@ -2010,10 +2008,10 @@ class EntityMenu(QWidget):
             d = QSpinBox()
             d.setRange(0, 15)
             d.setPrefix("Delay - ")
-            d.setValue(self.property1)
+            d.setValue(self.properties[0])
 
             Delay.setDefaultWidget(d)
-            d.valueChanged.connect(self.changeProperty1)
+            d.valueChanged.connect(lambda x : self.changeProperty(0, x))
             menu.addAction(Delay)
 
         # Speed
@@ -2021,10 +2019,10 @@ class EntityMenu(QWidget):
         v = QSpinBox()
         v.setRange(0, 15)
         v.setPrefix("Speed - ")
-        v.setValue(self.property2)
+        v.setValue(self.properties[1])
 
         Speed.setDefaultWidget(v)
-        v.valueChanged.connect(self.changeProperty2)
+        v.valueChanged.connect(lambda x : self.changeProperty(1, x))
         menu.addAction(Speed)
 
         # Distance/Angle
@@ -2035,10 +2033,10 @@ class EntityMenu(QWidget):
             d.setPrefix("Distance - ")
         elif self.entity.Type == 3001:
             d.setPrefix("Angle - ")
-        d.setValue(self.property3)
+        d.setValue(self.properties[2])
 
         Distance.setDefaultWidget(d)
-        d.valueChanged.connect(self.changeProperty3)
+        d.valueChanged.connect(lambda x : self.changeProperty(2, x))
         menu.addAction(Distance)
 
         # End it
