@@ -450,6 +450,9 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
         editorImgPath = en.get("EditorImage") and linuxPathSensitivityTraining(
             os.path.join(brPath, en.get("EditorImage"))
         )
+        overlayImgPath = en.get("OverlayImage") and linuxPathSensitivityTraining(
+            os.path.join(brPath, en.get("OverlayImage"))
+        )
 
         gfx = en.find("Gfx")
         if gfx is not None:
@@ -511,6 +514,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
             en.set("Group", "(Mod) %s" % name)
         en.set("Image", imgPath)
         en.set("EditorImage", editorImgPath)
+        en.set("OverlayImage", overlayImgPath)
 
         if fixIconFormat:
             formatFix = QImage(imgPath)
@@ -1252,6 +1256,7 @@ class Entity(QGraphicsItem):
             self.blocksDoor = True
 
             self.imgPath = None
+            self.overlayImgPath = None
             self.gfx = None
             self.renderPit = None
             self.renderRock = None
@@ -1259,6 +1264,7 @@ class Entity(QGraphicsItem):
 
             self.pixmap = None
             self.iconpixmap = None
+            self.overlaypixmap = None
 
             self.mirrorX = None
             self.mirrorY = None
@@ -1297,6 +1303,8 @@ class Entity(QGraphicsItem):
             self.gfx = en.find("Gfx")
 
             self.imgPath = en.get("EditorImage") or en.get("Image")
+
+            self.overlayImgPath = en.get("OverlayImage")
 
             self.renderPit = en.get("UsePitTiling") == "1"
             self.renderRock = en.get("UseRockTiling") == "1"
@@ -1340,6 +1348,9 @@ class Entity(QGraphicsItem):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
                     self.placeVisual = parts[0]
+
+            if self.overlayImgPath:
+                self.overlaypixmap = QPixmap(self.overlayImgPath)
 
             self.invalid = en.get("Invalid") == "1"
             self.known = True
@@ -1474,14 +1485,15 @@ class Entity(QGraphicsItem):
     RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
     RockAnm2.setAnimation()
 
-    def getPitFrame(self):
+    def getPitFrame(self, pitImg):
         def matchInStack(stack):
             for ent in stack:
-                if (
-                    ent.entity.Type == self.entity.Type
-                    and ent.entity.Variant == self.entity.Variant
-                ):
+
+                img = ent.getCurrentImg()
+
+                if img == pitImg:
                     return True
+
             return False
 
         adjEnts = self.scene().getAdjacentEnts(
@@ -1587,12 +1599,13 @@ class Entity(QGraphicsItem):
         if seed & 3 != 0:
             return
 
+        rockImg = self.getCurrentImg()
+
         def findMatchInStack(stack):
             for ent in stack:
-                if (
-                    ent.entity.Type == self.entity.Type
-                    and ent.entity.Variant == self.entity.Variant
-                ):
+                img = ent.getCurrentImg()
+
+                if img == rockImg:
                     return ent
             return None
 
@@ -1701,6 +1714,18 @@ class Entity(QGraphicsItem):
     def updatePosition(self):
         self.setPos(self.entity.x * 26, self.entity.y * 26)
 
+    def getGfxOverride(self):
+        gfxData = self.scene().getBGGfxData()
+        if gfxData is None:
+            return None
+
+        entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+        return gfxData["Entities"].get(entID)
+
+    def getCurrentImg(self):
+        override = self.getGfxOverride()
+        return self.entity.imgPath if override is None else override.get("Image")
+
     def paint(self, painter, option, widget):
 
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -1753,14 +1778,7 @@ class Entity(QGraphicsItem):
             rendered = self.entity.pixmap
             renderFunc = painter.drawPixmap
 
-            override = None
-
-            gfxData = self.scene().getBGGfxData()
-            if gfxData is not None:
-                entID = (
-                    f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-                )
-                override = gfxData["Entities"].get(entID)
+            override = self.getGfxOverride()
 
             if override is not None:
                 img = override.get("Image")
@@ -1809,7 +1827,7 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             if self.entity.renderPit:
-                Entity.PitAnm2.frame = self.getPitFrame()
+                Entity.PitAnm2.frame = self.getPitFrame(imgPath)
                 Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - pit", Entity.PitAnm2)
                 renderFunc = painter.drawImage
@@ -1849,6 +1867,9 @@ class Entity(QGraphicsItem):
                 # Grid space boundary
                 painter.setPen(Qt.green)
                 drawGridBorders()
+
+            if self.entity.overlaypixmap:
+                painter.drawPixmap(0, 0, self.entity.overlaypixmap)
 
         if not self.entity.known:
             painter.setFont(QFont("Arial", 6))
