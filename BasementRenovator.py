@@ -1491,7 +1491,8 @@ class Entity(QGraphicsItem):
 
                 img = ent.getCurrentImg()
 
-                return img == pitImg
+                if img == pitImg:
+                    return True
 
             return False
 
