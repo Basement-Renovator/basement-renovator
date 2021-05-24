@@ -1327,6 +1327,7 @@ class Entity(QGraphicsItem):
             self.rockFrame = None
 
             self.isTiler = en.get("IsTiler") == "1"
+
             def getEnt(s):
                 return list(map(int, s.split(".")))
 
