@@ -1876,14 +1876,6 @@ class Entity(QGraphicsItem):
         if warningIcon:
             painter.drawPixmap(18, -8, warningIcon)
 
-    def mousePressEvent(self, event):
-        e = self.entity
-        if (
-            event.buttons() == Qt.MiddleButton
-            and e.Type in Entity.ENTITIES_WITH_PROPERTIES
-        ):
-            EntityMenu(e)
-
     def remove(self):
         if self.popup:
             self.popup.remove()
@@ -1893,8 +1885,15 @@ class Entity(QGraphicsItem):
         self.scene().removeItem(self)
 
     def mouseReleaseEvent(self, event):
-        self.hideWeightPopup()
-        QGraphicsItem.mouseReleaseEvent(self, event)
+        e = self.entity
+        if (
+            event.button() == Qt.MiddleButton
+            and e.Type in Entity.ENTITIES_WITH_PROPERTIES
+        ):
+            EntityMenu(e)
+        else:
+            self.hideWeightPopup()
+            QGraphicsItem.mouseReleaseEvent(self, event)
 
     def hoverEnterEvent(self, event):
         self.createWeightPopup()
