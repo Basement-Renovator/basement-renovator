@@ -1716,14 +1716,12 @@ class Entity(QGraphicsItem):
         self.setPos(self.entity.x * 26, self.entity.y * 26)
 
     def getGfxOverride(self):
-        override = None
-
         gfxData = self.scene().getBGGfxData()
-        if gfxData is not None:
-            entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-            override = gfxData["Entities"].get(entID)
+        if gfxData is None:
+            return None
 
-        return override
+        entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+        return gfxData["Entities"].get(entID)
 
     def paint(self, painter, option, widget):
 
