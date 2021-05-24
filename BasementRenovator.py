@@ -966,6 +966,13 @@ class RoomEditorWidget(QGraphicsView):
 
                     i.hideWeightPopup()
 
+                    if len(self.tilerHistory) > 1:
+                        last = self.tilerHistory[-1].entity
+                        lastPos = (last.x, last.y)
+
+                        if (x, y) != lastPos:
+                            self.tilerHistory = list()
+
                     # Don't stack multiple grid entities
                     if int(i.entity.Type) > 999 and int(self.objectToPaint.ID) > 999:
                         return
@@ -976,8 +983,14 @@ class RoomEditorWidget(QGraphicsView):
         self.lastTile.add((x, y))
 
         en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
+
         if en.entity.isGridEnt:
             en.updateCoords(x, y, depth=0)
+
+        # Rail Maker, etc
+        if en.entity.isTiler:
+            self.tilerHistory.append(en)
+            en.tilerUpdate(self.tilerHistory)
 
         mainWindow.dirt()
 
@@ -985,10 +998,12 @@ class RoomEditorWidget(QGraphicsView):
         if event.buttons() == Qt.RightButton:
             if mainWindow.roomList.selectedRoom() is not None:
                 self.lastTile = set()
+                self.tilerHistory = list()
                 self.tryToPaint(event)
                 event.accept()
         else:
             self.lastTile = None
+            self.tilerHistory = None
         # not calling this for right click + adding items to the scene causes crashes
         QGraphicsView.mousePressEvent(self, event)
 
@@ -1269,6 +1284,7 @@ class Entity(QGraphicsItem):
             self.mirrorX = None
             self.mirrorY = None
 
+            self.isTiler = False
             self.getEntityInfo(t, v, s)
 
         def getEntityInfo(self, t, variant, subtype):
@@ -1310,6 +1326,7 @@ class Entity(QGraphicsItem):
             self.renderRock = en.get("UseRockTiling") == "1"
             self.rockFrame = None
 
+            self.isTiler = en.get("IsTiler") == "1"
             def getEnt(s):
                 return list(map(int, s.split(".")))
 
@@ -1656,6 +1673,92 @@ class Entity(QGraphicsItem):
             D.entity.placeVisual = (nh, g)
             DR.entity.rockFrame = 10
             DR.entity.placeVisual = (h, g)
+
+    def tilerUpdate(self, history):
+        if not self.entity.isTiler:
+            return
+
+        # change the tiler
+        if self.entity.Subtype == -1:
+            self.tilerChange(0)
+
+        if len(history) <= 1:
+            return
+
+        # get adjacent tiles
+        recentHistory = history[-3:]
+
+        def matchInStack(stack):
+            for ent in stack:
+                if ent in recentHistory:
+                    return ent
+            return False
+
+        adjEnts = self.scene().getAdjacentEnts(
+            self.entity.x, self.entity.y, useCache=True
+        )
+
+        [L, R, U, D, UL, DL, UR, DR] = list(map(matchInStack, adjEnts))
+
+        # horizontal
+        if L or R:
+            if L:
+                L.tilerChange(0)
+            if R:
+                R.tilerChange(0)
+
+            # turns
+            if DL:
+                L.tilerChange(2)
+            elif DR:
+                R.tilerChange(3)
+            if UL:
+                L.tilerChange(4)
+            elif UR:
+                R.tilerChange(5)
+
+        # vertical
+        elif U or D:
+            if U:
+                U.tilerChange(1)
+            if D:
+                D.tilerChange(1)
+
+            self.tilerChange(1)
+
+            # turns
+            if UR:
+                U.tilerChange(2)
+            elif UL:
+                U.tilerChange(3)
+            elif DR:
+                D.tilerChange(4)
+            elif DL:
+                D.tilerChange(5)
+
+        # attach stops
+        stopIndexes = [[0, 1], [-1, -2]]
+        print(len(history))
+
+        for i in stopIndexes:
+            tile = history[i[0]]
+            otherTile = history[i[1]]
+
+            if tile.entity.Variant == 0:
+                if tile.entity.x < otherTile.entity.x:
+                    tile.tilerChange(7)
+                else:
+                    tile.tilerChange(8)
+
+            elif tile.entity.Variant == 1:
+                if tile.entity.y < otherTile.entity.y:
+                    tile.tilerChange(9)
+                else:
+                    tile.tilerChange(10)
+
+    def tilerChange(self, variant):
+        self.setData(self.entity.Type, int(variant), 0)
+        self.update()
 
     def itemChange(self, change, value):
 

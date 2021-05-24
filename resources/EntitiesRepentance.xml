@@ -965,6 +965,7 @@
 	<entity Group="Events" ID="4500" Image="resources/Entities/4500.13.0 - Event Plate (group 3).png" Kind="Stage" Name="Event Plate (group 3)" Subtype="0" Variant="13" IsGrid="1" />
 	
 	<!-- Rails -->
+	<entity Group="Rails" ID="6000" Subtype="-1" Variant="-1" Image="resources/Entities/6000.-1.-1 - Rail Maker.png" Kind="Stage" Name="Rail Maker" IsTiler="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.0.0 - Rail (left-to-right).png" Kind="Stage" Name="Rail (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.1.0 - Rail (up-to-down).png" Kind="Stage" Name="Rail (up-to-down)" Subtype="0" Variant="1" IsGrid="1" />
 	<entity Group="Rails" ID="6000" Image="resources/Entities/6000.2.0 - Rail (up-to-right).png" Kind="Stage" Name="Rail (up-to-right)" Subtype="0" Variant="2" IsGrid="1" MirrorX="6000.3.0" MirrorY="6000.4.0" />
