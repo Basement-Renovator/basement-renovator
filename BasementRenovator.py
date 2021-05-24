@@ -1891,9 +1891,8 @@ class Entity(QGraphicsItem):
             and e.Type in Entity.ENTITIES_WITH_PROPERTIES
         ):
             EntityMenu(e)
-        else:
-            self.hideWeightPopup()
-            QGraphicsItem.mouseReleaseEvent(self, event)
+        self.hideWeightPopup()
+        QGraphicsItem.mouseReleaseEvent(self, event)
 
     def hoverEnterEvent(self, event):
         self.createWeightPopup()
