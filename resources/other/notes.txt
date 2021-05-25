@@ -1,0 +1,1 @@
+Use this as a drop-in replacement for EntitiesRepentance.xml if you want a whitelisted approach to detecting empty rooms instead of a blacklisted approach.
