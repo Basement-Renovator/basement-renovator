@@ -64,8 +64,8 @@ def checkNum(s):
         return False
 
 
-def printf(msg: str):
-    print(msg, flush=True)
+def printf(*args):
+    print(*args, flush=True)
 
 
 ########################
