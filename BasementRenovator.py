@@ -64,6 +64,10 @@ def checkNum(s):
         return False
 
 
+def printf(msg: str):
+    print(msg, flush=True)
+
+
 ########################
 #       XML Data       #
 ########################
@@ -177,7 +181,7 @@ def findInstallPath():
 
         # Looks like nothing was selected
         if cantFindPath or installPath == "" or not os.path.isdir(installPath):
-            print(
+            printf(
                 f"Could not find The Binding of Isaac: {version} install folder ({installPath})"
             )
             return ""
@@ -215,7 +219,7 @@ def findModsPath(installPath=None):
     version, subVer = getGameVersion()
 
     if version not in ["Afterbirth+", "Repentance"]:
-        print(f"INFO: {subVer or version} does not support mod folders")
+        printf(f"INFO: {subVer or version} does not support mod folders")
         return ""
 
     if cantFindPath:
@@ -321,7 +325,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
     if len(enList) == 0:
         return
 
-    print(f'-----------------------\nLoading entities from "{name}"')
+    printf(f'-----------------------\nLoading entities from "{name}"')
 
     def mapEn(en):
         # Fix some shit
@@ -333,7 +337,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
         s = en.get("subtype") or "0"
 
         if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
-            print("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
+            printf("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
             return None
 
         # Grab the anm location
@@ -343,7 +347,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
             )
             or ""
         )
-        print("LOADING:", anmPath)
+        printf("LOADING:", anmPath)
         if not os.path.isfile(anmPath):
             anmPath = (
                 linuxPathSensitivityTraining(
@@ -352,9 +356,9 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
                 or ""
             )
 
-            print("REDIRECT LOADING:", anmPath)
+            printf("REDIRECT LOADING:", anmPath)
             if not os.path.isfile(anmPath):
-                print("Skipping: Invalid anm2!")
+                printf("Skipping: Invalid anm2!")
                 return None
 
         anim = anm2.Config(anmPath, resourcePath)
@@ -373,7 +377,7 @@ def loadFromModXML(modPath, name, entRoot, resourcePath):
             )
             img.save(filename, "PNG")
         else:
-            print(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
+            printf(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
 
         # Write the modded entity to the entityXML temporarily for runtime
         entityTemp = ET.Element("entity")
@@ -427,14 +431,14 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
     if not os.path.isfile(entFile):
         return
 
-    print(f'-----------------------\nLoading entities from "{name}"')
+    printf(f'-----------------------\nLoading entities from "{name}"')
 
     root = None
     try:
         tree = ET.parse(entFile)
         root = tree.getroot()
     except Exception as e:
-        print("Error loading BR xml:", e)
+        printf("Error loading BR xml:", e)
         return
 
     enList = root.findall("entity")
@@ -481,7 +485,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
                 validMissingSubtype = entXML is not None
 
             if entXML is None:
-                print(
+                printf(
                     "Loading invalid entity (no entry in entities2 xml): "
                     + str(en.attrib)
                 )
@@ -502,7 +506,7 @@ def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
                         )
                     )
                 ):
-                    print(
+                    printf(
                         "Loading entity, found name mismatch! In entities2: ",
                         foundName,
                         "; In BR: ",
@@ -542,7 +546,7 @@ def loadMods(autogenerate, installPath, resourcePath):
     # Each mod in the mod folder is a Group
     modsPath = findModsPath(installPath)
     if not os.path.isdir(modsPath):
-        print("Could not find Mods Folder! Skipping mod content!")
+        printf("Could not find Mods Folder! Skipping mod content!")
         return
 
     modsInstalled = os.listdir(modsPath)
@@ -553,7 +557,7 @@ def loadMods(autogenerate, installPath, resourcePath):
     if autogenerate and not os.path.exists(autogenPath):
         os.mkdir(autogenPath)
 
-    print("LOADING MOD CONTENT")
+    printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
         modPath = os.path.join(modsPath, mod)
         brPath = os.path.join(modPath, "basementrenovator")
@@ -575,7 +579,7 @@ def loadMods(autogenerate, installPath, resourcePath):
             root = tree.getroot()
             modName = root.find("name").text
         except ET.ParseError:
-            print(
+            printf(
                 f'Failed to parse mod metadata "{modName}", falling back on default name'
             )
 
@@ -587,7 +591,7 @@ def loadMods(autogenerate, installPath, resourcePath):
             try:
                 entRoot = ET.parse(entPath).getroot()
             except ET.ParseError as e:
-                print(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
+                printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
                 continue
 
             ents = None
@@ -608,15 +612,15 @@ def loadMods(autogenerate, installPath, resourcePath):
                     )
 
                     if i >= 1000 or i < 0:
-                        print(
+                        printf(
                             f'Entity "{name}" has a type outside the 0 - 999 range! ({i}) It will not load properly from rooms!'
                         )
                     if v >= 4096 or v < 0:
-                        print(
+                        printf(
                             f'Entity "{name}" has a variant outside the 0 - 4095 range! ({v})'
                         )
                     if s >= 256 or s < 0:
-                        print(
+                        printf(
                             f'Entity "{name}" has a subtype outside the 0 - 255 range! ({s})'
                         )
 
@@ -624,7 +628,7 @@ def loadMods(autogenerate, installPath, resourcePath):
                         f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']"
                     )
                     if existingEn is not None:
-                        print(
+                        printf(
                             f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" ({i}.{v}.{s}) is overriding "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!'
                         )
                         entityXML.remove(existingEn)
@@ -1081,7 +1085,7 @@ class RoomEditorWidget(QGraphicsView):
                 q = QPixmap(roomTypes[0].get("Icon"))
                 painter.drawPixmap(2, 3, q)
             else:
-                print("Warning: Unknown room type during paintEvent:", room.getDesc())
+                printf("Warning: Unknown room type during paintEvent:", room.getDesc())
 
             # Top Text
             font = painter.font()
@@ -1296,7 +1300,7 @@ class Entity(QGraphicsItem):
                     f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']"
                 )
             except:
-                print(
+                printf(
                     f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
                 )
                 en = None
@@ -2532,12 +2536,12 @@ class Room(QListWidgetItem):
         self.info = Room.Info(myType, variant, subtype, shape)
         if doors:
             if len(self.info.doors) != len(doors):
-                print(f"{name} ({variant}): Invalid doors!", doors)
+                printf(f"{name} ({variant}): Invalid doors!", doors)
             self.info.doors = doors
 
         self.gridSpawns = spawns or [[] for x in range(self.info.gridLen())]
         if self.info.gridLen() != len(self.gridSpawns):
-            print(f"{name} ({variant}): Invalid grid spawns!")
+            printf(f"{name} ({variant}): Invalid grid spawns!")
 
         self.difficulty = difficulty
         self.weight = weight
@@ -2646,7 +2650,7 @@ class Room(QListWidgetItem):
 
         roomTypes = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
         if len(roomTypes) == 0:
-            print(
+            printf(
                 "Warning: Unknown room type during renderDisplayIcon:", self.getDesc()
             )
             return
@@ -3750,7 +3754,7 @@ class EntityGroupModel(QAbstractListModel):
                     imgPath = Path()
 
                 if not imgPath.exists():
-                    print(
+                    printf(
                         f"Could not find Entity {t}.{variant}.{subtype}'s palette icon:",
                         imgPath,
                     )
@@ -3927,7 +3931,7 @@ class EntityPalette(QWidget):
                 continue
 
             listView = EntityList()
-            print(f'Populating palette tab "{group}" with {numEnts} entities')
+            printf(f'Populating palette tab "{group}" with {numEnts} entities')
 
             listView.setModel(EntityGroupModel(group, ents))
             listView.model().view = listView
@@ -5139,7 +5143,7 @@ class MainWindow(QMainWindow):
         self.openWrapper(path)
 
     def openWrapper(self, path, addToRecent=True):
-        print(path)
+        printf(path)
         file, ext = os.path.splitext(path)
         isXml = ext == ".xml"
 
@@ -5225,14 +5229,14 @@ class MainWindow(QMainWindow):
             if len(normalDoors) != len(sortedDoors) or not sameDoorLocs(
                 normalDoors, sortedDoors
             ):
-                print(
+                printf(
                     f"Invalid doors in room {room.getPrefix()}: Expected {normalDoors}, Got {sortedDoors}"
                 )
 
             for stackedEnts, ex, ey in room.spawns():
 
                 if not room.info.isInBounds(ex, ey):
-                    print(
+                    printf(
                         f"Found entity with out of bounds spawn loc in room {room.getPrefix()}: {ex-1}, {ey-1}"
                     )
 
@@ -5243,7 +5247,7 @@ class MainWindow(QMainWindow):
                             f"entity[@ID='{eType}'][@Subtype='{eSubtype}'][@Variant='{eVariant}']"
                         )
                         if en is None or en.get("Invalid") == "1":
-                            print(
+                            printf(
                                 f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({eType}.{eVariant}.{eSubtype})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
@@ -5411,7 +5415,7 @@ class MainWindow(QMainWindow):
                     try:
                         subprocess.run([hook, fullPath, "--save"], cwd=path, timeout=60)
                     except Exception as e:
-                        print("Save hook failed! Reason:", e)
+                        printf("Save hook failed! Reason:", e)
 
     def replaceEntities(self, replaced, replacement):
         self.storeEntityList()
@@ -5553,7 +5557,7 @@ class MainWindow(QMainWindow):
             try:
                 shutil.rmtree(folder)
             except Exception as e:
-                print("Error clearing old mod data: ", e)
+                printf("Error clearing old mod data: ", e)
 
         # delete the old files
         if os.path.isdir(folder):
@@ -5577,7 +5581,7 @@ class MainWindow(QMainWindow):
                 os.makedirs(contentRoomPath)
                 mainWindow.wroteModFolder = True
             except Exception as e:
-                print("Could not copy mod template!", e)
+                printf("Could not copy mod template!", e)
                 return "", e
 
         return folder, roomPath
@@ -6014,7 +6018,7 @@ class MainWindow(QMainWindow):
                 modPath, roomPath, floorInfo, rooms, version, subVer
             ) or ([], None, "")
         except Exception as e:
-            print(
+            printf(
                 "Problem setting up test:",
                 "".join(traceback.format_exception(*sys.exc_info())),
             )
@@ -6037,7 +6041,7 @@ class MainWindow(QMainWindow):
                 try:
                     subprocess.run([hook, tp, "--test"], cwd=wd, timeout=30)
                 except Exception as e:
-                    print("Test hook failed! Reason:", e)
+                    printf("Test hook failed! Reason:", e)
 
         # Launch Isaac
         installPath = findInstallPath()
@@ -6075,7 +6079,7 @@ class MainWindow(QMainWindow):
                     launchArgs = ["-applaunch", "250900"] + launchArgs
 
                 appArgs = [exePath] + launchArgs
-                print("Test: Running executable", " ".join(appArgs))
+                printf("Test: Running executable", " ".join(appArgs))
                 subprocess.Popen(appArgs, cwd=installPath)
             else:
                 args = " ".join(map(lambda x: " " in x and f'"{x}"' or x, launchArgs))
@@ -6083,7 +6087,7 @@ class MainWindow(QMainWindow):
                 urlArgs = re.sub(r"/", "%2F", urlArgs)
 
                 url = f"steam://rungameid/250900//{urlArgs}"
-                print("Test: Opening url", url)
+                printf("Test: Opening url", url)
                 webbrowser.open(url)
 
         except Exception as e:
@@ -6319,8 +6323,8 @@ if __name__ == "__main__":
             settings.value("ResourceFolder", ""),
         )
 
-    print("-".join(["" for i in range(50)]))
-    print("INITIALIZING MAIN WINDOW")
+    printf("-".join(["" for i in range(50)]))
+    printf("INITIALIZING MAIN WINDOW")
     mainWindow = MainWindow()
 
     settings.setValue("FixIconFormat", "0")
