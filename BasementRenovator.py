@@ -1946,8 +1946,8 @@ class EntityMenu(QWidget):
         self.layout = QVBoxLayout()
 
         self.entity = entity
-        self.format = [ 4, 4, 4 ]
-        self.properties = [ 0 for i in self.format ]
+        self.format = [4, 4, 4]
+        self.properties = [0 for i in self.format]
         subtype = self.entity.Subtype
         for i, numBits in enumerate(self.format):
             # clear all but the lower numBits bits of subtype
@@ -1998,7 +1998,7 @@ class EntityMenu(QWidget):
             r.setCurrentIndex(self.properties[0])
 
             Rotation.setDefaultWidget(r)
-            r.currentIndexChanged.connect(lambda x : self.changeProperty(0, x))
+            r.currentIndexChanged.connect(lambda x: self.changeProperty(0, x))
             menu.addAction(Rotation)
         elif self.entity.Type == 3001:
             # Delay
@@ -2009,7 +2009,7 @@ class EntityMenu(QWidget):
             d.setValue(self.properties[0])
 
             Delay.setDefaultWidget(d)
-            d.valueChanged.connect(lambda x : self.changeProperty(0, x))
+            d.valueChanged.connect(lambda x: self.changeProperty(0, x))
             menu.addAction(Delay)
 
         # Speed
@@ -2020,7 +2020,7 @@ class EntityMenu(QWidget):
         v.setValue(self.properties[1])
 
         Speed.setDefaultWidget(v)
-        v.valueChanged.connect(lambda x : self.changeProperty(1, x))
+        v.valueChanged.connect(lambda x: self.changeProperty(1, x))
         menu.addAction(Speed)
 
         # Distance/Angle
@@ -2034,7 +2034,7 @@ class EntityMenu(QWidget):
         d.setValue(self.properties[2])
 
         Distance.setDefaultWidget(d)
-        d.valueChanged.connect(lambda x : self.changeProperty(2, x))
+        d.valueChanged.connect(lambda x: self.changeProperty(2, x))
         menu.addAction(Distance)
 
         # End it
