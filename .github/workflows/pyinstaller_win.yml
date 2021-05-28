@@ -3,6 +3,7 @@ name: Build a Windows executable
 on:
   workflow_run:
     workflows: ["Build & Lint & Deploy"]
+    branches: [main]
     types:
       - completed
 
