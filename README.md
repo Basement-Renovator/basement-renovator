@@ -8,9 +8,9 @@
 
 ### Download
 
-Basement Renovator is [not released regularly](https://github.com/Tempus/Basement-Renovator/releases), so we recommend that you do **not** download a release, and instead run it directly from the source code.
+The latest version of Basement Renovator is always available in the [releases section](https://github.com/Basement-Renovator/Basement-Renovator/releases), but the program can be run from source if desired.
 
-### Running From Source / Installation
+### Running From Source
 
 * [Simple Installation: Chocolatey](INSTALL.md#chocolatey)
 * [Minimal Installation: Python](INSTALL.md#python)
