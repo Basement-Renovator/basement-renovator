@@ -34,11 +34,17 @@ jobs:
         id: versioning
         with:
           releaseType: patch
-          incrementPerCommit: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: ncipollo/release-action@v1
+      - name: Create release archive
+        uses: thedoctor0/zip-release@master
         with:
-          artifacts: "dist/*"
+          filename: 'BasementRenovator.zip'
+          path: 'dist'
+
+      - name: Upload release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "BasementRenovator.zip"
           tag: ${{steps.versioning.outputs.version}}
           token: ${{ secrets.GITHUB_TOKEN }}
