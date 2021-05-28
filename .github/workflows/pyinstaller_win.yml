@@ -9,6 +9,7 @@ on:
 jobs:
   pyinstaller_win:
     runs-on: windows-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -28,10 +29,16 @@ jobs:
         run: |
          python win_build.py
 
-      - uses: actions/upload-artifact@v2
+      - name: Determine next build number
+        uses: MCKanpolat/auto-semver-action@1.0.5
+        id: versioning
         with:
-          name: BasementRenovator
-          path: dist/
- 
+          releaseType: patch
+          incrementPerCommit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/*"
+          tag: ${{steps.versioning.outputs.version}}
+          token: ${{ secrets.GITHUB_TOKEN }}
