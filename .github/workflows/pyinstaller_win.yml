@@ -36,11 +36,9 @@ jobs:
           releaseType: patch
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create release archive
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: 'BasementRenovator.zip'
-          path: 'dist'
+      - name: Create a release archive
+        run: |
+          powershell Compress-Archive dist BasementRenovator.zip
 
       - name: Upload release
         uses: ncipollo/release-action@v1
