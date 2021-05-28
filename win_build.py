@@ -28,8 +28,8 @@ exe('BasementRenovator.py',
     versionFile="winversion.txt",
     ico=os.path.normpath("resources/UI/BasementRenovator.ico"),
     addtlFiles=[
-        ('binary', os.path.join(pydir, 'Lib/site-packages/PyQt5/Qt/plugins/platforms/qwindows.dll'), './platforms'),
-        ('binary', os.path.join(pydir, 'Lib/site-packages/PyQt5/Qt/bin/libEGL.dll'), '.')
+        ('binary', os.path.join(pydir, 'Lib/site-packages/PyQt5/Qt5/plugins/platforms/qwindows.dll'), './platforms'),
+        ('binary', os.path.join(pydir, 'Lib/site-packages/PyQt5/Qt5/bin/libEGL.dll'), '.')
     ])
 
 addtl = [
