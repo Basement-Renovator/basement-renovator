@@ -1,4 +1,4 @@
-name: Build & Lint & Deploy
+name: Build & Lint
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build_lint_deploy:
+  build_lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -35,14 +35,14 @@ jobs:
         with:
           args: ./src/*.py --check
 
-      #- name: Run PyLint
+      #- name: Run PyLint (TODO)
       #  run: ./lint.sh
 
   discord:
     name: Discord Failure Notification
-    needs: [build_lint_deploy]
+    needs: [build_lint]
     # "always()" is needed to always run this job, even if the other jobs fail
-    # We don't want to spam the Discord channel when people have failing pull requests
+    # Furthermore, we don't want to spam the Discord channel when people have failing pull requests
     if: always() && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -57,7 +57,7 @@ jobs:
 
   pyinstaller_trigger:
     name: Build a Windows executable
-    needs: [build_lint_deploy]
+    needs: [build_lint]
     if: github.event_name != 'pull_request'
     runs-on: windows-latest
     steps:
