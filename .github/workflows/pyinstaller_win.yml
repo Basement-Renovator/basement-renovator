@@ -1,16 +1,11 @@
 name: Build a Windows executable
-
 on:
-  workflow_run:
-    workflows: ["Build & Lint & Deploy"]
-    branches: [main]
-    types:
-      - completed
+  repository_dispatch:
+    types: [build-release]
 
 jobs:
   pyinstaller_win:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
