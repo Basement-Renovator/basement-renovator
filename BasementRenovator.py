@@ -1231,6 +1231,7 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
+    ENTITIES_WITH_PROPERTIES = (893, 3001)
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1283,6 +1284,10 @@ class Entity(QGraphicsItem):
                 en = entityXML.find(
                     f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']"
                 )
+                if t in Entity.ENTITIES_WITH_PROPERTIES:
+                    en = entityXML.find(
+                        f"entity[@ID='{t}'][@Subtype='0'][@Variant='0']"
+                    )
             except:
                 printf(
                     f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
@@ -1402,7 +1407,7 @@ class Entity(QGraphicsItem):
             tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
         if e.Variant >= 4096:
             tooltipStr += "\nVariant is outside the valid range of 0 - 4095!"
-        if e.Subtype >= 255:
+        if e.Type not in Entity.ENTITIES_WITH_PROPERTIES and e.Subtype >= 255:
             tooltipStr += "\nSubtype is outside the valid range of 0 - 255!"
         if e.invalid:
             tooltipStr += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
@@ -1410,6 +1415,8 @@ class Entity(QGraphicsItem):
             tooltipStr += (
                 "\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!"
             )
+        if e.Type in Entity.ENTITIES_WITH_PROPERTIES:
+            tooltipStr += "\nMiddle-click to configure entity properties"
 
         self.setToolTip(tooltipStr)
 
@@ -1886,7 +1893,11 @@ class Entity(QGraphicsItem):
             warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
-        elif var >= 4096 or sub >= 256 or (typ >= 1000 and not self.entity.isGridEnt):
+        elif (
+            var >= 4096
+            or (sub >= 256 and typ not in Entity.ENTITIES_WITH_PROPERTIES)
+            or (typ >= 1000 and not self.entity.isGridEnt)
+        ):
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
 
         if warningIcon:
@@ -1901,6 +1912,12 @@ class Entity(QGraphicsItem):
         self.scene().removeItem(self)
 
     def mouseReleaseEvent(self, event):
+        e = self.entity
+        if (
+            event.button() == Qt.MiddleButton
+            and e.Type in Entity.ENTITIES_WITH_PROPERTIES
+        ):
+            EntityMenu(e)
         self.hideWeightPopup()
         QGraphicsItem.mouseReleaseEvent(self, event)
 
@@ -1945,6 +1962,110 @@ class Entity(QGraphicsItem):
             self.popup.setVisible(False)
             if self.scene():
                 self.scene().views()[0].canDelete = True
+
+
+class EntityMenu(QWidget):
+    def __init__(self, entity):
+        """Initializes the widget."""
+
+        QWidget.__init__(self)
+
+        self.layout = QVBoxLayout()
+
+        self.entity = entity
+        self.format = [4, 4, 4]
+        self.properties = [0 for i in self.format]
+        subtype = self.entity.Subtype
+        for i, numBits in enumerate(self.format):
+            # clear all but the lower numBits bits of subtype
+            self.properties[i] = subtype & (1 << numBits) - 1
+            # shift subtype right, which also clears the upper numBits bits
+            subtype >>= numBits
+        self.properties = self.properties[::-1]
+        self.setupList()
+
+        self.layout.addWidget(self.list)
+        self.setLayout(self.layout)
+
+    def setupList(self):
+        self.list = QListWidget()
+        self.list.setViewMode(self.list.ListMode)
+        self.list.setSelectionMode(self.list.ExtendedSelection)
+        self.list.setResizeMode(self.list.Adjust)
+        self.list.setContextMenuPolicy(Qt.CustomContextMenu)
+
+        cursor = QCursor()
+        self.customContextMenu(cursor.pos())
+
+    def changeProperty(self, index, val):
+        self.properties[index] = val
+
+        subtype = 0
+        # since we're building the subtype by shifting left, go in reverse order
+        for i, numBits in enumerate(reversed(self.format)):
+            # shift the subtype left in order to leave behind numBits 0s in its place
+            subtype <<= numBits
+            # set only the lower numBits bits of the property corresponding to the reversed format index
+            subtype |= self.properties[i] & (1 << numBits) - 1
+        self.entity.Subtype = subtype
+
+        mainWindow.dirt()
+        mainWindow.scene.update()
+
+    # @pyqtSlot(QPoint)
+    def customContextMenu(self, pos):
+        menu = QMenu(self.list)
+
+        if self.entity.Type == 893:
+            # Rotation
+            Rotation = QWidgetAction(menu)
+            r = QComboBox()
+            r.addItem("Clockwise")
+            r.addItem("Counter clockwise")
+            r.setCurrentIndex(self.properties[0])
+
+            Rotation.setDefaultWidget(r)
+            r.currentIndexChanged.connect(lambda x: self.changeProperty(0, x))
+            menu.addAction(Rotation)
+        elif self.entity.Type == 3001:
+            # Delay
+            Delay = QWidgetAction(menu)
+            d = QSpinBox()
+            d.setRange(0, 15)
+            d.setPrefix("Delay - ")
+            d.setValue(self.properties[0])
+
+            Delay.setDefaultWidget(d)
+            d.valueChanged.connect(lambda x: self.changeProperty(0, x))
+            menu.addAction(Delay)
+
+        # Speed
+        Speed = QWidgetAction(menu)
+        v = QSpinBox()
+        v.setRange(0, 15)
+        v.setPrefix("Speed - ")
+        v.setValue(self.properties[1])
+
+        Speed.setDefaultWidget(v)
+        v.valueChanged.connect(lambda x: self.changeProperty(1, x))
+        menu.addAction(Speed)
+
+        # Distance/Angle
+        Distance = QWidgetAction(menu)
+        d = QSpinBox()
+        d.setRange(0, 15)
+        if self.entity.Type == 893:
+            d.setPrefix("Distance - ")
+        elif self.entity.Type == 3001:
+            d.setPrefix("Angle - ")
+        d.setValue(self.properties[2])
+
+        Distance.setDefaultWidget(d)
+        d.valueChanged.connect(lambda x: self.changeProperty(2, x))
+        menu.addAction(Distance)
+
+        # End it
+        menu.exec(self.list.mapToGlobal(pos))
 
 
 class EntityStack(QGraphicsItem):

@@ -30,6 +30,9 @@ Did you know that when bulk replacing entities, the "replaced" entity is based o
 
 In the event of replacing entities across many files, check out the `bulk-entity-replacer` script in `src`. Given a config file specifying replaced entities and files to operate on, this will replace entities across those files.
 
+### Entities with SubType Properties
+Some entities (e.g. Ball & Chain and Fissure Spawner) use their SubType to customize their behavior, rather than using it as another variant (e.g. pickups). Middle-click entities to access these customizable properties.
+
 ### Recompute Room IDs
 Ever have a room file where the organization has completely gotten away from you and everything is completely out of order? This fixes that by changing their variants to be in sequence by type, starting with the first one it sees. You can also sort the rooms by variant or name before doing this.
 
