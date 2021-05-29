@@ -1,4 +1,4 @@
-name: Build & Lint
+name: Build & Lint & Release
 
 on:
   push:
