@@ -306,7 +306,7 @@
 	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Flies" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="7" Champion="1" Group="Flies" ID="819" Image="resources/Entities/819.0.0 - Fly Bomb.png" Kind="Enemies" Name="Fly Bomb" Variant="0" Subtype="0" />
-	<entity BaseHP="7" Champion="1" Group="Flies" ID="819" Image="resources/Entities/819.1.0 - Eternal Fly Bomb.png" Kind="Enemies" Name="Eternal Fly Bomb" Variant="1" Subtype="0" />
+	<!-- <entity BaseHP="7" Champion="1" Group="Flies" ID="819" Image="resources/Entities/819.1.0 - Eternal Fly Bomb.png" Kind="Enemies" Name="Eternal Fly Bomb" Variant="1" Subtype="0" /> -->
 	<entity BaseHP="40" Champion="1" Group="Flies" ID="91" Image="resources/Entities/91.0.0 - Swarmer.png" Kind="Enemies" Name="Swarmer" Subtype="0" Variant="0" />
 	<entity BaseHP="25" Group="Flies" ID="288" Image="resources/Entities/288.0.0 - Dukie.png" Kind="Enemies" Name="Dukie" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Flies" ID="289" Image="resources/Entities/289.0.0 - Ulcer.png" Kind="Enemies" Name="Ulcer" Subtype="0" Variant="0" />
@@ -347,9 +347,9 @@
 	<entity BaseHP="20" Champion="1" Group="Gapers" ID="827" Image="resources/Entities/827.0.0 - Faceless.png" Kind="Enemies" Name="Faceless" Variant="0" Subtype="0" />
 	<entity BaseHP="25" Champion="1" Group="Gapers" ID="832" Image="resources/Entities/832.0.0 - Exorcist.png" Kind="Enemies" Name="Exorcist" Variant="0" Subtype="0" />
 	<entity BaseHP="35" Champion="1" Group="Gapers" ID="832" Image="resources/Entities/832.1.0 - Fanatic.png" Kind="Enemies" Name="Fanatic" Variant="1" Subtype="0" />
-	<entity BaseHP="25" Champion="1" Group="Gapers" ID="839" Image="resources/Entities/839.0.0 - Strifer.png" Kind="Enemies" Name="Strifer" Variant="0" Subtype="0" />
-	<entity BaseHP="16" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.0.0 - Canary.png" Kind="Enemies" Name="Canary" Variant="0" Subtype="0" />
-	<entity BaseHP="18" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.1.0 - Foreigner.png" Kind="Enemies" Name="Foreigner" Variant="1" Subtype="0" />
+	<!-- <entity BaseHP="25" Champion="1" Group="Gapers" ID="839" Image="resources/Entities/839.0.0 - Strifer.png" Kind="Enemies" Name="Strifer" Variant="0" Subtype="0" /> -->
+	<!-- <entity BaseHP="16" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.0.0 - Canary.png" Kind="Enemies" Name="Canary" Variant="0" Subtype="0" /> -->
+	<!-- <entity BaseHP="18" Champion="1" Group="Gapers" ID="843" Image="resources/Entities/843.1.0 - Foreigner.png" Kind="Enemies" Name="Foreigner" Variant="1" Subtype="0" /> -->
 	<entity BaseHP="26" Champion="1" Group="Gapers" ID="844" Image="resources/Entities/844.0.0 - Bombgagger.png" Kind="Enemies" Name="Bombgagger" Variant="1" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Gapers" ID="889" Image="resources/Entities/889.0.0 - Clickety Clack.png" Kind="Enemies" Name="Clickety Clack" Variant="0" Subtype="0" />
 	<entity BaseHP="12" Champion="1" Group="Gapers" ID="890" Image="resources/Entities/890.0.0 - Maze Roamer (white).png" Kind="Enemies" Name="Maze Roamer (white)" Variant="0" Subtype="0" />
@@ -532,7 +532,7 @@
 	<entity BaseHP="24" Champion="1" Group="Other" ID="885" Image="resources/Entities/885.0.0 - Cultist.png" Kind="Enemies" Name="Cultist" Variant="0" Subtype="0" />
 	<entity BaseHP="24" Champion="1" Group="Other" ID="885" Image="resources/Entities/885.1.0 - Blood Cultist.png" Kind="Enemies" Name="Blood Cultist" Variant="1" Subtype="0" />
 	<entity BaseHP="10" Group="Other" ID="404" Image="resources/Entities/404.1.0 - Dark Ball.png" Kind="Enemies" Name="Dark Ball" Subtype="0" Variant="1" />
-	<entity BaseHP="250" Boss="1" Group="Other" ID="866" Image="resources/Entities/866.0.0 - Dark Esau.png" Kind="Enemies" Name="Dark Esau" Variant="0" Subtype="0" />
+<!-- 	<entity BaseHP="250" Boss="1" Group="Other" ID="866" Image="resources/Entities/866.0.0 - Dark Esau.png" Kind="Enemies" Name="Dark Esau" Variant="0" Subtype="0" /> -->
 
 	<!-- Poop -->
 	<entity BaseHP="3" Group="Poop" ID="217" Image="resources/Entities/217.0.0 - Dip.png" Kind="Enemies" Name="Dip" Subtype="0" Variant="0" />
@@ -659,8 +659,8 @@
 	<entity BaseHP="20" Group="Worms" ID="89" Image="resources/Entities/89.0.0 - Buttlicker.png" Kind="Enemies" Name="Buttlicker" Subtype="0" Variant="0" />
 	<entity BaseHP="16" Champion="1" Group="Worms" ID="878" Image="resources/Entities/878.0.0 - Butt Slicker.png" Kind="Enemies" Name="Butt Slicker" Variant="0" Subtype="0" />
 	<entity BaseHP="10" Group="Worms" ID="239" Image="resources/Entities/239.0.0 - Grub.png" Kind="Enemies" Name="Grub" Subtype="0" Variant="0" />
-	<entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.100.0 - Corpse Eater.png" Kind="Enemies" Name="Corpse Eater" Variant="100" Subtype="0" />
-	<entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.101.0 - Carrion Rider.png" Kind="Enemies" Name="Carrion Rider" Variant="101" Subtype="0" />
+	<!-- <entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.100.0 - Corpse Eater.png" Kind="Enemies" Name="Corpse Eater" Variant="100" Subtype="0" /> -->
+	<!-- <entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.101.0 - Carrion Rider.png" Kind="Enemies" Name="Carrion Rider" Variant="101" Subtype="0" /> -->
 	<entity BaseHP="10" Group="Worms" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Kind="Enemies" Name="Round Worm" Subtype="0" Variant="0" />
 	<entity BaseHP="35" Group="Worms" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Kind="Enemies" Name="Night Crawler" Subtype="0" Variant="0" />
 	<entity Group="Worms" Kind="Enemies" Image="resources/Entities/244.1.0 - Tube Worm.png" BaseHP="20" Champion="0" ID="244" Name="Tube Worm" Variant="1" Subtype="0" />
@@ -1062,7 +1062,7 @@
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Kind="Stage" Name="Suction Pitfall" Subtype="0" Variant="1" IsGrid="1" />
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Kind="Stage" Name="Teleport Pitfall" Subtype="0" Variant="2" IsGrid="1" />
 	<entity BaseHP="0" Group="Other" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Kind="Stage" Name="Blue Hush Pitfall" Subtype="0" Variant="3" IsGrid="1" />
-	<entity BaseHP="100" Group="Other" ID="866" Image="resources/Entities/866.1.0 - Dark Esau's Pit.png" Kind="Stage" Name="Dark Esau's Pit" Variant="1" Subtype="0" />
+	<!-- <entity BaseHP="100" Group="Other" ID="866" Image="resources/Entities/866.1.0 - Dark Esau's Pit.png" Kind="Stage" Name="Dark Esau's Pit" Variant="1" Subtype="0" /> -->
 	<entity BaseHP="0" Group="Other" ID="965" Image="resources/Entities/965.10.0 - Quest Minecart.png" Kind="Stage" Name="Quest Minecart" Variant="10" Subtype="0" />
 	<entity BaseHP="0" Group="Other" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Kind="Stage" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1" />
 	<entity Group="Other" ID="999" Image="resources/Entities/1000.141.1 - Smoke Cloud.png" Kind="Stage" Name="Smoke Cloud" Variant="141" Subtype="1" />
@@ -2300,7 +2300,7 @@
 	<!-- UNORDERED Repentance-->
 
 	<!-- Nightwatchers -->
-	<entity BaseHP="25" Group="Nightwatchers" ID="842" Image="resources/Entities/842.0.0 - Nightwatch.png" Kind="Enemies" Name="Nightwatch" Variant="0" Subtype="0" />
+	<!-- <entity BaseHP="25" Group="Nightwatchers" ID="842" Image="resources/Entities/842.0.0 - Nightwatch.png" Kind="Enemies" Name="Nightwatch" Variant="0" Subtype="0" /> -->
 
 	<!-- Tainted -->
 	<entity BaseHP="75" Group="Tainted" ID="14" Image="resources/Entities/14.2.0 - Tainted Pooter.png" Kind="Enemies" Name="Tainted Pooter" Subtype="0" Variant="2" />
