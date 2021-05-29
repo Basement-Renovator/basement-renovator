@@ -59,7 +59,7 @@ jobs:
     name: Build a Windows executable
     needs: [build_lint_deploy]
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
