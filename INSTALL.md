@@ -1,12 +1,14 @@
 # Run the Latest Release
 
-The latest release can be found in the [releases tab](https://github.com/Tempus/Basement-Renovator/releases). This is most likely out of date, so running from source is recommended.
+The latest release can be found in the [releases tab](https://github.com/Tempus/Basement-Renovator/releases).
 
 <br />
 
 # Running from Source
 
-Because Basement Renovator's build schedule is irregular, it's recommended to run it directly from the source code.
+If the latest release isn't working for you or if you want to Basement Renovator from source, then follow the instructions below.
+
+You can either follow the [step-by-step instructions using Chocolatey](#chocolatey), or the [minimal instructions](#minimal) for people who have run Python programs from source before.
 
 <br />
 
