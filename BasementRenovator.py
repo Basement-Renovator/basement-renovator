@@ -3772,7 +3772,10 @@ class EntityGroupModel(QAbstractListModel):
                     entitykinds[entitykind] = []
 
                 entitygroupname = en.get("Group")
-                if entitygroupname is not None and not entitygroupname in entitykinds[entitykind]:
+                if (
+                    entitygroupname is not None
+                    and not entitygroupname in entitykinds[entitykind]
+                ):
                     entitykinds[entitykind].append(entitygroupname)
 
             if self.kind is None or self.kind in entitykinds:
