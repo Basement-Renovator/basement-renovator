@@ -3805,6 +3805,9 @@ class EntityGroupModel(QAbstractListModel):
                             self.groups[g].objects.append(e)
 
         i = 0
+
+        # We hard-code the "Random" category to be at the top of the list,
+        # because it contains the most frequently-used entities
         if "Random" in self.groups:
             self.groups["Random"].calculateIndices(i)
             i = self.groups["Random"].endIndex + 1
