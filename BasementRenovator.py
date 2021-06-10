@@ -3758,23 +3758,23 @@ class EntityGroupModel(QAbstractListModel):
             engroups = en.findall("group")
             enkinds = {}
             for engroup in engroups:
-                enkind = engroup.get("Kind") or en.get("Kind")                
+                enkind = engroup.get("Kind") or en.get("Kind")
                 engroupname = engroup.get("Name") or en.get("Group")
                 if not enkind in enkinds:
                     enkinds[enkind] = []
-                
+
                 if not engroupname in enkinds[enkind]:
                     enkinds[enkind].append(engroupname)
-                    
+
             enkind = en.get("Kind")
             if enkind is not None:
                 if not enkind in enkinds:
                     enkinds[enkind] = []
-            
+
                 engroupname = en.get("Group")
                 if engroupname is not None and not engroupname in enkinds[enkind]:
                     enkinds[enkind].append(engroupname)
-            
+
             if self.kind is None or self.kind in enkinds:
                 t = en.get("ID")
                 variant = en.get("Variant")
@@ -3794,20 +3794,25 @@ class EntityGroupModel(QAbstractListModel):
                     en.set("Image", "resources/Entities/questionmark.png")
 
                 e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
-                
+
                 if self.kind is not None:
                     kindgroups = enkinds[self.kind]
                     for g in kindgroups:
                         if g is not None:
                             if g not in self.groups:
                                 self.groups[g] = EntityGroupItem(g)
-                            
+
                             self.groups[g].objects.append(e)
 
         i = 0
+        if "Random" in self.groups:
+            self.groups["Random"].calculateIndices(i)
+            i = self.groups["Random"].endIndex + 1
+
         for key, group in sorted(self.groups.items()):
-            group.calculateIndices(i)
-            i = group.endIndex + 1
+            if key != "Random":
+                group.calculateIndices(i)
+                i = group.endIndex + 1
 
     def rowCount(self, parent=None):
         c = 0
@@ -3956,13 +3961,23 @@ class EntityPalette(QWidget):
         enList = entityXML.findall("entity")
 
         for en in enList:
-            k = en.get("Kind")
-            if k is None:
-                continue
+            enkinds = []
 
-            if k not in groups:
-                groups[k] = []
-            groups[k].append(en)
+            k = en.get("Kind")
+            if k is not None:
+                enkinds.append(k)
+
+            engroups = en.findall("group")
+            for engroup in engroups:
+                engroupkind = engroup.get("Kind")
+                if engroupkind is not None:
+                    enkinds.append(engroupkind)
+
+            for enkind in enkinds:
+                if enkind not in groups:
+                    groups[enkind] = []
+
+                groups[enkind].append(en)
 
         for group, ents in groups.items():
             numEnts = len(ents)
