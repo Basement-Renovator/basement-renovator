@@ -3976,7 +3976,7 @@ class EntityPalette(QWidget):
             entitygroups = en.findall("group")
             for entitygroup in entitygroups:
                 entitygroupkind = entitygroup.get("Kind")
-                if entitygroupkind is not None:
+                if entitygroupkind is not None and entitygroupkind not in entitykinds:
                     entitykinds.append(entitygroupkind)
 
             for entitykind in entitykinds:
