@@ -2050,19 +2050,42 @@ class EntityMenu(QWidget):
         v.valueChanged.connect(lambda x: self.changeProperty(1, x))
         menu.addAction(Speed)
 
-        # Distance/Angle
-        Distance = QWidgetAction(menu)
-        d = QSpinBox()
-        d.setRange(0, 15)
-        if self.entity.Type == 893:
-            d.setPrefix("Distance - ")
-        elif self.entity.Type == 3001:
-            d.setPrefix("Angle - ")
-        d.setValue(self.properties[2])
+        if self.entity.Type == 3001:
+            # Angle
+            AngleLabel = QWidgetAction(menu)
+            d = QLabel()
+            d.setText("Angle - " + str(self.properties[2]))
+            AngleLabel.setDefaultWidget(d)
+            menu.addAction(AngleLabel)
 
-        Distance.setDefaultWidget(d)
-        d.valueChanged.connect(lambda x: self.changeProperty(2, x))
-        menu.addAction(Distance)
+            Angle = QWidgetAction(menu)
+            v = QDial()
+            v.setRange(0, 16)
+            v.setNotchesVisible(True)
+            v.setWrapping(True)
+            v.setValue((self.properties[2] - 4) % 16)
+            v.setToolTip("Spawn angle of the fissures")
+
+            Angle.setDefaultWidget(v)
+            v.valueChanged.connect(
+                lambda x: (
+                    self.changeProperty(2, (x + 4) % 16),
+                    d.setText("Angle - " + str(self.properties[2])),
+                )
+            )
+            menu.addAction(Angle)
+
+        if self.entity.Type == 893:
+            # Distance
+            Distance = QWidgetAction(menu)
+            d = QSpinBox()
+            d.setRange(0, 15)
+            d.setPrefix("Distance - ")
+            d.setToolTip("Grid-Distance between the source block and the spike")
+            d.setValue(self.properties[2])
+            Distance.setDefaultWidget(d)
+            d.valueChanged.connect(lambda x: self.changeProperty(2, x))
+            menu.addAction(Distance)
 
         # End it
         menu.exec(self.list.mapToGlobal(pos))
@@ -4844,6 +4867,10 @@ class MainWindow(QMainWindow):
             {"label": ": Multi Selection", "icons": [[0, 0], [16, 16]]},
             {"label": ": Replace with Palette selection", "icons": [[0, 0], [32, 16]]},
             {"label": ": Place Object", "icons": [[32, 0]]},
+            {
+                "label": ": Edit Spike&Chain + Fissure spawner properties",
+                "icons": [[16, 0]],
+            },
         ]
 
         q = QImage()
