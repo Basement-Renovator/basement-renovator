@@ -3755,27 +3755,27 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
-            engroups = en.findall("group")
-            enkinds = {}
-            for engroup in engroups:
-                enkind = engroup.get("Kind") or en.get("Kind")
-                engroupname = engroup.get("Name") or en.get("Group")
-                if not enkind in enkinds:
-                    enkinds[enkind] = []
+            entitygroups = en.findall("group")
+            entitykinds = {}
+            for entitygroup in entitygroups:
+                entitykind = entitygroup.get("Kind") or en.get("Kind")
+                entitygroupname = entitygroup.get("Name") or en.get("Group")
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
 
-                if not engroupname in enkinds[enkind]:
-                    enkinds[enkind].append(engroupname)
+                if not entitygroupname in entitykinds[entitykind]:
+                    entitykinds[entitykind].append(entitygroupname)
 
-            enkind = en.get("Kind")
-            if enkind is not None:
-                if not enkind in enkinds:
-                    enkinds[enkind] = []
+            entitykind = en.get("Kind")
+            if entitykind is not None:
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
 
-                engroupname = en.get("Group")
-                if engroupname is not None and not engroupname in enkinds[enkind]:
-                    enkinds[enkind].append(engroupname)
+                entitygroupname = en.get("Group")
+                if entitygroupname is not None and not entitygroupname in entitykinds[entitykind]:
+                    entitykinds[entitykind].append(entitygroupname)
 
-            if self.kind is None or self.kind in enkinds:
+            if self.kind is None or self.kind in entitykinds:
                 t = en.get("ID")
                 variant = en.get("Variant")
                 subtype = en.get("Subtype")
@@ -3796,7 +3796,7 @@ class EntityGroupModel(QAbstractListModel):
                 e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
 
                 if self.kind is not None:
-                    kindgroups = enkinds[self.kind]
+                    kindgroups = entitykinds[self.kind]
                     for g in kindgroups:
                         if g is not None:
                             if g not in self.groups:
@@ -3964,23 +3964,23 @@ class EntityPalette(QWidget):
         enList = entityXML.findall("entity")
 
         for en in enList:
-            enkinds = []
+            entitykinds = []
 
             k = en.get("Kind")
             if k is not None:
-                enkinds.append(k)
+                entitykinds.append(k)
 
-            engroups = en.findall("group")
-            for engroup in engroups:
-                engroupkind = engroup.get("Kind")
-                if engroupkind is not None:
-                    enkinds.append(engroupkind)
+            entitygroups = en.findall("group")
+            for entitygroup in entitygroups:
+                entitygroupkind = entitygroup.get("Kind")
+                if entitygroupkind is not None:
+                    entitykinds.append(entitygroupkind)
 
-            for enkind in enkinds:
-                if enkind not in groups:
-                    groups[enkind] = []
+            for entitykind in entitykinds:
+                if entitykind not in groups:
+                    groups[entitykind] = []
 
-                groups[enkind].append(en)
+                groups[entitykind].append(en)
 
         for group, ents in groups.items():
             numEnts = len(ents)
