@@ -3755,11 +3755,27 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
-            if self.kind is None or self.kind == en.get("Kind"):
-                g = en.get("Group")
-                if not (g is None or g in self.groups):
-                    self.groups[g] = EntityGroupItem(g)
-
+            engroups = en.findall("group")
+            enkinds = {}
+            for engroup in engroups:
+                enkind = engroup.get("Kind") or en.get("Kind")                
+                engroupname = engroup.get("Name") or en.get("Group")
+                if not enkind in enkinds:
+                    enkinds[enkind] = []
+                
+                if not engroupname in enkinds[enkind]:
+                    enkinds[enkind].append(engroupname)
+                    
+            enkind = en.get("Kind")
+            if enkind is not None:
+                if not enkind in enkinds:
+                    enkinds[enkind] = []
+            
+                engroupname = en.get("Group")
+                if engroupname is not None and not engroupname in enkinds[enkind]:
+                    enkinds[enkind].append(engroupname)
+            
+            if self.kind is None or self.kind in enkinds:
                 t = en.get("ID")
                 variant = en.get("Variant")
                 subtype = en.get("Subtype")
@@ -3778,9 +3794,15 @@ class EntityGroupModel(QAbstractListModel):
                     en.set("Image", "resources/Entities/questionmark.png")
 
                 e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
-
-                if g is not None:
-                    self.groups[g].objects.append(e)
+                
+                if self.kind is not None:
+                    kindgroups = enkinds[self.kind]
+                    for g in kindgroups:
+                        if g is not None:
+                            if g not in self.groups:
+                                self.groups[g] = EntityGroupItem(g)
+                            
+                            self.groups[g].objects.append(e)
 
         i = 0
         for key, group in sorted(self.groups.items()):
