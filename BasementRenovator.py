@@ -54,6 +54,7 @@ import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
 from src.lookup import MainLookup
 import src.anm2 as anm2
+from src.constants import *
 
 
 def checkNum(s):
@@ -1231,7 +1232,10 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
-    ENTITIES_WITH_PROPERTIES = (893, 3001)
+    ENTITIES_WITH_PROPERTIES = (
+        EntityType["BALL_AND_CHAIN"],
+        EntityType["FISSURE_SPAWNER"],
+    )
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1997,6 +2001,9 @@ class EntityMenu(QWidget):
         cursor = QCursor()
         self.customContextMenu(cursor.pos())
 
+    def calculateSpawnDelay(self, value):
+        return round(150 / (self.properties[0] + 1) / 30, 3)
+
     def changeProperty(self, index, val):
         self.properties[index] = val
 
@@ -2016,7 +2023,7 @@ class EntityMenu(QWidget):
     def customContextMenu(self, pos):
         menu = QMenu(self.list)
 
-        if self.entity.Type == 893:
+        if self.entity.Type == EntityType["BALL_AND_CHAIN"]:
             # Rotation
             Rotation = QWidgetAction(menu)
             r = QComboBox()
@@ -2027,55 +2034,18 @@ class EntityMenu(QWidget):
             Rotation.setDefaultWidget(r)
             r.currentIndexChanged.connect(lambda x: self.changeProperty(0, x))
             menu.addAction(Rotation)
-        elif self.entity.Type == 3001:
-            # Delay
-            Delay = QWidgetAction(menu)
-            d = QSpinBox()
-            d.setRange(0, 15)
-            d.setPrefix("Delay - ")
-            d.setValue(self.properties[0])
 
-            Delay.setDefaultWidget(d)
-            d.valueChanged.connect(lambda x: self.changeProperty(0, x))
-            menu.addAction(Delay)
+            # Speed
+            Speed = QWidgetAction(menu)
+            jumpInput = QSpinBox()
+            jumpInput.setRange(0, 15)
+            jumpInput.setPrefix("Speed - ")
+            jumpInput.setValue(self.properties[1])
 
-        # Speed
-        Speed = QWidgetAction(menu)
-        v = QSpinBox()
-        v.setRange(0, 15)
-        v.setPrefix("Speed - ")
-        v.setValue(self.properties[1])
+            Speed.setDefaultWidget(jumpInput)
+            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
+            menu.addAction(Speed)
 
-        Speed.setDefaultWidget(v)
-        v.valueChanged.connect(lambda x: self.changeProperty(1, x))
-        menu.addAction(Speed)
-
-        if self.entity.Type == 3001:
-            # Angle
-            AngleLabel = QWidgetAction(menu)
-            d = QLabel()
-            d.setText("Angle - " + str(self.properties[2]))
-            AngleLabel.setDefaultWidget(d)
-            menu.addAction(AngleLabel)
-
-            Angle = QWidgetAction(menu)
-            v = QDial()
-            v.setRange(0, 16)
-            v.setNotchesVisible(True)
-            v.setWrapping(True)
-            v.setValue((self.properties[2] - 4) % 16)
-            v.setToolTip("Spawn angle of the fissures")
-
-            Angle.setDefaultWidget(v)
-            v.valueChanged.connect(
-                lambda x: (
-                    self.changeProperty(2, (x + 4) % 16),
-                    d.setText("Angle - " + str(self.properties[2])),
-                )
-            )
-            menu.addAction(Angle)
-
-        if self.entity.Type == 893:
             # Distance
             Distance = QWidgetAction(menu)
             d = QSpinBox()
@@ -2086,6 +2056,74 @@ class EntityMenu(QWidget):
             Distance.setDefaultWidget(d)
             d.valueChanged.connect(lambda x: self.changeProperty(2, x))
             menu.addAction(Distance)
+
+        elif self.entity.Type == EntityType["FISSURE_SPAWNER"]:
+            # Delay (5 seconds split into the delay steps)
+            DelayLabel = QWidgetAction(menu)
+            dLabel = QLabel(
+                "Delay - "
+                + str(self.calculateSpawnDelay(self.properties[0]))
+                + " seconds"
+            )
+            DelayLabel.setDefaultWidget(dLabel)
+            menu.addAction(DelayLabel)
+
+            Delay = QWidgetAction(menu)
+            delayInput = QSlider(Qt.Horizontal)
+            delayInput.setRange(0, 15)
+            delayInput.setValue(self.properties[0])
+            jumpInput.setToolTip("Delay between spawned fissures")
+
+            Delay.setDefaultWidget(delayInput)
+            delayInput.valueChanged.connect(
+                lambda x: (
+                    self.changeProperty(0, x),
+                    dLabel.setText(
+                        "Delay - "
+                        + str(self.calculateSpawnDelay(self.properties[0]))
+                        + " seconds"
+                    ),
+                )
+            )
+            menu.addAction(Delay)
+
+            # Jump Distance
+            JumpDist = QWidgetAction(menu)
+            jumpInput = QSpinBox()
+            jumpInput.setRange(0, 15)
+            jumpInput.setPrefix("Jump Distance - ")
+            jumpInput.setValue(self.properties[1])
+            jumpInput.setSuffix(".5")
+            jumpInput.setToolTip(
+                "Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce"
+            )
+
+            JumpDist.setDefaultWidget(jumpInput)
+            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
+            menu.addAction(JumpDist)
+
+            # Angle
+            AngleLabel = QWidgetAction(menu)
+            aLabel = QLabel("Angle - " + str(self.properties[2]))
+            AngleLabel.setDefaultWidget(aLabel)
+            menu.addAction(AngleLabel)
+
+            Angle = QWidgetAction(menu)
+            dial = QDial()
+            dial.setRange(0, 16)
+            dial.setNotchesVisible(True)
+            dial.setWrapping(True)
+            dial.setValue((self.properties[2] - 4) % 16)
+            dial.setToolTip("Spawn angle of the fissures")
+
+            Angle.setDefaultWidget(dial)
+            dial.valueChanged.connect(
+                lambda x: (
+                    self.changeProperty(2, (x + 4) % 16),
+                    aLabel.setText("Angle - " + str(self.properties[2])),
+                )
+            )
+            menu.addAction(Angle)
 
         # End it
         menu.exec(self.list.mapToGlobal(pos))
