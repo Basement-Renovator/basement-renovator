@@ -2072,7 +2072,7 @@ class EntityMenu(QWidget):
             delayInput = QSlider(Qt.Horizontal)
             delayInput.setRange(0, 15)
             delayInput.setValue(self.properties[0])
-            jumpInput.setToolTip("Delay between spawned fissures")
+            delayInput.setToolTip("Delay between spawned fissures")
 
             Delay.setDefaultWidget(delayInput)
             delayInput.valueChanged.connect(
