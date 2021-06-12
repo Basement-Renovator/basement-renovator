@@ -54,6 +54,7 @@ import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
 from src.lookup import MainLookup
 import src.anm2 as anm2
+from src.constants import *
 
 
 def checkNum(s):
@@ -1231,7 +1232,10 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
-    ENTITIES_WITH_PROPERTIES = (893, 3001)
+    ENTITIES_WITH_PROPERTIES = (
+        EntityType["BALL_AND_CHAIN"],
+        EntityType["FISSURE_SPAWNER"],
+    )
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1997,6 +2001,9 @@ class EntityMenu(QWidget):
         cursor = QCursor()
         self.customContextMenu(cursor.pos())
 
+    def calculateSpawnDelay(self, value):
+        return round(150 / (self.properties[0] + 1) / 30, 3)
+
     def changeProperty(self, index, val):
         self.properties[index] = val
 
@@ -2016,7 +2023,7 @@ class EntityMenu(QWidget):
     def customContextMenu(self, pos):
         menu = QMenu(self.list)
 
-        if self.entity.Type == 893:
+        if self.entity.Type == EntityType["BALL_AND_CHAIN"]:
             # Rotation
             Rotation = QWidgetAction(menu)
             r = QComboBox()
@@ -2027,42 +2034,96 @@ class EntityMenu(QWidget):
             Rotation.setDefaultWidget(r)
             r.currentIndexChanged.connect(lambda x: self.changeProperty(0, x))
             menu.addAction(Rotation)
-        elif self.entity.Type == 3001:
-            # Delay
-            Delay = QWidgetAction(menu)
+
+            # Speed
+            Speed = QWidgetAction(menu)
+            jumpInput = QSpinBox()
+            jumpInput.setRange(0, 15)
+            jumpInput.setPrefix("Speed - ")
+            jumpInput.setValue(self.properties[1])
+
+            Speed.setDefaultWidget(jumpInput)
+            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
+            menu.addAction(Speed)
+
+            # Distance
+            Distance = QWidgetAction(menu)
             d = QSpinBox()
             d.setRange(0, 15)
-            d.setPrefix("Delay - ")
-            d.setValue(self.properties[0])
+            d.setPrefix("Distance - ")
+            d.setToolTip("Grid-Distance between the source block and the spike")
+            d.setValue(self.properties[2])
+            Distance.setDefaultWidget(d)
+            d.valueChanged.connect(lambda x: self.changeProperty(2, x))
+            menu.addAction(Distance)
 
-            Delay.setDefaultWidget(d)
-            d.valueChanged.connect(lambda x: self.changeProperty(0, x))
+        elif self.entity.Type == EntityType["FISSURE_SPAWNER"]:
+            # Delay (5 seconds split into the delay steps)
+            DelayLabel = QWidgetAction(menu)
+            dLabel = QLabel(
+                "Delay - "
+                + str(self.calculateSpawnDelay(self.properties[0]))
+                + " seconds"
+            )
+            DelayLabel.setDefaultWidget(dLabel)
+            menu.addAction(DelayLabel)
+
+            Delay = QWidgetAction(menu)
+            delayInput = QSlider(Qt.Horizontal)
+            delayInput.setRange(0, 15)
+            delayInput.setValue(self.properties[0])
+            delayInput.setToolTip("Delay between spawned fissures")
+
+            Delay.setDefaultWidget(delayInput)
+            delayInput.valueChanged.connect(
+                lambda x: (
+                    self.changeProperty(0, x),
+                    dLabel.setText(
+                        "Delay - "
+                        + str(self.calculateSpawnDelay(self.properties[0]))
+                        + " seconds"
+                    ),
+                )
+            )
             menu.addAction(Delay)
 
-        # Speed
-        Speed = QWidgetAction(menu)
-        v = QSpinBox()
-        v.setRange(0, 15)
-        v.setPrefix("Speed - ")
-        v.setValue(self.properties[1])
+            # Jump Distance
+            JumpDist = QWidgetAction(menu)
+            jumpInput = QSpinBox()
+            jumpInput.setRange(0, 15)
+            jumpInput.setPrefix("Jump Distance - ")
+            jumpInput.setValue(self.properties[1])
+            jumpInput.setSuffix(".5")
+            jumpInput.setToolTip(
+                "Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce"
+            )
 
-        Speed.setDefaultWidget(v)
-        v.valueChanged.connect(lambda x: self.changeProperty(1, x))
-        menu.addAction(Speed)
+            JumpDist.setDefaultWidget(jumpInput)
+            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
+            menu.addAction(JumpDist)
 
-        # Distance/Angle
-        Distance = QWidgetAction(menu)
-        d = QSpinBox()
-        d.setRange(0, 15)
-        if self.entity.Type == 893:
-            d.setPrefix("Distance - ")
-        elif self.entity.Type == 3001:
-            d.setPrefix("Angle - ")
-        d.setValue(self.properties[2])
+            # Angle
+            AngleLabel = QWidgetAction(menu)
+            aLabel = QLabel("Angle - " + str(self.properties[2]))
+            AngleLabel.setDefaultWidget(aLabel)
+            menu.addAction(AngleLabel)
 
-        Distance.setDefaultWidget(d)
-        d.valueChanged.connect(lambda x: self.changeProperty(2, x))
-        menu.addAction(Distance)
+            Angle = QWidgetAction(menu)
+            dial = QDial()
+            dial.setRange(0, 16)
+            dial.setNotchesVisible(True)
+            dial.setWrapping(True)
+            dial.setValue((self.properties[2] - 4) % 16)
+            dial.setToolTip("Spawn angle of the fissures")
+
+            Angle.setDefaultWidget(dial)
+            dial.valueChanged.connect(
+                lambda x: (
+                    self.changeProperty(2, (x + 4) % 16),
+                    aLabel.setText("Angle - " + str(self.properties[2])),
+                )
+            )
+            menu.addAction(Angle)
 
         # End it
         menu.exec(self.list.mapToGlobal(pos))
@@ -3755,11 +3816,30 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
-            if self.kind is None or self.kind == en.get("Kind"):
-                g = en.get("Group")
-                if not (g is None or g in self.groups):
-                    self.groups[g] = EntityGroupItem(g)
+            entitygroups = en.findall("group")
+            entitykinds = {}
+            for entitygroup in entitygroups:
+                entitykind = entitygroup.get("Kind") or en.get("Kind")
+                entitygroupname = entitygroup.get("Name") or en.get("Group")
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
 
+                if not entitygroupname in entitykinds[entitykind]:
+                    entitykinds[entitykind].append(entitygroupname)
+
+            entitykind = en.get("Kind")
+            if entitykind is not None:
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
+
+                entitygroupname = en.get("Group")
+                if (
+                    entitygroupname is not None
+                    and not entitygroupname in entitykinds[entitykind]
+                ):
+                    entitykinds[entitykind].append(entitygroupname)
+
+            if self.kind is None or self.kind in entitykinds:
                 t = en.get("ID")
                 variant = en.get("Variant")
                 subtype = en.get("Subtype")
@@ -3779,13 +3859,27 @@ class EntityGroupModel(QAbstractListModel):
 
                 e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
 
-                if g is not None:
-                    self.groups[g].objects.append(e)
+                if self.kind is not None:
+                    kindgroups = entitykinds[self.kind]
+                    for g in kindgroups:
+                        if g is not None:
+                            if g not in self.groups:
+                                self.groups[g] = EntityGroupItem(g)
+
+                            self.groups[g].objects.append(e)
 
         i = 0
+
+        # We hard-code the "Random" category to be at the top of the list,
+        # because it contains the most frequently-used entities
+        if "Random" in self.groups:
+            self.groups["Random"].calculateIndices(i)
+            i = self.groups["Random"].endIndex + 1
+
         for key, group in sorted(self.groups.items()):
-            group.calculateIndices(i)
-            i = group.endIndex + 1
+            if key != "Random":
+                group.calculateIndices(i)
+                i = group.endIndex + 1
 
     def rowCount(self, parent=None):
         c = 0
@@ -3934,13 +4028,23 @@ class EntityPalette(QWidget):
         enList = entityXML.findall("entity")
 
         for en in enList:
-            k = en.get("Kind")
-            if k is None:
-                continue
+            entitykinds = []
 
-            if k not in groups:
-                groups[k] = []
-            groups[k].append(en)
+            k = en.get("Kind")
+            if k is not None:
+                entitykinds.append(k)
+
+            entitygroups = en.findall("group")
+            for entitygroup in entitygroups:
+                entitygroupkind = entitygroup.get("Kind")
+                if entitygroupkind is not None and entitygroupkind not in entitykinds:
+                    entitykinds.append(entitygroupkind)
+
+            for entitykind in entitykinds:
+                if entitykind not in groups:
+                    groups[entitykind] = []
+
+                groups[entitykind].append(en)
 
         for group, ents in groups.items():
             numEnts = len(ents)
@@ -4844,6 +4948,10 @@ class MainWindow(QMainWindow):
             {"label": ": Multi Selection", "icons": [[0, 0], [16, 16]]},
             {"label": ": Replace with Palette selection", "icons": [[0, 0], [32, 16]]},
             {"label": ": Place Object", "icons": [[32, 0]]},
+            {
+                "label": ": Edit Spike&Chain + Fissure spawner properties",
+                "icons": [[16, 0]],
+            },
         ]
 
         q = QImage()
