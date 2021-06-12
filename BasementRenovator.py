@@ -3816,11 +3816,30 @@ class EntityGroupModel(QAbstractListModel):
         self.filter = ""
 
         for en in enList:
-            if self.kind is None or self.kind == en.get("Kind"):
-                g = en.get("Group")
-                if not (g is None or g in self.groups):
-                    self.groups[g] = EntityGroupItem(g)
+            entitygroups = en.findall("group")
+            entitykinds = {}
+            for entitygroup in entitygroups:
+                entitykind = entitygroup.get("Kind") or en.get("Kind")
+                entitygroupname = entitygroup.get("Name") or en.get("Group")
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
 
+                if not entitygroupname in entitykinds[entitykind]:
+                    entitykinds[entitykind].append(entitygroupname)
+
+            entitykind = en.get("Kind")
+            if entitykind is not None:
+                if not entitykind in entitykinds:
+                    entitykinds[entitykind] = []
+
+                entitygroupname = en.get("Group")
+                if (
+                    entitygroupname is not None
+                    and not entitygroupname in entitykinds[entitykind]
+                ):
+                    entitykinds[entitykind].append(entitygroupname)
+
+            if self.kind is None or self.kind in entitykinds:
                 t = en.get("ID")
                 variant = en.get("Variant")
                 subtype = en.get("Subtype")
@@ -3840,13 +3859,27 @@ class EntityGroupModel(QAbstractListModel):
 
                 e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
 
-                if g is not None:
-                    self.groups[g].objects.append(e)
+                if self.kind is not None:
+                    kindgroups = entitykinds[self.kind]
+                    for g in kindgroups:
+                        if g is not None:
+                            if g not in self.groups:
+                                self.groups[g] = EntityGroupItem(g)
+
+                            self.groups[g].objects.append(e)
 
         i = 0
+
+        # We hard-code the "Random" category to be at the top of the list,
+        # because it contains the most frequently-used entities
+        if "Random" in self.groups:
+            self.groups["Random"].calculateIndices(i)
+            i = self.groups["Random"].endIndex + 1
+
         for key, group in sorted(self.groups.items()):
-            group.calculateIndices(i)
-            i = group.endIndex + 1
+            if key != "Random":
+                group.calculateIndices(i)
+                i = group.endIndex + 1
 
     def rowCount(self, parent=None):
         c = 0
@@ -3995,13 +4028,23 @@ class EntityPalette(QWidget):
         enList = entityXML.findall("entity")
 
         for en in enList:
-            k = en.get("Kind")
-            if k is None:
-                continue
+            entitykinds = []
 
-            if k not in groups:
-                groups[k] = []
-            groups[k].append(en)
+            k = en.get("Kind")
+            if k is not None:
+                entitykinds.append(k)
+
+            entitygroups = en.findall("group")
+            for entitygroup in entitygroups:
+                entitygroupkind = entitygroup.get("Kind")
+                if entitygroupkind is not None and entitygroupkind not in entitykinds:
+                    entitykinds.append(entitygroupkind)
+
+            for entitykind in entitykinds:
+                if entitykind not in groups:
+                    groups[entitykind] = []
+
+                groups[entitykind].append(en)
 
         for group, ents in groups.items():
             numEnts = len(ents)
