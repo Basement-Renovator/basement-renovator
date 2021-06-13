@@ -8,27 +8,31 @@ from PyQt5.QtGui import QImage
 import src.anm2 as anm2
 from src.constants import *
 
+
 def printf(*args):
     print(*args, flush=True)
+
 
 def bitGet(bits, bitStart, bitCount):
     value = 0
     for i in range(bitCount):
         bit = 1 << (bitStart + i)
         if bits & bit:
-            value |= (1 << i)
+            value |= 1 << i
 
     return value
+
 
 def bitSet(bits, value, bitStart, bitCount):
     for i in range(bitCount):
         bit = 1 << i
         if value & bit:
-            bits |= (1 << (bitStart + i))
+            bits |= 1 << (bitStart + i)
         else:
             bits &= ~(1 << (bitStart + i))
 
     return bits
+
 
 def linuxPathSensitivityTraining(path):
 
@@ -376,22 +380,23 @@ class RoomTypeLookup(Lookup):
 
         return None
 
+
 class EntityLookup(Lookup):
     PICKUPS_WITH_SPECIAL_SUBTYPES = (
         PickupVariant["COLLECTIBLE"],
         PickupVariant["TRINKET"],
-        PickupVariant["PILL"]
+        PickupVariant["PILL"],
     )
 
-    class EntityConfig():
-        class Parameter():
+    class EntityConfig:
+        class Parameter:
             def __init__(self, node):
                 self.prefix = node.get("Prefix") or ""
                 self.suffix = node.get("Suffix") or ""
                 self.bitoffset = int(node.get("BitOffset") or 0)
                 self.bits = int(node.get("BitCount") or 12)
 
-                self.bitmask = ((1 << self.bits) - 1)
+                self.bitmask = (1 << self.bits) - 1
 
                 self.basevalue = int(node.get("BaseValue") or 0)
 
@@ -460,7 +465,9 @@ class EntityLookup(Lookup):
 
                 return bitValue
 
-        def __init__(self, entity=None, resourcePath=None, modName=None, entities2Node=None):
+        def __init__(
+            self, entity=None, resourcePath=None, modName=None, entities2Node=None
+        ):
             self.name = None
             self.mod = None
             self.type = None
@@ -489,14 +496,16 @@ class EntityLookup(Lookup):
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
 
-        def fillFromXML(self, entity, resourcePath, modName, entities2Node = None):
+        def fillFromXML(self, entity, resourcePath, modName, entities2Node=None):
             imgPath = entity.get("Image") and linuxPathSensitivityTraining(
                 os.path.join(resourcePath, entity.get("Image"))
             )
             editorImgPath = entity.get("EditorImage") and linuxPathSensitivityTraining(
                 os.path.join(resourcePath, entity.get("EditorImage"))
             )
-            overlayImgPath = entity.get("OverlayImage") and linuxPathSensitivityTraining(
+            overlayImgPath = entity.get(
+                "OverlayImage"
+            ) and linuxPathSensitivityTraining(
                 os.path.join(resourcePath, entity.get("OverlayImage"))
             )
 
@@ -509,9 +518,17 @@ class EntityLookup(Lookup):
             self.editorImagePath = editorImgPath
             self.overlayImagePath = overlayImgPath
             self.isGridEnt = entity.get("IsGrid") == "1"
-            self.baseHP = entities2Node.get("baseHP") if entities2Node else entity.get("BaseHP")
-            self.boss = entities2Node.get("boss") if entities2Node else entity.get("Boss")
-            self.champion = entities2Node.get("champion") if entities2Node else entity.get("Champion")
+            self.baseHP = (
+                entities2Node.get("baseHP") if entities2Node else entity.get("BaseHP")
+            )
+            self.boss = (
+                entities2Node.get("boss") if entities2Node else entity.get("Boss")
+            )
+            self.champion = (
+                entities2Node.get("champion")
+                if entities2Node
+                else entity.get("Champion")
+            )
             self.placeVisual = entity.get("PlaceVisual")
             self.disableOffsetIndicator = entity.get("DisableOffsetIndicator") == "1"
             self.blocksDoor = entity.get("NoBlockDoors") != "1"
@@ -526,7 +543,9 @@ class EntityLookup(Lookup):
                 if bgPrefix:
                     self.gfx.set(
                         "BGPrefix",
-                        linuxPathSensitivityTraining(os.path.join(resourcePath, bgPrefix)),
+                        linuxPathSensitivityTraining(
+                            os.path.join(resourcePath, bgPrefix)
+                        ),
                     )
 
             def getMirrorEntity(s):
@@ -551,7 +570,7 @@ class EntityLookup(Lookup):
 
             entitykind = entity.get("Kind")
             if entitykind is not None:
-                if not entitykind in  self.kinds:
+                if not entitykind in self.kinds:
                     self.kinds[entitykind] = []
 
                 entitygroupname = entity.get("Group")
@@ -659,7 +678,9 @@ class EntityLookup(Lookup):
                 )
                 img.save(filename, "PNG")
             else:
-                printf(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
+                printf(
+                    f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath
+                )
 
             # Write the modded entity to the entityXML temporarily for runtime
             entityTemp = ET.Element("entity")
@@ -701,13 +722,22 @@ class EntityLookup(Lookup):
         outputRoot = ET.Element("data")
         outputRoot.extend(result)
         with open(os.path.join(outputDir, "EntitiesMod.xml"), "w") as out:
-            xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
+            xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(
+                indent="    "
+            )
             s = str.replace(xml, outputDir + os.path.sep, "").replace(os.path.sep, "/")
             out.write(s)
 
         return result
 
-    def loadXML(self, root, resourcePath="", modName="Base", entities2Root = None, fixIconFormat=False):
+    def loadXML(
+        self,
+        root,
+        resourcePath="",
+        modName="Base",
+        entities2Root=None,
+        fixIconFormat=False,
+    ):
         entities = root.findall("entity")
         if not entities:
             return
@@ -730,7 +760,10 @@ class EntityLookup(Lookup):
                     f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
                 )
 
-            if (subtype >= 256 or subtype < 0) and (entityType != EntityType["PICKUP"] or variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES):
+            if (subtype >= 256 or subtype < 0) and (
+                entityType != EntityType["PICKUP"]
+                or variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
+            ):
                 printf(
                     f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
                 )
@@ -760,7 +793,10 @@ class EntityLookup(Lookup):
                         foundName = entityXML.get("name")
                         givenName = entity.get("Name")
                         foundNameClean, givenNameClean = list(
-                            map(lambda s: cleanUp.sub("", s).lower(), (foundName, givenName))
+                            map(
+                                lambda s: cleanUp.sub("", s).lower(),
+                                (foundName, givenName),
+                            )
                         )
                         if not (
                             foundNameClean == givenNameClean
@@ -786,7 +822,9 @@ class EntityLookup(Lookup):
                 )
                 entityConfig.fillFromXML(entity, resourcePath, modName, entityXML)
             else:
-                entityConfig = self.EntityConfig(entity, resourcePath, modName, entityXML)
+                entityConfig = self.EntityConfig(
+                    entity, resourcePath, modName, entityXML
+                )
 
             if fixIconFormat:
                 formatFix = QImage(entityConfig.imagePath)
@@ -817,11 +855,27 @@ class EntityLookup(Lookup):
                 return
 
             if autoGenerateModContent:
-                self.loadXML(self.generateXMLFromEntities2(modPath, name, entities2Root, brPath), brPath, name, entities2Root, fixIconFormat)
+                self.loadXML(
+                    self.generateXMLFromEntities2(modPath, name, entities2Root, brPath),
+                    brPath,
+                    name,
+                    entities2Root,
+                    fixIconFormat,
+                )
 
-            self.loadXML(self.loadXMLFile(entityFile), brPath, name, entities2Root, fixIconFormat)
+            self.loadXML(
+                self.loadXMLFile(entityFile), brPath, name, entities2Root, fixIconFormat
+            )
 
-    def lookup(self, entitytype=None, variant=None, subtype=None, kind=None, group=None, inEmptyRooms=None):
+    def lookup(
+        self,
+        entitytype=None,
+        variant=None,
+        subtype=None,
+        kind=None,
+        group=None,
+        inEmptyRooms=None,
+    ):
         entities = self.entityList
 
         if entitytype:
@@ -831,20 +885,41 @@ class EntityLookup(Lookup):
             entities = list(filter(lambda entity: entity.variant == variant, entities))
 
         if subtype:
-            entities = list(filter(lambda entity: entity.subtype == subtype or entity.hasParameters, entities))
+            entities = list(
+                filter(
+                    lambda entity: entity.subtype == subtype or entity.hasParameters,
+                    entities,
+                )
+            )
 
         if kind:
             if group:
-                entities = list(filter(lambda entity: kind in entity.kinds and group in entity.kinds[kind], entities))
+                entities = list(
+                    filter(
+                        lambda entity: kind in entity.kinds
+                        and group in entity.kinds[kind],
+                        entities,
+                    )
+                )
             else:
                 entities = list(filter(lambda entity: kind in entity.kinds, entities))
 
         if inEmptyRooms:
-            entities = list(filter(lambda entity: entity.inEmptyRooms == inEmptyRooms, entities))
+            entities = list(
+                filter(lambda entity: entity.inEmptyRooms == inEmptyRooms, entities)
+            )
 
         return entities
 
-    def lookupOne(self, entitytype=None, variant=None, subtype=None, kind=None, group=None, inEmptyRooms=None):
+    def lookupOne(
+        self,
+        entitytype=None,
+        variant=None,
+        subtype=None,
+        kind=None,
+        group=None,
+        inEmptyRooms=None,
+    ):
         entities = self.lookup(entitytype, variant, subtype, kind, group, inEmptyRooms)
 
         return entities[0] if len(entities) > 0 else None
@@ -859,7 +934,9 @@ class MainLookup:
     def loadFromMod(self, modPath, brPath, name, autoGenerateModContent, fixIconFormat):
         self.stages.loadFromMod(modPath, brPath, name)
         self.roomTypes.loadFromMod(modPath, brPath, name)
-        self.entities.loadFromMod(modPath, brPath, name, autoGenerateModContent, fixIconFormat)
+        self.entities.loadFromMod(
+            modPath, brPath, name, autoGenerateModContent, fixIconFormat
+        )
 
     def getRoomGfx(self, room=None, roomfile=None, path=None):
         node = self.roomTypes.getMainType(room=room, roomfile=roomfile, path=path)

@@ -780,7 +780,7 @@ def txtToCommon(path, entityLookup):
         v = int(v)
         s = int(s)
 
-        en = entityLookup.lookupOne(t,v,s)
+        en = entityLookup.lookupOne(t, v, s)
         if en is None or en.invalid:
             print(
                 f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.name}'! ({t}.{v}.{s})"

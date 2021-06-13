@@ -1,2 +1,2 @@
-EntityType = {"PICKUP": 5, "BALL_AND_CHAIN": 893, "FISSURE_SPAWNER": 3001}
+EntityType = {"PICKUP": 5}
 PickupVariant = {"COLLECTIBLE": 100, "TRINKET": 350, "PILL": 70}

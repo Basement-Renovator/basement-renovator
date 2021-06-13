@@ -87,6 +87,7 @@ def getGameVersion():
 
     return mode, None
 
+
 STEAM_PATH = None
 
 
@@ -294,6 +295,7 @@ def linuxPathSensitivityTraining(path):
             return os.path.normpath(os.path.join(directory, item))
 
     return os.path.normpath(path)
+
 
 def loadMods(autogenerate, installPath, resourcePath):
     global xmlLookups
@@ -865,7 +867,9 @@ class RoomEditorWidget(QGraphicsView):
                 200,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
-                ", ".join(set([x.entity.config.name or "INVALID" for x in selectedEntities])),
+                ", ".join(
+                    set([x.entity.config.name or "INVALID" for x in selectedEntities])
+                ),
             )
 
             pass
@@ -933,10 +937,6 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
-    ENTITIES_WITH_PROPERTIES = (
-        EntityType["BALL_AND_CHAIN"],
-        EntityType["FISSURE_SPAWNER"],
-    )
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1004,7 +1004,9 @@ class Entity(QGraphicsItem):
                 self.iconpixmap = self.pixmap
 
             if self.config.placeVisual:
-                parts = list(map(lambda x: x.strip(), self.config.placeVisual.split(",")))
+                parts = list(
+                    map(lambda x: x.strip(), self.config.placeVisual.split(","))
+                )
                 if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
@@ -1056,7 +1058,9 @@ class Entity(QGraphicsItem):
         if e.config:
             tooltipStr = f"{e.config.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.config.baseHP}"
         else:
-            tooltipStr = f"Missing @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}"
+            tooltipStr = (
+                f"Missing @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}"
+            )
 
         if e.Type >= 1000 and not e.config.isGridEnt:
             tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
@@ -1570,10 +1574,7 @@ class Entity(QGraphicsItem):
 
     def mouseReleaseEvent(self, event):
         e = self.entity
-        if (
-            event.button() == Qt.MiddleButton
-            and e.config.hasParameters
-        ):
+        if event.button() == Qt.MiddleButton and e.config.hasParameters:
             EntityMenu(e)
         self.hideWeightPopup()
         QGraphicsItem.mouseReleaseEvent(self, event)
@@ -1663,7 +1664,10 @@ class EntityMenu(QWidget):
                     + parameter.suffix
                 )
 
-        widget.valueChanged.connect(changeValue)
+        if parameter.display == "Dropdown":
+            widget.currentIndexChanged.connect(changeValue)
+        else:
+            widget.valueChanged.connect(changeValue)
 
     # @pyqtSlot(QPoint)
     def customContextMenu(self, pos):
@@ -1686,7 +1690,7 @@ class EntityMenu(QWidget):
             elif parameter.display == "Dropdown":
                 action = QWidgetAction(menu)
                 dropdown = QComboBox()
-                for item in parameter.dropdownvalues:
+                for item in parameter.dropdownkeys:
                     dropdown.addItem(item)
 
                 dropdown.setCurrentIndex(parameter.getIndexedValue(self.entity.Subtype))
@@ -1718,7 +1722,11 @@ class EntityMenu(QWidget):
                 menu.addAction(action)
             elif parameter.display == "Dial":
                 action = QWidgetAction(menu)
-                dialLabel = QLabel(parameter.prefix + str(parameter.getDisplayValue(self.entity.Subtype)) + parameter.suffix)
+                dialLabel = QLabel(
+                    parameter.prefix
+                    + str(parameter.getDisplayValue(self.entity.Subtype))
+                    + parameter.suffix
+                )
                 action.setDefaultWidget(dialLabel)
                 menu.addAction(action)
 
@@ -2978,7 +2986,10 @@ class RoomSelector(QWidget):
             if self.entityToggle.checked and self.filterEntity:
                 entityCond = any(
                     int(self.filterEntity.ID) == e[0]
-                    and int(self.filterEntity.subtype) == e[2]
+                    and (
+                        int(self.filterEntity.subtype) == e[2]
+                        or self.filterEntity.matchanysubtype
+                    )
                     and int(self.filterEntity.variant) == e[1]
                     for stack, x, y in room.spawns()
                     for e in stack
@@ -2999,7 +3010,9 @@ class RoomSelector(QWidget):
                                     e.variant,
                                     e.subtype,
                                 ],
-                                xmlLookups.entities.lookup(None, None, None, None, None, True),
+                                xmlLookups.entities.lookup(
+                                    None, None, None, None, None, True
+                                ),
                             )
                         )
 
@@ -3400,7 +3413,7 @@ class EntityGroupItem(object):
 class EntityItem(QStandardItem):
     """A single entity palette entry, not the in-editor Entity"""
 
-    def __init__(self, name, ID, variant, subtype, iconPath):
+    def __init__(self, name, ID, variant, subtype, iconPath, matchAnySubtype):
         QStandardItem.__init__(self)
 
         self.name = name
@@ -3408,6 +3421,7 @@ class EntityItem(QStandardItem):
         self.variant = variant
         self.subtype = subtype
         self.icon = QIcon(iconPath)
+        self.matchanysubtype = matchAnySubtype
 
         self.setToolTip(name)
 
@@ -3441,7 +3455,14 @@ class EntityGroupModel(QAbstractListModel):
                 )
                 entity.imagePath = "resources/Entities/questionmark.png"
 
-            entityItem = EntityItem(entity.name, entity.type, entity.variant, entity.subtype, entity.imagePath)
+            entityItem = EntityItem(
+                entity.name,
+                entity.type,
+                entity.variant,
+                entity.subtype,
+                entity.imagePath,
+                entity.hasParameters,
+            )
 
             if self.kind is not None:
                 kindgroups = entity.kinds[self.kind]
@@ -4933,7 +4954,9 @@ class MainWindow(QMainWindow):
                 for ent in stackedEnts:
                     eType, eSubtype, eVariant = ent.Type, ent.Subtype, ent.Variant
                     if (eType, eSubtype, eVariant) not in seenSpawns:
-                        config = xmlLookups.entities.lookupOne(eType, eVariant, eSubtype)
+                        config = xmlLookups.entities.lookupOne(
+                            eType, eVariant, eSubtype
+                        )
 
                         if config is None or config.invalid:
                             printf(
