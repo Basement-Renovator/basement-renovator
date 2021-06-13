@@ -409,9 +409,9 @@
 	<entity BaseHP="20" Champion="1" Group="Hosts" ID="859" Image="resources/Entities/859.0.0 - Floating Host.png" Kind="Enemies" Name="Floating Host" Variant="0" Subtype="0" />
 	<entity Group="Hosts" Kind="Enemies" Image="resources/Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
 	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1">
-		<param Prefix="Delay - " Suffix=" seconds" BitCount="4" BitOffset="8" BaseValue="1" SecondRange="5" Display="Slider" Tooltip="Delay between spawned fissures"/>
+		<param Prefix="Frequency - " Suffix=" Seconds" BitCount="4" BitOffset="8" BaseValue="1" SecondRange="5" Display="Slider" Tooltip="Seconds between each spawned Fissure"/>
 		<param Prefix="Jump Distance - " Suffix=".5" BitCount="4" BitOffset="4" Tooltip="Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce."/>
-		<param Prefix="Angle - " BitCount="4" BitOffset="0" BaseValue="12" Display="Dial" Tooltip="Spawn angle of the fissures"/>
+		<param Prefix="Angle - " BitCount="4" BitOffset="0" BaseValue="12" Display="Dial" Tooltip="Spawn angle of the Fissures"/>
 	</entity>
 
 	<!-- Knights -->
@@ -622,10 +622,10 @@
 	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" >
 		<param BitCount="1" BitOffset="8" Display="Dropdown">
 			<value Name="Clockwise"/>
-			<value Name="Counter clockwise"/>
+			<value Name="Counter-Clockwise"/>
 		</param>
 		<param Prefix="Speed - " BitCount="4" BitOffset="4"/>
-		<param Prefix="Distance - " BitCount="4" BitOffset="0" Tooltip="Grid-Distance between the source block and the spike"/>
+		<param Prefix="Distance - " BitCount="4" BitOffset="0" Tooltip="Distance in grid tiles between the source grid and the Ball and Chain"/>
 	</entity>
 
 	<!-- Stones -->

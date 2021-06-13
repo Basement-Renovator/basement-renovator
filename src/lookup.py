@@ -351,7 +351,7 @@ class EntityLookup(Lookup):
 
                 self.basevalue = int(node.get("BaseValue") or 0)
 
-                self.minimum = int(node.get("Minimum") or 0) or 0
+                self.minimum = int(node.get("Minimum") or 0)
                 self.maximum = int(node.get("Maximum") or self.bitmask)
 
                 self.secondrange = node.get("SecondRange")
@@ -404,8 +404,8 @@ class EntityLookup(Lookup):
 
                 return value
 
-            def getDisplayValue(self, subtype=None, bitValue=None):
-                if subtype:
+            def getDisplayValue(self, subtype, bitValue=None):
+                if subtype is not None:
                     bitValue = self.getBitValue(subtype)
 
                 if self.basevalue != 0 and self.display != "Dial":
