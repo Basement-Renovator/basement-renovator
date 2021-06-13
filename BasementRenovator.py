@@ -957,6 +957,9 @@ class Entity(QGraphicsItem):
                 self.config = xmlLookups.entities.EntityConfig()
                 return
 
+            if self.config.hasParameters:
+                self.Subtype = self.config.validateParameters(self.Subtype)
+
             self.rockFrame = None
             self.imgPath = self.config.editorImagePath or self.config.imagePath
 
@@ -1656,9 +1659,12 @@ class EntityMenu(QWidget):
             if parameter.display == "Spinner":
                 action = QWidgetAction(menu)
                 spinner = QSpinBox()
-                spinner.setRange(parameter.minimum, parameter.maximum)
+                spinner.setRange(
+                    parameter.minimum + parameter.basevalue,
+                    parameter.maximum + parameter.basevalue,
+                )
                 spinner.setPrefix(parameter.prefix)
-                spinner.setValue(parameter.getBitValue(self.entity.Subtype))
+                spinner.setValue(parameter.getIndexedValue(self.entity.Subtype))
                 spinner.setSuffix(parameter.suffix)
                 if parameter.tooltip:
                     spinner.setToolTip(parameter.tooltip)
@@ -1691,8 +1697,11 @@ class EntityMenu(QWidget):
 
                 action = QWidgetAction(menu)
                 slider = QSlider(Qt.Horizontal)
-                slider.setRange(parameter.minimum, parameter.maximum)
-                slider.setValue(parameter.getBitValue(self.entity.Subtype))
+                slider.setRange(
+                    parameter.minimum + parameter.basevalue,
+                    parameter.maximum + parameter.basevalue,
+                )
+                slider.setValue(parameter.getIndexedValue(self.entity.Subtype))
                 if parameter.tooltip:
                     slider.setToolTip(parameter.tooltip)
 

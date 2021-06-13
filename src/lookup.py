@@ -391,7 +391,7 @@ class EntityLookup(Lookup):
                 if self.display == "Dial":
                     return (index - self.basevalue) % (self.maximum + 1)
 
-                return index
+                return index - self.basevalue
 
             def getIndexedValue(self, subtype):
                 value = self.getBitValue(subtype)
@@ -402,7 +402,7 @@ class EntityLookup(Lookup):
                 if self.display == "Dial":
                     return (value + self.basevalue) % (self.maximum + 1)
 
-                return value
+                return value + self.basevalue
 
             def getDisplayValue(self, subtype, bitValue=None):
                 if subtype is not None:
@@ -415,6 +415,20 @@ class EntityLookup(Lookup):
                     bitValue = round(self.secondrange / bitValue / 30, 3)
 
                 return bitValue
+
+            def validate(self, subtype):
+                bitValue = self.getBitValue(subtype)
+                if self.display == "Dropdown":
+                    if bitValue not in self.dropdownvalues:
+                        return self.setBitValue(subtype, self.dropdownvalues[0])
+                else:
+                    if bitValue < self.minimum:
+                        return self.setBitValue(subtype, self.minimum)
+
+                    if bitValue > self.maximum:
+                        return self.setBitValue(subtype, self.maximum)
+
+                return subtype
 
         def __init__(
             self, entity=None, resourcePath=None, modName=None, entities2Node=None
@@ -536,6 +550,12 @@ class EntityLookup(Lookup):
             self.parameters = []
             for param in params:
                 self.parameters.append(EntityLookup.EntityConfig.Parameter(param))
+
+        def validateParameters(self, subtype):
+            for param in self.parameters:
+                subtype = param.validate(subtype)
+
+            return subtype
 
     def __init__(self, version, subVer, parent):
         super().__init__("Entities", version, subVer)
