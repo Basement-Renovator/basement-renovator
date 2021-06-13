@@ -408,7 +408,11 @@
 	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.3.0 - Hard Host.png" Kind="Enemies" Name="Hard Host" Variant="3" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Hosts" ID="859" Image="resources/Entities/859.0.0 - Floating Host.png" Kind="Enemies" Name="Floating Host" Variant="0" Subtype="0" />
 	<entity Group="Hosts" Kind="Enemies" Image="resources/Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1"/>
+	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1">
+		<param Prefix="Delay - " Suffix=" seconds" BitCount="4" BitOffset="0" BaseValue="1" SecondRange="5" Display="Slider" Tooltip="Delay between spawned fissures"/>
+		<param Prefix="Jump Distance - " Suffix=".5" BitCount="4" BitOffset="4" Tooltip="Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce."/>
+		<param Prefix="Angle - " BitCount="4" BitOffset="8" BaseValue="11" Display="Dial" Tooltip="Spawn angle of the fissures"/>
+	</entity>
 
 	<!-- Knights -->
 	<entity BaseHP="20" Champion="1" Group="Knights" ID="41" Image="resources/Entities/41.0.0 - Knight.png" Kind="Enemies" Name="Knight" Subtype="0" Variant="0" />
@@ -615,7 +619,14 @@
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.1 - Spikeball (up).png" Kind="Enemies" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3"/>
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.2 - Spikeball (right).png" Kind="Enemies" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0"/>
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.3 - Spikeball (down).png" Kind="Enemies" Name="Spikeball (down)" Subtype="3" Variant="0" MirrorY="852.0.1" />
-	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" />
+	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" >
+		<param BitCount="4" BitOffset="0" Display="Dropdown">
+			<value Name="Clockwise"/>
+			<value Name="Counter clockwise"/>
+		</param>
+		<param Prefix="Speed - " BitCount="4" BitOffset="4"/>
+		<param Prefix="Distance - " BitCount="4" BitOffset="8" Tooltip="Grid-Distance between the source block and the spike"/>
+	</entity>
 
 	<!-- Stones -->
 	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />

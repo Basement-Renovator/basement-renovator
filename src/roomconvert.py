@@ -741,7 +741,7 @@ def xmlToSTBAB(path, destPath=None):
 
 
 # HA HA HA FUNNY MODE FUNNY MODE
-def txtToCommon(path, entityXML):
+def txtToCommon(path, entityLookup):
     """Convert a txt file to the common format"""
     text = Path(path).read_text("utf-8")
 
@@ -780,10 +780,10 @@ def txtToCommon(path, entityXML):
         v = int(v)
         s = int(s)
 
-        en = entityXML.find(f"entity[@ID='{t}'][@Subtype='{s}'][@Variant='{v}']")
-        if en is None or en.get("Invalid") == "1":
+        en = entityLookup.lookupOne(t,v,s)
+        if en is None or en.invalid:
             print(
-                f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.get('Name')}'! ({t}.{v}.{s})"
+                f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.name}'! ({t}.{v}.{s})"
             )
             continue
 
