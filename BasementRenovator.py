@@ -1659,7 +1659,7 @@ class EntityMenu(QWidget):
             if label:
                 label.setText(
                     parameter.prefix
-                    + str(parameter.getDisplayValue(value))
+                    + str(parameter.getDisplayValue(None, value))
                     + parameter.suffix
                 )
 
@@ -1724,7 +1724,7 @@ class EntityMenu(QWidget):
 
                 action = QWidgetAction(menu)
                 dial = QDial()
-                dial.setRange(parameter.minimum, parameter.maximum)
+                dial.setRange(parameter.minimum, parameter.maximum + 1)
                 dial.setNotchesVisible(True)
                 dial.setWrapping(True)
                 dial.setValue(parameter.getIndexedValue(self.entity.Subtype))

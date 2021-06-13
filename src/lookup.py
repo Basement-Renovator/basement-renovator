@@ -448,8 +448,10 @@ class EntityLookup(Lookup):
 
                 return value
 
-            def getDisplayValue(self, subtype):
-                bitValue = self.getBitValue(subtype)
+            def getDisplayValue(self, subtype=None, bitValue=None):
+                if subtype:
+                    bitValue = self.getBitValue(subtype)
+
                 if self.basevalue != 0 and self.display != "Dial":
                     bitValue += self.basevalue
 
