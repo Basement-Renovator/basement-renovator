@@ -55,6 +55,7 @@ from src.core import Room as RoomData, Entity as EntityData
 from src.lookup import MainLookup
 import src.anm2 as anm2
 from src.constants import *
+from src.util import *
 
 
 def checkNum(s):
@@ -63,10 +64,6 @@ def checkNum(s):
         return True
     except ValueError:
         return False
-
-
-def printf(*args):
-    print(*args, flush=True)
 
 
 ########################
@@ -277,24 +274,6 @@ def findModsPath(installPath=None):
         settings.setValue("ModsFolder", modsPath)
 
     return modsPath
-
-
-def linuxPathSensitivityTraining(path):
-
-    path = path.replace("\\", "/")
-
-    directory, file = os.path.split(os.path.normpath(path))
-
-    if not os.path.isdir(directory):
-        return None
-
-    contents = os.listdir(directory)
-
-    for item in contents:
-        if item.lower() == file.lower():
-            return os.path.normpath(os.path.join(directory, item))
-
-    return os.path.normpath(path)
 
 
 def loadMods(autogenerate, installPath, resourcePath):
