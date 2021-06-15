@@ -849,13 +849,14 @@ class EntityLookup(Lookup):
     ):
         entities = self.entityList
 
-        if entitytype:
+        # Must be is not None because 0 is false-y
+        if entitytype is not None:
             entities = list(filter(lambda entity: entity.type == entitytype, entities))
 
-        if variant:
+        if variant is not None:
             entities = list(filter(lambda entity: entity.variant == variant, entities))
 
-        if subtype:
+        if subtype is not None:
             entities = list(
                 filter(
                     lambda entity: entity.subtype == subtype or entity.hasParameters,
