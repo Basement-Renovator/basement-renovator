@@ -2400,9 +2400,9 @@ class Room(QListWidgetItem):
         for stack, x, y in self.spawns():
             for spawn in stack:
                 info.changeTo(spawn[0], spawn[1], spawn[2])
-                if info.mirrorX:
+                if info.config.mirrorX:
                     for i in range(3):
-                        spawn[i] = info.mirrorX[i]
+                        spawn[i] = info.config.mirrorX[i]
 
         # Flip Shape
         shape = self.info.shapeData.get("MirrorX")
@@ -2429,9 +2429,9 @@ class Room(QListWidgetItem):
         for stack, x, y in self.spawns():
             for spawn in stack:
                 info.changeTo(spawn[0], spawn[1], spawn[2])
-                if info.mirrorY:
+                if info.config.mirrorY:
                     for i in range(3):
-                        spawn[i] = info.mirrorY[i]
+                        spawn[i] = info.config.mirrorY[i]
 
         # Flip Shape
         shape = self.info.shapeData.get("MirrorY")
