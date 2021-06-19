@@ -963,7 +963,10 @@ class Entity(QGraphicsItem):
             self.rockFrame = None
             self.imgPath = self.config.editorImagePath or self.config.imagePath
 
-            if entitytype == EntityType["PICKUP"] and variant == PickupVariant["COLLECTIBLE"]:
+            if (
+                entitytype == EntityType["PICKUP"]
+                and variant == PickupVariant["COLLECTIBLE"]
+            ):
                 i = QImage()
                 i.load("resources/Entities/5.100.0 - Collectible.png")
                 i = i.convertToFormat(QImage.Format_ARGB32)

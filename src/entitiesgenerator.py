@@ -6,6 +6,7 @@ import re
 import src.anm2 as anm2
 from src.util import linuxPathSensitivityTraining, printf
 
+
 def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
     cleanUp = re.compile(r"[^\w\d]")
     outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', modName)}"
@@ -73,9 +74,7 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
             )
             img.save(filename, "PNG")
         else:
-            printf(
-                f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath
-            )
+            printf(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
 
         # Write the modded entity to the entityXML temporarily for runtime
         entityTemp = ET.Element("entity")
@@ -117,9 +116,7 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
     outputRoot = ET.Element("data")
     outputRoot.extend(result)
     with open(os.path.join(outputDir, "EntitiesMod.xml"), "w") as out:
-        xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(
-            indent="    "
-        )
+        xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
         s = str.replace(xml, outputDir + os.path.sep, "").replace(os.path.sep, "/")
         out.write(s)
 

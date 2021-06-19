@@ -4,18 +4,22 @@ import os
 def printf(*args):
     print(*args, flush=True)
 
+
 def bitFill(count):
     return (1 << count) - 1
+
 
 def bitGet(bits, startBit, count):
     bits = bits >> startBit
     bits &= bitFill(count)
     return bits
 
+
 def bitSet(bits, sourceBits, startBit, count):
     sourceBits = bitGet(sourceBits, 0, count) << startBit
     bits &= ~(bitFill(count) << startBit)
     return bits | sourceBits
+
 
 def linuxPathSensitivityTraining(path):
 

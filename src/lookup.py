@@ -455,7 +455,9 @@ class EntityLookup(Lookup):
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
 
-        def fillFromXML(self, entity: ET.Element, resourcePath, modName, entities2Node=None):
+        def fillFromXML(
+            self, entity: ET.Element, resourcePath, modName, entities2Node=None
+        ):
             imgPath = entity.get("Image") and linuxPathSensitivityTraining(
                 os.path.join(resourcePath, entity.get("Image"))
             )
