@@ -963,7 +963,7 @@ class Entity(QGraphicsItem):
             self.rockFrame = None
             self.imgPath = self.config.editorImagePath or self.config.imagePath
 
-            if entitytype == 5 and variant == 100:
+            if entitytype == EntityType["PICKUP"] and variant == PickupVariant["COLLECTIBLE"]:
                 i = QImage()
                 i.load("resources/Entities/5.100.0 - Collectible.png")
                 i = i.convertToFormat(QImage.Format_ARGB32)
@@ -1036,7 +1036,7 @@ class Entity(QGraphicsItem):
 
     def updateTooltip(self):
         e = self.entity
-        tooltipStr = f""
+        tooltipStr = ""
         if e.config:
             tooltipStr = f"{e.config.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.config.baseHP}"
         else:
@@ -2998,9 +2998,7 @@ class RoomSelector(QWidget):
                                     e.variant,
                                     e.subtype,
                                 ],
-                                xmlLookups.entities.lookup(
-                                    None, None, None, None, None, True
-                                ),
+                                xmlLookups.entities.lookup(inEmptyRooms=True),
                             )
                         )
 

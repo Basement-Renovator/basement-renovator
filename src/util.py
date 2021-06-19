@@ -4,27 +4,18 @@ import os
 def printf(*args):
     print(*args, flush=True)
 
+def bitFill(count):
+    return (1 << count) - 1
 
-def bitGet(bits, bitStart, bitCount):
-    value = 0
-    for i in range(bitCount):
-        bit = 1 << (bitStart + i)
-        if bits & bit:
-            value |= 1 << i
-
-    return value
-
-
-def bitSet(bits, value, bitStart, bitCount):
-    for i in range(bitCount):
-        bit = 1 << i
-        if value & bit:
-            bits |= 1 << (bitStart + i)
-        else:
-            bits &= ~(1 << (bitStart + i))
-
+def bitGet(bits, startBit, count):
+    bits = bits >> startBit
+    bits &= bitFill(count)
     return bits
 
+def bitSet(bits, sourceBits, startBit, count):
+    sourceBits = bitGet(sourceBits, 0, count) << startBit
+    bits &= ~(bitFill(count) << startBit)
+    return bits | sourceBits
 
 def linuxPathSensitivityTraining(path):
 

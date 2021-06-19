@@ -1,13 +1,14 @@
 import xml.etree.cElementTree as ET
-from xml.dom import minidom
-import os, abc, re
+import os
+import abc
+import re
 
 from itertools import zip_longest
 from PyQt5.QtGui import QImage
 
-import src.anm2 as anm2
 from src.constants import *
 from src.util import *
+from src.entitiesgenerator import generateXMLFromEntities2
 
 
 def parseCriteria(txt):
@@ -77,6 +78,7 @@ def applyGfxReplacement(replacement, gfxchildren):
 class Lookup(metaclass=abc.ABCMeta):
     def __init__(self, prefix, version, subVer):
         version = version.replace("+", "Plus")
+        self.prefix = prefix
         self.setup(prefix, version, subVer)
 
     def setup(self, prefix, version, subVer):
@@ -86,10 +88,32 @@ class Lookup(metaclass=abc.ABCMeta):
             if os.path.exists(fileN):
                 file = fileN
 
-        tree = ET.parse(file)
-        root = tree.getroot()
+        self.xml = self.loadXMLFile(file)
+        self.loadXML(self.xml)
 
-        self.xml = root
+    def loadXMLFile(self, path):
+        root = None
+        try:
+            tree = ET.parse(path)
+            root = tree.getroot()
+        except Exception as e:
+            print("Error loading BR xml:", e)
+            return
+
+        return root
+
+    def loadFromMod(self, resourcePath, name, *args):
+        file = os.path.join(resourcePath, self.prefix + "Mod.xml")
+        if not os.path.isfile(file):
+            return
+
+        print(f'-----------------------\nLoading {self.prefix} from "{name}"')
+
+        self.loadXML(self.loadXMLFile(file), resourcePath, name, *args)
+
+    @abc.abstractmethod
+    def loadXML(self, *args):
+        pass
 
     @abc.abstractmethod
     def lookup(self):
@@ -101,21 +125,7 @@ class StageLookup(Lookup):
         super().__init__("Stages", version, subVer)
         self.parent = parent
 
-    def loadFromMod(self, modPath, brPath, name):
-        stageFile = os.path.join(brPath, "StagesMod.xml")
-        if not os.path.isfile(stageFile):
-            return
-
-        print(f'-----------------------\nLoading stages from "{name}"')
-
-        root = None
-        try:
-            tree = ET.parse(stageFile)
-            root = tree.getroot()
-        except Exception as e:
-            print("Error loading BR xml:", e)
-            return
-
+    def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
         stageList = root.findall("stage")
         if not stageList:
             return
@@ -137,14 +147,14 @@ class StageLookup(Lookup):
                     "Stage has missing stage/stage type; this may not load properly in testing"
                 )
 
-            sanitizePath(stage, "BGPrefix", brPath)
+            sanitizePath(stage, "BGPrefix", resourcePath)
 
             children = stage.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", brPath)
+                sanitizePath(gfx, "BGPrefix", resourcePath)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", brPath)
+                    sanitizePath(ent, "Image", resourcePath)
 
             if replacement is not None:
                 applyGfxReplacement(replacement, children)
@@ -153,7 +163,7 @@ class StageLookup(Lookup):
             return stage
 
         stages = list(filter(lambda x: x is not None, map(mapStage, stageList)))
-        if stages:
+        if stages and modName != "Basement Renovator":
             self.xml.extend(stages)
 
     def lookup(
@@ -195,21 +205,7 @@ class RoomTypeLookup(Lookup):
         super().__init__("RoomTypes", version, subVer)
         self.parent = parent
 
-    def loadFromMod(self, modPath, brPath, name):
-        roomTypeFile = os.path.join(brPath, "RoomTypesMod.xml")
-        if not os.path.isfile(roomTypeFile):
-            return
-
-        print(f'-----------------------\nLoading room types from "{name}"')
-
-        root = None
-        try:
-            tree = ET.parse(roomTypeFile)
-            root = tree.getroot()
-        except Exception as e:
-            print("Error loading BR xml:", e)
-            return
-
+    def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
         roomTypeList = root.findall("room")
         if not roomTypeList:
             return
@@ -227,14 +223,14 @@ class RoomTypeLookup(Lookup):
 
             replacement = self.xml.find(f'room[@Name="{name}"]')
 
-            sanitizePath(roomType, "Icon", brPath)
+            sanitizePath(roomType, "Icon", resourcePath)
 
             children = roomType.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", brPath)
+                sanitizePath(gfx, "BGPrefix", resourcePath)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", brPath)
+                    sanitizePath(ent, "Image", resourcePath)
 
             if replacement is not None:
                 applyGfxReplacement(replacement, children)
@@ -245,7 +241,7 @@ class RoomTypeLookup(Lookup):
         roomTypes = list(
             filter(lambda x: x is not None, map(mapRoomType, roomTypeList))
         )
-        if roomTypes:
+        if roomTypes and modName != "Base":
             self.xml.extend(roomTypes)
 
     def filterRoom(self, node, room, path=None):
@@ -341,25 +337,25 @@ class EntityLookup(Lookup):
 
     class EntityConfig:
         class Parameter:
-            def __init__(self, node):
-                self.prefix = node.get("Prefix") or ""
-                self.suffix = node.get("Suffix") or ""
-                self.bitoffset = int(node.get("BitOffset") or 0)
-                self.bits = int(node.get("BitCount") or 12)
+            def __init__(self, node: ET.Element):
+                self.prefix = node.get("Prefix", "")
+                self.suffix = node.get("Suffix", "")
+                self.bitoffset = int(node.get("BitOffset", 0))
+                self.bits = int(node.get("BitCount", 0))
 
                 self.bitmask = (1 << self.bits) - 1
 
-                self.basevalue = int(node.get("BaseValue") or 0)
+                self.basevalue = int(node.get("BaseValue", 0))
 
-                self.minimum = int(node.get("Minimum") or 0)
-                self.maximum = int(node.get("Maximum") or self.bitmask)
+                self.minimum = int(node.get("Minimum", 0))
+                self.maximum = int(node.get("Maximum", self.bitmask))
 
                 self.secondrange = node.get("SecondRange")
                 if self.secondrange:
                     self.secondrange = float(self.secondrange) * 30
                     self.secondrange = int(self.secondrange)
 
-                self.display = node.get("Display") or "Spinner"
+                self.display = node.get("Display", "Spinner")
                 self.tooltip = node.get("Tooltip")
 
                 self.dropdownkeys = None
@@ -368,11 +364,9 @@ class EntityLookup(Lookup):
                     self.dropdownkeys = []
                     self.dropdownvalues = []
                     values = node.findall("value")
-                    i = 0
-                    for value in values:
-                        self.dropdownkeys.append(value.get("Name") or str(i))
-                        self.dropdownvalues.append(int(value.get("Value") or i))
-                        i = i + 1
+                    for i, value in enumerate(values):
+                        self.dropdownkeys.append(value.get("Name", str(i)))
+                        self.dropdownvalues.append(int(value.get("Value", i)))
 
             def getBitValue(self, subtype):
                 subtype = bitGet(subtype, self.bitoffset, self.bits)
@@ -405,7 +399,7 @@ class EntityLookup(Lookup):
                 return value + self.basevalue
 
             def getDisplayValue(self, subtype, bitValue=None):
-                if subtype is not None:
+                if bitValue is None:
                     bitValue = self.getBitValue(subtype)
 
                 if self.basevalue != 0 and self.display != "Dial":
@@ -461,7 +455,7 @@ class EntityLookup(Lookup):
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
 
-        def fillFromXML(self, entity, resourcePath, modName, entities2Node=None):
+        def fillFromXML(self, entity: ET.Element, resourcePath, modName, entities2Node=None):
             imgPath = entity.get("Image") and linuxPathSensitivityTraining(
                 os.path.join(resourcePath, entity.get("Image"))
             )
@@ -547,9 +541,7 @@ class EntityLookup(Lookup):
 
             params = entity.findall("param")
             self.hasParameters = len(params) != 0
-            self.parameters = []
-            for param in params:
-                self.parameters.append(EntityLookup.EntityConfig.Parameter(param))
+            self.parameters = list(map(EntityLookup.EntityConfig.Parameter, params))
 
         def validateParameters(self, subtype):
             for param in self.parameters:
@@ -558,154 +550,15 @@ class EntityLookup(Lookup):
             return subtype
 
     def __init__(self, version, subVer, parent):
+        self.entityList = []
         super().__init__("Entities", version, subVer)
         self.parent = parent
-
-    def setup(self, prefix, version, subVer):
-        file = f"resources/{prefix}{version}.xml"
-        if subVer is not None:
-            fileN = f"resources/{prefix}{subVer}.xml"
-            if os.path.exists(fileN):
-                file = fileN
-
-        self.entityList = []
-        self.loadXML(self.loadXMLFile(file))
-
-    def loadXMLFile(self, path):
-        root = None
-        try:
-            tree = ET.parse(path)
-            root = tree.getroot()
-        except Exception as e:
-            print("Error loading BR xml:", e)
-            return
-
-        return root
-
-    def generateXMLFromEntities2(self, modPath, modName, entities2Root, resourcePath):
-        cleanUp = re.compile(r"[^\w\d]")
-        outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', modName)}"
-        if not os.path.isdir(outputDir):
-            os.mkdir(outputDir)
-
-        anm2root = entities2Root.get("anm2root")
-
-        # Iterate through all the entities
-        enList = entities2Root.findall("entity")
-
-        # Skip if the mod is empty
-        if len(enList) == 0:
-            return
-
-        printf(f'-----------------------\nLoading entities from "{modName}"')
-
-        def mapEn(en):
-            # Fix some shit
-            i = int(en.get("id"))
-            isEffect = i == 1000
-            if isEffect:
-                i = 999
-            v = en.get("variant") or "0"
-            s = en.get("subtype") or "0"
-
-            if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
-                printf("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
-                return None
-
-            # Grab the anm location
-            anmPath = (
-                linuxPathSensitivityTraining(
-                    os.path.join(modPath, "resources", anm2root, en.get("anm2path"))
-                )
-                or ""
-            )
-            printf("LOADING:", anmPath)
-            if not os.path.isfile(anmPath):
-                anmPath = (
-                    linuxPathSensitivityTraining(
-                        os.path.join(resourcePath, anm2root, en.get("anm2path"))
-                    )
-                    or ""
-                )
-
-                printf("REDIRECT LOADING:", anmPath)
-                if not os.path.isfile(anmPath):
-                    printf("Skipping: Invalid anm2!")
-                    return None
-
-            anim = anm2.Config(anmPath, resourcePath)
-            anim.setAnimation()
-            anim.frame = anim.animLen - 1
-            img = anim.render()
-
-            filename = "resources/Entities/questionmark.png"
-            if img:
-                # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-                resDir = os.path.join(outputDir, "icons")
-                if not os.path.isdir(resDir):
-                    os.mkdir(resDir)
-                filename = os.path.join(
-                    resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png'
-                )
-                img.save(filename, "PNG")
-            else:
-                printf(
-                    f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath
-                )
-
-            # Write the modded entity to the entityXML temporarily for runtime
-            entityTemp = ET.Element("entity")
-            entityTemp.set("Name", en.get("name"))
-            entityTemp.set("ID", str(i))
-            entityTemp.set("Variant", v)
-            entityTemp.set("Subtype", s)
-            entityTemp.set("Image", filename)
-
-            def condSet(setName, name):
-                val = en.get(name)
-                if val is not None:
-                    entityTemp.set(setName, val)
-
-            condSet("BaseHP", "baseHP")
-            condSet("Boss", "boss")
-            condSet("Champion", "champion")
-
-            i = int(i)
-            entityTemp.set("Group", "(Mod) %s" % modName)
-            entityTemp.set("Kind", "Mods")
-            if i == 5:  # pickups
-                if v == 100:  # collectible
-                    return None
-                entityTemp.set("Kind", "Pickups")
-            elif i in (2, 4, 6):  # tears, live bombs, machines
-                entityTemp.set("Kind", "Stage")
-            elif en.get("boss") == "1":
-                entityTemp.set("Kind", "Bosses")
-            elif isEffect:
-                entityTemp.set("Kind", "Effects")
-            else:
-                entityTemp.set("Kind", "Enemies")
-
-            return entityTemp
-
-        result = list(filter(lambda x: x is not None, map(mapEn, enList)))
-
-        outputRoot = ET.Element("data")
-        outputRoot.extend(result)
-        with open(os.path.join(outputDir, "EntitiesMod.xml"), "w") as out:
-            xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(
-                indent="    "
-            )
-            s = str.replace(xml, outputDir + os.path.sep, "").replace(os.path.sep, "/")
-            out.write(s)
-
-        return result
 
     def loadXML(
         self,
         root,
         resourcePath="",
-        modName="Base",
+        modName="Basement Renovator",
         entities2Root=None,
         fixIconFormat=False,
     ):
@@ -808,7 +661,7 @@ class EntityLookup(Lookup):
 
         self.entityList.extend(list(map(mapEntity, entities)))
 
-    def loadFromMod(self, modPath, brPath, name, autoGenerateModContent, fixIconFormat):
+    def loadFromMod(self, brPath, name, modPath, autoGenerateModContent, fixIconFormat):
         entityFile = os.path.join(brPath, "EntitiesMod.xml")
         if not os.path.isfile(entityFile):
             return
@@ -827,7 +680,7 @@ class EntityLookup(Lookup):
 
             if autoGenerateModContent:
                 self.loadXML(
-                    self.generateXMLFromEntities2(modPath, name, entities2Root, brPath),
+                    generateXMLFromEntities2(modPath, name, entities2Root, brPath),
                     brPath,
                     name,
                     entities2Root,
@@ -849,7 +702,6 @@ class EntityLookup(Lookup):
     ):
         entities = self.entityList
 
-        # Must be is not None because 0 is false-y
         if entitytype is not None:
             entities = list(filter(lambda entity: entity.type == entitytype, entities))
 
@@ -894,7 +746,7 @@ class EntityLookup(Lookup):
     ):
         entities = self.lookup(entitytype, variant, subtype, kind, group, inEmptyRooms)
 
-        return entities[0] if len(entities) > 0 else None
+        return next(iter(entities), None)
 
 
 class MainLookup:
@@ -904,10 +756,10 @@ class MainLookup:
         self.entities = EntityLookup(version, subVer, self)
 
     def loadFromMod(self, modPath, brPath, name, autoGenerateModContent, fixIconFormat):
-        self.stages.loadFromMod(modPath, brPath, name)
-        self.roomTypes.loadFromMod(modPath, brPath, name)
+        self.stages.loadFromMod(brPath, name)
+        self.roomTypes.loadFromMod(brPath, name)
         self.entities.loadFromMod(
-            modPath, brPath, name, autoGenerateModContent, fixIconFormat
+            brPath, name, modPath, autoGenerateModContent, fixIconFormat
         )
 
     def getRoomGfx(self, room=None, roomfile=None, path=None):
