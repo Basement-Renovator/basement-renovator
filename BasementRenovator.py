@@ -287,8 +287,6 @@ def loadMods(autogenerate, installPath, resourcePath):
 
     modsInstalled = os.listdir(modsPath)
 
-    fixIconFormat = settings.value("FixIconFormat") == "1"
-
     autogenPath = "resources/Entities/ModTemp"
     if autogenerate and not os.path.exists(autogenPath):
         os.mkdir(autogenPath)
@@ -319,7 +317,7 @@ def loadMods(autogenerate, installPath, resourcePath):
                 f'Failed to parse mod metadata "{modName}", falling back on default name'
             )
 
-        xmlLookups.loadFromMod(modPath, brPath, modName, autogenerate, fixIconFormat)
+        xmlLookups.loadFromMod(modPath, brPath, modName, autogenerate)
 
 
 ########################
@@ -958,7 +956,7 @@ class Entity(QGraphicsItem):
                 return
 
             if self.config.hasParameters:
-                self.Subtype = self.config.validateParameters(self.Subtype)
+                self.Subtype = self.config.clampParameterValues(self.Subtype)
 
             self.rockFrame = None
             self.imgPath = self.config.editorImagePath or self.config.imagePath
@@ -4292,6 +4290,22 @@ class MainWindow(QMainWindow):
         if not fixIconFormat:
             return
 
+        savedPaths = []
+
+        def fixImage(path):
+            if path not in savedPaths:
+                savedPaths.append(path)
+                formatFix = QImage(path)
+                formatFix.save(path)
+
+        entities = xmlLookups.entities.lookup()
+        for config in entities:
+            if config.imagePath:
+                fixImage(config.imagePath)
+
+            if config.editorImagePath:
+                fixImage(config.editorImagePath)
+
         nodes = xmlLookups.stages.lookup()
         nodes.extend(xmlLookups.roomTypes.lookup())
 
@@ -4303,14 +4317,12 @@ class MainWindow(QMainWindow):
             for gfx in gfxs:
                 for key, imgPath in xmlLookups.getGfxData(gfx)["Paths"].items():
                     if imgPath and os.path.isfile(imgPath):
-                        formatFix = QImage(imgPath)
-                        formatFix.save(imgPath)
+                        fixImage(imgPath)
 
                 for ent in gfx.findall("Entity"):
                     imgPath = ent.get("Image")
                     if imgPath and os.path.isfile(imgPath):
-                        formatFix = QImage(imgPath)
-                        formatFix.save(imgPath)
+                        fixImage(imgPath)
 
     def setupFileMenuBar(self):
         f = self.fileMenu

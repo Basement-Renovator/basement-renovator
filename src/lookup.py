@@ -4,7 +4,6 @@ import abc
 import re
 
 from itertools import zip_longest
-from PyQt5.QtGui import QImage
 
 from src.constants import *
 from src.util import *
@@ -410,7 +409,7 @@ class EntityLookup(Lookup):
 
                 return bitValue
 
-            def validate(self, subtype):
+            def clampValue(self, subtype):
                 bitValue = self.getBitValue(subtype)
                 if self.display == "Dropdown":
                     if bitValue not in self.dropdownvalues:
@@ -545,9 +544,9 @@ class EntityLookup(Lookup):
             self.hasParameters = len(params) != 0
             self.parameters = list(map(EntityLookup.EntityConfig.Parameter, params))
 
-        def validateParameters(self, subtype):
+        def clampParameterValues(self, subtype):
             for param in self.parameters:
-                subtype = param.validate(subtype)
+                subtype = param.clampValue(subtype)
 
             return subtype
 
@@ -557,12 +556,7 @@ class EntityLookup(Lookup):
         self.parent = parent
 
     def loadXML(
-        self,
-        root,
-        resourcePath="",
-        modName="Basement Renovator",
-        entities2Root=None,
-        fixIconFormat=False,
+        self, root, resourcePath="", modName="Basement Renovator", entities2Root=None
     ):
         entities = root.findall("entity")
         if not entities:
@@ -652,18 +646,11 @@ class EntityLookup(Lookup):
                     entity, resourcePath, modName, entityXML
                 )
 
-            if fixIconFormat:
-                formatFix = QImage(entityConfig.imagePath)
-                formatFix.save(entityConfig.imagePath)
-                if entityConfig.editorImagePath:
-                    formatFix = QImage(entityConfig.editorImagePath)
-                    formatFix.save(entityConfig.editorImagePath)
-
             return entityConfig
 
         self.entityList.extend(list(map(mapEntity, entities)))
 
-    def loadFromMod(self, brPath, name, modPath, autoGenerateModContent, fixIconFormat):
+    def loadFromMod(self, brPath, name, modPath, autoGenerateModContent):
         entityFile = os.path.join(brPath, "EntitiesMod.xml")
         if not os.path.isfile(entityFile):
             return
@@ -686,12 +673,9 @@ class EntityLookup(Lookup):
                     brPath,
                     name,
                     entities2Root,
-                    fixIconFormat,
                 )
 
-            self.loadXML(
-                self.loadXMLFile(entityFile), brPath, name, entities2Root, fixIconFormat
-            )
+            self.loadXML(self.loadXMLFile(entityFile), brPath, name, entities2Root)
 
     def lookup(
         self,
@@ -757,12 +741,10 @@ class MainLookup:
         self.roomTypes = RoomTypeLookup(version, subVer, self)
         self.entities = EntityLookup(version, subVer, self)
 
-    def loadFromMod(self, modPath, brPath, name, autoGenerateModContent, fixIconFormat):
+    def loadFromMod(self, modPath, brPath, name, autoGenerateModContent):
         self.stages.loadFromMod(brPath, name)
         self.roomTypes.loadFromMod(brPath, name)
-        self.entities.loadFromMod(
-            brPath, name, modPath, autoGenerateModContent, fixIconFormat
-        )
+        self.entities.loadFromMod(brPath, name, modPath, autoGenerateModContent)
 
     def getRoomGfx(self, room=None, roomfile=None, path=None):
         node = self.roomTypes.getMainType(room=room, roomfile=roomfile, path=path)
