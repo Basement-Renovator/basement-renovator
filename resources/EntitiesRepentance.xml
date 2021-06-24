@@ -410,13 +410,13 @@
 	<entity Group="Hosts" Kind="Enemies" Image="resources/Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
 	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1">
 		<bitfield Key="Subtype">
-			<slider Length="4" Name="Frequency" Unit="Seconds" ValueOffset="1" SecondRange="5">
+			<slider Length="4" Offset="8" Name="Frequency" Unit="Seconds" ValueOffset="1" SecondRange="5">
 				<tooltip>Seconds between each spawned Fissure</tooltip>
 			</slider>
-			<spinner Length="4" Name="Jump Distance" Unit="Grids" ValueOffset=".5">
+			<spinner Length="4" Offset="4" Name="Jump Distance" Unit="Grids" ValueOffset=".5">
 				<tooltip>Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce.</tooltip>
 			</spinner>
-			<dial Length="4" Name="Angle" Unit="Degrees" ValueOffset="12">
+			<dial Length="4" Offset="0" Name="Angle" Unit="Degrees" ValueOffset="12">
 				<tooltip>Spawn angle of the Fissures</tooltip>
 			</dial>
 		</bitfield>
@@ -633,8 +633,8 @@
 				<choice>Clockwise</choice>
 				<choice>Counter-Clockwise</choice>
 			</dropdown>
-			<spinner Length="4" Name="Speed"/>
-			<spinner Length="4" Name="Distance" Unit="Grids">
+			<spinner Length="4" Offset="4" Name="Speed"/>
+			<spinner Length="4" Offset="0" Name="Distance" Unit="Grids">
 				<tooltip>Distance in grid tiles between the source grid and the Ball and Chain</tooltip>
 			</spinner>
 		</bitfield>
