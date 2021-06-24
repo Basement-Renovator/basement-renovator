@@ -335,93 +335,140 @@ class EntityLookup(Lookup):
     )
 
     class EntityConfig:
-        class Parameter:
-            def __init__(self, node: ET.Element):
-                self.prefix = node.get("Prefix", "")
-                self.suffix = node.get("Suffix", "")
-                self.bitoffset = int(node.get("BitOffset", 0))
-                self.bits = int(node.get("BitCount", 0))
+        class BitfieldElement:
+            def __init__(self, bitfield, node: ET.Element, offset, length):
+                self.bitfield = bitfield
 
-                self.bitmask = (1 << self.bits) - 1
+                self.name = node.get("Name", "")
+                self.unit = node.get("Unit", "")
 
-                self.basevalue = int(node.get("BaseValue", 0))
+                self.offset = offset
+                self.length = length
+
+                self.valueoffset = float(node.get("ValueOffset", 0))
+                self.floatvalueoffset = self.valueoffset % 1
+                self.valueoffset = int(self.valueoffset - self.floatvalueoffset)
 
                 self.minimum = int(node.get("Minimum", 0))
-                self.maximum = int(node.get("Maximum", self.bitmask))
+                self.maximum = int(node.get("Maximum", bitFill(self.length)))
 
                 self.secondrange = node.get("SecondRange")
                 if self.secondrange:
                     self.secondrange = float(self.secondrange) * 30
-                    self.secondrange = int(self.secondrange)
 
-                self.display = node.get("Display", "Spinner")
-                self.tooltip = node.get("Tooltip")
+                self.widget = node.tag
+
+                tooltipNode = node.find("tooltip")
+                self.tooltip = None
+                if tooltipNode is not None:
+                    self.tooltip = tooltipNode.text
+                    printf(f"Found tooltip {self.tooltip}")
 
                 self.dropdownkeys = None
                 self.dropdownvalues = None
-                if self.display == "Dropdown":
+                if self.widget == "dropdown":
                     self.dropdownkeys = []
                     self.dropdownvalues = []
-                    values = node.findall("value")
-                    for i, value in enumerate(values):
-                        self.dropdownkeys.append(value.get("Name", str(i)))
+                    choices = node.findall("choice")
+                    for i, value in enumerate(choices):
+                        self.dropdownkeys.append(value.text)
                         self.dropdownvalues.append(int(value.get("Value", i)))
 
-            def getBitValue(self, subtype):
-                subtype = bitGet(subtype, self.bitoffset, self.bits)
+            def getRawValue(self, number):
+                number = bitGet(number, self.offset, self.length)
 
-                return subtype
+                return number
 
-            def setBitValue(self, subtype, value):
-                subtype = bitSet(subtype, value, self.bitoffset, self.bits)
+            def setRawValue(self, number, value):
+                number = bitSet(number, value, self.offset, self.length)
 
-                return subtype
+                return number
 
-            def getValueFromIndex(self, index):
+            def getRawValueFromWidgetValue(self, widgetValue):
                 if self.dropdownvalues:
-                    return self.dropdownvalues[index]
+                    return self.dropdownvalues[widgetValue]
 
-                if self.display == "Dial":
-                    return (index - self.basevalue) % (self.maximum + 1)
+                if self.widget == "dial":
+                    return (widgetValue - self.valueoffset) % (self.maximum + 1)
 
-                return index - self.basevalue
+                if self.widget == "checkbox":
+                    return 1 if widgetValue else 0
 
-            def getIndexedValue(self, subtype):
-                value = self.getBitValue(subtype)
+                return widgetValue - self.valueoffset
+
+            def getWidgetValue(self, number, rawValue=None):
+                value = rawValue if rawValue is not None else self.getRawValue(number)
 
                 if self.dropdownvalues:
                     return self.dropdownvalues.index(value)
 
-                if self.display == "Dial":
-                    return (value + self.basevalue) % (self.maximum + 1)
+                if self.widget == "dial":
+                    return (value + self.valueoffset) % (self.maximum + 1)
 
-                return value + self.basevalue
+                if self.widget == "checkbox":
+                    return value == 1
 
-            def getDisplayValue(self, subtype, bitValue=None):
-                if bitValue is None:
-                    bitValue = self.getBitValue(subtype)
+                return value + self.valueoffset
 
-                if self.basevalue != 0 and self.display != "Dial":
-                    bitValue += self.basevalue
+            def getWidgetRange(self):
+                if self.widget == "dropdown":
+                    return len(self.dropdownvalues)
+                if self.widget == "dial":
+                    return self.minimum, self.maximum + 1
+
+                return self.minimum + self.valueoffset, self.maximum + self.valueoffset
+
+            def getDisplayValue(self, number, rawValue=None):
+                value = self.getWidgetValue(number, rawValue)
+
+                if self.unit == "Degrees":  # Match Isaac's degrees, where right is 0
+                    degrees = value * (360 / (self.maximum + 1))
+                    return (degrees + 90) % 360
 
                 if self.secondrange:
-                    bitValue = round(self.secondrange / bitValue / 30, 3)
+                    return round(self.secondrange / value / 30, 3)
 
-                return bitValue
+                return value
 
-            def clampValue(self, subtype):
-                bitValue = self.getBitValue(subtype)
-                if self.display == "Dropdown":
+            def clampValue(self, number):
+                bitValue = self.getRawValue(number)
+                if self.widget == "dropdown":
                     if bitValue not in self.dropdownvalues:
-                        return self.setBitValue(subtype, self.dropdownvalues[0])
+                        return self.setRawValue(number, self.dropdownvalues[0])
                 else:
                     if bitValue < self.minimum:
-                        return self.setBitValue(subtype, self.minimum)
+                        return self.setRawValue(number, self.minimum)
 
                     if bitValue > self.maximum:
-                        return self.setBitValue(subtype, self.maximum)
+                        return self.setRawValue(number, self.maximum)
 
-                return subtype
+                return number
+
+        class Bitfield:
+            def __init__(self, node: ET.Element):
+                self.key = node.get("Key", "Subtype")
+                self.elements = []
+                offset = 0
+                for elementNode in node:
+                    length = int(elementNode.get("Length", 1))
+                    elementOffset = elementNode.get("Offset")
+                    if elementOffset is None:
+                        elementOffset = offset
+                        offset = offset + length
+                    else:
+                        elementOffset = int(elementOffset)
+
+                    element = EntityLookup.EntityConfig.BitfieldElement(
+                        self, elementNode, elementOffset, length
+                    )
+
+                    self.elements.append(element)
+
+            def clampValues(self, number):
+                for element in self.elements:
+                    number = element.clampValue(number)
+
+                return number
 
         def __init__(
             self, entity=None, resourcePath=None, modName=None, entities2Node=None
@@ -448,7 +495,8 @@ class EntityLookup(Lookup):
             self.mirrorX = None
             self.mirrorY = None
             self.kinds = None
-            self.hasParameters = None
+            self.hasBitfields = None
+            self.bitfields = []
             self.inEmptyRooms = None
 
             if entity is not None:
@@ -540,15 +588,62 @@ class EntityLookup(Lookup):
                 ):
                     self.kinds[entitykind].append(entitygroupname)
 
-            params = entity.findall("param")
-            self.hasParameters = len(params) != 0
-            self.parameters = list(map(EntityLookup.EntityConfig.Parameter, params))
+            bitfields = entity.findall("bitfield")
+            self.hasBitfields = len(bitfields) != 0
+            self.bitfields = list(map(EntityLookup.EntityConfig.Bitfield, bitfields))
 
-        def clampParameterValues(self, subtype):
-            for param in self.parameters:
-                subtype = param.clampValue(subtype)
+        def hasBitfieldKey(self, key):
+            for bitfield in self.bitfields:
+                if bitfield.key == key:
+                    return True
 
-            return subtype
+            return False
+
+        def getBitfieldElements(self):
+            elements = []
+            for bitfield in self.bitfields:
+                elements.extend(bitfield.elements)
+
+            return elements
+
+        def isOutOfRange(self):
+            if self.type >= 1000 and not self.isGridEnt:
+                return True
+            if self.variant >= 4096 and not self.hasBitfieldKey("Variant"):
+                return True
+            if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
+                return True
+
+            return False
+
+        def getEditorWarnings(self):
+            warnings = ""
+            if self.type >= 1000 and not self.isGridEnt:
+                warnings += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
+            if self.variant >= 4096 and not self.hasBitfieldKey("Variant"):
+                warnings += "\nVariant is outside the valid range of 0 - 4095!"
+            if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
+                warnings += "\nSubtype is outside the valid range of 0 - 255!"
+            if self.invalid:
+                warnings += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
+            if self.hasBitfields:
+                warnings += "\nMiddle-click to configure entity properties"
+
+            return warnings
+
+        def matches(self, entitytype=None, variant=None, subtype=None):
+            if entitytype is not None and self.type != entitytype:
+                return False
+            if variant is not None and (
+                self.variant != variant and not self.hasBitfieldKey("Variant")
+            ):
+                return False
+            if subtype is not None and (
+                self.subtype != subtype and not self.hasBitfieldKey("Subtype")
+            ):
+                return False
+
+            return True
 
     def __init__(self, version, subVer, parent):
         self.entityList = []
@@ -688,19 +783,11 @@ class EntityLookup(Lookup):
     ):
         entities = self.entityList
 
-        if entitytype is not None:
-            entities = list(filter(lambda entity: entity.type == entitytype, entities))
-
-        if variant is not None:
-            entities = list(filter(lambda entity: entity.variant == variant, entities))
-
-        if subtype is not None:
-            entities = list(
-                filter(
-                    lambda entity: entity.subtype == subtype or entity.hasParameters,
-                    entities,
-                )
+        entities = list(
+            filter(
+                lambda entity: entity.matches(entitytype, variant, subtype), entities
             )
+        )
 
         if kind:
             if group:
