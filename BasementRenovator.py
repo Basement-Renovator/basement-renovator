@@ -1044,7 +1044,7 @@ class Entity(QGraphicsItem):
     def updateTooltip(self):
         e = self.entity
         tooltipStr = ""
-        if e.config:
+        if e.known:
             tooltipStr = f"{e.config.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.config.baseHP}"
             tooltipStr += e.config.getEditorWarnings()
         else:
