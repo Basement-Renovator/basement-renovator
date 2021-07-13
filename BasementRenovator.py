@@ -1633,7 +1633,7 @@ class EntityMenu(QWidget):
     def updateLabel(self, label, bitfieldElement):
         label.setText(
             bitfieldElement.name
-            + " - "
+            + ": "
             + str(self.getDisplayValue(bitfieldElement))
             + " "
             + bitfieldElement.unit
@@ -1683,7 +1683,7 @@ class EntityMenu(QWidget):
                 minimum, maximum = bitfieldElement.getWidgetRange()
                 spinner.setRange(minimum, maximum)
                 spinner.setValue(self.getWidgetValue(bitfieldElement))
-                spinner.setPrefix(bitfieldElement.name + " - ")
+                spinner.setPrefix(bitfieldElement.name + ": ")
                 if bitfieldElement.floatvalueoffset != 0:
                     spinner.setSuffix(
                         str(bitfieldElement.floatvalueoffset)[1:]
