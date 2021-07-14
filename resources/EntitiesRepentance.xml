@@ -2329,7 +2329,7 @@
 	<entity ID="8" Image="resources/Entities/8.0.0 - Knife.png" Name="Knife" Subtype="0" Variant="0" />
 	<entity BaseHP="140" ID="79" Image="resources/Entities/79.20.0 - Umbilical Cord.png" Name="Umbilical Cord" Variant="20" />
 	<entity BaseHP="60" ID="251" Image="resources/Entities/251.10.0 - Begotten Chain.png" Name="Begotten Chain" Subtype="0" Variant="10" />
-	<entity BaseHP="30" Champion="1" ID="294" Image="resources/Entities/294.0.0 - Ultra Greed Door.png" Kind="Stage" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" ID="294" Image="resources/Entities/294.0.0 - Ultra Greed Door.png" Name="Ultra Greed Door" Kind="Stage" Subtype="0" Variant="0" />
 
 	<!-- UNORDERED Repentance-->
 
