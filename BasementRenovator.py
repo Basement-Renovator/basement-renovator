@@ -660,7 +660,16 @@ class RoomEditorWidget(QGraphicsView):
             return
         self.lastTile.add((x, y))
 
-        en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
+        selection = self.scene().selectedItems()
+        paintID, paintVariant, paintSubtype = paint.ID, paint.variant, paint.subtype
+        if paint.config.hasBitfields and len(selection) == 1:
+            selectedEntity = selection[0]
+            if selectedEntity.entity.config == paint.config:
+                paintID = selectedEntity.entity.Type
+                paintVariant = selectedEntity.entity.Variant
+                paintSubtype = selectedEntity.entity.Subtype
+
+        en = Entity(x, y, int(paintID), int(paintVariant), int(paintSubtype), 1.0)
         if en.entity.config.isGridEnt:
             en.updateCoords(x, y, depth=0)
 

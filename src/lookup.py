@@ -362,7 +362,6 @@ class EntityLookup(Lookup):
                 self.tooltip = None
                 if tooltipNode is not None:
                     self.tooltip = tooltipNode.text
-                    printf(f"Found tooltip {self.tooltip}")
 
                 self.dropdownkeys = None
                 self.dropdownvalues = None
