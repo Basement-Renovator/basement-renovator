@@ -3867,6 +3867,15 @@ class EntityGroupModel(QAbstractListModel):
                                 self.groups[g] = EntityGroupItem(g)
 
                             self.groups[g].objects.append(e)
+                else:
+                    for kind in entitykinds:
+                        kindgroups = entitykinds[kind]
+                        for g in kindgroups:
+                            if g is not None:
+                                if g not in self.groups:
+                                    self.groups[g] = EntityGroupItem(g)
+
+                            self.groups[g].objects.append(e)
 
         i = 0
 
