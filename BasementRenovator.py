@@ -1142,7 +1142,7 @@ class Entity(QGraphicsItem):
     RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
     RockAnm2.setAnimation()
 
-    def getPitFrame(self, pitImg):
+    def getPitFrame(self, pitImg, rendered):
         def matchInStack(stack):
             for ent in stack:
 
@@ -1158,7 +1158,7 @@ class Entity(QGraphicsItem):
         )
 
         [L, R, U, D, UL, DL, UR, DR] = list(map(matchInStack, adjEnts))
-        hasExtraFrames = self.entity.pixmap.height() > 260
+        hasExtraFrames = rendered.height() > 260
 
         # copied from stageapi
         # Words were shortened to make writing code simpler.
@@ -1484,7 +1484,7 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             if self.entity.config.renderPit:
-                Entity.PitAnm2.frame = self.getPitFrame(imgPath)
+                Entity.PitAnm2.frame = self.getPitFrame(imgPath, rendered)
                 Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - pit", Entity.PitAnm2)
                 renderFunc = painter.drawImage
