@@ -4299,7 +4299,8 @@ class MainWindow(QMainWindow):
         "resources/UI/FilterIcons.png",
         "resources/UI/ShapeIcons.png",
         "resources/UI/uiIcons.png",
-        "resources/Entities/questionmark.png" "resources/UI/ent-error.png",
+        "resources/Entities/questionmark.png",
+        "resources/UI/ent-error.png",
         "resources/UI/ent-warning.png",
         "resources/UI/CurrentRoom.png",
     )
