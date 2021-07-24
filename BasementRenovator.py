@@ -55,6 +55,7 @@ from src.core import Room as RoomData, Entity as EntityData
 from src.lookup import MainLookup
 import src.anm2 as anm2
 from src.constants import *
+from src.util import *
 
 
 def checkNum(s):
@@ -63,10 +64,6 @@ def checkNum(s):
         return True
     except ValueError:
         return False
-
-
-def printf(*args):
-    print(*args, flush=True)
 
 
 ########################
@@ -86,20 +83,6 @@ def getGameVersion():
         return "Rebirth", "Antibirth"
 
     return mode, None
-
-
-def getEntityXML():
-    version, subVer = getGameVersion()
-    version = version.replace("+", "Plus")
-
-    tree = ET.parse(f"resources/Entities{version}.xml")
-    root = tree.getroot()
-
-    if subVer is not None:
-        extraTree = ET.parse(f"resources/Entities{subVer}.xml")
-        root.extend([child for child in extraTree.getroot()])
-
-    return root
 
 
 STEAM_PATH = None
@@ -293,255 +276,7 @@ def findModsPath(installPath=None):
     return modsPath
 
 
-def linuxPathSensitivityTraining(path):
-
-    path = path.replace("\\", "/")
-
-    directory, file = os.path.split(os.path.normpath(path))
-
-    if not os.path.isdir(directory):
-        return None
-
-    contents = os.listdir(directory)
-
-    for item in contents:
-        if item.lower() == file.lower():
-            return os.path.normpath(os.path.join(directory, item))
-
-    return os.path.normpath(path)
-
-
-def loadFromModXML(modPath, name, entRoot, resourcePath):
-    cleanUp = re.compile(r"[^\w\d]")
-    outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', name)}"
-    if not os.path.isdir(outputDir):
-        os.mkdir(outputDir)
-
-    anm2root = entRoot.get("anm2root")
-
-    # Iterate through all the entities
-    enList = entRoot.findall("entity")
-
-    # Skip if the mod is empty
-    if len(enList) == 0:
-        return
-
-    printf(f'-----------------------\nLoading entities from "{name}"')
-
-    def mapEn(en):
-        # Fix some shit
-        i = int(en.get("id"))
-        isEffect = i == 1000
-        if isEffect:
-            i = 999
-        v = en.get("variant") or "0"
-        s = en.get("subtype") or "0"
-
-        if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
-            printf("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
-            return None
-
-        # Grab the anm location
-        anmPath = (
-            linuxPathSensitivityTraining(
-                os.path.join(modPath, "resources", anm2root, en.get("anm2path"))
-            )
-            or ""
-        )
-        printf("LOADING:", anmPath)
-        if not os.path.isfile(anmPath):
-            anmPath = (
-                linuxPathSensitivityTraining(
-                    os.path.join(resourcePath, anm2root, en.get("anm2path"))
-                )
-                or ""
-            )
-
-            printf("REDIRECT LOADING:", anmPath)
-            if not os.path.isfile(anmPath):
-                printf("Skipping: Invalid anm2!")
-                return None
-
-        anim = anm2.Config(anmPath, resourcePath)
-        anim.setAnimation()
-        anim.frame = anim.animLen - 1
-        img = anim.render()
-
-        filename = "resources/Entities/questionmark.png"
-        if img:
-            # Save it to a Temp file - better than keeping it in memory for user retrieval purposes?
-            resDir = os.path.join(outputDir, "icons")
-            if not os.path.isdir(resDir):
-                os.mkdir(resDir)
-            filename = os.path.join(
-                resDir, f'{en.get("id")}.{v}.{s} - {en.get("name")}.png'
-            )
-            img.save(filename, "PNG")
-        else:
-            printf(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
-
-        # Write the modded entity to the entityXML temporarily for runtime
-        entityTemp = ET.Element("entity")
-        entityTemp.set("Name", en.get("name"))
-        entityTemp.set("ID", str(i))
-        entityTemp.set("Variant", v)
-        entityTemp.set("Subtype", s)
-        entityTemp.set("Image", filename)
-
-        def condSet(setName, name):
-            val = en.get(name)
-            if val is not None:
-                entityTemp.set(setName, val)
-
-        condSet("BaseHP", "baseHP")
-        condSet("Boss", "boss")
-        condSet("Champion", "champion")
-
-        i = int(i)
-        entityTemp.set("Group", "(Mod) %s" % name)
-        entityTemp.set("Kind", "Mods")
-        if i == 5:  # pickups
-            if v == 100:  # collectible
-                return None
-            entityTemp.set("Kind", "Pickups")
-        elif i in (2, 4, 6):  # tears, live bombs, machines
-            entityTemp.set("Kind", "Stage")
-        elif en.get("boss") == "1":
-            entityTemp.set("Kind", "Bosses")
-        elif isEffect:
-            entityTemp.set("Kind", "Effects")
-        else:
-            entityTemp.set("Kind", "Enemies")
-
-        return entityTemp
-
-    result = list(filter(lambda x: x is not None, map(mapEn, enList)))
-
-    outputRoot = ET.Element("data")
-    outputRoot.extend(result)
-    with open(os.path.join(outputDir, "EntitiesMod.xml"), "w") as out:
-        xml = minidom.parseString(ET.tostring(outputRoot)).toprettyxml(indent="    ")
-        s = str.replace(xml, outputDir + os.path.sep, "").replace(os.path.sep, "/")
-        out.write(s)
-
-    return result
-
-
-def loadFromMod(modPath, brPath, name, entRoot, fixIconFormat=False):
-    entFile = os.path.join(brPath, "EntitiesMod.xml")
-    if not os.path.isfile(entFile):
-        return
-
-    printf(f'-----------------------\nLoading entities from "{name}"')
-
-    root = None
-    try:
-        tree = ET.parse(entFile)
-        root = tree.getroot()
-    except Exception as e:
-        printf("Error loading BR xml:", e)
-        return
-
-    enList = root.findall("entity")
-    if len(enList) == 0:
-        return
-
-    cleanUp = re.compile(r"[^\w\d]")
-
-    def mapEn(en):
-        imgPath = en.get("Image") and linuxPathSensitivityTraining(
-            os.path.join(brPath, en.get("Image"))
-        )
-        editorImgPath = en.get("EditorImage") and linuxPathSensitivityTraining(
-            os.path.join(brPath, en.get("EditorImage"))
-        )
-        overlayImgPath = en.get("OverlayImage") and linuxPathSensitivityTraining(
-            os.path.join(brPath, en.get("OverlayImage"))
-        )
-
-        gfx = en.find("Gfx")
-        if gfx is not None:
-            bgPrefix = gfx.get("BGPrefix")
-            if bgPrefix:
-                gfx.set(
-                    "BGPrefix",
-                    linuxPathSensitivityTraining(os.path.join(brPath, bgPrefix)),
-                )
-
-        i = en.get("ID", "-1")
-        v = en.get("Variant", "0")
-        s = en.get("Subtype", "0")
-
-        entXML = None
-
-        if en.get("Metadata") != "1" and en.get("IsGrid") != "1":
-            adjustedId = i == "999" and "1000" or i
-            query = f"entity[@id='{adjustedId}'][@variant='{v}']"
-
-            validMissingSubtype = False
-
-            entXML = entRoot.find(query + f"[@subtype='{s}']")
-            if entXML is None:
-                entXML = entRoot.find(query)
-                validMissingSubtype = entXML is not None
-
-            if entXML is None:
-                printf(
-                    "Loading invalid entity (no entry in entities2 xml): "
-                    + str(en.attrib)
-                )
-                en.set("Invalid", "1")
-            else:
-                foundName = entXML.get("name")
-                givenName = en.get("Name")
-                foundNameClean, givenNameClean = list(
-                    map(lambda s: cleanUp.sub("", s).lower(), (foundName, givenName))
-                )
-                if not (
-                    foundNameClean == givenNameClean
-                    or (
-                        validMissingSubtype
-                        and (
-                            foundNameClean in givenNameClean
-                            or givenNameClean in foundNameClean
-                        )
-                    )
-                ):
-                    printf(
-                        "Loading entity, found name mismatch! In entities2: ",
-                        foundName,
-                        "; In BR: ",
-                        givenName,
-                    )
-
-        # Write the modded entity to the entityXML temporarily for runtime
-        if not en.get("Group"):
-            en.set("Group", "(Mod) %s" % name)
-        en.set("Image", imgPath)
-        en.set("EditorImage", editorImgPath)
-        en.set("OverlayImage", overlayImgPath)
-
-        if fixIconFormat:
-            formatFix = QImage(imgPath)
-            formatFix.save(imgPath)
-            if editorImgPath:
-                formatFix = QImage(editorImgPath)
-                formatFix.save(editorImgPath)
-
-        en.set("Variant", v)
-        en.set("Subtype", s)
-
-        en.set("BaseHP", entXML and entXML.get("baseHP") or en.get("BaseHP"))
-        en.set("Boss", entXML and entXML.get("boss") or en.get("Boss"))
-        en.set("Champion", entXML and entXML.get("champion") or en.get("Champion"))
-
-        return en
-
-    return list(map(mapEn, enList))
-
-
 def loadMods(autogenerate, installPath, resourcePath):
-    global entityXML
     global xmlLookups
 
     # Each mod in the mod folder is a Group
@@ -551,8 +286,6 @@ def loadMods(autogenerate, installPath, resourcePath):
         return
 
     modsInstalled = os.listdir(modsPath)
-
-    fixIconFormat = settings.value("FixIconFormat") == "1"
 
     autogenPath = "resources/Entities/ModTemp"
     if autogenerate and not os.path.exists(autogenPath):
@@ -584,60 +317,7 @@ def loadMods(autogenerate, installPath, resourcePath):
                 f'Failed to parse mod metadata "{modName}", falling back on default name'
             )
 
-        # add dedicated entities
-        entPath = os.path.join(modPath, "content/entities2.xml")
-        if os.path.exists(entPath):
-            # Grab their Entities2.xml
-            entRoot = None
-            try:
-                entRoot = ET.parse(entPath).getroot()
-            except ET.ParseError as e:
-                printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
-                continue
-
-            ents = None
-            if autogenerate:
-                ents = loadFromModXML(modPath, modName, entRoot, resourcePath)
-            else:
-                ents = loadFromMod(
-                    modPath, brPath, modName, entRoot, fixIconFormat=fixIconFormat
-                )
-
-            if ents:
-                for ent in ents:
-                    name, i, v, s = (
-                        ent.get("Name"),
-                        int(ent.get("ID")),
-                        int(ent.get("Variant")),
-                        int(ent.get("Subtype")),
-                    )
-
-                    if i >= 1000 or i < 0:
-                        printf(
-                            f'Entity "{name}" has a type outside the 0 - 999 range! ({i}) It will not load properly from rooms!'
-                        )
-                    if v >= 4096 or v < 0:
-                        printf(
-                            f'Entity "{name}" has a variant outside the 0 - 4095 range! ({v})'
-                        )
-                    if s >= 256 or s < 0:
-                        printf(
-                            f'Entity "{name}" has a subtype outside the 0 - 255 range! ({s})'
-                        )
-
-                    existingEn = entityXML.find(
-                        f"entity[@ID='{i}'][@Subtype='{s}'][@Variant='{v}']"
-                    )
-                    if existingEn is not None:
-                        printf(
-                            f'Entity "{name}" in "{ent.get("Kind")}" > "{ent.get("Group")}" ({i}.{v}.{s}) is overriding "{existingEn.get("Name")}" from "{existingEn.get("Kind")}" > "{existingEn.get("Group")}"!'
-                        )
-                        entityXML.remove(existingEn)
-                        ent.set("Invalid", existingEn.get("Invalid"))
-
-                    entityXML.append(ent)
-
-            xmlLookups.loadFromMod(modPath, brPath, modName)
+        xmlLookups.loadFromMod(modPath, brPath, modName, autogenerate)
 
 
 ########################
@@ -898,7 +578,7 @@ class RoomScene(QGraphicsScene):
             seed = room.seed
             for i, stack in enumerate(self.entCache):
                 for ent in stack:
-                    if ent.entity.renderRock and ent.entity.rockFrame is None:
+                    if ent.entity.config.renderRock and ent.entity.rockFrame is None:
                         ent.setRockFrame(seed + i)
 
         QGraphicsScene.drawBackground(self, painter, rect)
@@ -980,8 +660,17 @@ class RoomEditorWidget(QGraphicsView):
             return
         self.lastTile.add((x, y))
 
-        en = Entity(x, y, int(paint.ID), int(paint.variant), int(paint.subtype), 1.0)
-        if en.entity.isGridEnt:
+        selection = self.scene().selectedItems()
+        paintID, paintVariant, paintSubtype = paint.ID, paint.variant, paint.subtype
+        if paint.config.hasBitfields and len(selection) == 1:
+            selectedEntity = selection[0]
+            if selectedEntity.entity.config == paint.config:
+                paintID = selectedEntity.entity.Type
+                paintVariant = selectedEntity.entity.Variant
+                paintSubtype = selectedEntity.entity.Subtype
+
+        en = Entity(x, y, int(paintID), int(paintVariant), int(paintSubtype), 1.0)
+        if en.entity.config.isGridEnt:
             en.updateCoords(x, y, depth=0)
 
         mainWindow.dirt()
@@ -1109,7 +798,7 @@ class RoomEditorWidget(QGraphicsView):
                 400,
                 16,
                 int(Qt.AlignRight | Qt.AlignBottom),
-                f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.name}",
+                f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.config.name}",
             )
 
             # Bottom Text
@@ -1122,7 +811,7 @@ class RoomEditorWidget(QGraphicsView):
                 400,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
-                f"Boss: {e.entity.boss}, Champion: {e.entity.champion}",
+                f"Boss: {e.entity.config.boss}, Champion: {e.entity.config.champion}",
             )
             painter.drawText(
                 r.right() - 34 - 200,
@@ -1130,7 +819,7 @@ class RoomEditorWidget(QGraphicsView):
                 200,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
-                f"Base HP : {e.entity.baseHP}",
+                f"Base HP : {e.entity.config.baseHP}",
             )
 
         elif len(selectedEntities) > 1:
@@ -1164,7 +853,9 @@ class RoomEditorWidget(QGraphicsView):
                 200,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
-                ", ".join(set([x.entity.name or "INVALID" for x in selectedEntities])),
+                ", ".join(
+                    set([x.entity.config.name or "INVALID" for x in selectedEntities])
+                ),
             )
 
             pass
@@ -1232,10 +923,6 @@ class RoomEditorWidget(QGraphicsView):
 
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
-    ENTITIES_WITH_PROPERTIES = (
-        EntityType["BALL_AND_CHAIN"],
-        EntityType["FISSURE_SPAWNER"],
-    )
 
     class Info:
         def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, changeAtStart=True):
@@ -1253,86 +940,41 @@ class Entity(QGraphicsItem):
             self.Subtype = s
 
             # Derived Entity Info
-            self.name = None
-            self.isGridEnt = False
-            self.baseHP = None
-            self.boss = None
-            self.champion = None
-            self.known = False
-            self.invalid = False
-            self.placeVisual = None
-            self.disableOffsetIndicator = False
-            self.blocksDoor = True
-
-            self.imgPath = None
-            self.overlayImgPath = None
-            self.gfx = None
-            self.renderPit = None
-            self.renderRock = None
+            self.config = None
             self.rockFrame = None
-
+            self.placeVisual = None
+            self.imgPath = None
             self.pixmap = None
             self.iconpixmap = None
             self.overlaypixmap = None
-
-            self.mirrorX = None
-            self.mirrorY = None
+            self.known = False
 
             self.getEntityInfo(t, v, s)
 
-        def getEntityInfo(self, t, variant, subtype):
+        def getEntityInfo(self, entitytype, variant, subtype):
 
-            en = None
-            try:
-                global entityXML
-                en = entityXML.find(
-                    f"entity[@ID='{t}'][@Subtype='{subtype}'][@Variant='{variant}']"
-                )
-                if t in Entity.ENTITIES_WITH_PROPERTIES:
-                    en = entityXML.find(
-                        f"entity[@ID='{t}'][@Subtype='0'][@Variant='0']"
-                    )
-            except:
+            self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
+            if self.config is None:
                 printf(
-                    f"'Could not find Entity {t}.{variant}.{subtype} for in-editor, using ?"
+                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
                 )
-                en = None
 
-            if en is None:
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
                 self.iconpixmap = self.pixmap
+                self.config = xmlLookups.entities.EntityConfig()
                 return
 
-            self.name = en.get("Name")
-            self.isGridEnt = en.get("IsGrid") == "1"
+            if self.config.hasBitfields:
+                for bitfield in self.config.bitfields:
+                    self.validateBitfield(bitfield)
 
-            self.baseHP = en.get("BaseHP")
-            self.boss = en.get("Boss") == "1"
-            self.champion = en.get("Champion") == "1"
-            self.placeVisual = en.get("PlaceVisual")
-            self.disableOffsetIndicator = en.get("DisableOffsetIndicator") == "1"
-            self.blocksDoor = en.get("NoBlockDoors") != "1"
-
-            self.gfx = en.find("Gfx")
-
-            self.imgPath = en.get("EditorImage") or en.get("Image")
-
-            self.overlayImgPath = en.get("OverlayImage")
-
-            self.renderPit = en.get("UsePitTiling") == "1"
-            self.renderRock = en.get("UseRockTiling") == "1"
             self.rockFrame = None
+            self.imgPath = self.config.editorImagePath or self.config.imagePath
 
-            def getEnt(s):
-                return list(map(int, s.split(".")))
-
-            mirrorX, mirrorY = en.get("MirrorX"), en.get("MirrorY")
-            if mirrorX:
-                self.mirrorX = getEnt(mirrorX)
-            if mirrorY:
-                self.mirrorY = getEnt(mirrorY)
-
-            if t == 5 and variant == 100:
+            if (
+                entitytype == EntityType["PICKUP"]
+                and variant == PickupVariant["COLLECTIBLE"]
+            ):
                 i = QImage()
                 i.load("resources/Entities/5.100.0 - Collectible.png")
                 i = i.convertToFormat(QImage.Format_ARGB32)
@@ -1349,24 +991,47 @@ class Entity(QGraphicsItem):
             else:
                 self.pixmap = QPixmap(self.imgPath)
 
-            iconPath = en.get("Image")
-            if self.imgPath != iconPath:
-                self.iconpixmap = QPixmap(iconPath)
+            if self.imgPath != self.config.imagePath:
+                self.iconpixmap = QPixmap(self.config.imagePath)
             else:
                 self.iconpixmap = self.pixmap
 
-            if self.placeVisual:
-                parts = list(map(lambda x: x.strip(), self.placeVisual.split(",")))
+            if self.config.placeVisual:
+                parts = list(
+                    map(lambda x: x.strip(), self.config.placeVisual.split(","))
+                )
                 if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
                     self.placeVisual = parts[0]
 
-            if self.overlayImgPath:
-                self.overlaypixmap = QPixmap(self.overlayImgPath)
+            if self.config.overlayImagePath:
+                self.overlaypixmap = QPixmap(self.config.overlayImagePath)
 
-            self.invalid = en.get("Invalid") == "1"
             self.known = True
+
+        def validateBitfield(self, bitfield):
+            value = self.getBitfieldValue(bitfield)
+            if not isinstance(value, int):
+                printf(
+                    f"Entity {self.config.name} ({self.config.type}.{self.config.variant}.{self.config.subtype}) has an invalid bitfield Key {bitfield.key}"
+                )
+                self.config.invalidBitfield = True
+            else:
+                value = bitfield.clampValues(value)
+                setattr(self, bitfield.key, value)
+
+        def getBitfieldValue(self, bitfield):
+            return getattr(self, bitfield.key)
+
+        def setBitfieldElementValue(self, bitfieldElement, value):
+            setattr(
+                self,
+                bitfieldElement.bitfield.key,
+                bitfieldElement.setRawValue(
+                    self.getBitfieldValue(bitfieldElement.bitfield), int(value)
+                ),
+            )
 
     def __init__(self, x, y, myType, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
@@ -1405,22 +1070,17 @@ class Entity(QGraphicsItem):
 
     def updateTooltip(self):
         e = self.entity
-        tooltipStr = f"{e.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.baseHP}"
-
-        if e.Type >= 1000 and not e.isGridEnt:
-            tooltipStr += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
-        if e.Variant >= 4096:
-            tooltipStr += "\nVariant is outside the valid range of 0 - 4095!"
-        if e.Type not in Entity.ENTITIES_WITH_PROPERTIES and e.Subtype >= 255:
-            tooltipStr += "\nSubtype is outside the valid range of 0 - 255!"
-        if e.invalid:
-            tooltipStr += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
-        if not e.known:
+        tooltipStr = ""
+        if e.known:
+            tooltipStr = f"{e.config.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.config.baseHP}"
+            tooltipStr += e.config.getEditorWarnings()
+        else:
+            tooltipStr = (
+                f"Missing @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}"
+            )
             tooltipStr += (
                 "\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!"
             )
-        if e.Type in Entity.ENTITIES_WITH_PROPERTIES:
-            tooltipStr += "\nMiddle-click to configure entity properties"
 
         self.setToolTip(tooltipStr)
 
@@ -1437,10 +1097,10 @@ class Entity(QGraphicsItem):
         if adding:
             self.setParentItem(scene.roomRows[y])
 
-            if self.entity.gfx is not None:
+            if self.entity.config.gfx is not None:
                 currentRoom = mainWindow.roomList.selectedRoom()
                 if currentRoom:
-                    currentRoom.setRoomBG(self.entity.gfx)
+                    currentRoom.setRoomBG(self.entity.config.gfx)
 
             self.updateBlockedDoor(False, countOnly=self.respawning)
             return
@@ -1479,7 +1139,7 @@ class Entity(QGraphicsItem):
             self.updateBlockedDoor(False)
 
     def updateBlockedDoor(self, val, countOnly=False):
-        if self.entity.blocksDoor:
+        if self.entity.config.blocksDoor:
             blockedDoor = self.scene().roomInfo.inFrontOfDoor(
                 self.entity.x, self.entity.y
             )
@@ -1841,12 +1501,12 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 22, 26)
                 painter.drawLine(26, 26, 26, 22)
 
-            if self.entity.renderPit:
+            if self.entity.config.renderPit:
                 Entity.PitAnm2.frame = self.getPitFrame(imgPath, rendered)
                 Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - pit", Entity.PitAnm2)
                 renderFunc = painter.drawImage
-            elif self.entity.renderRock and self.entity.rockFrame is not None:
+            elif self.entity.config.renderRock and self.entity.rockFrame is not None:
                 Entity.RockAnm2.frame = self.entity.rockFrame
                 Entity.RockAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - rock", Entity.RockAnm2)
@@ -1863,7 +1523,7 @@ class Entity(QGraphicsItem):
             renderFunc(x, y, rendered)
 
             # if the offset is high enough, draw an indicator of the actual position
-            if not self.entity.disableOffsetIndicator and (
+            if not self.entity.config.disableOffsetIndicator and (
                 abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5
             ):
                 painter.setPen(self.OFFSET_SELECTION_PEN)
@@ -1893,15 +1553,11 @@ class Entity(QGraphicsItem):
 
         warningIcon = None
         # applies to entities that do not have a corresponding entities2 entry
-        if self.entity.invalid or not self.entity.known:
+        if not self.entity.known or self.entity.config.invalid:
             warningIcon = Entity.INVALID_ERROR_IMG
         # entities have 12 bits for type and variant, 8 for subtype
         # common mod error is to make them outside that range
-        elif (
-            var >= 4096
-            or (sub >= 256 and typ not in Entity.ENTITIES_WITH_PROPERTIES)
-            or (typ >= 1000 and not self.entity.isGridEnt)
-        ):
+        elif self.entity.config.isOutOfRange():
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
 
         if warningIcon:
@@ -1919,7 +1575,8 @@ class Entity(QGraphicsItem):
         e = self.entity
         if (
             event.button() == Qt.MiddleButton
-            and e.Type in Entity.ENTITIES_WITH_PROPERTIES
+            and e.config.hasBitfields
+            and not e.config.invalidBitfield
         ):
             EntityMenu(e)
         self.hideWeightPopup()
@@ -1977,15 +1634,6 @@ class EntityMenu(QWidget):
         self.layout = QVBoxLayout()
 
         self.entity = entity
-        self.format = [4, 4, 4]
-        self.properties = [0 for i in self.format]
-        subtype = self.entity.Subtype
-        for i, numBits in enumerate(self.format):
-            # clear all but the lower numBits bits of subtype
-            self.properties[i] = subtype & (1 << numBits) - 1
-            # shift subtype right, which also clears the upper numBits bits
-            subtype >>= numBits
-        self.properties = self.properties[::-1]
         self.setupList()
 
         self.layout.addWidget(self.list)
@@ -2001,129 +1649,104 @@ class EntityMenu(QWidget):
         cursor = QCursor()
         self.customContextMenu(cursor.pos())
 
-    def calculateSpawnDelay(self, value):
-        return round(150 / (self.properties[0] + 1) / 30, 3)
-
-    def changeProperty(self, index, val):
-        self.properties[index] = val
-
-        subtype = 0
-        # since we're building the subtype by shifting left, go in reverse order
-        for i, numBits in enumerate(reversed(self.format)):
-            # shift the subtype left in order to leave behind numBits 0s in its place
-            subtype <<= numBits
-            # set only the lower numBits bits of the property corresponding to the reversed format index
-            subtype |= self.properties[i] & (1 << numBits) - 1
-        self.entity.Subtype = subtype
+    def changeProperty(self, bitfieldElement, value):
+        self.entity.setBitfieldElementValue(bitfieldElement, value)
 
         mainWindow.dirt()
         mainWindow.scene.update()
+
+    def updateLabel(self, label, bitfieldElement):
+        label.setText(
+            f"{bitfieldElement.name}: {self.getDisplayValue(bitfieldElement)} {bitfieldElement.unit}"
+        )
+
+    def connectBitfieldElement(self, widget, bitfieldElement, label=None):
+        def changeValue(x):
+            value = bitfieldElement.getRawValueFromWidgetValue(x)
+            self.changeProperty(bitfieldElement, value)
+
+            if label:
+                self.updateLabel(label, bitfieldElement)
+
+        if bitfieldElement.widget == "dropdown":
+            widget.currentIndexChanged.connect(changeValue)
+        elif bitfieldElement.widget == "checkbox":
+            widget.stateChanged.connect(lambda: changeValue(widget.isChecked()))
+        else:
+            widget.valueChanged.connect(changeValue)
+
+        if label:
+            self.updateLabel(label, bitfieldElement)
+
+    def getWidgetValue(self, bitfieldElement):
+        return bitfieldElement.getWidgetValue(
+            self.entity.getBitfieldValue(bitfieldElement.bitfield)
+        )
+
+    def getDisplayValue(self, bitfieldElement):
+        return bitfieldElement.getDisplayValue(
+            self.entity.getBitfieldValue(bitfieldElement.bitfield)
+        )
+
+    WIDGETS_WITH_LABELS = ("slider", "dial")
 
     # @pyqtSlot(QPoint)
     def customContextMenu(self, pos):
         menu = QMenu(self.list)
 
-        if self.entity.Type == EntityType["BALL_AND_CHAIN"]:
-            # Rotation
-            Rotation = QWidgetAction(menu)
-            r = QComboBox()
-            r.addItem("Clockwise")
-            r.addItem("Counter clockwise")
-            r.setCurrentIndex(self.properties[0])
+        for bitfieldElement in self.entity.config.getBitfieldElements():
+            if not hasattr(self.entity, bitfieldElement.bitfield.key):
+                continue
 
-            Rotation.setDefaultWidget(r)
-            r.currentIndexChanged.connect(lambda x: self.changeProperty(0, x))
-            menu.addAction(Rotation)
+            label = None
+            if bitfieldElement.widget in EntityMenu.WIDGETS_WITH_LABELS:
+                action = QWidgetAction(menu)
+                label = QLabel("")
+                action.setDefaultWidget(label)
+                menu.addAction(action)
 
-            # Speed
-            Speed = QWidgetAction(menu)
-            jumpInput = QSpinBox()
-            jumpInput.setRange(0, 15)
-            jumpInput.setPrefix("Speed - ")
-            jumpInput.setValue(self.properties[1])
+            action = QWidgetAction(menu)
+            widget = None
+            if bitfieldElement.widget == "spinner":
+                widget = QSpinBox()
+                minimum, maximum = bitfieldElement.getWidgetRange()
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
+                widget.setPrefix(bitfieldElement.name + ": ")
+                if bitfieldElement.floatvalueoffset != 0:
+                    widget.setSuffix(
+                        f"{str(bitfieldElement.floatvalueoffset)[1:]} {bitfieldElement.unit}"
+                    )
+                else:
+                    widget.setSuffix(f" {bitfieldElement.unit}")
+            elif bitfieldElement.widget == "dropdown":
+                widget = QComboBox()
+                for item in bitfieldElement.dropdownkeys:
+                    widget.addItem(item)
+                widget.setCurrentIndex(self.getWidgetValue(bitfieldElement))
+            elif bitfieldElement.widget == "slider":
+                widget = QSlider(Qt.Horizontal)
+                minimum, maximum = bitfieldElement.getWidgetRange()
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
+            elif bitfieldElement.widget == "dial":
+                widget = QDial()
+                minimum, maximum = bitfieldElement.getWidgetRange()
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
+                widget.setNotchesVisible(True)
+                widget.setWrapping(True)
+            elif bitfieldElement.widget == "checkbox":
+                widget = QCheckBox()
+                widget.setText(bitfieldElement.name)
+                widget.setChecked(self.getWidgetValue(bitfieldElement))
 
-            Speed.setDefaultWidget(jumpInput)
-            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
-            menu.addAction(Speed)
+            if bitfieldElement.tooltip:
+                widget.setToolTip(bitfieldElement.tooltip)
 
-            # Distance
-            Distance = QWidgetAction(menu)
-            d = QSpinBox()
-            d.setRange(0, 15)
-            d.setPrefix("Distance - ")
-            d.setToolTip("Grid-Distance between the source block and the spike")
-            d.setValue(self.properties[2])
-            Distance.setDefaultWidget(d)
-            d.valueChanged.connect(lambda x: self.changeProperty(2, x))
-            menu.addAction(Distance)
-
-        elif self.entity.Type == EntityType["FISSURE_SPAWNER"]:
-            # Delay (5 seconds split into the delay steps)
-            DelayLabel = QWidgetAction(menu)
-            dLabel = QLabel(
-                "Delay - "
-                + str(self.calculateSpawnDelay(self.properties[0]))
-                + " seconds"
-            )
-            DelayLabel.setDefaultWidget(dLabel)
-            menu.addAction(DelayLabel)
-
-            Delay = QWidgetAction(menu)
-            delayInput = QSlider(Qt.Horizontal)
-            delayInput.setRange(0, 15)
-            delayInput.setValue(self.properties[0])
-            delayInput.setToolTip("Delay between spawned fissures")
-
-            Delay.setDefaultWidget(delayInput)
-            delayInput.valueChanged.connect(
-                lambda x: (
-                    self.changeProperty(0, x),
-                    dLabel.setText(
-                        "Delay - "
-                        + str(self.calculateSpawnDelay(self.properties[0]))
-                        + " seconds"
-                    ),
-                )
-            )
-            menu.addAction(Delay)
-
-            # Jump Distance
-            JumpDist = QWidgetAction(menu)
-            jumpInput = QSpinBox()
-            jumpInput.setRange(0, 15)
-            jumpInput.setPrefix("Jump Distance - ")
-            jumpInput.setValue(self.properties[1])
-            jumpInput.setSuffix(".5")
-            jumpInput.setToolTip(
-                "Distance the Fissure will jump based on the center of the Spawner. It will die on the 7th bounce"
-            )
-
-            JumpDist.setDefaultWidget(jumpInput)
-            jumpInput.valueChanged.connect(lambda x: self.changeProperty(1, x))
-            menu.addAction(JumpDist)
-
-            # Angle
-            AngleLabel = QWidgetAction(menu)
-            aLabel = QLabel("Angle - " + str(self.properties[2]))
-            AngleLabel.setDefaultWidget(aLabel)
-            menu.addAction(AngleLabel)
-
-            Angle = QWidgetAction(menu)
-            dial = QDial()
-            dial.setRange(0, 16)
-            dial.setNotchesVisible(True)
-            dial.setWrapping(True)
-            dial.setValue((self.properties[2] - 4) % 16)
-            dial.setToolTip("Spawn angle of the fissures")
-
-            Angle.setDefaultWidget(dial)
-            dial.valueChanged.connect(
-                lambda x: (
-                    self.changeProperty(2, (x + 4) % 16),
-                    aLabel.setText("Angle - " + str(self.properties[2])),
-                )
-            )
-            menu.addAction(Angle)
+            action.setDefaultWidget(widget)
+            self.connectBitfieldElement(widget, bitfieldElement, label)
+            menu.addAction(action)
 
         # End it
         menu.exec(self.list.mapToGlobal(pos))
@@ -2794,9 +2417,9 @@ class Room(QListWidgetItem):
         for stack, x, y in self.spawns():
             for spawn in stack:
                 info.changeTo(spawn[0], spawn[1], spawn[2])
-                if info.mirrorX:
+                if info.config.mirrorX:
                     for i in range(3):
-                        spawn[i] = info.mirrorX[i]
+                        spawn[i] = info.config.mirrorX[i]
 
         # Flip Shape
         shape = self.info.shapeData.get("MirrorX")
@@ -2823,9 +2446,9 @@ class Room(QListWidgetItem):
         for stack, x, y in self.spawns():
             for spawn in stack:
                 info.changeTo(spawn[0], spawn[1], spawn[2])
-                if info.mirrorY:
+                if info.config.mirrorY:
                     for i in range(3):
-                        spawn[i] = info.mirrorY[i]
+                        spawn[i] = info.config.mirrorY[i]
 
         # Flip Shape
         shape = self.info.shapeData.get("MirrorY")
@@ -3367,9 +2990,7 @@ class RoomSelector(QWidget):
             # Check if the right entity is in the room
             if self.entityToggle.checked and self.filterEntity:
                 entityCond = any(
-                    int(self.filterEntity.ID) == e[0]
-                    and int(self.filterEntity.subtype) == e[2]
-                    and int(self.filterEntity.variant) == e[1]
+                    self.filterEntity.config.matches(e[0], e[1], e[2])
                     for stack, x, y in room.spawns()
                     for e in stack
                 )
@@ -3382,15 +3003,14 @@ class RoomSelector(QWidget):
                 # For null rooms, include "empty" rooms regardless of type
                 if not typeCond and self.filter.typeData == 0:
                     if uselessEntities is None:
-                        global entityXML
                         uselessEntities = list(
                             map(
                                 lambda e: [
-                                    int(e.get("ID")),
-                                    int(e.get("Variant") or 0),
-                                    int(e.get("Subtype") or 0),
+                                    e.type,
+                                    e.variant,
+                                    e.subtype,
                                 ],
-                                entityXML.findall("entity[@InEmptyRooms='1']"),
+                                xmlLookups.entities.lookup(inEmptyRooms=True),
                             )
                         )
 
@@ -3791,22 +3411,23 @@ class EntityGroupItem(object):
 class EntityItem(QStandardItem):
     """A single entity palette entry, not the in-editor Entity"""
 
-    def __init__(self, name, ID, variant, subtype, iconPath):
+    def __init__(self, config):
         QStandardItem.__init__(self)
 
-        self.name = name
-        self.ID = ID
-        self.variant = variant
-        self.subtype = subtype
-        self.icon = QIcon(iconPath)
+        self.name = config.name
+        self.ID = config.type
+        self.variant = config.variant
+        self.subtype = config.subtype
+        self.icon = QIcon(config.imagePath)
+        self.config = config
 
-        self.setToolTip(name)
+        self.setToolTip(self.name)
 
 
 class EntityGroupModel(QAbstractListModel):
     """Model containing all the grouped objects in a tileset"""
 
-    def __init__(self, kind, enList):
+    def __init__(self, kind=None, entityList=None):
         QAbstractListModel.__init__(self)
 
         self.groups = {}
@@ -3815,67 +3436,36 @@ class EntityGroupModel(QAbstractListModel):
 
         self.filter = ""
 
-        for en in enList:
-            entitygroups = en.findall("group")
-            entitykinds = {}
-            for entitygroup in entitygroups:
-                entitykind = entitygroup.get("Kind") or en.get("Kind")
-                entitygroupname = entitygroup.get("Name") or en.get("Group")
-                if not entitykind in entitykinds:
-                    entitykinds[entitykind] = []
+        if entityList is None:
+            entityList = xmlLookups.entities.lookup()
 
-                if not entitygroupname in entitykinds[entitykind]:
-                    entitykinds[entitykind].append(entitygroupname)
+        for entity in entityList:
+            try:
+                imgPath = Path(entity.imagePath)
+            except:
+                traceback.print_exception(*sys.exc_info())
+                imgPath = Path()
 
-            entitykind = en.get("Kind")
-            if entitykind is not None:
-                if not entitykind in entitykinds:
-                    entitykinds[entitykind] = []
+            if not imgPath.exists():
+                printf(
+                    f"Could not find Entity {entity.name} ({entity.type}.{entity.variant}.{entity.subtype})'s palette icon:",
+                    imgPath,
+                )
+                entity.imagePath = "resources/Entities/questionmark.png"
 
-                entitygroupname = en.get("Group")
-                if (
-                    entitygroupname is not None
-                    and not entitygroupname in entitykinds[entitykind]
-                ):
-                    entitykinds[entitykind].append(entitygroupname)
+            entityItem = EntityItem(entity)
 
-            if self.kind is None or self.kind in entitykinds:
-                t = en.get("ID")
-                variant = en.get("Variant")
-                subtype = en.get("Subtype")
+            addKinds = entity.kinds
+            if self.kind is not None:
+                addKinds = [self.kind]
 
-                try:
-                    imgPath = Path(en.get("Image"))
-                except:
-                    traceback.print_exception(*sys.exc_info())
-                    imgPath = Path()
+            for kind in addKinds:
+                kindgroups = entity.kinds[kind]
+                for groupname in kindgroups:
+                    if groupname not in self.groups:
+                        self.groups[groupname] = EntityGroupItem(groupname)
 
-                if not imgPath.exists():
-                    printf(
-                        f"Could not find Entity {t}.{variant}.{subtype}'s palette icon:",
-                        imgPath,
-                    )
-                    en.set("Image", "resources/Entities/questionmark.png")
-
-                e = EntityItem(en.get("Name"), t, variant, subtype, en.get("Image"))
-
-                if self.kind is not None:
-                    kindgroups = entitykinds[self.kind]
-                    for g in kindgroups:
-                        if g is not None:
-                            if g not in self.groups:
-                                self.groups[g] = EntityGroupItem(g)
-
-                            self.groups[g].objects.append(e)
-                else:
-                    for kind in entitykinds:
-                        kindgroups = entitykinds[kind]
-                        for g in kindgroups:
-                            if g is not None:
-                                if g not in self.groups:
-                                    self.groups[g] = EntityGroupItem(g)
-
-                            self.groups[g].objects.append(e)
+                    self.groups[groupname].objects.append(entityItem)
 
         i = 0
 
@@ -3998,12 +3588,9 @@ class EntityPalette(QWidget):
         # Create the hidden search results tab
         self.searchTab = QTabWidget()
 
-        global entityXML
-        allEnts = entityXML.findall("entity")
-
         # Funky model setup
         listView = EntityList()
-        listView.setModel(EntityGroupModel(None, allEnts))
+        listView.setModel(EntityGroupModel())
         listView.model().view = listView
         listView.clicked.connect(self.objSelected)
 
@@ -4033,27 +3620,14 @@ class EntityPalette(QWidget):
             "Mods": [],
         }
 
-        global entityXML
-        enList = entityXML.findall("entity")
+        entityList = xmlLookups.entities.lookup()
 
-        for en in enList:
-            entitykinds = []
+        for entity in entityList:
+            for kind in entity.kinds:
+                if kind not in groups:
+                    groups[kind] = []
 
-            k = en.get("Kind")
-            if k is not None:
-                entitykinds.append(k)
-
-            entitygroups = en.findall("group")
-            for entitygroup in entitygroups:
-                entitygroupkind = entitygroup.get("Kind")
-                if entitygroupkind is not None and entitygroupkind not in entitykinds:
-                    entitykinds.append(entitygroupkind)
-
-            for entitykind in entitykinds:
-                if entitykind not in groups:
-                    groups[entitykind] = []
-
-                groups[entitykind].append(en)
+                groups[kind].append(entity)
 
         for group, ents in groups.items():
             numEnts = len(ents)
@@ -4717,12 +4291,51 @@ class MainWindow(QMainWindow):
         self.openWrapper(target)
         evt.acceptProposedAction()
 
+    FIXUP_PNGS = (
+        "resources/UI/",
+        "resources/Entities/5.100.0 - Collectible.png",
+        "resources/Backgrounds/Door.png",
+        "resources/Backgrounds/DisabledDoor.png",
+        "resources/Entities/questionmark.png",
+    )
+
     def fixupLookups(self):
         global xmlLookups
 
         fixIconFormat = settings.value("FixIconFormat") == "1"
         if not fixIconFormat:
             return
+
+        savedPaths = {}
+
+        def fixImage(path):
+            if path not in savedPaths:
+                savedPaths[path] = True
+                formatFix = QImage(path)
+                formatFix.save(path)
+
+        for fixupPath in MainWindow.FIXUP_PNGS:
+            dirPath = Path(fixupPath)
+            if dirPath.is_dir():
+                for dirPath, dirNames, filenames in os.walk(dirPath):
+                    for filename in filenames:
+                        path = os.path.join(dirPath, filename)
+                        fixPath = Path(path)
+                        if fixPath.is_file() and fixPath.suffix == ".png":
+                            fixImage(path)
+
+            elif dirPath.is_file() and dirPath.suffix == ".png":
+                fixImage(fixupPath)
+            else:
+                printf(f"{fixupPath} is not a valid directory or png file")
+
+        entities = xmlLookups.entities.lookup()
+        for config in entities:
+            if config.imagePath:
+                fixImage(config.imagePath)
+
+            if config.editorImagePath:
+                fixImage(config.editorImagePath)
 
         nodes = xmlLookups.stages.lookup()
         nodes.extend(xmlLookups.roomTypes.lookup())
@@ -4735,14 +4348,12 @@ class MainWindow(QMainWindow):
             for gfx in gfxs:
                 for key, imgPath in xmlLookups.getGfxData(gfx)["Paths"].items():
                     if imgPath and os.path.isfile(imgPath):
-                        formatFix = QImage(imgPath)
-                        formatFix.save(imgPath)
+                        fixImage(imgPath)
 
                 for ent in gfx.findall("Entity"):
                     imgPath = ent.get("Image")
                     if imgPath and os.path.isfile(imgPath):
-                        formatFix = QImage(imgPath)
-                        formatFix.save(imgPath)
+                        fixImage(imgPath)
 
     def setupFileMenuBar(self):
         f = self.fileMenu
@@ -5335,15 +4946,13 @@ class MainWindow(QMainWindow):
 
     def open(self, path=None, addToRecent=True):
         path = path or self.path
-        global entityXML
-
         roomFile = None
 
         ext = os.path.splitext(path)[1]
         if ext == ".xml":
             roomFile = StageConvert.xmlToCommon(path)
         elif ext == ".txt":
-            roomFile = StageConvert.txtToCommon(path, entityXML)
+            roomFile = StageConvert.txtToCommon(path, xmlLookups.entities)
         else:
             roomFile = StageConvert.stbToCommon(path)
 
@@ -5377,15 +4986,16 @@ class MainWindow(QMainWindow):
                 for ent in stackedEnts:
                     eType, eSubtype, eVariant = ent.Type, ent.Subtype, ent.Variant
                     if (eType, eSubtype, eVariant) not in seenSpawns:
-                        en = entityXML.find(
-                            f"entity[@ID='{eType}'][@Subtype='{eSubtype}'][@Variant='{eVariant}']"
+                        config = xmlLookups.entities.lookupOne(
+                            eType, eVariant, eSubtype
                         )
-                        if en is None or en.get("Invalid") == "1":
+
+                        if config is None or config.invalid:
                             printf(
-                                f"Room {room.getPrefix()} has invalid entity '{en is None and 'UNKNOWN' or en.get('Name')}'! ({eType}.{eVariant}.{eSubtype})"
+                                f"Room {room.getPrefix()} has invalid entity '{config is None and 'UNKNOWN' or config.name}'! ({eType}.{eVariant}.{eSubtype})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
-                            en is None or en.get("Invalid") == "1"
+                            config is None or config.invalid
                         )
 
         def coreToEntItem(e):
@@ -6448,7 +6058,6 @@ if __name__ == "__main__":
 
     # XML Globals
     version, subVer = getGameVersion()
-    entityXML = getEntityXML()
     xmlLookups = MainLookup(version, subVer)
     if settings.value("DisableMods") != "1":
         loadMods(
