@@ -463,20 +463,39 @@ class EntityLookup(Lookup):
 
                     self.elements.append(element)
 
-            def hasOverlappingElements(self):
+            def isInvalid(self):
+                invalid = False
+                startsAtZero = False
                 for element in self.elements:
-                    for element2 in self.elements:
-                        if (
-                            element != element2
-                            and element.offset <= element2.offset
-                            and (element.offset + element.length) > element2.offset
-                        ):
-                            printf(
-                                f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
-                            )
-                            return True
+                    hasAdjacent = len(self.elements) == 1 and element.offset == 0
+                    if element.offset == 0:
+                        startsAtZero = True
 
-                return False
+                    for element2 in self.elements:
+                        if element != element2:
+                            if (
+                                element.offset <= element2.offset
+                                and (element.offset + element.length) > element2.offset
+                            ):
+                                printf(
+                                    f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
+                                )
+                                invalid = True
+
+                            if (element.offset + element.length) == element2.offset or (
+                                element2.offset + element2.length
+                            ) == element.offset:
+                                hasAdjacent = True
+
+                    if not hasAdjacent:
+                        printf(
+                            f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
+                        )
+
+                if not startsAtZero:
+                    printf("Bitfield does not have an element with an offset of 0.")
+
+                return invalid
 
             def clampValues(self, number):
                 for element in self.elements:
@@ -607,10 +626,10 @@ class EntityLookup(Lookup):
             self.hasBitfields = len(bitfields) != 0
             self.bitfields = list(map(EntityLookup.EntityConfig.Bitfield, bitfields))
             for bitfield in self.bitfields:
-                if bitfield.hasOverlappingElements():
+                if bitfield.isInvalid():
                     self.invalidBitfield = True
                     printf(
-                        f"Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) has bitfield elements with overlapping bitmasks and cannot be configured"
+                        f"Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) has invalid bitfield elements and cannot be configured"
                     )
                     break
 

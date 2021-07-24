@@ -1011,7 +1011,7 @@ class Entity(QGraphicsItem):
             self.known = True
 
         def validateBitfield(self, bitfield):
-            value = getattr(self, bitfield.key)
+            value = self.getBitfieldValue(bitfield)
             if not isinstance(value, int):
                 printf(
                     f"Entity {self.config.name} ({self.config.type}.{self.config.variant}.{self.config.subtype}) has an invalid bitfield Key {bitfield.key}"
@@ -1021,15 +1021,15 @@ class Entity(QGraphicsItem):
                 value = bitfield.clampValues(value)
                 setattr(self, bitfield.key, value)
 
-        def getBitfieldElementValue(self, bitfieldElement):
-            return getattr(self, bitfieldElement.bitfield.key)
+        def getBitfieldValue(self, bitfield):
+            return getattr(self, bitfield.key)
 
         def setBitfieldElementValue(self, bitfieldElement, value):
             setattr(
                 self,
                 bitfieldElement.bitfield.key,
                 bitfieldElement.setRawValue(
-                    self.getBitfieldElementValue(bitfieldElement), int(value)
+                    self.getBitfieldValue(bitfieldElement.bitfield), int(value)
                 ),
             )
 
@@ -1680,12 +1680,12 @@ class EntityMenu(QWidget):
 
     def getWidgetValue(self, bitfieldElement):
         return bitfieldElement.getWidgetValue(
-            self.entity.getBitfieldElementValue(bitfieldElement)
+            self.entity.getBitfieldValue(bitfieldElement.bitfield)
         )
 
     def getDisplayValue(self, bitfieldElement):
         return bitfieldElement.getDisplayValue(
-            self.entity.getBitfieldElementValue(bitfieldElement)
+            self.entity.getBitfieldValue(bitfieldElement.bitfield)
         )
 
     WIDGETS_WITH_LABELS = ("slider", "dial")
@@ -4292,17 +4292,11 @@ class MainWindow(QMainWindow):
         evt.acceptProposedAction()
 
     FIXUP_PNGS = (
-        "resources/UI/Bitfont.png",
+        "resources/UI/",
         "resources/Entities/5.100.0 - Collectible.png",
         "resources/Backgrounds/Door.png",
         "resources/Backgrounds/DisabledDoor.png",
-        "resources/UI/FilterIcons.png",
-        "resources/UI/ShapeIcons.png",
-        "resources/UI/uiIcons.png",
         "resources/Entities/questionmark.png",
-        "resources/UI/ent-error.png",
-        "resources/UI/ent-warning.png",
-        "resources/UI/CurrentRoom.png",
     )
 
     def fixupLookups(self):
@@ -4320,8 +4314,21 @@ class MainWindow(QMainWindow):
                 formatFix = QImage(path)
                 formatFix.save(path)
 
-        for path in MainWindow.FIXUP_PNGS:
-            fixImage(path)
+        for fixupPath in MainWindow.FIXUP_PNGS:
+            dirPath = Path(fixupPath)
+            if dirPath.is_dir():
+                for dirPath, dirNames, filenames in os.walk(dirPath):
+                    for filename in filenames:
+                        path = os.path.join(dirPath, filename)
+                        fixPath = Path(path)
+                        if fixPath.is_file() and fixPath.suffix == ".png":
+                            fixImage(path)
+
+            elif dirPath.is_file() and dirPath.suffix == ".png":
+                printf(fixupPath)
+                fixImage(fixupPath)
+            else:
+                printf(f"{fixupPath} is not a valid directory or png file")
 
         entities = xmlLookups.entities.lookup()
         for config in entities:

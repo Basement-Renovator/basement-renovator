@@ -629,7 +629,7 @@
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.3 - Spikeball (down).png" Kind="Enemies" Name="Spikeball (down)" Subtype="3" Variant="0" MirrorY="852.0.1" />
 	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" >
 		<bitfield Key="Subtype">
-		<spinner Length="4" Name="Distance" Unit="Grids">
+			<spinner Length="4" Name="Distance" Unit="Grids">
 				<tooltip>Distance in grid tiles between the source grid and the Ball and Chain</tooltip>
 			</spinner>
 			<spinner Length="4" Name="Speed"/>
