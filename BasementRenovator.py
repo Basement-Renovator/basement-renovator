@@ -4325,7 +4325,6 @@ class MainWindow(QMainWindow):
                             fixImage(path)
 
             elif dirPath.is_file() and dirPath.suffix == ".png":
-                printf(fixupPath)
                 fixImage(fixupPath)
             else:
                 printf(f"{fixupPath} is not a valid directory or png file")
