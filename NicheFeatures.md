@@ -13,6 +13,9 @@ Sometimes it's desirable to replace a few entities in a room with another one. S
 Sometimes you'd like to keep an entity filter active while selecting new entities to paint for the current room. Ctrl+Click the entity you'd like to paint and the current entity filter will not change.
 You can also invert the normal behavior by toggling Edit > Pin Entity Filter.
 
+#### Place Multiple Entities With Matching Attributes
+Sometimes it's desirable to place an entity with all the same attributes of another. Selecting an entity in-room that matches the one you have selected in the palette will do this automatically!
+
 ### Filter by other properties
 If you'd like to filter rooms by things other than entities, type, and size, you can filter for other room properties through the *Other* filter. This includes properties like weight, difficulty, subtype, and the last time the room was tested.
   - As an aside, last test time is filtered differently from other properties.

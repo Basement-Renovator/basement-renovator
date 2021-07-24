@@ -352,9 +352,9 @@ class EntityLookup(Lookup):
                 self.minimum = int(node.get("Minimum", 0))
                 self.maximum = int(node.get("Maximum", bitFill(self.length)))
 
-                self.secondrange = node.get("SecondRange")
-                if self.secondrange:
-                    self.secondrange = float(self.secondrange) * 30
+                self.scalarrange = node.get("ScalarRange")
+                if self.scalarrange:
+                    self.scalarrange = float(self.scalarrange)
 
                 self.widget = node.tag
 
@@ -424,8 +424,8 @@ class EntityLookup(Lookup):
                     degrees = value * (360 / (self.maximum + 1))
                     return (degrees + 90) % 360
 
-                if self.secondrange:
-                    return round(self.secondrange / value / 30, 3)
+                if self.scalarrange:
+                    return round(self.scalarrange / value, 3)
 
                 return value
 
@@ -463,6 +463,21 @@ class EntityLookup(Lookup):
 
                     self.elements.append(element)
 
+            def hasOverlappingElements(self):
+                for element in self.elements:
+                    for element2 in self.elements:
+                        if (
+                            element != element2
+                            and element.offset <= element2.offset
+                            and (element.offset + element.length) > element2.offset
+                        ):
+                            printf(
+                                f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
+                            )
+                            return True
+
+                return False
+
             def clampValues(self, number):
                 for element in self.elements:
                     number = element.clampValue(number)
@@ -495,6 +510,7 @@ class EntityLookup(Lookup):
             self.mirrorY = None
             self.kinds = None
             self.hasBitfields = None
+            self.invalidBitfield = False
             self.bitfields = []
             self.inEmptyRooms = None
 
@@ -590,6 +606,13 @@ class EntityLookup(Lookup):
             bitfields = entity.findall("bitfield")
             self.hasBitfields = len(bitfields) != 0
             self.bitfields = list(map(EntityLookup.EntityConfig.Bitfield, bitfields))
+            for bitfield in self.bitfields:
+                if bitfield.hasOverlappingElements():
+                    self.invalidBitfield = True
+                    printf(
+                        f"Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) has bitfield elements with overlapping bitmasks and cannot be configured"
+                    )
+                    break
 
         def hasBitfieldKey(self, key):
             for bitfield in self.bitfields:
@@ -605,17 +628,7 @@ class EntityLookup(Lookup):
 
             return elements
 
-        def isOutOfRange(self):
-            if self.type >= 1000 and not self.isGridEnt:
-                return True
-            if self.variant >= 4096 and not self.hasBitfieldKey("Variant"):
-                return True
-            if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
-                return True
-
-            return False
-
-        def getEditorWarnings(self):
+        def getOutOfRangeWarnings(self):
             warnings = ""
             if self.type >= 1000 and not self.isGridEnt:
                 warnings += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
@@ -623,9 +636,20 @@ class EntityLookup(Lookup):
                 warnings += "\nVariant is outside the valid range of 0 - 4095!"
             if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
                 warnings += "\nSubtype is outside the valid range of 0 - 255!"
+
+            return warnings
+
+        def isOutOfRange(self):
+            return self.getOutOfRangeWarnings() != ""
+
+        def getEditorWarnings(self):
+            warnings = self.getOutOfRangeWarnings()
             if self.invalid:
                 warnings += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
-            if self.hasBitfields:
+
+            if self.invalidBitfield:
+                warnings += "\nHas incorrectly defined bitfield properties, cannot be configured"
+            elif self.hasBitfields:
                 warnings += "\nMiddle-click to configure entity properties"
 
             return warnings

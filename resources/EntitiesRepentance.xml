@@ -410,7 +410,7 @@
 	<entity Group="Hosts" Kind="Enemies" Image="resources/Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
 	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1">
 		<bitfield Key="Subtype">
-			<slider Length="4" Offset="8" Name="Frequency" Unit="Seconds" ValueOffset="1" SecondRange="5">
+			<slider Length="4" Offset="8" Name="Frequency" Unit="Seconds" ValueOffset="1" ScalarRange="5">
 				<tooltip>Seconds between each spawned Fissure</tooltip>
 			</slider>
 			<spinner Length="4" Offset="4" Name="Jump Distance" Unit="Grids" ValueOffset=".5">
@@ -629,14 +629,14 @@
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.3 - Spikeball (down).png" Kind="Enemies" Name="Spikeball (down)" Subtype="3" Variant="0" MirrorY="852.0.1" />
 	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" >
 		<bitfield Key="Subtype">
-			<dropdown Length="1" Offset="8">
+					<spinner Length="4" Name="Distance" Unit="Grids">
+				<tooltip>Distance in grid tiles between the source grid and the Ball and Chain</tooltip>
+			</spinner>
+			<spinner Length="4" Name="Speed"/>
+			<dropdown Length="1">
 				<choice>Clockwise</choice>
 				<choice>Counter-Clockwise</choice>
 			</dropdown>
-			<spinner Length="4" Offset="4" Name="Speed"/>
-			<spinner Length="4" Offset="0" Name="Distance" Unit="Grids">
-				<tooltip>Distance in grid tiles between the source grid and the Ball and Chain</tooltip>
-			</spinner>
 		</bitfield>
 	</entity>
 

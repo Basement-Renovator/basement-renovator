@@ -966,12 +966,7 @@ class Entity(QGraphicsItem):
 
             if self.config.hasBitfields:
                 for bitfield in self.config.bitfields:
-                    if hasattr(self, bitfield.key):
-                        setattr(
-                            self,
-                            bitfield.key,
-                            bitfield.clampValues(getattr(self, bitfield.key)),
-                        )
+                    self.validateBitfield(bitfield)
 
             self.rockFrame = None
             self.imgPath = self.config.editorImagePath or self.config.imagePath
@@ -1014,6 +1009,29 @@ class Entity(QGraphicsItem):
                 self.overlaypixmap = QPixmap(self.config.overlayImagePath)
 
             self.known = True
+
+        def validateBitfield(self, bitfield):
+            value = getattr(self, bitfield.key)
+            if not isinstance(value, int):
+                printf(
+                    f"Entity {self.config.name} ({self.config.type}.{self.config.variant}.{self.config.subtype}) has an invalid bitfield Key {bitfield.key}"
+                )
+                self.config.invalidBitfield = True
+            else:
+                value = bitfield.clampValues(value)
+                setattr(self, bitfield.key, value)
+
+        def getBitfieldElementValue(self, bitfieldElement):
+            return getattr(self, bitfieldElement.bitfield.key)
+
+        def setBitfieldElementValue(self, bitfieldElement, value):
+            setattr(
+                self,
+                bitfieldElement.bitfield.key,
+                bitfieldElement.setRawValue(
+                    self.getBitfieldElementValue(bitfieldElement), int(value)
+                ),
+            )
 
     def __init__(self, x, y, myType, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
@@ -1555,7 +1573,11 @@ class Entity(QGraphicsItem):
 
     def mouseReleaseEvent(self, event):
         e = self.entity
-        if event.button() == Qt.MiddleButton and e.config.hasBitfields:
+        if (
+            event.button() == Qt.MiddleButton
+            and e.config.hasBitfields
+            and not e.config.invalidBitfield
+        ):
             EntityMenu(e)
         self.hideWeightPopup()
         QGraphicsItem.mouseReleaseEvent(self, event)
@@ -1628,31 +1650,18 @@ class EntityMenu(QWidget):
         self.customContextMenu(cursor.pos())
 
     def changeProperty(self, bitfieldElement, value):
-        setattr(
-            self.entity,
-            bitfieldElement.bitfield.key,
-            bitfieldElement.setRawValue(
-                getattr(self.entity, bitfieldElement.bitfield.key), int(value)
-            ),
-        )
+        self.entity.setBitfieldElementValue(bitfieldElement, value)
 
         mainWindow.dirt()
         mainWindow.scene.update()
 
     def updateLabel(self, label, bitfieldElement):
         label.setText(
-            bitfieldElement.name
-            + ": "
-            + str(self.getDisplayValue(bitfieldElement))
-            + " "
-            + bitfieldElement.unit
+            f"{bitfieldElement.name}: {self.getDisplayValue(bitfieldElement)} {bitfieldElement.unit}"
         )
 
     def connectBitfieldElement(self, widget, bitfieldElement, label=None):
-        def changeValue(x=None):
-            if x is None and bitfieldElement.widget == "checkbox":
-                x = widget.isChecked()
-
+        def changeValue(x):
             value = bitfieldElement.getRawValueFromWidgetValue(x)
             self.changeProperty(bitfieldElement, value)
 
@@ -1662,7 +1671,7 @@ class EntityMenu(QWidget):
         if bitfieldElement.widget == "dropdown":
             widget.currentIndexChanged.connect(changeValue)
         elif bitfieldElement.widget == "checkbox":
-            widget.stateChanged.connect(changeValue)
+            widget.stateChanged.connect(lambda: changeValue(widget.isChecked()))
         else:
             widget.valueChanged.connect(changeValue)
 
@@ -1671,13 +1680,15 @@ class EntityMenu(QWidget):
 
     def getWidgetValue(self, bitfieldElement):
         return bitfieldElement.getWidgetValue(
-            getattr(self.entity, bitfieldElement.bitfield.key)
+            self.entity.getBitfieldElementValue(bitfieldElement)
         )
 
     def getDisplayValue(self, bitfieldElement):
         return bitfieldElement.getDisplayValue(
-            getattr(self.entity, bitfieldElement.bitfield.key)
+            self.entity.getBitfieldElementValue(bitfieldElement)
         )
+
+    WIDGETS_WITH_LABELS = ("slider", "dial")
 
     # @pyqtSlot(QPoint)
     def customContextMenu(self, pos):
@@ -1686,90 +1697,56 @@ class EntityMenu(QWidget):
         for bitfieldElement in self.entity.config.getBitfieldElements():
             if not hasattr(self.entity, bitfieldElement.bitfield.key):
                 continue
-            elif bitfieldElement.widget == "spinner":
+
+            label = None
+            if bitfieldElement.widget in EntityMenu.WIDGETS_WITH_LABELS:
                 action = QWidgetAction(menu)
-                spinner = QSpinBox()
+                label = QLabel("")
+                action.setDefaultWidget(label)
+                menu.addAction(action)
+
+            action = QWidgetAction(menu)
+            widget = None
+            if bitfieldElement.widget == "spinner":
+                widget = QSpinBox()
                 minimum, maximum = bitfieldElement.getWidgetRange()
-                spinner.setRange(minimum, maximum)
-                spinner.setValue(self.getWidgetValue(bitfieldElement))
-                spinner.setPrefix(bitfieldElement.name + ": ")
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
+                widget.setPrefix(bitfieldElement.name + ": ")
                 if bitfieldElement.floatvalueoffset != 0:
-                    spinner.setSuffix(
-                        str(bitfieldElement.floatvalueoffset)[1:]
-                        + " "
-                        + bitfieldElement.unit
+                    widget.setSuffix(
+                        f"{str(bitfieldElement.floatvalueoffset)[1:]} {bitfieldElement.unit}"
                     )
                 else:
-                    spinner.setSuffix(" " + bitfieldElement.unit)
-
-                if bitfieldElement.tooltip:
-                    spinner.setToolTip(bitfieldElement.tooltip)
-
-                action.setDefaultWidget(spinner)
-                self.connectBitfieldElement(spinner, bitfieldElement)
-                menu.addAction(action)
+                    widget.setSuffix(f" {bitfieldElement.unit}")
             elif bitfieldElement.widget == "dropdown":
-                action = QWidgetAction(menu)
-                dropdown = QComboBox()
+                widget = QComboBox()
                 for item in bitfieldElement.dropdownkeys:
-                    dropdown.addItem(item)
-                dropdown.setCurrentIndex(self.getWidgetValue(bitfieldElement))
-
-                if bitfieldElement.tooltip:
-                    dropdown.setToolTip(bitfieldElement.tooltip)
-
-                action.setDefaultWidget(dropdown)
-                self.connectBitfieldElement(dropdown, bitfieldElement)
-                menu.addAction(action)
+                    widget.addItem(item)
+                widget.setCurrentIndex(self.getWidgetValue(bitfieldElement))
             elif bitfieldElement.widget == "slider":
-                action = QWidgetAction(menu)
-                sliderLabel = QLabel("")
-                action.setDefaultWidget(sliderLabel)
-                menu.addAction(action)
-
-                action = QWidgetAction(menu)
-                slider = QSlider(Qt.Horizontal)
+                widget = QSlider(Qt.Horizontal)
                 minimum, maximum = bitfieldElement.getWidgetRange()
-                slider.setRange(minimum, maximum)
-                slider.setValue(self.getWidgetValue(bitfieldElement))
-                if bitfieldElement.tooltip:
-                    slider.setToolTip(bitfieldElement.tooltip)
-
-                action.setDefaultWidget(slider)
-                self.connectBitfieldElement(slider, bitfieldElement, sliderLabel)
-                menu.addAction(action)
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
             elif bitfieldElement.widget == "dial":
-                action = QWidgetAction(menu)
-                dialLabel = QLabel("")
-                action.setDefaultWidget(dialLabel)
-                menu.addAction(action)
-
-                action = QWidgetAction(menu)
-                dial = QDial()
+                widget = QDial()
                 minimum, maximum = bitfieldElement.getWidgetRange()
-                dial.setRange(minimum, maximum)
-                dial.setValue(self.getWidgetValue(bitfieldElement))
-                dial.setNotchesVisible(True)
-                dial.setWrapping(True)
-
-                if bitfieldElement.tooltip:
-                    dial.setToolTip(bitfieldElement.tooltip)
-
-                action.setDefaultWidget(dial)
-                self.connectBitfieldElement(dial, bitfieldElement, dialLabel)
-                menu.addAction(action)
+                widget.setRange(minimum, maximum)
+                widget.setValue(self.getWidgetValue(bitfieldElement))
+                widget.setNotchesVisible(True)
+                widget.setWrapping(True)
             elif bitfieldElement.widget == "checkbox":
-                action = QWidgetAction(menu)
-                checkbox = QCheckBox()
-                checkbox.setText(bitfieldElement.name)
-                checkbox.setChecked(self.getWidgetValue(bitfieldElement))
+                widget = QCheckBox()
+                widget.setText(bitfieldElement.name)
+                widget.setChecked(self.getWidgetValue(bitfieldElement))
 
-                if bitfieldElement.tooltip:
-                    checkbox.setToolTip(bitfieldElement.tooltip)
+            if bitfieldElement.tooltip:
+                widget.setToolTip(bitfieldElement.tooltip)
 
-                action.setDefaultWidget(checkbox)
-                self.connectBitfieldElement(checkbox, bitfieldElement)
-                menu.addAction(action)
+            action.setDefaultWidget(widget)
+            self.connectBitfieldElement(widget, bitfieldElement, label)
+            menu.addAction(action)
 
         # End it
         menu.exec(self.list.mapToGlobal(pos))
@@ -3478,21 +3455,17 @@ class EntityGroupModel(QAbstractListModel):
 
             entityItem = EntityItem(entity)
 
+            addKinds = entity.kinds
             if self.kind is not None:
-                kindgroups = entity.kinds[self.kind]
+                addKinds = [self.kind]
+
+            for kind in addKinds:
+                kindgroups = entity.kinds[kind]
                 for groupname in kindgroups:
                     if groupname not in self.groups:
                         self.groups[groupname] = EntityGroupItem(groupname)
 
                     self.groups[groupname].objects.append(entityItem)
-            else:
-                for kind in entity.kinds:
-                    kindgroups = entity.kinds[kind]
-                    for groupname in kindgroups:
-                        if groupname not in self.groups:
-                            self.groups[groupname] = EntityGroupItem(groupname)
-
-                        self.groups[groupname].objects.append(entityItem)
 
         i = 0
 
@@ -4318,6 +4291,19 @@ class MainWindow(QMainWindow):
         self.openWrapper(target)
         evt.acceptProposedAction()
 
+    FIXUP_PNGS = (
+        "resources/UI/Bitfont.png",
+        "resources/Entities/5.100.0 - Collectible.png",
+        "resources/Backgrounds/Door.png",
+        "resources/Backgrounds/DisabledDoor.png",
+        "resources/UI/FilterIcons.png",
+        "resources/UI/ShapeIcons.png",
+        "resources/UI/uiIcons.png",
+        "resources/Entities/questionmark.png" "resources/UI/ent-error.png",
+        "resources/UI/ent-warning.png",
+        "resources/UI/CurrentRoom.png",
+    )
+
     def fixupLookups(self):
         global xmlLookups
 
@@ -4325,13 +4311,16 @@ class MainWindow(QMainWindow):
         if not fixIconFormat:
             return
 
-        savedPaths = []
+        savedPaths = {}
 
         def fixImage(path):
-            if path not in savedPaths:
-                savedPaths.append(path)
+            if savedPaths[path] is not True:
+                savedPaths[path] = True
                 formatFix = QImage(path)
                 formatFix.save(path)
+
+        for path in MainWindow.FIXUP_PNGS:
+            fixImage(path)
 
         entities = xmlLookups.entities.lookup()
         for config in entities:
