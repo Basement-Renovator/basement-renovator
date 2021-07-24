@@ -4314,7 +4314,7 @@ class MainWindow(QMainWindow):
         savedPaths = {}
 
         def fixImage(path):
-            if savedPaths[path] is not True:
+            if path not in savedPaths:
                 savedPaths[path] = True
                 formatFix = QImage(path)
                 formatFix.save(path)
