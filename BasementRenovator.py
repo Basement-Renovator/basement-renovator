@@ -3376,14 +3376,16 @@ class RoomSelector(QWidget):
 class EntityGroupItem(object):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name=None, containsEntity=True):
+    def __init__(self, name=None, visible=True):
 
         self.objects = []
         self.startIndex = 0
         self.endIndex = 0
 
         self.name = "" if name is None else name
-        self.containsEntity = containsEntity
+        self.visible = visible
+        if self.name == "":
+            self.visible = False
 
         self.alignment = Qt.AlignCenter
 
@@ -3723,9 +3725,7 @@ class EntityList(QListView):
             if isinstance(item, EntityGroupItem):
                 self.setRowHidden(row, True)
 
-                if item.name != "" and item.containsEntity:
-                    hadHidden = False
-                    hadVisible = False
+                if item.visible:
                     checkedIndices = []
                     if len(item.objects) == 0:
                         self.setRowHidden(row, False)
@@ -3734,9 +3734,6 @@ class EntityList(QListView):
                             checkedIndices.append(i)
                             if not self.isRowHidden(i):
                                 self.setRowHidden(row, False)
-                                hadVisible = True
-                            else:
-                                hadHidden = True
 
 
 class ReplaceDialog(QDialog):
