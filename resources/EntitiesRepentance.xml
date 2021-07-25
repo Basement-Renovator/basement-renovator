@@ -1,21 +1,61 @@
 <data>
 	<!--——— Pickups ———-->
 
+	<group Name="Random Collectibles">
+		<entity ID="5" Variant="100" Subtype="0" Name="Random Collectible" Image="resources/Entities/Items/5.100.0 - Random.png"/>
+		<entity ID="5" Variant="150" Subtype="0" Name="Random Shop Item" Image="resources/Entities/Items/5.150.0 - Random.png"/>
+		<entity ID="5" Variant="350" Subtype="0" Name="Random Trinket" Image="resources/Entities/5.350.0 - Trinket.png"/>
+	</group>
+
+	<group Name="Random All Pickups">
+		<entity ID="5" Variant="0" Subtype="0" Name="Pickup" Image="resources/Entities/5.0.0 - Pickup.png"/>
+		<entity ID="5" Variant="0" Subtype="1" Name="Pickup (not chest or item)" Image="resources/Entities/5.0.1 - Pickup.png"/>
+		<entity ID="5" Variant="0" Subtype="2" Name="Pickup (not item)" Image="resources/Entities/5.0.2 - Pickup.png"/>
+		<entity ID="5" Variant="0" Subtype="3" Name="Greed Pickup (no chest, item, or coin)" Image="resources/Entities/5.0.3 - Pickup.png"/>
+		<entity ID="5" Variant="0" Subtype="4" Name="Pickup (no chest, item, or trinket)" Image="resources/Entities/5.0.4 - Pickup.png"/>
+	</group>
+
+	<group Name="Pickups" IsTab="1">
+		<group Name="(Pickups) Random" Label="Random">
+			<group Name="Random Collectibles"/>
+			<group Name="Random All Pickups"/>
+		</group>
+	</group>
+
+	<group Name="Enemies" IsTab="1"/>
+	<group Name="Bosses" IsTab="1" IconSize="52"/>
+	<group Name="Stage" IsTab="1"/>
+
+	<group Name="Collect" IsTab="1" IconSize="32, 64">
+		<group Name="(Collect) Random" Label="Random">
+			<group Name="Random Collectibles"/>
+		</group>
+	</group>
+
+	<!-- <group Name="Floors" IsTab="1">
+		<group Name="Global Shared" Label="Shared">
+		</group>
+		<group Name="Chapter 1" Label="Chapter 1">
+			<group Name="Chapter 1 Shared" Label="Shared">
+			</group>
+			<group Name="Basement" Label="Basement">
+			</group>
+			<group Name="Cellar" Label="Cellar">
+			</group>
+			<group Name="Burning Basement" Label="Burning Basement">
+			</group>
+		</group>
+		<group Name="Chapter 1x" Label="Chapter 1x">
+			<group Name="Chapter 1x Shared" Label="Shared">
+			</group>
+			<group Name="Downpour" Label="Downpour">
+			</group>
+			<group Name="Dross" Label="Dross">
+			</group>
+		</group>
+	</group> -->
+
 	<!-- Random -->
-	<entity Group="Random" ID="5" Image="resources/Entities/Items/5.100.0 - Random.png" Kind="Pickups" Name="Random Collectible" Subtype="0" Variant="100">
-		<group Kind="Collect" />
-	</entity>
-	<entity Group="Random" ID="5" Image="resources/Entities/Items/5.150.0 - Random.png" Kind="Pickups" Name="Random Shop Item" Subtype="0" Variant="150">
-		<group Kind="Collect" />
-	</entity>
-	<entity Group="Random" ID="5" Image="resources/Entities/5.350.0 - Trinket.png" Kind="Pickups" Name="Random Trinket" Subtype="0" Variant="350" >
-		<group Kind="Collect" />
-	</entity>
-	<entity Group="Random" ID="5" Image="resources/Entities/5.0.0 - Pickup.png" Kind="Pickups" Name="Pickup" Subtype="0" Variant="0" />
-	<entity Group="Random" ID="5" Image="resources/Entities/5.0.1 - Pickup.png" Kind="Pickups" Name="Pickup (not chest or item)" Subtype="0" Variant="1" />
-	<entity Group="Random" ID="5" Image="resources/Entities/5.0.2 - Pickup.png" Kind="Pickups" Name="Pickup (not item)" Subtype="0" Variant="2" />
-	<entity Group="Random" ID="5" Image="resources/Entities/5.0.3 - Pickup.png" Kind="Pickups" Name="Greed Pickup (no chest, item, or coin)" Subtype="0" Variant="3" />
-	<entity Group="Random" ID="5" Image="resources/Entities/5.0.4 - Pickup.png" Kind="Pickups" Name="Pickup (no chest, item, or trinket)" Subtype="0" Variant="4" />
 	<entity Group="Random" ID="5" Image="resources/Entities/5.10.0 - RHeart.png" Kind="Pickups" Name="Random Heart" Subtype="0" Variant="10">
 		<group Name="Hearts" />
 	</entity>

@@ -57,15 +57,6 @@ import src.anm2 as anm2
 from src.constants import *
 from src.util import *
 
-
-def checkNum(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
-
-
 ########################
 #       XML Data       #
 ########################
@@ -3385,13 +3376,14 @@ class RoomSelector(QWidget):
 class EntityGroupItem(object):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name):
+    def __init__(self, name=None):
 
         self.objects = []
         self.startIndex = 0
         self.endIndex = 0
 
-        self.name = name
+        self.name = "" if name is None else name
+
         self.alignment = Qt.AlignCenter
 
     def getItem(self, index):
@@ -3430,60 +3422,64 @@ class EntityGroupModel(QAbstractListModel):
     def __init__(self, kind=None, entityList=None):
         QAbstractListModel.__init__(self)
 
-        self.groups = {}
+        self.groups = []
         self.kind = kind
         self.view = None
+        self.entitycount = 0
 
-        self.filter = ""
+        entitiesCounted = {}
 
-        if entityList is None:
-            entityList = xmlLookups.entities.lookup()
+        entries = entityList
 
-        for entity in entityList:
-            try:
-                imgPath = Path(entity.imagePath)
-            except:
-                traceback.print_exception(*sys.exc_info())
-                imgPath = Path()
-
-            if not imgPath.exists():
-                printf(
-                    f"Could not find Entity {entity.name} ({entity.type}.{entity.variant}.{entity.subtype})'s palette icon:",
-                    imgPath,
-                )
-                entity.imagePath = "resources/Entities/questionmark.png"
-
-            entityItem = EntityItem(entity)
-
-            addKinds = entity.kinds
-            if self.kind is not None:
-                addKinds = [self.kind]
-
-            for kind in addKinds:
-                kindgroups = entity.kinds[kind]
-                for groupname in kindgroups:
-                    if groupname not in self.groups:
-                        self.groups[groupname] = EntityGroupItem(groupname)
-
-                    self.groups[groupname].objects.append(entityItem)
+        global xmlLookups
+        if kind is not None:
+            entries = xmlLookups.entities.lookupGroup(kind)
+        elif entityList is None:
+            entries = xmlLookups.entities.lookup()
 
         i = 0
+        populatingGroup = None
 
-        # We hard-code the "Random" category to be at the top of the list,
-        # because it contains the most frequently-used entities
-        if "Random" in self.groups:
-            self.groups["Random"].calculateIndices(i)
-            i = self.groups["Random"].endIndex + 1
+        for entry in entries:
+            if isinstance(entry, xmlLookups.entities.GroupConfig):
+                if populatingGroup:
+                    populatingGroup.calculateIndices(i)
+                    i = populatingGroup.endIndex + 1
 
-        for key, group in sorted(self.groups.items()):
-            if key != "Random":
-                group.calculateIndices(i)
-                i = group.endIndex + 1
+                populatingGroup = EntityGroupItem(entry.label)
+                self.groups.append(populatingGroup)
+            elif isinstance(entry, xmlLookups.entities.EntityConfig):
+                if entry not in entitiesCounted:
+                    entitiesCounted[entry] = True
+                    self.entitycount += 1
+
+                if populatingGroup is None:
+                    populatingGroup = EntityGroupItem()
+                    self.groups.append(populatingGroup)
+
+                try:
+                    imgPath = Path(entry.imagePath)
+                except:
+                    traceback.print_exception(*sys.exc_info())
+                    imgPath = Path()
+
+                if not imgPath.exists():
+                    printf(
+                        f"Could not find Entity {entry.name} ({entry.type}.{entry.variant}.{entry.subtype})'s palette icon:",
+                        imgPath,
+                    )
+                    entry.imagePath = "resources/Entities/questionmark.png"
+
+                entityItem = EntityItem(entry)
+                populatingGroup.objects.append(entityItem)
+
+        if populatingGroup:
+            populatingGroup.calculateIndices(i)
 
     def rowCount(self, parent=None):
         c = 0
 
-        for group in self.groups.values():
+        for group in self.groups:
             c += len(group.objects) + 1
 
         return c
@@ -3497,7 +3493,7 @@ class EntityGroupModel(QAbstractListModel):
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def getItem(self, index):
-        for group in self.groups.values():
+        for group in self.groups:
             if (group.startIndex <= index) and (index <= group.endIndex):
                 return group.getItem(index)
 
@@ -3611,44 +3607,24 @@ class EntityPalette(QWidget):
 
     def populateTabs(self):
 
-        groups = {
-            "Pickups": [],
-            "Enemies": [],
-            "Bosses": [],
-            "Stage": [],
-            "Collect": [],
-            "Mods": [],
-        }
+        for tabGroup in xmlLookups.entities.tabGroups:
+            model = EntityGroupModel(tabGroup.name)
+            if model.entitycount != 0:
+                listView = EntityList()
+                printf(f'Populating palette tab "{tabGroup.name}" with {model.entitycount} entities')
 
-        entityList = xmlLookups.entities.lookup()
+                listView.setModel(model)
+                listView.model().view = listView
+                listView.filterList()
 
-        for entity in entityList:
-            for kind in entity.kinds:
-                if kind not in groups:
-                    groups[kind] = []
+                listView.clicked.connect(self.objSelected)
 
-                groups[kind].append(entity)
+                if tabGroup.iconSize:
+                    listView.setIconSize(QSize(tabGroup.iconSize[0], tabGroup.iconSize[1]))
 
-        for group, ents in groups.items():
-            numEnts = len(ents)
-            if numEnts == 0:
-                continue
-
-            listView = EntityList()
-            printf(f'Populating palette tab "{group}" with {numEnts} entities')
-
-            listView.setModel(EntityGroupModel(group, ents))
-            listView.model().view = listView
-
-            listView.clicked.connect(self.objSelected)
-
-            if group == "Bosses":
-                listView.setIconSize(QSize(52, 52))
-
-            if group == "Collect":
-                listView.setIconSize(QSize(32, 64))
-
-            self.tabs.addTab(listView, group)
+                self.tabs.addTab(listView, tabGroup.name)
+            else:
+                printf(f"Skipping empty palette tab {tabGroup.name}")
 
     def currentSelectedObject(self):
         """Returns the currently selected object reference, for painting purposes."""
@@ -3742,8 +3718,12 @@ class EntityList(QListView):
             if isinstance(item, EntityGroupItem):
                 self.setRowHidden(row, True)
 
-                for i in range(item.startIndex, item.endIndex):
-                    if not self.isRowHidden(i):
+                if item.name != "":
+                    for i in range(item.startIndex, item.endIndex):
+                        if not self.isRowHidden(i):
+                            self.setRowHidden(row, False)
+
+                    if item.startIndex == item.endIndex:
                         self.setRowHidden(row, False)
 
 
