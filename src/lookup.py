@@ -649,7 +649,9 @@ class EntityLookup(Lookup):
 
             return warnings
 
-        def matches(self, entitytype=None, variant=None, subtype=None):
+        def matches(self, entitytype=None, variant=None, subtype=None, name=None):
+            if name is not None and self.name != name:
+                return False
             if entitytype is not None and self.type != entitytype:
                 return False
             if variant is not None and (
@@ -708,10 +710,39 @@ class EntityLookup(Lookup):
         modName="Basement Renovator",
         entities2Root=None,
     ):
-        entityType = int(node.get("ID", "-1"))
-        variant = int(node.get("Variant", "0"))
-        subtype = int(node.get("Subtype", "0"))
+        entityType = node.get("ID")
+        variant = node.get("Variant")
+        subtype = node.get("Subtype")
         name = node.get("Name")
+
+        if (name is not None) or (entityType is not None):
+            isRef = True
+            for key in node.attrib.keys():
+                if key not in ("ID", "Variant", "Subtype", "Name"):
+                    isRef = False
+                    break
+
+            if isRef:
+                if entityType:
+                    entityType = int(entityType)
+                if variant:
+                    variant = int(variant)
+                if subtype:
+                    subtype = int(subtype)
+
+                entityConfig = self.lookupOne(
+                    entitytype=entityType, variant=variant, subtype=subtype, name=name
+                )
+                if entityConfig:
+                    return entityConfig
+                else:
+                    printf(
+                        f"Entity {node.attrib} looks like a ref, but was not previously defined!"
+                    )
+
+        entityType = int(entityType or -1)
+        variant = int(variant or 0)
+        subtype = int(subtype or 0)
 
         if (entityType >= 1000 or entityType < 0) and node.get("IsGrid") != "1":
             printf(
@@ -810,8 +841,6 @@ class EntityLookup(Lookup):
             if tabGroupConfig is None:
                 tabGroupConfig = self.getGroup(name=kind, isTab=True)
 
-            # printf(f"Got tab group config {tabGroupConfig.name}, {tabGroupConfig.isTab}")
-
             groupConfig = None
             for entry in tabGroupConfig.entries:
                 if isinstance(entry, self.GroupConfig) and entry.name == groupName:
@@ -820,9 +849,6 @@ class EntityLookup(Lookup):
 
             if groupConfig is None:
                 groupConfig = self.getGroup(name=groupName, label=group)
-                printf(
-                    f"Generated group {groupConfig.name}, from Kind {kind} / Group {group}, adding to tab {tabGroupConfig.name}"
-                )
                 tabGroupConfig.entries.append(groupConfig)
 
             groupConfig.entries.append(entityConfig)
@@ -880,9 +906,7 @@ class EntityLookup(Lookup):
     ):
         for subNode in root:
             if subNode.tag == "group":
-                group = self.loadGroupNode(
-                    subNode, resourcePath, modName, entities2Root
-                )
+                self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
             elif subNode.tag == "entity":
                 self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
 
@@ -932,12 +956,14 @@ class EntityLookup(Lookup):
         variant=None,
         subtype=None,
         inEmptyRooms=None,
+        name=None,
     ):
         entities = self.entityList
 
         entities = list(
             filter(
-                lambda entity: entity.matches(entitytype, variant, subtype), entities
+                lambda entity: entity.matches(entitytype, variant, subtype, name),
+                entities,
             )
         )
 
@@ -954,8 +980,9 @@ class EntityLookup(Lookup):
         variant=None,
         subtype=None,
         inEmptyRooms=None,
+        name=None,
     ):
-        entities = self.lookup(entitytype, variant, subtype, inEmptyRooms)
+        entities = self.lookup(entitytype, variant, subtype, inEmptyRooms, name)
 
         return next(iter(entities), None)
 
