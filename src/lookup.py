@@ -929,6 +929,9 @@ class EntityLookup(Lookup):
         modName="Basement Renovator",
         entities2Root=None,
     ):
+        if not root:
+            return
+
         for subNode in root:
             if subNode.tag == "group":
                 self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
