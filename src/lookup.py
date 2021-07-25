@@ -673,15 +673,15 @@ class EntityLookup(Lookup):
 
                 iconSize = node.get("IconSize")
                 if iconSize:
-                    parts = list(
-                        map(lambda x: x.strip(), iconSize.split(","))
-                    )
+                    parts = list(map(lambda x: x.strip(), iconSize.split(",")))
                     if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
                         self.iconSize = (int(parts[0]), int(parts[1]))
                     elif len(parts) == 1 and checkNum(parts[0]):
                         self.iconSize = (int(parts[0]), int(parts[0]))
                     else:
-                        printf(f"Group {node.attrib} has invalid IconSize, must be 1 or 2 integer values")
+                        printf(
+                            f"Group {node.attrib} has invalid IconSize, must be 1 or 2 integer values"
+                        )
 
                 if self.name is None and self.label is not None:
                     self.name = self.label
@@ -700,7 +700,14 @@ class EntityLookup(Lookup):
         self.parent = parent
 
     ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
-    def loadEntityNode(self, node: ET.Element, resourcePath="", modName="Basement Renovator", entities2Root=None):
+
+    def loadEntityNode(
+        self,
+        node: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
+    ):
         entityType = int(node.get("ID", "-1"))
         variant = int(node.get("Variant", "0"))
         subtype = int(node.get("Subtype", "0"))
@@ -778,9 +785,7 @@ class EntityLookup(Lookup):
             )
             entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
         else:
-            entityConfig = self.EntityConfig(
-                node, resourcePath, modName, entityXML
-            )
+            entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
             self.entityList.append(entityConfig)
 
         groups = []
@@ -815,11 +820,12 @@ class EntityLookup(Lookup):
 
             if groupConfig is None:
                 groupConfig = self.getGroup(name=groupName, label=group)
-                printf(f"Generated group {groupConfig.name}, from Kind {kind} / Group {group}, adding to tab {tabGroupConfig.name}")
+                printf(
+                    f"Generated group {groupConfig.name}, from Kind {kind} / Group {group}, adding to tab {tabGroupConfig.name}"
+                )
                 tabGroupConfig.entries.append(groupConfig)
 
             groupConfig.entries.append(entityConfig)
-
 
         return entityConfig
 
@@ -838,16 +844,26 @@ class EntityLookup(Lookup):
 
         return self.groups[name]
 
-    def loadGroupNode(self, node: ET.Element, resourcePath="", modName="Basement Renovator", entities2Root=None):
+    def loadGroupNode(
+        self,
+        node: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
+    ):
         group = self.getGroup(node)
         if group:
             for subNode in node:
                 if subNode.tag == "group":
-                    subGroup = self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
+                    subGroup = self.loadGroupNode(
+                        subNode, resourcePath, modName, entities2Root
+                    )
                     if subGroup:
                         group.entries.append(subGroup)
                 elif subNode.tag == "entity":
-                    entityConfig = self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
+                    entityConfig = self.loadEntityNode(
+                        subNode, resourcePath, modName, entities2Root
+                    )
                     if entityConfig:
                         group.entries.append(entityConfig)
 
@@ -856,11 +872,17 @@ class EntityLookup(Lookup):
         return None
 
     def loadXML(
-        self, root: ET.Element, resourcePath="", modName="Basement Renovator", entities2Root=None
+        self,
+        root: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
     ):
         for subNode in root:
             if subNode.tag == "group":
-                group = self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
+                group = self.loadGroupNode(
+                    subNode, resourcePath, modName, entities2Root
+                )
             elif subNode.tag == "entity":
                 self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
 

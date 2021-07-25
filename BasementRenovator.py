@@ -3611,7 +3611,9 @@ class EntityPalette(QWidget):
             model = EntityGroupModel(tabGroup.name)
             if model.entitycount != 0:
                 listView = EntityList()
-                printf(f'Populating palette tab "{tabGroup.name}" with {model.entitycount} entities')
+                printf(
+                    f'Populating palette tab "{tabGroup.name}" with {model.entitycount} entities'
+                )
 
                 listView.setModel(model)
                 listView.model().view = listView
@@ -3620,7 +3622,9 @@ class EntityPalette(QWidget):
                 listView.clicked.connect(self.objSelected)
 
                 if tabGroup.iconSize:
-                    listView.setIconSize(QSize(tabGroup.iconSize[0], tabGroup.iconSize[1]))
+                    listView.setIconSize(
+                        QSize(tabGroup.iconSize[0], tabGroup.iconSize[1])
+                    )
 
                 self.tabs.addTab(listView, tabGroup.name)
             else:

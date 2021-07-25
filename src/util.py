@@ -45,6 +45,7 @@ def sanitizePath(node, key, path):
         prefixPath = linuxPathSensitivityTraining(os.path.join(path, prefix))
         node.set(key, prefixPath)
 
+
 def checkNum(s):
     try:
         float(s)
