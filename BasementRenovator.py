@@ -3738,6 +3738,7 @@ class EntityList(QListView):
                             else:
                                 hadHidden = True
 
+
 class ReplaceDialog(QDialog):
     class EntSpinners(QWidget):
         def __init__(self):
