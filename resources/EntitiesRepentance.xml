@@ -1,6 +1,7 @@
 <data>
 	<!--——— Tabs ———-->
 	<group Name="Pickups" IsTab="1"/>
+	<group Name="Global" IsTab="1"/>
 	<group Name="Floors" IsTab="1"/>
 	<group Name="Enemies" IsTab="1"/>
 	<group Name="Bosses" IsTab="1" IconSize="52"/>
@@ -233,102 +234,152 @@
 		</group>
 	</group>
 
+	<!--——— Global ———-->
+	<group Name="Global">
+		<group Label="Grids">
+			<entity ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Name="Rock" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/rocks_generic.png" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
+			<entity ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Name="Rock (non-replaceable)" Subtype="1" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/NonRandom.png" />
+			<entity ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1010" Image="resources/Entities/1010.0.0 - Spike Rock.png" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="1011" Image="resources/Entities/1011.0.0 - Fool's Gold Rock.png" Name="Fool's Gold Rock" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1008" Image="resources/Entities/1008.0.0 - Marked Skull.png" Name="Marked Skull" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1901" Image="resources/Entities/1901.0.0 - Tall Block.png" Name="Tall Block" Variant="0" Subtype="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1999" Image="resources/Entities/1999.0.0 - Invisible Block.png" Name="Invisible Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" />
+			<entity ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Name="Pushable TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
+			<entity ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Name="Key Block" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.0.1 - Reward Plate.png" Name="Reward Plate" Subtype="0" Variant="1" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.0.9 - Kill Plate.png" Name="Kill Plate" Subtype="0" Variant="9" IsGrid="1" />
+		</group>
+		<group Label="Events">
+			<entity ID="1009" Image="resources/Entities/1009.0.0 - Rock (event).png" Name="Rock (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/Event.png" />
+			<entity ID="3009" Image="resources/Entities/3009.0.0 - Pit (event).png" Name="Pit (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="resources/Overlays/Event.png" />
+			<entity ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Name="Event (group 0)" Subtype="0" Variant="0" />
+			<entity ID="969" Image="resources/Entities/969.1.0 - Event (group 1).png" Name="Event (group 1)" Subtype="0" Variant="1" />
+			<entity ID="969" Image="resources/Entities/969.2.0 - Event (group 2).png" Name="Event (group 2)" Subtype="0" Variant="2" />
+			<entity ID="969" Image="resources/Entities/969.3.0 - Event (group 3).png" Name="Event (group 3)" Subtype="0" Variant="3" />
+			<entity ID="969" Image="resources/Entities/969.9.0 - Event (After Cleaning).png" Name="Event (Room Clear)" Subtype="0" Variant="9" />
+			<entity ID="4500" Image="resources/Entities/4500.10.0 - Event Plate (group 0).png" Name="Event Plate (group 0)" Subtype="0" Variant="10" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.11.0 - Event Plate (group 1).png" Name="Event Plate (group 1)" Subtype="0" Variant="11" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (group 2)" Subtype="0" Variant="12" IsGrid="1" />
+			<entity ID="4500" Image="resources/Entities/4500.13.0 - Event Plate (group 3).png" Name="Event Plate (group 3)" Subtype="0" Variant="13" IsGrid="1" />
+		</group>
+		<group Label="Poops">
+			<entity ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1500" Image="resources/Entities/1500.0.1 - Poop (non-replaceable).png" Name="Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1500.0.0 - Poop.png" />
+			<entity ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Name="Chunky Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1495" Image="resources/Entities/1495.0.1 - Chunky Poop (non-replaceable).png" Name="Chunky Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1495.0.0 - Chunky Poop.png" />
+			<entity ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Name="Red Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Name="Golden Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Name="Rainbow Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Name="Black Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Name="Holy Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1499" Image="resources/Entities/1499.0.0 - Giant Poop.png" Name="Giant Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1501" Image="resources/Entities/1501.0.0 - Charming Poop.png" Name="Charming Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+		</group>
+		<group Label="Fireplaces">
+			<entity BaseHP="5" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Name="Fire Place" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity BaseHP="5" ID="33" Image="resources/Entities/33.1.0 - Red Fire Place.png" Name="Red Fire Place" Subtype="0" Variant="1" InEmptyRooms="1" IsGrid="1" />
+			<entity BaseHP="5" ID="33" Image="resources/Entities/33.2.0 - Blue Fire Place.png" Name="Blue Fire Place" Subtype="0" Variant="2" InEmptyRooms="1" IsGrid="1" />
+			<entity BaseHP="5" ID="33" Image="resources/Entities/33.3.0 - Purple Fire Place.png" Name="Purple Fire Place" Subtype="0" Variant="3" InEmptyRooms="1" IsGrid="1" />
+		</group>
+		<group Label="Spikes">
+			<entity ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Name="Retracting Spikes" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.1.0 - Retracting Spikes (Down 1).png" Name="Retracting Spikes (Down 1/5)" Subtype="0" Variant="1" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.2.0 - Retracting Spikes (Down 2).png" Name="Retracting Spikes (Down 2/5)" Subtype="0" Variant="2" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.3.0 - Retracting Spikes (Down 3).png" Name="Retracting Spikes (Down 3/5)" Subtype="0" Variant="3" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.4.0 - Retracting Spikes (Down 4).png" Name="Retracting Spikes (Down 4/5)" Subtype="0" Variant="4" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.5.0 - Retracting Spikes (Down 5).png" Name="Retracting Spikes (Down 5/5)" Subtype="0" Variant="5" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.6.0 - Retracting Spikes (Up 1).png" Name="Retracting Spikes (Up 1/5)" Subtype="0" Variant="6" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.7.0 - Retracting Spikes (Up 2).png" Name="Retracting Spikes (Up 2/5)" Subtype="0" Variant="7" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.8.0 - Retracting Spikes (Up 3).png" Name="Retracting Spikes (Up 3/5)" Subtype="0" Variant="8" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.9.0 - Retracting Spikes (Up 4).png" Name="Retracting Spikes (Up 4/5)" Subtype="0" Variant="9" IsGrid="1" />
+			<entity ID="1931" Image="resources/Entities/1931.10.0 - Retracting Spikes (Up 5).png" Name="Retracting Spikes (Up 5/5)" Subtype="0" Variant="10" IsGrid="1" />
+		</group>
+		<group Label="Troll Bombs">
+			<entity ID="5" Image="resources/Entities/4.0.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
+			<entity ID="5" Image="resources/Entities/4.0.4 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
+			<entity ID="5" Image="resources/Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb" Variant="40" Subtype="6" />
+		</group>
+		<group Label="Bums">
+			<entity ID="6" Image="resources/Entities/6.4.0 - Beggar.png" Name="Beggar" Subtype="0" Variant="4" />
+			<entity ID="6" Image="resources/Entities/6.5.0 - Devil Beggar.png" Name="Devil Beggar" Subtype="0" Variant="5" />
+			<entity ID="6" Image="resources/Entities/6.7.0 - Key Master.png" Name="Key Master" Subtype="0" Variant="7" />
+			<entity ID="6" Image="resources/Entities/6.9.0 - Bomb Bum.png" Name="Bomb Bum" Subtype="0" Variant="9" />
+			<entity ID="6" Image="resources/Entities/6.13.0 - Battery Bum.png" Name="Battery Bum" Variant="13" Subtype="0" />
+			<entity ID="6" Image="resources/Entities/6.18.0 - Rotten Beggar.png" Name="Rotten Beggar" Variant="18" Subtype="0" />
+			<entity ID="6" Image="resources/Entities/6.6.0 - Shell Game.png" Name="Shell Game" Subtype="0" Variant="6" />
+			<entity ID="6" Image="resources/Entities/6.15.0 - Hell Game.png" Name="Hell Game" Variant="15" Subtype="0" />
+		</group>
+		<group Label="Machines">
+			<entity ID="6" Image="resources/Entities/6.1.0 - Slot Machine.png" Name="Slot Machine" Subtype="0" Variant="1" />
+			<entity ID="6" Image="resources/Entities/6.2.0 - Blood Donation Machine.png" Name="Blood Donation Machine" Subtype="0" Variant="2" />
+			<entity ID="6" Image="resources/Entities/6.3.0 - Fortune Telling Machine.png" Name="Fortune Telling Machine" Subtype="0" Variant="3" />
+			<entity ID="6" Image="resources/Entities/6.10.0 - Shop Restock Machine.png" Name="Shop Restock Machine" Subtype="0" Variant="10" />
+			<entity ID="6" Image="resources/Entities/6.8.0 - Donation Machine.png" Name="Donation Machine" Subtype="0" Variant="8" />
+			<entity ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Name="Greed Machine" Subtype="0" Variant="11" />
+			<entity ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
+			<entity ID="6" Image="resources/Entities/6.16.0 - Crane Game.png" Name="Crane Game" Variant="16" Subtype="0" />
+			<entity ID="6" Image="resources/Entities/6.17.0 - Confessional.png" Name="Confessional" Variant="17" Subtype="0" />
+		</group>
+		<group Label="Props">
+			<entity ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Name="Random Props A" Subtype="0" Variant="10" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
+			<entity ID="0" Image="resources/Entities/0.20.0 - Random Props B.png" Name="Random Props B" Subtype="0" Variant="20" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
+			<entity ID="0" Image="resources/Entities/0.30.0 - Random Props C.png" Name="Random Props C" Subtype="0" Variant="30" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
+		</group>
+		<group Label="Pitfalls">
+			<entity BaseHP="0" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Name="Pitfall" Subtype="0" Variant="0" IsGrid="1" />
+			<entity BaseHP="0" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" Subtype="0" Variant="1" IsGrid="1" />
+			<entity BaseHP="0" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" Subtype="0" Variant="2" IsGrid="1" />
+			<entity BaseHP="0" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Name="Blue Hush Pitfall" Subtype="0" Variant="3" IsGrid="1" />
+		</group>
+		<group Label="Exits">
+			<entity ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Name="Big Chest" Subtype="0" Variant="340" />
+			<entity ID="5" Image="resources/Entities/5.370.0 - Trophy.png" Name="Trophy" Subtype="0" Variant="370" />
+			<entity ID="9000" Image="resources/Entities/9000.0.0 - Trap Door.png" Name="Trap Door" Subtype="0" Variant="0" PlaceVisual="0,0.1" IsGrid="1" />
+			<entity ID="9100" Image="resources/Entities/9100.0.0 - Ladder Door.png" Name="Ladder Door" Subtype="0" Variant="0" PlaceVisual="0,0.1" IsGrid="1" />
+		</group>
+		<group Label="Special Grids">
+			<entity ID="10000" Image="resources/Entities/10000.0.0 - Gravity.png" Name="Gravity" Subtype="0" Variant="0" IsGrid="1"/>
+			<entity ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" IsGrid="1" />
+		</group>
+		<group Label="Special Props">
+			<entity ID="5" Image="resources/Entities/5.380.0 - Isaac's Bed.png" PlaceVisual="0,1" Kind="Stage" Name="Isaac's Bed" Subtype="0" Variant="380" IsGrid="1" />
+			<entity Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="999" Name="Isaac's Carpet" Variant="74" Subtype="0" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
+			<entity BaseHP="5" ID="17" Image="resources/Entities/17.0.0 - Keeper.png" Kind="Stage" Name="Keeper" Subtype="0" Variant="0" />
+			<entity BaseHP="5" ID="17" Image="resources/Entities/17.1.0 - Hanging Keeper.png" Kind="Stage" Name="Hanging Keeper" Subtype="0" Variant="1" />
+			<entity BaseHP="5" ID="17" Image="resources/Entities/17.2.0 - Error Room Keeper.png" Kind="Stage" Name="Error Room Keeper" Subtype="0" Variant="2" />
+			<entity BaseHP="5" ID="17" Image="resources/Entities/17.3.0 - Special Keeper.png" Kind="Stage" Name="Special Keeper" Subtype="0" Variant="3" />
+			<entity BaseHP="5" ID="17" Image="resources/Entities/17.4.0 - Special Hanging Keeper.png" Kind="Stage" Name="Special Hanging Keeper" Subtype="0" Variant="4" />
+			<entity ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" IsGrid="1" />
+			<entity ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" IsGrid="1" />
+			<entity Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="999" Name="Dice Room Floor" Variant="76" Subtype="0" PlaceVisual="0,2.5" NoBlockDoors="1" IsGrid="1" />
+			<entity BaseHP="0" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1"/>
+		</group>
+		<group Name="Global Enemies" Label="Enemies">
+			<entity Image="resources/Entities/302.0.0 - Stoney.png" BaseHP="50" ID="302" Name="Stoney" Variant="0" Subtype="0"/>
+			<entity BaseHP="10" ID="61" Image="resources/Entities/61.5.0 - Bulb.png" Name="Bulb" Variant="5" Subtype="0"/>
+		</group>
+		<group Label="Special Enemies">
+			<entity BaseHP="30" Champion="1" ID="296" Image="resources/Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0"/>
+			<entity BaseHP="30" Champion="1" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0"/>
+			<entity BaseHP="60" ID="257" Image="resources/Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1"/>
+			<entity BaseHP="30" ID="246" Image="resources/Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1"/>
+			<entity BaseHP="30" Champion="1" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0"/>
+			<entity BaseHP="25" Champion="1" ID="832" Image="resources/Entities/832.0.0 - Exorcist.png" Name="Exorcist" Variant="0" Subtype="0"/>
+			<entity BaseHP="35" Champion="1" ID="832" Image="resources/Entities/832.1.0 - Fanatic.png" Name="Fanatic" Variant="1" Subtype="0"/>
+			<entity BaseHP="6" ID="61" Image="resources/Entities/61.6.0 - Bloodfly.png" Name="Bloodfly" Variant="6" Subtype="0"/>
+		</group>
+	</group>
+
 	<!--——— Floors ———-->
 	<group Name="Floors">
-		<group Name="Global">
-			<group Label="Grids">
-				<entity ID="1000" Image="resources/Entities/1000.0.0 - Rock.png" Name="Rock" Subtype="0" Variant="0" EditorImage="resources/Backgrounds/rocks_generic.png" InEmptyRooms="1" IsGrid="1" UseRockTiling="1" />
-				<entity ID="1000" Image="resources/Entities/1000.0.1 - Rock (non-replaceable).png" Name="Rock (non-replaceable)" Subtype="1" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/NonRandom.png" />
-				<entity ID="1001" Image="resources/Entities/1001.0.0 - Bomb Rock.png" Name="Bomb Rock" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1010" Image="resources/Entities/1010.0.0 - Spike Rock.png" Name="Spike Rock" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="1011" Image="resources/Entities/1011.0.0 - Fool's Gold Rock.png" Name="Fool's Gold Rock" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="1002" Image="resources/Entities/1002.0.0 - Pot.png" Name="Pot" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1008" Image="resources/Entities/1008.0.0 - Marked Skull.png" Name="Marked Skull" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1900" Image="resources/Entities/1900.0.0 - Block.png" Name="Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1901" Image="resources/Entities/1901.0.0 - Tall Block.png" Name="Tall Block" Variant="0" Subtype="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1999" Image="resources/Entities/1999.0.0 - Invisible Block.png" Name="Invisible Block" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="3000" Image="resources/Entities/3000.0.0 - Pit.png" Name="Pit" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" />
-				<entity ID="1300" Image="resources/Entities/1300.0.0 - TNT.png" Name="TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="292" Image="resources/Entities/292.0.0 - Pushable TNT.png" Name="Pushable TNT" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1940" Image="resources/Entities/1940.0.0 - Cobweb.png" Name="Cobweb" Subtype="0" Variant="0" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
-				<entity ID="4000" Image="resources/Entities/4000.0.0 - Key Block.png" Name="Key Block" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.0.0 - Pressure Plate.png" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.0.1 - Reward Plate.png" Name="Reward Plate" Subtype="0" Variant="1" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.0.9 - Kill Plate.png" Name="Kill Plate" Subtype="0" Variant="9" IsGrid="1" />
-			</group>
-			<group Label="Events">
-				<entity ID="1009" Image="resources/Entities/1009.0.0 - Rock (event).png" Name="Rock (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="resources/Overlays/Event.png" />
-				<entity ID="3009" Image="resources/Entities/3009.0.0 - Pit (event).png" Name="Pit (event)" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" EditorImage="resources/Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="resources/Overlays/Event.png" />
-				<entity ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Name="Event (group 0)" Subtype="0" Variant="0" />
-				<entity ID="969" Image="resources/Entities/969.1.0 - Event (group 1).png" Name="Event (group 1)" Subtype="0" Variant="1" />
-				<entity ID="969" Image="resources/Entities/969.2.0 - Event (group 2).png" Name="Event (group 2)" Subtype="0" Variant="2" />
-				<entity ID="969" Image="resources/Entities/969.3.0 - Event (group 3).png" Name="Event (group 3)" Subtype="0" Variant="3" />
-				<entity ID="969" Image="resources/Entities/969.9.0 - Event (After Cleaning).png" Name="Event (Room Clear)" Subtype="0" Variant="9" />
-				<entity ID="4500" Image="resources/Entities/4500.10.0 - Event Plate (group 0).png" Name="Event Plate (group 0)" Subtype="0" Variant="10" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.11.0 - Event Plate (group 1).png" Name="Event Plate (group 1)" Subtype="0" Variant="11" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (group 2)" Subtype="0" Variant="12" IsGrid="1" />
-				<entity ID="4500" Image="resources/Entities/4500.13.0 - Event Plate (group 3).png" Name="Event Plate (group 3)" Subtype="0" Variant="13" IsGrid="1" />
-			</group>
-			<group Label="Poops">
-				<entity ID="1500" Image="resources/Entities/1500.0.0 - Poop.png" Name="Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1500" Image="resources/Entities/1500.0.1 - Poop (non-replaceable).png" Name="Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1500.0.0 - Poop.png" />
-				<entity ID="1495" Image="resources/Entities/1495.0.0 - Chunky Poop.png" Name="Chunky Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1495" Image="resources/Entities/1495.0.1 - Chunky Poop (non-replaceable).png" Name="Chunky Poop (non-replaceable)" Subtype="1" Variant="0" IsGrid="1" OverlayImage="resources/Overlays/NonRandom.png" EditorImage="resources/Entities/1495.0.0 - Chunky Poop.png" />
-				<entity ID="1490" Image="resources/Entities/1490.0.0 - Red Poop.png" Name="Red Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1496" Image="resources/Entities/1496.0.0 - Golden Poop.png" Name="Golden Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1494" Image="resources/Entities/1494.0.0 - Rainbow Poop.png" Name="Rainbow Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1497" Image="resources/Entities/1497.0.0 - Black Poop.png" Name="Black Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1498" Image="resources/Entities/1498.0.0 - Holy Poop.png" Name="Holy Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1499" Image="resources/Entities/1499.0.0 - Giant Poop.png" Name="Giant Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1501" Image="resources/Entities/1501.0.0 - Charming Poop.png" Name="Charming Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-			</group>
-			<group Label="Fireplaces">
-				<entity BaseHP="5" ID="33" Image="resources/Entities/33.0.0 - Fire Place.png" Name="Fire Place" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity BaseHP="5" ID="33" Image="resources/Entities/33.1.0 - Red Fire Place.png" Name="Red Fire Place" Subtype="0" Variant="1" InEmptyRooms="1" IsGrid="1" />
-				<entity BaseHP="5" ID="33" Image="resources/Entities/33.2.0 - Blue Fire Place.png" Name="Blue Fire Place" Subtype="0" Variant="2" InEmptyRooms="1" IsGrid="1" />
-				<entity BaseHP="5" ID="33" Image="resources/Entities/33.3.0 - Purple Fire Place.png" Name="Purple Fire Place" Subtype="0" Variant="3" InEmptyRooms="1" IsGrid="1" />
-			</group>
-			<group Label="Spikes">
-				<entity ID="1930" Image="resources/Entities/1930.0.0 - Spikes.png" Name="Spikes" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.0.0 - Retracting Spikes.png" Name="Retracting Spikes" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.1.0 - Retracting Spikes (Down 1).png" Name="Retracting Spikes (Down 1/5)" Subtype="0" Variant="1" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.2.0 - Retracting Spikes (Down 2).png" Name="Retracting Spikes (Down 2/5)" Subtype="0" Variant="2" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.3.0 - Retracting Spikes (Down 3).png" Name="Retracting Spikes (Down 3/5)" Subtype="0" Variant="3" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.4.0 - Retracting Spikes (Down 4).png" Name="Retracting Spikes (Down 4/5)" Subtype="0" Variant="4" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.5.0 - Retracting Spikes (Down 5).png" Name="Retracting Spikes (Down 5/5)" Subtype="0" Variant="5" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.6.0 - Retracting Spikes (Up 1).png" Name="Retracting Spikes (Up 1/5)" Subtype="0" Variant="6" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.7.0 - Retracting Spikes (Up 2).png" Name="Retracting Spikes (Up 2/5)" Subtype="0" Variant="7" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.8.0 - Retracting Spikes (Up 3).png" Name="Retracting Spikes (Up 3/5)" Subtype="0" Variant="8" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.9.0 - Retracting Spikes (Up 4).png" Name="Retracting Spikes (Up 4/5)" Subtype="0" Variant="9" IsGrid="1" />
-				<entity ID="1931" Image="resources/Entities/1931.10.0 - Retracting Spikes (Up 5).png" Name="Retracting Spikes (Up 5/5)" Subtype="0" Variant="10" IsGrid="1" />
-			</group>
-			<group Label="Troll Bombs">
-				<entity ID="5" Image="resources/Entities/4.0.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
-				<entity ID="5" Image="resources/Entities/4.0.4 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
-				<entity ID="5" Image="resources/Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb" Variant="40" Subtype="6" />
-			</group>
-			<group Label="Props">
-				<entity ID="0" Image="resources/Entities/0.10.0 - Random Props A.png" Name="Random Props A" Subtype="0" Variant="10" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
-				<entity ID="0" Image="resources/Entities/0.20.0 - Random Props B.png" Name="Random Props B" Subtype="0" Variant="20" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
-				<entity ID="0" Image="resources/Entities/0.30.0 - Random Props C.png" Name="Random Props C" Subtype="0" Variant="30" InEmptyRooms="1" NoBlockDoors="1" IsGrid="1" />
-			</group>
-			<group Label="Pitfalls">
-				<entity BaseHP="0" ID="291" Image="resources/Entities/291.0.0 - Pitfall.png" Name="Pitfall" Subtype="0" Variant="0" IsGrid="1" />
-				<entity BaseHP="0" ID="291" Image="resources/Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" Subtype="0" Variant="1" IsGrid="1" />
-				<entity BaseHP="0" ID="291" Image="resources/Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" Subtype="0" Variant="2" IsGrid="1" />
-				<entity BaseHP="0" ID="291" Image="resources/Entities/291.3.0 - Blue Hush Pitfall.png" Name="Blue Hush Pitfall" Subtype="0" Variant="3" IsGrid="1" />
-			</group>
-			<group Label="Special Exits">
-				<entity ID="5" Image="resources/Entities/5.340.0 - Big Chest.png" Name="Big Chest" Subtype="0" Variant="340" />
-				<entity ID="5" Image="resources/Entities/5.370.0 - Trophy.png" Name="Trophy" Subtype="0" Variant="370" />
-				<entity ID="9000" Image="resources/Entities/9000.0.0 - Trap Door.png" Name="Trap Door" Subtype="0" Variant="0" PlaceVisual="0,0.1" IsGrid="1" />
-				<entity ID="9100" Image="resources/Entities/9100.0.0 - Ladder Door.png" Name="Ladder Door" Subtype="0" Variant="0" PlaceVisual="0,0.1" IsGrid="1" />
-			</group>
-			<group Name="Global Enemies" Label="Shared">
-				<entity Image="resources/Entities/302.0.0 - Stoney.png" BaseHP="50" ID="302" Name="Stoney" Variant="0" Subtype="0"/>
-				<entity BaseHP="10" ID="61" Image="resources/Entities/61.5.0 - Bulb.png" Name="Bulb" Variant="5" Subtype="0"/>
-			</group>
-		</group>
 		<group Name="Chapter 1"/>
 		<group Name="Chapter 2"/>
 		<group Name="Chapter 3"/>
@@ -338,56 +389,6 @@
 		<group Label="Ascent"/>
 		<group Label="Home"/>
 		<group Label="Void"/>
-		<group Label="Special">
-			<group Name="Special Grids" Label="Grids">
-				<entity ID="10000" Image="resources/Entities/10000.0.0 - Gravity.png" Name="Gravity" Subtype="0" Variant="0" IsGrid="1"/>
-				<entity ID="4500" Image="resources/Entities/4500.0.2 - Greed Plate.png" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" IsGrid="1" />
-			</group>
-			<group Label="Bums">
-				<entity ID="6" Image="resources/Entities/6.4.0 - Beggar.png" Name="Beggar" Subtype="0" Variant="4" />
-				<entity ID="6" Image="resources/Entities/6.5.0 - Devil Beggar.png" Name="Devil Beggar" Subtype="0" Variant="5" />
-				<entity ID="6" Image="resources/Entities/6.7.0 - Key Master.png" Name="Key Master" Subtype="0" Variant="7" />
-				<entity ID="6" Image="resources/Entities/6.9.0 - Bomb Bum.png" Name="Bomb Bum" Subtype="0" Variant="9" />
-				<entity ID="6" Image="resources/Entities/6.13.0 - Battery Bum.png" Name="Battery Bum" Variant="13" Subtype="0" />
-				<entity ID="6" Image="resources/Entities/6.18.0 - Rotten Beggar.png" Name="Rotten Beggar" Variant="18" Subtype="0" />
-				<entity ID="6" Image="resources/Entities/6.6.0 - Shell Game.png" Name="Shell Game" Subtype="0" Variant="6" />
-				<entity ID="6" Image="resources/Entities/6.15.0 - Hell Game.png" Name="Hell Game" Variant="15" Subtype="0" />
-			</group>
-			<group Label="Machines">
-				<entity ID="6" Image="resources/Entities/6.1.0 - Slot Machine.png" Name="Slot Machine" Subtype="0" Variant="1" />
-				<entity ID="6" Image="resources/Entities/6.2.0 - Blood Donation Machine.png" Name="Blood Donation Machine" Subtype="0" Variant="2" />
-				<entity ID="6" Image="resources/Entities/6.3.0 - Fortune Telling Machine.png" Name="Fortune Telling Machine" Subtype="0" Variant="3" />
-				<entity ID="6" Image="resources/Entities/6.10.0 - Shop Restock Machine.png" Name="Shop Restock Machine" Subtype="0" Variant="10" />
-				<entity ID="6" Image="resources/Entities/6.8.0 - Donation Machine.png" Name="Donation Machine" Subtype="0" Variant="8" />
-				<entity ID="6" Image="resources/Entities/6.11.0 - Greed Machine.png" Name="Greed Machine" Subtype="0" Variant="11" />
-				<entity ID="6" Image="resources/Entities/6.12.0 - Mom's Dressing Table.png" Name="Mom's Dressing Table" Subtype="0" Variant="12" />
-				<entity ID="6" Image="resources/Entities/6.16.0 - Crane Game.png" Name="Crane Game" Variant="16" Subtype="0" />
-				<entity ID="6" Image="resources/Entities/6.17.0 - Confessional.png" Name="Confessional" Variant="17" Subtype="0" />
-			</group>
-			<group Name="Special Props" Label="Props">
-				<entity ID="5" Image="resources/Entities/5.380.0 - Isaac's Bed.png" PlaceVisual="0,1" Kind="Stage" Name="Isaac's Bed" Subtype="0" Variant="380" IsGrid="1" />
-				<entity Kind="Stage" Image="resources/Entities/1000.74.0 - Isaacs Carpet.png" ID="999" Name="Isaac's Carpet" Variant="74" Subtype="0" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
-				<entity BaseHP="5" ID="17" Image="resources/Entities/17.0.0 - Keeper.png" Kind="Stage" Name="Keeper" Subtype="0" Variant="0" />
-				<entity BaseHP="5" ID="17" Image="resources/Entities/17.1.0 - Hanging Keeper.png" Kind="Stage" Name="Hanging Keeper" Subtype="0" Variant="1" />
-				<entity BaseHP="5" ID="17" Image="resources/Entities/17.2.0 - Error Room Keeper.png" Kind="Stage" Name="Error Room Keeper" Subtype="0" Variant="2" />
-				<entity BaseHP="5" ID="17" Image="resources/Entities/17.3.0 - Special Keeper.png" Kind="Stage" Name="Special Keeper" Subtype="0" Variant="3" />
-				<entity BaseHP="5" ID="17" Image="resources/Entities/17.4.0 - Special Hanging Keeper.png" Kind="Stage" Name="Special Hanging Keeper" Subtype="0" Variant="4" />
-				<entity ID="5000" Image="resources/Entities/5000.0.0 - Devil Statue.png" Kind="Stage" Name="Devil Statue" Subtype="0" Variant="0" IsGrid="1" />
-				<entity ID="5001" Image="resources/Entities/5001.0.0 - Angel Statue.png" Kind="Stage" Name="Angel Statue" Subtype="0" Variant="0" IsGrid="1" />
-				<entity Image="resources/Entities/1000.76.0 - Dice Floor.png" ID="999" Name="Dice Room Floor" Variant="76" Subtype="0" PlaceVisual="0,2.5" NoBlockDoors="1" IsGrid="1" />
-				<entity BaseHP="0" ID="999" Image="resources/Entities/1000.116.0 - Dirt Patch.png" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1"/>
-			</group>
-			<group Name="Special Enemies" Label="Enemies">
-				<entity BaseHP="30" Champion="1" ID="296" Image="resources/Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0"/>
-				<entity BaseHP="30" Champion="1" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0"/>
-				<entity BaseHP="60" ID="257" Image="resources/Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1"/>
-				<entity BaseHP="30" ID="246" Image="resources/Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1"/>
-				<entity BaseHP="30" Champion="1" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0"/>
-				<entity BaseHP="25" Champion="1" ID="832" Image="resources/Entities/832.0.0 - Exorcist.png" Name="Exorcist" Variant="0" Subtype="0"/>
-				<entity BaseHP="35" Champion="1" ID="832" Image="resources/Entities/832.1.0 - Fanatic.png" Name="Fanatic" Variant="1" Subtype="0"/>
-				<entity BaseHP="6" ID="61" Image="resources/Entities/61.6.0 - Bloodfly.png" Name="Bloodfly" Variant="6" Subtype="0"/>
-			</group>
-		</group>
 	</group>
 
 	<group Name="Chapter 1">
@@ -411,13 +412,6 @@
 				<entity BaseHP="10" Champion="1" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Name="Sucker" Subtype="0" Variant="0"/>
 				<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.0.0 - Pooter.png" Name="Pooter" Subtype="0" Variant="0"/>
 				<entity BaseHP="8" Champion="1" ID="14" Image="resources/Entities/14.1.0 - Super Pooter.png" Name="Super Pooter" Subtype="0" Variant="1"/>
-				<entity BaseHP="6.5" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Name="Spider" Subtype="0" Variant="0"/>
-				<entity BaseHP="13" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Name="lvl2 Spider" Subtype="0" Variant="0"/>
-				<entity BaseHP="12" Champion="1" ID="206" Image="resources/Entities/206.1.0 - Small Baby Long Legs.png" Name="Small Baby Long Legs" Subtype="0" Variant="1"/>
-				<entity BaseHP="16" Champion="1" ID="206" Image="resources/Entities/206.0.0 - Baby Long Legs.png" Name="Baby Long Legs" Subtype="0" Variant="0"/>
-				<entity BaseHP="12" Champion="1" ID="207" Image="resources/Entities/207.1.0 - Small Crazy Long Legs.png" Name="Small Crazy Long Legs" Subtype="0" Variant="1"/>
-				<entity BaseHP="16" Champion="1" ID="207" Image="resources/Entities/207.0.0 - Crazy Long Legs.png" Name="Crazy Long Legs" Subtype="0" Variant="0"/>
-				<entity BaseHP="10" ID="240" Image="resources/Entities/240.0.0 - Wall Creep.png" PlaceVisual="WallSnap" Name="Wall Creep" Subtype="0" Variant="0"/>
 				<entity BaseHP="10" ID="289" Image="resources/Entities/289.0.0 - Ulcer.png" Name="Ulcer" Subtype="0" Variant="0"/>
 			</group>
 			<group Label="Basement">
@@ -428,15 +422,22 @@
 				<entity BaseHP="10" Champion="1" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Name="Spit" Subtype="0" Variant="1"/>
 				<entity BaseHP="10" Champion="1" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Name="Trite" Subtype="0" Variant="1"/>
 				<entity BaseHP="13" Champion="1" ID="246" Image="resources/Entities/246.0.0 - Ragling.png" Name="Ragling" Subtype="0" Variant="0"/>
+				<entity BaseHP="6.5" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Name="Spider" Subtype="0" Variant="0"/>
 				<entity BaseHP="20" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Name="Big Spider" Subtype="0" Variant="0"/>
+				<entity BaseHP="13" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Name="lvl2 Spider" Subtype="0" Variant="0"/>
 				<entity BaseHP="13" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Name="Ticking Spider" Subtype="0" Variant="0"/>
+				<entity BaseHP="12" Champion="1" ID="206" Image="resources/Entities/206.1.0 - Small Baby Long Legs.png" Name="Small Baby Long Legs" Subtype="0" Variant="1"/>
+				<entity BaseHP="16" Champion="1" ID="206" Image="resources/Entities/206.0.0 - Baby Long Legs.png" Name="Baby Long Legs" Subtype="0" Variant="0"/>
+				<entity BaseHP="12" Champion="1" ID="207" Image="resources/Entities/207.1.0 - Small Crazy Long Legs.png" Name="Small Crazy Long Legs" Subtype="0" Variant="1"/>
+				<entity BaseHP="16" Champion="1" ID="207" Image="resources/Entities/207.0.0 - Crazy Long Legs.png" Name="Crazy Long Legs" Subtype="0" Variant="0"/>
 				<entity BaseHP="16" Champion="1" ID="869" Image="resources/Entities/869.0.0 - Migraine.png" Name="Migraine" Variant="0" Subtype="0"/>
+				<entity BaseHP="10" ID="240" Image="resources/Entities/240.0.0 - Wall Creep.png" PlaceVisual="WallSnap" Name="Wall Creep" Subtype="0" Variant="0"/>
+				<entity BaseHP="10" ID="242" Image="resources/Entities/242.0.0 - Blind Creep.png" PlaceVisual="WallSnap" Name="Blind Creep" Subtype="0" Variant="0"/>
 				<group Name="Swarm Spiders">
 					<entity BaseHP="4.5" ID="884" Image="resources/Entities/884.0.0 - Swarm Spider.png" Name="Swarm Spider" Variant="0" Subtype="0"/>
 					<entity BaseHP="4.5" ID="884" Image="resources/Entities/884.0.2 - Swarm Spider (two).png" Name="Swarm Spider (two)" Variant="0" Subtype="2"/>
 					<entity BaseHP="4.5" ID="884" Image="resources/Entities/884.0.4 - Swarm Spider (four).png" Name="Swarm Spider (four)" Variant="0" Subtype="4"/>
 				</group>
-				<entity BaseHP="10" ID="242" Image="resources/Entities/242.0.0 - Blind Creep.png" PlaceVisual="WallSnap" Name="Blind Creep" Subtype="0" Variant="0"/>
 			</group>
 			<group Label="Burning Basement">
 				<entity BaseHP="10" Champion="1" ID="10" Image="resources/Entities/10.2.0 - Flaming Gaper.png" Name="Flaming Gaper" Subtype="0" Variant="2"/>
@@ -550,8 +551,8 @@
 				<entity BaseHP="54" Champion="1" Image="resources/Entities/303.0.0 - Blister.png" ID="303" Name="Blister" Variant="0" Subtype="0"/>
 				<entity Name="lvl2 Spider"/>
 				<entity Name="Migraine"/>
-				<group Name="Swarm Spiders"/>
 				<entity BaseHP="15" ID="304" Image="resources/Entities/304.0.0 - TheThing.png" PlaceVisual="WallSnap" Name="The Thing" Variant="0" Subtype="0" Champion="1"/>
+				<group Name="Swarm Spiders"/>
 			</group>
 			<group Label="Flooded Caves">
 				<entity Name="Bloaty"/>
@@ -701,6 +702,11 @@
 			<group Label="Dank Depths">
 				<entity BaseHP="33" Champion="1" ID="24" Image="resources/Entities/24.2.0 - Dank Globin.png" Name="Dank Globin" Subtype="0" Variant="2"/>
 				<entity BaseHP="28" Champion="1" ID="34" Image="resources/Entities/34.1.0 - Sticky Leaper.png" Name="Sticky Leaper" Variant="1" Subtype="0"/>
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.2.0 - Slog (random).png" Name="Slog (random)" Variant="2" Subtype="0"/>
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.2.1 - Slog (left).png" Name="Slog (left)" Variant="2" Subtype="1" MirrorX="40.2.3" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.2.2 - Slog (up).png" Name="Slog (up)" Variant="2" Subtype="2" MirrorY="40.2.4" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.2.3 - Slog (right).png" Name="Slog (right)" Variant="2" Subtype="3" MirrorX="40.2.1" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.2.4 - Slog (down).png" Name="Slog (down)" Variant="2" Subtype="4" MirrorY="40.2.2" />
 				<entity Name="Ink"/>
 			</group>
 		</group>
@@ -763,6 +769,11 @@
 				<entity Name="Blind Creep"/>
 			</group>
 			<group Label="Scarred Womb">
+				<entity BaseHP="25" Champion="1" ID="40" Image="resources/Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.1.1 - Scarred Guts (Left).png" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
+				<entity BaseHP="28" Champion="1" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
 				<entity Name="Spider"/>
 				<entity Name="Big Spider"/>
 			</group>
@@ -786,6 +797,11 @@
 					<entity BaseHP="80" Champion="1" ID="831" Image="resources/Entities/831.0.0 - Gutted Fatty.png" Name="Gutted Fatty" Variant="0" Subtype="0"/>
 					<entity BaseHP="80" ID="831" Image="resources/Entities/831.10.0 - Gutted Fatty Eye.png" Name="Gutted Fatty Eye" Variant="10" Subtype="0"/>
 					<entity BaseHP="22" Champion="1" ID="831" Image="resources/Entities/831.20.0 - Festering Guts.png" Name="Festering Guts" Variant="20" Subtype="0"/>
+					<entity BaseHP="25" Champion="1" ID="862" Image="resources/Entities/862.0.0 - Cyst (random).png" Name="Cyst (random)" Variant="0" Subtype="0" />
+					<entity BaseHP="25" Champion="1" ID="862" Image="resources/Entities/862.0.1 - Cyst (left).png" Name="Cyst (left)" Variant="0" Subtype="1" MirrorX="862.0.3" />
+					<entity BaseHP="25" Champion="1" ID="862" Image="resources/Entities/862.0.2 - Cyst (up).png" Name="Cyst (up)" Variant="0" Subtype="2" MirrorY="862.0.4" />
+					<entity BaseHP="25" Champion="1" ID="862" Image="resources/Entities/862.0.3 - Cyst (right).png" Name="Cyst (right)" Variant="0" Subtype="3" MirrorX="862.0.1" />
+					<entity BaseHP="25" Champion="1" ID="862" Image="resources/Entities/862.0.4 - Cyst (down).png" Name="Cyst (down)" Variant="0" Subtype="4" MirrorY="862.0.2" />
 					<entity BaseHP="20" Champion="1" ID="25" Image="resources/Entities/25.5.0 - Sick Boom Fly.png" Name="Sick Boom Fly" Variant="5" Subtype="0"/>
 					<entity BaseHP="44" Champion="1" ID="61" Image="resources/Entities/61.4.0 - Mama Fly.png" Name="Mama Fly" Variant="4" Subtype="0"/>
 				</group>
@@ -993,21 +1009,6 @@
 	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.2 - Guts (Up).png" Kind="Enemies" Name="Guts (Up)" Subtype="2" Variant="0" MirrorY="40.0.4" />
 	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.3 - Guts (Right).png" Kind="Enemies" Name="Guts (Right)" Subtype="3" Variant="0" MirrorX="40.0.1" />
 	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.0.4 - Guts (Down).png" Kind="Enemies" Name="Guts (Down)" Subtype="4" Variant="0" MirrorY="40.0.2" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.0 - Scarred Guts.png" Kind="Enemies" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.1 - Scarred Guts (Left).png" Kind="Enemies" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Kind="Enemies" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Kind="Enemies" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Kind="Enemies" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.0 - Slog (random).png" Kind="Enemies" Name="Slog (random)" Variant="2" Subtype="0"/>
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.1 - Slog (left).png" Kind="Enemies" Name="Slog (left)" Variant="2" Subtype="1" MirrorX="40.2.3" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.2 - Slog (up).png" Kind="Enemies" Name="Slog (up)" Variant="2" Subtype="2" MirrorY="40.2.4" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.3 - Slog (right).png" Kind="Enemies" Name="Slog (right)" Variant="2" Subtype="3" MirrorX="40.2.1" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.4 - Slog (down).png" Kind="Enemies" Name="Slog (down)" Variant="2" Subtype="4" MirrorY="40.2.2" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.0 - Cyst (random).png" Kind="Enemies" Name="Cyst (random)" Variant="0" Subtype="0" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.1 - Cyst (left).png" Kind="Enemies" Name="Cyst (left)" Variant="0" Subtype="1" MirrorX="862.0.3" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.2 - Cyst (up).png" Kind="Enemies" Name="Cyst (up)" Variant="0" Subtype="2" MirrorY="862.0.4" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.3 - Cyst (right).png" Kind="Enemies" Name="Cyst (right)" Variant="0" Subtype="3" MirrorX="862.0.1" />
-	<entity BaseHP="25" Champion="1" Group="Organs" ID="862" Image="resources/Entities/862.0.4 - Cyst (down).png" Kind="Enemies" Name="Cyst (down)" Variant="0" Subtype="4" MirrorY="862.0.2" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.1.0 - Mama Guts.png" Kind="Enemies" Name="Mama Guts" Subtype="0" Variant="1" />
 	<entity BaseHP="62" Champion="1" Group="Organs" ID="57" Image="resources/Entities/57.2.0 - Dead Meat.png" Kind="Enemies" Name="Dead Meat" Variant="2" Subtype="0" />
 	<entity BaseHP="20" Champion="1" Group="Organs" ID="60" Image="resources/Entities/60.0.0 - Eye.png" Kind="Enemies" Name="Eye" Subtype="0" Variant="0" />
