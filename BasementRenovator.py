@@ -3376,13 +3376,14 @@ class RoomSelector(QWidget):
 class EntityGroupItem(object):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, containsEntity=True):
 
         self.objects = []
         self.startIndex = 0
         self.endIndex = 0
 
         self.name = "" if name is None else name
+        self.containsEntity = containsEntity
 
         self.alignment = Qt.AlignCenter
 
@@ -3446,7 +3447,7 @@ class EntityGroupModel(QAbstractListModel):
                     populatingGroup.calculateIndices(i)
                     i = populatingGroup.endIndex + 1
 
-                populatingGroup = EntityGroupItem(entry.label)
+                populatingGroup = EntityGroupItem(entry.label, entry.containsEntity())
                 self.groups.append(populatingGroup)
             elif isinstance(entry, xmlLookups.entities.EntityConfig):
                 if entry not in entitiesCounted:
@@ -3722,14 +3723,20 @@ class EntityList(QListView):
             if isinstance(item, EntityGroupItem):
                 self.setRowHidden(row, True)
 
-                if item.name != "":
-                    for i in range(item.startIndex, item.endIndex):
-                        if not self.isRowHidden(i):
-                            self.setRowHidden(row, False)
-
-                    if item.startIndex == item.endIndex:
+                if item.name != "" and item.containsEntity:
+                    hadHidden = False
+                    hadVisible = False
+                    checkedIndices = []
+                    if len(item.objects) == 0:
                         self.setRowHidden(row, False)
-
+                    else:
+                        for i in range(item.startIndex, item.endIndex + 1):
+                            checkedIndices.append(i)
+                            if not self.isRowHidden(i):
+                                self.setRowHidden(row, False)
+                                hadVisible = True
+                            else:
+                                hadHidden = True
 
 class ReplaceDialog(QDialog):
     class EntSpinners(QWidget):

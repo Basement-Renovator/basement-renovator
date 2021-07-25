@@ -668,9 +668,10 @@ class EntityLookup(Lookup):
     class GroupConfig:
         def __init__(self, node=None, name=None, label=None, isTab=False):
             self.iconSize = None
+            self.hasEntity = False
             if node is not None:
-                self.name = node.get("Name")
                 self.label = node.get("Label")
+                self.name = node.get("Name", self.label)
                 self.isTab = node.get("IsTab") == "1"
 
                 iconSize = node.get("IconSize")
@@ -684,15 +685,39 @@ class EntityLookup(Lookup):
                         printf(
                             f"Group {node.attrib} has invalid IconSize, must be 1 or 2 integer values"
                         )
-
-                if self.name is None and self.label is not None:
-                    self.name = self.label
             else:
                 self.name = name
                 self.label = label
                 self.isTab = isTab
 
             self.entries = []
+            self.groupentries = []
+
+        def addEntry(self, entry):
+            self.entries.append(entry)
+            if isinstance(entry, EntityLookup.GroupConfig):
+                self.groupentries.append(entry)
+            elif isinstance(entry, EntityLookup.EntityConfig):
+                self.hasEntity = True
+
+        def getAllEntries(self):
+            entries = []
+            for entry in self.entries:
+                entries.append(entry)
+                if isinstance(entry, EntityLookup.GroupConfig):
+                    entries.extend(entry.getAllEntries())
+
+            return entries
+
+        def containsEntity(self):
+            if self.hasEntity:
+                return True
+
+            for group in self.groupentries:
+                if group.containsEntity():
+                    return True
+
+            return False
 
     def __init__(self, version, subVer, parent):
         self.entityList = []
@@ -849,9 +874,9 @@ class EntityLookup(Lookup):
 
             if groupConfig is None:
                 groupConfig = self.getGroup(name=groupName, label=group)
-                tabGroupConfig.entries.append(groupConfig)
+                tabGroupConfig.addEntry(groupConfig)
 
-            groupConfig.entries.append(entityConfig)
+            groupConfig.addEntry(entityConfig)
 
         return entityConfig
 
@@ -880,18 +905,18 @@ class EntityLookup(Lookup):
         group = self.getGroup(node)
         if group:
             for subNode in node:
+                entry = None
                 if subNode.tag == "group":
-                    subGroup = self.loadGroupNode(
+                    entry = self.loadGroupNode(
                         subNode, resourcePath, modName, entities2Root
                     )
-                    if subGroup:
-                        group.entries.append(subGroup)
                 elif subNode.tag == "entity":
-                    entityConfig = self.loadEntityNode(
+                    entry = self.loadEntityNode(
                         subNode, resourcePath, modName, entities2Root
                     )
-                    if entityConfig:
-                        group.entries.append(entityConfig)
+
+                if entry:
+                    group.addEntry(entry)
 
             return group
 
@@ -937,18 +962,11 @@ class EntityLookup(Lookup):
 
             self.loadXML(self.loadXMLFile(entityFile), brPath, name, entities2Root)
 
-    def lookupGroup(self, name=None, groupConfig=None):
-        entries = []
-        if groupConfig is None:
-            if name in self.groups:
-                return self.lookupGroup(groupConfig=self.groups[name])
-
-        for entry in groupConfig.entries:
-            entries.append(entry)
-            if isinstance(entry, self.GroupConfig):
-                entries.extend(self.lookupGroup(groupConfig=entry))
-
-        return entries
+    def lookupGroup(self, name):
+        if name in self.groups:
+            return self.groups[name].getAllEntries()
+        else:
+            return []
 
     def lookup(
         self,
