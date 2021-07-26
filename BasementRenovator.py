@@ -3736,7 +3736,6 @@ class EntityList(QListView):
                     self.setRowHidden(row, False)
                     shownEntities[item.config.uniqueid] = True
 
-
         # Second loop for Group titles, check to see if all contents are hidden or not
         for row in range(rows):
             item = m.getItem(row)
@@ -4510,10 +4509,15 @@ class MainWindow(QMainWindow):
         self.wd.setChecked(settings.value("BitfontEnabled") != "0")
         self.hideDuplicateEntities = v.addAction(
             "Hide Duplicate Entities",
-            lambda: (self.toggleSetting("HideDuplicateEntities", onDefault=False), self.EntityPalette.updateTabs()),
+            lambda: (
+                self.toggleSetting("HideDuplicateEntities", onDefault=False),
+                self.EntityPalette.updateTabs(),
+            ),
         )
         self.hideDuplicateEntities.setCheckable(True)
-        self.hideDuplicateEntities.setChecked(settings.value("HideDuplicateEntities") == "1")
+        self.hideDuplicateEntities.setChecked(
+            settings.value("HideDuplicateEntities") == "1"
+        )
         v.addSeparator()
         self.wb = v.addAction(
             "Hide Entity Painter", self.showPainter, QKeySequence("Ctrl+Alt+P")
