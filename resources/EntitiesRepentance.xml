@@ -658,10 +658,10 @@
 	<entity BaseHP="1" Group="Stones" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Kind="Enemies" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
 	<entity BaseHP="100" Group="Stones" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="100" Group="Stones" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Kind="Enemies" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.0 - Quake Grimace (left).png" Kind="Enemies" Name="Quake Grimace (left)" Variant="0" Subtype="0" />
-	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.1 - Quake Grimace (up).png" Kind="Enemies" Name="Quake Grimace (up)" Variant="0" Subtype="1" />
-	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.2 - Quake Grimace (right).png" Kind="Enemies" Name="Quake Grimace (right)" Variant="0" Subtype="2" />
-	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.3 - Quake Grimace (down).png" Kind="Enemies" Name="Quake Grimace (down)" Variant="0" Subtype="3" />
+	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.0 - Quake Grimace (left).png" Kind="Enemies" Name="Quake Grimace (left)" Variant="0" Subtype="0" MirrorX="804.0.2" />
+	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.1 - Quake Grimace (up).png" Kind="Enemies" Name="Quake Grimace (up)" Variant="0" Subtype="1" MirrorY="804.0.3" />
+	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.2 - Quake Grimace (right).png" Kind="Enemies" Name="Quake Grimace (right)" Variant="0" Subtype="2" MirrorX="804.0.0" />
+	<entity BaseHP="20" Group="Stones" ID="804" Image="resources/Entities/804.0.3 - Quake Grimace (down).png" Kind="Enemies" Name="Quake Grimace (down)" Variant="0" Subtype="3" MirrorY="804.0.1" />
 	<entity BaseHP="20" Group="Stones" ID="809" Image="resources/Entities/809.0.0 - Bomb Grimace.png" Kind="Enemies" Name="Bomb Grimace" Variant="0" Subtype="0" />
 	<entity BaseHP="1" Group="Stones" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Kind="Enemies" Name="Stone Eye" Subtype="0" Variant="0" />
 	<entity BaseHP="14" Group="Stones" ID="805" Image="resources/Entities/805.0.0 - Bishop.png" Kind="Enemies" Name="Bishop" Variant="0" Subtype="0" />
