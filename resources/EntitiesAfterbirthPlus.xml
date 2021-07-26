@@ -103,7 +103,7 @@
 	</group>
 
 	<group Name="Chapter 3 (Main Path) Enemies">
-		<entity Name="Blister"/>
+		<entity Name="Blister" ID="303"/>
 		<entity Name="Mr. Red Maw"/>
 	</group>
 
