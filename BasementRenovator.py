@@ -282,6 +282,7 @@ def loadMods(autogenerate, installPath, resourcePath):
     if autogenerate and not os.path.exists(autogenPath):
         os.mkdir(autogenPath)
 
+    printf("-".join(["" for i in range(50)]))
     printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
         modPath = os.path.join(modsPath, mod)
@@ -3460,8 +3461,10 @@ class EntityGroupModel(QAbstractListModel):
                     populatingGroup = EntityGroupItem()
                     self.groups.append(populatingGroup)
 
+                imgPath = Path()
                 try:
-                    imgPath = Path(entry.imagePath)
+                    if entry.imagePath:
+                        imgPath = Path(entry.imagePath)
                 except:
                     traceback.print_exception(*sys.exc_info())
                     imgPath = Path()
@@ -6047,7 +6050,7 @@ if __name__ == "__main__":
 
     # XML Globals
     version, subVer = getGameVersion()
-    xmlLookups = MainLookup(version, subVer)
+    xmlLookups = MainLookup(version)
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",
