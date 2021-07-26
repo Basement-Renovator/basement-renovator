@@ -683,6 +683,8 @@
 		<entity BaseHP="10" Champion="1" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Name="Spit" Subtype="0" Variant="1"/>
 		<entity BaseHP="10" Champion="1" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Name="Trite" Subtype="0" Variant="1"/>
 		<entity BaseHP="13" Champion="1" ID="246" Image="resources/Entities/246.0.0 - Ragling.png" Name="Ragling" Subtype="0" Variant="0"/>
+		<entity BaseHP="20" Champion="1" ID="30" Image="resources/Entities/30.2.0 - Sack.png" Name="Sack" Subtype="0" Variant="2" />
+		<entity BaseHP="20" Champion="1" ID="88" Image="resources/Entities/88.2.0 - Walking Sack.png" Name="Walking Sack" Subtype="0" Variant="2" />
 		<entity BaseHP="6.5" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Name="Spider" Subtype="0" Variant="0"/>
 		<entity BaseHP="20" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Name="Big Spider" Subtype="0" Variant="0"/>
 		<entity BaseHP="13" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Name="lvl2 Spider" Subtype="0" Variant="0"/>
@@ -836,6 +838,23 @@
 		<entity Name="Dip"/>
 		<entity BaseHP="3" ID="217" Image="resources/Entities/217.1.0 - Corn.png" Name="Corn" Subtype="0" Variant="1" />
 		<entity Name="Squirt"/>
+		<entity BaseHP="20" ID="234" Image="resources/Entities/234.0.0 - One Tooth.png" Name="One Tooth" Subtype="0" Variant="0" />
+		<entity BaseHP="50" ID="258" Image="resources/Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Name="Boil" Subtype="0" Variant="0" />
+		<entity BaseHP="15" Champion="1" ID="27" Image="resources/Entities/27.0.0 - Host.png" Name="Host" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="204" Image="resources/Entities/204.0.0 - Mobile Host.png" Name="Mobile Host" Subtype="0" Variant="0" />
+		<entity BaseHP="15" Champion="1" ID="27" Image="resources/Entities/27.1.0 - Red Host.png" Name="Red Host" Subtype="0" Variant="1" />
+		<entity BaseHP="27" Champion="1" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
+	</group>
+
+	<group Name="Chapter 2 (Main Path) Obstacles">
+		<entity BaseHP="20" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Name="Stone Grimace" Subtype="0" Variant="0" />
+		<group Name="Constant Stone Shooter">
+			<entity BaseHP="1" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" MirrorX="202.0.2" />
+			<entity BaseHP="1" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" MirrorY="202.0.3" />
+			<entity BaseHP="1" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" MirrorX="202.0.0" />
+			<entity BaseHP="1" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" MirrorY="202.0.1" />
+		</group>
 	</group>
 
 	<group Name="Caves Enemies">
@@ -855,6 +874,16 @@
 		<entity Name="Migraine"/>
 		<entity BaseHP="15" ID="304" Image="resources/Entities/304.0.0 - TheThing.png" PlaceVisual="WallSnap" Name="The Thing" Variant="0" Subtype="0" Champion="1"/>
 		<group Name="Swarm Spiders"/>
+		<entity BaseHP="36" Champion="1" ID="86" Image="resources/Entities/86.0.0 - Keeper.png" Name="Keeper" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="30" Image="resources/Entities/30.1.0 - Gut.png" Name="Gut" Subtype="0" Variant="1" />
+		<entity Name="Sack"/>
+		<entity BaseHP="20" Champion="1" ID="88" Image="resources/Entities/88.0.0 - Walking Boil.png" Name="Walking Boil" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="88" Image="resources/Entities/88.1.0 - Walking Gut.png" Name="Walking Gut" Subtype="0" Variant="1" />
+		<entity Name="Walking Sack"/>
+	</group>
+
+	<group Name="Catacombs Obstacles">
+		<entity BaseHP="20" ID="42" Image="resources/Entities/42.1.0 - Vomit Grimace.png" Name="Vomit Grimace" Subtype="0" Variant="1" />
 	</group>
 
 	<group Label="Flooded Caves Enemies">
@@ -865,6 +894,16 @@
 		<entity Name="Tube Worm"/>
 		<entity BaseHP="20" Champion="0" ID="311" Image="resources/Entities/311.0.0 - Mr. Mine.png" Name="Mr. Mine" Subtype="0" Variant="0" />
 		<entity Name="Clotty"/>
+		<entity Name="Gut"/>
+	</group>
+
+	<group Name="Flooded Caves Obstacles">
+		<group Name="Cross Stone Shooter">
+			<entity Image="resources/Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
+			<entity Image="resources/Entities/202.10.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
+			<entity Image="resources/Entities/202.11.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
+			<entity Image="resources/Entities/202.11.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
+		</group>
 	</group>
 
 	<group Name="Chapter 2 (Alt Path) Events">
@@ -877,6 +916,8 @@
 	</group>
 
 	<group Name="Chapter 2 (Alt Path) Obstacles">
+		<entity Name="Stone Grimace"/>
+		<group Name="Constant Stone Shooter"/>
 		<entity BaseHP="20" ID="804" Image="resources/Entities/804.0.0 - Quake Grimace (left).png" Name="Quake Grimace (left)" Variant="0" Subtype="0" />
 		<entity BaseHP="20" ID="804" Image="resources/Entities/804.0.1 - Quake Grimace (up).png" Name="Quake Grimace (up)" Variant="0" Subtype="1" />
 		<entity BaseHP="20" ID="804" Image="resources/Entities/804.0.2 - Quake Grimace (right).png" Name="Quake Grimace (right)" Variant="0" Subtype="2" />
@@ -960,7 +1001,7 @@
 		<entity BaseHP="15" Champion="1" ID="27" Image="resources/Entities/27.3.0 - Hard Host.png" Name="Hard Host" Variant="3" Subtype="0" />
 	</group>
 
-	<group Label="Mines Enemies">
+	<group Name="Mines Enemies">
 		<entity BaseHP="20" Champion="1" ID="827" Image="resources/Entities/827.0.0 - Faceless.png" Name="Faceless" Variant="0" Subtype="0"/>
 		<entity BaseHP="40" Champion="1" ID="820" Image="resources/Entities/820.0.0 - Danny.png" Name="Danny" Variant="0" Subtype="0"/>
 		<entity BaseHP="30" Champion="1" ID="822" Image="resources/Entities/822.0.0 - Bouncer.png" Name="Bouncer" Variant="0" Subtype="0" />
@@ -973,7 +1014,11 @@
 		<entity BaseHP="20" Champion="1" ID="840" Image="resources/Entities/840.0.0 - Pon.png" Name="Pon" Variant="0" Subtype="0" />
 	</group>
 
-	<group Label="Ashpit Enemies">
+	<group Name="Mines Obstacles">
+		<group Name="Cross Stone Shooter"/>
+	</group>
+
+	<group Name="Ashpit Enemies">
 		<entity BaseHP="20" Champion="1" ID="889" Image="resources/Entities/889.0.0 - Clickety Clack.png" Name="Clickety Clack" Variant="0" Subtype="0"/>
 		<entity BaseHP="40" Champion="1" ID="87" Image="resources/Entities/87.1.0 - Crackle.png" Name="Crackle" Variant="1" Subtype="0"/>
 		<entity BaseHP="26" Champion="1" ID="844" Image="resources/Entities/844.0.0 - Bombgagger.png" Name="Bombgagger" Variant="1" Subtype="0"/>
@@ -987,6 +1032,11 @@
 		<entity BaseHP="20" ID="887" Image="resources/Entities/887.0.0 - Dusty Death's Head (left).png" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" />
 		<entity BaseHP="20" ID="887" Image="resources/Entities/887.0.1 - Dusty Death's Head (right).png" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" />
 		<entity BaseHP="22" Champion="1" ID="828" Image="resources/Entities/828.0.0 - Necro.png" Name="Necro" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Ashpit Obstacles">
+		<entity Name="Vomit Grimace"/>
+		<entity BaseHP="20" ID="42" Image="resources/Entities/42.2.0 - Triple Grimace.png" Name="Triple Grimace" Variant="2" Subtype="0" />
 	</group>
 
 	<group Name="Chapter 3 (Main Path) Enemies">
@@ -1033,9 +1083,17 @@
 		<entity Name="Dip"/>
 		<entity Name="Squirt"/>
 		<entity BaseHP="62" ID="223" Image="resources/Entities/223.0.0 - Dinga.png" Name="Dinga" Subtype="0" Variant="0" />
+		<entity BaseHP="25" ID="219" Image="resources/Entities/219.0.0 - Wizoob.png" Name="Wizoob" Subtype="0" Variant="0" />
+		<entity BaseHP="25" ID="260" Image="resources/Entities/260.10.0 - Lil' Haunt.png" Name="Lil' Haunt" Subtype="0" Variant="10" />
+		<entity Name="Boil"/>
+		<entity Name="Host"/>
+		<entity Name="Mobile Host"/>
 	</group>
 
 	<group Name="Chapter 3 (Main Path) Obstacles">
+		<entity Name="Stone Grimace"/>
+		<entity BaseHP="100" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Name="Gaping Maw" Subtype="0" Variant="0" />
+		<entity BaseHP="100" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
 		<entity BaseHP="100" ID="44" Image="resources/Entities/44.0.0 - Poky.png" PlaceVisual="0,0.5" Name="Poky" Subtype="0" Variant="0" />
 		<entity BaseHP="100" ID="44" Image="resources/Entities/44.1.0 - Slide.png" PlaceVisual="0,0.5" Name="Slide" Subtype="0" Variant="1" />
 	</group>
@@ -1050,6 +1108,10 @@
 		</group>
 		<entity Name="Army Fly"/>
 		<entity Name="Ministro"/>
+	</group>
+
+	<group Name="Depths Obstacles">
+		<group Name="Cross Stone Shooter"/>
 	</group>
 
 	<group Name="Necropolis Enemies">
@@ -1067,6 +1129,19 @@
 		<entity BaseHP="20" ID="287" Image="resources/Entities/287.0.0 - Mom's Dead Hand.png" Name="Mom's Dead Hand" Subtype="0" Variant="0" />
 		<entity BaseHP="40" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Name="Psy Tumor" Subtype="0" Variant="0" />
 		<entity Image="resources/Entities/301.0.0 - PoisonMind.png" BaseHP="20" Champion="1" ID="301" Name="Poison Mind" Variant="0" Subtype="0" />
+		<entity Name="Keeper"/>
+		<entity BaseHP="40" ID="90" Image="resources/Entities/90.0.0 - Hanger.png" Name="Hanger" Subtype="0" Variant="0" />
+		<entity Name="Gut"/>
+		<entity Name="Sack"/>
+		<entity Name="Walking Boil"/>
+		<entity Name="Walking Gut"/>
+		<entity Name="Walking Sack"/>
+	</group>
+
+	<group Name="Necropolis Obstacles">
+		<entity Name="Vomit Grimace"/>
+		<entity Name="Triple Grimace"/>
+		<group Name="Cross Stone Shooter"/>
 	</group>
 
 	<group Name="Dank Depths Enemies">
@@ -1088,7 +1163,12 @@
 		<entity Name="Clot"/>
 	</group>
 
+	<group Name="Dank Depths Obstacles">
+		<entity Name="Triple Grimace"/>
+	</group>
+
 	<group Name="Chapter 3 (Alt Path) Obstacles">
+		<entity Name="Triple Grimace"/>
 		<entity BaseHP="100" ID="877" Image="resources/Entities/877.0.0 - Grudge.png" Name="Grudge" Variant="0" Subtype="0" />
 	</group>
 
@@ -1111,7 +1191,6 @@
 			<entity ID="6100" Image="resources/Entities/6100.6.1 - Teleporter(Triangle-off).png" Name="Teleporter(Triangle-off)" Subtype="1" Variant="6" IsGrid="1" />
 		</group>
 	</group>
-
 
 	<group Name="Chapter 3 (Alt Path) Enemies">
 		<entity BaseHP="33" Champion="1" ID="24" Image="resources/Entities/24.3.0 - Cursed Globin.png" Name="Cursed Globin" Variant="3" Subtype="0"/>
@@ -1208,7 +1287,23 @@
 		<entity Name="I.Blob"/>
 		<entity Name="Dip"/>
 		<entity Name="Squirt"/>
-		<entity BaseHP="62" ID="223" Image="resources/Entities/223.0.0 - Dinga.png" Name="Dinga" Subtype="0" Variant="0" />
+		<entity Name="Dinga"/>
+		<entity Name="Boil"/>
+		<entity Name="Walking Boil"/>
+		<entity Name="Red Host"/>
+		<entity Name="Flesh Mobile Host"/>
+	</group>
+
+	<group Name="Chapter 4 (Main Path) Obstacles">
+		<entity Name="Stone Grimace"/>
+		<entity Name="Gaping Maw"/>
+		<entity Name="Broken Gaping Maw"/>
+		<group Name="Cross Stone Shooter"/>
+		<entity BaseHP="1" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Name="Stone Eye" Subtype="0" Variant="0" />
+	</group>
+
+	<group Name="Womb Enemies">
+		<entity Name="Host"/>
 	</group>
 
 	<group Name="Utero Enemies">
@@ -1226,6 +1321,12 @@
 		<entity BaseHP="25" Champion="1" ID="55" Image="resources/Entities/55.0.0 - Leech.png" Name="Leech" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Champion="1" ID="60" Image="resources/Entities/60.1.0 - Bloodshot Eye.png" Name="Bloodshot Eye" Subtype="0" Variant="1" />
 		<entity BaseHP="28" Champion="1" ID="229" Image="resources/Entities/229.1.0 - Planetoid.png" Name="Planetoid" Variant="1" Subtype="0" />
+		<entity Name="Mobile Host"/>
+	</group>
+
+	<group Name="Utero Obstacles">
+		<entity Name="Vomit Grimace"/>
+		<entity Name="Triple Grimace"/>
 	</group>
 
 	<group Name="Scarred Womb Enemies">
@@ -1246,9 +1347,12 @@
 		<entity BaseHP="35" Champion="1" ID="58" Image="resources/Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
 		<entity Name="Leech"/>
 		<group Name="Mask II"/>
+		<entity Name="Host"/>
 	</group>
 
 	<group Name="Corpse Obstacles" Label="Obstacles">
+		<entity Name="Stone Grimace"/>
+		<entity Name="Triple Grimace"/>
 		<entity BaseHP="100" ID="852" Image="resources/Entities/852.0.0 - Spikeball (left).png" Name="Spikeball (left)" Subtype="0" Variant="0" MirrorX="852.0.2"/>
 		<entity BaseHP="100" ID="852" Image="resources/Entities/852.0.1 - Spikeball (up).png" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3"/>
 		<entity BaseHP="100" ID="852" Image="resources/Entities/852.0.2 - Spikeball (right).png" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0"/>
@@ -1290,6 +1394,17 @@
 		<entity BaseHP="20" Champion="1" ID="859" Image="resources/Entities/859.0.0 - Floating Host.png" Name="Floating Host" Variant="0" Subtype="0" />
 	</group>
 
+	<group Name="Chapter 5 (Main Path) Shared">
+		<entity Name="Wizoob"/>
+		<entity BaseHP="25" ID="285" Image="resources/Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
+		<entity Name="Lil' Haunt"/>
+		<entity Name="Mobile Host"/>
+	</group>
+
+	<group Name="Chapter 5 (Main Path) Obstacles">
+		<group Name="Cross Stone Shooter"/>
+	</group>
+
 	<group Name="Sheol Enemies">
 		<entity BaseHP="33" Champion="1" ID="278" Image="resources/Entities/278.0.0 - Black Globin.png" Name="Black Globin" Subtype="0" Variant="0"/>
 		<entity BaseHP="20" Champion="1" ID="279" Image="resources/Entities/279.0.0 - Black Globin's Head.png" Name="Black Globin's Head" Subtype="0" Variant="0"/>
@@ -1313,14 +1428,16 @@
 		<entity Name="Dank Death's Head"/>
 		<entity BaseHP="32" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr.png" Name="Camillo Jr." Subtype="0" Variant="0" />
 		<entity BaseHP="20" ID="225" Image="resources/Entities/225.0.0 - Black Maw.png" Name="Black Maw" Subtype="0" Variant="0" />
+		<entity Name="Host"/>
 	</group>
 
 	<group Name="Sheol Obstacles">
+		<entity Name="Gaping Maw"/>
+		<entity Name="Stone Eye"/>
 		<entity BaseHP="1" ID="203" Image="resources/Entities/203.0.0 - Brimstone Head.png" Name="Brimstone Head (Left)" Subtype="0" Variant="0" MirrorX="203.0.2" />
 		<entity BaseHP="1" ID="203" Image="resources/Entities/203.0.1 - Brimstone Head.png" Name="Brimstone Head (Up)" Subtype="1" Variant="0" MirrorY="203.0.3" />
 		<entity BaseHP="1" ID="203" Image="resources/Entities/203.0.2 - Brimstone Head.png" Name="Brimstone Head (Right)" Subtype="2" Variant="0" MirrorX="203.0.0" />
 		<entity BaseHP="1" ID="203" Image="resources/Entities/203.0.3 - Brimstone Head.png" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
-		<entity BaseHP="1" ID="201" Image="resources/Entities/201.0.0 - Stone Eye.png" Name="Stone Eye" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Cathedral Enemies">
@@ -1337,9 +1454,13 @@
 		<entity Name="Bishop"/>
 		<entity Name="I.Blob"/>
 		<entity Name="Clot"/>
+		<entity Name="Keeper"/>
+		<entity Name="Hanger"/>
 	</group>
 
 	<group Name="Cathedral Obstacles">
+		<entity Name="Stone Grimace"/>
+		<entity Name="Triple Grimace"/>
 		<entity Name="Poky"/>
 		<entity Name="Slide"/>
 	</group>
@@ -1396,20 +1517,6 @@
 
 	<!--——— Enemies ———-->
 
-	<!-- Boils -->
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.0.0 - Boil.png" Kind="Enemies" Name="Boil" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.1.0 - Gut.png" Kind="Enemies" Name="Gut" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="30" Image="resources/Entities/30.2.0 - Sack.png" Kind="Enemies" Name="Sack" Subtype="0" Variant="2" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.0.0 - Walking Boil.png" Kind="Enemies" Name="Walking Boil" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.1.0 - Walking Gut.png" Kind="Enemies" Name="Walking Gut" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Boils" ID="88" Image="resources/Entities/88.2.0 - Walking Sack.png" Kind="Enemies" Name="Walking Sack" Subtype="0" Variant="2" />
-
-	<!-- Hosts -->
-	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.0.0 - Host.png" Kind="Enemies" Name="Host" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Hosts" ID="204" Image="resources/Entities/204.0.0 - Mobile Host.png" Kind="Enemies" Name="Mobile Host" Subtype="0" Variant="0" />
-	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.1.0 - Red Host.png" Kind="Enemies" Name="Red Host" Subtype="0" Variant="1" />
-	<entity BaseHP="27" Champion="1" Group="Hosts" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Kind="Enemies" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
-
 	<!-- Maws -->
 	<entity BaseHP="10" Champion="1" Group="Maws" ID="12" Image="resources/Entities/12.0.0 - Horf.png" Kind="Enemies" Name="Horf" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Maws" ID="248" Image="resources/Entities/248.0.0 - Psychic Horf.png" Kind="Enemies" Name="Psychic Horf" Subtype="0" Variant="0" />
@@ -1419,30 +1526,6 @@
 	<entity BaseHP="25" Group="Maws" ID="35" Image="resources/Entities/35.0.0 - Mr. Maw.png" Kind="Enemies" Name="Mr. Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="25" Group="Maws" ID="35" Image="resources/Entities/35.2.0 - Mr. Red Maw.png" Kind="Enemies" Name="Mr. Red Maw" Subtype="0" Variant="2" />
 	<entity BaseHP="38" Group="Maws" ID="216" Image="resources/Entities/216.0.0 - Swinger.png" Kind="Enemies" Name="Swinger" Subtype="0" Variant="0" />
-	<entity BaseHP="36" Champion="1" Group="Maws" ID="86" Image="resources/Entities/86.0.0 - Keeper.png" Kind="Enemies" Name="Keeper" Subtype="0" Variant="0" />
-
-	<!-- Other -->
-	<entity BaseHP="40" Group="Other" ID="90" Image="resources/Entities/90.0.0 - Hanger.png" Kind="Enemies" Name="Hanger" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Other" ID="219" Image="resources/Entities/219.0.0 - Wizoob.png" Kind="Enemies" Name="Wizoob" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Other" ID="285" Image="resources/Entities/285.0.0 - Red Ghost.png" Kind="Enemies" Name="Red Ghost" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Other" ID="234" Image="resources/Entities/234.0.0 - One Tooth.png" Kind="Enemies" Name="One Tooth" Subtype="0" Variant="0" />
-	<entity BaseHP="50" Group="Other" ID="258" Image="resources/Entities/258.0.0 - Fat Bat.png" Kind="Enemies" Name="Fat Bat" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Other" ID="260" Image="resources/Entities/260.10.0 - Lil' Haunt.png" Kind="Enemies" Name="Lil' Haunt" Subtype="0" Variant="10" />
-
-	<!-- Stones -->
-	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.0.0 - Stone Grimace.png" Kind="Enemies" Name="Stone Grimace" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.1.0 - Vomit Grimace.png" Kind="Enemies" Name="Vomit Grimace" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Group="Stones" ID="42" Image="resources/Entities/42.2.0 - Triple Grimace.png" Kind="Enemies" Name="Triple Grimace" Variant="2" Subtype="0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.3 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" MirrorX="202.0.2" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.1 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" MirrorY="202.0.3" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.2 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" MirrorX="202.0.0" />
-	<entity BaseHP="1" Group="Stones" ID="202" Image="resources/Entities/202.0.0 - Constant Stone Shooter.png" Kind="Enemies" Name="Constant Stone Shooter (Down)" Subtype="3" Variant="0" MirrorY="202.0.1" />
-	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
-	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.10.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
-	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
-	<entity Group="Stones" Kind="Enemies" Image="resources/Entities/202.11.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
-	<entity BaseHP="100" Group="Stones" ID="235" Image="resources/Entities/235.0.0 - Gaping Maw.png" Kind="Enemies" Name="Gaping Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="100" Group="Stones" ID="236" Image="resources/Entities/236.0.0 - Broken Gaping Maw.png" Kind="Enemies" Name="Broken Gaping Maw" Subtype="0" Variant="0" />
 
 	<!-- Worms -->
 	<entity BaseHP="15" Champion="1" Group="Worms" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
