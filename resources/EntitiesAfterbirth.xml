@@ -211,7 +211,7 @@
 		<entity BaseHP="28" Champion="1" ID="40" Image="Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
 	</group>
 
-	<group Name="Chapter 5 (Main Path) Shared">
+	<group Name="Chapter 5 (Main Path) Enemies">
 		<entity BaseHP="25" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
 	</group>
 

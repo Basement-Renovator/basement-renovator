@@ -565,6 +565,7 @@ class EntityLookup(Lookup):
             self.invalidBitfield = False
             self.bitfields = []
             self.inEmptyRooms = None
+            self.uniqueid = -1
 
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
@@ -757,11 +758,17 @@ class EntityLookup(Lookup):
         self.entityList = []
         self.groups = {}
         self.tabGroups = []
+        self.lastuniqueid = 0
         super().__init__("Entities", version)
         self.parent = parent
 
     def count(self):
         return len(self.entityList)
+
+    def addEntity(self, entity: EntityConfig):
+        self.lastuniqueid += 1
+        entity.uniqueid = self.lastuniqueid
+        self.entityList.append(entity)
 
     ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
 
@@ -888,7 +895,7 @@ class EntityLookup(Lookup):
                 )
 
             entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
-            self.entityList.append(entityConfig)
+            self.addEntity(entityConfig)
 
         groups = []
         nodeKind = node.get("Kind")

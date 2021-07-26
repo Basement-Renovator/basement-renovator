@@ -3678,6 +3678,10 @@ class EntityPalette(QWidget):
             self.tabs.show()
             self.searchTab.hide()
 
+    def updateTabs(self):
+        for i in range(0, self.tabs.count()):
+            self.tabs.widget(i).filterList()
+
     objChanged = pyqtSignal(EntityItem, bool)
     objReplaced = pyqtSignal(EntityItem)
 
@@ -3711,15 +3715,27 @@ class EntityList(QListView):
         m = self.model()
         rows = m.rowCount()
 
+        hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
+        shownEntities = {}
+
         # First loop for entity items
         for row in range(rows):
             item = m.getItem(row)
 
             if isinstance(item, EntityItem):
-                if self.filter.lower() in item.name.lower():
-                    self.setRowHidden(row, False)
-                else:
+                hidden = False
+                if self.filter.lower() not in item.name.lower():
+                    hidden = True
+
+                if hideDuplicateEntities and item.config.uniqueid in shownEntities:
+                    hidden = True
+
+                if hidden:
                     self.setRowHidden(row, True)
+                else:
+                    self.setRowHidden(row, False)
+                    shownEntities[item.config.uniqueid] = True
+
 
         # Second loop for Group titles, check to see if all contents are hidden or not
         for row in range(rows):
@@ -4492,6 +4508,12 @@ class MainWindow(QMainWindow):
         )
         self.wd.setCheckable(True)
         self.wd.setChecked(settings.value("BitfontEnabled") != "0")
+        self.hideDuplicateEntities = v.addAction(
+            "Hide Duplicate Entities",
+            lambda: (self.toggleSetting("HideDuplicateEntities", onDefault=False), self.EntityPalette.updateTabs()),
+        )
+        self.hideDuplicateEntities.setCheckable(True)
+        self.hideDuplicateEntities.setChecked(settings.value("HideDuplicateEntities") == "1")
         v.addSeparator()
         self.wb = v.addAction(
             "Hide Entity Painter", self.showPainter, QKeySequence("Ctrl+Alt+P")
