@@ -3,7 +3,6 @@
 	<group Name="Pickups" IsTab="1"/>
 	<group Name="Global" IsTab="1"/>
 	<group Name="Floors" IsTab="1"/>
-	<group Name="Enemies" IsTab="1"/>
 	<group Name="Bosses" IsTab="1" IconSize="52"/>
 	<group Name="Collect" IsTab="1" IconSize="32, 64"/>
 	<group Name="Unused" IsTab="1"/>
@@ -648,6 +647,7 @@
 		<entity BaseHP="10" Champion="1" ID="11" Image="resources/Entities/11.0.0 - Gusher.png" Name="Gusher" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" Champion="1" ID="284" Image="resources/Entities/284.0.0 - Cyclopia.png" Name="Cyclopia" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" ID="226" Image="resources/Entities/226.0.0 - Skinny.png" Name="Skinny" Subtype="0" Variant="0"/>
+		<entity BaseHP="10" Champion="1" ID="12" Image="resources/Entities/12.0.0 - Horf.png" Name="Horf" Subtype="0" Variant="0" />
 		<entity BaseHP="20" ID="208" Image="resources/Entities/208.0.0 - Fatty.png" Name="Fatty" Subtype="0" Variant="0"/>
 		<entity BaseHP="13" Champion="1" ID="16" Image="resources/Entities/16.0.0 - Mulligan.png" Name="Mulligan" Subtype="0" Variant="0" />
 		<entity BaseHP="13" Champion="1" ID="16" Image="resources/Entities/16.1.0 - Mulligoon.png" Name="Mulligoon" Subtype="0" Variant="1" />
@@ -669,12 +669,16 @@
 		<entity BaseHP="3" ID="217" Image="resources/Entities/217.0.0 - Dip.png" Name="Dip" Subtype="0" Variant="0" />
 		<entity BaseHP="3" ID="217" Image="resources/Entities/217.2.0 - Brownie Corn.png" Name="Brownie Corn" Subtype="0" Variant="2" />
 		<entity BaseHP="15" ID="220" Image="resources/Entities/220.0.0 - Squirt.png" Name="Squirt" Subtype="0" Variant="0" />
+		<entity BaseHP="12" ID="77" Image="resources/Entities/77.0.0 - Embryo.png" Name="Embryo" Subtype="0" Variant="0" />
+		<entity BaseHP="10" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Name="Round Worm" Subtype="0" Variant="0" />
+		<entity BaseHP="10" ID="276" Image="resources/Entities/276.0.0 - Roundy.png" Name="Roundy" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Basement Enemies">
 		<entity Image="resources/Entities/305.0.0 - Ministro.png" BaseHP="9" Champion="1" ID="305" Name="Ministro" Variant="0" Subtype="0" />
 		<entity BaseHP="10" Champion="1" ID="29" Image="resources/Entities/29.0.0 - Hopper.png" Name="Hopper" Subtype="0" Variant="0"/>
 		<entity BaseHP="5" ID="868" Image="resources/Entities/868.0.0 - Army Fly.png" Name="Army Fly" Variant="0" Subtype="0"/>
+		<entity BaseHP="10" Champion="1" ID="248" Image="resources/Entities/248.0.0 - Psychic Horf.png" Name="Psychic Horf" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Cellar Enemies">
@@ -701,6 +705,7 @@
 			<entity BaseHP="4.5" ID="884" Image="resources/Entities/884.0.2 - Swarm Spider (two).png" Name="Swarm Spider (two)" Variant="0" Subtype="2"/>
 			<entity BaseHP="4.5" ID="884" Image="resources/Entities/884.0.4 - Swarm Spider (four).png" Name="Swarm Spider (four)" Variant="0" Subtype="4"/>
 		</group>
+		<entity BaseHP="35" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Name="Night Crawler" Subtype="0" Variant="0" />
 	</group>
 
 	<group Label="Burning Basement Enemies">
@@ -715,6 +720,7 @@
 		<group Name="Swarm Spiders"/>
 		<entity BaseHP="20" Champion="1" ID="15" Image="resources/Entities/15.3.0 - Grilled Clotty.png" Name="Grilled Clotty" Variant="3" Subtype="0" />
 		<entity Name="Ministro"/>
+		<entity Name="Psychic Horf"/>
 	</group>
 
 	<group Name="Chapter 1 (Alt Path) Events">
@@ -802,6 +808,9 @@
 		<entity BaseHP="16" ID="226" Image="resources/Entities/226.1.0 - Rotty.png" Name="Rotty" Subtype="0" Variant="1"/>
 		<entity BaseHP="8" ID="227" Image="resources/Entities/227.0.0 - Boney Head.png" Name="Boney" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" ID="238" Image="resources/Entities/238.0.0 - Splasher.png" Name="Splasher" Subtype="0" Variant="0"/>
+		<entity Name="Psychic Horf"/>
+		<entity BaseHP="20" Champion="1" ID="26" Image="resources/Entities/26.0.0 - Maw.png" Name="Maw" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="26" Image="resources/Entities/26.1.0 - Red Maw.png" Name="Red Maw" Subtype="0" Variant="1" />
 		<entity Name="Fatty"/>
 		<entity BaseHP="20" ID="257" Image="resources/Entities/257.0.0 - Conjoined Fatty.png" Name="Conjoined Fatty" Subtype="0" Variant="0"/>
 		<entity BaseHP="20" ID="208" Image="resources/Entities/208.1.0 - Pale Fatty.png" Name="Pale Fatty" Subtype="0" Variant="1"/>
@@ -845,6 +854,15 @@
 		<entity BaseHP="20" Champion="1" ID="204" Image="resources/Entities/204.0.0 - Mobile Host.png" Name="Mobile Host" Subtype="0" Variant="0" />
 		<entity BaseHP="15" Champion="1" ID="27" Image="resources/Entities/27.1.0 - Red Host.png" Name="Red Host" Subtype="0" Variant="1" />
 		<entity BaseHP="27" Champion="1" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
+		<entity BaseHP="15" Champion="1" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Name="Maggot" Subtype="0" Variant="0" />
+		<entity BaseHP="20" Champion="1" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Name="Charger" Subtype="0" Variant="0" />
+		<entity BaseHP="10" Champion="1" ID="31" Image="resources/Entities/31.0.0 - Spitty.png" Name="Spitty" Subtype="0" Variant="0" />
+		<entity BaseHP="18" ID="243" Image="resources/Entities/243.0.0 - Conjoined Spitty.png" Name="Conjoined Spitty" Subtype="0" Variant="0" />
+		<entity Name="Embryo"/>
+		<entity BaseHP="20" ID="89" Image="resources/Entities/89.0.0 - Buttlicker.png" Name="Buttlicker" Subtype="0" Variant="0" />
+		<entity BaseHP="10" ID="239" Image="resources/Entities/239.0.0 - Grub.png" Name="Grub" Subtype="0" Variant="0" />
+		<entity Name="Round Worm"/>
+		<entity Name="Night Crawler"/>
 	</group>
 
 	<group Name="Chapter 2 (Main Path) Obstacles">
@@ -860,6 +878,7 @@
 	<group Name="Caves Enemies">
 		<entity Name="Army Fly"/>
 		<entity Name="Clotty"/>
+		<entity BaseHP="10" Champion="1" ID="881" Image="resources/Entities/881.0.0 - Needle.png" Name="Needle" Variant="0" Subtype="0" />
 	</group>
 
 	<group Name="Catacombs Enemies">
@@ -887,14 +906,16 @@
 	</group>
 
 	<group Label="Flooded Caves Enemies">
+		<entity BaseHP="20" Champion="0" ID="311" Image="resources/Entities/311.0.0 - Mr. Mine.png" Name="Mr. Mine" Subtype="0" Variant="0" />
+		<entity BaseHP="25" ID="35" Image="resources/Entities/35.2.0 - Mr. Red Maw.png" Name="Mr. Red Maw" Subtype="0" Variant="2" />
 		<entity Name="Bloaty"/>
 		<entity BaseHP="18" Champion="1" ID="22" Image="resources/Entities/22.1.0 - Drowned Hive.png" Name="Drowned Hive" Subtype="0" Variant="1" />
 		<entity BaseHP="20" Champion="1" ID="25" Image="resources/Entities/25.2.0 - Drowned Boom Fly.png" Name="Drowned Boom Fly" Subtype="0" Variant="2"/>
 		<entity BaseHP="22" Champion="1" ID="23" Image="resources/Entities/23.1.0 - Drowned Charger.png" Name="Drowned Charger" Subtype="0" Variant="1" />
 		<entity Name="Tube Worm"/>
-		<entity BaseHP="20" Champion="0" ID="311" Image="resources/Entities/311.0.0 - Mr. Mine.png" Name="Mr. Mine" Subtype="0" Variant="0" />
 		<entity Name="Clotty"/>
 		<entity Name="Gut"/>
+		<entity Name="Needle"/>
 	</group>
 
 	<group Name="Flooded Caves Obstacles">
@@ -1051,6 +1072,12 @@
 		<entity BaseHP="60" ID="251" Image="resources/Entities/251.0.0 - Begotten.png" Name="Begotten" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Champion="1" Group="Knights" ID="41" Image="resources/Entities/41.0.0 - Knight.png" Name="Knight" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Champion="1" Group="Knights" ID="254" Image="resources/Entities/254.0.0 - Floating Knight.png" Name="Floating Knight" Subtype="0" Variant="0" />
+		<entity Name="Psychic Horf"/>
+		<entity Name="Maw"/>
+		<entity Name="Red Maw"/>
+		<entity BaseHP="20" Champion="1" ID="26" Image="resources/Entities/26.2.0 - Psychic Maw.png" Name="Psychic Maw" Subtype="0" Variant="2" />
+		<entity BaseHP="25" ID="35" Image="resources/Entities/35.0.0 - Mr. Maw.png" Name="Mr. Maw" Subtype="0" Variant="0" />
+		<entity Name="Mr. Red Maw"/>
 		<entity Name="Pale Fatty"/>
 		<entity BaseHP="16" Champion="1" ID="209" Image="resources/Entities/209.0.0 - Fat Sack.png" Name="Fat Sack" Subtype="0" Variant="0"/>
 		<entity Name="Blubber"/>
@@ -1088,6 +1115,8 @@
 		<entity Name="Boil"/>
 		<entity Name="Host"/>
 		<entity Name="Mobile Host"/>
+		<entity Name="Buttlicker"/>
+		<entity Name="Grub"/>
 	</group>
 
 	<group Name="Chapter 3 (Main Path) Obstacles">
@@ -1108,6 +1137,7 @@
 		</group>
 		<entity Name="Army Fly"/>
 		<entity Name="Ministro"/>
+		<entity Name="Needle"/>
 	</group>
 
 	<group Name="Depths Obstacles">
@@ -1161,6 +1191,7 @@
 		<entity Image="resources/Entities/309.0.0 - Gush.png" BaseHP="20" Champion="1" ID="309" Name="Gush" Variant="0" Subtype="0" />
 		<entity Name="Ministro"/>
 		<entity Name="Clot"/>
+		<entity Name="Needle"/>
 	</group>
 
 	<group Name="Dank Depths Obstacles">
@@ -1213,6 +1244,8 @@
 		<entity BaseHP="20" ID="41" Image="resources/Entities/41.3.0 - Brainless Knight.png" Name="Brainless Knight" Variant="3" Subtype="0" />
 		<entity Name="Pon"/>
 		<entity BaseHP="42" Champion="1" ID="834" Image="resources/Entities/834.2.0 - Flagellant.png" Name="Flagellant" Variant="2" Subtype="0" />
+		<entity Name="Psychic Horf"/>
+		<entity Name="Psychic Maw"/>
 		<entity BaseHP="45" Champion="1" ID="816" Image="resources/Entities/816.1.0 - Kineti.png" Name="Kineti" Variant="1" Subtype="0" />
 		<entity BaseHP="25" Champion="1" ID="833" Image="resources/Entities/833.0.0 - Candler.png" Name="Candler" Variant="0" Subtype="0" />
 		<entity BaseHP="24" Champion="1" ID="885" Image="resources/Entities/885.0.0 - Cultist.png" Name="Cultist" Variant="0" Subtype="0" />
@@ -1258,6 +1291,8 @@
 		<entity Name="Gazing Globin"/>
 		<entity BaseHP="36" ID="228" Image="resources/Entities/228.0.0 - Homunculus.png" Name="Homunculus" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Champion="1" ID="53" Image="resources/Entities/53.0.0 - Dople.png" Name="Dople" Subtype="0" Variant="0" />
+		<entity Name="Mr. Maw"/>
+		<entity Name="Mr. Red Maw"/>
 		<entity Name="Vis"/>
 		<entity Name="Double Vis"/>
 		<entity BaseHP="22" Champion="1" ID="39" Image="resources/Entities/39.3.0 - Scarred Double Vis.png" Name="Scarred Double Vis" Subtype="0" Variant="3" />
@@ -1292,6 +1327,10 @@
 		<entity Name="Walking Boil"/>
 		<entity Name="Red Host"/>
 		<entity Name="Flesh Mobile Host"/>
+		<entity Name="Needle"/>
+		<entity Name="Embryo"/>
+		<entity Name="Grub"/>
+		<entity BaseHP="38" ID="216" Image="resources/Entities/216.0.0 - Swinger.png" Name="Swinger" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Chapter 4 (Main Path) Obstacles">
@@ -1395,6 +1434,8 @@
 	</group>
 
 	<group Name="Chapter 5 (Main Path) Shared">
+		<entity Name="Mr. Maw"/>
+		<entity Name="Mr. Red Maw"/>
 		<entity Name="Wizoob"/>
 		<entity BaseHP="25" ID="285" Image="resources/Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
 		<entity Name="Lil' Haunt"/>
@@ -1444,6 +1485,7 @@
 		<entity BaseHP="40" Champion="1" ID="22" Image="resources/Entities/22.2.0 - Holy Mulligan.png" Name="Holy Mulligan" Variant="2" Subtype="0" />
 		<entity Name="Boney"/>
 		<entity BaseHP="60" Champion="1" ID="227" Image="resources/Entities/227.1.0 - Holy Bony.png" Name="Holy Bony" Variant="1" Subtype="0"/>
+		<entity Name="Psychic Maw"/>
 		<entity BaseHP="25" Champion="1" ID="38" Image="resources/Entities/38.1.0 - Angelic Baby.png" Name="Angelic Baby" Subtype="0" Variant="1" />
 		<entity BaseHP="16" Champion="1" ID="38" Image="resources/Entities/38.1.1 - Angelic Baby (small).png" Name="Angelic Baby (small)" Variant="1" Subtype="1" />
 		<entity Name="Spit"/>
@@ -1514,34 +1556,6 @@
 	<group Name="Void Enemies">
 		<entity Image="resources/Entities/306.0.0 - Portal.png" BaseHP="10" ID="306" Name="Portal" Variant="0" Subtype="0" />
 	</group>
-
-	<!--——— Enemies ———-->
-
-	<!-- Maws -->
-	<entity BaseHP="10" Champion="1" Group="Maws" ID="12" Image="resources/Entities/12.0.0 - Horf.png" Kind="Enemies" Name="Horf" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Maws" ID="248" Image="resources/Entities/248.0.0 - Psychic Horf.png" Kind="Enemies" Name="Psychic Horf" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.0.0 - Maw.png" Kind="Enemies" Name="Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.1.0 - Red Maw.png" Kind="Enemies" Name="Red Maw" Subtype="0" Variant="1" />
-	<entity BaseHP="20" Champion="1" Group="Maws" ID="26" Image="resources/Entities/26.2.0 - Psychic Maw.png" Kind="Enemies" Name="Psychic Maw" Subtype="0" Variant="2" />
-	<entity BaseHP="25" Group="Maws" ID="35" Image="resources/Entities/35.0.0 - Mr. Maw.png" Kind="Enemies" Name="Mr. Maw" Subtype="0" Variant="0" />
-	<entity BaseHP="25" Group="Maws" ID="35" Image="resources/Entities/35.2.0 - Mr. Red Maw.png" Kind="Enemies" Name="Mr. Red Maw" Subtype="0" Variant="2" />
-	<entity BaseHP="38" Group="Maws" ID="216" Image="resources/Entities/216.0.0 - Swinger.png" Kind="Enemies" Name="Swinger" Subtype="0" Variant="0" />
-
-	<!-- Worms -->
-	<entity BaseHP="15" Champion="1" Group="Worms" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Kind="Enemies" Name="Charger" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Worms" ID="31" Image="resources/Entities/31.0.0 - Spitty.png" Kind="Enemies" Name="Spitty" Subtype="0" Variant="0" />
-	<entity BaseHP="18" Group="Worms" ID="243" Image="resources/Entities/243.0.0 - Conjoined Spitty.png" Kind="Enemies" Name="Conjoined Spitty" Subtype="0" Variant="0" />
-	<entity BaseHP="12" Group="Worms" ID="77" Image="resources/Entities/77.0.0 - Embryo.png" Kind="Enemies" Name="Embryo" Subtype="0" Variant="0" />
-	<entity BaseHP="20" Group="Worms" ID="89" Image="resources/Entities/89.0.0 - Buttlicker.png" Kind="Enemies" Name="Buttlicker" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Worms" ID="239" Image="resources/Entities/239.0.0 - Grub.png" Kind="Enemies" Name="Grub" Subtype="0" Variant="0" />
-	<!-- <entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.100.0 - Corpse Eater.png" Kind="Enemies" Name="Corpse Eater" Variant="100" Subtype="0" /> -->
-	<!-- <entity BaseHP="48" Group="Worms" ID="239" Image="resources/Entities/239.101.0 - Carrion Rider.png" Kind="Enemies" Name="Carrion Rider" Variant="101" Subtype="0" /> -->
-	<entity BaseHP="10" Group="Worms" ID="244" Image="resources/Entities/244.0.0 - Round Worm.png" Kind="Enemies" Name="Round Worm" Subtype="0" Variant="0" />
-	<entity BaseHP="35" Group="Worms" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Kind="Enemies" Name="Night Crawler" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Worms" ID="276" Image="resources/Entities/276.0.0 - Roundy.png" Kind="Enemies" Name="Roundy" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Champion="1" Group="Worms" ID="881" Image="resources/Entities/881.0.0 - Needle.png" Kind="Enemies" Name="Needle" Variant="0" Subtype="0" />
-
 
 	<!--——— Bosses ———-->
 
