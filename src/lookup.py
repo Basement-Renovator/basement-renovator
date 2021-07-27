@@ -713,7 +713,6 @@ class EntityLookup(Lookup):
 
     class GroupConfig:
         def __init__(self, node=None, name=None, label=None):
-            self.hasEntity = False
             if node is not None:
                 self.label = node.get("Label")
                 self.name = node.get("Name", self.label)
@@ -728,27 +727,6 @@ class EntityLookup(Lookup):
             self.entries.append(entry)
             if isinstance(entry, EntityLookup.GroupConfig):
                 self.groupentries.append(entry)
-            elif isinstance(entry, EntityLookup.EntityConfig):
-                self.hasEntity = True
-
-        def getAllEntries(self):
-            entries = []
-            for entry in self.entries:
-                entries.append(entry)
-                if isinstance(entry, EntityLookup.GroupConfig):
-                    entries.extend(entry.getAllEntries())
-
-            return entries
-
-        def containsEntity(self):
-            if self.hasEntity:
-                return True
-
-            for group in self.groupentries:
-                if group.containsEntity():
-                    return True
-
-            return False
 
     class TabConfig(GroupConfig):
         def __init__(self, node=None, name=None):

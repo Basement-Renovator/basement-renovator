@@ -3380,7 +3380,6 @@ class EntityGroupItem(object):
     def __init__(self, group, startIndex=0):
 
         self.objects = []
-        self.groups = []
         self.config = group
 
         self.startIndex = startIndex
@@ -3397,7 +3396,6 @@ class EntityGroupItem(object):
                 endIndex = groupItem.endIndex
                 self.entitycount += groupItem.entitycount
                 self.objects.append(groupItem)
-                self.groups.append(groupItem)
             elif isinstance(entry, xmlLookups.entities.EntityConfig):
                 self.entitycount += 1
                 self.objects.append(EntityItem(entry))
@@ -3412,12 +3410,17 @@ class EntityGroupItem(object):
         if index == self.startIndex:
             return self
 
-        for group in self.groups:
-            if index >= group.startIndex and index <= group.endIndex:
-                return group.getItem(index)
-
-        if index <= self.startIndex + len(self.objects):
-            return self.objects[index - self.startIndex - 1]
+        checkIndex = self.startIndex
+        for object in self.objects:
+            if isinstance(object, EntityGroupItem):
+                if index >= object.startIndex and index <= object.endIndex:
+                    return object.getItem(index)
+                else:
+                    checkIndex = object.endIndex
+            else:
+                checkIndex += 1
+                if checkIndex == index:
+                    return object
 
     def filterView(self, view, shownEntities=None):
         hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
@@ -3427,7 +3430,6 @@ class EntityGroupItem(object):
 
         hasAnyVisible = False
 
-        # First loop for entity items
         row = self.startIndex
         for item in self.objects:
             if isinstance(item, EntityItem):
@@ -3435,8 +3437,7 @@ class EntityGroupItem(object):
                 hidden = False
                 if view.filter.lower() not in item.name.lower():
                     hidden = True
-
-                if hideDuplicateEntities and item.config.uniqueid in shownEntities:
+                elif hideDuplicateEntities and item.config.uniqueid in shownEntities:
                     hidden = True
 
                 view.setRowHidden(row, hidden)
@@ -3624,7 +3625,6 @@ class EntityPalette(QWidget):
                 listView.clicked.connect(self.objSelected)
 
                 if tab.iconSize:
-                    printf(f"Setting icon size {tab.iconSize}")
                     listView.setIconSize(QSize(tab.iconSize[0], tab.iconSize[1]))
 
                 self.tabs.addTab(listView, tab.name)

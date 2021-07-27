@@ -183,12 +183,8 @@
 		<entity BaseHP="800" Boss="1" ID="410" Image="Entities/265.1.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
 	</group>
 
-	<group Name="Womb Bosses">
-		<entity BaseHP="700" Boss="1" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
-	</group>
-
 	<group Name="Scarred Womb Bosses">
-		<entity Name="The Matriarch"/>
+		<entity BaseHP="700" Boss="1" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Story Bosses">
