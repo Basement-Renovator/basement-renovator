@@ -132,7 +132,7 @@ class StageLookup(Lookup):
         self.parent = parent
 
     def count(self):
-        if self.xml:
+        if self.xml is not None:
             return len(self.xml)
         else:
             return 0
@@ -226,7 +226,7 @@ class RoomTypeLookup(Lookup):
         self.parent = parent
 
     def count(self):
-        if self.xml:
+        if self.xml is not None:
             return len(self.xml)
         else:
             return 0
@@ -712,13 +712,11 @@ class EntityLookup(Lookup):
                 iconSize = node.get("IconSize")
                 if iconSize:
                     parts = list(map(lambda x: x.strip(), iconSize.split(",")))
-                    if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
+                    if len(parts) == 2 and checkInt(parts[0]) and checkInt(parts[1]):
                         self.iconSize = (int(parts[0]), int(parts[1]))
-                    elif len(parts) == 1 and checkNum(parts[0]):
-                        self.iconSize = (int(parts[0]), int(parts[0]))
                     else:
                         printf(
-                            f"Group {node.attrib} has invalid IconSize, must be 1 or 2 integer values"
+                            f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
                         )
             else:
                 self.name = name
@@ -1079,10 +1077,10 @@ class EntityLookup(Lookup):
 class MainLookup:
     class Version:
         class DataFile:
-            def __init__(self, filetype, path, ignorewith):
+            def __init__(self, filetype, path, name):
                 self.path = path
                 self.filetype = filetype
-                self.ignorewith = ignorewith
+                self.name = name
 
         def __init__(self, node, versions):
             self.invalid = False
@@ -1107,19 +1105,12 @@ class MainLookup:
                         self.invalid = True
                     else:
                         self.toload.append(versions[name])
-                elif dataNode.tag in ("entities", "stages", "roomtypes"):
-                    path = dataNode.get("File")
-                    if path:
-                        self.toload.append(
-                            self.DataFile(
-                                dataNode.tag, path, dataNode.get("IgnoreWith")
-                            )
+                elif dataNode.tag in ("entities", "stages", "roomtypes"):\
+                    self.toload.append(
+                        self.DataFile(
+                            dataNode.tag, dataNode.get("File"), dataNode.get("Name")
                         )
-                    else:
-                        printf(
-                            f"Cannot load file from node {node.attrib} without File path"
-                        )
-                        self.invalid = True
+                    )
                 else:
                     printf(
                         f"Cannot load unknown file type {dataNode.tag} from node {node.attrib}"
@@ -1128,24 +1119,28 @@ class MainLookup:
 
         def allFiles(self, versions=None):
             files = []
+            namedFiles = {}
 
             if versions is None:
                 versions = {}
 
             versions[self.name] = True
             for entry in self.toload:
+                addFiles = None
                 if isinstance(entry, MainLookup.Version):
-                    files.extend(entry.allFiles(versions))
+                    addFiles = entry.allFiles(versions)
                 else:
-                    files.append(entry)
+                    addFiles = [entry]
 
-            files = list(
-                filter(
-                    lambda file: file.ignorewith is None
-                    or file.ignorewith not in versions,
-                    files,
-                )
-            )
+                for file in addFiles:
+                    if file.name:
+                        if file.name not in namedFiles:
+                            namedFiles[file.name] = len(files)
+                            files.append(file)
+                        else:
+                            files[namedFiles[file.name]] = file
+                    else:
+                        files.append(file)
 
             return files
 
@@ -1191,15 +1186,16 @@ class MainLookup:
         if loadVersion:
             files = loadVersion.allFiles()
             for file in files:
-                path = os.path.join(resourcePath, file.path)
-                if file.filetype == "entities":
-                    self.entities.loadFile(
-                        path, resourcePath, modName, modPath, autogenerateContent
-                    )
-                elif file.filetype == "stages":
-                    self.stages.loadFile(path, resourcePath, modName)
-                elif file.filetype == "roomtypes":
-                    self.roomTypes.loadFile(path, resourcePath, modName)
+                if file.path:
+                    path = os.path.join(resourcePath, file.path)
+                    if file.filetype == "entities":
+                        self.entities.loadFile(
+                            path, resourcePath, modName, modPath, autogenerateContent
+                        )
+                    elif file.filetype == "stages":
+                        self.stages.loadFile(path, resourcePath, modName)
+                    elif file.filetype == "roomtypes":
+                        self.roomTypes.loadFile(path, resourcePath, modName)
         else:
             printf("Could not find valid version to load")
 

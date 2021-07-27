@@ -4,7 +4,7 @@
 		<entities File="CollectiblesRebirth.xml"/>
 		<stages File="StagesRebirth.xml"/>
 		<roomtypes File="RoomTypesRebirth.xml"/>
-		<roomtypes File="SecretRoomTypesOld.xml" IgnoreWith="Repentance"/>
+		<roomtypes Name="SecretRoomTypes" File="SecretRoomTypesOld.xml"/>
 	</version>
 
 	<!-- Not currently functional -->
@@ -21,7 +21,7 @@
 		<entities File="EntitiesAfterbirth.xml"/>
 		<entities File="CollectiblesAfterbirth.xml"/>
 		<stages File="StagesAfterbirth.xml"/>
-		<stages File="StagesGreed.xml" IgnoreWith="Repentance"/>
+		<stages Name="GreedStages" File="StagesGreed.xml"/>
 	</version>
 
 	<version Name="Afterbirth+">
@@ -37,5 +37,7 @@
 		<entities File="CollectiblesRepentance.xml"/>
 		<stages File="StagesRepentance.xml"/>
 		<roomtypes File="RoomTypesRepentance.xml"/>
+		<roomtypes Name="SecretRoomTypes"/>
+		<stages Name="GreedStages"/>
 	</version>
 </data>

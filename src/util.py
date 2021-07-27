@@ -46,9 +46,15 @@ def sanitizePath(node, key, path):
         node.set(key, prefixPath)
 
 
-def checkNum(s):
+def checkFloat(s):
     try:
         float(s)
         return True
     except ValueError:
         return False
+
+def checkInt(s):
+    if checkFloat(s):
+        return int(s) == float(s)
+
+    return False

@@ -992,7 +992,7 @@ class Entity(QGraphicsItem):
                 parts = list(
                     map(lambda x: x.strip(), self.config.placeVisual.split(","))
                 )
-                if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
+                if len(parts) == 2 and checkFloat(parts[0]) and checkFloat(parts[1]):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
                     self.placeVisual = parts[0]
@@ -1458,8 +1458,8 @@ class Entity(QGraphicsItem):
                         parts = list(map(lambda x: x.strip(), placeVisual.split(",")))
                         if (
                             len(parts) == 2
-                            and checkNum(parts[0])
-                            and checkNum(parts[1])
+                            and checkFloat(parts[0])
+                            and checkFloat(parts[1])
                         ):
                             placeVisual = (float(parts[0]), float(parts[1]))
                         else:
@@ -3377,13 +3377,13 @@ class RoomSelector(QWidget):
 class EntityGroupItem(object):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name=None, visible=True):
+    def __init__(self, name="", visible=True):
 
         self.objects = []
         self.startIndex = 0
         self.endIndex = 0
 
-        self.name = "" if name is None else name
+        self.name = name
         self.visible = visible
         if self.name == "":
             self.visible = False
@@ -3500,7 +3500,7 @@ class EntityGroupModel(QAbstractListModel):
 
     def getItem(self, index):
         for group in self.groups:
-            if (group.startIndex <= index) and (index <= group.endIndex):
+            if (index >= group.startIndex) and (index <= group.endIndex):
                 return group.getItem(index)
 
     def data(self, index, role=Qt.DisplayRole):
@@ -3730,10 +3730,8 @@ class EntityList(QListView):
                 if hideDuplicateEntities and item.config.uniqueid in shownEntities:
                     hidden = True
 
-                if hidden:
-                    self.setRowHidden(row, True)
-                else:
-                    self.setRowHidden(row, False)
+                self.setRowHidden(row, hidden)
+                if not hidden:
                     shownEntities[item.config.uniqueid] = True
 
         # Second loop for Group titles, check to see if all contents are hidden or not
@@ -3743,15 +3741,16 @@ class EntityList(QListView):
             if isinstance(item, EntityGroupItem):
                 self.setRowHidden(row, True)
 
-                if item.visible:
-                    checkedIndices = []
-                    if len(item.objects) == 0:
+                if not item.visible:
+                    continue
+
+                if len(item.objects) == 0:
+                    self.setRowHidden(row, False)
+                    continue
+
+                for i in range(item.startIndex, item.endIndex + 1):
+                    if not self.isRowHidden(i):
                         self.setRowHidden(row, False)
-                    else:
-                        for i in range(item.startIndex, item.endIndex + 1):
-                            checkedIndices.append(i)
-                            if not self.isRowHidden(i):
-                                self.setRowHidden(row, False)
 
 
 class ReplaceDialog(QDialog):
@@ -4510,7 +4509,7 @@ class MainWindow(QMainWindow):
         self.hideDuplicateEntities = v.addAction(
             "Hide Duplicate Entities",
             lambda: (
-                self.toggleSetting("HideDuplicateEntities", onDefault=False),
+                self.toggleSetting("HideDuplicateEntities"),
                 self.EntityPalette.updateTabs(),
             ),
         )
