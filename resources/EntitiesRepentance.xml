@@ -2,7 +2,6 @@
 	<!--——— Pickups ———-->
 	<!-- Overwrite old Lil' Battery and Grab Bag definitions -->
 	<entity ID="5" Image="Entities/5.90.0 - RBattery.png" Name="Random Battery" Subtype="0" Variant="90" Overwrite="1"/>
-	<entity ID="5" Image="Entities/5.69.0 - RGrab Bag.png" Name="Random Grab Bag" Subtype="0" Variant="69" Overwrite="1"/>
 
 	<group Name="(Pickups) Random">
 		<entity ID="5" Image="Entities/5.69.0 - RGrab Bag.png" Name="Random Grab Bag" Subtype="0" Variant="69" Overwrite="1"/>

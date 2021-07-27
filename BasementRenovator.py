@@ -3486,7 +3486,7 @@ class EntityGroupModel(QAbstractListModel):
         self.group = EntityGroupItem(group)
 
     def rowCount(self, parent=None):
-        return self.group.endIndex
+        return self.group.endIndex + 1
 
     def flags(self, index):
         item = self.getItem(index.row())
