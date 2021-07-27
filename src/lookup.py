@@ -570,29 +570,40 @@ class EntityLookup(Lookup):
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
 
+        def validateImagePath(self, imagePath, resourcePath, default=None):
+            if imagePath is None:
+                return default
+
+            imagePath = linuxPathSensitivityTraining(
+                os.path.join(resourcePath, imagePath)
+            )
+
+            if not os.path.exists(imagePath):
+                printf(
+                    f"Failed loading image for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}):",
+                    imagePath,
+                )
+                return default
+
+            return imagePath
+
         def fillFromXML(
             self, entity: ET.Element, resourcePath, modName, entities2Node=None
         ):
-            imgPath = entity.get("Image") and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("Image"))
-            )
-            editorImgPath = entity.get("EditorImage") and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("EditorImage"))
-            )
-            overlayImgPath = entity.get(
-                "OverlayImage"
-            ) and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("OverlayImage"))
-            )
-
             self.name = entity.get("Name")
             self.mod = modName
             self.type = int(entity.get("ID", "-1"))
             self.variant = int(entity.get("Variant", "0"))
             self.subtype = int(entity.get("Subtype", "0"))
-            self.imagePath = imgPath
-            self.editorImagePath = editorImgPath
-            self.overlayImagePath = overlayImgPath
+            self.imagePath = self.validateImagePath(
+                entity.get("Image"), resourcePath, "resources/Entities/questionmark.png"
+            )
+            self.editorImagePath = self.validateImagePath(
+                entity.get("EditorImage"), resourcePath
+            )
+            self.overlayImagePath = self.validateImagePath(
+                entity.get("OverlayImage"), resourcePath
+            )
             self.isGridEnt = entity.get("IsGrid") == "1"
             self.baseHP = (
                 entities2Node.get("baseHP") if entities2Node else entity.get("BaseHP")
@@ -701,27 +712,14 @@ class EntityLookup(Lookup):
             return True
 
     class GroupConfig:
-        def __init__(self, node=None, name=None, label=None, isTab=False):
-            self.iconSize = None
+        def __init__(self, node=None, name=None, label=None):
             self.hasEntity = False
             if node is not None:
                 self.label = node.get("Label")
                 self.name = node.get("Name", self.label)
-                self.isTab = node.get("IsTab") == "1"
-
-                iconSize = node.get("IconSize")
-                if iconSize:
-                    parts = list(map(lambda x: x.strip(), iconSize.split(",")))
-                    if len(parts) == 2 and checkInt(parts[0]) and checkInt(parts[1]):
-                        self.iconSize = (int(parts[0]), int(parts[1]))
-                    else:
-                        printf(
-                            f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
-                        )
             else:
                 self.name = name
                 self.label = label
-                self.isTab = isTab
 
             self.entries = []
             self.groupentries = []
@@ -752,21 +750,37 @@ class EntityLookup(Lookup):
 
             return False
 
+    class TabConfig(GroupConfig):
+        def __init__(self, node=None, name=None):
+            super().__init__(node, name)
+
+            self.iconSize = None
+            if node is not None:
+                iconSize = node.get("IconSize")
+                if iconSize:
+                    parts = list(map(lambda x: x.strip(), iconSize.split(",")))
+                    if len(parts) == 2 and checkInt(parts[0]) and checkInt(parts[1]):
+                        self.iconSize = (int(parts[0]), int(parts[1]))
+                    else:
+                        printf(
+                            f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
+                        )
+
     def __init__(self, version, parent):
-        self.entityList = []
+        self.entityList = self.GroupConfig()
         self.groups = {}
-        self.tabGroups = []
+        self.tabs = []
         self.lastuniqueid = 0
         super().__init__("Entities", version)
         self.parent = parent
 
     def count(self):
-        return len(self.entityList)
+        return len(self.entityList.entries)
 
     def addEntity(self, entity: EntityConfig):
         self.lastuniqueid += 1
         entity.uniqueid = self.lastuniqueid
-        self.entityList.append(entity)
+        self.entityList.addEntry(entity)
 
     ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
 
@@ -908,30 +922,23 @@ class EntityLookup(Lookup):
 
         for kind, group in groups:
             groupName = f"({kind}) {group}"
-            tabGroupConfig = None
-            for tabGroup in self.tabGroups:
-                if tabGroup.isTab and tabGroup.name == kind:
-                    tabGroupConfig = tabGroup
-                    break
-
-            if tabGroupConfig is None:
-                tabGroupConfig = self.getGroup(name=kind, isTab=True)
+            tab = self.getTab(name=kind)
 
             groupConfig = None
-            for entry in tabGroupConfig.entries:
+            for entry in tab.entries:
                 if isinstance(entry, self.GroupConfig) and entry.name == groupName:
                     groupConfig = entry
                     break
 
             if groupConfig is None:
                 groupConfig = self.getGroup(name=groupName, label=group)
-                tabGroupConfig.addEntry(groupConfig)
+                tab.addEntry(groupConfig)
 
             groupConfig.addEntry(entityConfig)
 
         return entityConfig
 
-    def getGroup(self, node=None, name=None, label=None, isTab=False):
+    def getGroup(self, node=None, name=None, label=None):
         if name is None:
             name = node.get("Name", node.get("Label"))
             if name is None:
@@ -939,10 +946,22 @@ class EntityLookup(Lookup):
                 return None
 
         if name not in self.groups:
-            group = self.GroupConfig(node=node, name=name, label=label, isTab=isTab)
+            group = self.GroupConfig(node=node, name=name, label=label)
             self.groups[name] = group
-            if group.isTab:
-                self.tabGroups.append(group)
+
+        return self.groups[name]
+
+    def getTab(self, node=None, name=None):
+        if name is None:
+            name = node.get("Name")
+            if name is None:
+                printf(f"Attempted to get tab with no Name {node.attrib}")
+                return None
+
+        if name not in self.groups:
+            tab = self.TabConfig(node, name)
+            self.groups[tab.name] = tab
+            self.tabs.append(tab)
 
         return self.groups[name]
 
@@ -953,7 +972,12 @@ class EntityLookup(Lookup):
         modName="Basement Renovator",
         entities2Root=None,
     ):
-        group = self.getGroup(node)
+        group = None
+        if node.tag == "tab":
+            group = self.getTab(node)
+        else:
+            group = self.getGroup(node)
+
         if group:
             for subNode in node:
                 entry = None
@@ -969,9 +993,7 @@ class EntityLookup(Lookup):
                 if entry:
                     group.addEntry(entry)
 
-            return group
-
-        return None
+        return group
 
     def loadXML(
         self,
@@ -984,7 +1006,7 @@ class EntityLookup(Lookup):
             return
 
         for subNode in root:
-            if subNode.tag == "group":
+            if subNode.tag == "group" or subNode.tag == "tab":
                 self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
             elif subNode.tag == "entity":
                 self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
@@ -1031,12 +1053,6 @@ class EntityLookup(Lookup):
             f"Successfully loaded {self.count() - previous} new Entities from {modName}"
         )
 
-    def lookupGroup(self, name):
-        if name in self.groups:
-            return self.groups[name].getAllEntries()
-        else:
-            return []
-
     def lookup(
         self,
         entitytype=None,
@@ -1045,7 +1061,7 @@ class EntityLookup(Lookup):
         inEmptyRooms=None,
         name=None,
     ):
-        entities = self.entityList
+        entities = self.entityList.entries
 
         entities = list(
             filter(
@@ -1105,7 +1121,7 @@ class MainLookup:
                         self.invalid = True
                     else:
                         self.toload.append(versions[name])
-                elif dataNode.tag in ("entities", "stages", "roomtypes"):\
+                elif dataNode.tag in ("entities", "stages", "roomtypes"):
                     self.toload.append(
                         self.DataFile(
                             dataNode.tag, dataNode.get("File"), dataNode.get("Name")

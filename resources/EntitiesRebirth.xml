@@ -1,11 +1,11 @@
 <data>
 	<!--——— Tabs ———-->
-	<group Name="Pickups" IsTab="1"/>
-	<group Name="Global" IsTab="1"/>
-	<group Name="Floors" IsTab="1"/>
-	<group Name="Bosses" IsTab="1" IconSize="52, 52"/>
-	<group Name="Collect" IsTab="1" IconSize="32, 64"/>
-	<group Name="Unused" IsTab="1"/>
+	<tab Name="Pickups"/>
+	<tab Name="Global"/>
+	<tab Name="Floors"/>
+	<tab Name="Bosses" IconSize="52, 52"/>
+	<tab Name="Collect" IconSize="32, 64"/>
+	<tab Name="Unused"/>
 
 	<!--——— Pickups ———-->
 	<group Name="Pickups">
