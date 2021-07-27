@@ -2782,11 +2782,13 @@ class RoomSelector(QWidget):
 
         global xmlLookups
         types = xmlLookups.roomTypes.lookup(showInMenu=True)
+        matchingTypes = xmlLookups.roomTypes.lookup(room=self.selectedRoom(), showInMenu=True)
 
         for i, t in enumerate(types):
             c.addItem(QIcon(t.get("Icon")), t.get("Name"))
+            if t in matchingTypes:
+                c.setCurrentIndex(i)
 
-        c.setCurrentIndex(self.selectedRoom().info.type)
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
         menu.addAction(Type)
