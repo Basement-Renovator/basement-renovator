@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
     <!-- mods resources are loaded in reverse ascii order, we need to be the authority -->
-    <name>!!!!!!basement-renovator-helper</name>
+    <name>      basement-renovator-helper</name>
     <directory>basement-renovator-helper</directory>
     <description>
         Used by Basement Renovator for mod related things.
-        
+
         Replaces resources stbs to load test rooms in the starting room and basement
-        
+
         Mods can subscribe to the TestRoom callback to get notified when the player enters a test room like so:
         ```lua
             BasementRenovator = BasementRenovator or { subscribers = {} }
