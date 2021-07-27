@@ -10,6 +10,21 @@ from src.util import *
 from src.entitiesgenerator import generateXMLFromEntities2
 
 
+def loadXMLFile(path):
+    root = None
+    if not os.path.isfile(path):
+        return None
+
+    try:
+        tree = ET.parse(path)
+        root = tree.getroot()
+    except Exception as e:
+        print("Error loading BR xml:", e)
+        return
+
+    return root
+
+
 def parseCriteria(txt):
     if not txt:
         return None
@@ -75,40 +90,31 @@ def applyGfxReplacement(replacement, gfxchildren):
 
 
 class Lookup(metaclass=abc.ABCMeta):
-    def __init__(self, prefix, version, subVer):
+    def __init__(self, prefix, version):
         version = version.replace("+", "Plus")
         self.prefix = prefix
-        self.setup(prefix, version, subVer)
+        self.version = version
 
-    def setup(self, prefix, version, subVer):
-        file = f"resources/{prefix}{version}.xml"
-        if subVer is not None:
-            fileN = f"resources/{prefix}{subVer}.xml"
-            if os.path.exists(fileN):
-                file = fileN
+    def loadFile(self, file, resourcePath, modName, *args):
+        printf(
+            f'-----------------------\nLoading {self.prefix} from "{modName}" at {file}'
+        )
+        previous = self.count()
+        self.loadXML(loadXMLFile(file), resourcePath, modName, *args)
+        printf(
+            f'Successfully loaded {self.count() - previous} new {self.prefix} from "{modName}"'
+        )
 
-        self.xml = self.loadXMLFile(file)
-        self.loadXML(self.xml)
-
-    def loadXMLFile(self, path):
-        root = None
-        try:
-            tree = ET.parse(path)
-            root = tree.getroot()
-        except Exception as e:
-            print("Error loading BR xml:", e)
-            return
-
-        return root
-
-    def loadFromMod(self, resourcePath, name, *args):
+    def loadFromMod(self, resourcePath, modName, *args):
         file = os.path.join(resourcePath, self.prefix + "Mod.xml")
         if not os.path.isfile(file):
             return
 
-        print(f'-----------------------\nLoading {self.prefix} from "{name}"')
+        self.loadFile(file, resourcePath, modName, *args)
 
-        self.loadXML(self.loadXMLFile(file), resourcePath, name, *args)
+    @abc.abstractmethod
+    def count(self):
+        return 0
 
     @abc.abstractmethod
     def loadXML(self, *args):
@@ -120,14 +126,26 @@ class Lookup(metaclass=abc.ABCMeta):
 
 
 class StageLookup(Lookup):
-    def __init__(self, version, subVer, parent):
-        super().__init__("Stages", version, subVer)
+    def __init__(self, version, parent):
+        self.xml = None
+        super().__init__("Stages", version)
         self.parent = parent
+
+    def count(self):
+        if self.xml is not None:
+            return len(self.xml)
+        else:
+            return 0
 
     def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
         stageList = root.findall("stage")
         if not stageList:
             return
+
+        initialLoad = False
+        if self.xml is None:
+            self.xml = root
+            initialLoad = True
 
         def mapStage(stage):
             name = stage.get("Name")
@@ -135,15 +153,13 @@ class StageLookup(Lookup):
                 print("Tried to load stage, but had missing name!", str(stage.attrib))
                 return None
 
-            print("Loading stage:", str(stage.attrib))
-
             replacement = self.xml.find(f'stage[@Name="{name}"]')
 
             if replacement is None and (
                 stage.get("Stage") is None or stage.get("StageType") is None
             ):
-                print(
-                    "Stage has missing stage/stage type; this may not load properly in testing"
+                printf(
+                    f"Stage {stage.attrib} has missing stage/stage type; this may not load properly in testing"
                 )
 
             sanitizePath(stage, "BGPrefix", resourcePath)
@@ -156,13 +172,17 @@ class StageLookup(Lookup):
                     sanitizePath(ent, "Image", resourcePath)
 
             if replacement is not None:
+                for key in stage.attrib.keys():
+                    if key != "Name":
+                        replacement.set(key, stage.get(key, replacement.get(key)))
+
                 applyGfxReplacement(replacement, children)
                 return None
 
             return stage
 
         stages = list(filter(lambda x: x is not None, map(mapStage, stageList)))
-        if stages and modName != "Basement Renovator":
+        if stages and not initialLoad:
             self.xml.extend(stages)
 
     def lookup(
@@ -200,14 +220,26 @@ class StageLookup(Lookup):
 
 
 class RoomTypeLookup(Lookup):
-    def __init__(self, version, subVer, parent):
-        super().__init__("RoomTypes", version, subVer)
+    def __init__(self, version, parent):
+        self.xml = None
+        super().__init__("RoomTypes", version)
         self.parent = parent
+
+    def count(self):
+        if self.xml is not None:
+            return len(self.xml)
+        else:
+            return 0
 
     def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
         roomTypeList = root.findall("room")
         if not roomTypeList:
             return
+
+        initialLoad = False
+        if self.xml is None:
+            self.xml = root
+            initialLoad = True
 
         def mapRoomType(roomType):
             name = roomType.get("Name")
@@ -217,8 +249,6 @@ class RoomTypeLookup(Lookup):
                     str(roomType.attrib),
                 )
                 return None
-
-            print("Loading room type:", str(roomType.attrib))
 
             replacement = self.xml.find(f'room[@Name="{name}"]')
 
@@ -240,7 +270,7 @@ class RoomTypeLookup(Lookup):
         roomTypes = list(
             filter(lambda x: x is not None, map(mapRoomType, roomTypeList))
         )
-        if roomTypes and modName != "Base":
+        if roomTypes and not initialLoad:
             self.xml.extend(roomTypes)
 
     def filterRoom(self, node, room, path=None):
@@ -270,6 +300,10 @@ class RoomTypeLookup(Lookup):
 
         idCriteria = parseCriteria(node.get("ID"))
         if idCriteria and not idCriteria(room.info.variant):
+            return False
+
+        subtypeCriteria = parseCriteria(node.get("Subtype"))
+        if subtypeCriteria and not subtypeCriteria(room.info.subtype):
             return False
 
         return True
@@ -527,11 +561,11 @@ class EntityLookup(Lookup):
             self.gfx = None
             self.mirrorX = None
             self.mirrorY = None
-            self.kinds = None
             self.hasBitfields = None
             self.invalidBitfield = False
             self.bitfields = []
             self.inEmptyRooms = None
+            self.uniqueid = -1
 
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
@@ -599,29 +633,6 @@ class EntityLookup(Lookup):
             if mirrorY:
                 self.mirrorY = getMirrorEntity(mirrorY)
 
-            self.kinds = {}
-            entitygroups = entity.findall("group")
-            for entitygroup in entitygroups:
-                entitykind = entitygroup.get("Kind") or entity.get("Kind")
-                entitygroupname = entitygroup.get("Name") or entity.get("Group")
-                if not entitykind in self.kinds:
-                    self.kinds[entitykind] = []
-
-                if not entitygroupname in self.kinds[entitykind]:
-                    self.kinds[entitykind].append(entitygroupname)
-
-            entitykind = entity.get("Kind")
-            if entitykind is not None:
-                if not entitykind in self.kinds:
-                    self.kinds[entitykind] = []
-
-                entitygroupname = entity.get("Group")
-                if (
-                    entitygroupname is not None
-                    and not entitygroupname in self.kinds[entitykind]
-                ):
-                    self.kinds[entitykind].append(entitygroupname)
-
             bitfields = entity.findall("bitfield")
             self.hasBitfields = len(bitfields) != 0
             self.bitfields = list(map(EntityLookup.EntityConfig.Bitfield, bitfields))
@@ -673,7 +684,9 @@ class EntityLookup(Lookup):
 
             return warnings
 
-        def matches(self, entitytype=None, variant=None, subtype=None):
+        def matches(self, entitytype=None, variant=None, subtype=None, name=None):
+            if name is not None and self.name != name:
+                return False
             if entitytype is not None and self.type != entitytype:
                 return False
             if variant is not None and (
@@ -687,161 +700,359 @@ class EntityLookup(Lookup):
 
             return True
 
-    def __init__(self, version, subVer, parent):
+    class GroupConfig:
+        def __init__(self, node=None, name=None, label=None, isTab=False):
+            self.iconSize = None
+            self.hasEntity = False
+            if node is not None:
+                self.label = node.get("Label")
+                self.name = node.get("Name", self.label)
+                self.isTab = node.get("IsTab") == "1"
+
+                iconSize = node.get("IconSize")
+                if iconSize:
+                    parts = list(map(lambda x: x.strip(), iconSize.split(",")))
+                    if len(parts) == 2 and checkInt(parts[0]) and checkInt(parts[1]):
+                        self.iconSize = (int(parts[0]), int(parts[1]))
+                    else:
+                        printf(
+                            f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
+                        )
+            else:
+                self.name = name
+                self.label = label
+                self.isTab = isTab
+
+            self.entries = []
+            self.groupentries = []
+
+        def addEntry(self, entry):
+            self.entries.append(entry)
+            if isinstance(entry, EntityLookup.GroupConfig):
+                self.groupentries.append(entry)
+            elif isinstance(entry, EntityLookup.EntityConfig):
+                self.hasEntity = True
+
+        def getAllEntries(self):
+            entries = []
+            for entry in self.entries:
+                entries.append(entry)
+                if isinstance(entry, EntityLookup.GroupConfig):
+                    entries.extend(entry.getAllEntries())
+
+            return entries
+
+        def containsEntity(self):
+            if self.hasEntity:
+                return True
+
+            for group in self.groupentries:
+                if group.containsEntity():
+                    return True
+
+            return False
+
+    def __init__(self, version, parent):
         self.entityList = []
-        super().__init__("Entities", version, subVer)
+        self.groups = {}
+        self.tabGroups = []
+        self.lastuniqueid = 0
+        super().__init__("Entities", version)
         self.parent = parent
 
-    def loadXML(
-        self, root, resourcePath="", modName="Basement Renovator", entities2Root=None
+    def count(self):
+        return len(self.entityList)
+
+    def addEntity(self, entity: EntityConfig):
+        self.lastuniqueid += 1
+        entity.uniqueid = self.lastuniqueid
+        self.entityList.append(entity)
+
+    ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
+
+    def loadEntityNode(
+        self,
+        node: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
     ):
-        entities = root.findall("entity")
-        if not entities:
-            return
+        entityType = node.get("ID")
+        variant = node.get("Variant")
+        subtype = node.get("Subtype")
+        name = node.get("Name")
 
-        cleanUp = re.compile(r"[^\w\d]")
+        if (name is not None) or (entityType is not None):
+            isRef = True
+            for key in node.attrib.keys():
+                if key not in ("ID", "Variant", "Subtype", "Name"):
+                    isRef = False
+                    break
 
-        def mapEntity(entity):
-            entityType = int(entity.get("ID", "-1"))
-            variant = int(entity.get("Variant", "0"))
-            subtype = int(entity.get("Subtype", "0"))
-            name = entity.get("Name")
+            if isRef:
+                if entityType:
+                    entityType = int(entityType)
+                if variant:
+                    variant = int(variant)
+                if subtype:
+                    subtype = int(subtype)
 
-            if (entityType >= 1000 or entityType < 0) and entity.get("IsGrid") != "1":
-                printf(
-                    f'Entity "{name}" from "{modName}" has a type outside the 0 - 999 range! ({entityType}) It will not load properly from rooms!'
+                entityConfig = self.lookupOne(
+                    entitytype=entityType, variant=variant, subtype=subtype, name=name
                 )
+                if entityConfig:
+                    return entityConfig
+                else:
+                    printf(
+                        f"Entity {node.attrib} looks like a ref, but was not previously defined!"
+                    )
 
-            if variant >= 4096 or variant < 0:
-                printf(
-                    f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
-                )
+        entityType = int(entityType or -1)
+        variant = int(variant or 0)
+        subtype = int(subtype or 0)
 
-            if (subtype >= 256 or subtype < 0) and (
-                entityType != EntityType["PICKUP"]
-                or variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
-            ):
-                printf(
-                    f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
-                )
+        if (entityType >= 1000 or entityType < 0) and node.get("IsGrid") != "1":
+            printf(
+                f'Entity "{name}" from "{modName}" has a type outside the 0 - 999 range! ({entityType}) It will not load properly from rooms!'
+            )
 
-            entityXML = None
+        if variant >= 4096 or variant < 0:
+            printf(
+                f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
+            )
 
-            if entity.get("Metadata") != "1" and entity.get("IsGrid") != "1":
-                adjustedId = "1000" if entityType == "999" else entityType
-                query = f"entity[@id='{adjustedId}'][@variant='{variant}']"
+        if (subtype >= 256 or subtype < 0) and (
+            entityType != EntityType["PICKUP"]
+            or variant not in self.PICKUPS_WITH_SPECIAL_SUBTYPES
+        ):
+            printf(
+                f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
+            )
 
-                validMissingSubtype = False
+        entityXML = None
 
-                if entities2Root:
-                    entityXML = entities2Root.find(query + f"[@subtype='{subtype}']")
+        if node.get("Metadata") != "1" and node.get("IsGrid") != "1":
+            adjustedId = "1000" if entityType == "999" else entityType
+            query = f"entity[@id='{adjustedId}'][@variant='{variant}']"
 
-                    if entityXML is None:
-                        entityXML = entities2Root.find(query)
-                        validMissingSubtype = entityXML is not None
+            validMissingSubtype = False
 
-                    if entityXML is None:
+            if entities2Root:
+                entityXML = entities2Root.find(query + f"[@subtype='{subtype}']")
+
+                if entityXML is None:
+                    entityXML = entities2Root.find(query)
+                    validMissingSubtype = entityXML is not None
+
+                if entityXML is None:
+                    printf(
+                        "Loading invalid entity (no entry in entities2 xml): "
+                        + str(node.attrib)
+                    )
+                    node.set("Invalid", "1")
+                else:
+                    foundName = entityXML.get("name")
+                    givenName = node.get("Name")
+                    foundNameClean, givenNameClean = list(
+                        map(
+                            lambda s: self.ENTITY_CLEANUP_REGEX.sub("", s).lower(),
+                            (foundName, givenName),
+                        )
+                    )
+                    if not (
+                        foundNameClean == givenNameClean
+                        or (
+                            validMissingSubtype
+                            and (
+                                foundNameClean in givenNameClean
+                                or givenNameClean in foundNameClean
+                            )
+                        )
+                    ):
                         printf(
-                            "Loading invalid entity (no entry in entities2 xml): "
-                            + str(entity.attrib)
+                            "Loading entity, found name mismatch! In entities2: ",
+                            foundName,
+                            "; In BR: ",
+                            givenName,
                         )
-                        entity.set("Invalid", "1")
-                    else:
-                        foundName = entityXML.get("name")
-                        givenName = entity.get("Name")
-                        foundNameClean, givenNameClean = list(
-                            map(
-                                lambda s: cleanUp.sub("", s).lower(),
-                                (foundName, givenName),
-                            )
-                        )
-                        if not (
-                            foundNameClean == givenNameClean
-                            or (
-                                validMissingSubtype
-                                and (
-                                    foundNameClean in givenNameClean
-                                    or givenNameClean in foundNameClean
-                                )
-                            )
-                        ):
-                            printf(
-                                "Loading entity, found name mismatch! In entities2: ",
-                                foundName,
-                                "; In BR: ",
-                                givenName,
-                            )
 
-            entityConfig = self.lookupOne(entityType, variant, subtype)
-            if entityConfig:
+        overwrite = node.get("Overwrite") == "1"
+
+        entityConfig = self.lookupOne(entityType, variant, subtype)
+        if entityConfig:
+            if not overwrite:
                 printf(
                     f'Entity "{name}" from "{modName}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod}"!'
                 )
-                entityConfig.fillFromXML(entity, resourcePath, modName, entityXML)
-            else:
-                entityConfig = self.EntityConfig(
-                    entity, resourcePath, modName, entityXML
+
+            entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
+        else:
+            if overwrite:
+                printf(
+                    f'Entity "{name} from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
                 )
 
-            return entityConfig
+            entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
+            self.addEntity(entityConfig)
 
-        self.entityList.extend(list(map(mapEntity, entities)))
+        groups = []
+        nodeKind = node.get("Kind")
+        nodeGroup = node.get("Group")
+        if nodeKind is not None and nodeGroup is not None:
+            groups.append((nodeKind, nodeGroup))
 
-    def loadFromMod(self, brPath, name, modPath, autoGenerateModContent):
-        entityFile = os.path.join(brPath, "EntitiesMod.xml")
-        if not os.path.isfile(entityFile):
+        for group in node.findall("group"):
+            kind = group.get("Kind", nodeKind)
+            name = group.get("Name", nodeGroup)
+            groups.append((kind, name))
+
+        for kind, group in groups:
+            groupName = f"({kind}) {group}"
+            tabGroupConfig = None
+            for tabGroup in self.tabGroups:
+                if tabGroup.isTab and tabGroup.name == kind:
+                    tabGroupConfig = tabGroup
+                    break
+
+            if tabGroupConfig is None:
+                tabGroupConfig = self.getGroup(name=kind, isTab=True)
+
+            groupConfig = None
+            for entry in tabGroupConfig.entries:
+                if isinstance(entry, self.GroupConfig) and entry.name == groupName:
+                    groupConfig = entry
+                    break
+
+            if groupConfig is None:
+                groupConfig = self.getGroup(name=groupName, label=group)
+                tabGroupConfig.addEntry(groupConfig)
+
+            groupConfig.addEntry(entityConfig)
+
+        return entityConfig
+
+    def getGroup(self, node=None, name=None, label=None, isTab=False):
+        if name is None:
+            name = node.get("Name", node.get("Label"))
+            if name is None:
+                printf(f"Attempted to get group with no Name {node.attrib}")
+                return None
+
+        if name not in self.groups:
+            group = self.GroupConfig(node=node, name=name, label=label, isTab=isTab)
+            self.groups[name] = group
+            if group.isTab:
+                self.tabGroups.append(group)
+
+        return self.groups[name]
+
+    def loadGroupNode(
+        self,
+        node: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
+    ):
+        group = self.getGroup(node)
+        if group:
+            for subNode in node:
+                entry = None
+                if subNode.tag == "group":
+                    entry = self.loadGroupNode(
+                        subNode, resourcePath, modName, entities2Root
+                    )
+                elif subNode.tag == "entity":
+                    entry = self.loadEntityNode(
+                        subNode, resourcePath, modName, entities2Root
+                    )
+
+                if entry:
+                    group.addEntry(entry)
+
+            return group
+
+        return None
+
+    def loadXML(
+        self,
+        root: ET.Element,
+        resourcePath="",
+        modName="Basement Renovator",
+        entities2Root=None,
+    ):
+        if not root:
             return
 
-        print(f'-----------------------\nLoading entities from "{name}"')
+        for subNode in root:
+            if subNode.tag == "group":
+                self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
+            elif subNode.tag == "entity":
+                self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
 
-        # Grab mod Entities2.xml
-        entities2Path = os.path.join(modPath, "content/entities2.xml")
-        if os.path.exists(entities2Path):
-            entities2Root = None
-            try:
-                entities2Root = ET.parse(entities2Path).getroot()
-            except ET.ParseError as e:
-                printf(f'ERROR parsing entities2 xml for mod "{name}": {e}')
-                return
+    def loadFile(
+        self,
+        path,
+        resourcePath="resources/",
+        modName="Basement Renovator",
+        modPath=None,
+        autogenerateContent=False,
+    ):
+        root = loadXMLFile(path)
+        if root is None:
+            return
 
-            if autoGenerateModContent:
-                self.loadXML(
-                    generateXMLFromEntities2(modPath, name, entities2Root, brPath),
-                    brPath,
-                    name,
-                    entities2Root,
-                )
+        printf(f'-----------------------\nLoading Entities from "{modName}" at {path}')
+        previous = self.count()
 
-            self.loadXML(self.loadXMLFile(entityFile), brPath, name, entities2Root)
+        entities2Root = None
+        if modPath:
+            entities2Path = os.path.join(modPath, "content/entities2.xml")
+            if os.path.exists(entities2Path):
+                entities2Root = None
+                try:
+                    entities2Root = ET.parse(entities2Path).getroot()
+                except ET.ParseError as e:
+                    printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
+                    return
+
+                if autogenerateContent:
+                    self.loadXML(
+                        generateXMLFromEntities2(
+                            modPath, modName, entities2Root, resourcePath
+                        ),
+                        resourcePath,
+                        modName,
+                        entities2Root,
+                    )
+
+        self.loadXML(root, resourcePath, modName, entities2Root)
+
+        printf(
+            f"Successfully loaded {self.count() - previous} new Entities from {modName}"
+        )
+
+    def lookupGroup(self, name):
+        if name in self.groups:
+            return self.groups[name].getAllEntries()
+        else:
+            return []
 
     def lookup(
         self,
         entitytype=None,
         variant=None,
         subtype=None,
-        kind=None,
-        group=None,
         inEmptyRooms=None,
+        name=None,
     ):
         entities = self.entityList
 
         entities = list(
             filter(
-                lambda entity: entity.matches(entitytype, variant, subtype), entities
+                lambda entity: entity.matches(entitytype, variant, subtype, name),
+                entities,
             )
         )
-
-        if kind:
-            if group:
-                entities = list(
-                    filter(
-                        lambda entity: kind in entity.kinds
-                        and group in entity.kinds[kind],
-                        entities,
-                    )
-                )
-            else:
-                entities = list(filter(lambda entity: kind in entity.kinds, entities))
 
         if inEmptyRooms:
             entities = list(
@@ -855,25 +1066,138 @@ class EntityLookup(Lookup):
         entitytype=None,
         variant=None,
         subtype=None,
-        kind=None,
-        group=None,
         inEmptyRooms=None,
+        name=None,
     ):
-        entities = self.lookup(entitytype, variant, subtype, kind, group, inEmptyRooms)
+        entities = self.lookup(entitytype, variant, subtype, inEmptyRooms, name)
 
         return next(iter(entities), None)
 
 
 class MainLookup:
-    def __init__(self, version, subVer):
-        self.stages = StageLookup(version, subVer, self)
-        self.roomTypes = RoomTypeLookup(version, subVer, self)
-        self.entities = EntityLookup(version, subVer, self)
+    class Version:
+        class DataFile:
+            def __init__(self, filetype, path, name):
+                self.path = path
+                self.filetype = filetype
+                self.name = name
 
-    def loadFromMod(self, modPath, brPath, name, autoGenerateModContent):
-        self.stages.loadFromMod(brPath, name)
-        self.roomTypes.loadFromMod(brPath, name)
-        self.entities.loadFromMod(brPath, name, modPath, autoGenerateModContent)
+        def __init__(self, node, versions):
+            self.invalid = False
+            self.name = node.get("Name")
+            if self.name is None:
+                printf(f"Version {node.attrib} does not have a Name")
+
+            self.toload = []
+
+            for dataNode in node:
+                if dataNode.tag == "version":
+                    name = dataNode.get("Name")
+                    if name is None:
+                        printf(
+                            f"Cannot load version from node {node.attrib} without Name"
+                        )
+                        self.invalid = True
+                    elif name not in versions:
+                        printf(
+                            f"Cannot load version from node {node.attrib} because it is not defined"
+                        )
+                        self.invalid = True
+                    else:
+                        self.toload.append(versions[name])
+                elif dataNode.tag in ("entities", "stages", "roomtypes"):\
+                    self.toload.append(
+                        self.DataFile(
+                            dataNode.tag, dataNode.get("File"), dataNode.get("Name")
+                        )
+                    )
+                else:
+                    printf(
+                        f"Cannot load unknown file type {dataNode.tag} from node {node.attrib}"
+                    )
+                    self.invalid = True
+
+        def allFiles(self, versions=None):
+            files = []
+            namedFiles = {}
+
+            if versions is None:
+                versions = {}
+
+            versions[self.name] = True
+            for entry in self.toload:
+                addFiles = None
+                if isinstance(entry, MainLookup.Version):
+                    addFiles = entry.allFiles(versions)
+                else:
+                    addFiles = [entry]
+
+                for file in addFiles:
+                    if file.name:
+                        if file.name not in namedFiles:
+                            namedFiles[file.name] = len(files)
+                            files.append(file)
+                        else:
+                            files[namedFiles[file.name]] = file
+                    else:
+                        files.append(file)
+
+            return files
+
+    def __init__(self, version):
+        self.stages = StageLookup(version, self)
+        self.roomTypes = RoomTypeLookup(version, self)
+        self.entities = EntityLookup(version, self)
+        self.version = version
+
+        self.loadXML(loadXMLFile("resources/Versions.xml"))
+
+    def loadFromMod(self, modPath, brPath, name, autogenerateContent):
+        versionsPath = os.path.join(brPath, "VersionsMod.xml")
+        if os.path.exists(versionsPath):
+            self.loadXML(
+                loadXMLFile(versionsPath), brPath, modPath, name, autogenerateContent
+            )
+        else:
+            self.stages.loadFromMod(brPath, name)
+            self.roomTypes.loadFromMod(brPath, name)
+            self.entities.loadFromMod(brPath, name, modPath, autogenerateContent)
+
+    def loadXML(
+        self,
+        root=None,
+        resourcePath="resources/",
+        modPath=None,
+        modName="Basement Renovator",
+        autogenerateContent=False,
+    ):
+        if root is None:
+            return
+
+        loadVersion = None
+        versions = {}
+        for versionNode in root:
+            version = self.Version(versionNode, versions)
+            if version.invalid is False:
+                versions[version.name] = version
+                if version.name == self.version:
+                    loadVersion = version
+
+        if loadVersion:
+            files = loadVersion.allFiles()
+            for file in files:
+                if file.path:
+                    path = os.path.join(resourcePath, file.path)
+                    if file.filetype == "entities":
+                        self.entities.loadFile(
+                            path, resourcePath, modName, modPath, autogenerateContent
+                        )
+                    elif file.filetype == "stages":
+                        self.stages.loadFile(path, resourcePath, modName)
+                    elif file.filetype == "roomtypes":
+                        self.roomTypes.loadFile(path, resourcePath, modName)
+        else:
+            printf("Could not find valid version to load")
 
     def getRoomGfx(self, room=None, roomfile=None, path=None):
         node = self.roomTypes.getMainType(room=room, roomfile=roomfile, path=path)
