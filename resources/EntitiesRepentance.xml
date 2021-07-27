@@ -804,3 +804,175 @@
 		<entity ID="999" Image="Entities/1000.74.1 - Moms Room Carpet.png" Name="Moms Room Carpet" Variant="74" Subtype="1" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
 		<entity ID="999" Image="Entities/1000.74.2 - Living Room Carpet.png" Name="Living Room Carpet" Variant="74" Subtype="2" PlaceVisual="0,1.5" NoBlockDoors="1" IsGrid="1" />
 	</group>
+
+	<!--——— Bosses ———-->
+	<group Name="Chapter 1 Bosses (Main Path) Shared">
+		<entity BaseHP="234" Boss="1" ID="908" Image="Entities/908.0.0 - Baby Plum.png" Name="Baby Plum" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Chapter 1 Bosses">
+		<group Name="Chapter 1 Bosses (Alt Path)" Label="Chapter 1 (Alt Path)">
+			<group Name="Chapter 1 Bosses (Alt Path) Shared"/>
+			<group Name="Downpour Bosses" Label="Downpour"/>
+			<group Name="Dross Bosses" Label="Dross"/>
+		</group>
+	</group>
+
+	<group Name="Chapter 1 Bosses (Alt Path) Shared">
+		<entity BaseHP="200" Boss="1" ID="62" Image="Entities/62.3.0 - Wormwood.png" Name="Wormwood" Variant="3" Subtype="0" />
+		<entity BaseHP="200" Boss="1" ID="901" Image="Entities/901.0.0 - Lil Blub.png" Name="Lil Blub" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Downpour Bosses">
+		<entity BaseHP="240" Boss="1" ID="902" Image="Entities/902.0.0 - Rainmaker.png" Name="Rainmaker" Variant="0" Subtype="0" />
+		<entity BaseHP="280" Boss="1" ID="913" Image="Entities/913.0.0 - Min Min.png" Name="Min Min" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Dross Bosses">
+		<entity BaseHP="420" Boss="1" ID="914" Image="Entities/914.0.0 - Clog.png" Name="Clog" Variant="0" Subtype="0" />
+		<entity BaseHP="380" Boss="1" ID="917" Image="Entities/917.0.0 - Colostomia.png" Name="Colostomia" Variant="0" Subtype="0" />
+		<entity BaseHP="190" Boss="1" ID="918" Image="Entities/918.0.0 - Turdlet.png" Name="Turdlet" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Chapter 2 Bosses (Main Path) Shared">
+		<entity BaseHP="385" Boss="1" ID="916" Image="Entities/916.0.0 - Bumbino.png" Name="Bumbino" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Chapter 2 Bosses">
+		<group Name="Chapter 2 Bosses (Alt Path)" Label="Chapter 2 (Alt Path)">
+			<group Name="Chapter 2 Bosses (Alt Path) Shared"/>
+			<group Name="Mines Bosses" Label="Mines"/>
+			<group Name="Ashpit Bosses" Label="Ashpit"/>
+		</group>
+	</group>
+
+	<group Name="Chapter 2 Bosses (Alt Path) Shared">
+		<entity BaseHP="6" Boss="1" ID="907" Image="Entities/907.0.0 - Great Gideon.png" Name="Great Gideon" Variant="0" Subtype="0" />
+		<entity BaseHP="6" Boss="1" ID="907" Image="Entities/907.0.1 - Great Gideon (defeated).png" Name="Great Gideon (defeated)" Variant="0" Subtype="1" />
+	</group>
+
+	<group Name="Mines Bosses">
+		<entity BaseHP="35" Boss="1" ID="19" Image="Entities/19.2.0 - Tuff Twin.png" Name="Tuff Twin" Variant="2" Subtype="0" />
+		<entity BaseHP="690" Boss="1" ID="900" Image="Entities/900.0.0 - Reap Creep.png" Name="Reap Creep" Variant="0" Subtype="0" />
+		<entity BaseHP="240" Boss="1" ID="906" Image="Entities/906.0.0 - Hornfel.png" Name="Hornfel" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Ashpit Bosses">
+		<entity BaseHP="35" Boss="1" ID="19" Image="Entities/19.3.0 - The Shell.png" Name="The Shell" Variant="3" Subtype="0" />
+		<entity BaseHP="580" Boss="1" ID="269" Image="Entities/269.1.0 - The Pile.png" Name="The Pile" Variant="1" Subtype="0" />
+		<entity BaseHP="444" Boss="1" ID="915" Image="Entities/915.0.0 - Singe.png" Name="Singe" Variant="0" Subtype="0" />
+		<entity BaseHP="100" ID="915" Image="Entities/915.1.0 - Singe's Ball.png" Name="Singe's Ball" Variant="1" Subtype="0" />
+	</group>
+
+	<group Name="Depths Bosses">
+		<entity Name="Reap Creep"/>
+	</group>
+
+	<group Name="Necropolis Bosses">
+		<entity Name="The Pile"/>
+	</group>
+
+	<group Name="Dank Depths Bosses">
+		<entity Name="Reap Creep"/>
+	</group>
+
+	<group Name="Chapter 3 Bosses">
+		<group Name="Chapter 3 Bosses (Alt Path)" Label="Chapter 3 (Alt Path)">
+			<group Name="Chapter 3 Bosses (Alt Path) Shared"/>
+			<group Name="Mausoleum Bosses" Label="Mausoleum"/>
+			<group Name="Gehenna Bosses" Label="Gehenna"/>
+		</group>
+	</group>
+
+	<group Name="Mausoleum Bosses">
+		<entity BaseHP="666" Boss="1" ID="904" Image="Entities/904.0.0 - Siren.png" Name="Siren" Variant="0" Subtype="0" />
+		<entity BaseHP="20" ID="904" Image="Entities/904.1.0 - Siren's Skull.png" Name="Siren's Skull" Variant="1" Subtype="0" />
+		<entity BaseHP="789" Boss="1" ID="905" Image="Entities/905.0.0 - The Heretic.png" Name="The Heretic" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Gehenna Bosses">
+		<entity BaseHP="620" Boss="1" ID="903" Image="Entities/903.0.0 - Visage Heart.png" Name="Visage Heart" Variant="0" Subtype="0" />
+		<entity BaseHP="100" Boss="1" ID="903" Image="Entities/903.1.0 - Visage Mask.png" Name="Visage Mask" Variant="1" Subtype="0" />
+		<entity BaseHP="707" Boss="1" ID="920" Image="Entities/920.0.0 - Horny Boys.png" Name="Horny Boys" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Chapter 4 Bosses">
+		<group Name="Chapter 4 Bosses (Alt Path)" Label="Chapter 4 (Alt Path)">
+			<group Name="Chapter 4 Bosses (Alt Path) Shared"/>
+			<group Name="Corpse Bosses" Label="Corpse"/>
+		</group>
+	</group>
+
+	<group Name="Corpse Bosses">
+		<entity BaseHP="950" Boss="1" ID="909" Image="Entities/909.0.0 - The Scourge.png" Name="The Scourge" Variant="0" Subtype="0" />
+		<entity BaseHP="1050" Boss="1" ID="910" Image="Entities/910.0.0 - Chimera.png" Name="Chimera" Variant="0" Subtype="0" />
+		<entity BaseHP="1050" Boss="1" ID="910" Image="Entities/910.1.0 - Chimera (body).png" Name="Chimera (body)" Variant="1" Subtype="0" />
+		<entity BaseHP="1050" Boss="1" ID="910" Image="Entities/910.2.0 - Chimera (head).png" Name="Chimera (head)" Variant="2" Subtype="0" />
+		<entity BaseHP="600" Boss="1" ID="911" Image="Entities/911.0.0 - Rotgut.png" Name="Rotgut" Variant="0" Subtype="0" />
+		<entity BaseHP="600" Boss="1" ID="911" Image="Entities/911.1.0 - Rotgut (maggot).png" Name="Rotgut (maggot)" Variant="1" Subtype="0" />
+		<entity BaseHP="600" Boss="1" ID="911" Image="Entities/911.2.0 - Rotgut (heart).png" Name="Rotgut (heart)" Variant="2" Subtype="0" />
+	</group>
+
+	<group Name="Story Bosses">
+		<entity BaseHP="250" Boss="1" ID="867" Image="Entities/867.0.0 - Mother's Shadow.png" Name="Mother's Shadow" Variant="0" Subtype="0" />
+		<entity BaseHP="2222" Boss="1" ID="912" Image="Entities/912.0.0 - Mother.png" Name="Mother" Variant="0" Subtype="0" />
+		<entity BaseHP="2000" Boss="1" ID="912" Image="Entities/912.10.0 - Mother 2.png" Name="Mother 2" Variant="10" Subtype="0" />
+		<entity BaseHP="40" ID="912" Image="Entities/912.20.0 - Dead Isaac.png" Name="Dead Isaac" Variant="20" Subtype="0" />
+		<entity BaseHP="10" Boss="1" ID="912" Image="Entities/912.100.0 - Mother Ball.png" Name="Mother Ball" Variant="100" Subtype="0" />
+		<entity BaseHP="10" Boss="1" ID="912" Image="Entities/912.100.1 - Mother Ball (Medium).png" Name="Mother Ball (Medium)" Variant="100" Subtype="1" />
+		<entity BaseHP="10" Boss="1" ID="912" Image="Entities/912.100.2 - Mother Ball (Small).png" Name="Mother Ball (Small)" Variant="100" Subtype="2" />
+		<entity BaseHP="1200" Boss="1" ID="950" Image="Entities/950.0.0 - Dogma.png" Name="Dogma" Variant="0" Subtype="0" />
+		<entity BaseHP="1200" Boss="1" ID="950" Image="Entities/950.1.0 - Dogma's TV.png" Name="Dogma's TV" Variant="1" Subtype="0" />
+		<entity BaseHP="1200" Boss="1" ID="950" Image="Entities/950.2.0 - Dogma Angel.png" Name="Dogma Angel" Variant="2" Subtype="0" />
+		<entity BaseHP="30" ID="950" Image="Entities/950.10.0 - Dogma Angel Baby.png" Name="Dogma Angel Baby" Variant="10" Subtype="0" />
+	</group>
+
+	<group Name="Other Bosses">
+		<group Label="The Beast">
+			<entity BaseHP="10000" Boss="1" ID="951" Image="Entities/951.0.0 - The Beast.png" Name="The Beast" Variant="0" Subtype="0" />
+			<entity BaseHP="2000" Boss="1" ID="951" Image="Entities/951.10.0 - Ultra Famine.png" Name="Ultra Famine" Variant="10" Subtype="0" />
+			<entity BaseHP="10" ID="951" Image="Entities/951.11.0 - Ultra Famine Fly.png" Name="Ultra Famine Fly" Variant="11" Subtype="0" />
+			<entity BaseHP="1800" Boss="1" ID="951" Image="Entities/951.20.0 - Ultra Pestilence.png" Name="Ultra Pestilence" Variant="20" Subtype="0" />
+			<entity BaseHP="10" ID="951" Image="Entities/951.21.0 - Ultra Pestilence Fly.png" Name="Ultra Pestilence Fly" Variant="21" Subtype="0" />
+			<entity ID="951" Image="Entities/951.22.0 - Ultra Pestilence Maggot.png" Name="Ultra Pestilence Maggot" Variant="22" Subtype="0" />
+			<entity BaseHP="200" ID="951" Image="Entities/951.23.0 - Ultra Pestilence Fly Ball.png" Name="Ultra Pestilence Fly Ball" Variant="23" Subtype="0" />
+			<entity BaseHP="2000" Boss="1" ID="951" Image="Entities/951.30.0 - Ultra War.png" Name="Ultra War" Variant="30" Subtype="0" />
+			<entity BaseHP="200" ID="951" Image="Entities/951.31.0 - Ultra War Bomb.png" Name="Ultra War Bomb" Variant="31" Subtype="0" />
+			<entity BaseHP="2000" Boss="1" ID="951" Image="Entities/951.40.0 - Ultra Death.png" Name="Ultra Death" Variant="40" Subtype="0" />
+			<entity BaseHP="100" ID="951" Image="Entities/951.42.0 - Ultra Death Head.png" Name="Ultra Death Head" Variant="42" Subtype="0" />
+		</group>
+	</group>
+
+	<group Name="Special Bosses">
+		<group Name="Unfinished Bosses" Label="Unfinished">
+			<entity BaseHP="792" Boss="1" ID="919" Image="Entities/919.0.0 - Raglich.png" Name="Raglich" Variant="0" Subtype="0" />
+			<entity BaseHP="500" Boss="1" ID="921" Image="Entities/921.0.0 - Clutch.png" Name="Clutch" Variant="0" Subtype="0" />
+		</group>
+	</group>
+
+	<!--——— Unused ———-->
+	<group Name="Unused Enemies">
+		<entity BaseHP="18" Champion="1" ID="803" Image="Entities/803.0.0 - Blind Bat.png" Name="Blind Bat" Variant="0" Subtype="0" />
+		<entity BaseHP="16" Champion="1" ID="241" Image="Entities/241.1.0 - Split Rage Creep.png" PlaceVisual="WallSnap" Name="Split Rage Creep" Variant="1" Subtype="0"/>
+		<entity BaseHP="17" ID="240" Image="Entities/240.2.0 - Rag Creep.png" PlaceVisual="WallSnap" Name="Rag Creep" Variant="2" Subtype="0" />
+		<entity BaseHP="60" Champion="1" ID="858" Image="Entities/858.0.0 - Vessel.png" Name="Vessel" Variant="0" Subtype="0"/>
+		<entity BaseHP="6.5" ID="815" Image="Entities/815.0.0 - Fissure.png" Name="Fissure" Variant="0" Subtype="0" />
+	</group>
+
+	<group Name="Unused Fireplaces">
+		<entity BaseHP="5" ID="33" Image="Entities/33.10.0 - Moveable Fireplace.png" Name="Moveable Fireplace" Variant="10" Subtype="0" />
+		<entity BaseHP="5" ID="33" Image="Entities/33.12.0 - Moveable Blue Fireplace.png" Name="Moveable Blue Fireplace" Variant="12" Subtype="0" />
+		<entity BaseHP="5" ID="33" Image="Entities/33.13.0 - Moveable Purple Fireplace.png" Name="Moveable Purple Fireplace" Variant="13" Subtype="0" />
+	</group>
+
+	<group Name="Live Bombs">
+		<entity ID="4" Image="Entities/4.13.0 - Throwable Bomb.png" Name="Throwable Bomb" Variant="13" Subtype="0" />
+		<entity ID="4" Image="Entities/4.14.0 - Small Bomb.png" Name="Small Bomb" Variant="14" Subtype="0" />
+		<entity ID="4" Image="Entities/4.15.0 - Brimstone Bomb.png" Name="Brimstone Bomb" Variant="15" Subtype="0" />
+		<entity ID="4" Image="Entities/4.16.0 - Bloody Sad Bomb.png" Name="Bloody Sad Bomb" Variant="16" Subtype="0" />
+		<entity ID="4" Image="Entities/4.17.0 - Giga Bomb.png" Name="Giga Bomb" Variant="17" Subtype="0" />
+		<entity ID="4" Image="Entities/4.18.0 - Golden Troll Bomb.png" Name="Golden Troll Bomb (player)" Variant="18" Subtype="0" />
+		<entity ID="4" Image="Entities/4.19.0 - Rocket.png" Name="Rocket" Variant="19" Subtype="0" />
+		<entity ID="4" Image="Entities/4.20.0 - Giga Rocket.png" Name="Giga Rocket" Variant="20" Subtype="0" />
+	</group>
+</data>
