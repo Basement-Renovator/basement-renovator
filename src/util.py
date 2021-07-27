@@ -53,6 +53,7 @@ def checkFloat(s):
     except ValueError:
         return False
 
+
 def checkInt(s):
     if checkFloat(s):
         return int(s) == float(s)
