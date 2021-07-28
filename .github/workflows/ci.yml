@@ -36,7 +36,7 @@ jobs:
           args: ./src/*.py --check
 
       #- name: Run PyLint (TODO)
-      #  run: bash lint.sh
+      #  run: ./lint.sh
 
   discord:
     name: Discord Failure Notification
