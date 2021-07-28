@@ -15,7 +15,7 @@
 			<Entity ID="1000" Image="Backgrounds/rocks_secretroom.png" />
 		</Gfx>
 	</room>
-	<room Name="Super Secret Room" Type="7" Icon="UI/roomicons/supersecret.png" ShowInMenu="1"/>
+	<room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1"/>
 	<room Name="Arcade" Type="9" Icon="UI/roomicons/arcade.png" ShowInMenu="1">
 		<Gfx BGPrefix="Backgrounds/0e_arcade" />
 	</room>
