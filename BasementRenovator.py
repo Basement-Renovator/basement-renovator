@@ -5585,7 +5585,7 @@ class MainWindow(QMainWindow):
             # Because instapreview is xml, no special allowances have to be made for rebirth
             self.save([roomsToUse[0]], path, updateRecent=False, isPreview=True)
 
-            if version == "Rebirth":
+            if version in ["Rebirth", "Antibirth"]:
                 return (
                     [
                         "-room",
