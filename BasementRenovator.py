@@ -69,11 +69,7 @@ def getGameVersion():
     # default mode if not set
     mode = settings.value("CompatibilityMode", "Repentance")
 
-    if mode == "Antibirth":
-        # assumes rebirth only is present for anti
-        return "Rebirth", "Antibirth"
-
-    return mode, None
+    return mode
 
 
 STEAM_PATH = None
@@ -89,8 +85,8 @@ def getSteamPath():
 
 
 def findInstallPath():
-    version, subVer = getGameVersion()
-    if subVer == "Antibirth":
+    version = getGameVersion()
+    if version == "Antibirth" and settings.value("AntibirthPath"):
         return settings.value("AntibirthPath")
 
     installPath = ""
@@ -191,10 +187,10 @@ def findModsPath(installPath=None):
     if modsPath == "" or not os.path.isdir(modsPath):
         cantFindPath = True
 
-    version, subVer = getGameVersion()
+    version = getGameVersion()
 
     if version not in ["Afterbirth+", "Repentance"]:
-        printf(f"INFO: {subVer or version} does not support mod folders")
+        printf(f"INFO: {version} does not support mod folders")
         return ""
 
     if cantFindPath:
@@ -5365,7 +5361,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             if version not in ["Afterbirth+", "Repentance"]:
                 QMessageBox.warning(
                     self, "Error", f"Stage Replacement not supported for {version}!"
@@ -5436,7 +5432,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the starting room
     def testStartMap(self):
-        def setup(modPath, roomsPath, floorInfo, testRoom, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, testRoom, version):
             if len(testRoom) > 1:
                 QMessageBox.warning(
                     self,
@@ -5509,7 +5505,7 @@ class MainWindow(QMainWindow):
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
@@ -5634,7 +5630,7 @@ class MainWindow(QMainWindow):
 
         else:
             installPath = findInstallPath()
-            version, subVer = getGameVersion()
+            version = getGameVersion()
 
             if len(installPath) != 0:
                 resourcesPath = os.path.join(installPath, "resources")
@@ -5709,7 +5705,7 @@ class MainWindow(QMainWindow):
             return
 
         settings = QSettings("settings.ini", QSettings.IniFormat)
-        version, subVer = getGameVersion()
+        version = getGameVersion()
 
         # Floor type
         # TODO cache this when loading a file
@@ -5738,7 +5734,7 @@ class MainWindow(QMainWindow):
         try:
             # setup raises an exception if it can't continue
             launchArgs, roomsOverride, extraMessage = setupFunc(
-                modPath, roomPath, floorInfo, rooms, version, subVer
+                modPath, roomPath, floorInfo, rooms, version
             ) or ([], None, "")
         except Exception as e:
             printf(
@@ -5785,7 +5781,7 @@ class MainWindow(QMainWindow):
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
             # if there exists drm free copies, allow the direct exe launch method
             steamPath = None
-            if subVer is None and settings.value("ForceExeLaunch") != "1":
+            if version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
                 steamPath = getSteamPath() or ""
 
             if steamPath:
@@ -6036,7 +6032,7 @@ if __name__ == "__main__":
     applyDefaultSettings(settings, {"SnapToBounds": "1", "ExportSTBOnSave": "1"})
 
     # XML Globals
-    version, subVer = getGameVersion()
+    version = getGameVersion()
     xmlLookups = MainLookup(version)
     if settings.value("DisableMods") != "1":
         loadMods(
