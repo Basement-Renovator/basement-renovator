@@ -870,22 +870,31 @@ class EntityLookup(Lookup):
 
         overwrite = node.get("Overwrite") == "1"
 
-        entityConfig = self.lookupOne(entityType, variant, subtype)
-        if entityConfig:
-            if not overwrite:
+        if overwrite:
+            entityConfig = None
+            if name:
+                entityConfig = self.lookupOne(name=name)
+
+            if entityConfig is None:
+                entityConfig = self.lookupOne(entityType, variant, subtype)
+
+            if entityConfig:
+                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
+            else:
+                printf(
+                    f'Entity "{name}" from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
+                )
+        else:
+            entityConfig = self.lookupOne(entityType, variant, subtype)
+            if entityConfig:
                 printf(
                     f'Entity "{name}" from "{modName}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod}"!'
                 )
 
-            entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
-        else:
-            if overwrite:
-                printf(
-                    f'Entity "{name} from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
-                )
-
-            entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
-            self.addEntity(entityConfig)
+                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
+            else:
+                entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
+                self.addEntity(entityConfig)
 
         groups = []
         nodeKind = node.get("Kind")

@@ -1,5 +1,11 @@
 <data>
 	<!--——— Pickups ———-->
+	<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="37" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="38" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.44 - Rules Card.png" Name="Rules Card" Subtype="39" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.45 - A Card Against Humanity.png" Name="A Card Against Humanity" Subtype="40" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.46 - Suicide King.png" Name="Suicide King" Subtype="41" Variant="300" Overwrite="1"/>
+
 	<group Name="Hearts">
 		<entity ID="5" Image="Entities/5.10.7 - Gold Heart.png" Name="Gold Heart" Subtype="7" Variant="10"/>
 	</group>
@@ -39,7 +45,7 @@
 	</group>
 
 	<group Name="Runes">
-		<entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" Subtype="40" Variant="300" />
+		<entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" Subtype="36" Variant="300" />
 	</group>
 
 	<!--——— Global ———-->
