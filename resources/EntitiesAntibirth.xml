@@ -5,7 +5,15 @@
 	</group>
 
 	<group Name="Hearts">
+		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.10.9 - Immortal Heart.png" Name="Heart (immortal)" Subtype="9" Variant="10"/>
 		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/5.10.12 - Rotten Heart.png" Name="Heart (rotten)" Subtype="12" Variant="10"/>
+	</group>
+	
+	<group Name="Runes">
+		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Gebo" Subtype="60" Variant="300"/>
+		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Kenaz" Subtype="61" Variant="300"/>
+		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Fehu" Subtype="62" Variant="300"/>
+		<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Othala" Subtype="63" Variant="300"/>
 	</group>
 
 	<!--——— Global ———-->
@@ -473,8 +481,12 @@
 	<group Name="Unused">
 		<group Name="Unused Hearts" Label="Hearts">
 			<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.10.8 - Sun Heart.png" Name="Heart (sun)" Subtype="8" Variant="10"/>
-			<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.10.9 - Immortal Heart.png" Name="Heart (immortal)" Subtype="9" Variant="10"/>
 			<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.10.11 - Illusion Heart.png" Name="Heart (illusion)" Subtype="11" Variant="10"/>
+		</group>
+		
+		<group Name="Unused Runes" Label="Runes">
+			<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Ingwaz" Subtype="64" Variant="300"/>
+			<entity BaseHP="0" Boss="0" Champion="0" ID="5" Image="Entities/Antibirth/5.300.5 - Rune#3.png" Name="Sowilo" Subtype="65" Variant="300"/>
 		</group>
 	</group>
 
