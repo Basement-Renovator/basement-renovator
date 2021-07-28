@@ -7,7 +7,6 @@
 		<roomtypes Name="SecretRoomTypes" File="SecretRoomTypesOld.xml"/>
 	</version>
 
-	<!-- Not currently functional -->
 	<version Name="Antibirth">
 		<version Name="Rebirth"/>
 		<entities File="EntitiesAntibirth.xml"/>
