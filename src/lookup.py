@@ -655,6 +655,12 @@ class EntityLookup(Lookup):
                     )
                     break
 
+            warnings = self.getOutOfRangeWarnings()
+            if warnings != "":
+                printf(
+                    f"Entity {self.name} from {self.mod} is out of range:" + warnings
+                )
+
         def hasBitfieldKey(self, key):
             for bitfield in self.bitfields:
                 if bitfield.key == key:
@@ -671,12 +677,25 @@ class EntityLookup(Lookup):
 
         def getOutOfRangeWarnings(self):
             warnings = ""
-            if self.type >= 1000 and not self.isGridEnt:
-                warnings += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
-            if self.variant >= 4096 and not self.hasBitfieldKey("Variant"):
-                warnings += "\nVariant is outside the valid range of 0 - 4095!"
-            if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
-                warnings += "\nSubtype is outside the valid range of 0 - 255!"
+            if (self.type >= 1000 or self.type < 0) and not self.isGridEnt:
+                warnings += f"\nType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
+            if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
+                "Variant"
+            ):
+                warnings += (
+                    f"\nVariant {self.variant} is outside the valid range of 0 - 4095!"
+                )
+            if (
+                (self.subtype >= 256 or self.subtype < 0)
+                and (
+                    self.type != EntityType["PICKUP"]
+                    or self.variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
+                )
+                and not self.hasBitfieldKey("Subtype")
+            ):
+                warnings += (
+                    f"\nSubtype {self.subtype} is outside the valid range of 0 - 255!"
+                )
 
             return warnings
 
@@ -802,24 +821,6 @@ class EntityLookup(Lookup):
         entityType = int(entityType or -1)
         variant = int(variant or 0)
         subtype = int(subtype or 0)
-
-        if (entityType >= 1000 or entityType < 0) and node.get("IsGrid") != "1":
-            printf(
-                f'Entity "{name}" from "{modName}" has a type outside the 0 - 999 range! ({entityType}) It will not load properly from rooms!'
-            )
-
-        if variant >= 4096 or variant < 0:
-            printf(
-                f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
-            )
-
-        if (subtype >= 256 or subtype < 0) and (
-            entityType != EntityType["PICKUP"]
-            or variant not in self.PICKUPS_WITH_SPECIAL_SUBTYPES
-        ):
-            printf(
-                f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
-            )
 
         entityXML = None
 
