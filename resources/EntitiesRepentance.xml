@@ -436,10 +436,10 @@
 	<group Name="Chapter 2 (Alt Path) Obstacles">
 		<entity Name="Stone Grimace"/>
 		<group Name="Constant Stone Shooter"/>
-		<entity BaseHP="20" ID="804" Image="Entities/804.0.0 - Quake Grimace (left).png" Name="Quake Grimace (left)" Variant="0" Subtype="0" />
-		<entity BaseHP="20" ID="804" Image="Entities/804.0.1 - Quake Grimace (up).png" Name="Quake Grimace (up)" Variant="0" Subtype="1" />
-		<entity BaseHP="20" ID="804" Image="Entities/804.0.2 - Quake Grimace (right).png" Name="Quake Grimace (right)" Variant="0" Subtype="2" />
-		<entity BaseHP="20" ID="804" Image="Entities/804.0.3 - Quake Grimace (down).png" Name="Quake Grimace (down)" Variant="0" Subtype="3" />
+		<entity BaseHP="20" ID="804" Image="Entities/804.0.0 - Quake Grimace (left).png" Name="Quake Grimace (left)" Variant="0" Subtype="0" MirrorX="804.0.2" />
+		<entity BaseHP="20" ID="804" Image="Entities/804.0.1 - Quake Grimace (up).png" Name="Quake Grimace (up)" Variant="0" Subtype="1" MirrorY="804.0.3" />
+		<entity BaseHP="20" ID="804" Image="Entities/804.0.2 - Quake Grimace (right).png" Name="Quake Grimace (right)" Variant="0" Subtype="2" MirrorX="804.0.0" />
+		<entity BaseHP="20" ID="804" Image="Entities/804.0.3 - Quake Grimace (down).png" Name="Quake Grimace (down)" Variant="0" Subtype="3" MirrorY="804.0.1" />
 		<entity BaseHP="20" ID="809" Image="Entities/809.0.0 - Bomb Grimace.png" Name="Bomb Grimace" Variant="0" Subtype="0" />
 	</group>
 
