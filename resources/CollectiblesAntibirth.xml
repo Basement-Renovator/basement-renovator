@@ -24,7 +24,7 @@
     <entity ID="5" Image="Entities/Items/5.100.639 - Yuck Heart.png" Name="Yuck Heart" Subtype="1086" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.642 - Magic Skin.png" Name="Magic Skin" Subtype="1089" Variant="100" />
 	</group>
-	
+
 	<group Name="Familiar Items">
     <entity ID="5" Image="Entities/Items/5.100.581 - Psy Fly.png" Name="Psy Fly" Subtype="1028" Variant="100" />
     <entity ID="5" Image="Entities/Antibirth/Items/5.100.1034 - Menorah.png" Name="Menorah" Subtype="1034" Variant="100" />
@@ -39,7 +39,7 @@
     <entity ID="5" Image="Entities/Items/5.100.629 - Bot Fly.png" Name="Bot Fly" Subtype="1076" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.645 - Tinytoma.png" Name="Tinytoma" Subtype="1092" Variant="100" />
   </group>
-	
+
 	<group Name="Passive Items">
 		<entity ID="5" Image="Entities/Items/5.100.553 - Mucormycosis.png" Name="Mucormycosis" Subtype="1000" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.554 - 2Spooky.png" Name="2Spooky" Subtype="1001" Variant="100" />
@@ -94,16 +94,18 @@
     <entity ID="5" Image="Entities/Items/5.100.643 - Revelation.png" Name="Revelation" Subtype="1090" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.644 - Consolation Prize.png" Name="Consolation Prize" Subtype="1091" Variant="100" />
 	</group>
-	
-	<group Name="Active Items (unused)">
-		<entity ID="5" Image="Entities/Antibirth/Items/5.100.1060 - Salt Shaker.png" Name="Salt Shaker" Subtype="1060" Variant="100" />
-		<entity ID="5" Image="Entities/Antibirth/Items/5.100.1081 - Book of Illusions.png" Name="Book of Illusions" Subtype="1081" Variant="100" />
-		<entity ID="5" Image="Entities/Items/5.100.640 - Urn of Souls.png" Name="Urn of Souls" Subtype="1087" Variant="100" />
-	</group>
-	
-	<group Name="Passive Items (unused)">
-		<entity ID="5" Image="Entities/Items/5.100.594 - Jupiter.png" Name="Jupiter" Subtype="1041" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.597 - Neptunus.png" Name="Neptunus" Subtype="1044" Variant="100" />
-    <entity ID="5" Image="Entities/Antibirth/Items/5.100.1077 - Lucky Seven.png" Name="Lucky Seven" Subtype="1077" Variant="100" />
-	</group>
+
+  <group Name="Unused">
+    <group Name="Active Items (unused)" Label="Active Items">
+      <entity ID="5" Image="Entities/Antibirth/Items/5.100.1060 - Salt Shaker.png" Name="Salt Shaker" Subtype="1060" Variant="100" />
+      <entity ID="5" Image="Entities/Antibirth/Items/5.100.1081 - Book of Illusions.png" Name="Book of Illusions" Subtype="1081" Variant="100" />
+      <entity ID="5" Image="Entities/Items/5.100.640 - Urn of Souls.png" Name="Urn of Souls" Subtype="1087" Variant="100" />
+    </group>
+
+    <group Name="Passive Items (unused)" Label="Passive Items">
+      <entity ID="5" Image="Entities/Items/5.100.594 - Jupiter.png" Name="Jupiter" Subtype="1041" Variant="100" />
+      <entity ID="5" Image="Entities/Items/5.100.597 - Neptunus.png" Name="Neptunus" Subtype="1044" Variant="100" />
+      <entity ID="5" Image="Entities/Antibirth/Items/5.100.1077 - Lucky Seven.png" Name="Lucky Seven" Subtype="1077" Variant="100" />
+    </group>
+  </group>
 </data>

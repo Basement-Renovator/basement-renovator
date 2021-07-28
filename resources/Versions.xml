@@ -11,7 +11,7 @@
 	<version Name="Antibirth">
 		<version Name="Rebirth"/>
 		<entities File="EntitiesAntibirth.xml"/>
-		<!--<entities File="CollectiblesAntibirth.xml"/>-->
+		<entities File="CollectiblesAntibirth.xml"/>
 		<stages File="StagesAntibirth.xml"/>
 		<roomtypes File="RoomTypesAntibirth.xml"/>
 	</version>
