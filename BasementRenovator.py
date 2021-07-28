@@ -69,11 +69,7 @@ def getGameVersion():
     # default mode if not set
     mode = settings.value("CompatibilityMode", "Repentance")
 
-    if mode == "Antibirth":
-        # assumes rebirth only is present for anti
-        return "Rebirth", "Antibirth"
-
-    return mode, None
+    return mode
 
 
 STEAM_PATH = None
@@ -89,8 +85,8 @@ def getSteamPath():
 
 
 def findInstallPath():
-    version, subVer = getGameVersion()
-    if subVer == "Antibirth":
+    version = getGameVersion()
+    if version == "Antibirth" and settings.value("AntibirthPath"):
         return settings.value("AntibirthPath")
 
     installPath = ""
@@ -191,10 +187,10 @@ def findModsPath(installPath=None):
     if modsPath == "" or not os.path.isdir(modsPath):
         cantFindPath = True
 
-    version, subVer = getGameVersion()
+    version = getGameVersion()
 
     if version not in ["Afterbirth+", "Repentance"]:
-        printf(f"INFO: {subVer or version} does not support mod folders")
+        printf(f"INFO: {version} does not support mod folders")
         return ""
 
     if cantFindPath:
@@ -2782,11 +2778,15 @@ class RoomSelector(QWidget):
 
         global xmlLookups
         types = xmlLookups.roomTypes.lookup(showInMenu=True)
+        matchingTypes = xmlLookups.roomTypes.lookup(
+            room=self.selectedRoom(), showInMenu=True
+        )
 
         for i, t in enumerate(types):
             c.addItem(QIcon(t.get("Icon")), t.get("Name"))
+            if t in matchingTypes:
+                c.setCurrentIndex(i)
 
-        c.setCurrentIndex(self.selectedRoom().info.type)
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
         menu.addAction(Type)
@@ -3377,16 +3377,30 @@ class RoomSelector(QWidget):
 class EntityGroupItem(object):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name="", visible=True):
+    def __init__(self, group, startIndex=0):
 
         self.objects = []
-        self.startIndex = 0
-        self.endIndex = 0
+        self.config = group
 
-        self.name = name
-        self.visible = visible
-        if self.name == "":
-            self.visible = False
+        self.startIndex = startIndex
+
+        self.name = group.label or ""
+        self.entitycount = 0
+
+        global xmlLookups
+        endIndex = startIndex
+        for entry in group.entries:
+            endIndex += 1
+            if isinstance(entry, xmlLookups.entities.GroupConfig):
+                groupItem = EntityGroupItem(entry, endIndex)
+                endIndex = groupItem.endIndex
+                self.entitycount += groupItem.entitycount
+                self.objects.append(groupItem)
+            elif isinstance(entry, xmlLookups.entities.EntityConfig):
+                self.entitycount += 1
+                self.objects.append(EntityItem(entry))
+
+        self.endIndex = endIndex
 
         self.alignment = Qt.AlignCenter
 
@@ -3396,12 +3410,51 @@ class EntityGroupItem(object):
         if index == self.startIndex:
             return self
 
-        if index <= self.startIndex + len(self.objects):
-            return self.objects[index - self.startIndex - 1]
+        checkIndex = self.startIndex
+        for object in self.objects:
+            if isinstance(object, EntityGroupItem):
+                if index >= object.startIndex and index <= object.endIndex:
+                    return object.getItem(index)
+                else:
+                    checkIndex = object.endIndex
+            else:
+                checkIndex += 1
+                if checkIndex == index:
+                    return object
 
-    def calculateIndices(self, index):
-        self.startIndex = index
-        self.endIndex = len(self.objects) + index
+    def filterView(self, view, shownEntities=None):
+        hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
+
+        if shownEntities is None:
+            shownEntities = {}
+
+        hasAnyVisible = False
+
+        row = self.startIndex
+        for item in self.objects:
+            if isinstance(item, EntityItem):
+                row += 1
+                hidden = False
+                if view.filter.lower() not in item.name.lower():
+                    hidden = True
+                elif hideDuplicateEntities and item.config.uniqueid in shownEntities:
+                    hidden = True
+
+                view.setRowHidden(row, hidden)
+                if not hidden:
+                    shownEntities[item.config.uniqueid] = True
+                    hasAnyVisible = True
+            elif isinstance(item, EntityGroupItem):
+                row = item.endIndex + 1
+                visible = item.filterView(view, shownEntities)
+                hasAnyVisible = hasAnyVisible or visible
+
+        if not hasAnyVisible or self.name == "":
+            view.setRowHidden(self.startIndex, True)
+        else:
+            view.setRowHidden(self.startIndex, False)
+
+        return hasAnyVisible
 
 
 class EntityItem(QStandardItem):
@@ -3423,72 +3476,18 @@ class EntityItem(QStandardItem):
 class EntityGroupModel(QAbstractListModel):
     """Model containing all the grouped objects in a tileset"""
 
-    def __init__(self, kind=None, entityList=None):
+    def __init__(self, group=None):
         QAbstractListModel.__init__(self)
 
-        self.groups = []
-        self.kind = kind
         self.view = None
-        self.entitycount = 0
 
-        entitiesCounted = {}
+        if group is None:
+            group = xmlLookups.entities.entityList
 
-        entries = entityList
-
-        global xmlLookups
-        if kind is not None:
-            entries = xmlLookups.entities.lookupGroup(kind)
-        elif entityList is None:
-            entries = xmlLookups.entities.lookup()
-
-        i = 0
-        populatingGroup = None
-
-        for entry in entries:
-            if isinstance(entry, xmlLookups.entities.GroupConfig):
-                if populatingGroup:
-                    populatingGroup.calculateIndices(i)
-                    i = populatingGroup.endIndex + 1
-
-                populatingGroup = EntityGroupItem(entry.label, entry.containsEntity())
-                self.groups.append(populatingGroup)
-            elif isinstance(entry, xmlLookups.entities.EntityConfig):
-                if entry not in entitiesCounted:
-                    entitiesCounted[entry] = True
-                    self.entitycount += 1
-
-                if populatingGroup is None:
-                    populatingGroup = EntityGroupItem()
-                    self.groups.append(populatingGroup)
-
-                imgPath = Path()
-                try:
-                    if entry.imagePath:
-                        imgPath = Path(entry.imagePath)
-                except:
-                    traceback.print_exception(*sys.exc_info())
-                    imgPath = Path()
-
-                if not imgPath.exists():
-                    printf(
-                        f"Could not find Entity {entry.name} ({entry.type}.{entry.variant}.{entry.subtype})'s palette icon:",
-                        imgPath,
-                    )
-                    entry.imagePath = "resources/Entities/questionmark.png"
-
-                entityItem = EntityItem(entry)
-                populatingGroup.objects.append(entityItem)
-
-        if populatingGroup:
-            populatingGroup.calculateIndices(i)
+        self.group = EntityGroupItem(group)
 
     def rowCount(self, parent=None):
-        c = 0
-
-        for group in self.groups:
-            c += len(group.objects) + 1
-
-        return c
+        return self.group.endIndex + 1
 
     def flags(self, index):
         item = self.getItem(index.row())
@@ -3499,9 +3498,7 @@ class EntityGroupModel(QAbstractListModel):
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def getItem(self, index):
-        for group in self.groups:
-            if (index >= group.startIndex) and (index <= group.endIndex):
-                return group.getItem(index)
+        return self.group.getItem(index)
 
     def data(self, index, role=Qt.DisplayRole):
         # Should return the contents of a row when asked for the index
@@ -3613,12 +3610,12 @@ class EntityPalette(QWidget):
 
     def populateTabs(self):
 
-        for tabGroup in xmlLookups.entities.tabGroups:
-            model = EntityGroupModel(tabGroup.name)
-            if model.entitycount != 0:
+        for tab in xmlLookups.entities.tabs:
+            model = EntityGroupModel(tab)
+            if model.group.entitycount != 0:
                 listView = EntityList()
                 printf(
-                    f'Populating palette tab "{tabGroup.name}" with {model.entitycount} entities'
+                    f'Populating palette tab "{tab.name}" with {model.group.entitycount} entities'
                 )
 
                 listView.setModel(model)
@@ -3627,14 +3624,12 @@ class EntityPalette(QWidget):
 
                 listView.clicked.connect(self.objSelected)
 
-                if tabGroup.iconSize:
-                    listView.setIconSize(
-                        QSize(tabGroup.iconSize[0], tabGroup.iconSize[1])
-                    )
+                if tab.iconSize:
+                    listView.setIconSize(QSize(tab.iconSize[0], tab.iconSize[1]))
 
-                self.tabs.addTab(listView, tabGroup.name)
+                self.tabs.addTab(listView, tab.name)
             else:
-                printf(f"Skipping empty palette tab {tabGroup.name}")
+                printf(f"Skipping empty palette tab {tab.name}")
 
     def currentSelectedObject(self):
         """Returns the currently selected object reference, for painting purposes."""
@@ -3715,42 +3710,7 @@ class EntityList(QListView):
         m = self.model()
         rows = m.rowCount()
 
-        hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
-        shownEntities = {}
-
-        # First loop for entity items
-        for row in range(rows):
-            item = m.getItem(row)
-
-            if isinstance(item, EntityItem):
-                hidden = False
-                if self.filter.lower() not in item.name.lower():
-                    hidden = True
-
-                if hideDuplicateEntities and item.config.uniqueid in shownEntities:
-                    hidden = True
-
-                self.setRowHidden(row, hidden)
-                if not hidden:
-                    shownEntities[item.config.uniqueid] = True
-
-        # Second loop for Group titles, check to see if all contents are hidden or not
-        for row in range(rows):
-            item = m.getItem(row)
-
-            if isinstance(item, EntityGroupItem):
-                self.setRowHidden(row, True)
-
-                if not item.visible:
-                    continue
-
-                if len(item.objects) == 0:
-                    self.setRowHidden(row, False)
-                    continue
-
-                for i in range(item.startIndex, item.endIndex + 1):
-                    if not self.isRowHidden(i):
-                        self.setRowHidden(row, False)
+        m.group.filterView(self)
 
 
 class ReplaceDialog(QDialog):
@@ -5403,7 +5363,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             if version not in ["Afterbirth+", "Repentance"]:
                 QMessageBox.warning(
                     self, "Error", f"Stage Replacement not supported for {version}!"
@@ -5474,7 +5434,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the starting room
     def testStartMap(self):
-        def setup(modPath, roomsPath, floorInfo, testRoom, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, testRoom, version):
             if len(testRoom) > 1:
                 QMessageBox.warning(
                     self,
@@ -5547,7 +5507,7 @@ class MainWindow(QMainWindow):
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
@@ -5672,7 +5632,7 @@ class MainWindow(QMainWindow):
 
         else:
             installPath = findInstallPath()
-            version, subVer = getGameVersion()
+            version = getGameVersion()
 
             if len(installPath) != 0:
                 resourcesPath = os.path.join(installPath, "resources")
@@ -5747,7 +5707,7 @@ class MainWindow(QMainWindow):
             return
 
         settings = QSettings("settings.ini", QSettings.IniFormat)
-        version, subVer = getGameVersion()
+        version = getGameVersion()
 
         # Floor type
         # TODO cache this when loading a file
@@ -5776,7 +5736,7 @@ class MainWindow(QMainWindow):
         try:
             # setup raises an exception if it can't continue
             launchArgs, roomsOverride, extraMessage = setupFunc(
-                modPath, roomPath, floorInfo, rooms, version, subVer
+                modPath, roomPath, floorInfo, rooms, version
             ) or ([], None, "")
         except Exception as e:
             printf(
@@ -5823,7 +5783,7 @@ class MainWindow(QMainWindow):
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
             # if there exists drm free copies, allow the direct exe launch method
             steamPath = None
-            if subVer is None and settings.value("ForceExeLaunch") != "1":
+            if version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
                 steamPath = getSteamPath() or ""
 
             if steamPath:
@@ -6074,7 +6034,7 @@ if __name__ == "__main__":
     applyDefaultSettings(settings, {"SnapToBounds": "1", "ExportSTBOnSave": "1"})
 
     # XML Globals
-    version, subVer = getGameVersion()
+    version = getGameVersion()
     xmlLookups = MainLookup(version)
     if settings.value("DisableMods") != "1":
         loadMods(

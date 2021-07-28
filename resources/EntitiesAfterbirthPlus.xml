@@ -1,5 +1,23 @@
 <data>
 	<!--——— Pickups ———-->
+	<entity ID="5" Image="Entities/5.300.31 - Joker.png" Name="Joker" Subtype="31" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="42" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="43" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.44 - Rules Card.png" Name="Rules Card" Subtype="44" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.45 - A Card Against Humanity.png" Name="A Card Against Humanity" Subtype="45" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.46 - Suicide King.png" Name="Suicide King" Subtype="46" Variant="300" Overwrite="1"/>
+
+	<entity ID="5" Image="Entities/5.300.32 - Hagalaz.png" Name="Hagalaz" Subtype="32" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.33 - Jera.png" Name="Jera" Subtype="33" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.34 - Ehwaz.png" Name="Ehwaz" Subtype="34" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.35 - Dagaz.png" Name="Dagaz" Subtype="35" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.36 - Ansuz.png" Name="Ansuz" Subtype="36" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.37 - Perthro.png" Name="Perthro" Subtype="37" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.38 - Berkano.png" Name="Berkano" Subtype="38" Variant="300" Overwrite="1"/>
+	<entity ID="5" Image="Entities/5.300.39 - Algiz.png" Name="Algiz" Subtype="39" Variant="300" Overwrite="1"/>
+
+	<entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" Subtype="40" Variant="300" Overwrite="1"/>
+
 	<group Name="Red Hearts">
 		<entity ID="5" Image="Entities/5.10.9 - Scared Heart.png" Name="Scared Heart" Subtype="9" Variant="10"/>
 	</group>
@@ -183,12 +201,8 @@
 		<entity BaseHP="800" Boss="1" ID="410" Image="Entities/265.1.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
 	</group>
 
-	<group Name="Womb Bosses">
-		<entity BaseHP="700" Boss="1" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
-	</group>
-
 	<group Name="Scarred Womb Bosses">
-		<entity Name="The Matriarch"/>
+		<entity BaseHP="700" Boss="1" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Story Bosses">

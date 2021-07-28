@@ -570,29 +570,40 @@ class EntityLookup(Lookup):
             if entity is not None:
                 self.fillFromXML(entity, resourcePath, modName, entities2Node)
 
+        def validateImagePath(self, imagePath, resourcePath, default=None):
+            if imagePath is None:
+                return default
+
+            imagePath = linuxPathSensitivityTraining(
+                os.path.join(resourcePath, imagePath)
+            )
+
+            if not os.path.exists(imagePath):
+                printf(
+                    f"Failed loading image for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}):",
+                    imagePath,
+                )
+                return default
+
+            return imagePath
+
         def fillFromXML(
             self, entity: ET.Element, resourcePath, modName, entities2Node=None
         ):
-            imgPath = entity.get("Image") and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("Image"))
-            )
-            editorImgPath = entity.get("EditorImage") and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("EditorImage"))
-            )
-            overlayImgPath = entity.get(
-                "OverlayImage"
-            ) and linuxPathSensitivityTraining(
-                os.path.join(resourcePath, entity.get("OverlayImage"))
-            )
-
             self.name = entity.get("Name")
             self.mod = modName
             self.type = int(entity.get("ID", "-1"))
             self.variant = int(entity.get("Variant", "0"))
             self.subtype = int(entity.get("Subtype", "0"))
-            self.imagePath = imgPath
-            self.editorImagePath = editorImgPath
-            self.overlayImagePath = overlayImgPath
+            self.imagePath = self.validateImagePath(
+                entity.get("Image"), resourcePath, "resources/Entities/questionmark.png"
+            )
+            self.editorImagePath = self.validateImagePath(
+                entity.get("EditorImage"), resourcePath
+            )
+            self.overlayImagePath = self.validateImagePath(
+                entity.get("OverlayImage"), resourcePath
+            )
             self.isGridEnt = entity.get("IsGrid") == "1"
             self.baseHP = (
                 entities2Node.get("baseHP") if entities2Node else entity.get("BaseHP")
@@ -644,6 +655,12 @@ class EntityLookup(Lookup):
                     )
                     break
 
+            warnings = self.getOutOfRangeWarnings()
+            if warnings != "":
+                printf(
+                    f"Entity {self.name} from {self.mod} is out of range:" + warnings
+                )
+
         def hasBitfieldKey(self, key):
             for bitfield in self.bitfields:
                 if bitfield.key == key:
@@ -660,12 +677,25 @@ class EntityLookup(Lookup):
 
         def getOutOfRangeWarnings(self):
             warnings = ""
-            if self.type >= 1000 and not self.isGridEnt:
-                warnings += "\nType is outside the valid range of 0 - 999! This will not load properly in-game!"
-            if self.variant >= 4096 and not self.hasBitfieldKey("Variant"):
-                warnings += "\nVariant is outside the valid range of 0 - 4095!"
-            if self.subtype >= 255 and not self.hasBitfieldKey("Subtype"):
-                warnings += "\nSubtype is outside the valid range of 0 - 255!"
+            if (self.type >= 1000 or self.type < 0) and not self.isGridEnt:
+                warnings += f"\nType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
+            if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
+                "Variant"
+            ):
+                warnings += (
+                    f"\nVariant {self.variant} is outside the valid range of 0 - 4095!"
+                )
+            if (
+                (self.subtype >= 256 or self.subtype < 0)
+                and (
+                    self.type != EntityType["PICKUP"]
+                    or self.variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
+                )
+                and not self.hasBitfieldKey("Subtype")
+            ):
+                warnings += (
+                    f"\nSubtype {self.subtype} is outside the valid range of 0 - 255!"
+                )
 
             return warnings
 
@@ -701,14 +731,28 @@ class EntityLookup(Lookup):
             return True
 
     class GroupConfig:
-        def __init__(self, node=None, name=None, label=None, isTab=False):
-            self.iconSize = None
-            self.hasEntity = False
+        def __init__(self, node=None, name=None, label=None):
             if node is not None:
                 self.label = node.get("Label")
                 self.name = node.get("Name", self.label)
-                self.isTab = node.get("IsTab") == "1"
+            else:
+                self.name = name
+                self.label = label
 
+            self.entries = []
+            self.groupentries = []
+
+        def addEntry(self, entry):
+            self.entries.append(entry)
+            if isinstance(entry, EntityLookup.GroupConfig):
+                self.groupentries.append(entry)
+
+    class TabConfig(GroupConfig):
+        def __init__(self, node=None, name=None):
+            super().__init__(node, name)
+
+            self.iconSize = None
+            if node is not None:
                 iconSize = node.get("IconSize")
                 if iconSize:
                     parts = list(map(lambda x: x.strip(), iconSize.split(",")))
@@ -718,55 +762,22 @@ class EntityLookup(Lookup):
                         printf(
                             f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
                         )
-            else:
-                self.name = name
-                self.label = label
-                self.isTab = isTab
-
-            self.entries = []
-            self.groupentries = []
-
-        def addEntry(self, entry):
-            self.entries.append(entry)
-            if isinstance(entry, EntityLookup.GroupConfig):
-                self.groupentries.append(entry)
-            elif isinstance(entry, EntityLookup.EntityConfig):
-                self.hasEntity = True
-
-        def getAllEntries(self):
-            entries = []
-            for entry in self.entries:
-                entries.append(entry)
-                if isinstance(entry, EntityLookup.GroupConfig):
-                    entries.extend(entry.getAllEntries())
-
-            return entries
-
-        def containsEntity(self):
-            if self.hasEntity:
-                return True
-
-            for group in self.groupentries:
-                if group.containsEntity():
-                    return True
-
-            return False
 
     def __init__(self, version, parent):
-        self.entityList = []
+        self.entityList = self.GroupConfig()
         self.groups = {}
-        self.tabGroups = []
+        self.tabs = []
         self.lastuniqueid = 0
         super().__init__("Entities", version)
         self.parent = parent
 
     def count(self):
-        return len(self.entityList)
+        return len(self.entityList.entries)
 
     def addEntity(self, entity: EntityConfig):
         self.lastuniqueid += 1
         entity.uniqueid = self.lastuniqueid
-        self.entityList.append(entity)
+        self.entityList.addEntry(entity)
 
     ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
 
@@ -810,24 +821,6 @@ class EntityLookup(Lookup):
         entityType = int(entityType or -1)
         variant = int(variant or 0)
         subtype = int(subtype or 0)
-
-        if (entityType >= 1000 or entityType < 0) and node.get("IsGrid") != "1":
-            printf(
-                f'Entity "{name}" from "{modName}" has a type outside the 0 - 999 range! ({entityType}) It will not load properly from rooms!'
-            )
-
-        if variant >= 4096 or variant < 0:
-            printf(
-                f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
-            )
-
-        if (subtype >= 256 or subtype < 0) and (
-            entityType != EntityType["PICKUP"]
-            or variant not in self.PICKUPS_WITH_SPECIAL_SUBTYPES
-        ):
-            printf(
-                f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
-            )
 
         entityXML = None
 
@@ -878,22 +871,31 @@ class EntityLookup(Lookup):
 
         overwrite = node.get("Overwrite") == "1"
 
-        entityConfig = self.lookupOne(entityType, variant, subtype)
-        if entityConfig:
-            if not overwrite:
+        if overwrite:
+            entityConfig = None
+            if name:
+                entityConfig = self.lookupOne(name=name)
+
+            if entityConfig is None:
+                entityConfig = self.lookupOne(entityType, variant, subtype)
+
+            if entityConfig:
+                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
+            else:
+                printf(
+                    f'Entity "{name}" from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
+                )
+        else:
+            entityConfig = self.lookupOne(entityType, variant, subtype)
+            if entityConfig:
                 printf(
                     f'Entity "{name}" from "{modName}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod}"!'
                 )
 
-            entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
-        else:
-            if overwrite:
-                printf(
-                    f'Entity "{name} from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
-                )
-
-            entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
-            self.addEntity(entityConfig)
+                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
+            else:
+                entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
+                self.addEntity(entityConfig)
 
         groups = []
         nodeKind = node.get("Kind")
@@ -908,30 +910,23 @@ class EntityLookup(Lookup):
 
         for kind, group in groups:
             groupName = f"({kind}) {group}"
-            tabGroupConfig = None
-            for tabGroup in self.tabGroups:
-                if tabGroup.isTab and tabGroup.name == kind:
-                    tabGroupConfig = tabGroup
-                    break
-
-            if tabGroupConfig is None:
-                tabGroupConfig = self.getGroup(name=kind, isTab=True)
+            tab = self.getTab(name=kind)
 
             groupConfig = None
-            for entry in tabGroupConfig.entries:
+            for entry in tab.entries:
                 if isinstance(entry, self.GroupConfig) and entry.name == groupName:
                     groupConfig = entry
                     break
 
             if groupConfig is None:
                 groupConfig = self.getGroup(name=groupName, label=group)
-                tabGroupConfig.addEntry(groupConfig)
+                tab.addEntry(groupConfig)
 
             groupConfig.addEntry(entityConfig)
 
         return entityConfig
 
-    def getGroup(self, node=None, name=None, label=None, isTab=False):
+    def getGroup(self, node=None, name=None, label=None):
         if name is None:
             name = node.get("Name", node.get("Label"))
             if name is None:
@@ -939,10 +934,22 @@ class EntityLookup(Lookup):
                 return None
 
         if name not in self.groups:
-            group = self.GroupConfig(node=node, name=name, label=label, isTab=isTab)
+            group = self.GroupConfig(node=node, name=name, label=label)
             self.groups[name] = group
-            if group.isTab:
-                self.tabGroups.append(group)
+
+        return self.groups[name]
+
+    def getTab(self, node=None, name=None):
+        if name is None:
+            name = node.get("Name")
+            if name is None:
+                printf(f"Attempted to get tab with no Name {node.attrib}")
+                return None
+
+        if name not in self.groups:
+            tab = self.TabConfig(node, name)
+            self.groups[tab.name] = tab
+            self.tabs.append(tab)
 
         return self.groups[name]
 
@@ -953,7 +960,12 @@ class EntityLookup(Lookup):
         modName="Basement Renovator",
         entities2Root=None,
     ):
-        group = self.getGroup(node)
+        group = None
+        if node.tag == "tab":
+            group = self.getTab(node)
+        else:
+            group = self.getGroup(node)
+
         if group:
             for subNode in node:
                 entry = None
@@ -969,9 +981,7 @@ class EntityLookup(Lookup):
                 if entry:
                     group.addEntry(entry)
 
-            return group
-
-        return None
+        return group
 
     def loadXML(
         self,
@@ -984,7 +994,7 @@ class EntityLookup(Lookup):
             return
 
         for subNode in root:
-            if subNode.tag == "group":
+            if subNode.tag == "group" or subNode.tag == "tab":
                 self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
             elif subNode.tag == "entity":
                 self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
@@ -1031,12 +1041,6 @@ class EntityLookup(Lookup):
             f"Successfully loaded {self.count() - previous} new Entities from {modName}"
         )
 
-    def lookupGroup(self, name):
-        if name in self.groups:
-            return self.groups[name].getAllEntries()
-        else:
-            return []
-
     def lookup(
         self,
         entitytype=None,
@@ -1045,7 +1049,7 @@ class EntityLookup(Lookup):
         inEmptyRooms=None,
         name=None,
     ):
-        entities = self.entityList
+        entities = self.entityList.entries
 
         entities = list(
             filter(
@@ -1105,7 +1109,7 @@ class MainLookup:
                         self.invalid = True
                     else:
                         self.toload.append(versions[name])
-                elif dataNode.tag in ("entities", "stages", "roomtypes"):\
+                elif dataNode.tag in ("entities", "stages", "roomtypes"):
                     self.toload.append(
                         self.DataFile(
                             dataNode.tag, dataNode.get("File"), dataNode.get("Name")

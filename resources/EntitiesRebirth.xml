@@ -1,11 +1,11 @@
 <data>
 	<!--——— Tabs ———-->
-	<group Name="Pickups" IsTab="1"/>
-	<group Name="Global" IsTab="1"/>
-	<group Name="Floors" IsTab="1"/>
-	<group Name="Bosses" IsTab="1" IconSize="52, 52"/>
-	<group Name="Collect" IsTab="1" IconSize="32, 64"/>
-	<group Name="Unused" IsTab="1"/>
+	<tab Name="Pickups"/>
+	<tab Name="Global"/>
+	<tab Name="Floors"/>
+	<tab Name="Bosses" IconSize="52, 52"/>
+	<tab Name="Collect" IconSize="32, 64"/>
+	<tab Name="Unused"/>
 
 	<!--——— Pickups ———-->
 	<group Name="Pickups">
@@ -117,23 +117,23 @@
 				<entity ID="5" Image="Entities/5.300.25 - 2 of Spades.png"  Name="2 of Spades" Subtype="25" Variant="300" />
 				<entity ID="5" Image="Entities/5.300.26 - 2 of Hearts.png" Name="2 of Hearts" Subtype="26" Variant="300" />
 			</group>
-			<entity ID="5" Image="Entities/5.300.31 - Joker.png" Name="Joker" Subtype="31" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="42" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="43" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.44 - Rules Card.png" Name="Rules Card" Subtype="44" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.45 - A Card Against Humanity.png" Name="A Card Against Humanity" Subtype="45" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.46 - Suicide King.png" Name="Suicide King" Subtype="46" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.31 - Joker.png" Name="Joker" Subtype="27" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="36" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="37" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.44 - Rules Card.png" Name="Rules Card" Subtype="38" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.45 - A Card Against Humanity.png" Name="A Card Against Humanity" Subtype="39" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.46 - Suicide King.png" Name="Suicide King" Subtype="40" Variant="300" />
 		</group>
 		<group Label="Runes">
 			<entity Name="Random Rune"/>
-			<entity ID="5" Image="Entities/5.300.32 - Hagalaz.png" Name="Hagalaz" Subtype="32" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.33 - Jera.png" Name="Jera" Subtype="33" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.34 - Ehwaz.png" Name="Ehwaz" Subtype="34" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.35 - Dagaz.png" Name="Dagaz" Subtype="35" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.36 - Ansuz.png" Name="Ansuz" Subtype="36" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.37 - Perthro.png" Name="Perthro" Subtype="37" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.38 - Berkano.png" Name="Berkano" Subtype="38" Variant="300" />
-			<entity ID="5" Image="Entities/5.300.39 - Algiz.png" Name="Algiz" Subtype="39" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.32 - Hagalaz.png" Name="Hagalaz" Subtype="28" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.33 - Jera.png" Name="Jera" Subtype="29" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.34 - Ehwaz.png" Name="Ehwaz" Subtype="30" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.35 - Dagaz.png" Name="Dagaz" Subtype="31" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.36 - Ansuz.png" Name="Ansuz" Subtype="32" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.37 - Perthro.png" Name="Perthro" Subtype="33" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.38 - Berkano.png" Name="Berkano" Subtype="34" Variant="300" />
+			<entity ID="5" Image="Entities/5.300.39 - Algiz.png" Name="Algiz" Subtype="35" Variant="300" />
 		</group>
 	</group>
 
