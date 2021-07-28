@@ -53,6 +53,7 @@
 
   <group Name="Familiar Items">
     <entity ID="5" Image="Entities/Items/5.100.565 - Blood Puppy.png" Name="Blood Puppy" Subtype="565" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.581 - Psy Fly.png" Name="Psy Fly" Subtype="581" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.607 - Boiled Baby.png" Name="Boiled Baby" Subtype="607" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.608 - Freezer Baby.png" Name="Freezer Baby" Subtype="608" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.610 - Bird Cage.png" Name="Bird Cage" Subtype="610" Variant="100" />
@@ -60,7 +61,7 @@
     <entity ID="5" Image="Entities/Items/5.100.615 - Lil Dumpy.png" Name="Lil Dumpy" Subtype="615" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.626 - Knife Piece 1.png" Name="Knife Piece 1" Subtype="626" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.627 - Knife Piece 2.png" Name="Knife Piece 2" Subtype="627" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.629 - Bot FLy.png" Name="Bot FLy" Subtype="629" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.629 - Bot Fly.png" Name="Bot Fly" Subtype="629" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.645 - Tinytoma.png" Name="Tinytoma" Subtype="645" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.649 - Fruity Plum.png" Name="Fruity Plum" Subtype="649" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.651 - Star of Bethlehem.png" Name="Star of Bethlehem" Subtype="651" Variant="100" />
@@ -95,7 +96,6 @@
     <entity ID="5" Image="Entities/Items/5.100.575 - The Intruder.png" Name="The Intruder" Subtype="575" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.576 - Dirty Mind.png" Name="Dirty Mind" Subtype="576" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.579 - Spirit Sword.png" Name="Spirit Sword" Subtype="579" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.581 - Psy Fly.png" Name="Psy Fly" Subtype="581" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.583 - Rocket in a Jar.png" Name="Rocket in a Jar" Subtype="583" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.584 - Book of Virtues.png" Name="Book of Virtues" Subtype="584" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.586 - The Stairway.png" Name="The Stairway" Subtype="586" Variant="100" />
