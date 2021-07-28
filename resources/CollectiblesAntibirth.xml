@@ -94,6 +94,27 @@
     <entity ID="5" Image="Entities/Items/5.100.643 - Revelation.png" Name="Revelation" Subtype="1090" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.644 - Consolation Prize.png" Name="Consolation Prize" Subtype="1091" Variant="100" />
 	</group>
+	
+	<group Name="Trinkets">
+		<entity ID="5" Image="Entities/Trinkets/5.350.129 - Jawbreaker.png" Name="Jawbreaker" Subtype="1000" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.130 - Chewed Pen.png" Name="Chewed Pen" Subtype="1001" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.131 - Blessed Penny.png" Name="Blessed Penny" Subtype="1002" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.132 - Broken Syringe.png" Name="Broken Syringe" Subtype="1003" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.133 - Short Fuse.png" Name="Exploded Firecracker" Subtype="1004" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.134 - Gigante Bean.png" Name="Giant Bean" Subtype="1005" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.135 - A Lighter.png" Name="A Lighter" Subtype="1006" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.136 - Broken Padlock.png" Name="Broken Padlock" Subtype="1007" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.137 - Myosotis.png" Name="Myosotis" Subtype="1008" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.138 - 'M.png" Name="'M" Subtype="1009" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.139 - Teardrop Charm.png" Name="Teardrop Charm" Subtype="1010" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.141 - Forgotten Lullaby.png" Name="Song of the Siren" Subtype="1012" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.142 - Beths Faith.png" Name="Beth's Faith" Subtype="1013" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.143 - Old Capacitor.png" Name="Old Capacitor" Subtype="1014" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.144 - Brain Worm.png" Name="Brain Worm" Subtype="1015" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.145 - Perfection.png" Name="Perfection" Subtype="1016" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.146 - Devils Crown.png" Name="Devil's Crown" Subtype="1017" Variant="350" />
+    <entity ID="5" Image="Entities/Antibirth/Trinkets/5.350.1018 - Electric Penny.png" Name="Electric Penny" Subtype="1018" Variant="350" />
+	</group>
 
   <group Name="Unused">
     <group Name="Active Items (unused)" Label="Active Items">
@@ -107,5 +128,9 @@
       <entity ID="5" Image="Entities/Items/5.100.597 - Neptunus.png" Name="Neptunus" Subtype="1044" Variant="100" />
       <entity ID="5" Image="Entities/Antibirth/Items/5.100.1077 - Lucky Seven.png" Name="Lucky Seven" Subtype="1077" Variant="100" />
     </group>
+		
+		<group Name="Trinkets (unused)" Label="Trinkets">
+			<entity ID="5" Image="Entities/Trinkets/5.350.140 - Apple of Sodom.png" Name="Apple of Sodom" Subtype="1011" Variant="350" />
+		</group>
   </group>
 </data>
