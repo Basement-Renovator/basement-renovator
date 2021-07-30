@@ -3374,10 +3374,11 @@ class RoomSelector(QWidget):
 ########################
 
 
-class EntityGroupItem(object):
+class EntityGroupItem(QStandardItem):
     """Group Item to contain Entities for sorting"""
 
     def __init__(self, group, startIndex=0):
+        QStandardItem.__init__(self)
 
         self.objects = []
         self.config = group
@@ -3404,6 +3405,8 @@ class EntityGroupItem(object):
 
         self.alignment = Qt.AlignCenter
 
+        self.collapsed = False
+
     def getItem(self, index):
         """Retrieves an item of a specific index. The index is already checked for validity"""
 
@@ -3422,13 +3425,15 @@ class EntityGroupItem(object):
                 if checkIndex == index:
                     return object
 
-    def filterView(self, view, shownEntities=None):
+    def filterView(self, view, shownEntities=None, parentCollapsed=False):
         hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
 
         if shownEntities is None:
             shownEntities = {}
 
         hasAnyVisible = False
+
+        collapsed = self.collapsed or parentCollapsed
 
         row = self.startIndex
         for item in self.objects:
@@ -3440,16 +3445,16 @@ class EntityGroupItem(object):
                 elif hideDuplicateEntities and item.config.uniqueid in shownEntities:
                     hidden = True
 
-                view.setRowHidden(row, hidden)
+                view.setRowHidden(row, collapsed or hidden)
                 if not hidden:
                     shownEntities[item.config.uniqueid] = True
                     hasAnyVisible = True
             elif isinstance(item, EntityGroupItem):
-                row = item.endIndex + 1
-                visible = item.filterView(view, shownEntities)
+                row = item.endIndex
+                visible = item.filterView(view, shownEntities, collapsed)
                 hasAnyVisible = hasAnyVisible or visible
 
-        if not hasAnyVisible or self.name == "":
+        if not hasAnyVisible or self.name == "" or parentCollapsed:
             view.setRowHidden(self.startIndex, True)
         else:
             view.setRowHidden(self.startIndex, False)
@@ -3493,7 +3498,7 @@ class EntityGroupModel(QAbstractListModel):
         item = self.getItem(index.row())
 
         if isinstance(item, EntityGroupItem):
-            return Qt.NoItemFlags
+            return Qt.ItemIsEnabled
         else:
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
@@ -3540,7 +3545,7 @@ class EntityGroupModel(QAbstractListModel):
 
         elif role == Qt.DisplayRole:
             if isinstance(item, EntityGroupItem):
-                return item.name
+                return item.name + (" >" if item.collapsed else "")
 
         elif role == Qt.SizeHintRole:
             if isinstance(item, EntityGroupItem):
@@ -3649,6 +3654,11 @@ class EntityPalette(QWidget):
 
         current = self.currentSelectedObject()
         if current is None:
+            return
+
+        if isinstance(current, EntityGroupItem):
+            current.collapsed = not current.collapsed
+            self.tabs.currentWidget().filterList()
             return
 
         # holding ctrl skips the filter change step
