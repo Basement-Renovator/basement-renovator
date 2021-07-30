@@ -520,6 +520,7 @@
 	</group>
 
 	<group Name="Mines Enemies">
+		<entity Name="Crispy"/>
 		<entity BaseHP="20" Champion="1" ID="827" Image="Entities/827.0.0 - Faceless.png" Name="Faceless" Variant="0" Subtype="0"/>
 		<entity BaseHP="40" Champion="1" ID="820" Image="Entities/820.0.0 - Danny.png" Name="Danny" Variant="0" Subtype="0"/>
 		<entity BaseHP="30" Champion="1" ID="822" Image="Entities/822.0.0 - Bouncer.png" Name="Bouncer" Variant="0" Subtype="0" />
@@ -634,8 +635,6 @@
 		<entity BaseHP="20" ID="41" Image="Entities/41.3.0 - Brainless Knight.png" Name="Brainless Knight" Variant="3" Subtype="0" />
 		<entity Name="Pon"/>
 		<entity BaseHP="42" Champion="1" ID="834" Image="Entities/834.2.0 - Flagellant.png" Name="Flagellant" Variant="2" Subtype="0" />
-		<entity Name="Psychic Horf"/>
-		<entity Name="Psychic Maw"/>
 		<entity BaseHP="45" Champion="1" ID="816" Image="Entities/816.1.0 - Kineti.png" Name="Kineti" Variant="1" Subtype="0" />
 		<entity BaseHP="25" Champion="1" ID="833" Image="Entities/833.0.0 - Candler.png" Name="Candler" Variant="0" Subtype="0" />
 		<entity BaseHP="24" Champion="1" ID="885" Image="Entities/885.0.0 - Cultist.png" Name="Cultist" Variant="0" Subtype="0" />
@@ -659,6 +658,7 @@
 	</group>
 
 	<group Name="Gehenna Enemies">
+		<entity Name="Boney"/>
 		<entity BaseHP="18" Champion="1" ID="891" Image="Entities/891.0.0 - Goat.png" Name="Goat" Variant="0" Subtype="0"/>
 		<entity BaseHP="24" Champion="1" ID="891" Image="Entities/891.1.0 - Black Goat.png" Name="Black Goat" Variant="1" Subtype="0"/>
 		<entity BaseHP="12" Champion="1" ID="890" Image="Entities/890.0.0 - Maze Roamer (white).png" Name="Maze Roamer (white)" Variant="0" Subtype="0"/>

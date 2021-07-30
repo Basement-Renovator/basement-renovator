@@ -725,6 +725,7 @@
 		<entity Name="Clot"/>
 		<entity Name="Keeper" ID="86"/>
 		<entity Name="Hanger"/>
+		<entity Name="Psy Tumor"/>
 	</group>
 
 	<group Name="Cathedral Obstacles">
