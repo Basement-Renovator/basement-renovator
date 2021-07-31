@@ -244,132 +244,114 @@
 		<group Name="Chapter 1">
 			<group Label="Chapter 1 (Main Path)">
 				<group Name="Chapter 1 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 1 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 1 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 1 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 1 (Main Path) Other"/>
+					<group Name="Chapter 1 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 1 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Basement" Label="- Basement -">
-					<group Name="Basement Enemies" Label="Enemies"/>
-					<group Name="Basement Obstacles" Label="Obstacles"/>
 					<group Name="Basement Events" Label="Events"/>
-					<group Name="Basement Other"/>
+					<group Name="Basement Obstacles" Label="Obstacles"/>
+					<group Name="Basement Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Cellar" Label="- Cellar -">
-					<group Name="Cellar Enemies" Label="Enemies"/>
-					<group Name="Cellar Obstacles" Label="Obstacles"/>
 					<group Name="Cellar Events" Label="Events"/>
-					<group Name="Cellar Other"/>
+					<group Name="Cellar Obstacles" Label="Obstacles"/>
+					<group Name="Cellar Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>
 		<group Name="Chapter 2">
 			<group Label="Chapter 2 (Main Path)">
 				<group Name="Chapter 2 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 2 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 2 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 2 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 2 (Main Path) Other"/>
+					<group Name="Chapter 2 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 2 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Caves" Label="- Caves -">
-					<group Name="Caves Enemies" Label="Enemies"/>
-					<group Name="Caves Obstacles" Label="Obstacles"/>
 					<group Name="Caves Events" Label="Events"/>
-					<group Name="Caves Other"/>
+					<group Name="Caves Obstacles" Label="Obstacles"/>
+					<group Name="Caves Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Catacombs" Label="- Catacombs -">
-					<group Name="Catacombs Enemies" Label="Enemies"/>
-					<group Name="Catacombs Obstacles" Label="Obstacles"/>
 					<group Name="Catacombs Events" Label="Events"/>
-					<group Name="Catacombs Other"/>
+					<group Name="Catacombs Obstacles" Label="Obstacles"/>
+					<group Name="Catacombs Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>
 		<group Name="Chapter 3">
 			<group Label="Chapter 3 (Main Path)">
 				<group Name="Chapter 3 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 3 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 3 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 3 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 3 (Main Path) Other"/>
+					<group Name="Chapter 3 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 3 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Depths" Label="- Depths -">
-					<group Name="Depths Enemies" Label="Enemies"/>
-					<group Name="Depths Obstacles" Label="Obstacles"/>
 					<group Name="Depths Events" Label="Events"/>
-					<group Name="Depths Other"/>
+					<group Name="Depths Obstacles" Label="Obstacles"/>
+					<group Name="Depths Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Necropolis" Label="- Necropolis -">
-					<group Name="Necropolis Enemies" Label="Enemies"/>
-					<group Name="Necropolis Obstacles" Label="Obstacles"/>
 					<group Name="Necropolis Events" Label="Events"/>
-					<group Name="Necropolis Other"/>
+					<group Name="Necropolis Obstacles" Label="Obstacles"/>
+					<group Name="Necropolis Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>
 		<group Name="Chapter 4">
 			<group Label="Chapter 4 (Main Path)">
 				<group Name="Chapter 4 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 4 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 4 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 4 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 4 (Main Path) Other"/>
+					<group Name="Chapter 4 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 4 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Womb" Label="- Womb -">
-					<group Name="Womb Enemies" Label="Enemies"/>
-					<group Name="Womb Obstacles" Label="Obstacles"/>
 					<group Name="Womb Events" Label="Events"/>
-					<group Name="Womb Other"/>
+					<group Name="Womb Obstacles" Label="Obstacles"/>
+					<group Name="Womb Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Utero" Label="- Utero -">
-					<group Name="Utero Enemies" Label="Enemies"/>
-					<group Name="Utero Obstacles" Label="Obstacles"/>
 					<group Name="Utero Events" Label="Events"/>
-					<group Name="Utero Other"/>
+					<group Name="Utero Obstacles" Label="Obstacles"/>
+					<group Name="Utero Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>
 		<group Name="Chapter 5">
 			<group Label="Chapter 5 (Main Path)">
 				<group Name="Chapter 5 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 5 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 5 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 5 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 5 (Main Path) Other"/>
+					<group Name="Chapter 5 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 5 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Sheol" Label="- Sheol -">
-					<group Name="Sheol Enemies" Label="Enemies"/>
-					<group Name="Sheol Obstacles" Label="Obstacles"/>
 					<group Name="Sheol Events" Label="Events"/>
-					<group Name="Sheol Other"/>
+					<group Name="Sheol Obstacles" Label="Obstacles"/>
+					<group Name="Sheol Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Cathedral" Label="- Cathedral -">
-					<group Name="Cathedral Enemies" Label="Enemies"/>
-					<group Name="Cathedral Obstacles" Label="Obstacles"/>
 					<group Name="Cathedral Events" Label="Events"/>
-					<group Name="Cathedral Other"/>
+					<group Name="Cathedral Obstacles" Label="Obstacles"/>
+					<group Name="Cathedral Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>
 		<group Name="Chapter 6">
 			<group Label="Chapter 6 (Main Path)">
 				<group Name="Chapter 6 (Main Path) Shared" Label="- Shared -">
-					<group Name="Chapter 6 (Main Path) Enemies" Label="Enemies"/>
-					<group Name="Chapter 6 (Main Path) Obstacles" Label="Obstacles"/>
 					<group Name="Chapter 6 (Main Path) Events" Label="Events"/>
-					<group Name="Chapter 6 (Main Path) Other"/>
+					<group Name="Chapter 6 (Main Path) Obstacles" Label="Obstacles"/>
+					<group Name="Chapter 6 (Main Path) Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Dark Room" Label="- Dark Room -">
-					<group Name="Dark Room Enemies" Label="Enemies"/>
-					<group Name="Dark Room Obstacles" Label="Obstacles"/>
 					<group Name="Dark Room Events" Label="Events"/>
-					<group Name="Dark Room Other"/>
+					<group Name="Dark Room Obstacles" Label="Obstacles"/>
+					<group Name="Dark Room Enemies" Label="Enemies"/>
 				</group>
 				<group Name="Chest" Label="- Chest -">
-					<group Name="Chest Enemies" Label="Enemies"/>
-					<group Name="Chest Obstacles" Label="Obstacles"/>
 					<group Name="Chest Events" Label="Events"/>
-					<group Name="Chest Other"/>
+					<group Name="Chest Obstacles" Label="Obstacles"/>
+					<group Name="Chest Enemies" Label="Enemies"/>
 				</group>
 			</group>
 		</group>

@@ -107,37 +107,33 @@
 	<!--——— Floors ———-->
 	<group Name="Chapter 1 (Main Path)">
 		<group Name="Burning Basement" Label="- Burning Basement -">
-			<group Name="Burning Basement Enemies" Label="Enemies"/>
-			<group Name="Burning Basement Obstacles" Label="Obstacles"/>
 			<group Name="Burning Basement Events" Label="Events"/>
-			<group Name="Burning Basement Other"/>
+			<group Name="Burning Basement Obstacles" Label="Obstacles"/>
+			<group Name="Burning Basement Enemies" Label="Enemies"/>
 		</group>
 	</group>
 
 	<group Name="Chapter 2 (Main Path)">
 		<group Name="Flooded Caves" Label="- Flooded Caves -">
-			<group Name="Flooded Caves Enemies" Label="Enemies"/>
-			<group Name="Flooded Caves Obstacles" Label="Obstacles"/>
 			<group Name="Flooded Caves Events" Label="Events"/>
-			<group Name="Flooded Caves Other"/>
+			<group Name="Flooded Caves Obstacles" Label="Obstacles"/>
+			<group Name="Flooded Caves Enemies" Label="Enemies"/>
 		</group>
 	</group>
 
 	<group Name="Chapter 3 (Main Path)">
 		<group Name="Dank Depths" Label="- Dank Depths -">
-			<group Name="Dank Depths Enemies" Label="Enemies"/>
-			<group Name="Dank Depths Obstacles" Label="Obstacles"/>
 			<group Name="Dank Depths Events" Label="Events"/>
-			<group Name="Dank Depths Other"/>
+			<group Name="Dank Depths Obstacles" Label="Obstacles"/>
+			<group Name="Dank Depths Enemies" Label="Enemies"/>
 		</group>
 	</group>
 
 	<group Name="Chapter 4 (Main Path)">
 		<group Name="Scarred Womb" Label="- Scarred Womb -">
-			<group Name="Scarred Womb Enemies" Label="Enemies"/>
-			<group Name="Scarred Womb Obstacles" Label="Obstacles"/>
 			<group Name="Scarred Womb Events" Label="Events"/>
-			<group Name="Scarred Womb Other"/>
+			<group Name="Scarred Womb Obstacles" Label="Obstacles"/>
+			<group Name="Scarred Womb Enemies" Label="Enemies"/>
 		</group>
 	</group>
 

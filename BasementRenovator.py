@@ -3388,18 +3388,32 @@ class EntityGroupItem(QStandardItem):
         self.name = group.label or ""
         self.entitycount = 0
 
+        # Labelled groups are added last, so that loose entities are below the main group header.
+        labelledGroups = []
+
         global xmlLookups
         endIndex = startIndex
         for entry in group.entries:
             endIndex += 1
             if isinstance(entry, xmlLookups.entities.GroupConfig):
-                groupItem = EntityGroupItem(entry, endIndex)
-                endIndex = groupItem.endIndex
-                self.entitycount += groupItem.entitycount
-                self.objects.append(groupItem)
+                if entry.label:
+                    labelledGroups.append(entry)
+                    endIndex -= 1
+                else:
+                    groupItem = EntityGroupItem(entry, endIndex)
+                    endIndex = groupItem.endIndex
+                    self.entitycount += groupItem.entitycount
+                    self.objects.append(groupItem)
             elif isinstance(entry, xmlLookups.entities.EntityConfig):
                 self.entitycount += 1
                 self.objects.append(EntityItem(entry))
+
+        for entry in labelledGroups:
+            endIndex += 1
+            groupItem = EntityGroupItem(entry, endIndex)
+            endIndex = groupItem.endIndex
+            self.entitycount += groupItem.entitycount
+            self.objects.append(groupItem)
 
         self.endIndex = endIndex
 

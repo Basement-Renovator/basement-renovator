@@ -79,10 +79,9 @@
 	<!--——— Floors ———-->
 	<group Name="Floors">
 		<group Name="Void" Label="- Void -">
-			<group Name="Void Enemies" Label="Enemies"/>
-			<group Name="Void Obstacles" Label="Obstacles"/>
 			<group Name="Void Events" Label="Events"/>
-			<group Name="Void Other"/>
+			<group Name="Void Obstacles" Label="Obstacles"/>
+			<group Name="Void Enemies" Label="Enemies"/>
 		</group>
 	</group>
 

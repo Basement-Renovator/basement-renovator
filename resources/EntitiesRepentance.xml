@@ -214,22 +214,19 @@
 	<group Name="Chapter 1">
 		<group Label="Chapter 1 (Alt Path)">
 			<group Name="Chapter 1 (Alt Path) Shared" Label="- Shared -">
-				<group Name="Chapter 1 (Alt Path) Enemies" Label="Enemies"/>
-				<group Name="Chapter 1 (Alt Path) Obstacles" Label="Obstacles"/>
 				<group Name="Chapter 1 (Alt Path) Events" Label="Events"/>
-				<group Name="Chapter 1 (Alt Path) Other"/>
+				<group Name="Chapter 1 (Alt Path) Obstacles" Label="Obstacles"/>
+				<group Name="Chapter 1 (Alt Path) Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Downpour" Label="- Downpour -">
-				<group Name="Downpour Enemies" Label="Enemies"/>
-				<group Name="Downpour Obstacles" Label="Obstacles"/>
 				<group Name="Downpour Events" Label="Events"/>
-				<group Name="Downpour Other"/>
+				<group Name="Downpour Obstacles" Label="Obstacles"/>
+				<group Name="Downpour Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Dross" Label="- Dross -">
-				<group Name="Dross Enemies" Label="Enemies"/>
-				<group Name="Dross Obstacles" Label="Obstacles"/>
 				<group Name="Dross Events" Label="Events"/>
-				<group Name="Dross Other"/>
+				<group Name="Dross Obstacles" Label="Obstacles"/>
+				<group Name="Dross Enemies" Label="Enemies"/>
 			</group>
 		</group>
 	</group>
@@ -237,22 +234,19 @@
 	<group Name="Chapter 2">
 		<group Label="Chapter 2 (Alt Path)">
 			<group Name="Chapter 2 (Alt Path) Shared" Label="- Shared -">
-				<group Name="Chapter 2 (Alt Path) Enemies" Label="Enemies"/>
-				<group Name="Chapter 2 (Alt Path) Obstacles" Label="Obstacles"/>
 				<group Name="Chapter 2 (Alt Path) Events" Label="Events"/>
-				<group Name="Chapter 2 (Alt Path) Other"/>
+				<group Name="Chapter 2 (Alt Path) Obstacles" Label="Obstacles"/>
+				<group Name="Chapter 2 (Alt Path) Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Mines" Label="- Mines -">
-				<group Name="Mines Enemies" Label="Enemies"/>
-				<group Name="Mines Obstacles" Label="Obstacles"/>
 				<group Name="Mines Events" Label="Events"/>
-				<group Name="Mines Other"/>
+				<group Name="Mines Obstacles" Label="Obstacles"/>
+				<group Name="Mines Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Ashpit" Label="- Ashpit -">
-				<group Name="Ashpit Enemies" Label="Enemies"/>
-				<group Name="Ashpit Obstacles" Label="Obstacles"/>
 				<group Name="Ashpit Events" Label="Events"/>
-				<group Name="Ashpit Other"/>
+				<group Name="Ashpit Obstacles" Label="Obstacles"/>
+				<group Name="Ashpit Enemies" Label="Enemies"/>
 			</group>
 		</group>
 	</group>
@@ -260,22 +254,19 @@
 	<group Name="Chapter 3">
 		<group Label="Chapter 3 (Alt Path)">
 			<group Name="Chapter 3 (Alt Path) Shared" Label="- Shared -">
-				<group Name="Chapter 3 (Alt Path) Enemies" Label="Enemies"/>
-				<group Name="Chapter 3 (Alt Path) Obstacles" Label="Obstacles"/>
 				<group Name="Chapter 3 (Alt Path) Events" Label="Events"/>
-				<group Name="Chapter 3 (Alt Path) Other"/>
+				<group Name="Chapter 3 (Alt Path) Obstacles" Label="Obstacles"/>
+				<group Name="Chapter 3 (Alt Path) Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Mausoleum" Label="- Mausoleum -">
-				<group Name="Mausoleum Enemies" Label="Enemies"/>
-				<group Name="Mausoleum Obstacles" Label="Obstacles"/>
 				<group Name="Mausoleum Events" Label="Events"/>
-				<group Name="Mausoleum Other"/>
+				<group Name="Mausoleum Obstacles" Label="Obstacles"/>
+				<group Name="Mausoleum Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Gehenna" Label="- Gehenna -">
-				<group Name="Gehenna Enemies" Label="Enemies"/>
-				<group Name="Gehenna Obstacles" Label="Obstacles"/>
 				<group Name="Gehenna Events" Label="Events"/>
-				<group Name="Gehenna Other"/>
+				<group Name="Gehenna Obstacles" Label="Obstacles"/>
+				<group Name="Gehenna Enemies" Label="Enemies"/>
 			</group>
 		</group>
 	</group>
@@ -283,32 +274,28 @@
 	<group Name="Chapter 4">
 		<group Label="Chapter 4 (Alt Path)">
 			<group Name="Chapter 4 (Alt Path) Shared" Label="- Shared -">
-				<group Name="Chapter 4 (Alt Path) Enemies" Label="Enemies"/>
-				<group Name="Chapter 4 (Alt Path) Obstacles" Label="Obstacles"/>
 				<group Name="Chapter 4 (Alt Path) Events" Label="Events"/>
-				<group Name="Chapter 4 (Alt Path) Other"/>
+				<group Name="Chapter 4 (Alt Path) Obstacles" Label="Obstacles"/>
+				<group Name="Chapter 4 (Alt Path) Enemies" Label="Enemies"/>
 			</group>
 			<group Name="Corpse" Label="- Corpse -">
-				<group Name="Corpse Enemies" Label="Enemies"/>
-				<group Name="Corpse Obstacles" Label="Obstacles"/>
 				<group Name="Corpse Events" Label="Events"/>
-				<group Name="Corpse Other"/>
+				<group Name="Corpse Obstacles" Label="Obstacles"/>
+				<group Name="Corpse Enemies" Label="Enemies"/>
 			</group>
 		</group>
 	</group>
 
 	<group Name="Floors">
 		<group Name="Ascent" Label="- Ascent -">
-			<group Name="Ascent Enemies" Label="Enemies"/>
-			<group Name="Ascent Obstacles" Label="Obstacles"/>
 			<group Name="Ascent Events" Label="Events"/>
-			<group Name="Ascent Other"/>
+			<group Name="Ascent Obstacles" Label="Obstacles"/>
+			<group Name="Ascent Enemies" Label="Enemies"/>
 		</group>
 		<group Name="Home" Label="- Home -">
-			<group Name="Home Enemies" Label="Enemies"/>
-			<group Name="Home Obstacles" Label="Obstacles"/>
 			<group Name="Home Events" Label="Events"/>
-			<group Name="Home Other"/>
+			<group Name="Home Obstacles" Label="Obstacles"/>
+			<group Name="Home Enemies" Label="Enemies"/>
 		</group>
 	</group>
 
@@ -444,9 +431,6 @@
 		<entity BaseHP="20" ID="804" Image="Entities/804.0.2 - Quake Grimace (right).png" Name="Quake Grimace (right)" Variant="0" Subtype="2" MirrorX="804.0.0" />
 		<entity BaseHP="20" ID="804" Image="Entities/804.0.3 - Quake Grimace (down).png" Name="Quake Grimace (down)" Variant="0" Subtype="3" MirrorY="804.0.1" />
 		<entity BaseHP="20" ID="809" Image="Entities/809.0.0 - Bomb Grimace.png" Name="Bomb Grimace" Variant="0" Subtype="0" />
-	</group>
-
-	<group Name="Chapter 2 (Alt Path) Other">
 		<group Label="Rails">
 			<entity ID="6000" Image="Entities/6000.0.0 - Rail (left-to-right).png" Name="Rail (left-to-right)" Subtype="0" Variant="0" IsGrid="1" />
 			<entity ID="6000" Image="Entities/6000.1.0 - Rail (up-to-down).png" Name="Rail (up-to-down)" Subtype="0" Variant="1" IsGrid="1" />
@@ -595,9 +579,6 @@
 	<group Name="Chapter 3 (Alt Path) Obstacles">
 		<entity Name="Triple Grimace"/>
 		<entity BaseHP="100" ID="877" Image="Entities/877.0.0 - Grudge.png" Name="Grudge" Variant="0" Subtype="0" />
-	</group>
-
-	<group Name="Chapter 3 (Alt Path) Other">
 		<group Label="Teleporters">
 			<entity ID="6100" Image="Entities/6100.0.0 - Teleporter(Square).png" Name="Teleporter(Square)" Subtype="0" Variant="0" IsGrid="1" />
 			<entity ID="6100" Image="Entities/6100.1.0 - Teleporter(Moon).png" Name="Teleporter(Moon)" Subtype="0" Variant="1" IsGrid="1" />
