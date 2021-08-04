@@ -95,22 +95,22 @@ class Lookup(metaclass=abc.ABCMeta):
         self.prefix = prefix
         self.version = version
 
-    def loadFile(self, file, resourcePath, modName, *args):
+    def loadFile(self, file, mod, *args):
         printf(
-            f'-----------------------\nLoading {self.prefix} from "{modName}" at {file}'
+            f'-----------------------\nLoading {self.prefix} from "{mod.name}" at {file}'
         )
         previous = self.count()
-        self.loadXML(loadXMLFile(file), resourcePath, modName, *args)
+        self.loadXML(loadXMLFile(file), mod, *args)
         printf(
-            f'Successfully loaded {self.count() - previous} new {self.prefix} from "{modName}"'
+            f'Successfully loaded {self.count() - previous} new {self.prefix} from "{mod.name}"'
         )
 
-    def loadFromMod(self, resourcePath, modName, *args):
-        file = os.path.join(resourcePath, self.prefix + "Mod.xml")
+    def loadFromMod(self, mod, *args):
+        file = os.path.join(mod.resourcePath, self.prefix + "Mod.xml")
         if not os.path.isfile(file):
             return
 
-        self.loadFile(file, resourcePath, modName, *args)
+        self.loadFile(file, mod.resourcePath, mod.name, *args)
 
     @abc.abstractmethod
     def count(self):
@@ -137,7 +137,7 @@ class StageLookup(Lookup):
         else:
             return 0
 
-    def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
+    def loadXML(self, root, mod):
         stageList = root.findall("stage")
         if not stageList:
             return
@@ -162,14 +162,14 @@ class StageLookup(Lookup):
                     f"Stage {stage.attrib} has missing stage/stage type; this may not load properly in testing"
                 )
 
-            sanitizePath(stage, "BGPrefix", resourcePath)
+            sanitizePath(stage, "BGPrefix", mod.resourcePath)
 
             children = stage.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", resourcePath)
+                sanitizePath(gfx, "BGPrefix", mod.resourcePath)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", resourcePath)
+                    sanitizePath(ent, "Image", mod.resourcePath)
 
             if replacement is not None:
                 for key in stage.attrib.keys():
@@ -231,7 +231,7 @@ class RoomTypeLookup(Lookup):
         else:
             return 0
 
-    def loadXML(self, root, resourcePath="", modName="Basement Renovator"):
+    def loadXML(self, root, mod):
         roomTypeList = root.findall("room")
         if not roomTypeList:
             return
@@ -252,14 +252,14 @@ class RoomTypeLookup(Lookup):
 
             replacement = self.xml.find(f'room[@Name="{name}"]')
 
-            sanitizePath(roomType, "Icon", resourcePath)
+            sanitizePath(roomType, "Icon", mod.resourcePath)
 
             children = roomType.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", resourcePath)
+                sanitizePath(gfx, "BGPrefix", mod.resourcePath)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", resourcePath)
+                    sanitizePath(ent, "Image", mod.resourcePath)
 
             if replacement is not None:
                 applyGfxReplacement(replacement, children)
@@ -537,38 +537,55 @@ class EntityLookup(Lookup):
 
                 return number
 
-        def __init__(
-            self, entity=None, resourcePath=None, modName=None, entities2Node=None
-        ):
+        def __init__(self, mod=None, parent=None):
+            self.mod = mod
+            self.parent = parent
             self.name = None
-            self.mod = None
-            self.type = None
-            self.variant = None
-            self.subtype = None
-            self.imagePath = None
+            self.type = -1
+            self.variant = 0
+            self.subtype = 0
+            self.imagePath = "resources/Entities/questionmark.png"
             self.editorImagePath = None
             self.overlayImagePath = None
-            self.isGridEnt = None
             self.baseHP = None
-            self.boss = None
-            self.champion = None
             self.placeVisual = None
-            self.disableOffsetIndicator = None
-            self.blocksDoor = None
-            self.renderPit = None
-            self.renderRock = None
-            self.invalid = None
+            self.disableOffsetIndicator = False
+            self.renderPit = False
+            self.renderRock = False
+            self.invalid = False
             self.gfx = None
             self.mirrorX = None
             self.mirrorY = None
-            self.hasBitfields = None
+            self.hasBitfields = False
             self.invalidBitfield = False
             self.bitfields = []
-            self.inEmptyRooms = None
+            self.tags = {}
             self.uniqueid = -1
 
-            if entity is not None:
-                self.fillFromXML(entity, resourcePath, modName, entities2Node)
+        def getTagConfig(self, tag):
+            if not isinstance(tag, EntityLookup.TagConfig):
+                name = tag
+                tag = self.parent.getTag(name=name)
+                if tag is None:
+                    printf(
+                        f"Attempted to get undefined tag {name} for entity {self.name} from mod {self.mod.name}"
+                    )
+
+            return tag
+
+        def addTag(self, tag):
+            tag = self.getTagConfig(tag)
+            if tag and tag.tag not in self.tags:
+                self.tags[tag.tag] = tag
+
+        def removeTag(self, tag):
+            tag = self.getTagConfig(tag)
+            if tag and tag.tag in self.tags:
+                self.tags[tag.tag] = None
+
+        def hasTag(self, tag):
+            tag = self.getTagConfig(tag)
+            return tag and tag.tag in self.tags
 
         def validateImagePath(self, imagePath, resourcePath, default=None):
             if imagePath is None:
@@ -587,79 +604,219 @@ class EntityLookup(Lookup):
 
             return imagePath
 
-        def fillFromXML(
-            self, entity: ET.Element, resourcePath, modName, entities2Node=None
-        ):
-            self.name = entity.get("Name")
-            self.mod = modName
-            self.type = int(entity.get("ID", "-1"))
-            self.variant = int(entity.get("Variant", "0"))
-            self.subtype = int(entity.get("Subtype", "0"))
-            self.imagePath = self.validateImagePath(
-                entity.get("Image"), resourcePath, "resources/Entities/questionmark.png"
-            )
-            self.editorImagePath = self.validateImagePath(
-                entity.get("EditorImage"), resourcePath
-            )
-            self.overlayImagePath = self.validateImagePath(
-                entity.get("OverlayImage"), resourcePath
-            )
-            self.isGridEnt = entity.get("IsGrid") == "1"
-            self.baseHP = (
-                entities2Node.get("baseHP") if entities2Node else entity.get("BaseHP")
-            )
-            self.boss = (
-                entities2Node.get("boss") if entities2Node else entity.get("Boss")
-            )
-            self.champion = (
-                entities2Node.get("champion")
-                if entities2Node
-                else entity.get("Champion")
-            )
-            self.placeVisual = entity.get("PlaceVisual")
-            self.disableOffsetIndicator = entity.get("DisableOffsetIndicator") == "1"
-            self.blocksDoor = entity.get("NoBlockDoors") != "1"
-            self.renderPit = entity.get("UsePitTiling") == "1"
-            self.renderRock = entity.get("UseRockTiling") == "1"
-            self.inEmptyRooms = entity.get("InEmptyRooms") == "1"
-            self.invalid = entity.get("Invalid")
-            self.gfx = entity.find("Gfx")
+        COPYABLE_ATTRIBUTES = (
+            "type",
+            "variant",
+            "subtype",
+            "imagePath",
+            "editorImagePath",
+            "overlayImagePath",
+            "baseHP",
+            "placeVisual",
+            "disableOffsetIndicator",
+            "renderPit",
+            "renderRock",
+            "mirrorX",
+            "mirrorY",
+        )
 
-            if self.gfx is not None:
+        def fillFromConfig(self, config):
+            for attribute in EntityLookup.EntityConfig.COPYABLE_ATTRIBUTES:
+                defaultValue = getattr(EntityLookup.DEFAULT_ENTITY_CONFIG, attribute)
+                selfValue = getattr(self, attribute)
+                if selfValue == defaultValue:
+                    configValue = getattr(config, attribute)
+                    setattr(self, attribute, configValue)
+
+            for tag in config.tags.values():
+                self.addTag(tag)
+
+            self.bitfields.extend(config.bitfields)
+            self.hasBitfields = len(self.bitfields) != 0
+            self.invalidBitfield = self.invalidBitfield or config.invalidBitfield
+
+        ENTITY_CLEAN_NAME_REGEX = re.compile(r"[^\w\d]")
+
+        def getEntities2Node(self):
+            if (
+                not self.mod
+                or self.matches(tags=("Metadata", "Grid"), matchAnyTag=True)
+                or self.mod.entities2root is None
+            ):
+                return None, False, None
+
+            adjustedId = 1000 if self.type == 999 else self.type
+            query = f"entity[@id='{adjustedId}'][@variant='{self.variant}']"
+
+            validMissingSubtype = False
+            entityXML = self.mod.entities2root.find(
+                query + f"[@subtype='{self.subtype}']"
+            )
+
+            if entityXML is None:
+                entityXML = self.mod.entities2root.find(query)
+                validMissingSubtype = entityXML is not None
+
+            if entityXML is None:
+                return None, True, None
+            else:
+                foundName = entityXML.get("name")
+                givenName = self.name
+                foundNameClean, givenNameClean = list(
+                    map(
+                        lambda s: self.ENTITY_CLEAN_NAME_REGEX.sub("", s).lower(),
+                        (foundName, givenName),
+                    )
+                )
+                if not (
+                    foundNameClean == givenNameClean
+                    or (
+                        validMissingSubtype
+                        and (
+                            foundNameClean in givenNameClean
+                            or givenNameClean in foundNameClean
+                        )
+                    )
+                ):
+                    return entityXML, False, foundName
+
+            return entityXML, False, None
+
+        def fillFromNode(self, node: ET.Element):
+            warnings = ""
+
+            if node.get("Name"):
+                self.name = node.get("Name")
+
+            if node.get("ID"):
+                self.type = int(node.get("ID"))
+
+            if node.get("Variant"):
+                self.variant = int(node.get("Variant"))
+
+            if node.get("Subtype"):
+                self.subtype = int(node.get("Subtype"))
+
+            if node.get("Image"):
+                self.imagePath = self.validateImagePath(
+                    node.get("Image"),
+                    self.mod.resourcePath,
+                    "resources/Entities/questionmark.png",
+                )
+
+            if node.get("EditorImage"):
+                self.editorImagePath = self.validateImagePath(
+                    node.get("EditorImage"), self.mod.resourcePath
+                )
+
+            if node.get("OverlayImage"):
+                self.overlayImagePath = self.validateImagePath(
+                    node.get("OverlayImage"), self.mod.resourcePath
+                )
+
+            # Tags="" attribute allows overriding default tags with nothing / different tags
+            tagsString = node.get("Tags")
+            if tagsString is not None:
+                self.tags = {}
+                if tagsString != "":
+                    for tag in tagsString.split(","):
+                        self.addTag(tag.strip())
+
+            tags = node.findall("tag")
+            for tag in tags:
+                self.addTag(tag.text)
+
+            for tag in self.parent.tags.values():
+                if tag.attribute:
+                    attribute = node.get(tag.attribute)
+                    if attribute == "1":
+                        self.addTag(tag)
+                    elif attribute == "0":
+                        self.removeTag(tag)
+
+            if node.get("DisableOffsetIndicator"):
+                self.disableOffsetIndicator = node.get("DisableOffsetIndicator") == "1"
+
+            if node.get("UsePitTiling"):
+                self.renderPit = node.get("UsePitTiling") == "1"
+
+            if node.get("UseRockTiling"):
+                self.renderRock = node.get("UseRockTiling") == "1"
+
+            entities2Node, invalid, mismatchedName = self.getEntities2Node()
+            if invalid:
+                warnings += "\nHas no entry in entities2.xml!"
+                self.invalid = True
+
+            if mismatchedName:
+                warnings += f"\nFound name mismatch! In entities2: {mismatchedName}; In BR: {self.name}"
+
+            if node.get("BaseHP"):
+                self.baseHP = node.get("BaseHP")
+            elif self.baseHP is None and entities2Node is not None:
+                self.baseHP = entities2Node.get("baseHP")
+
+            if node.get("Boss") == "1" or (
+                entities2Node is not None and entities2Node.get("boss") == "1"
+            ):
+                self.addTag("Boss")
+
+            if node.get("Champion") or (
+                entities2Node is not None and entities2Node.get("champion") == "1"
+            ):
+                self.addTag("Champion")
+
+            if node.get("PlaceVisual"):
+                self.placeVisual = node.get("PlaceVisual")
+
+            if node.get("Invalid"):
+                self.invalid = True
+
+            if node.find("Gfx"):
+                self.gfx = node.find("Gfx")
                 bgPrefix = self.gfx.get("BGPrefix")
                 if bgPrefix:
                     self.gfx.set(
                         "BGPrefix",
                         linuxPathSensitivityTraining(
-                            os.path.join(resourcePath, bgPrefix)
+                            os.path.join(self.mod.resourcePath, bgPrefix)
                         ),
                     )
 
             def getMirrorEntity(s):
                 return list(map(int, s.split(".")))
 
-            mirrorX, mirrorY = entity.get("MirrorX"), entity.get("MirrorY")
+            mirrorX, mirrorY = node.get("MirrorX"), node.get("MirrorY")
             if mirrorX:
                 self.mirrorX = getMirrorEntity(mirrorX)
             if mirrorY:
                 self.mirrorY = getMirrorEntity(mirrorY)
 
-            bitfields = entity.findall("bitfield")
-            self.hasBitfields = len(bitfields) != 0
-            self.bitfields = list(map(EntityLookup.EntityConfig.Bitfield, bitfields))
-            for bitfield in self.bitfields:
-                if bitfield.isInvalid():
-                    self.invalidBitfield = True
-                    printf(
-                        f"Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) has invalid bitfield elements and cannot be configured"
-                    )
-                    break
+            bitfields = node.findall("bitfield")
+            if len(bitfields) != 0:
+                self.hasBitfields = True
+                for bitfieldNode in bitfields:
+                    bitfield = self.Bitfield(bitfieldNode)
+                    if bitfield.isInvalid():
+                        self.invalidBitfield = True
+                        warnings += (
+                            "\nHas invalid bitfield elements and cannot be configured"
+                        )
+                        break
+                    else:
+                        self.bitfields.append(bitfield)
 
-            warnings = self.getOutOfRangeWarnings()
+            rangeWarnings = self.getOutOfRangeWarnings()
+            if rangeWarnings != "":
+                warnings += "\nOut of range:" + rangeWarnings
+
             if warnings != "":
-                printf(
-                    f"Entity {self.name} from {self.mod} is out of range:" + warnings
+                warnings = (
+                    f"\nWarning for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) from {self.mod.name}:"
+                    + warnings
                 )
+
+            return warnings
 
         def hasBitfieldKey(self, key):
             for bitfield in self.bitfields:
@@ -677,7 +834,7 @@ class EntityLookup(Lookup):
 
         def getOutOfRangeWarnings(self):
             warnings = ""
-            if (self.type >= 1000 or self.type < 0) and not self.isGridEnt:
+            if (self.type >= 1000 or self.type < 0) and not self.hasTag("Grid"):
                 warnings += f"\nType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
             if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
                 "Variant"
@@ -714,7 +871,28 @@ class EntityLookup(Lookup):
 
             return warnings
 
-        def matches(self, entitytype=None, variant=None, subtype=None, name=None):
+        def printTags(self):
+            tags = "["
+            separated = False
+            for tag in self.parent.tags.values():
+                if self.hasTag(tag) and tag.label:
+                    if separated:
+                        tags += ", "
+
+                    tags += tag.label
+                    separated = True
+
+            return tags + "]"
+
+        def matches(
+            self,
+            entitytype=None,
+            variant=None,
+            subtype=None,
+            name=None,
+            tags=None,
+            matchAnyTag=False,
+        ):
             if name is not None and self.name != name:
                 return False
             if entitytype is not None and self.type != entitytype:
@@ -727,17 +905,38 @@ class EntityLookup(Lookup):
                 self.subtype != subtype and not self.hasBitfieldKey("Subtype")
             ):
                 return False
+            if tags is not None:
+                matchedAny = False
+                for tag in tags:
+                    if self.hasTag(tag):
+                        matchedAny = True
+                    elif not matchAnyTag:
+                        return False
+
+                if not matchedAny:
+                    return False
 
             return True
 
+    DEFAULT_ENTITY_CONFIG = EntityConfig()
+
     class GroupConfig:
-        def __init__(self, node=None, name=None, label=None):
+        def __init__(self, node=None, name=None, label=None, parentGroup=None):
             if node is not None:
                 self.label = node.get("Label")
                 self.name = node.get("Name", self.label)
             else:
                 self.name = name
                 self.label = label
+
+            self.parent = parentGroup
+
+            self.entityDefaults = None
+            if self.parent is not None and self.parent.entityDefaults:
+                self.entityDefaults = EntityLookup.EntityConfig(
+                    self.parent.entityDefaults.mod, self.parent.entityDefaults.parent
+                )
+                self.entityDefaults.fillFromConfig(self.parent.entityDefaults)
 
             self.entries = []
             self.groupentries = []
@@ -763,9 +962,17 @@ class EntityLookup(Lookup):
                             f"Group {node.attrib} has invalid IconSize, must be 2 integer values"
                         )
 
+    class TagConfig:
+        def __init__(self, node: ET.Element):
+            self.tag = node.text
+            self.label = node.get("Label")
+            self.filterable = node.get("Filterable") == "1"
+            self.attribute = node.get("Attribute")
+
     def __init__(self, version, parent):
         self.entityList = self.GroupConfig()
         self.groups = {}
+        self.tags = {}
         self.tabs = []
         self.lastuniqueid = 0
         super().__init__("Entities", version)
@@ -779,20 +986,13 @@ class EntityLookup(Lookup):
         entity.uniqueid = self.lastuniqueid
         self.entityList.addEntry(entity)
 
-    ENTITY_CLEANUP_REGEX = re.compile(r"[^\w\d]")
-
-    def loadEntityNode(
-        self,
-        node: ET.Element,
-        resourcePath="",
-        modName="Basement Renovator",
-        entities2Root=None,
-    ):
+    def loadEntityNode(self, node: ET.Element, mod, parentGroup=None):
         entityType = node.get("ID")
         variant = node.get("Variant")
         subtype = node.get("Subtype")
         name = node.get("Name")
 
+        entityConfig = None
         if (name is not None) or (entityType is not None):
             isRef = True
             for key in node.attrib.keys():
@@ -812,6 +1012,11 @@ class EntityLookup(Lookup):
                     entitytype=entityType, variant=variant, subtype=subtype, name=name
                 )
                 if entityConfig:
+                    # Refs can be used to add tags to entities without overwriting them
+                    tags = node.findall("tag")
+                    for tag in tags:
+                        entityConfig.addTag(tag.text)
+
                     return entityConfig
                 else:
                     printf(
@@ -822,80 +1027,37 @@ class EntityLookup(Lookup):
         variant = int(variant or 0)
         subtype = int(subtype or 0)
 
-        entityXML = None
-
-        if node.get("Metadata") != "1" and node.get("IsGrid") != "1":
-            adjustedId = "1000" if entityType == "999" else entityType
-            query = f"entity[@id='{adjustedId}'][@variant='{variant}']"
-
-            validMissingSubtype = False
-
-            if entities2Root:
-                entityXML = entities2Root.find(query + f"[@subtype='{subtype}']")
-
-                if entityXML is None:
-                    entityXML = entities2Root.find(query)
-                    validMissingSubtype = entityXML is not None
-
-                if entityXML is None:
-                    printf(
-                        "Loading invalid entity (no entry in entities2 xml): "
-                        + str(node.attrib)
-                    )
-                    node.set("Invalid", "1")
-                else:
-                    foundName = entityXML.get("name")
-                    givenName = node.get("Name")
-                    foundNameClean, givenNameClean = list(
-                        map(
-                            lambda s: self.ENTITY_CLEANUP_REGEX.sub("", s).lower(),
-                            (foundName, givenName),
-                        )
-                    )
-                    if not (
-                        foundNameClean == givenNameClean
-                        or (
-                            validMissingSubtype
-                            and (
-                                foundNameClean in givenNameClean
-                                or givenNameClean in foundNameClean
-                            )
-                        )
-                    ):
-                        printf(
-                            "Loading entity, found name mismatch! In entities2: ",
-                            foundName,
-                            "; In BR: ",
-                            givenName,
-                        )
-
         overwrite = node.get("Overwrite") == "1"
 
         if overwrite:
-            entityConfig = None
             if name:
                 entityConfig = self.lookupOne(name=name)
 
             if entityConfig is None:
                 entityConfig = self.lookupOne(entityType, variant, subtype)
 
-            if entityConfig:
-                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
-            else:
+            if entityConfig is None:
                 printf(
-                    f'Entity "{name}" from {modName} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
+                    f'Entity "{name}" from {mod.name} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
                 )
         else:
             entityConfig = self.lookupOne(entityType, variant, subtype)
             if entityConfig:
                 printf(
-                    f'Entity "{name}" from "{modName}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod}"!'
+                    f'Entity "{name}" from "{mod.name}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod.name}"!'
                 )
-
-                entityConfig.fillFromXML(node, resourcePath, modName, entityXML)
             else:
-                entityConfig = self.EntityConfig(node, resourcePath, modName, entityXML)
+                entityConfig = self.EntityConfig(mod, self)
                 self.addEntity(entityConfig)
+
+        if entityConfig:
+            entityConfig.mod = mod
+            if parentGroup is not None and parentGroup.entityDefaults:
+                entityConfig.fillFromConfig(parentGroup.entityDefaults)
+
+            warnings = entityConfig.fillFromNode(node)
+            if warnings != "":
+                printf(warnings)
 
         groups = []
         nodeKind = node.get("Kind")
@@ -926,7 +1088,7 @@ class EntityLookup(Lookup):
 
         return entityConfig
 
-    def getGroup(self, node=None, name=None, label=None):
+    def getGroup(self, node=None, name=None, label=None, parentGroup=None):
         if name is None:
             name = node.get("Name", node.get("Label"))
             if name is None:
@@ -934,7 +1096,9 @@ class EntityLookup(Lookup):
                 return None
 
         if name not in self.groups:
-            group = self.GroupConfig(node=node, name=name, label=label)
+            group = self.GroupConfig(
+                node=node, name=name, label=label, parentGroup=parentGroup
+            )
             self.groups[name] = group
 
         return self.groups[name]
@@ -953,92 +1117,80 @@ class EntityLookup(Lookup):
 
         return self.groups[name]
 
-    def loadGroupNode(
-        self,
-        node: ET.Element,
-        resourcePath="",
-        modName="Basement Renovator",
-        entities2Root=None,
-    ):
+    def getTag(self, node=None, name=None):
+        if name is None:
+            name = node.text
+            if name == "":
+                printf(f"Attempted to get tag with no text {node.attrib}")
+                return None
+
+        if name not in self.tags:
+            if node is None:
+                printf(f"Attempted to get undefined tag {name}")
+                return None
+
+            tag = self.TagConfig(node)
+            self.tags[tag.tag] = tag
+
+        return self.tags[name]
+
+    def loadGroupNode(self, node: ET.Element, mod, parentGroup=None):
         group = None
         if node.tag == "tab":
             group = self.getTab(node)
         else:
-            group = self.getGroup(node)
+            group = self.getGroup(node, parentGroup=parentGroup)
 
         if group:
             for subNode in node:
                 entry = None
                 if subNode.tag == "group":
-                    entry = self.loadGroupNode(
-                        subNode, resourcePath, modName, entities2Root
-                    )
+                    entry = self.loadGroupNode(subNode, mod, group)
                 elif subNode.tag == "entity":
-                    entry = self.loadEntityNode(
-                        subNode, resourcePath, modName, entities2Root
-                    )
+                    entry = self.loadEntityNode(subNode, mod, group)
+                elif subNode.tag == "entitydefaults":
+                    if not group.entityDefaults:
+                        group.entityDefaults = self.EntityConfig(mod, self)
+
+                    group.entityDefaults.fillFromNode(subNode)
 
                 if entry:
                     group.addEntry(entry)
 
         return group
 
-    def loadXML(
-        self,
-        root: ET.Element,
-        resourcePath="",
-        modName="Basement Renovator",
-        entities2Root=None,
-    ):
+    def loadXML(self, root: ET.Element, mod):
         if not root:
             return
 
         for subNode in root:
             if subNode.tag == "group" or subNode.tag == "tab":
-                self.loadGroupNode(subNode, resourcePath, modName, entities2Root)
+                self.loadGroupNode(subNode, mod)
             elif subNode.tag == "entity":
-                self.loadEntityNode(subNode, resourcePath, modName, entities2Root)
+                self.loadEntityNode(subNode, mod)
+            elif subNode.tag == "tag":
+                self.getTag(subNode)
 
-    def loadFile(
-        self,
-        path,
-        resourcePath="resources/",
-        modName="Basement Renovator",
-        modPath=None,
-        autogenerateContent=False,
-    ):
+    def loadFile(self, path, mod):
         root = loadXMLFile(path)
         if root is None:
             return
 
-        printf(f'-----------------------\nLoading Entities from "{modName}" at {path}')
+        printf(f'-----------------------\nLoading Entities from "{mod.name}" at {path}')
         previous = self.count()
 
-        entities2Root = None
-        if modPath:
-            entities2Path = os.path.join(modPath, "content/entities2.xml")
-            if os.path.exists(entities2Path):
-                entities2Root = None
-                try:
-                    entities2Root = ET.parse(entities2Path).getroot()
-                except ET.ParseError as e:
-                    printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
-                    return
+        if mod.autogenerateContent and mod.entities2root is not None:
+            self.loadXML(
+                generateXMLFromEntities2(
+                    mod.modPath, mod.name, mod.entities2root, mod.resourcePath
+                ),
+                mod,
+            )
 
-                if autogenerateContent:
-                    self.loadXML(
-                        generateXMLFromEntities2(
-                            modPath, modName, entities2Root, resourcePath
-                        ),
-                        resourcePath,
-                        modName,
-                        entities2Root,
-                    )
-
-        self.loadXML(root, resourcePath, modName, entities2Root)
+        self.loadXML(root, mod)
 
         printf(
-            f"Successfully loaded {self.count() - previous} new Entities from {modName}"
+            f"Successfully loaded {self.count() - previous} new Entities from {mod.name}"
         )
 
     def lookup(
@@ -1046,22 +1198,20 @@ class EntityLookup(Lookup):
         entitytype=None,
         variant=None,
         subtype=None,
-        inEmptyRooms=None,
         name=None,
+        tags=None,
+        matchAnyTag=False,
     ):
         entities = self.entityList.entries
 
         entities = list(
             filter(
-                lambda entity: entity.matches(entitytype, variant, subtype, name),
+                lambda entity: entity.matches(
+                    entitytype, variant, subtype, name, tags, matchAnyTag
+                ),
                 entities,
             )
         )
-
-        if inEmptyRooms:
-            entities = list(
-                filter(lambda entity: entity.inEmptyRooms == inEmptyRooms, entities)
-            )
 
         return entities
 
@@ -1070,16 +1220,17 @@ class EntityLookup(Lookup):
         entitytype=None,
         variant=None,
         subtype=None,
-        inEmptyRooms=None,
         name=None,
+        tags=None,
+        matchAnyTag=False,
     ):
-        entities = self.lookup(entitytype, variant, subtype, inEmptyRooms, name)
+        entities = self.lookup(entitytype, variant, subtype, name, tags, matchAnyTag)
 
         return next(iter(entities), None)
 
 
 class MainLookup:
-    class Version:
+    class VersionConfig:
         class DataFile:
             def __init__(self, filetype, path, name):
                 self.path = path
@@ -1131,7 +1282,7 @@ class MainLookup:
             versions[self.name] = True
             for entry in self.toload:
                 addFiles = None
-                if isinstance(entry, MainLookup.Version):
+                if isinstance(entry, MainLookup.VersionConfig):
                     addFiles = entry.allFiles(versions)
                 else:
                     addFiles = [entry]
@@ -1148,40 +1299,56 @@ class MainLookup:
 
             return files
 
+    class ModConfig:
+        def __init__(
+            self,
+            modName="Basement Renovator",
+            resourcePath="resources/",
+            modPath=None,
+            autogenerateContent=False,
+        ):
+            self.name = modName
+            self.resourcePath = resourcePath
+            self.modPath = modPath
+            self.autogenerateContent = autogenerateContent
+
+            self.entities2root = None
+            if self.modPath:
+                entities2Path = os.path.join(modPath, "content/entities2.xml")
+                if os.path.exists(entities2Path):
+                    try:
+                        self.entities2root = ET.parse(entities2Path).getroot()
+                    except ET.ParseError as e:
+                        printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
+                        return
+
     def __init__(self, version):
+        self.basemod = self.ModConfig()
         self.stages = StageLookup(version, self)
         self.roomTypes = RoomTypeLookup(version, self)
         self.entities = EntityLookup(version, self)
         self.version = version
 
-        self.loadXML(loadXMLFile("resources/Versions.xml"))
+        self.loadXML(loadXMLFile("resources/Versions.xml"), self.basemod)
 
     def loadFromMod(self, modPath, brPath, name, autogenerateContent):
+        modConfig = self.ModConfig(name, brPath, modPath, autogenerateContent)
         versionsPath = os.path.join(brPath, "VersionsMod.xml")
         if os.path.exists(versionsPath):
-            self.loadXML(
-                loadXMLFile(versionsPath), brPath, modPath, name, autogenerateContent
-            )
+            self.loadXML(loadXMLFile(versionsPath), modConfig)
         else:
-            self.stages.loadFromMod(brPath, name)
-            self.roomTypes.loadFromMod(brPath, name)
-            self.entities.loadFromMod(brPath, name, modPath, autogenerateContent)
+            self.stages.loadFromMod(modConfig)
+            self.roomTypes.loadFromMod(modConfig)
+            self.entities.loadFromMod(modConfig)
 
-    def loadXML(
-        self,
-        root=None,
-        resourcePath="resources/",
-        modPath=None,
-        modName="Basement Renovator",
-        autogenerateContent=False,
-    ):
+    def loadXML(self, root=None, mod=None):
         if root is None:
             return
 
         loadVersion = None
         versions = {}
         for versionNode in root:
-            version = self.Version(versionNode, versions)
+            version = self.VersionConfig(versionNode, versions)
             if version.invalid is False:
                 versions[version.name] = version
                 if version.name == self.version:
@@ -1191,15 +1358,13 @@ class MainLookup:
             files = loadVersion.allFiles()
             for file in files:
                 if file.path:
-                    path = os.path.join(resourcePath, file.path)
+                    path = os.path.join(mod.resourcePath, file.path)
                     if file.filetype == "entities":
-                        self.entities.loadFile(
-                            path, resourcePath, modName, modPath, autogenerateContent
-                        )
+                        self.entities.loadFile(path, mod)
                     elif file.filetype == "stages":
-                        self.stages.loadFile(path, resourcePath, modName)
+                        self.stages.loadFile(path, mod)
                     elif file.filetype == "roomtypes":
-                        self.roomTypes.loadFile(path, resourcePath, modName)
+                        self.roomTypes.loadFile(path, mod)
         else:
             printf("Could not find valid version to load")
 

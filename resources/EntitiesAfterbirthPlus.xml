@@ -59,7 +59,7 @@
 
 	<!--——— Global ———-->
 	<group Name="Poops">
-		<entity ID="1498" Image="Entities/1498.0.0 - Holy Poop.png" Name="Holy Poop" Subtype="0" Variant="0" InEmptyRooms="1" IsGrid="1" />
+		<entity ID="1498" Image="Entities/1498.0.0 - Holy Poop.png" Name="Holy Poop" Subtype="0" Variant="0"/>
 	</group>
 
 	<group Name="Machines">
@@ -67,7 +67,9 @@
 	</group>
 
 	<group Name="Special Props">
-		<entity BaseHP="0" ID="999" Image="Entities/1000.116.0 - Dirt Patch.png" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2" IsGrid="1"/>
+		<entity BaseHP="0" ID="999" Image="Entities/1000.116.0 - Dirt Patch.png" Name="Dirt Patch" Subtype="0" Variant="116" PlaceVisual="0,0.2">
+			<tag>Grid</tag>
+		</entity>
 	</group>
 
 	<group Name="Global">
@@ -86,7 +88,7 @@
 	</group>
 
 	<group Name="Basement Enemies">
-		<entity Image="Entities/305.0.0 - Ministro.png" BaseHP="9" Champion="1" ID="305" Name="Ministro" Variant="0" Subtype="0" />
+		<entity Image="Entities/305.0.0 - Ministro.png" BaseHP="9" Tags="Champion" ID="305" Name="Ministro" Variant="0" Subtype="0" />
 	</group>
 
 	<group Name="Burning Basement Enemies">
@@ -95,27 +97,27 @@
 	</group>
 
 	<group Name="Chapter 2 (Main Path) Enemies">
-		<entity Image="Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
+		<entity Image="Entities/300.0.0 - MushroomMan.png" BaseHP="23" Tags="Champion" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
 		<entity Name="Ministro"/>
 	</group>
 
 	<group Name="Catacombs Enemies">
-		<entity BaseHP="54" Champion="1" Image="Entities/303.0.0 - Blister.png" ID="303" Name="Blister" Variant="0" Subtype="0"/>
-		<entity BaseHP="15" ID="304" Image="Entities/304.0.0 - TheThing.png" PlaceVisual="WallSnap" Name="The Thing" Variant="0" Subtype="0" Champion="1"/>
+		<entity BaseHP="54" Tags="Champion" Image="Entities/303.0.0 - Blister.png" ID="303" Name="Blister" Variant="0" Subtype="0"/>
+		<entity BaseHP="15" ID="304" Image="Entities/304.0.0 - TheThing.png" PlaceVisual="WallSnap" Name="The Thing" Variant="0" Subtype="0" Tags="Champion"/>
 	</group>
 
 	<group Name="Flooded Caves Enemies">
-		<entity BaseHP="20" Champion="0" ID="311" Image="Entities/311.0.0 - Mr. Mine.png" Name="Mr. Mine" Subtype="0" Variant="0" />
+		<entity BaseHP="20" ID="311" Image="Entities/311.0.0 - Mr. Mine.png" Name="Mr. Mine" Subtype="0" Variant="0" />
 		<entity BaseHP="25" ID="35" Image="Entities/35.2.0 - Mr. Red Maw.png" Name="Mr. Red Maw" Subtype="0" Variant="2" />
-		<entity Image="Entities/244.1.0 - Tube Worm.png" BaseHP="20" Champion="0" ID="244" Name="Tube Worm" Variant="1" Subtype="0" />
+		<entity Image="Entities/244.1.0 - Tube Worm.png" BaseHP="20" ID="244" Name="Tube Worm" Variant="1" Subtype="0" />
 	</group>
 
 	<group Name="Flooded Caves Obstacles">
 		<group Name="Cross Stone Shooter">
-			<entity Image="Entities/202.10.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
-			<entity Image="Entities/202.10.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
-			<entity Image="Entities/202.11.0 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
-			<entity Image="Entities/202.11.1 - Cross Stone Shooter.png" Champion="0" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
+			<entity Image="Entities/202.10.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
+			<entity Image="Entities/202.10.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
+			<entity Image="Entities/202.11.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
+			<entity Image="Entities/202.11.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
 		</group>
 	</group>
 
@@ -133,7 +135,7 @@
 	</group>
 
 	<group Name="Necropolis Enemies">
-		<entity Image="Entities/301.0.0 - PoisonMind.png" BaseHP="20" Champion="1" ID="301" Name="Poison Mind" Variant="0" Subtype="0" />
+		<entity Image="Entities/301.0.0 - PoisonMind.png" BaseHP="20" Tags="Champion" ID="301" Name="Poison Mind" Variant="0" Subtype="0" />
 		<entity Name="The Thing"/>
 	</group>
 
@@ -142,9 +144,9 @@
 	</group>
 
 	<group Name="Dank Depths Enemies">
-		<entity Image="Entities/307.0.0 - Tar Boy.png" BaseHP="55" Champion="1" ID="307" Name="Tar Boy" Variant="0" Subtype="0" />
-		<entity BaseHP="26" Champion="1" ID="23" Image="Entities/23.2.0 - Dank Charger.png" Name="Dank Charger" Subtype="0" Variant="2" />
-		<entity Image="Entities/309.0.0 - Gush.png" BaseHP="20" Champion="1" ID="309" Name="Gush" Variant="0" Subtype="0" />
+		<entity Image="Entities/307.0.0 - Tar Boy.png" BaseHP="55" Tags="Champion" ID="307" Name="Tar Boy" Variant="0" Subtype="0" />
+		<entity BaseHP="26" Tags="Champion" ID="23" Image="Entities/23.2.0 - Dank Charger.png" Name="Dank Charger" Subtype="0" Variant="2" />
+		<entity Image="Entities/309.0.0 - Gush.png" BaseHP="20" Tags="Champion" ID="309" Name="Gush" Variant="0" Subtype="0" />
 		<entity Name="Ministro"/>
 	</group>
 
@@ -158,12 +160,12 @@
 	</group>
 
 	<group Name="Scarred Womb Enemies">
-		<entity Image="Entities/308.0.0 - Fistuloid.png" BaseHP="30" Champion="1" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
-		<entity BaseHP="60" Champion="1" ID="310" Image="Entities/310.0.0 - Leper.png" Name="Leper" Subtype="0" Variant="0" />
-		<entity BaseHP="45" Champion="1" ID="310" Image="Entities/310.0.1 - Leper (stage 2).png" Name="Leper (stage 2)" Subtype="1" Variant="0" />
-		<entity BaseHP="30" Champion="1" ID="310" Image="Entities/310.0.2 - Leper (stage 3).png" Name="Leper (stage 3)" Subtype="2" Variant="0" />
-		<entity BaseHP="15" Champion="1" ID="310" Image="Entities/310.0.3 - Leper (stage 4).png" Name="Leper (stage 4)" Subtype="3" Variant="0" />
-		<entity BaseHP="5" Champion="0" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" Subtype="0" Variant="1" />
+		<entity Image="Entities/308.0.0 - Fistuloid.png" BaseHP="30" Tags="Champion" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
+		<entity BaseHP="60" Tags="Champion" ID="310" Image="Entities/310.0.0 - Leper.png" Name="Leper" Subtype="0" Variant="0" />
+		<entity BaseHP="45" Tags="Champion" ID="310" Image="Entities/310.0.1 - Leper (stage 2).png" Name="Leper (stage 2)" Subtype="1" Variant="0" />
+		<entity BaseHP="30" Tags="Champion" ID="310" Image="Entities/310.0.2 - Leper (stage 3).png" Name="Leper (stage 3)" Subtype="2" Variant="0" />
+		<entity BaseHP="15" Tags="Champion" ID="310" Image="Entities/310.0.3 - Leper (stage 4).png" Name="Leper (stage 4)" Subtype="3" Variant="0" />
+		<entity BaseHP="5" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" Subtype="0" Variant="1" />
 	</group>
 
 	<group Name="Chapter 5 (Main Path) Enemies">
@@ -175,7 +177,7 @@
 	</group>
 
 	<group Name="Sheol Enemies">
-		<entity BaseHP="18" Champion="1" Image="Entities/61.2.0 - Soul Sucker.png" ID="61" Name="Soul Sucker" Variant="2" Subtype="0"/>
+		<entity BaseHP="18" Tags="Champion" Image="Entities/61.2.0 - Soul Sucker.png" ID="61" Name="Soul Sucker" Variant="2" Subtype="0"/>
 	</group>
 
 	<group Name="Dark Room Enemies">
@@ -192,24 +194,24 @@
 
 	<!--——— Bosses ———-->
 	<group Name="Chapter 2 Bosses (Main Path) Shared">
-		<entity BaseHP="110" Boss="1" ID="409" Image="Entities/409.0.0 - RagMega.png" Name="Rag Mega" Variant="0" Subtype="0" />
-		<entity BaseHP="600" Boss="1" ID="411" Image="Entities/411.0.0 - BigHorn.png" Name="Big Horn" Variant="0" Subtype="0" />
+		<entity BaseHP="110" ID="409" Image="Entities/409.0.0 - RagMega.png" Name="Rag Mega" Variant="0" Subtype="0" />
+		<entity BaseHP="600" ID="411" Image="Entities/411.0.0 - BigHorn.png" Name="Big Horn" Variant="0" Subtype="0" />
 	</group>
 
 	<group Name="Chapter 3 Bosses (Main Path) Shared">
-		<entity BaseHP="800" Boss="1" ID="410" Image="Entities/265.1.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
+		<entity BaseHP="800" ID="410" Image="Entities/265.1.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Scarred Womb Bosses">
-		<entity BaseHP="700" Boss="1" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
+		<entity BaseHP="700" ID="413" Image="Entities/413.0.0 - The Matriarch.png" Name="The Matriarch" Subtype="0" Variant="0" />
 	</group>
 
 	<group Name="Story Bosses">
-		<entity ID="412" Variant="0" Subtype="0" Name="Delirium" BaseHP="10000" Boss="1" Image="Entities/412.0.0 - Delirium.png" />
+		<entity ID="412" Variant="0" Subtype="0" Name="Delirium" BaseHP="10000" Image="Entities/412.0.0 - Delirium.png" />
 	</group>
 
 	<group Name="Ultra Greed (Boss)">
-		<entity ID="406" Variant="1" Subtype="0" Name="Ultra Greedier" BaseHP="2500" Boss="1" Image="Entities/406.1.0 - UltraGreedier.png" />
+		<entity ID="406" Variant="1" Subtype="0" Name="Ultra Greedier" BaseHP="2500" Image="Entities/406.1.0 - UltraGreedier.png" />
 	</group>
 
 	<!--——— Unused ———-->

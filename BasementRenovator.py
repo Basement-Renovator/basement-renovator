@@ -658,7 +658,7 @@ class RoomEditorWidget(QGraphicsView):
                 paintSubtype = selectedEntity.entity.Subtype
 
         en = Entity(x, y, int(paintID), int(paintVariant), int(paintSubtype), 1.0)
-        if en.entity.config.isGridEnt:
+        if en.entity.config.hasTag("Grid"):
             en.updateCoords(x, y, depth=0)
 
         mainWindow.dirt()
@@ -774,7 +774,7 @@ class RoomEditorWidget(QGraphicsView):
             r = event.rect()
 
             # Entity Icon
-            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
+            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.iconpixmap)
 
             # Top Text
             font = painter.font()
@@ -793,17 +793,22 @@ class RoomEditorWidget(QGraphicsView):
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(
-                r.right() - 34 - 400,
-                20,
-                400,
-                12,
-                int(Qt.AlignRight | Qt.AlignBottom),
-                f"Boss: {e.entity.config.boss}, Champion: {e.entity.config.champion}",
-            )
+            textY = 20
+            tags = e.entity.config.printTags()
+            if tags != "[]":
+                painter.drawText(
+                    r.right() - 34 - 400,
+                    textY,
+                    400,
+                    12,
+                    int(Qt.AlignRight | Qt.AlignBottom),
+                    "Tags: " + tags,
+                )
+                textY += 16
+
             painter.drawText(
                 r.right() - 34 - 200,
-                36,
+                textY,
                 200,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
@@ -1127,7 +1132,7 @@ class Entity(QGraphicsItem):
             self.updateBlockedDoor(False)
 
     def updateBlockedDoor(self, val, countOnly=False):
-        if self.entity.config.blocksDoor:
+        if self.entity.config.hasTag("NoBlockDoors"):
             blockedDoor = self.scene().roomInfo.inFrontOfDoor(
                 self.entity.x, self.entity.y
             )
@@ -2533,6 +2538,7 @@ class RoomSelector(QWidget):
                 "useRange": False,
                 "enabled": False,
             },
+            "tags": {"enabled": False, "mode": "Any", "tags": []},
         }
 
         # ID Filter
@@ -2971,8 +2977,6 @@ class RoomSelector(QWidget):
     def changeFilter(self):
         self.colorizeClearFilterButtons()
 
-        uselessEntities = None
-
         # Here we go
         for room in self.getRooms():
             IDCond = entityCond = typeCond = sizeCond = extraCond = True
@@ -2994,17 +2998,23 @@ class RoomSelector(QWidget):
 
                 # For null rooms, include "empty" rooms regardless of type
                 if not typeCond and self.filter.typeData == 0:
-                    if uselessEntities is None:
-                        uselessEntities = list(
-                            map(
-                                lambda e: [
-                                    e.type,
-                                    e.variant,
-                                    e.subtype,
-                                ],
-                                xmlLookups.entities.lookup(inEmptyRooms=True),
-                            )
+                    nonCombatRooms = settings.value("NonCombatRoomFilter") == "1"
+                    checkTags = ["InEmptyRooms"]
+                    if nonCombatRooms:
+                        checkTags.append("InNonCombatRooms")
+
+                    uselessEntities = list(
+                        map(
+                            lambda e: [
+                                e.type,
+                                e.variant,
+                                e.subtype,
+                            ],
+                            xmlLookups.entities.lookup(
+                                tags=checkTags, matchAnyTag=True
+                            ),
                         )
+                    )
 
                     hasUsefulEntities = any(
                         entity[:3] not in uselessEntities
@@ -3074,6 +3084,43 @@ class RoomSelector(QWidget):
                             or room.lastTestTime <= lastTestTimeData["min"]
                         )
 
+                # Check if the room contains entities with certain tags
+                tagsData = self.filter.extraData["tags"]
+                if extraCond and tagsData["enabled"]:
+                    checkTags = tagsData["tags"]
+                    matchAnyTag = (
+                        tagsData["mode"] == "Any" or tagsData["mode"] == "Blacklist"
+                    )
+                    checkUnmatched = tagsData["mode"] == "Exclusive"
+
+                    matchingEntities = list(
+                        map(
+                            lambda e: [
+                                e.type,
+                                e.variant,
+                                e.subtype,
+                            ],
+                            xmlLookups.entities.lookup(
+                                tags=checkTags, matchAnyTag=matchAnyTag
+                            ),
+                        )
+                    )
+
+                    matched = any(
+                        (entity[:3] not in matchingEntities)
+                        if checkUnmatched
+                        else (entity[:3] in matchingEntities)
+                        for stack, x, y in room.spawns()
+                        for entity in stack
+                    )
+
+                    if tagsData["mode"] == "Blacklist":
+                        extraCond = not matched
+                    elif tagsData["mode"] == "Exclusive":
+                        extraCond = not matched
+                    else:
+                        extraCond = matched
+
             # Check if the room is the right size
             if self.filter.sizeData != -1:
                 sizeCond = self.filter.sizeData == room.info.shape
@@ -3087,7 +3134,8 @@ class RoomSelector(QWidget):
     def setEntityFilter(self, entity):
         self.filterEntity = entity
         self.entityToggle.setIcon(entity.icon)
-        self.changeFilter()
+        if self.entityToggle.checked:
+            self.changeFilter()
 
     def changeSize(self, shapeIdx):
 
@@ -4158,6 +4206,91 @@ class FilterDialog(QDialog):
             filterData["enabled"] = self.enabledToggle.isChecked()
             filterData["useRange"] = self.rangeEnabled.isChecked()
 
+    class TagFilterEntry(QWidget):
+        class TagFilterListItem(QListWidgetItem):
+            def __init__(self, config):
+                super(QListWidgetItem, self).__init__(config.label or config.tag)
+                self.config = config
+
+        def __init__(self, roomList):
+            super(QWidget, self).__init__()
+
+            self.roomList = roomList
+
+            self.layout = QVBoxLayout()
+
+            buttons = QHBoxLayout()
+
+            self.enabledToggle = QCheckBox("Tags")
+
+            modeGroup = QButtonGroup()
+            self.anyModeToggle = QRadioButton("Any")
+            self.exclusiveModeToggle = QRadioButton("Exclusive")
+            self.blacklistModeToggle = QRadioButton("Blacklist")
+
+            modeGroup.addButton(self.anyModeToggle)
+            modeGroup.addButton(self.exclusiveModeToggle)
+            modeGroup.addButton(self.blacklistModeToggle)
+
+            buttons.addWidget(self.enabledToggle)
+            buttons.addWidget(self.anyModeToggle)
+            buttons.addWidget(self.exclusiveModeToggle)
+            buttons.addWidget(self.blacklistModeToggle)
+            self.layout.addLayout(buttons)
+
+            self.tagsList = QListWidget()
+            global xmlLookups
+            for tag in xmlLookups.entities.tags.values():
+                if tag.filterable:
+                    tagItem = FilterDialog.TagFilterEntry.TagFilterListItem(tag)
+                    tagItem.setFlags(tagItem.flags() | Qt.ItemIsUserCheckable)
+                    tagItem.setCheckState(Qt.Unchecked)
+                    self.tagsList.addItem(tagItem)
+
+            self.setVals()
+
+            self.tagsList.itemChanged.connect(self.updateVals)
+            self.enabledToggle.toggled.connect(self.updateVals)
+            self.anyModeToggle.toggled.connect(self.updateVals)
+            self.exclusiveModeToggle.toggled.connect(self.updateVals)
+            self.blacklistModeToggle.toggled.connect(self.updateVals)
+
+            self.layout.addWidget(self.tagsList)
+            self.setLayout(self.layout)
+
+        def setVals(self):
+            filterData = self.roomList.filter.extraData["tags"]
+            self.enabledToggle.setChecked(filterData["enabled"])
+            self.anyModeToggle.setChecked(filterData["mode"] == "Any")
+            self.exclusiveModeToggle.setChecked(filterData["mode"] == "Exclusive")
+            self.blacklistModeToggle.setChecked(filterData["mode"] == "Blacklist")
+
+            for row in range(self.tagsList.count()):
+                item = self.tagsList.item(row)
+                item.setCheckState(
+                    Qt.Checked
+                    if item.config.tag in filterData["tags"]
+                    else Qt.Unchecked
+                )
+
+        def updateVals(self):
+            filterData = self.roomList.filter.extraData["tags"]
+            filterData["enabled"] = self.enabledToggle.isChecked()
+            if self.anyModeToggle.isChecked():
+                filterData["mode"] = "Any"
+            elif self.exclusiveModeToggle.isChecked():
+                filterData["mode"] = "Exclusive"
+            elif self.blacklistModeToggle.isChecked():
+                filterData["mode"] = "Blacklist"
+
+            checkedTags = []
+            for row in range(self.tagsList.count()):
+                item = self.tagsList.item(row)
+                if item.checkState() == Qt.Checked:
+                    checkedTags.append(item.config.tag)
+
+            filterData["tags"] = checkedTags
+
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
         self.setWindowTitle("Room Filter Configuration")
@@ -4192,6 +4325,9 @@ class FilterDialog(QDialog):
             "If no range, searches for never tested rooms and rooms before this date-time. Else searches for rooms tested within the range, starting from the righthand datetime"
         )
         self.layout.addWidget(self.lastTestTimeEntry)
+
+        self.tagsEntry = FilterDialog.TagFilterEntry(roomList)
+        self.layout.addWidget(self.tagsEntry)
 
         self.setLayout(self.layout)
 
@@ -4431,6 +4567,15 @@ class MainWindow(QMainWindow):
         )
         self.eg.setCheckable(True)
         self.eg.setChecked(settings.value("PinEntityFilter") == "1")
+        self.nonCombatFilter = self.e.addAction(
+            "Non-Combat Room Filter",
+            lambda: (
+                self.toggleSetting("NonCombatRoomFilter"),
+                self.roomList.changeFilter(),
+            ),
+        )
+        self.nonCombatFilter.setCheckable(True)
+        self.nonCombatFilter.setChecked(settings.value("NonCombatRoomFilter") == "1")
         self.el = self.e.addAction(
             "Snap to Room Boundaries",
             lambda: self.toggleSetting("SnapToBounds", onDefault=True),
