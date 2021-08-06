@@ -971,6 +971,7 @@ class EntityLookup(Lookup):
 
     def __init__(self, version, parent):
         self.entityList = self.GroupConfig()
+        self.entityListByType = {}
         self.groups = {}
         self.tags = {}
         self.tabs = []
@@ -985,6 +986,11 @@ class EntityLookup(Lookup):
         self.lastuniqueid += 1
         entity.uniqueid = self.lastuniqueid
         self.entityList.addEntry(entity)
+
+        if entity.type not in self.entityListByType:
+            self.entityListByType[entity.type] = []
+
+        self.entityListByType[entity.type].append(entity)
 
     def loadEntityNode(self, node: ET.Element, mod, parentGroup=None):
         entityType = node.get("ID")
@@ -1043,12 +1049,12 @@ class EntityLookup(Lookup):
         else:
             entityConfig = self.lookupOne(entityType, variant, subtype)
             if entityConfig:
+                overwrite = True
                 printf(
                     f'Entity "{name}" from "{mod.name}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod.name}"!'
                 )
             else:
                 entityConfig = self.EntityConfig(mod, self)
-                self.addEntity(entityConfig)
 
         if entityConfig:
             entityConfig.mod = mod
@@ -1058,6 +1064,9 @@ class EntityLookup(Lookup):
             warnings = entityConfig.fillFromNode(node)
             if warnings != "":
                 printf(warnings)
+
+            if not overwrite:
+                self.addEntity(entityConfig)
 
         groups = []
         nodeKind = node.get("Kind")
@@ -1201,8 +1210,16 @@ class EntityLookup(Lookup):
         name=None,
         tags=None,
         matchAnyTag=False,
+        entities=None,
     ):
-        entities = self.entityList.entries
+        if entities is None:
+            if entitytype is not None:
+                if entitytype in self.entityListByType:
+                    entities = self.entityListByType[entitytype]
+                else:
+                    return []
+            else:
+                entities = self.entityList.entries
 
         entities = list(
             filter(
@@ -1223,8 +1240,11 @@ class EntityLookup(Lookup):
         name=None,
         tags=None,
         matchAnyTag=False,
+        entities=None,
     ):
-        entities = self.lookup(entitytype, variant, subtype, name, tags, matchAnyTag)
+        entities = self.lookup(
+            entitytype, variant, subtype, name, tags, matchAnyTag, entities
+        )
 
         return next(iter(entities), None)
 

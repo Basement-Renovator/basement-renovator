@@ -52,7 +52,7 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
-from src.lookup import MainLookup
+from src.lookup import EntityLookup, MainLookup
 import src.anm2 as anm2
 from src.constants import *
 from src.util import *
@@ -1132,7 +1132,7 @@ class Entity(QGraphicsItem):
             self.updateBlockedDoor(False)
 
     def updateBlockedDoor(self, val, countOnly=False):
-        if self.entity.config.hasTag("NoBlockDoors"):
+        if not self.entity.config.hasTag("NoBlockDoors"):
             blockedDoor = self.scene().roomInfo.inFrontOfDoor(
                 self.entity.x, self.entity.y
             )
@@ -2213,6 +2213,7 @@ class Room(QListWidgetItem):
         self,
         name="New Room",
         spawns=[],
+        palette=None,
         difficulty=1,
         weight=1.0,
         myType=1,
@@ -2236,6 +2237,8 @@ class Room(QListWidgetItem):
         self.gridSpawns = spawns or [[] for x in range(self.info.gridLen())]
         if self.info.gridLen() != len(self.gridSpawns):
             printf(f"{name} ({variant}): Invalid grid spawns!")
+
+        self.palette = palette or {}
 
         self.difficulty = difficulty
         self.weight = weight
@@ -2985,11 +2988,7 @@ class RoomSelector(QWidget):
 
             # Check if the right entity is in the room
             if self.entityToggle.checked and self.filterEntity:
-                entityCond = any(
-                    self.filterEntity.config.matches(e[0], e[1], e[2])
-                    for stack, x, y in room.spawns()
-                    for e in stack
-                )
+                entityCond = self.filterEntity.config.uniqueid in room.palette
 
             # Check if the room is the right type
             if self.filter.typeData != -1:
@@ -3003,23 +3002,9 @@ class RoomSelector(QWidget):
                     if nonCombatRooms:
                         checkTags.append("InNonCombatRooms")
 
-                    uselessEntities = list(
-                        map(
-                            lambda e: [
-                                e.type,
-                                e.variant,
-                                e.subtype,
-                            ],
-                            xmlLookups.entities.lookup(
-                                tags=checkTags, matchAnyTag=True
-                            ),
-                        )
-                    )
-
                     hasUsefulEntities = any(
-                        entity[:3] not in uselessEntities
-                        for stack, x, y in room.spawns()
-                        for entity in stack
+                        not config.matches(tags=checkTags, matchAnyTag=True)
+                        for config in room.palette.values()
                     )
 
                     typeCond = not hasUsefulEntities
@@ -3093,25 +3078,10 @@ class RoomSelector(QWidget):
                     )
                     checkUnmatched = tagsData["mode"] == "Exclusive"
 
-                    matchingEntities = list(
-                        map(
-                            lambda e: [
-                                e.type,
-                                e.variant,
-                                e.subtype,
-                            ],
-                            xmlLookups.entities.lookup(
-                                tags=checkTags, matchAnyTag=matchAnyTag
-                            ),
-                        )
-                    )
-
                     matched = any(
-                        (entity[:3] not in matchingEntities)
-                        if checkUnmatched
-                        else (entity[:3] in matchingEntities)
-                        for stack, x, y in room.spawns()
-                        for entity in stack
+                        config.matches(tags=checkTags, matchAnyTag=matchAnyTag)
+                        != checkUnmatched
+                        for config in room.palette.values()
                     )
 
                     if tagsData["mode"] == "Blacklist":
@@ -3324,6 +3294,7 @@ class RoomSelector(QWidget):
             r = Room(
                 deepcopy(usedRoomName + extra),
                 deepcopy(room.gridSpawns),
+                deepcopy(room.palette),
                 deepcopy(room.difficulty),
                 deepcopy(room.weight),
                 deepcopy(room.info.type),
@@ -4337,6 +4308,280 @@ class FilterDialog(QDialog):
         QWidget.closeEvent(self, evt)
 
 
+class StatisticsDialog(QDialog):
+    class EntityStatisticsEntry:
+        class EntityStatItem(QTableWidgetItem):
+            def __init__(self, entry, property, formatAsPercent=False):
+                super(QTableWidgetItem, self).__init__()
+                self.entry = entry
+                self.property = property
+                self.sortValue = getattr(self.entry, self.property)
+                self.formatAsPercent = formatAsPercent
+                self.setFlags(Qt.ItemIsEnabled)
+
+            def __lt__(self, otherItem):
+                if (
+                    self.sortValue is not None
+                    and isinstance(
+                        otherItem, StatisticsDialog.EntityStatisticsEntry.EntityStatItem
+                    )
+                    and otherItem.sortValue is not None
+                ):
+                    return self.sortValue < otherItem.sortValue
+                else:
+                    return super(QTableWidgetItem, self).__lt__(otherItem)
+
+            def updateValue(self):
+                self.sortValue = getattr(self.entry, self.property)
+                if self.formatAsPercent:
+                    self.setText("{:.2%}".format(self.sortValue))
+                else:
+                    self.setText(str(round(self.sortValue, 2)))
+
+        def __init__(self, parent, config: EntityLookup.EntityConfig):
+            self.parent = parent
+            self.table = self.parent.statisticsTable
+            self.config = config
+
+            self.appearCount = 0
+            self.appearPercent = 0
+            self.averageDifficulty = 0
+            self.averageWeight = 0
+
+            self.rooms = []
+
+            self.pixmap = QPixmap(config.imagePath)
+
+            self.table.insertRow(0)
+            self.nameWidget = QTableWidgetItem()
+            self.nameWidget.setFlags(Qt.ItemIsEnabled)
+            self.nameWidget.setText(self.config.name)
+            self.nameWidget.setIcon(QIcon(self.pixmap))
+            self.table.setItem(0, 0, self.nameWidget)
+
+            self.propertyWidgets = []
+            properties = (
+                "appearCount",
+                "appearPercent",
+                "averageDifficulty",
+                "averageWeight",
+            )
+            column = 1
+            for property in properties:
+                widget = StatisticsDialog.EntityStatisticsEntry.EntityStatItem(
+                    self, property, property == "appearPercent"
+                )
+                self.table.setItem(0, column, widget)
+                self.propertyWidgets.append(widget)
+                column += 1
+
+        def updateWidgets(self, overallStats, roomFilter, useAverage):
+            roomStats = self.parent.getStatsForRooms(self.rooms, roomFilter)
+
+            self.appearCount = roomStats["Count"]
+            if overallStats["SumWeight"] > 0:
+                self.appearPercent = roomStats["SumWeight"] / overallStats["SumWeight"]
+            else:
+                self.appearPercent = 0
+
+            if useAverage:
+                self.averageDifficulty = roomStats["AverageDifficulty"]
+                self.averageWeight = roomStats["AverageWeight"]
+            else:
+                self.averageDifficulty = roomStats["ModeDifficulty"]
+                self.averageWeight = roomStats["ModeWeight"]
+
+            for widget in self.propertyWidgets:
+                widget.updateValue()
+
+            self.table.setRowHidden(self.nameWidget.row(), self.appearCount == 0)
+
+    def __init__(self, parent, roomList: RoomSelector):
+        super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Room Statistics")
+
+        self.roomList = roomList
+
+        self.layout = QVBoxLayout()
+
+        generalStatsBox = QGroupBox("General Stats")
+        generalStatsBoxLayout = QVBoxLayout()
+        self.generalStatsLabel = QLabel()
+        generalStatsBoxLayout.addWidget(self.generalStatsLabel)
+        generalStatsBox.setLayout(generalStatsBoxLayout)
+        self.layout.addWidget(generalStatsBox)
+
+        filterBox = QGroupBox("Filter")
+        filterBoxLayout = QVBoxLayout()
+        generalFilterCheckBoxesLayout = QHBoxLayout()
+        self.selectedRoomsToggle = QCheckBox("Only Selected Rooms")
+        self.selectedRoomsToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.selectedRoomsToggle)
+        self.modeAverageToggle = QCheckBox("Show Average Difficulty / Weight")
+        self.modeAverageToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.modeAverageToggle)
+        filterBoxLayout.addLayout(generalFilterCheckBoxesLayout)
+        difficultyFilterBox = QGroupBox("Room Difficulty")
+        difficultyFilterBoxLayout = QHBoxLayout()
+        self.difficultyCheckboxes = []
+        filterableDifficulties = (1, 5, 10, 15, 20)
+        for difficulty in filterableDifficulties:
+            checkbox = QCheckBox(str(difficulty))
+            checkbox.setChecked(True)
+            checkbox.toggled.connect(self.refresh)
+            self.difficultyCheckboxes.append(checkbox)
+            difficultyFilterBoxLayout.addWidget(checkbox)
+        difficultyFilterBox.setLayout(difficultyFilterBoxLayout)
+        filterBoxLayout.addWidget(difficultyFilterBox)
+        filterBox.setLayout(filterBoxLayout)
+        self.layout.addWidget(filterBox)
+
+        entityStatsBox = QGroupBox("Entity Stats")
+        entityStatsBoxLayout = QVBoxLayout()
+        self.statsEntries = []
+        self.statisticsTable = QTableWidget()
+        self.statisticsTable.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        entityStatsBoxLayout.addWidget(self.statisticsTable)
+        entityStatsBox.setLayout(entityStatsBoxLayout)
+        self.layout.addWidget(entityStatsBox)
+
+        self.populateTable()
+
+        self.setLayout(self.layout)
+
+        self.adjustSize()
+
+    def getStatsForRooms(self, rooms, roomFilter=None):
+        count = 0
+        sumRoomDifficulties = 0
+        sumRoomWeights = 0
+        difficulties = {}
+        weights = {}
+        for room in rooms:
+            if roomFilter:
+                if room.difficulty not in roomFilter["AllowedDifficulties"]:
+                    continue
+                if roomFilter["Rooms"]:
+                    if room not in roomFilter["Rooms"]:
+                        continue
+
+            count += 1
+            sumRoomDifficulties += room.difficulty
+            sumRoomWeights += room.weight
+
+            if room.difficulty not in difficulties:
+                difficulties[room.difficulty] = 0
+
+            difficulties[room.difficulty] += 1
+
+            if room.weight not in weights:
+                weights[room.weight] = 0
+
+            weights[room.weight] += 1
+
+        if count == 0:
+            return {
+                "Count": 0,
+                "SumDifficulty": 0,
+                "AverageDifficulty": 0,
+                "ModeDifficulty": 0,
+                "SumWeight": 0,
+                "AverageWeight": 0,
+                "ModeWeight": 0,
+            }
+
+        return {
+            "Count": count,
+            "SumDifficulty": sumRoomDifficulties,
+            "AverageDifficulty": sumRoomDifficulties / count,
+            "ModeDifficulty": max(difficulties, key=difficulties.get),
+            "SumWeight": sumRoomWeights,
+            "AverageWeight": sumRoomWeights / count,
+            "ModeWeight": max(weights, key=weights.get),
+        }
+
+    def populateTable(self):
+        self.statisticsTable.setSortingEnabled(False)
+        self.statisticsTable.clear()
+        self.statisticsTable.setColumnCount(5)
+
+        # if len(self.roomList.selectedRooms()) > 0:
+        #    rooms = self.roomList.orderedSelectedRooms()
+
+        rooms = self.roomList.getRooms()
+
+        overallStats = self.getStatsForRooms(rooms)
+        self.generalStatsLabel.setText(
+            f"Rooms: {overallStats['Count']}\n"
+            + f"Most Common Difficulty: {overallStats['ModeDifficulty']} (average: {round(overallStats['AverageDifficulty'], 2)})\n"
+            + f"Most Common Weight: {overallStats['ModeWeight']} (average: {round(overallStats['AverageWeight'], 2)})"
+        )
+
+        global xmlLookups
+        entities = {}
+        self.statsEntries = []
+        for room in rooms:
+            for config in room.palette.values():
+                if config.uniqueid not in entities:
+                    entities[config.uniqueid] = StatisticsDialog.EntityStatisticsEntry(
+                        self, config
+                    )
+                    self.statsEntries.append(entities[config.uniqueid])
+
+                entities[config.uniqueid].rooms.append(room)
+
+        self.refresh()
+
+        self.statisticsTable.setSortingEnabled(True)
+        self.statisticsTable.sortItems(1, Qt.DescendingOrder)
+        self.statisticsTable.verticalHeader().hide()
+        self.statisticsTable.resizeColumnsToContents()
+
+    def refresh(self):
+        rooms = self.roomList.getRooms()
+
+        roomFilter = {"AllowedDifficulties": {}, "Rooms": False}
+
+        if (
+            self.selectedRoomsToggle.isChecked()
+            and len(self.roomList.selectedRooms()) > 0
+        ):
+            rooms = self.roomList.selectedRooms()
+            roomFilter["Rooms"] = rooms
+
+        for checkbox in self.difficultyCheckboxes:
+            if checkbox.isChecked():
+                roomFilter["AllowedDifficulties"][int(checkbox.text())] = True
+
+        filteredStats = self.getStatsForRooms(rooms, roomFilter)
+
+        for stats in self.statsEntries:
+            stats.updateWidgets(
+                filteredStats, roomFilter, self.modeAverageToggle.isChecked()
+            )
+
+        if self.modeAverageToggle.isChecked():
+            self.statisticsTable.setHorizontalHeaderLabels(
+                [
+                    "Entity",
+                    "Room Count",
+                    "Appear Chance",
+                    "Average Difficulty",
+                    "Average Weight",
+                ]
+            )
+        else:
+            self.statisticsTable.setHorizontalHeaderLabels(
+                [
+                    "Entity",
+                    "Room Count",
+                    "Appear Chance",
+                    "Common Difficulty",
+                    "Common Weight",
+                ]
+            )
+
+
 ########################
 #      Main Window     #
 ########################
@@ -4597,6 +4842,9 @@ class MainWindow(QMainWindow):
         self.ek = self.e.addAction(
             "Recompute Room IDs", self.recomputeRoomIDs, QKeySequence("Ctrl+B")
         )
+        self.showStatistics = self.e.addAction(
+            "View Room Statistics", self.showStatisticsMenu
+        )
 
         v = mb.addMenu("View")
         self.wa = v.addAction(
@@ -4797,7 +5045,12 @@ class MainWindow(QMainWindow):
             for e in self.scene.roomRows[y].childItems():
                 spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append(e)
 
+        palette = {}
         for i, spawn in enumerate(spawns):
+            for e in spawn:
+                if e.entity.config.uniqueid not in palette:
+                    palette[e.entity.config.uniqueid] = e.entity.config
+
             spawns[i] = list(
                 map(
                     lambda e: [
@@ -4811,6 +5064,7 @@ class MainWindow(QMainWindow):
             )
 
         room.gridSpawns = spawns
+        room.palette = palette
 
     def closeEvent(self, event):
         """Handler for the main window close event"""
@@ -4921,6 +5175,10 @@ class MainWindow(QMainWindow):
     def showTestConfigMenu(self):
         testConfig = TestConfigDialog(self)
         testConfig.show()
+
+    def showStatisticsMenu(self):
+        statistics = StatisticsDialog(self, self.roomList)
+        statistics.show()
 
     def openMapDefault(self):
         if self.checkDirty():
@@ -5144,16 +5402,29 @@ class MainWindow(QMainWindow):
                             config is None or config.invalid
                         )
 
-        def coreToEntItem(e):
-            return [e.Type, e.Variant, e.Subtype, e.weight]
-
         def coreToRoomItem(coreRoom):
-            spawns = list(
-                map(lambda s: list(map(coreToEntItem, s)), coreRoom.gridSpawns)
-            )
+            palette = {}
+            gridSpawns = []
+            global xmlLookups
+            for gridSpawn in coreRoom.gridSpawns:
+                spawns = []
+                for spawn in gridSpawn:
+                    spawns.append(
+                        [spawn.Type, spawn.Variant, spawn.Subtype, spawn.weight]
+                    )
+
+                    config = xmlLookups.entities.lookupOne(
+                        spawn.Type, spawn.Variant, spawn.Subtype
+                    )
+                    if config and config.uniqueid not in palette:
+                        palette[config.uniqueid] = config
+
+                gridSpawns.append(spawns)
+
             r = Room(
                 coreRoom.name,
-                spawns,
+                gridSpawns,
+                palette,
                 coreRoom.difficulty,
                 coreRoom.weight,
                 coreRoom.info.type,
@@ -5562,6 +5833,7 @@ class MainWindow(QMainWindow):
                     lambda room: Room(
                         room.name,
                         room.gridSpawns,
+                        room.palette,
                         5,
                         1000.0,
                         1,
@@ -5716,6 +5988,7 @@ class MainWindow(QMainWindow):
                     Room(
                         f"{room.name} [Real ID: {room.info.variant}]",
                         room.gridSpawns,
+                        room.palette,
                         room.difficulty,
                         room.weight,
                         room.info.type,
