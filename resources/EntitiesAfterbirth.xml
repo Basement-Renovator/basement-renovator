@@ -1,4 +1,7 @@
 <data>
+	<!--——— Sorting Tags ———-->
+	<tag Label="Scarred Guts" StatisticsGroup="1">ScarredGuts</tag>
+
 	<!--——— Pickups ———-->
 	<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="37" Variant="300" Overwrite="1"/>
 	<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="38" Variant="300" Overwrite="1"/>
@@ -204,17 +207,19 @@
 		<entity Name="Mega Clotty"/>
 	</group>
 
-	<group Name="Chapter 4 (Main Path) Obstacles">
-		<group Name="Cross Stone Shooter"/>
-	</group>
-
 	<group Name="Scarred Womb Enemies">
 		<entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
-		<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
-		<entity BaseHP="28" Tags="Champion" ID="40" Image="Entities/40.1.1 - Scarred Guts (Left).png" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
-		<entity BaseHP="28" Tags="Champion" ID="40" Image="Entities/40.1.2 - Scarred Guts (Up).png" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
-		<entity BaseHP="28" Tags="Champion" ID="40" Image="Entities/40.1.3 - Scarred Guts (Right).png" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
-		<entity BaseHP="28" Tags="Champion" ID="40" Image="Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
+		<group Name="Scarred Guts">
+			<entitydefaults>
+				<tag>Champion</tag>
+				<tag>ScarredGuts</tag>
+			</entitydefaults>
+			<entity BaseHP="25" ID="40" Image="Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
+			<entity BaseHP="28" ID="40" Image="Entities/40.1.1 - Scarred Guts (Left).png" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
+			<entity BaseHP="28" ID="40" Image="Entities/40.1.2 - Scarred Guts (Up).png" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
+			<entity BaseHP="28" ID="40" Image="Entities/40.1.3 - Scarred Guts (Right).png" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
+			<entity BaseHP="28" ID="40" Image="Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
+		</group>
 	</group>
 
 	<group Name="Chapter 5 (Main Path) Enemies">

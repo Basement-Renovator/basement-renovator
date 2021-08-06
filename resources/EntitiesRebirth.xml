@@ -1,4 +1,5 @@
 <data>
+	<!--——— Important Tags ———-->
 	<tag Label="In Empty Rooms" Attribute="InEmptyRooms" Filterable="1">InEmptyRooms</tag>
 	<tag Label="In Non-Combat Rooms" Attribute="InNonCombatRooms" Filterable="1">InNonCombatRooms</tag>
 	<tag Label="Grid Entity" Attribute="IsGrid" Filterable="1">Grid</tag>
@@ -6,6 +7,15 @@
 	<tag Label="Can be Champion" Attribute="Champion" Filterable="1">Champion</tag>
 	<tag Label="Metadata" Attribute="Metadata" Filterable="1">Metadata</tag>
 	<tag Attribute="NoBlockDoors">NoBlockDoors</tag>
+
+	<!--——— Sorting Tags ———-->
+	<tag Label="Retracting Spikes" StatisticsGroup="1">RetractingSpikes</tag>
+	<tag Label="Wall Huggers" StatisticsGroup="1">WallHuggers</tag>
+	<tag Label="Random Props" StatisticsGroup="1">RandomProps</tag>
+	<tag Label="Gapers" StatisticsGroup="1">DefaultGaper</tag>
+	<tag Label="Pacers and Gushers" StatisticsGroup="1">DefaultGusher</tag>
+	<tag Label="Constant Stone Shooters" StatisticsGroup="1">ConstantStoneShooters</tag>
+	<tag Label="Guts" StatisticsGroup="1">GutsEnemy</tag>
 
 	<!--——— Tabs ———-->
 	<tab Name="Pickups"/>
@@ -214,11 +224,17 @@
 					<tag>InNonCombatRooms</tag>
 				</entitydefaults>
 				<entity ID="1930" Image="Entities/1930.0.0 - Spikes.png" Name="Spikes" Subtype="0" Variant="0" />
-				<entity ID="1931" Image="Entities/1931.0.0 - Retracting Spikes.png" Name="Retracting Spikes" Subtype="0" Variant="0" />
+				<group Name="Retracting Spikes">
+					<entitydefaults>
+						<tag>RetractingSpikes</tag>
+					</entitydefaults>
+					<entity ID="1931" Image="Entities/1931.0.0 - Retracting Spikes.png" Name="Retracting Spikes" Subtype="0" Variant="0" />
+				</group>
 			</group>
 			<group Label="Wall Huggers">
 				<entitydefaults>
 					<tag>InNonCombatRooms</tag>
+					<tag>WallHuggers</tag>
 				</entitydefaults>
 				<entity BaseHP="100" ID="218" Image="Entities/218.0.0 - Wall Hugger.png" PlaceVisual="0,0.5" Name="Wall Hugger (Random)" Subtype="0" Variant="0" />
 				<entity BaseHP="100" ID="218" Image="Entities/218.0.1 - Wall Hugger (Left).png" PlaceVisual="0,0.3" Name="Wall Hugger (Left)" Subtype="1" Variant="0" MirrorX="218.0.3" />
@@ -258,6 +274,7 @@
 					<tag>InEmptyRooms</tag>
 					<tag>InNonCombatRooms</tag>
 					<tag>NoBlockDoors</tag>
+					<tag>RandomProps</tag>
 				</entitydefaults>
 				<entity ID="0" Image="Entities/0.10.0 - Random Props A.png" Name="Random Props A" Subtype="0" Variant="10"/>
 				<entity ID="0" Image="Entities/0.20.0 - Random Props B.png" Name="Random Props B" Subtype="0" Variant="20"/>
@@ -431,10 +448,22 @@
 	</group>
 
 	<group Name="Chapter 1 (Main Path) Enemies">
-		<entity BaseHP="10" Tags="Champion" ID="10" Image="Entities/10.1.0 - Gaper.png" Name="Gaper" Subtype="0" Variant="1"/>
-		<entity BaseHP="10" Tags="Champion" ID="10" Image="Entities/10.0.0 - Frowning Gaper.png" Name="Frowning Gaper" Subtype="0" Variant="0"/>
-		<entity BaseHP="10" Tags="Champion" ID="11" Image="Entities/11.1.0 - Pacer.png" Name="Pacer" Subtype="0" Variant="1"/>
-		<entity BaseHP="10" Tags="Champion" ID="11" Image="Entities/11.0.0 - Gusher.png" Name="Gusher" Subtype="0" Variant="0"/>
+		<group Name="Default Gapers">
+			<entitydefaults>
+				<tag>Champion</tag>
+				<tag>DefaultGaper</tag>
+			</entitydefaults>
+			<entity BaseHP="10" ID="10" Image="Entities/10.1.0 - Gaper.png" Name="Gaper" Subtype="0" Variant="1"/>
+			<entity BaseHP="10" ID="10" Image="Entities/10.0.0 - Frowning Gaper.png" Name="Frowning Gaper" Subtype="0" Variant="0"/>
+		</group>
+		<group Name="Default Gushers">
+			<entitydefaults>
+				<tag>Champion</tag>
+				<tag>DefaultGusher</tag>
+			</entitydefaults>
+			<entity BaseHP="10" ID="11" Image="Entities/11.1.0 - Pacer.png" Name="Pacer" Subtype="0" Variant="1"/>
+			<entity BaseHP="10" ID="11" Image="Entities/11.0.0 - Gusher.png" Name="Gusher" Subtype="0" Variant="0"/>
+		</group>
 		<entity BaseHP="10" ID="226" Image="Entities/226.0.0 - Skinny.png" Name="Skinny" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" Tags="Champion" ID="12" Image="Entities/12.0.0 - Horf.png" Name="Horf" Subtype="0" Variant="0" />
 		<entity BaseHP="20" ID="208" Image="Entities/208.0.0 - Fatty.png" Name="Fatty" Subtype="0" Variant="0"/>
@@ -542,6 +571,9 @@
 	<group Name="Chapter 2 (Main Path) Obstacles">
 		<entity BaseHP="20" ID="42" Image="Entities/42.0.0 - Stone Grimace.png" Name="Stone Grimace" Subtype="0" Variant="0" />
 		<group Name="Constant Stone Shooter">
+			<entitydefaults>
+				<tag>ConstantStoneShooters</tag>
+			</entitydefaults>
 			<entity BaseHP="1" ID="202" Image="Entities/202.0.3 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Left)" Subtype="0" Variant="0" MirrorX="202.0.2" />
 			<entity BaseHP="1" ID="202" Image="Entities/202.0.1 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Up)" Subtype="1" Variant="0" MirrorY="202.0.3" />
 			<entity BaseHP="1" ID="202" Image="Entities/202.0.2 - Constant Stone Shooter.png" Name="Constant Stone Shooter (Right)" Subtype="2" Variant="0" MirrorX="202.0.0" />
@@ -635,11 +667,15 @@
 
 	<group Name="Depths Enemies">
 		<group Name="Guts (Enemy)">
-			<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.0.0 - Guts.png" Name="Guts (Random)" Subtype="0" Variant="0" />
-			<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.0.1 - Guts (Left).png" Name="Guts (Left)" Subtype="1" Variant="0" MirrorX="40.0.3" />
-			<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.0.2 - Guts (Up).png" Name="Guts (Up)" Subtype="2" Variant="0" MirrorY="40.0.4" />
-			<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.0.3 - Guts (Right).png" Name="Guts (Right)" Subtype="3" Variant="0" MirrorX="40.0.1" />
-			<entity BaseHP="25" Tags="Champion" ID="40" Image="Entities/40.0.4 - Guts (Down).png" Name="Guts (Down)" Subtype="4" Variant="0" MirrorY="40.0.2" />
+			<entitydefaults>
+				<tag>Champion</tag>
+				<tag>GutsEnemy</tag>
+			</entitydefaults>
+			<entity BaseHP="25" ID="40" Image="Entities/40.0.0 - Guts.png" Name="Guts (Random)" Subtype="0" Variant="0" />
+			<entity BaseHP="25" ID="40" Image="Entities/40.0.1 - Guts (Left).png" Name="Guts (Left)" Subtype="1" Variant="0" MirrorX="40.0.3" />
+			<entity BaseHP="25" ID="40" Image="Entities/40.0.2 - Guts (Up).png" Name="Guts (Up)" Subtype="2" Variant="0" MirrorY="40.0.4" />
+			<entity BaseHP="25" ID="40" Image="Entities/40.0.3 - Guts (Right).png" Name="Guts (Right)" Subtype="3" Variant="0" MirrorX="40.0.1" />
+			<entity BaseHP="25" ID="40" Image="Entities/40.0.4 - Guts (Down).png" Name="Guts (Down)" Subtype="4" Variant="0" MirrorY="40.0.2" />
 		</group>
 	</group>
 

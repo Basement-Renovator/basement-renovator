@@ -4338,10 +4338,12 @@ class StatisticsDialog(QDialog):
                 else:
                     self.setText(str(round(self.sortValue, 2)))
 
-        def __init__(self, parent, config: EntityLookup.EntityConfig):
+        def __init__(self, parent, config: EntityLookup.EntityConfig, tag=None):
             self.parent = parent
             self.table = self.parent.statisticsTable
             self.config = config
+            self.tag = tag
+            self.includedintag = False
 
             self.appearCount = 0
             self.appearPercent = 0
@@ -4355,7 +4357,12 @@ class StatisticsDialog(QDialog):
             self.table.insertRow(0)
             self.nameWidget = QTableWidgetItem()
             self.nameWidget.setFlags(Qt.ItemIsEnabled)
-            self.nameWidget.setText(self.config.name)
+
+            if self.tag:
+                self.nameWidget.setText(self.tag.label or self.tag.tag)
+            else:
+                self.nameWidget.setText(self.config.name)
+
             self.nameWidget.setIcon(QIcon(self.pixmap))
             self.table.setItem(0, 0, self.nameWidget)
 
@@ -4375,8 +4382,8 @@ class StatisticsDialog(QDialog):
                 self.propertyWidgets.append(widget)
                 column += 1
 
-        def updateWidgets(self, overallStats, roomFilter, useAverage):
-            roomStats = self.parent.getStatsForRooms(self.rooms, roomFilter)
+        def updateWidgets(self, overallStats, filter, useAverage):
+            roomStats = self.parent.getStatsForRooms(self.rooms, filter)
 
             self.appearCount = roomStats["Count"]
             if overallStats["SumWeight"] > 0:
@@ -4394,7 +4401,15 @@ class StatisticsDialog(QDialog):
             for widget in self.propertyWidgets:
                 widget.updateValue()
 
-            self.table.setRowHidden(self.nameWidget.row(), self.appearCount == 0)
+            hidden = self.appearCount < filter["AppearCountThreshold"]
+            if filter["CombatEntitiesOnly"]:
+                hidden = hidden or self.config.matches(tags=["InNonCombatRooms"])
+            if filter["GroupSimilarEntities"]:
+                hidden = hidden or self.includedintag
+            else:
+                hidden = hidden or self.tag is not None
+
+            self.table.setRowHidden(self.nameWidget.row(), hidden)
 
     def __init__(self, parent, roomList: RoomSelector):
         super(QDialog, self).__init__(parent)
@@ -4413,14 +4428,34 @@ class StatisticsDialog(QDialog):
 
         filterBox = QGroupBox("Filter")
         filterBoxLayout = QVBoxLayout()
+
         generalFilterCheckBoxesLayout = QHBoxLayout()
-        self.selectedRoomsToggle = QCheckBox("Only Selected Rooms")
+        self.selectedRoomsToggle = QCheckBox("Selected Rooms")
+        self.selectedRoomsToggle.setToolTip(
+            "If checked, statistics are only evaluated for selected rooms\nIf you have no rooms selected, has no effect."
+        )
         self.selectedRoomsToggle.toggled.connect(self.refresh)
         generalFilterCheckBoxesLayout.addWidget(self.selectedRoomsToggle)
-        self.modeAverageToggle = QCheckBox("Show Average Difficulty / Weight")
+        self.combatEntityToggle = QCheckBox("Combat Entities")
+        self.combatEntityToggle.setToolTip(
+            "If checked, hides non-combat related entities, like grids and pickups"
+        )
+        self.combatEntityToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.combatEntityToggle)
+        self.forceIndividualEntitiesToggle = QCheckBox("Force Individual Entities")
+        self.forceIndividualEntitiesToggle.setToolTip(
+            "Forces each entity entry to get its own row, rather than combining variants of the same entity"
+        )
+        self.forceIndividualEntitiesToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.forceIndividualEntitiesToggle)
+        self.modeAverageToggle = QCheckBox("Show Averages")
+        self.modeAverageToggle.setToolTip(
+            "If checked, displays the average difficulty / weight of the rooms each entity is in, rather than the most common"
+        )
         self.modeAverageToggle.toggled.connect(self.refresh)
         generalFilterCheckBoxesLayout.addWidget(self.modeAverageToggle)
         filterBoxLayout.addLayout(generalFilterCheckBoxesLayout)
+
         difficultyFilterBox = QGroupBox("Room Difficulty")
         difficultyFilterBoxLayout = QHBoxLayout()
         self.difficultyCheckboxes = []
@@ -4433,6 +4468,15 @@ class StatisticsDialog(QDialog):
             difficultyFilterBoxLayout.addWidget(checkbox)
         difficultyFilterBox.setLayout(difficultyFilterBoxLayout)
         filterBoxLayout.addWidget(difficultyFilterBox)
+
+        appearCountThresholdLabel = QLabel("Appear Count Threshold:")
+        filterBoxLayout.addWidget(appearCountThresholdLabel)
+
+        self.appearCountThresholdSpinner = QSpinBox()
+        self.appearCountThresholdSpinner.setRange(1, (2 ** 31) - 1)
+        self.appearCountThresholdSpinner.valueChanged.connect(self.refresh)
+        filterBoxLayout.addWidget(self.appearCountThresholdSpinner)
+
         filterBox.setLayout(filterBoxLayout)
         self.layout.addWidget(filterBox)
 
@@ -4519,6 +4563,7 @@ class StatisticsDialog(QDialog):
 
         global xmlLookups
         entities = {}
+        tags = {}
         self.statsEntries = []
         for room in rooms:
             for config in room.palette.values():
@@ -4527,6 +4572,19 @@ class StatisticsDialog(QDialog):
                         self, config
                     )
                     self.statsEntries.append(entities[config.uniqueid])
+
+                for tag in config.tags.values():
+                    if tag.statisticsgroup:
+                        if tag.tag not in tags:
+                            tags[tag.tag] = StatisticsDialog.EntityStatisticsEntry(
+                                self, config, tag
+                            )
+                            self.statsEntries.append(tags[tag.tag])
+
+                        if room not in tags[tag.tag].rooms:
+                            tags[tag.tag].rooms.append(room)
+
+                        entities[config.uniqueid].includedintag = True
 
                 entities[config.uniqueid].rooms.append(room)
 
@@ -4540,7 +4598,13 @@ class StatisticsDialog(QDialog):
     def refresh(self):
         rooms = self.roomList.getRooms()
 
-        roomFilter = {"AllowedDifficulties": {}, "Rooms": False}
+        roomFilter = {
+            "AllowedDifficulties": {},
+            "Rooms": False,
+            "AppearCountThreshold": self.appearCountThresholdSpinner.value(),
+            "CombatEntitiesOnly": self.combatEntityToggle.isChecked(),
+            "GroupSimilarEntities": not self.forceIndividualEntitiesToggle.isChecked(),
+        }
 
         if (
             self.selectedRoomsToggle.isChecked()

@@ -967,6 +967,7 @@ class EntityLookup(Lookup):
             self.tag = node.text
             self.label = node.get("Label")
             self.filterable = node.get("Filterable") == "1"
+            self.statisticsgroup = node.get("StatisticsGroup") == "1"
             self.attribute = node.get("Attribute")
 
     def __init__(self, version, parent):

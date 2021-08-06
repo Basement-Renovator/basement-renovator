@@ -1,4 +1,7 @@
 <data>
+	<!--——— Sorting Tags ———-->
+	<tag Label="Cross Stone Shooters" StatisticsGroup="1">CrossStoneShooters</tag>
+
 	<!--——— Pickups ———-->
 	<entity ID="5" Image="Entities/5.300.31 - Joker.png" Name="Joker" Subtype="31" Variant="300" Overwrite="1"/>
 	<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="42" Variant="300" Overwrite="1"/>
@@ -114,6 +117,9 @@
 
 	<group Name="Flooded Caves Obstacles">
 		<group Name="Cross Stone Shooter">
+			<entitydefaults>
+				<tag>CrossStoneShooters</tag>
+			</entitydefaults>
 			<entity Image="Entities/202.10.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
 			<entity Image="Entities/202.10.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
 			<entity Image="Entities/202.11.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
@@ -153,6 +159,10 @@
 	<group Name="Chapter 4 (Main Path) Enemies">
 		<entity Name="Poison Mind"/>
 		<entity Name="Mr. Red Maw"/>
+	</group>
+
+	<group Name="Chapter 4 (Main Path) Obstacles">
+		<group Name="Cross Stone Shooter"/>
 	</group>
 
 	<group Name="Utero Enemies">
