@@ -563,6 +563,9 @@ class EntityLookup(Lookup):
             self.uniqueid = -1
 
         def getTagConfig(self, tag):
+            if not self.parent:
+                return None
+
             if not isinstance(tag, EntityLookup.TagConfig):
                 name = tag
                 tag = self.parent.getTag(name=name)
@@ -872,6 +875,9 @@ class EntityLookup(Lookup):
             return warnings
 
         def printTags(self):
+            if not self.parent:
+                return "None"
+
             tags = "["
             separated = False
             for tag in self.parent.tags.values():
