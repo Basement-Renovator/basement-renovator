@@ -2,11 +2,12 @@
 Bulk replaces entities across room files
 """
 import json
-
-import roomconvert as cvt
-
+from pathlib import Path
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser
 from PyQt5.QtWidgets import QApplication
+
+import roomconvert as cvt
+from util import printf
 
 
 def replaceEntities(rooms, replaced, replacement):
@@ -39,7 +40,7 @@ def replaceEntities(rooms, replaced, replacement):
             numRooms += 1
             numEnts += n
 
-    print(
+    printf(
         f"{replaced} -> {replacement}: "
         + (
             numEnts > 0
@@ -49,6 +50,17 @@ def replaceEntities(rooms, replaced, replacement):
     )
 
     return numEnts
+
+
+def recurseGetFiles(path: Path):
+    filesList = []
+    if path.is_dir():
+        for path2 in path.iterdir():
+            filesList.extend(recurseGetFiles(path2))
+    elif path.suffix == ".xml":
+        filesList.append(path)
+
+    return filesList
 
 
 if __name__ == "__main__":
@@ -66,7 +78,8 @@ if __name__ == "__main__":
         "configFile",
         """json config file to grab configuration from. Format:
     {
-        files: [ absolute path to file to replace, ... ],
+        stb: optional, true to save an stb version of files,
+        files: [ path to file/folder to replace, ... ],
         entities: [
             {
                 from: [ type, variant, subtype (can be -1 for wild card) ],
@@ -87,24 +100,39 @@ if __name__ == "__main__":
 
     args = cmdParser.positionalArguments()
     configArg = args[0]
+    configPath = Path(configArg).absolute().resolve()
+    if not configArg or not configPath.is_file():
+        print("Invalid config path!")
+        sys.exit()
+
+    workingDirectory = configPath.parent
 
     stbArg = cmdParser.isSet(stbOpt)
 
-    with open(configArg) as configFile:
+    with open(configPath) as configFile:
         config = json.load(configFile)
 
-        totalRooms = 0
-        print("Replacing entities:", config["entities"])
-        for rf in config["files"]:
-            print("File: ", rf)
-            if ".xml" not in rf:
-                print("Must be xml! Skipping!")
-                continue
+        if "stb" in config and config["stb"]:
+            stbArg = True
 
-            roomFile = cvt.xmlToCommon(rf)
+        totalRooms = 0
+        printf("Replacing entities:", config["entities"])
+
+        files = []
+        for file in config["files"]:
+            basePath = workingDirectory / Path(file)
+            if not basePath.is_dir() and basePath.suffix != ".xml":
+                printf(f"{basePath} is not an XML file or directory, skipping!")
+            else:
+                files.extend(recurseGetFiles(basePath))
+
+        for path in files:
+            printf("Replacing Entities in File: ", path)
+
+            roomFile = cvt.xmlToCommon(path)
             rooms = roomFile.rooms
 
-            print("Room Count:", len(rooms))
+            printf("Room Count:", len(rooms))
             totalRooms += len(rooms)
 
             numEnts = 0
@@ -112,8 +140,8 @@ if __name__ == "__main__":
                 numEnts += replaceEntities(rooms, entPair["from"], entPair["to"])
 
             if numEnts > 0:
-                cvt.commonToXML(rf, rooms, file=roomFile)
+                cvt.commonToXML(path, rooms, file=roomFile)
                 if stbArg:
-                    cvt.commonToSTBAB(rf.replace(".xml", ".stb"), rooms)
+                    cvt.commonToSTBAB(path.with_suffix(".stb"), rooms)
 
-    print("Success!", totalRooms, "affected")
+    printf("Success!", totalRooms, "affected")
