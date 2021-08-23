@@ -460,8 +460,8 @@
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.2.0 - Cursed Death's Head.png" Kind="Enemies" Name="Cursed Death's Head" Variant="2" Subtype="0" />
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.3.0 - Brimstone Death's Head.png" Kind="Enemies" Name="Brimstone Death's Head" Variant="3" Subtype="0" />
 	<entity BaseHP="80" Group="Maws" ID="212" Image="resources/Entities/212.4.0 - Redskull.png" Kind="Enemies" Name="Redskull" Variant="4" Subtype="0" />
-	<entity BaseHP="20" Group="Maws" ID="887" Image="resources/Entities/887.0.0 - Dusty Death's Head (left).png" Kind="Enemies" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" />
-	<entity BaseHP="20" Group="Maws" ID="887" Image="resources/Entities/887.0.1 - Dusty Death's Head (right).png" Kind="Enemies" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" />
+	<entity BaseHP="20" Group="Maws" ID="887" Image="resources/Entities/887.0.0 - Dusty Death's Head (left).png" Kind="Enemies" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" MirrorX="887.0.1" />
+	<entity BaseHP="20" Group="Maws" ID="887" Image="resources/Entities/887.0.1 - Dusty Death's Head (right).png" Kind="Enemies" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" MirrorX="887.0.0" />
 	<entity BaseHP="22" Champion="1" Group="Maws" ID="828" Image="resources/Entities/828.0.0 - Necro.png" Kind="Enemies" Name="Necro" Variant="0" Subtype="0" />
 
 	<!-- Mulligans -->
