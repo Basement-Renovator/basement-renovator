@@ -158,7 +158,7 @@
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.4 - Heart (eternal).png" Kind="Pickups" Name="Heart (eternal)" Subtype="4" Variant="10" />
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.7 - Gold Heart.png" Kind="Pickups" Name="Gold Heart" Subtype="7" Variant="10" />
 	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.11 - Bone Heart.png" Kind="Pickups" Name="Bone Heart" Subtype="11" Variant="10" />
-	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.12 - Rotten Heart.png" Kind="Pickups" Name="Heart (rotten)" Subtype="12" Variant="10"/>
+	<entity Group="Hearts" ID="5" Image="resources/Entities/5.10.12 - Rotten Heart.png" Kind="Pickups" Name="Heart (rotten)" Subtype="12" Variant="10" />
 
 	<!-- Keys -->
 	<entity Group="Keys" ID="5" Image="resources/Entities/5.30.1 - Key.png" Kind="Pickups" Name="Key" Subtype="1" Variant="30" />
@@ -496,7 +496,7 @@
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.2 - Scarred Guts (Up).png" Kind="Enemies" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.3 - Scarred Guts (Right).png" Kind="Enemies" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.1.4 - Scarred Guts (Down).png" Kind="Enemies" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
-	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.0 - Slog (random).png" Kind="Enemies" Name="Slog (random)" Variant="2" Subtype="0"/>
+	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.0 - Slog (random).png" Kind="Enemies" Name="Slog (random)" Variant="2" Subtype="0" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.1 - Slog (left).png" Kind="Enemies" Name="Slog (left)" Variant="2" Subtype="1" MirrorX="40.2.3" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.2 - Slog (up).png" Kind="Enemies" Name="Slog (up)" Variant="2" Subtype="2" MirrorY="40.2.4" />
 	<entity BaseHP="28" Champion="1" Group="Organs" ID="40" Image="resources/Entities/40.2.3 - Slog (right).png" Kind="Enemies" Name="Slog (right)" Variant="2" Subtype="3" MirrorX="40.2.1" />
@@ -623,16 +623,16 @@
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.3 - Wall Hugger (Right).png" PlaceVisual="0,0.3" Kind="Enemies" Name="Wall Hugger (Right)" Subtype="3" Variant="0" MirrorX="218.0.1" />
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.4 - Wall Hugger (Down).png" PlaceVisual="0,0.25" Kind="Enemies" Name="Wall Hugger (Down)" Subtype="4" Variant="0" MirrorY="218.0.2" />
 	<entity BaseHP="100" Group="Spikes" ID="877" Image="resources/Entities/877.0.0 - Grudge.png" Kind="Enemies" Name="Grudge" Variant="0" Subtype="0" />
-	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.0 - Spikeball (left).png" Kind="Enemies" Name="Spikeball (left)" Subtype="0" Variant="0" MirrorX="852.0.2"/>
-	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.1 - Spikeball (up).png" Kind="Enemies" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3"/>
-	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.2 - Spikeball (right).png" Kind="Enemies" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0"/>
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.0 - Spikeball (left).png" Kind="Enemies" Name="Spikeball (left)" Subtype="0" Variant="0" MirrorX="852.0.2" />
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.1 - Spikeball (up).png" Kind="Enemies" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3" />
+	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.2 - Spikeball (right).png" Kind="Enemies" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0" />
 	<entity BaseHP="100" Group="Spikes" ID="852" Image="resources/Entities/852.0.3 - Spikeball (down).png" Kind="Enemies" Name="Spikeball (down)" Subtype="3" Variant="0" MirrorY="852.0.1" />
 	<entity BaseHP="100" Group="Spikes" ID="893" Image="resources/Entities/893.0.0 - Ball and Chain.png" Kind="Enemies" Name="Ball and Chain" Variant="0" Subtype="0" >
 		<bitfield Key="Subtype">
 			<spinner Length="4" Name="Distance" Unit="Grids">
 				<tooltip>Distance in grid tiles between the source grid and the Ball and Chain</tooltip>
 			</spinner>
-			<spinner Length="4" Name="Speed"/>
+			<spinner Length="4" Name="Speed" />
 			<dropdown Length="1">
 				<choice>Clockwise</choice>
 				<choice>Counter-Clockwise</choice>
@@ -681,8 +681,8 @@
 	<!-- Worms -->
 	<entity BaseHP="15" Champion="1" Group="Worms" ID="21" Image="resources/Entities/21.0.0 - Maggot.png" Kind="Enemies" Name="Maggot" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.0.0 - Small Maggot.png" Kind="Enemies" Name="Small Maggot" Variant="0" Subtype="0" />
-	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.3 - Small Maggot (three).png" Kind="Enemies" Name="Small Maggot (three)" Variant="10" Subtype="3"/>
-	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.5 - Small Maggot (five).png" Kind="Enemies" Name="Small Maggot (five)" Variant="10" Subtype="5"/>
+	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.3 - Small Maggot (three).png" Kind="Enemies" Name="Small Maggot (three)" Variant="10" Subtype="3" />
+	<entity BaseHP="10" Group="Worms" ID="853" Image="resources/Entities/853.10.5 - Small Maggot (five).png" Kind="Enemies" Name="Small Maggot (five)" Variant="10" Subtype="5" />
 	<entity BaseHP="20" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.0.0 - Charger.png" Kind="Enemies" Name="Charger" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Worms" ID="855" Image="resources/Entities/855.0.0 - Level 2 Charger.png" Kind="Enemies" Name="Level 2 Charger" Variant="0" Subtype="0" />
 	<entity BaseHP="22" Champion="1" Group="Worms" ID="23" Image="resources/Entities/23.1.0 - Drowned Charger.png" Kind="Enemies" Name="Drowned Charger" Subtype="0" Variant="1" />
@@ -983,14 +983,14 @@
 	<entity Group="Grid" ID="4500" Image="resources/Entities/4500.3.0 - Rail Plate.png" Kind="Stage" Name="Rail Plate" Subtype="0" Variant="3" IsGrid="1" />
 
 	<!-- Events -->
-	<entity Group="Events" ID="970" Image="resources/Entities/970.0.0 - Room Darkness.png" Kind="Stage" Name="Room Darkness" Subtype="0" Variant="0"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.0 - Water Flow (left).png" Kind="Stage" Name="Water Flow (left)" Subtype="0" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.1 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="1" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (right).png" Kind="Stage" Name="Water Flow (right)" Subtype="2" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.1.20 - Lava Disabler.png" Kind="Stage" Name="Lava Disabler" Subtype="20" Variant="1"/>
-	<entity Group="Events" ID="970" Image="resources/Entities/970.2.0 - Quest Door.png" Kind="Stage" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2"/>
+	<entity Group="Events" ID="970" Image="resources/Entities/970.0.0 - Room Darkness.png" Kind="Stage" Name="Room Darkness" Subtype="0" Variant="0" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.0 - Water Flow (left).png" Kind="Stage" Name="Water Flow (left)" Subtype="0" Variant="1" MirrorX="970.1.2" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.1 - Water Flow (up).png" Kind="Stage" Name="Water Flow (up)" Subtype="1" Variant="1" MirrorY="970.1.3" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (right).png" Kind="Stage" Name="Water Flow (right)" Subtype="2" Variant="1" MirrorX="970.1.0" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1" MirrorY="970.1.1" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.20 - Lava Disabler.png" Kind="Stage" Name="Lava Disabler" Subtype="20" Variant="1" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.2.0 - Quest Door.png" Kind="Stage" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Kind="Stage" Name="Event (group 0)" Subtype="0" Variant="0" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.1.0 - Event (group 1).png" Kind="Stage" Name="Event (group 1)" Subtype="0" Variant="1" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.2.0 - Event (group 2).png" Kind="Stage" Name="Event (group 2)" Subtype="0" Variant="2" />
@@ -1041,7 +1041,7 @@
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.3.0 - Rail (Pit) (up-to-left).png" Kind="Stage" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="3" IsGrid="1" MirrorX="6001.2.0" MirrorY="6001.5.0" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.4.0 - Rail (Pit) (left-to-up).png" Kind="Stage" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="4" IsGrid="1" MirrorX="6001.5.0" MirrorY="6001.2.0" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.5.0 - Rail (Pit) (right-to-up).png" Kind="Stage" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="5" IsGrid="1" MirrorX="6001.4.0" MirrorY="6001.3.0" />
-	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.6.0 - Rail (Pit) (crossroad).png" Kind="Stage" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="6" IsGrid="1"/>
+	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.6.0 - Rail (Pit) (crossroad).png" Kind="Stage" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="6" IsGrid="1" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.16.0 - Rail (Pit) (cart-left).png" Kind="Stage" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="16" IsGrid="1" MirrorX="6001.32.0" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.32.0 - Rail (Pit) (cart-right).png" Kind="Stage" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="32" IsGrid="1" MirrorX="6000.16.0" />
 	<entity Group="Rails" ID="6001" Image="resources/Entities/6001.17.0 - Rail (Pit) (cart-up).png" Kind="Stage" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="17" IsGrid="1" MirrorY="6001.33.0" />
