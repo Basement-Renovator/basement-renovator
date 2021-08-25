@@ -1,5 +1,8 @@
 <data>
   <group Name="Collect">
+    <entitydefaults>
+      <tag>InNonCombatRooms</tag>
+    </entitydefaults>
 		<group Name="(Collect) Random" Label="Random">
 			<group Name="Random Collectibles"/>
 		</group>
