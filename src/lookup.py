@@ -110,7 +110,7 @@ class Lookup(metaclass=abc.ABCMeta):
         if not os.path.isfile(file):
             return
 
-        self.loadFile(file, mod.resourcePath, mod.name, *args)
+        self.loadFile(file, mod, *args)
 
     @abc.abstractmethod
     def count(self):
