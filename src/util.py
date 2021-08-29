@@ -1,4 +1,5 @@
 import os
+import math
 
 
 def printf(*args):
@@ -59,3 +60,12 @@ def checkInt(s):
         return int(s) == float(s)
 
     return False
+
+
+def vectorFromAngle(angle):
+    radians = angle * (math.pi / 180)
+    return math.cos(radians), math.sin(radians)
+
+
+def angleFromVector(x, y):
+    return math.atan2(y, x) * (180 / math.pi)

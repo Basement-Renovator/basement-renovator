@@ -426,10 +426,10 @@
 			<entitydefaults>
 				<tag>WaterFlows</tag>
 			</entitydefaults>
-			<entity ID="970" Image="Entities/970.1.0 - Water Flow (left).png" Name="Water Flow (left)" Subtype="0" Variant="1"/>
-			<entity ID="970" Image="Entities/970.1.1 - Water Flow (up).png" Name="Water Flow (up)" Subtype="1" Variant="1"/>
-			<entity ID="970" Image="Entities/970.1.2 - Water Flow (right).png" Name="Water Flow (right)" Subtype="2" Variant="1"/>
-			<entity ID="970" Image="Entities/970.1.3 - Water Flow (down).png" Name="Water Flow (down)" Subtype="3" Variant="1"/>
+			<entity ID="970" Image="Entities/970.1.0 - Water Flow (left).png" Name="Water Flow (left)" Subtype="0" Variant="1" MirrorX="970.1.2"/>
+			<entity ID="970" Image="Entities/970.1.1 - Water Flow (up).png" Name="Water Flow (up)" Subtype="1" Variant="1" MirrorY="970.1.3"/>
+			<entity ID="970" Image="Entities/970.1.2 - Water Flow (right).png" Name="Water Flow (right)" Subtype="2" Variant="1" MirrorX="970.1.0"/>
+			<entity ID="970" Image="Entities/970.1.3 - Water Flow (down).png" Name="Water Flow (down)" Subtype="3" Variant="1" MirrorY="970.1.1"/>
 		</group>
 		<entity ID="970" Image="Entities/970.1.10 - Water Disabler.png" Name="Water Disabler" Subtype="10" Variant="1"/>
 		<entity ID="999" Image="Entities/1000.141.1 - Smoke Cloud.png" Name="Smoke Cloud" Variant="141" Subtype="1" />
@@ -638,8 +638,8 @@
 			<entitydefaults>
 				<tag>DustyDeathsHeads</tag>
 			</entitydefaults>
-			<entity BaseHP="20" ID="887" Image="Entities/887.0.0 - Dusty Death's Head (left).png" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" />
-			<entity BaseHP="20" ID="887" Image="Entities/887.0.1 - Dusty Death's Head (right).png" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" />
+			<entity BaseHP="20" ID="887" Image="Entities/887.0.0 - Dusty Death's Head (left).png" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" MirrorX="887.0.1"/>
+			<entity BaseHP="20" ID="887" Image="Entities/887.0.1 - Dusty Death's Head (right).png" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" MirrorX="887.0.0"/>
 		</group>
 		<entity BaseHP="22" Tags="Champion" ID="828" Image="Entities/828.0.0 - Necro.png" Name="Necro" Variant="0" Subtype="0" />
 	</group>
