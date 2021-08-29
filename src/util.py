@@ -1,4 +1,5 @@
 import os
+import math
 
 
 def printf(*args):
@@ -44,3 +45,11 @@ def sanitizePath(node, key, path):
     if prefix is not None:
         prefixPath = linuxPathSensitivityTraining(os.path.join(path, prefix))
         node.set(key, prefixPath)
+
+def vectorFromAngle(angle):
+    radians = angle * (math.pi / 180)
+    return math.cos(radians), math.sin(radians)
+
+
+def angleFromVector(x, y):
+    return math.atan2(y, x) * (180 / math.pi)

@@ -2424,9 +2424,26 @@ class Room(QListWidgetItem):
                         spawn[i] = info.config.mirrorX[i]
 
                 # Entities with subtypes that represent degrees
-                # TODO
-                for element in info.config.Bitfield:
-                    print(element)
+                if info.config.hasBitfields:
+                    for bitfield in info.config.bitfields:
+                        for element in bitfield.elements:
+                            if element.unit == "Degrees":
+                                angle = element.getWidgetValue(info.getBitfieldValue(bitfield))
+
+                                # Convert to game direction, in degrees
+                                angle = angle * (360 / (element.maximum + 1))
+                                angle = (angle + 90) % 360
+
+                                # Flip
+                                x, y = vectorFromAngle(angle)
+                                angle = angleFromVector(-x, y) % 360
+
+                                # Convert to widget value, from degrees
+                                angle = (angle / 360) * (element.maximum + 1)
+                                angle = (angle + element.valueoffset) % (element.maximum + 1)
+
+                                info.setBitfieldElementValue(element, element.getRawValueFromWidgetValue(angle))
+                                spawn[2] = info.Subtype
 
         # Flip shape
         shape = self.info.shapeData.get("MirrorX")
@@ -2460,9 +2477,26 @@ class Room(QListWidgetItem):
                         spawn[i] = info.config.mirrorY[i]
 
                 # Entities with subtypes that represent degrees
-                # TODO
-                for element in info.config.Bitfield:
-                    print(element)
+                if info.config.hasBitfields:
+                    for bitfield in info.config.bitfields:
+                        for element in bitfield.elements:
+                            if element.unit == "Degrees":
+                                angle = element.getWidgetValue(info.getBitfieldValue(bitfield))
+
+                                # Convert to game direction, in degrees
+                                angle = angle * (360 / (element.maximum + 1))
+                                angle = (angle + 90) % 360
+
+                                # Flip
+                                x, y = vectorFromAngle(angle)
+                                angle = angleFromVector(x, -y) % 360
+
+                                # Convert to widget value, from degrees
+                                angle = (angle / 360) * (element.maximum + 1)
+                                angle = (angle + element.valueoffset) % (element.maximum + 1)
+
+                                info.setBitfieldElementValue(element, element.getRawValueFromWidgetValue(angle))
+                                spawn[2] = info.Subtype
 
         # Flip shape
         shape = self.info.shapeData.get("MirrorY")
