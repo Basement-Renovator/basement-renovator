@@ -2428,7 +2428,9 @@ class Room(QListWidgetItem):
                     for bitfield in info.config.bitfields:
                         for element in bitfield.elements:
                             if element.unit == "Degrees":
-                                angle = element.getWidgetValue(info.getBitfieldValue(bitfield))
+                                angle = element.getWidgetValue(
+                                    info.getBitfieldValue(bitfield)
+                                )
 
                                 # Convert to game direction, in degrees
                                 angle = angle * (360 / (element.maximum + 1))
@@ -2440,9 +2442,13 @@ class Room(QListWidgetItem):
 
                                 # Convert to widget value, from degrees
                                 angle = (angle / 360) * (element.maximum + 1)
-                                angle = (angle + element.valueoffset) % (element.maximum + 1)
+                                angle = (angle + element.valueoffset) % (
+                                    element.maximum + 1
+                                )
 
-                                info.setBitfieldElementValue(element, element.getRawValueFromWidgetValue(angle))
+                                info.setBitfieldElementValue(
+                                    element, element.getRawValueFromWidgetValue(angle)
+                                )
                                 spawn[2] = info.Subtype
 
         # Flip shape
@@ -2481,7 +2487,9 @@ class Room(QListWidgetItem):
                     for bitfield in info.config.bitfields:
                         for element in bitfield.elements:
                             if element.unit == "Degrees":
-                                angle = element.getWidgetValue(info.getBitfieldValue(bitfield))
+                                angle = element.getWidgetValue(
+                                    info.getBitfieldValue(bitfield)
+                                )
 
                                 # Convert to game direction, in degrees
                                 angle = angle * (360 / (element.maximum + 1))
@@ -2493,9 +2501,13 @@ class Room(QListWidgetItem):
 
                                 # Convert to widget value, from degrees
                                 angle = (angle / 360) * (element.maximum + 1)
-                                angle = (angle + element.valueoffset) % (element.maximum + 1)
+                                angle = (angle + element.valueoffset) % (
+                                    element.maximum + 1
+                                )
 
-                                info.setBitfieldElementValue(element, element.getRawValueFromWidgetValue(angle))
+                                info.setBitfieldElementValue(
+                                    element, element.getRawValueFromWidgetValue(angle)
+                                )
                                 spawn[2] = info.Subtype
 
         # Flip shape

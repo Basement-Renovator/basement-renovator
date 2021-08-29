@@ -46,6 +46,7 @@ def sanitizePath(node, key, path):
         prefixPath = linuxPathSensitivityTraining(os.path.join(path, prefix))
         node.set(key, prefixPath)
 
+
 def vectorFromAngle(angle):
     radians = angle * (math.pi / 180)
     return math.cos(radians), math.sin(radians)
