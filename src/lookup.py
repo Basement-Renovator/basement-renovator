@@ -775,7 +775,7 @@ class EntityLookup(Lookup):
             if node.get("Invalid"):
                 self.invalid = True
 
-            if node.find("Gfx"):
+            if node.find("Gfx") is not None:
                 self.gfx = node.find("Gfx")
                 bgPrefix = self.gfx.get("BGPrefix")
                 if bgPrefix:
