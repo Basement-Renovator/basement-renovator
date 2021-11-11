@@ -989,6 +989,7 @@
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.2 - Water Flow (right).png" Kind="Stage" Name="Water Flow (right)" Subtype="2" Variant="1" MirrorX="970.1.0" />
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.3 - Water Flow (down).png" Kind="Stage" Name="Water Flow (down)" Subtype="3" Variant="1" MirrorY="970.1.1" />
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.10 - Water Disabler.png" Kind="Stage" Name="Water Disabler" Subtype="10" Variant="1" />
+	<entity Group="Events" ID="970" Image="resources/Entities/970.1.11 - Force Water.png" Kind="Stage" Name="Force Water" Subtype="11" Variant="1" />
 	<entity Group="Events" ID="970" Image="resources/Entities/970.1.20 - Lava Disabler.png" Kind="Stage" Name="Lava Disabler" Subtype="20" Variant="1" />
 	<entity Group="Events" ID="970" Image="resources/Entities/970.2.0 - Quest Door.png" Kind="Stage" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2" />
 	<entity Group="Events" ID="969" Image="resources/Entities/969.0.0 - Event (group 0).png" Kind="Stage" Name="Event (group 0)" Subtype="0" Variant="0" />
