@@ -454,6 +454,7 @@
 		<entity Name="Dart Fly"/>
 		<entity Name="Swarm"/>
 		<entity Name="Army Fly"/>
+		<entity Name="Boom Fly"/>
 		<entity BaseHP="80" ID="837" Image="Entities/837.0.0 - Henry.png" Name="Henry" Variant="0" Subtype="0" />
 	</group>
 
@@ -551,6 +552,7 @@
 	</group>
 
 	<group Name="Chapter 2 (Alt Path) Enemies">
+		<entity Name="Boney"/>
 		<entity Name="Gurgle"/>
 		<entity Name="Splasher"/>
 		<entity BaseHP="20" Tags="Champion" ID="821" Image="Entities/821.0.0 - Blaster.png" Name="Blaster" Variant="0" Subtype="0"/>
@@ -716,6 +718,7 @@
 	</group>
 
 	<group Name="Chapter 3 (Alt Path) Enemies">
+		<entity Name="Boney"/>
 		<entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.3.0 - Cursed Globin.png" Name="Cursed Globin" Variant="3" Subtype="0"/>
 		<entity BaseHP="20" Tags="Champion" ID="841" Image="Entities/841.0.0 - Revenant.png" Name="Revenant" Variant="0" Subtype="0"/>
 		<entity BaseHP="35" Tags="Champion" ID="841" Image="Entities/841.1.0 - Quad Revenant.png" Name="Quad Revenant" Variant="1" Subtype="0"/>
@@ -741,6 +744,7 @@
 		<entity BaseHP="24" Tags="Champion" ID="885" Image="Entities/885.0.0 - Cultist.png" Name="Cultist" Variant="0" Subtype="0" />
 		<entity BaseHP="20" ID="212" Image="Entities/212.2.0 - Cursed Death's Head.png" Name="Cursed Death's Head" Variant="2" Subtype="0" />
 		<entity BaseHP="14" ID="805" Image="Entities/805.0.0 - Bishop.png" Name="Bishop" Variant="0" Subtype="0" />
+		<entity Name="Dark Ball"/>
 	</group>
 
 	<group Name="Gehenna Obstacles">
@@ -759,7 +763,6 @@
 	</group>
 
 	<group Name="Gehenna Enemies">
-		<entity Name="Boney"/>
 		<entity BaseHP="18" Tags="Champion" ID="891" Image="Entities/891.0.0 - Goat.png" Name="Goat" Variant="0" Subtype="0"/>
 		<entity BaseHP="24" Tags="Champion" ID="891" Image="Entities/891.1.0 - Black Goat.png" Name="Black Goat" Variant="1" Subtype="0"/>
 		<entity BaseHP="12" Tags="Champion" ID="890" Image="Entities/890.0.0 - Maze Roamer (white).png" Name="Maze Roamer (white)" Variant="0" Subtype="0"/>
