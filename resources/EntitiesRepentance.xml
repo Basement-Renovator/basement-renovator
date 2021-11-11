@@ -188,6 +188,7 @@
 				<entity ID="4500" Image="Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (group 2)" Subtype="0" Variant="12" />
 				<entity ID="4500" Image="Entities/4500.13.0 - Event Plate (group 3).png" Name="Event Plate (group 3)" Subtype="0" Variant="13" />
 			</group>
+			<entity ID="970" Image="Entities/970.1.11 - Force Water.png" Name="Force Water" Subtype="11" Variant="1" />
 		</group>
 	</group>
 

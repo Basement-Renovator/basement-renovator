@@ -19,7 +19,7 @@ The latest version of Basement Renovator is always available in the [releases se
 
 ### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
-- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+), read on.
+- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+ or Repentance), read on.
 - First, unpack the game's assets using the official unpacker.
   - On Windows: <br />
   `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
