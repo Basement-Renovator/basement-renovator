@@ -30,7 +30,7 @@
         <Gfx StageGfx="Downpour" Subtype="27" />
         <Gfx StageGfx="Mines" Subtype="29" />
         <Gfx StageGfx="Mausoleum" Subtype="31" />
-    </room>
+	</room>
 	<room Name="Home Isaac's Bedroom" Type="1" StageName="Home" ID="1">
 		<Gfx BGPrefix="Backgrounds/0ex_isaacs_bedroom" />
 	</room>
