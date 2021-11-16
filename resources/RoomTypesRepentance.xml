@@ -24,6 +24,13 @@
 			whichever is loaded last will have priority
  -->
 <data>
+	<room Name="Ascent Room" Type="1" StageName="Ascent">
+        <Gfx StageGfx="Caves" Subtype="4" />
+        <Gfx StageGfx="Depths" Subtype="7" />
+        <Gfx StageGfx="Downpour" Subtype="27" />
+        <Gfx StageGfx="Mines" Subtype="29" />
+        <Gfx StageGfx="Mausoleum" Subtype="31" />
+    </room>
 	<room Name="Home Isaac's Bedroom" Type="1" StageName="Home" ID="1">
 		<Gfx BGPrefix="Backgrounds/0ex_isaacs_bedroom" />
 	</room>
