@@ -172,8 +172,10 @@
 			<Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mortis.png" />
 		</Gfx>
 	</stage> -->
-
 	<stage Name="Home" BaseGamePath="35.home" Stage="13" StageType="0" Pattern="home">
 		<Gfx BGPrefix="Backgrounds/0fx_hallway" />
+	</stage>
+	<stage Name="Ascent" BaseGamePath="36.backwards" Stage="0" StageType="0" Pattern="backwards">
+		<Gfx StageGfx="Basement"/>
 	</stage>
 </data>
