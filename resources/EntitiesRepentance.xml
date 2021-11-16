@@ -913,7 +913,7 @@
 		<entity BaseHP="80" ID="29" Image="Entities/29.3.0 - Tainted Hopper.png" Name="Tainted Hopper" Variant="3" Subtype="0" />
 		<entity BaseHP="60" ID="31" Image="Entities/31.1.0 - Tainted Spitty.png" Name="Tainted Spitty" Variant="1" Subtype="0" />
 		<entity BaseHP="14" ID="61" Image="Entities/61.7.0 - Tainted Sucker.png" Name="Tainted Sucker" Variant="7" Subtype="0" />
-		<entity BaseHP="50" ID="240" Image="Entities/240.3.0 - Tainted Soy Creep.png" Name="Tainted Soy Creep" Variant="3" Subtype="0" />
+		<entity BaseHP="50" ID="240" Image="Entities/240.3.0 - Tainted Soy Creep.png" PlaceVisual="WallSnap" Name="Tainted Soy Creep" Variant="3" Subtype="0" />
 		<entity BaseHP="100" ID="244" Image="Entities/244.2.0 - Tainted Round Worm.png" Name="Tainted Round Worm" Variant="2" Subtype="0" />
 		<entity BaseHP="100" ID="244" Image="Entities/244.2.1 - Tainted Round Worm Butt.png" Name="Tainted Round Worm Butt" Variant="2" Subtype="1" />
 		<entity BaseHP="100" ID="244" Image="Entities/244.3.0 - Tainted Tube Worm.png" Name="Tainted Tube Worm" Variant="3" Subtype="0" />
