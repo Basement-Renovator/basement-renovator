@@ -47,6 +47,21 @@ def sanitizePath(node, key, path):
         node.set(key, prefixPath)
 
 
+def checkFloat(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
+def checkInt(s):
+    if checkFloat(s):
+        return int(s) == float(s)
+
+    return False
+
+
 def vectorFromAngle(angle):
     radians = angle * (math.pi / 180)
     return math.cos(radians), math.sin(radians)

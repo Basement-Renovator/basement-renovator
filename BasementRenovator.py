@@ -52,19 +52,10 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
-from src.lookup import MainLookup
+from src.lookup import EntityLookup, MainLookup
 import src.anm2 as anm2
 from src.constants import *
 from src.util import *
-
-
-def checkNum(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
-
 
 ########################
 #       XML Data       #
@@ -78,11 +69,7 @@ def getGameVersion():
     # default mode if not set
     mode = settings.value("CompatibilityMode", "Repentance")
 
-    if mode == "Antibirth":
-        # assumes rebirth only is present for anti
-        return "Rebirth", "Antibirth"
-
-    return mode, None
+    return mode
 
 
 STEAM_PATH = None
@@ -98,8 +85,8 @@ def getSteamPath():
 
 
 def findInstallPath():
-    version, subVer = getGameVersion()
-    if subVer == "Antibirth":
+    version = getGameVersion()
+    if version == "Antibirth" and settings.value("AntibirthPath"):
         return settings.value("AntibirthPath")
 
     installPath = ""
@@ -200,10 +187,10 @@ def findModsPath(installPath=None):
     if modsPath == "" or not os.path.isdir(modsPath):
         cantFindPath = True
 
-    version, subVer = getGameVersion()
+    version = getGameVersion()
 
     if version not in ["Afterbirth+", "Repentance"]:
-        printf(f"INFO: {subVer or version} does not support mod folders")
+        printf(f"INFO: {version} does not support mod folders")
         return ""
 
     if cantFindPath:
@@ -291,6 +278,7 @@ def loadMods(autogenerate, installPath, resourcePath):
     if autogenerate and not os.path.exists(autogenPath):
         os.mkdir(autogenPath)
 
+    printf("-".join(["" for i in range(50)]))
     printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
         modPath = os.path.join(modsPath, mod)
@@ -670,7 +658,7 @@ class RoomEditorWidget(QGraphicsView):
                 paintSubtype = selectedEntity.entity.Subtype
 
         en = Entity(x, y, int(paintID), int(paintVariant), int(paintSubtype), 1.0)
-        if en.entity.config.isGridEnt:
+        if en.entity.config.hasTag("Grid"):
             en.updateCoords(x, y, depth=0)
 
         mainWindow.dirt()
@@ -786,7 +774,7 @@ class RoomEditorWidget(QGraphicsView):
             r = event.rect()
 
             # Entity Icon
-            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.pixmap)
+            painter.drawPixmap(QRect(r.right() - 32, 2, 32, 32), e.entity.iconpixmap)
 
             # Top Text
             font = painter.font()
@@ -805,17 +793,22 @@ class RoomEditorWidget(QGraphicsView):
             font = painter.font()
             font.setPixelSize(10)
             painter.setFont(font)
-            painter.drawText(
-                r.right() - 34 - 400,
-                20,
-                400,
-                12,
-                int(Qt.AlignRight | Qt.AlignBottom),
-                f"Boss: {e.entity.config.boss}, Champion: {e.entity.config.champion}",
-            )
+            textY = 20
+            tags = e.entity.config.printTags()
+            if tags != "[]":
+                painter.drawText(
+                    r.right() - 34 - 400,
+                    textY,
+                    400,
+                    12,
+                    int(Qt.AlignRight | Qt.AlignBottom),
+                    "Tags: " + tags,
+                )
+                textY += 16
+
             painter.drawText(
                 r.right() - 34 - 200,
-                36,
+                textY,
                 200,
                 12,
                 int(Qt.AlignRight | Qt.AlignBottom),
@@ -1000,7 +993,7 @@ class Entity(QGraphicsItem):
                 parts = list(
                     map(lambda x: x.strip(), self.config.placeVisual.split(","))
                 )
-                if len(parts) == 2 and checkNum(parts[0]) and checkNum(parts[1]):
+                if len(parts) == 2 and checkFloat(parts[0]) and checkFloat(parts[1]):
                     self.placeVisual = (float(parts[0]), float(parts[1]))
                 else:
                     self.placeVisual = parts[0]
@@ -1139,7 +1132,7 @@ class Entity(QGraphicsItem):
             self.updateBlockedDoor(False)
 
     def updateBlockedDoor(self, val, countOnly=False):
-        if self.entity.config.blocksDoor:
+        if not self.entity.config.hasTag("NoBlockDoors"):
             blockedDoor = self.scene().roomInfo.inFrontOfDoor(
                 self.entity.x, self.entity.y
             )
@@ -1466,8 +1459,8 @@ class Entity(QGraphicsItem):
                         parts = list(map(lambda x: x.strip(), placeVisual.split(",")))
                         if (
                             len(parts) == 2
-                            and checkNum(parts[0])
-                            and checkNum(parts[1])
+                            and checkFloat(parts[0])
+                            and checkFloat(parts[1])
                         ):
                             placeVisual = (float(parts[0]), float(parts[1]))
                         else:
@@ -2220,6 +2213,7 @@ class Room(QListWidgetItem):
         self,
         name="New Room",
         spawns=[],
+        palette=None,
         difficulty=1,
         weight=1.0,
         myType=1,
@@ -2243,6 +2237,8 @@ class Room(QListWidgetItem):
         self.gridSpawns = spawns or [[] for x in range(self.info.gridLen())]
         if self.info.gridLen() != len(self.gridSpawns):
             printf(f"{name} ({variant}): Invalid grid spawns!")
+
+        self.palette = palette or {}
 
         self.difficulty = difficulty
         self.weight = weight
@@ -2605,6 +2601,7 @@ class RoomSelector(QWidget):
                 "useRange": False,
                 "enabled": False,
             },
+            "tags": {"enabled": False, "mode": "Any", "tags": []},
         }
 
         # ID Filter
@@ -2850,11 +2847,15 @@ class RoomSelector(QWidget):
 
         global xmlLookups
         types = xmlLookups.roomTypes.lookup(showInMenu=True)
+        matchingTypes = xmlLookups.roomTypes.lookup(
+            room=self.selectedRoom(), showInMenu=True
+        )
 
         for i, t in enumerate(types):
             c.addItem(QIcon(t.get("Icon")), t.get("Name"))
+            if t in matchingTypes:
+                c.setCurrentIndex(i)
 
-        c.setCurrentIndex(self.selectedRoom().info.type)
         c.currentIndexChanged.connect(self.changeType)
         Type.setDefaultWidget(c)
         menu.addAction(Type)
@@ -3039,8 +3040,6 @@ class RoomSelector(QWidget):
     def changeFilter(self):
         self.colorizeClearFilterButtons()
 
-        uselessEntities = None
-
         # Here we go
         for room in self.getRooms():
             IDCond = entityCond = typeCond = sizeCond = extraCond = True
@@ -3049,11 +3048,7 @@ class RoomSelector(QWidget):
 
             # Check if the right entity is in the room
             if self.entityToggle.checked and self.filterEntity:
-                entityCond = any(
-                    self.filterEntity.config.matches(e[0], e[1], e[2])
-                    for stack, x, y in room.spawns()
-                    for e in stack
-                )
+                entityCond = self.filterEntity.config.uniqueid in room.palette
 
             # Check if the room is the right type
             if self.filter.typeData != -1:
@@ -3062,22 +3057,14 @@ class RoomSelector(QWidget):
 
                 # For null rooms, include "empty" rooms regardless of type
                 if not typeCond and self.filter.typeData == 0:
-                    if uselessEntities is None:
-                        uselessEntities = list(
-                            map(
-                                lambda e: [
-                                    e.type,
-                                    e.variant,
-                                    e.subtype,
-                                ],
-                                xmlLookups.entities.lookup(inEmptyRooms=True),
-                            )
-                        )
+                    nonCombatRooms = settings.value("NonCombatRoomFilter") == "1"
+                    checkTags = ["InEmptyRooms"]
+                    if nonCombatRooms:
+                        checkTags.append("InNonCombatRooms")
 
                     hasUsefulEntities = any(
-                        entity[:3] not in uselessEntities
-                        for stack, x, y in room.spawns()
-                        for entity in stack
+                        not config.matches(tags=checkTags, matchAnyTag=True)
+                        for config in room.palette.values()
                     )
 
                     typeCond = not hasUsefulEntities
@@ -3142,6 +3129,28 @@ class RoomSelector(QWidget):
                             or room.lastTestTime <= lastTestTimeData["min"]
                         )
 
+                # Check if the room contains entities with certain tags
+                tagsData = self.filter.extraData["tags"]
+                if extraCond and tagsData["enabled"]:
+                    checkTags = tagsData["tags"]
+                    matchAnyTag = (
+                        tagsData["mode"] == "Any" or tagsData["mode"] == "Blacklist"
+                    )
+                    checkUnmatched = tagsData["mode"] == "Exclusive"
+
+                    matched = any(
+                        config.matches(tags=checkTags, matchAnyTag=matchAnyTag)
+                        != checkUnmatched
+                        for config in room.palette.values()
+                    )
+
+                    if tagsData["mode"] == "Blacklist":
+                        extraCond = not matched
+                    elif tagsData["mode"] == "Exclusive":
+                        extraCond = not matched
+                    else:
+                        extraCond = matched
+
             # Check if the room is the right size
             if self.filter.sizeData != -1:
                 sizeCond = self.filter.sizeData == room.info.shape
@@ -3155,7 +3164,8 @@ class RoomSelector(QWidget):
     def setEntityFilter(self, entity):
         self.filterEntity = entity
         self.entityToggle.setIcon(entity.icon)
-        self.changeFilter()
+        if self.entityToggle.checked:
+            self.changeFilter()
 
     def changeSize(self, shapeIdx):
 
@@ -3344,6 +3354,7 @@ class RoomSelector(QWidget):
             r = Room(
                 deepcopy(usedRoomName + extra),
                 deepcopy(room.gridSpawns),
+                deepcopy(room.palette),
                 deepcopy(room.difficulty),
                 deepcopy(room.weight),
                 deepcopy(room.info.type),
@@ -3442,17 +3453,52 @@ class RoomSelector(QWidget):
 ########################
 
 
-class EntityGroupItem(object):
+class EntityGroupItem(QStandardItem):
     """Group Item to contain Entities for sorting"""
 
-    def __init__(self, name):
+    def __init__(self, group, startIndex=0):
+        QStandardItem.__init__(self)
 
         self.objects = []
-        self.startIndex = 0
-        self.endIndex = 0
+        self.config = group
 
-        self.name = name
+        self.startIndex = startIndex
+
+        self.name = group.label or ""
+        self.entitycount = 0
+
+        # Labelled groups are added last, so that loose entities are below the main group header.
+        labelledGroups = []
+
+        global xmlLookups
+        endIndex = startIndex
+        for entry in group.entries:
+            endIndex += 1
+            if isinstance(entry, xmlLookups.entities.GroupConfig):
+                if entry.label:
+                    labelledGroups.append(entry)
+                    endIndex -= 1
+                else:
+                    groupItem = EntityGroupItem(entry, endIndex)
+                    endIndex = groupItem.endIndex
+                    self.entitycount += groupItem.entitycount
+                    self.objects.append(groupItem)
+            elif isinstance(entry, xmlLookups.entities.EntityConfig):
+                self.entitycount += 1
+                self.objects.append(EntityItem(entry))
+
+        for entry in labelledGroups:
+            endIndex += 1
+            groupItem = EntityGroupItem(entry, endIndex)
+            endIndex = groupItem.endIndex
+            self.entitycount += groupItem.entitycount
+            self.objects.append(groupItem)
+
+        self.endIndex = endIndex
+
         self.alignment = Qt.AlignCenter
+
+        self.collapsed = False
 
     def getItem(self, index):
         """Retrieves an item of a specific index. The index is already checked for validity"""
@@ -3460,12 +3506,53 @@ class EntityGroupItem(object):
         if index == self.startIndex:
             return self
 
-        if index <= self.startIndex + len(self.objects):
-            return self.objects[index - self.startIndex - 1]
+        checkIndex = self.startIndex
+        for object in self.objects:
+            if isinstance(object, EntityGroupItem):
+                if index >= object.startIndex and index <= object.endIndex:
+                    return object.getItem(index)
+                else:
+                    checkIndex = object.endIndex
+            else:
+                checkIndex += 1
+                if checkIndex == index:
+                    return object
 
-    def calculateIndices(self, index):
-        self.startIndex = index
-        self.endIndex = len(self.objects) + index
+    def filterView(self, view, shownEntities=None, parentCollapsed=False):
+        hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
+
+        if shownEntities is None:
+            shownEntities = {}
+
+        hasAnyVisible = False
+
+        collapsed = self.collapsed or parentCollapsed
+
+        row = self.startIndex
+        for item in self.objects:
+            if isinstance(item, EntityItem):
+                row += 1
+                hidden = False
+                if view.filter.lower() not in item.name.lower():
+                    hidden = True
+                elif hideDuplicateEntities and item.config.uniqueid in shownEntities:
+                    hidden = True
+
+                view.setRowHidden(row, collapsed or hidden)
+                if not hidden:
+                    shownEntities[item.config.uniqueid] = True
+                    hasAnyVisible = True
+            elif isinstance(item, EntityGroupItem):
+                row = item.endIndex
+                visible = item.filterView(view, shownEntities, collapsed)
+                hasAnyVisible = hasAnyVisible or visible
+
+        if not hasAnyVisible or self.name == "" or parentCollapsed:
+            view.setRowHidden(self.startIndex, True)
+        else:
+            view.setRowHidden(self.startIndex, False)
+
+        return hasAnyVisible
 
 
 class EntityItem(QStandardItem):
@@ -3487,79 +3574,29 @@ class EntityItem(QStandardItem):
 class EntityGroupModel(QAbstractListModel):
     """Model containing all the grouped objects in a tileset"""
 
-    def __init__(self, kind=None, entityList=None):
+    def __init__(self, group=None):
         QAbstractListModel.__init__(self)
 
-        self.groups = {}
-        self.kind = kind
         self.view = None
 
-        self.filter = ""
+        if group is None:
+            group = xmlLookups.entities.entityList
 
-        if entityList is None:
-            entityList = xmlLookups.entities.lookup()
-
-        for entity in entityList:
-            try:
-                imgPath = Path(entity.imagePath)
-            except:
-                traceback.print_exception(*sys.exc_info())
-                imgPath = Path()
-
-            if not imgPath.exists():
-                printf(
-                    f"Could not find Entity {entity.name} ({entity.type}.{entity.variant}.{entity.subtype})'s palette icon:",
-                    imgPath,
-                )
-                entity.imagePath = "resources/Entities/questionmark.png"
-
-            entityItem = EntityItem(entity)
-
-            addKinds = entity.kinds
-            if self.kind is not None:
-                addKinds = [self.kind]
-
-            for kind in addKinds:
-                kindgroups = entity.kinds[kind]
-                for groupname in kindgroups:
-                    if groupname not in self.groups:
-                        self.groups[groupname] = EntityGroupItem(groupname)
-
-                    self.groups[groupname].objects.append(entityItem)
-
-        i = 0
-
-        # We hard-code the "Random" category to be at the top of the list,
-        # because it contains the most frequently-used entities
-        if "Random" in self.groups:
-            self.groups["Random"].calculateIndices(i)
-            i = self.groups["Random"].endIndex + 1
-
-        for key, group in sorted(self.groups.items()):
-            if key != "Random":
-                group.calculateIndices(i)
-                i = group.endIndex + 1
+        self.group = EntityGroupItem(group)
 
     def rowCount(self, parent=None):
-        c = 0
-
-        for group in self.groups.values():
-            c += len(group.objects) + 1
-
-        return c
+        return self.group.endIndex + 1
 
     def flags(self, index):
         item = self.getItem(index.row())
 
         if isinstance(item, EntityGroupItem):
-            return Qt.NoItemFlags
+            return Qt.ItemIsEnabled
         else:
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def getItem(self, index):
-        for group in self.groups.values():
-            if (group.startIndex <= index) and (index <= group.endIndex):
-                return group.getItem(index)
+        return self.group.getItem(index)
 
     def data(self, index, role=Qt.DisplayRole):
         # Should return the contents of a row when asked for the index
@@ -3601,7 +3638,7 @@ class EntityGroupModel(QAbstractListModel):
 
         elif role == Qt.DisplayRole:
             if isinstance(item, EntityGroupItem):
-                return item.name
+                return item.name + (" >" if item.collapsed else "")
 
         elif role == Qt.SizeHintRole:
             if isinstance(item, EntityGroupItem):
@@ -3671,44 +3708,26 @@ class EntityPalette(QWidget):
 
     def populateTabs(self):
 
-        groups = {
-            "Pickups": [],
-            "Enemies": [],
-            "Bosses": [],
-            "Stage": [],
-            "Collect": [],
-            "Mods": [],
-        }
+        for tab in xmlLookups.entities.tabs:
+            model = EntityGroupModel(tab)
+            if model.group.entitycount != 0:
+                listView = EntityList()
+                printf(
+                    f'Populating palette tab "{tab.name}" with {model.group.entitycount} entities'
+                )
 
-        entityList = xmlLookups.entities.lookup()
+                listView.setModel(model)
+                listView.model().view = listView
+                listView.filterList()
 
-        for entity in entityList:
-            for kind in entity.kinds:
-                if kind not in groups:
-                    groups[kind] = []
+                listView.clicked.connect(self.objSelected)
 
-                groups[kind].append(entity)
+                if tab.iconSize:
+                    listView.setIconSize(QSize(tab.iconSize[0], tab.iconSize[1]))
 
-        for group, ents in groups.items():
-            numEnts = len(ents)
-            if numEnts == 0:
-                continue
-
-            listView = EntityList()
-            printf(f'Populating palette tab "{group}" with {numEnts} entities')
-
-            listView.setModel(EntityGroupModel(group, ents))
-            listView.model().view = listView
-
-            listView.clicked.connect(self.objSelected)
-
-            if group == "Bosses":
-                listView.setIconSize(QSize(52, 52))
-
-            if group == "Collect":
-                listView.setIconSize(QSize(32, 64))
-
-            self.tabs.addTab(listView, group)
+                self.tabs.addTab(listView, tab.name)
+            else:
+                printf(f"Skipping empty palette tab {tab.name}")
 
     def currentSelectedObject(self):
         """Returns the currently selected object reference, for painting purposes."""
@@ -3728,6 +3747,11 @@ class EntityPalette(QWidget):
 
         current = self.currentSelectedObject()
         if current is None:
+            return
+
+        if isinstance(current, EntityGroupItem):
+            current.collapsed = not current.collapsed
+            self.tabs.currentWidget().filterList()
             return
 
         # holding ctrl skips the filter change step
@@ -3751,6 +3775,10 @@ class EntityPalette(QWidget):
         else:
             self.tabs.show()
             self.searchTab.hide()
+
+    def updateTabs(self):
+        for i in range(0, self.tabs.count()):
+            self.tabs.widget(i).filterList()
 
     objChanged = pyqtSignal(EntityItem, bool)
     objReplaced = pyqtSignal(EntityItem)
@@ -3785,26 +3813,7 @@ class EntityList(QListView):
         m = self.model()
         rows = m.rowCount()
 
-        # First loop for entity items
-        for row in range(rows):
-            item = m.getItem(row)
-
-            if isinstance(item, EntityItem):
-                if self.filter.lower() in item.name.lower():
-                    self.setRowHidden(row, False)
-                else:
-                    self.setRowHidden(row, True)
-
-        # Second loop for Group titles, check to see if all contents are hidden or not
-        for row in range(rows):
-            item = m.getItem(row)
-
-            if isinstance(item, EntityGroupItem):
-                self.setRowHidden(row, True)
-
-                for i in range(item.startIndex, item.endIndex):
-                    if not self.isRowHidden(i):
-                        self.setRowHidden(row, False)
+        m.group.filterView(self)
 
 
 class ReplaceDialog(QDialog):
@@ -4228,6 +4237,91 @@ class FilterDialog(QDialog):
             filterData["enabled"] = self.enabledToggle.isChecked()
             filterData["useRange"] = self.rangeEnabled.isChecked()
 
+    class TagFilterEntry(QWidget):
+        class TagFilterListItem(QListWidgetItem):
+            def __init__(self, config):
+                super(QListWidgetItem, self).__init__(config.label or config.tag)
+                self.config = config
+
+        def __init__(self, roomList):
+            super(QWidget, self).__init__()
+
+            self.roomList = roomList
+
+            self.layout = QVBoxLayout()
+
+            buttons = QHBoxLayout()
+
+            self.enabledToggle = QCheckBox("Tags")
+
+            modeGroup = QButtonGroup()
+            self.anyModeToggle = QRadioButton("Any")
+            self.exclusiveModeToggle = QRadioButton("Exclusive")
+            self.blacklistModeToggle = QRadioButton("Blacklist")
+
+            modeGroup.addButton(self.anyModeToggle)
+            modeGroup.addButton(self.exclusiveModeToggle)
+            modeGroup.addButton(self.blacklistModeToggle)
+
+            buttons.addWidget(self.enabledToggle)
+            buttons.addWidget(self.anyModeToggle)
+            buttons.addWidget(self.exclusiveModeToggle)
+            buttons.addWidget(self.blacklistModeToggle)
+            self.layout.addLayout(buttons)
+
+            self.tagsList = QListWidget()
+            global xmlLookups
+            for tag in xmlLookups.entities.tags.values():
+                if tag.filterable:
+                    tagItem = FilterDialog.TagFilterEntry.TagFilterListItem(tag)
+                    tagItem.setFlags(tagItem.flags() | Qt.ItemIsUserCheckable)
+                    tagItem.setCheckState(Qt.Unchecked)
+                    self.tagsList.addItem(tagItem)
+
+            self.setVals()
+
+            self.tagsList.itemChanged.connect(self.updateVals)
+            self.enabledToggle.toggled.connect(self.updateVals)
+            self.anyModeToggle.toggled.connect(self.updateVals)
+            self.exclusiveModeToggle.toggled.connect(self.updateVals)
+            self.blacklistModeToggle.toggled.connect(self.updateVals)
+
+            self.layout.addWidget(self.tagsList)
+            self.setLayout(self.layout)
+
+        def setVals(self):
+            filterData = self.roomList.filter.extraData["tags"]
+            self.enabledToggle.setChecked(filterData["enabled"])
+            self.anyModeToggle.setChecked(filterData["mode"] == "Any")
+            self.exclusiveModeToggle.setChecked(filterData["mode"] == "Exclusive")
+            self.blacklistModeToggle.setChecked(filterData["mode"] == "Blacklist")
+
+            for row in range(self.tagsList.count()):
+                item = self.tagsList.item(row)
+                item.setCheckState(
+                    Qt.Checked
+                    if item.config.tag in filterData["tags"]
+                    else Qt.Unchecked
+                )
+
+        def updateVals(self):
+            filterData = self.roomList.filter.extraData["tags"]
+            filterData["enabled"] = self.enabledToggle.isChecked()
+            if self.anyModeToggle.isChecked():
+                filterData["mode"] = "Any"
+            elif self.exclusiveModeToggle.isChecked():
+                filterData["mode"] = "Exclusive"
+            elif self.blacklistModeToggle.isChecked():
+                filterData["mode"] = "Blacklist"
+
+            checkedTags = []
+            for row in range(self.tagsList.count()):
+                item = self.tagsList.item(row)
+                if item.checkState() == Qt.Checked:
+                    checkedTags.append(item.config.tag)
+
+            filterData["tags"] = checkedTags
+
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
         self.setWindowTitle("Room Filter Configuration")
@@ -4263,12 +4357,353 @@ class FilterDialog(QDialog):
         )
         self.layout.addWidget(self.lastTestTimeEntry)
 
+        self.tagsEntry = FilterDialog.TagFilterEntry(roomList)
+        self.layout.addWidget(self.tagsEntry)
+
         self.setLayout(self.layout)
 
     def closeEvent(self, evt):
         self.roomList.setExtraFilter(None, force=True)
         self.roomList.changeFilter()
         QWidget.closeEvent(self, evt)
+
+
+class StatisticsDialog(QDialog):
+    class EntityStatisticsEntry:
+        class EntityStatItem(QTableWidgetItem):
+            def __init__(self, entry, property, formatAsPercent=False):
+                super(QTableWidgetItem, self).__init__()
+                self.entry = entry
+                self.property = property
+                self.sortValue = getattr(self.entry, self.property)
+                self.formatAsPercent = formatAsPercent
+                self.setFlags(Qt.ItemIsEnabled)
+
+            def __lt__(self, otherItem):
+                if (
+                    self.sortValue is not None
+                    and isinstance(
+                        otherItem, StatisticsDialog.EntityStatisticsEntry.EntityStatItem
+                    )
+                    and otherItem.sortValue is not None
+                ):
+                    return self.sortValue < otherItem.sortValue
+                else:
+                    return super(QTableWidgetItem, self).__lt__(otherItem)
+
+            def updateValue(self):
+                self.sortValue = getattr(self.entry, self.property)
+                if self.formatAsPercent:
+                    self.setText("{:.2%}".format(self.sortValue))
+                else:
+                    self.setText(str(round(self.sortValue, 2)))
+
+        def __init__(self, parent, config: EntityLookup.EntityConfig, tag=None):
+            self.parent = parent
+            self.table = self.parent.statisticsTable
+            self.config = config
+            self.tag = tag
+            self.includedintag = False
+
+            self.appearCount = 0
+            self.appearPercent = 0
+            self.averageDifficulty = 0
+            self.averageWeight = 0
+
+            self.rooms = []
+
+            self.pixmap = QPixmap(config.imagePath)
+
+            self.table.insertRow(0)
+            self.nameWidget = QTableWidgetItem()
+            self.nameWidget.setFlags(Qt.ItemIsEnabled)
+
+            if self.tag:
+                self.nameWidget.setText(self.tag.label or self.tag.tag)
+            else:
+                self.nameWidget.setText(self.config.name)
+
+            self.nameWidget.setIcon(QIcon(self.pixmap))
+            self.table.setItem(0, 0, self.nameWidget)
+
+            self.propertyWidgets = []
+            properties = (
+                "appearCount",
+                "appearPercent",
+                "averageDifficulty",
+                "averageWeight",
+            )
+            column = 1
+            for property in properties:
+                widget = StatisticsDialog.EntityStatisticsEntry.EntityStatItem(
+                    self, property, property == "appearPercent"
+                )
+                self.table.setItem(0, column, widget)
+                self.propertyWidgets.append(widget)
+                column += 1
+
+        def updateWidgets(self, overallStats, filter, useAverage):
+            roomStats = self.parent.getStatsForRooms(self.rooms, filter)
+
+            self.appearCount = roomStats["Count"]
+            if overallStats["SumWeight"] > 0:
+                self.appearPercent = roomStats["SumWeight"] / overallStats["SumWeight"]
+            else:
+                self.appearPercent = 0
+
+            if useAverage:
+                self.averageDifficulty = roomStats["AverageDifficulty"]
+                self.averageWeight = roomStats["AverageWeight"]
+            else:
+                self.averageDifficulty = roomStats["ModeDifficulty"]
+                self.averageWeight = roomStats["ModeWeight"]
+
+            for widget in self.propertyWidgets:
+                widget.updateValue()
+
+            hidden = self.appearCount < filter["AppearCountThreshold"]
+            if filter["CombatEntitiesOnly"]:
+                hidden = hidden or self.config.matches(tags=["InNonCombatRooms"])
+            if filter["GroupSimilarEntities"]:
+                hidden = hidden or self.includedintag
+            else:
+                hidden = hidden or self.tag is not None
+
+            self.table.setRowHidden(self.nameWidget.row(), hidden)
+
+    def __init__(self, parent, roomList: RoomSelector):
+        super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Room Statistics")
+
+        self.roomList = roomList
+
+        self.layout = QVBoxLayout()
+
+        generalStatsBox = QGroupBox("General Stats")
+        generalStatsBoxLayout = QVBoxLayout()
+        self.generalStatsLabel = QLabel()
+        generalStatsBoxLayout.addWidget(self.generalStatsLabel)
+        generalStatsBox.setLayout(generalStatsBoxLayout)
+        self.layout.addWidget(generalStatsBox)
+
+        filterBox = QGroupBox("Filter")
+        filterBoxLayout = QVBoxLayout()
+
+        generalFilterCheckBoxesLayout = QHBoxLayout()
+        self.selectedRoomsToggle = QCheckBox("Selected Rooms")
+        self.selectedRoomsToggle.setToolTip(
+            "If checked, statistics are only evaluated for selected rooms\nIf you have no rooms selected, has no effect."
+        )
+        self.selectedRoomsToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.selectedRoomsToggle)
+        self.combatEntityToggle = QCheckBox("Combat Entities")
+        self.combatEntityToggle.setToolTip(
+            "If checked, hides non-combat related entities, like grids and pickups"
+        )
+        self.combatEntityToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.combatEntityToggle)
+        self.forceIndividualEntitiesToggle = QCheckBox("Force Individual Entities")
+        self.forceIndividualEntitiesToggle.setToolTip(
+            "Forces each entity entry to get its own row, rather than combining variants of the same entity"
+        )
+        self.forceIndividualEntitiesToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.forceIndividualEntitiesToggle)
+        self.modeAverageToggle = QCheckBox("Show Averages")
+        self.modeAverageToggle.setToolTip(
+            "If checked, displays the average difficulty / weight of the rooms each entity is in, rather than the most common"
+        )
+        self.modeAverageToggle.toggled.connect(self.refresh)
+        generalFilterCheckBoxesLayout.addWidget(self.modeAverageToggle)
+        filterBoxLayout.addLayout(generalFilterCheckBoxesLayout)
+
+        difficultyFilterBox = QGroupBox("Room Difficulty")
+        difficultyFilterBoxLayout = QHBoxLayout()
+        self.difficultyCheckboxes = []
+        filterableDifficulties = (1, 5, 10, 15, 20)
+        for difficulty in filterableDifficulties:
+            checkbox = QCheckBox(str(difficulty))
+            checkbox.setChecked(True)
+            checkbox.toggled.connect(self.refresh)
+            self.difficultyCheckboxes.append(checkbox)
+            difficultyFilterBoxLayout.addWidget(checkbox)
+        difficultyFilterBox.setLayout(difficultyFilterBoxLayout)
+        filterBoxLayout.addWidget(difficultyFilterBox)
+
+        appearCountThresholdLabel = QLabel("Appear Count Threshold:")
+        filterBoxLayout.addWidget(appearCountThresholdLabel)
+
+        self.appearCountThresholdSpinner = QSpinBox()
+        self.appearCountThresholdSpinner.setRange(1, (2 ** 31) - 1)
+        self.appearCountThresholdSpinner.valueChanged.connect(self.refresh)
+        filterBoxLayout.addWidget(self.appearCountThresholdSpinner)
+
+        filterBox.setLayout(filterBoxLayout)
+        self.layout.addWidget(filterBox)
+
+        entityStatsBox = QGroupBox("Entity Stats")
+        entityStatsBoxLayout = QVBoxLayout()
+        self.statsEntries = []
+        self.statisticsTable = QTableWidget()
+        self.statisticsTable.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        entityStatsBoxLayout.addWidget(self.statisticsTable)
+        entityStatsBox.setLayout(entityStatsBoxLayout)
+        self.layout.addWidget(entityStatsBox)
+
+        self.populateTable()
+
+        self.setLayout(self.layout)
+
+        self.adjustSize()
+
+    def getStatsForRooms(self, rooms, roomFilter=None):
+        count = 0
+        sumRoomDifficulties = 0
+        sumRoomWeights = 0
+        difficulties = {}
+        weights = {}
+        for room in rooms:
+            if roomFilter:
+                if room.difficulty not in roomFilter["AllowedDifficulties"]:
+                    continue
+                if roomFilter["Rooms"]:
+                    if room not in roomFilter["Rooms"]:
+                        continue
+
+            count += 1
+            sumRoomDifficulties += room.difficulty
+            sumRoomWeights += room.weight
+
+            if room.difficulty not in difficulties:
+                difficulties[room.difficulty] = 0
+
+            difficulties[room.difficulty] += 1
+
+            if room.weight not in weights:
+                weights[room.weight] = 0
+
+            weights[room.weight] += 1
+
+        if count == 0:
+            return {
+                "Count": 0,
+                "SumDifficulty": 0,
+                "AverageDifficulty": 0,
+                "ModeDifficulty": 0,
+                "SumWeight": 0,
+                "AverageWeight": 0,
+                "ModeWeight": 0,
+            }
+
+        return {
+            "Count": count,
+            "SumDifficulty": sumRoomDifficulties,
+            "AverageDifficulty": sumRoomDifficulties / count,
+            "ModeDifficulty": max(difficulties, key=difficulties.get),
+            "SumWeight": sumRoomWeights,
+            "AverageWeight": sumRoomWeights / count,
+            "ModeWeight": max(weights, key=weights.get),
+        }
+
+    def populateTable(self):
+        self.statisticsTable.setSortingEnabled(False)
+        self.statisticsTable.clear()
+        self.statisticsTable.setColumnCount(5)
+
+        # if len(self.roomList.selectedRooms()) > 0:
+        #    rooms = self.roomList.orderedSelectedRooms()
+
+        rooms = self.roomList.getRooms()
+
+        overallStats = self.getStatsForRooms(rooms)
+        self.generalStatsLabel.setText(
+            f"Rooms: {overallStats['Count']}\n"
+            + f"Most Common Difficulty: {overallStats['ModeDifficulty']} (average: {round(overallStats['AverageDifficulty'], 2)})\n"
+            + f"Most Common Weight: {overallStats['ModeWeight']} (average: {round(overallStats['AverageWeight'], 2)})"
+        )
+
+        global xmlLookups
+        entities = {}
+        tags = {}
+        self.statsEntries = []
+        for room in rooms:
+            for config in room.palette.values():
+                if config.uniqueid not in entities:
+                    entities[config.uniqueid] = StatisticsDialog.EntityStatisticsEntry(
+                        self, config
+                    )
+                    self.statsEntries.append(entities[config.uniqueid])
+
+                for tag in config.tags.values():
+                    if tag.statisticsgroup:
+                        if tag.tag not in tags:
+                            tags[tag.tag] = StatisticsDialog.EntityStatisticsEntry(
+                                self, config, tag
+                            )
+                            self.statsEntries.append(tags[tag.tag])
+
+                        if room not in tags[tag.tag].rooms:
+                            tags[tag.tag].rooms.append(room)
+
+                        entities[config.uniqueid].includedintag = True
+
+                entities[config.uniqueid].rooms.append(room)
+
+        self.refresh()
+
+        self.statisticsTable.setSortingEnabled(True)
+        self.statisticsTable.sortItems(1, Qt.DescendingOrder)
+        self.statisticsTable.verticalHeader().hide()
+        self.statisticsTable.resizeColumnsToContents()
+
+    def refresh(self):
+        rooms = self.roomList.getRooms()
+
+        roomFilter = {
+            "AllowedDifficulties": {},
+            "Rooms": False,
+            "AppearCountThreshold": self.appearCountThresholdSpinner.value(),
+            "CombatEntitiesOnly": self.combatEntityToggle.isChecked(),
+            "GroupSimilarEntities": not self.forceIndividualEntitiesToggle.isChecked(),
+        }
+
+        if (
+            self.selectedRoomsToggle.isChecked()
+            and len(self.roomList.selectedRooms()) > 0
+        ):
+            rooms = self.roomList.selectedRooms()
+            roomFilter["Rooms"] = rooms
+
+        for checkbox in self.difficultyCheckboxes:
+            if checkbox.isChecked():
+                roomFilter["AllowedDifficulties"][int(checkbox.text())] = True
+
+        filteredStats = self.getStatsForRooms(rooms, roomFilter)
+
+        for stats in self.statsEntries:
+            stats.updateWidgets(
+                filteredStats, roomFilter, self.modeAverageToggle.isChecked()
+            )
+
+        if self.modeAverageToggle.isChecked():
+            self.statisticsTable.setHorizontalHeaderLabels(
+                [
+                    "Entity",
+                    "Room Count",
+                    "Appear Chance",
+                    "Average Difficulty",
+                    "Average Weight",
+                ]
+            )
+        else:
+            self.statisticsTable.setHorizontalHeaderLabels(
+                [
+                    "Entity",
+                    "Room Count",
+                    "Appear Chance",
+                    "Common Difficulty",
+                    "Common Weight",
+                ]
+            )
 
 
 ########################
@@ -4501,6 +4936,15 @@ class MainWindow(QMainWindow):
         )
         self.eg.setCheckable(True)
         self.eg.setChecked(settings.value("PinEntityFilter") == "1")
+        self.nonCombatFilter = self.e.addAction(
+            "Non-Combat Room Filter",
+            lambda: (
+                self.toggleSetting("NonCombatRoomFilter"),
+                self.roomList.changeFilter(),
+            ),
+        )
+        self.nonCombatFilter.setCheckable(True)
+        self.nonCombatFilter.setChecked(settings.value("NonCombatRoomFilter") == "1")
         self.el = self.e.addAction(
             "Snap to Room Boundaries",
             lambda: self.toggleSetting("SnapToBounds", onDefault=True),
@@ -4521,6 +4965,9 @@ class MainWindow(QMainWindow):
         self.ej = self.e.addAction("Sort Rooms by Name", self.sortRoomNames)
         self.ek = self.e.addAction(
             "Recompute Room IDs", self.recomputeRoomIDs, QKeySequence("Ctrl+B")
+        )
+        self.showStatistics = self.e.addAction(
+            "View Room Statistics", self.showStatisticsMenu
         )
 
         v = mb.addMenu("View")
@@ -4560,6 +5007,17 @@ class MainWindow(QMainWindow):
         )
         self.wd.setCheckable(True)
         self.wd.setChecked(settings.value("BitfontEnabled") != "0")
+        self.hideDuplicateEntities = v.addAction(
+            "Hide Duplicate Entities",
+            lambda: (
+                self.toggleSetting("HideDuplicateEntities"),
+                self.EntityPalette.updateTabs(),
+            ),
+        )
+        self.hideDuplicateEntities.setCheckable(True)
+        self.hideDuplicateEntities.setChecked(
+            settings.value("HideDuplicateEntities") == "1"
+        )
         v.addSeparator()
         self.wb = v.addAction(
             "Hide Entity Painter", self.showPainter, QKeySequence("Ctrl+Alt+P")
@@ -4711,7 +5169,12 @@ class MainWindow(QMainWindow):
             for e in self.scene.roomRows[y].childItems():
                 spawns[Room.Info.gridIndex(e.entity.x, e.entity.y, width)].append(e)
 
+        palette = {}
         for i, spawn in enumerate(spawns):
+            for e in spawn:
+                if e.entity.config.uniqueid not in palette:
+                    palette[e.entity.config.uniqueid] = e.entity.config
+
             spawns[i] = list(
                 map(
                     lambda e: [
@@ -4725,6 +5188,7 @@ class MainWindow(QMainWindow):
             )
 
         room.gridSpawns = spawns
+        room.palette = palette
 
     def closeEvent(self, event):
         """Handler for the main window close event"""
@@ -4835,6 +5299,10 @@ class MainWindow(QMainWindow):
     def showTestConfigMenu(self):
         testConfig = TestConfigDialog(self)
         testConfig.show()
+
+    def showStatisticsMenu(self):
+        statistics = StatisticsDialog(self, self.roomList)
+        statistics.show()
 
     def openMapDefault(self):
         if self.checkDirty():
@@ -5058,16 +5526,29 @@ class MainWindow(QMainWindow):
                             config is None or config.invalid
                         )
 
-        def coreToEntItem(e):
-            return [e.Type, e.Variant, e.Subtype, e.weight]
-
         def coreToRoomItem(coreRoom):
-            spawns = list(
-                map(lambda s: list(map(coreToEntItem, s)), coreRoom.gridSpawns)
-            )
+            palette = {}
+            gridSpawns = []
+            global xmlLookups
+            for gridSpawn in coreRoom.gridSpawns:
+                spawns = []
+                for spawn in gridSpawn:
+                    spawns.append(
+                        [spawn.Type, spawn.Variant, spawn.Subtype, spawn.weight]
+                    )
+
+                    config = xmlLookups.entities.lookupOne(
+                        spawn.Type, spawn.Variant, spawn.Subtype
+                    )
+                    if config and config.uniqueid not in palette:
+                        palette[config.uniqueid] = config
+
+                gridSpawns.append(spawns)
+
             r = Room(
                 coreRoom.name,
-                spawns,
+                gridSpawns,
+                palette,
                 coreRoom.difficulty,
                 coreRoom.weight,
                 coreRoom.info.type,
@@ -5446,7 +5927,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             if version not in ["Afterbirth+", "Repentance"]:
                 QMessageBox.warning(
                     self, "Error", f"Stage Replacement not supported for {version}!"
@@ -5476,6 +5957,7 @@ class MainWindow(QMainWindow):
                     lambda room: Room(
                         room.name,
                         room.gridSpawns,
+                        room.palette,
                         5,
                         1000.0,
                         1,
@@ -5517,7 +5999,7 @@ class MainWindow(QMainWindow):
 
     # Test by replacing the starting room
     def testStartMap(self):
-        def setup(modPath, roomsPath, floorInfo, testRoom, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, testRoom, version):
             if len(testRoom) > 1:
                 QMessageBox.warning(
                     self,
@@ -5590,7 +6072,7 @@ class MainWindow(QMainWindow):
 
     # Test by launching the game directly into the test room, skipping the menu
     def testMapInstapreview(self):
-        def setup(modPath, roomsPath, floorInfo, rooms, version, subVer):
+        def setup(modPath, roomsPath, floorInfo, rooms, version):
             testfile = "instapreview.xml"
             path = Path(modPath) / testfile
             path = path.resolve()
@@ -5630,6 +6112,7 @@ class MainWindow(QMainWindow):
                     Room(
                         f"{room.name} [Real ID: {room.info.variant}]",
                         room.gridSpawns,
+                        room.palette,
                         room.difficulty,
                         room.weight,
                         room.info.type,
@@ -5668,7 +6151,7 @@ class MainWindow(QMainWindow):
             # Because instapreview is xml, no special allowances have to be made for rebirth
             self.save([roomsToUse[0]], path, updateRecent=False, isPreview=True)
 
-            if version == "Rebirth":
+            if version in ["Rebirth", "Antibirth"]:
                 return (
                     [
                         "-room",
@@ -5715,7 +6198,7 @@ class MainWindow(QMainWindow):
 
         else:
             installPath = findInstallPath()
-            version, subVer = getGameVersion()
+            version = getGameVersion()
 
             if len(installPath) != 0:
                 resourcesPath = os.path.join(installPath, "resources")
@@ -5790,7 +6273,7 @@ class MainWindow(QMainWindow):
             return
 
         settings = QSettings("settings.ini", QSettings.IniFormat)
-        version, subVer = getGameVersion()
+        version = getGameVersion()
 
         # Floor type
         # TODO cache this when loading a file
@@ -5819,7 +6302,7 @@ class MainWindow(QMainWindow):
         try:
             # setup raises an exception if it can't continue
             launchArgs, roomsOverride, extraMessage = setupFunc(
-                modPath, roomPath, floorInfo, rooms, version, subVer
+                modPath, roomPath, floorInfo, rooms, version
             ) or ([], None, "")
         except Exception as e:
             printf(
@@ -5866,7 +6349,7 @@ class MainWindow(QMainWindow):
             # try to run through steam to avoid steam confirmation popup, else run isaac directly
             # if there exists drm free copies, allow the direct exe launch method
             steamPath = None
-            if subVer is None and settings.value("ForceExeLaunch") != "1":
+            if version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
                 steamPath = getSteamPath() or ""
 
             if steamPath:
@@ -6117,8 +6600,8 @@ if __name__ == "__main__":
     applyDefaultSettings(settings, {"SnapToBounds": "1", "ExportSTBOnSave": "1"})
 
     # XML Globals
-    version, subVer = getGameVersion()
-    xmlLookups = MainLookup(version, subVer)
+    version = getGameVersion()
+    xmlLookups = MainLookup(version)
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",
