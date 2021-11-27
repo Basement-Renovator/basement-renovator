@@ -997,6 +997,9 @@
 		<entity BaseHP="60" ID="51" Image="Entities/51.20.0 - Envy (1-4).png" Name="Envy (1/4)" Subtype="0" Variant="20" />
 		<entity BaseHP="60" ID="51" Image="Entities/51.30.0 - Envy (1-8).png" Name="Envy (1/8)" Subtype="0" Variant="30" />
 		<entity BaseHP="60" ID="51" Image="Entities/51.1.0 - Super Envy.png" Name="Super Envy" Subtype="0" Variant="1" />
+		<entity BaseHP="60" ID="51" Image="Entities/51.11.0 - Super Envy (1-2).png" Name="Super Envy (1/2)" Subtype="0" Variant="11" />
+		<entity BaseHP="60" ID="51" Image="Entities/51.21.0 - Super Envy (1-4).png" Name="Super Envy (1/4)" Subtype="0" Variant="21" />
+		<entity BaseHP="60" ID="51" Image="Entities/51.31.0 - Super Envy (1-8).png" Name="Super Envy (1/8)" Subtype="0" Variant="31" />
 		<entity BaseHP="60" ID="52" Image="Entities/52.0.0 - Pride.png" Name="Pride" Subtype="0" Variant="0" />
 		<entity BaseHP="60" ID="52" Image="Entities/52.1.0 - Super Pride.png" Name="Super Pride" Subtype="0" Variant="1" />
 		<entity BaseHP="60" ID="46" Image="Entities/46.2.0 - Ultra Pride.png" Name="Ultra Pride" Subtype="0" Variant="2" />

@@ -13,7 +13,7 @@
     <entity ID="5" Image="Entities/Items/5.100.580 - Red Key.png" Name="Red Key" Subtype="580" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.582 - Wavy Cap.png" Name="Wavy Cap" Subtype="582" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.585 - Alabaster Box.png" Name="Alabaster Box" Subtype="585" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.604 - Moms Bracelet.png" Name="Mom's Bracelet" Subtype="604" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.604 - Mom's Bracelet.png" Name="Mom's Bracelet" Subtype="604" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.605 - The Scooper.png" Name="The Scooper" Subtype="605" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.609 - Florians D6.png" Name="Eternal D6" Subtype="609" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.611 - Larynx.png" Name="Larynx" Subtype="611" Variant="100" />
@@ -179,6 +179,9 @@
     <entity ID="5" Image="Entities/Items/5.100.725 - Ibs.png" Name="Ibs" Subtype="725" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.726 - Hemoptysis.png" Name="Hemoptysis" Subtype="726" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.727 - Ghost Bombs.png" Name="Ghost Bombs" Subtype="727" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.730 - Glass Eye.png" Name="Glass Eye" Subtype="730" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.731 - Stye.png" Name="Stye" Subtype="731" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.732 - Mom's Ring.png" Name="Ghost Bombs" Subtype="732" Variant="100" />
   </group>
 
   <group Name="Trinkets">
