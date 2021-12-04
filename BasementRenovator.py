@@ -4881,6 +4881,11 @@ class MainWindow(QMainWindow):
     def getRecentFolder(self):
         startPath = ""
 
+        # If a file is currently open, first default to the directory that the current file is in
+        if self.path != "":
+            dir_of_file_currently_open = os.path.dirname(self.path)
+            return dir_of_file_currently_open
+
         settings = QSettings("settings.ini", QSettings.IniFormat)
 
         # Get the folder containing the last open file if you can
