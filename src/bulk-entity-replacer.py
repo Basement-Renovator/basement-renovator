@@ -101,7 +101,7 @@ if __name__ == "__main__":
     args = cmdParser.positionalArguments()
     configArg = args[0]
     configPath = Path(configArg).absolute().resolve()
-    if not configArg or not configPath.is_file():
+    if not (configArg and configPath.is_file()):
         print("Invalid config path!")
         sys.exit()
 
@@ -121,10 +121,10 @@ if __name__ == "__main__":
         files = []
         for file in config["files"]:
             basePath = workingDirectory / Path(file)
-            if not basePath.is_dir() and basePath.suffix != ".xml":
-                printf(f"{basePath} is not an XML file or directory, skipping!")
-            else:
+            if basePath.is_dir() or basePath.suffix == ".xml":
                 files.extend(recurseGetFiles(basePath))
+            else:
+                printf(f"{basePath} is not an XML file or directory, skipping!")
 
         for path in files:
             printf("Replacing Entities in File: ", path)
