@@ -182,6 +182,17 @@ local function GotoTestRoomIndex()
     Isaac.ExecuteCommand(gotoStr)
 end
 
+local function pt(name)
+    local char = Isaac.GetPlayerTypeByName(name)
+    return char >= 0 and char or nil
+end
+
+local function tryGetPlayerType(name)
+    return pt(name)
+        or pt(string.gsub(string.upper(name), ".*", "#%0_NAME"))
+        or pt(string.gsub(name, "^(.)", string.upper))
+end
+
 local maxFloorRetries = 150
 local floorRetries = 0
 local loadingFloor = false
@@ -193,19 +204,18 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local test = BasementRenovator.TestRoomData
     floorRetries = 0
 
-    -- omitted pending some update with instapreview, which is the main test mode that would benefit
-    --[[if test.Character then
-        local char = Isaac.GetPlayerTypeByName(test.Character)
-        if char >= 0 then
-            if Isaac.GetPlayer(0):GetPlayerType() ~= char then
-                log('restart ' .. char)
-                Isaac.ExecuteCommand('restart ' .. char)
-                return
+    if test.Character then
+        local player = Isaac.GetPlayer(0)
+        local char = tryGetPlayerType(test.Character)
+        if char then
+            if player:GetPlayerType() ~= char and player.ChangePlayerType then
+                log('CHARACTER: ' .. test.Character)
+                player:ChangePlayerType(char)
             end
         else
             log("Invalid character! " .. test.Character)
         end
-    end]]
+    end
 
     if test.TestType == 'StageReplace' then
         local player = Isaac.GetPlayer(0)
