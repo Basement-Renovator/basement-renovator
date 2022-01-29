@@ -1555,7 +1555,7 @@ class Entity(QGraphicsItem):
         # applies to entities that do not have a corresponding entities2 entry
         if not self.entity.known or self.entity.config.invalid:
             warningIcon = Entity.INVALID_ERROR_IMG
-        # entities have 12 bits for type and variant, 8 for subtype
+        # entities have 12 bits for type, variant, and subtype (?)
         # common mod error is to make them outside that range
         elif self.entity.config.isOutOfRange():
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
@@ -2896,10 +2896,10 @@ class RoomSelector(QWidget):
         s.valueChanged.connect(self.changeWeight)
         menu.addAction(weight)
 
-        # SubVariant
+        # Subtype
         Subtype = QWidgetAction(menu)
         st = QSpinBox()
-        st.setRange(0, 256)
+        st.setRange(0, 4096)
         st.setPrefix("Sub - ")
 
         st.setValue(self.selectedRoom().info.subtype)
