@@ -123,7 +123,7 @@ def commonToXML(destPath, rooms, file=None, isPreview=False):
     # any extra props are written properly
     def flattenXml(d):
         return "".join(
-            map(lambda key, val: f' {key}="{_xmlStrFix(str(val))}"', d.items())
+            map(lambda item: f' {item[0]}="{_xmlStrFix(str(item[1]))}"', d.items())
         )
 
     output = ['<?xml version="1.0" ?>\n']
