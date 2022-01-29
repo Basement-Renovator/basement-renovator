@@ -179,7 +179,7 @@ class StageLookup(Lookup):
             stages = list(filter(lambda s: s.get("StageType") == st, stages))
 
         if path is not None:
-            stages = list(filter(lambda s: s.get("Pattern") in path, stages))
+            stages = list(filter(lambda s: s.get("Pattern").lower() in path.lower(), stages))
 
         if name:
             stages = list(filter(lambda s: s.get("Name") == name, stages))
