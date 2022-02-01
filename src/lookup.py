@@ -179,7 +179,7 @@ class StageLookup(Lookup):
             stages = list(filter(lambda s: s.get("StageType") == st, stages))
 
         if path is not None:
-            stages = list(filter(lambda s: s.get("Pattern") in path, stages))
+            stages = list(filter(lambda s: s.get("Pattern").lower() in path.lower(), stages))
 
         if name:
             stages = list(filter(lambda s: s.get("Name") == name, stages))
@@ -328,12 +328,6 @@ class RoomTypeLookup(Lookup):
 
 
 class EntityLookup(Lookup):
-    PICKUPS_WITH_SPECIAL_SUBTYPES = (
-        PickupVariant["COLLECTIBLE"],
-        PickupVariant["TRINKET"],
-        PickupVariant["PILL"],
-    )
-
     class EntityConfig:
         class BitfieldElement:
             def __init__(self, bitfield, node: ET.Element, offset, length):
@@ -717,12 +711,9 @@ class EntityLookup(Lookup):
                     f'Entity "{name}" from "{modName}" has a variant outside the 0 - 4095 range! ({variant})'
                 )
 
-            if (subtype >= 256 or subtype < 0) and (
-                entityType != EntityType["PICKUP"]
-                or variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
-            ):
+            if subtype >= 4096 or subtype < 0:
                 printf(
-                    f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 255 range! ({subtype})'
+                    f'Entity "{name}" from "{modName}" has a subtype outside the 0 - 4095 range! ({subtype})'
                 )
 
             entityXML = None
