@@ -319,7 +319,7 @@
 	<entity BaseHP="44" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.4.0 - Mama Fly.png" Kind="Enemies" Name="Mama Fly" Variant="4" Subtype="0" />
 	<entity BaseHP="10" Group="Flies" ID="61" Image="resources/Entities/61.5.0 - Bulb.png" Kind="Enemies" Name="Bulb" Variant="5" Subtype="0" />
 	<entity BaseHP="6" Group="Flies" ID="61" Image="resources/Entities/61.6.0 - Bloodfly.png" Kind="Enemies" Name="Bloodfly" Variant="6" Subtype="0" />
-	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - Level 2 Fly.png" Kind="Enemies" Name="Level 2 Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Flies" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="7" Champion="1" Group="Flies" ID="819" Image="resources/Entities/819.0.0 - Fly Bomb.png" Kind="Enemies" Name="Fly Bomb" Variant="0" Subtype="0" />
 	<!-- <entity BaseHP="7" Champion="1" Group="Flies" ID="819" Image="resources/Entities/819.1.0 - Eternal Fly Bomb.png" Kind="Enemies" Name="Eternal Fly Bomb" Variant="1" Subtype="0" /> -->
@@ -335,7 +335,7 @@
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="284" Image="resources/Entities/284.0.0 - Cyclopia.png" Kind="Enemies" Name="Cyclopia" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Gapers" ID="87" Image="resources/Entities/87.0.0 - Gurgle.png" Kind="Enemies" Name="Gurgle" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Gapers" ID="87" Image="resources/Entities/87.1.0 - Crackle.png" Kind="Enemies" Name="Crackle" Variant="1" Subtype="0" />
-	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Null.png" Kind="Enemies" Name="Null" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Nulls.png" Kind="Enemies" Name="Nulls" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Kind="Enemies" Name="Blue Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Kind="Enemies" Name="Greed Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.0 - Deep Gaper (random).png" Kind="Enemies" Name="Deep Gaper (random)" Variant="0" Subtype="0" />
@@ -343,8 +343,8 @@
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.2 - Deep Gaper (subtype 2).png" Kind="Enemies" Name="Deep Gaper (subtype 2)" Variant="0" Subtype="2" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.3 - Deep Gaper (subtype 3).png" Kind="Enemies" Name="Deep Gaper (subtype 3)" Variant="0" Subtype="3" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.4 - Deep Gaper (subtype 4).png" Kind="Enemies" Name="Deep Gaper (subtype 4)" Variant="0" Subtype="4" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.5 - Deep Gaper (subtype 5).png" Kind="Enemies" Name="Deep Gaper (subtype 4)" Variant="0" Subtype="5" />
-	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.6 - Deep Gaper (subtype 6).png" Kind="Enemies" Name="Deep Gaper (subtype 5)" Variant="0" Subtype="6" />
+	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.5 - Deep Gaper (subtype 5).png" Kind="Enemies" Name="Deep Gaper (subtype 5)" Variant="0" Subtype="5" />
+	<entity BaseHP="10" Champion="1" Group="Gapers" ID="811" Image="resources/Entities/811.0.6 - Deep Gaper (subtype 6).png" Kind="Enemies" Name="Deep Gaper (subtype 6)" Variant="0" Subtype="6" />
 	<entity BaseHP="24" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.3.0 - Rotten Gaper (random).png" Kind="Enemies" Name="Rotten Gaper (random)" Variant="3" Subtype="0" />
 	<entity BaseHP="24" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.3.1 - Rotten Gaper (subtype 1).png" Kind="Enemies" Name="Rotten Gaper (subtype 1)" Variant="3" Subtype="1" />
 	<entity BaseHP="24" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.3.2 - Rotten Gaper (subtype 2).png" Kind="Enemies" Name="Rotten Gaper (subtype 2)" Variant="3" Subtype="2" />
@@ -406,7 +406,7 @@
 	<entity BaseHP="27" Champion="1" Group="Hosts" ID="247" Image="resources/Entities/247.0.0 - Flesh Mobile Host.png" Kind="Enemies" Name="Flesh Mobile Host" Subtype="0" Variant="0" />
 	<entity BaseHP="6.5" Group="Hosts" ID="815" Image="resources/Entities/815.0.0 - Fissure.png" Kind="Enemies" Name="Fissure" Variant="0" Subtype="0" />
 	<entity BaseHP="15" Champion="1" Group="Hosts" ID="27" Image="resources/Entities/27.3.0 - Hard Host.png" Kind="Enemies" Name="Hard Host" Variant="3" Subtype="0" />
-	<entity BaseHP="20" Champion="1" Group="Hosts" ID="859" Image="resources/Entities/859.0.0 - Floating Host.png" Kind="Enemies" Name="Floating Host" Variant="0" Subtype="0" />
+	<entity BaseHP="20" Champion="1" Group="Hosts" ID="859" Image="resources/Entities/859.0.0 - Floating Host.png" Kind="Enemies" Name="Floast" Variant="0" Subtype="0" />
 	<entity Group="Hosts" Kind="Enemies" Image="resources/Entities/300.0.0 - MushroomMan.png" BaseHP="23" Champion="1" ID="300" Name="Mushroom" Variant="0" Subtype="0" />
 	<entity BaseHP="100" Group="Hosts" ID="3001" Image="resources/Entities/3001.0.0 - Fissure Spawner.png" Kind="Enemies" Name="Fissure Spawner" Variant="0" Subtype="0" IsGrid="1">
 		<bitfield Key="Subtype">
@@ -473,7 +473,7 @@
 	<entity BaseHP="18" Champion="1" Group="Mulligans" ID="22" Image="resources/Entities/22.1.0 - Drowned Hive.png" Kind="Enemies" Name="Drowned Hive" Subtype="0" Variant="1" />
 	<entity BaseHP="14" Champion="1" Group="Mulligans" ID="817" Image="resources/Entities/817.0.0 - Prey.png" Kind="Enemies" Name="Prey" Variant="0" Subtype="0" />
 	<entity BaseHP="14" Champion="1" Group="Mulligans" ID="817" Image="resources/Entities/817.1.0 - Mullighoul.png" Kind="Enemies" Name="Mullighoul" Variant="1" Subtype="0" />
-	<entity BaseHP="13" Champion="1" Group="Mulligans" ID="874" Image="resources/Entities/874.0.0 - Fartigan.png" Kind="Enemies" Name="Fartigan" Variant="0" Subtype="0" />
+	<entity BaseHP="13" Champion="1" Group="Mulligans" ID="874" Image="resources/Entities/874.0.0 - Gas Dwarf.png" Kind="Enemies" Name="Gas Dwarf" Variant="0" Subtype="0" />
 	<entity BaseHP="60" Champion="1" Group="Mulligans" ID="310" Image="resources/Entities/310.0.0 - Leper.png" Kind="Enemies" Name="Leper" Subtype="0" Variant="0" />
 	<entity BaseHP="45" Champion="1" Group="Mulligans" ID="310" Image="resources/Entities/310.0.1 - Leper (stage 2).png" Kind="Enemies" Name="Leper (stage 2)" Subtype="1" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Mulligans" ID="310" Image="resources/Entities/310.0.2 - Leper (stage 3).png" Kind="Enemies" Name="Leper (stage 3)" Subtype="2" Variant="0" />
@@ -594,7 +594,7 @@
 	<entity BaseHP="15" Group="Spiders" ID="818" Image="resources/Entities/818.2.1 - Coal Spider.png" Kind="Enemies" Name="Coal Spider (subtype 1)" Variant="2" Subtype="1" />
 	<entity BaseHP="15" Group="Spiders" ID="818" Image="resources/Entities/818.2.2 - Coal Spider.png" Kind="Enemies" Name="Coal Spider (subtype 2)" Variant="2" Subtype="2" />
 	<entity BaseHP="15" Group="Spiders" ID="818" Image="resources/Entities/818.2.3 - Coal Spider.png" Kind="Enemies" Name="Coal Spider (subtype 3)" Variant="2" Subtype="3" />
-	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Kind="Enemies" Name="lvl2 Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - Level 2 Spider.png" Kind="Enemies" Name="Level 2 Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="13" Group="Spiders" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Kind="Enemies" Name="Ticking Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="16" Champion="1" Group="Spiders" ID="869" Image="resources/Entities/869.0.0 - Migraine.png" Kind="Enemies" Name="Migraine" Variant="0" Subtype="0" />
 	<entity BaseHP="10" Champion="1" Group="Spiders" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Kind="Enemies" Name="Trite" Subtype="0" Variant="1" />
