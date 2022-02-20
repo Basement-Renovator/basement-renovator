@@ -192,7 +192,7 @@
 	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.0.0 - Sucker.png" Kind="Enemies" Name="Sucker" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Flies" ID="61" Image="resources/Entities/61.1.0 - Spit.png" Kind="Enemies" Name="Spit" Subtype="0" Variant="1" />
 	<entity Group="Flies" Kind="Enemies" Image="resources/Entities/61.2.0 - Soul Sucker.png" BaseHP="18" Champion="1" ID="61" Name="Soul Sucker" Variant="2" Subtype="0" />
-	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - Level 2 Fly.png" Kind="Enemies" Name="Level 2 Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Flies" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Flies" ID="91" Image="resources/Entities/91.0.0 - Swarmer.png" Kind="Enemies" Name="Swarmer" Subtype="0" Variant="0" />
 	<entity BaseHP="25" Group="Flies" ID="288" Image="resources/Entities/288.0.0 - Dukie.png" Kind="Enemies" Name="Dukie" Subtype="0" Variant="0" />
@@ -204,7 +204,7 @@
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="10" Image="resources/Entities/10.2.0 - Flaming Gaper.png" Kind="Enemies" Name="Flaming Gaper" Subtype="0" Variant="2" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="284" Image="resources/Entities/284.0.0 - Cyclopia.png" Kind="Enemies" Name="Cyclopia" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Champion="1" Group="Gapers" ID="87" Image="resources/Entities/87.0.0 - Gurgle.png" Kind="Enemies" Name="Gurgle" Subtype="0" Variant="0" />
-	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Null.png" Kind="Enemies" Name="Null" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Nulls.png" Kind="Enemies" Name="Nulls" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="297" Image="resources/Entities/297.0.0 - Blue Gaper.png" Kind="Enemies" Name="Blue Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="30" Champion="1" Group="Gapers" ID="299" Image="resources/Entities/299.0.0 - Greed Gaper.png" Kind="Enemies" Name="Greed Gaper" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Gapers" ID="11" Image="resources/Entities/11.1.0 - Pacer.png" Kind="Enemies" Name="Pacer" Subtype="0" Variant="1" />
@@ -328,7 +328,7 @@
 	<!-- Spiders -->
 	<entity BaseHP="6.5" Group="Spiders" ID="85" Image="resources/Entities/85.0.0 - Spider.png" Kind="Enemies" Name="Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Spiders" ID="94" Image="resources/Entities/94.0.0 - Big Spider.png" Kind="Enemies" Name="Big Spider" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Kind="Enemies" Name="lvl2 Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - Level 2 Spider.png" Kind="Enemies" Name="Level 2 Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="13" Group="Spiders" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Kind="Enemies" Name="Ticking Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Champion="1" Group="Spiders" ID="29" Image="resources/Entities/29.1.0 - Trite.png" Kind="Enemies" Name="Trite" Subtype="0" Variant="1" />
 	<entity BaseHP="13" Champion="1" Group="Spiders" ID="246" Image="resources/Entities/246.0.0 - Ragling.png" Kind="Enemies" Name="Ragling" Subtype="0" Variant="0" />
