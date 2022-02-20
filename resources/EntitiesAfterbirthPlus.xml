@@ -217,7 +217,7 @@
 	<entity BaseHP="10" Group="Gapers" ID="226" Image="resources/Entities/226.0.0 - Skinny.png" Kind="Enemies" Name="Skinny" Subtype="0" Variant="0" />
 	<entity BaseHP="16" Group="Gapers" ID="226" Image="resources/Entities/226.1.0 - Rotty.png" Kind="Enemies" Name="Rotty" Subtype="0" Variant="1" />
 	<entity BaseHP="12" Group="Gapers" ID="226" Image="resources/Entities/226.2.0 - Crispy.png" Kind="Enemies" Name="Crispy" Subtype="0" Variant="2" />
-	<entity BaseHP="8" Group="Gapers" ID="227" Image="resources/Entities/227.0.0 - Boney Head.png" Kind="Enemies" Name="Boney" Subtype="0" Variant="0" />
+	<entity BaseHP="8" Group="Gapers" ID="227" Image="resources/Entities/227.0.0 - Bony.png" Kind="Enemies" Name="Bony" Subtype="0" Variant="0" />
 	<entity BaseHP="8" Group="Gapers" ID="277" Image="resources/Entities/277.0.0 - Black Bony.png" Kind="Enemies" Name="Black Bony" Subtype="0" Variant="0" />
 	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.0.0 - Globin.png" Kind="Enemies" Name="Globin" Subtype="0" Variant="0" />
 	<entity BaseHP="33" Champion="1" Group="Gapers" ID="24" Image="resources/Entities/24.1.0 - Gazing Globin.png" Kind="Enemies" Name="Gazing Globin" Subtype="0" Variant="1" />
