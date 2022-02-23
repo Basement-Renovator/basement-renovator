@@ -300,8 +300,8 @@
 	<entity BaseHP="10" Champion="1" Group="Fatties" ID="211" Image="resources/Entities/211.0.0 - Half Sack.png" Kind="Enemies" Name="Half Sack" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Maws" ID="212" Image="resources/Entities/212.0.0 - Death's Head.png" Kind="Enemies" Name="Death's Head" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="213" Image="resources/Entities/213.0.0 - Mom's Hand.png" Kind="Enemies" Name="Mom's Hand" Subtype="0" Variant="0" />
-	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - lvl2 Fly.png" Kind="Enemies" Name="lvl2 Fly" Subtype="0" Variant="0" />
-	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - lvl2 Spider.png" Kind="Enemies" Name="lvl2 Spider" Subtype="0" Variant="0" />
+	<entity BaseHP="10" Group="Flies" ID="214" Image="resources/Entities/214.0.0 - Level 2 Fly.png" Kind="Enemies" Name="Level 2 Fly" Subtype="0" Variant="0" />
+	<entity BaseHP="13" Group="Spiders" ID="215" Image="resources/Entities/215.0.0 - Level 2 Spider.png" Kind="Enemies" Name="Level 2 Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="38" Group="Maws" ID="216" Image="resources/Entities/216.0.0 - Swinger.png" Kind="Enemies" Name="Swinger" Subtype="0" Variant="0" />
 	<entity BaseHP="3" Group="Poop" ID="217" Image="resources/Entities/217.0.0 - Dip.png" Kind="Enemies" Name="Dip" Subtype="0" Variant="0" />
 	<entity BaseHP="100" Group="Spikes" ID="218" Image="resources/Entities/218.0.0 - Wall Hugger.png" Kind="Enemies" Name="Wall Hugger (Nearest)" Subtype="0" Variant="0" />
@@ -318,7 +318,7 @@
 	<entity BaseHP="20" Group="Maws" ID="225" Image="resources/Entities/225.0.0 - Black Maw.png" Kind="Enemies" Name="Black Maw" Subtype="0" Variant="0" />
 	<entity BaseHP="10" Group="Gapers" ID="226" Image="resources/Entities/226.0.0 - Skinny.png" Kind="Enemies" Name="Skinny" Subtype="0" Variant="0" />
 	<entity BaseHP="16" Group="Gapers" ID="226" Image="resources/Entities/226.1.0 - Rotty.png" Kind="Enemies" Name="Rotty" Subtype="0" Variant="1" />
-	<entity BaseHP="8" Group="Gapers" ID="227" Image="resources/Entities/227.0.0 - Boney Head.png" Kind="Enemies" Name="Boney" Subtype="0" Variant="0" />
+	<entity BaseHP="8" Group="Gapers" ID="227" Image="resources/Entities/227.0.0 - Bony.png" Kind="Enemies" Name="Bony" Subtype="0" Variant="0" />
 	<entity BaseHP="36" Group="Other" ID="228" Image="resources/Entities/228.0.0 - Homunculus.png" Kind="Enemies" Name="Homunculus" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Group="Organs" ID="229" Image="resources/Entities/229.0.0 - Tumor.png" Kind="Enemies" Name="Tumor" Subtype="0" Variant="0" />
 	<entity BaseHP="32" Group="Organs" ID="230" Image="resources/Entities/230.0.0 - Camillo Jr.png" Kind="Enemies" Name="Camillo Jr." Subtype="0" Variant="0" />
@@ -341,7 +341,7 @@
 	<entity BaseHP="10" Group="Flies" ID="249" Image="resources/Entities/249.0.0 - Full Fly.png" Kind="Enemies" Name="Full Fly" Subtype="0" Variant="0" />
 	<entity BaseHP="13" Group="Spiders" ID="250" Image="resources/Entities/250.0.0 - Ticking Spider.png" Kind="Enemies" Name="Ticking Spider" Subtype="0" Variant="0" />
 	<entity BaseHP="60" Group="Other" ID="251" Image="resources/Entities/251.0.0 - Begotten.png" Kind="Enemies" Name="Begotten" Subtype="0" Variant="0" />
-	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Null.png" Kind="Enemies" Name="Null" Subtype="0" Variant="0" />
+	<entity BaseHP="30" Champion="1" Group="Gapers" ID="252" Image="resources/Entities/252.0.0 - Nulls.png" Kind="Enemies" Name="Nulls" Subtype="0" Variant="0" />
 	<entity BaseHP="40" Group="Organs" ID="253" Image="resources/Entities/253.0.0 - Psy Tumor.png" Kind="Enemies" Name="Psy Tumor" Subtype="0" Variant="0" />
 	<entity BaseHP="20" Champion="1" Group="Knights" ID="254" Image="resources/Entities/254.0.0 - Floating Knight.png" Kind="Enemies" Name="Floating Knight" Subtype="0" Variant="0" />
 	<entity BaseHP="35" Group="Worms" ID="255" Image="resources/Entities/255.0.0 - Night Crawler.png" Kind="Enemies" Name="Night Crawler" Subtype="0" Variant="0" />
