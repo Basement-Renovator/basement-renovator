@@ -773,7 +773,7 @@ class RoomEditorWidget(QGraphicsView):
             painter.drawText(
                 8,
                 30,
-                f"Difficulty: {room.difficulty}, Weight: {room.weight}, Subtype: {room.info.subtype}",
+                f"Type: {room.info.type}, Variant: {room.info.variant}, Subtype: {room.info.subtype}, Difficulty: {room.difficulty}, Weight: {room.weight}",
             )
 
         # Display the currently selected entity in a text overlay
