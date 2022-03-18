@@ -6,6 +6,10 @@ def printf(*args):
     print(*args, flush=True)
 
 
+def printSectionBreak():
+    printf("-".join(["" for i in range(50)]))
+
+
 def bitFill(count):
     return (1 << count) - 1
 

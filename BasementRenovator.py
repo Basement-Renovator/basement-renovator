@@ -278,7 +278,7 @@ def loadMods(autogenerate, installPath, resourcePath):
     if autogenerate and not os.path.exists(autogenPath):
         os.mkdir(autogenPath)
 
-    printf("-".join(["" for i in range(50)]))
+    printSectionBreak()
     printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
         modPath = os.path.join(modsPath, mod)
@@ -3507,16 +3507,16 @@ class EntityGroupItem(QStandardItem):
             return self
 
         checkIndex = self.startIndex
-        for object in self.objects:
-            if isinstance(object, EntityGroupItem):
-                if index >= object.startIndex and index <= object.endIndex:
-                    return object.getItem(index)
+        for obj in self.objects:
+            if isinstance(obj, EntityGroupItem):
+                if index >= obj.startIndex and index <= obj.endIndex:
+                    return obj.getItem(index)
                 else:
-                    checkIndex = object.endIndex
+                    checkIndex = obj.endIndex
             else:
                 checkIndex += 1
                 if checkIndex == index:
-                    return object
+                    return obj
 
     def filterView(self, view, shownEntities=None, parentCollapsed=False):
         hideDuplicateEntities = settings.value("HideDuplicateEntities") == "1"
@@ -3638,7 +3638,7 @@ class EntityGroupModel(QAbstractListModel):
 
         elif role == Qt.DisplayRole:
             if isinstance(item, EntityGroupItem):
-                return item.name + (" >" if item.collapsed else "")
+                return item.name + (" ▶" if item.collapsed else "")
 
         elif role == Qt.SizeHintRole:
             if isinstance(item, EntityGroupItem):
@@ -3823,11 +3823,11 @@ class ReplaceDialog(QDialog):
             layout = QFormLayout()
 
             self.type = QSpinBox()
-            self.type.setRange(1, 2**31 - 1)
+            self.type.setRange(1, 2 ** 31 - 1)
             self.variant = QSpinBox()
-            self.variant.setRange(-1, 2**31 - 1)
+            self.variant.setRange(-1, 2 ** 31 - 1)
             self.subtype = QSpinBox()
-            self.subtype.setRange(-1, 2**8 - 1)
+            self.subtype.setRange(-1, 2 ** 8 - 1)
 
             layout.addRow("&Type:", self.type)
             layout.addRow("&Variant:", self.variant)
@@ -6115,7 +6115,7 @@ class MainWindow(QMainWindow):
 
                 # Set the selected rooms to have descending ids from max
                 # this should avoid any id conflicts
-                baseId = (2**31) - 1
+                baseId = (2 ** 31) - 1
                 newRooms = list(
                     Room(
                         f"{room.name} [Real ID: {room.info.variant}]",

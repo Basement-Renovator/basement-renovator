@@ -91,14 +91,12 @@ def applyGfxReplacement(replacement, gfxchildren):
 
 class Lookup(metaclass=abc.ABCMeta):
     def __init__(self, prefix, version):
-        version = version.replace("+", "Plus")
         self.prefix = prefix
         self.version = version
 
     def loadFile(self, file, mod, *args):
-        printf(
-            f'-----------------------\nLoading {self.prefix} from "{mod.name}" at {file}'
-        )
+        printSectionBreak()
+        printf(f'Loading {self.prefix} from "{mod.name}" at {file}')
         previous = self.count()
         self.loadXML(loadXMLFile(file), mod, *args)
         printf(
@@ -871,17 +869,7 @@ class EntityLookup(Lookup):
             if not self.parent:
                 return "None"
 
-            tags = "["
-            separated = False
-            for tag in self.parent.tags.values():
-                if self.hasTag(tag) and tag.label:
-                    if separated:
-                        tags += ", "
-
-                    tags += tag.label
-                    separated = True
-
-            return tags + "]"
+            return f'[{", ".join(map(lambda t: t.label, filter(lambda tag: self.hasTag(tag) and tag.label, self.parent.tags.values())))}]'
 
         def matches(
             self,
@@ -1185,7 +1173,8 @@ class EntityLookup(Lookup):
         if root is None:
             return
 
-        printf(f'-----------------------\nLoading Entities from "{mod.name}" at {path}')
+        printSectionBreak()
+        printf(f'Loading Entities from "{mod.name}" at {path}')
         previous = self.count()
 
         if mod.autogenerateContent and mod.entities2root is not None:
