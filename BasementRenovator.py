@@ -763,7 +763,7 @@ class RoomEditorWidget(QGraphicsView):
             painter.drawText(
                 8,
                 30,
-                f"Difficulty: {room.difficulty}, Weight: {room.weight}, Subtype: {room.info.subtype}",
+                f"Type: {room.info.type}, Variant: {room.info.variant}, Subtype: {room.info.subtype}, Difficulty: {room.difficulty}, Weight: {room.weight}",
             )
 
         # Display the currently selected entity in a text overlay
@@ -1548,7 +1548,7 @@ class Entity(QGraphicsItem):
         # applies to entities that do not have a corresponding entities2 entry
         if not self.entity.known or self.entity.config.invalid:
             warningIcon = Entity.INVALID_ERROR_IMG
-        # entities have 12 bits for type and variant, 8 for subtype
+        # entities have 12 bits for type, variant, and subtype (?)
         # common mod error is to make them outside that range
         elif self.entity.config.isOutOfRange():
             warningIcon = Entity.OUT_OF_RANGE_WARNING_IMG
@@ -2897,10 +2897,10 @@ class RoomSelector(QWidget):
         s.valueChanged.connect(self.changeWeight)
         menu.addAction(weight)
 
-        # SubVariant
+        # Subtype
         Subtype = QWidgetAction(menu)
         st = QSpinBox()
-        st.setRange(0, 256)
+        st.setRange(0, 4096)
         st.setPrefix("Sub - ")
 
         st.setValue(self.selectedRoom().info.subtype)
@@ -3823,11 +3823,11 @@ class ReplaceDialog(QDialog):
             layout = QFormLayout()
 
             self.type = QSpinBox()
-            self.type.setRange(1, 2 ** 31 - 1)
+            self.type.setRange(1, 2**31 - 1)
             self.variant = QSpinBox()
-            self.variant.setRange(-1, 2 ** 31 - 1)
+            self.variant.setRange(-1, 2**31 - 1)
             self.subtype = QSpinBox()
-            self.subtype.setRange(-1, 2 ** 8 - 1)
+            self.subtype.setRange(-1, 2**8 - 1)
 
             layout.addRow("&Type:", self.type)
             layout.addRow("&Variant:", self.variant)
@@ -4059,6 +4059,8 @@ class TestConfigDialog(QDialog):
 
         self.layout = QVBoxLayout()
 
+        version, subVer = getGameVersion()
+
         # character
         characterLayout = QHBoxLayout()
         self.characterConfig = TestConfigDialog.ConfigItem(
@@ -4071,7 +4073,9 @@ class TestConfigDialog(QDialog):
         characterLayout.addWidget(self.characterEntry)
         characterWidget = QWidget()
         characterWidget.setLayout(characterLayout)
-        # self.layout.addWidget(characterWidget)
+        if version not in ["Repentance"]:
+            characterWidget.setEnabled(False)
+        self.layout.addWidget(characterWidget)
 
         # commands
         commandLayout = QVBoxLayout()
@@ -4131,8 +4135,7 @@ class TestConfigDialog(QDialog):
         return None if self.enableCheck.isChecked() else "1"
 
     def character(self):
-        # return self.characterEntry.text() or None
-        return None
+        return self.characterEntry.text() or None
 
     def commands(self):
         return [
@@ -4141,7 +4144,7 @@ class TestConfigDialog(QDialog):
 
     def setValues(self):
         self.enableCheck.setChecked(self.enableConfig.val != "1")
-        # self.characterEntry.setText(self.characterConfig.val)
+        self.characterEntry.setText(self.characterConfig.val)
         self.commandList.clear()
         self.commandList.addItems(self.commandConfig.val)
         for i in range(self.commandList.count()):
@@ -4159,7 +4162,7 @@ class TestConfigDialog(QDialog):
 
     def closeEvent(self, evt):
         self.enableConfig.val = self.enabled()
-        # self.characterConfig.val = self.character()
+        self.characterConfig.val = self.character()
         self.commandConfig.val = self.commands()
         QWidget.closeEvent(self, evt)
 
@@ -5349,6 +5352,11 @@ class MainWindow(QMainWindow):
     def getRecentFolder(self):
         startPath = ""
 
+        # If a file is currently open, first default to the directory that the current file is in
+        if self.path != "":
+            dir_of_file_currently_open = os.path.dirname(self.path)
+            return dir_of_file_currently_open
+
         settings = QSettings("settings.ini", QSettings.IniFormat)
 
         # Get the folder containing the last open file if you can
@@ -5903,7 +5911,7 @@ class MainWindow(QMainWindow):
             testData.write(
                 f"""return {{
     TestType = {strFix(testType)},
-    Character = {char or 'nil'}, -- currently unused due to instapreview limitations
+    Character = {char or 'nil'}, -- only used in Repentance
     Commands = {{ {', '.join(map(strFix, commands))} }},
     Stage = {floorInfo.get('Stage')},
     StageType = {floorInfo.get('StageType')},
@@ -6107,7 +6115,7 @@ class MainWindow(QMainWindow):
 
                 # Set the selected rooms to have descending ids from max
                 # this should avoid any id conflicts
-                baseId = (2 ** 31) - 1
+                baseId = (2**31) - 1
                 newRooms = list(
                     Room(
                         f"{room.name} [Real ID: {room.info.variant}]",

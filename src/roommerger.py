@@ -11,15 +11,15 @@ from PyQt5.QtWidgets import QApplication
 
 
 def recomputeRoomIDs(roomList, startingId=None):
-    roomsByType = {}
+    # sort rooms by type > subtype
+    # special rooms and higher subtypes are at the bottom
+    roomList.sort(key=lambda r: (r.info.type, r.info.subtype))
 
-    # set the starting id for default rooms
-    if startingId:
-        roomsByType[1] = startingId
+    roomsByType = {}
 
     for room in roomList:
         if room.info.type not in roomsByType:
-            roomsByType[room.info.type] = room.info.variant
+            roomsByType[room.info.type] = startingId or room.info.variant
 
         room.info.variant = roomsByType[room.info.type]
 

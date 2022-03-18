@@ -473,7 +473,7 @@
 		<entity BaseHP="5" ID="18" Image="Entities/18.0.0 - Attack Fly.png" Name="Attack Fly" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" ID="80" Image="Entities/80.0.0 - Moter.png" Name="Moter" Subtype="0" Variant="0"/>
 		<entity BaseHP="5" ID="222" Image="Entities/222.0.0 - Ring Fly.png" Name="Ring Fly" Subtype="0" Variant="0"/>
-		<entity BaseHP="10" ID="214" Image="Entities/214.0.0 - lvl2 Fly.png" Name="lvl2 Fly" Subtype="0" Variant="0"/>
+		<entity BaseHP="10" ID="214" Image="Entities/214.0.0 - Level 2 Fly.png" Name="Level 2 Fly" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" ID="249" Image="Entities/249.0.0 - Full Fly.png" Name="Full Fly" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" Tags="Champion" ID="61" Image="Entities/61.0.0 - Sucker.png" Name="Sucker" Subtype="0" Variant="0"/>
 		<entity BaseHP="8" Tags="Champion" ID="14" Image="Entities/14.0.0 - Pooter.png" Name="Pooter" Subtype="0" Variant="0"/>
@@ -502,7 +502,7 @@
 		<entity BaseHP="20" Tags="Champion" ID="88" Image="Entities/88.2.0 - Walking Sack.png" Name="Walking Sack" Subtype="0" Variant="2" />
 		<entity BaseHP="6.5" ID="85" Image="Entities/85.0.0 - Spider.png" Name="Spider" Subtype="0" Variant="0"/>
 		<entity BaseHP="20" ID="94" Image="Entities/94.0.0 - Big Spider.png" Name="Big Spider" Subtype="0" Variant="0"/>
-		<entity BaseHP="13" ID="215" Image="Entities/215.0.0 - lvl2 Spider.png" Name="lvl2 Spider" Subtype="0" Variant="0"/>
+		<entity BaseHP="13" ID="215" Image="Entities/215.0.0 - Level 2 Spider.png" Name="Level 2 Spider" Subtype="0" Variant="0"/>
 		<entity BaseHP="13" ID="250" Image="Entities/250.0.0 - Ticking Spider.png" Name="Ticking Spider" Subtype="0" Variant="0"/>
 		<entity BaseHP="12" Tags="Champion" ID="206" Image="Entities/206.1.0 - Small Baby Long Legs.png" Name="Small Baby Long Legs" Subtype="0" Variant="1"/>
 		<entity BaseHP="16" Tags="Champion" ID="206" Image="Entities/206.0.0 - Baby Long Legs.png" Name="Baby Long Legs" Subtype="0" Variant="0"/>
@@ -518,7 +518,7 @@
 		<entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.1.0 - Gazing Globin.png" Name="Gazing Globin" Subtype="0" Variant="1"/>
 		<entity Name="Skinny"/>
 		<entity BaseHP="16" ID="226" Image="Entities/226.1.0 - Rotty.png" Name="Rotty" Subtype="0" Variant="1"/>
-		<entity BaseHP="8" ID="227" Image="Entities/227.0.0 - Boney Head.png" Name="Boney" Subtype="0" Variant="0"/>
+		<entity BaseHP="8" ID="227" Image="Entities/227.0.0 - Bony.png" Name="Bony" Subtype="0" Variant="0"/>
 		<entity BaseHP="10" ID="238" Image="Entities/238.0.0 - Splasher.png" Name="Splasher" Subtype="0" Variant="0"/>
 		<entity Name="Psychic Horf"/>
 		<entity BaseHP="20" Tags="Champion" ID="26" Image="Entities/26.0.0 - Maw.png" Name="Maw" Subtype="0" Variant="0" />
@@ -592,7 +592,7 @@
 		<entity Name="Spit"/>
 		<entity Name="Trite"/>
 		<entity Name="Ragling"/>
-		<entity Name="lvl2 Spider"/>
+		<entity Name="Level 2 Spider"/>
 		<entity BaseHP="36" Tags="Champion" ID="86" Image="Entities/86.0.0 - Keeper.png" Name="Keeper" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Tags="Champion" ID="30" Image="Entities/30.1.0 - Gut.png" Name="Gut" Subtype="0" Variant="1" />
 		<entity Name="Sack"/>
@@ -609,9 +609,9 @@
 		<entity Name="Globin"/>
 		<entity Name="Gazing Globin"/>
 		<entity Name="Rotty"/>
-		<entity Name="Boney"/>
+		<entity Name="Bony"/>
 		<entity BaseHP="25" Tags="Champion" ID="34" Image="Entities/34.0.0 - Leaper.png" Name="Leaper" Subtype="0" Variant="0"/>
-		<entity BaseHP="30" Tags="Champion" ID="252" Image="Entities/252.0.0 - Null.png" Name="Null" Subtype="0" Variant="0"/>
+		<entity BaseHP="30" Tags="Champion" ID="252" Image="Entities/252.0.0 - Nulls.png" Name="Nulls" Subtype="0" Variant="0"/>
 		<entity BaseHP="60" ID="251" Image="Entities/251.0.0 - Begotten.png" Name="Begotten" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Tags="Champion" ID="41" Image="Entities/41.0.0 - Knight.png" Name="Knight" Subtype="0" Variant="0" />
 		<entity BaseHP="20" Tags="Champion" ID="254" Image="Entities/254.0.0 - Floating Knight.png" Name="Floating Knight" Subtype="0" Variant="0" />
@@ -783,7 +783,7 @@
 	</group>
 
 	<group Name="Sheol Enemies">
-		<entity Name="Null"/>
+		<entity Name="Nulls"/>
 		<entity Name="Begotten"/>
 		<entity BaseHP="20" Tags="Champion" ID="41" Image="Entities/41.1.0 - Selfless Knight.png" Name="Selfless Knight" Subtype="0" Variant="1" />
 		<entity BaseHP="20" Tags="Champion" ID="53" Image="Entities/53.1.0 - Evil Twin.png" Name="Evil Twin" Subtype="0" Variant="1" />
@@ -806,7 +806,7 @@
 	</group>
 
 	<group Name="Cathedral Enemies">
-		<entity Name="Boney"/>
+		<entity Name="Bony"/>
 		<entity Name="Psychic Maw"/>
 		<entity BaseHP="25" Tags="Champion" ID="38" Image="Entities/38.1.0 - Angelic Baby.png" Name="Angelic Baby" Subtype="0" Variant="1" />
 		<entity Name="Spit"/>

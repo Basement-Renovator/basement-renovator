@@ -381,8 +381,8 @@
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.2 - Deep Gaper (subtype 2).png" Name="Deep Gaper (subtype 2)" Variant="0" Subtype="2"/>
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.3 - Deep Gaper (subtype 3).png" Name="Deep Gaper (subtype 3)" Variant="0" Subtype="3"/>
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.4 - Deep Gaper (subtype 4).png" Name="Deep Gaper (subtype 4)" Variant="0" Subtype="4"/>
-			<entity BaseHP="10" ID="811" Image="Entities/811.0.5 - Deep Gaper (subtype 5).png" Name="Deep Gaper (subtype 4)" Variant="0" Subtype="5"/>
-			<entity BaseHP="10" ID="811" Image="Entities/811.0.6 - Deep Gaper (subtype 6).png" Name="Deep Gaper (subtype 5)" Variant="0" Subtype="6"/>
+			<entity BaseHP="10" ID="811" Image="Entities/811.0.5 - Deep Gaper (subtype 5).png" Name="Deep Gaper (subtype 5)" Variant="0" Subtype="5"/>
+			<entity BaseHP="10" ID="811" Image="Entities/811.0.6 - Deep Gaper (subtype 6).png" Name="Deep Gaper (subtype 6)" Variant="0" Subtype="6"/>
 		</group>
 		<entity BaseHP="10" Tags="Champion" ID="807" Image="Entities/807.0.0 - Wraith.png" Name="Wraith" Variant="0" Subtype="0"/>
 		<entity BaseHP="16" Tags="Champion" ID="813" Image="Entities/813.0.0 - Blurb.png" Name="Blurb" Variant="0" Subtype="0"/>
@@ -446,7 +446,7 @@
 		<entity BaseHP="15" Tags="Champion" ID="872" Image="Entities/872.0.0 - Cloggy.png" Name="Cloggy" Variant="0" Subtype="0" />
 		<entity BaseHP="10" Tags="Champion" ID="876" Image="Entities/876.0.0 - Dump.png" Name="Dump" Variant="0" Subtype="0"/>
 		<entity BaseHP="10" Tags="Champion" ID="876" Image="Entities/876.1.0 - Dump Head.png" Name="Dump Head" Variant="1" Subtype="0"/>
-		<entity BaseHP="13" Tags="Champion" ID="874" Image="Entities/874.0.0 - Fartigan.png" Name="Fartigan" Variant="0" Subtype="0" />
+		<entity BaseHP="13" Tags="Champion" ID="874" Image="Entities/874.0.0 - Gas Dwarf.png" Name="Gas Dwarf" Variant="0" Subtype="0" />
 		<entity BaseHP="12" Tags="Champion" ID="875" Image="Entities/875.0.0 - Poot Mine.png" Name="Poot Mine" Variant="0" Subtype="0" />
 		<entity BaseHP="16" Tags="Champion" ID="873" Image="Entities/873.0.0 - Fly Trap.png" Name="Fly Trap" Variant="0" Subtype="0" />
 		<entity Name="Attack Fly"/>
@@ -552,7 +552,7 @@
 	</group>
 
 	<group Name="Chapter 2 (Alt Path) Enemies">
-		<entity Name="Boney"/>
+		<entity Name="Bony"/>
 		<entity Name="Gurgle"/>
 		<entity Name="Splasher"/>
 		<entity BaseHP="20" Tags="Champion" ID="821" Image="Entities/821.0.0 - Blaster.png" Name="Blaster" Variant="0" Subtype="0"/>
@@ -718,7 +718,7 @@
 	</group>
 
 	<group Name="Chapter 3 (Alt Path) Enemies">
-		<entity Name="Boney"/>
+		<entity Name="Bony"/>
 		<entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.3.0 - Cursed Globin.png" Name="Cursed Globin" Variant="3" Subtype="0"/>
 		<entity BaseHP="20" Tags="Champion" ID="841" Image="Entities/841.0.0 - Revenant.png" Name="Revenant" Variant="0" Subtype="0"/>
 		<entity BaseHP="35" Tags="Champion" ID="841" Image="Entities/841.1.0 - Quad Revenant.png" Name="Quad Revenant" Variant="1" Subtype="0"/>
@@ -796,7 +796,7 @@
 		<entity BaseHP="60" ID="835" Image="Entities/835.10.0 - Peeping Fatty Eye.png" Name="Peeping Fatty Eye" Variant="10" Subtype="0"/>
 		<entity BaseHP="25" Tags="Champion" ID="38" Image="Entities/38.3.0 - Wrinkly Baby.png" Name="Wrinkly Baby" Variant="3" Subtype="0" />
 		<entity BaseHP="28" Tags="Champion" ID="229" Image="Entities/229.1.0 - Planetoid.png" Name="Planetoid" Variant="1" Subtype="0" />
-		<entity BaseHP="20" Tags="Champion" ID="859" Image="Entities/859.0.0 - Floating Host.png" Name="Floating Host" Variant="0" Subtype="0" />
+		<entity BaseHP="20" Tags="Champion" ID="859" Image="Entities/859.0.0 - Floast.png" Name="Floast" Variant="0" Subtype="0" />
 	</group>
 
 	<group Name="Utero Obstacles">
@@ -875,7 +875,7 @@
 		<entity Name="Wrinkly Baby"/>
 		<entity BaseHP="32" Tags="Champion" ID="860" Image="Entities/860.0.0 - Unborn.png" Name="Unborn" Variant="0" Subtype="0" />
 		<entity BaseHP="19" Tags="Champion" ID="861" Image="Entities/861.0.0 - Pustule.png" Name="Pustule" Variant="0" Subtype="0" />
-		<entity Name="Floating Host"/>
+		<entity Name="Floast"/>
 	</group>
 
 	<group Name="Sheol Enemies">

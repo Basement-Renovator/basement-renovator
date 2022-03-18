@@ -199,7 +199,9 @@ class StageLookup(Lookup):
             stages = list(filter(lambda s: s.get("StageType") == st, stages))
 
         if path is not None:
-            stages = list(filter(lambda s: s.get("Pattern") in path, stages))
+            stages = list(
+                filter(lambda s: s.get("Pattern").lower() in path.lower(), stages)
+            )
 
         if name:
             stages = list(filter(lambda s: s.get("Name") == name, stages))
@@ -362,12 +364,6 @@ class RoomTypeLookup(Lookup):
 
 
 class EntityLookup(Lookup):
-    PICKUPS_WITH_SPECIAL_SUBTYPES = (
-        PickupVariant["COLLECTIBLE"],
-        PickupVariant["TRINKET"],
-        PickupVariant["PILL"],
-    )
-
     class EntityConfig:
         class BitfieldElement:
             def __init__(self, bitfield, node: ET.Element, offset, length):
@@ -846,15 +842,12 @@ class EntityLookup(Lookup):
                     f"\nVariant {self.variant} is outside the valid range of 0 - 4095!"
                 )
             if (
-                (self.subtype >= 256 or self.subtype < 0)
-                and (
-                    self.type != EntityType["PICKUP"]
-                    or self.variant not in EntityLookup.PICKUPS_WITH_SPECIAL_SUBTYPES
-                )
+                (self.subtype >= 4096 or self.subtype < 0)
+                and (self.type != EntityType["PICKUP"])
                 and not self.hasBitfieldKey("Subtype")
             ):
                 warnings += (
-                    f"\nSubtype {self.subtype} is outside the valid range of 0 - 255!"
+                    f"\nSubtype {self.subtype} is outside the valid range of 0 - 4095!"
                 )
 
             return warnings
