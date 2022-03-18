@@ -4059,7 +4059,7 @@ class TestConfigDialog(QDialog):
 
         self.layout = QVBoxLayout()
 
-        version, subVer = getGameVersion()
+        version = getGameVersion()
 
         # character
         characterLayout = QHBoxLayout()
