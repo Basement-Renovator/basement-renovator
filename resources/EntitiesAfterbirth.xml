@@ -78,10 +78,12 @@
 
 	<group Name="Miscellaneous Global Grids">
 		<group Label="Pitfalls">
-			<entitydefaults>
-				<tag>Grid</tag>
-				<tag>InNonCombatRooms</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Grid</tag>
+					<tag>InNonCombatRooms</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="0" ID="291" Image="Entities/291.0.0 - Pitfall.png" Name="Pitfall" Subtype="0" Variant="0" />
 			<entity BaseHP="0" ID="291" Image="Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" Subtype="0" Variant="1" />
 			<entity BaseHP="0" ID="291" Image="Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" Subtype="0" Variant="2" />
@@ -210,10 +212,12 @@
 	<group Name="Scarred Womb Enemies">
 		<entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
 		<group Name="Scarred Guts">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>ScarredGuts</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>ScarredGuts</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="25" ID="40" Image="Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
 			<entity BaseHP="28" ID="40" Image="Entities/40.1.1 - Scarred Guts (Left).png" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
 			<entity BaseHP="28" ID="40" Image="Entities/40.1.2 - Scarred Guts (Up).png" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />

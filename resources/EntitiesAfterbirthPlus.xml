@@ -117,9 +117,11 @@
 
 	<group Name="Flooded Caves Obstacles">
 		<group Name="Cross Stone Shooter">
-			<entitydefaults>
-				<tag>CrossStoneShooters</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>CrossStoneShooters</tag>
+				</entity>
+			</defaults>
 			<entity Image="Entities/202.10.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
 			<entity Image="Entities/202.10.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
 			<entity Image="Entities/202.11.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />

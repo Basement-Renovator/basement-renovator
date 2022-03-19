@@ -794,7 +794,7 @@ class RoomEditorWidget(QGraphicsView):
             font.setPixelSize(10)
             painter.setFont(font)
             textY = 20
-            tags = e.entity.config.printTags()
+            tags = e.entity.config.tagsString
             if tags != "[]":
                 painter.drawText(
                     r.right() - 34 - 400,

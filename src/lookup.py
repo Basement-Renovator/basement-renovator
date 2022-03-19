@@ -555,6 +555,7 @@ class EntityLookup(Lookup):
             self.bitfields = []
             self.tags = {}
             self.uniqueid = -1
+            self.tagsString = "[]"
 
         def getTagConfig(self, tag):
             if not self.parent:
@@ -574,11 +575,13 @@ class EntityLookup(Lookup):
             tag = self.getTagConfig(tag)
             if tag and tag.tag not in self.tags:
                 self.tags[tag.tag] = tag
+                self.tagsString = self.printTags()
 
         def removeTag(self, tag):
             tag = self.getTagConfig(tag)
             if tag and tag.tag in self.tags:
                 self.tags[tag.tag] = None
+                self.tagsString = self.printTags()
 
         def hasTag(self, tag):
             tag = self.getTagConfig(tag)
@@ -1131,6 +1134,14 @@ class EntityLookup(Lookup):
 
         return self.tags[name]
 
+    def loadDefaultsNode(self, node: ET.Element, mod, group):
+        for subNode in node:
+            if subNode.tag == "entity":
+                if not group.entityDefaults:
+                    group.entityDefaults = self.EntityConfig(mod, self)
+
+                group.entityDefaults.fillFromNode(subNode)
+
     def loadGroupNode(self, node: ET.Element, mod, parentGroup=None):
         group = None
         if node.tag == "tab":
@@ -1145,11 +1156,8 @@ class EntityLookup(Lookup):
                     entry = self.loadGroupNode(subNode, mod, group)
                 elif subNode.tag == "entity":
                     entry = self.loadEntityNode(subNode, mod, group)
-                elif subNode.tag == "entitydefaults":
-                    if not group.entityDefaults:
-                        group.entityDefaults = self.EntityConfig(mod, self)
-
-                    group.entityDefaults.fillFromNode(subNode)
+                elif subNode.tag == "defaults":
+                    self.loadDefaultsNode(subNode, mod, group)
 
                 if entry:
                     group.addEntry(entry)

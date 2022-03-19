@@ -162,17 +162,21 @@
 
 	<group Name="Top Grids">
 		<group Label="Events">
-			<entitydefaults>
-				<tag>Grid</tag>
-				<tag>InEmptyRooms</tag>
-				<tag>InNonCombatRooms</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Grid</tag>
+					<tag>InEmptyRooms</tag>
+					<tag>InNonCombatRooms</tag>
+				</entity>
+			</defaults>
 			<entity ID="1009" Image="Entities/1009.0.0 - Rock (event).png" Name="Rock (event)" Subtype="0" Variant="0" EditorImage="Backgrounds/rocks_generic.png" UseRockTiling="1" OverlayImage="Overlays/Event.png"/>
 			<entity ID="3009" Image="Entities/3009.0.0 - Pit (event).png" Name="Pit (event)" Subtype="0" Variant="0" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Overlays/Event.png"/>
 			<group Name="Numbered Events">
-				<entitydefaults>
-					<tag>NumberedEvents</tag>
-				</entitydefaults>
+				<defaults>
+					<entity>
+						<tag>NumberedEvents</tag>
+					</entity>
+				</defaults>
 				<entity ID="969" Image="Entities/969.0.0 - Event (group 0).png" Name="Event (group 0)" Subtype="0" Variant="0" />
 				<entity ID="969" Image="Entities/969.1.0 - Event (group 1).png" Name="Event (group 1)" Subtype="0" Variant="1" />
 				<entity ID="969" Image="Entities/969.2.0 - Event (group 2).png" Name="Event (group 2)" Subtype="0" Variant="2" />
@@ -180,9 +184,11 @@
 			</group>
 			<entity ID="969" Image="Entities/969.9.0 - Event (After Cleaning).png" Name="Event (Room Clear)" Subtype="0" Variant="9" />
 			<group Name="Event Plates">
-				<entitydefaults>
-					<tag>EventPlates</tag>
-				</entitydefaults>
+				<defaults>
+					<entity>
+						<tag>EventPlates</tag>
+					</entity>
+				</defaults>
 				<entity ID="4500" Image="Entities/4500.10.0 - Event Plate (group 0).png" Name="Event Plate (group 0)" Subtype="0" Variant="10" />
 				<entity ID="4500" Image="Entities/4500.11.0 - Event Plate (group 1).png" Name="Event Plate (group 1)" Subtype="0" Variant="11" />
 				<entity ID="4500" Image="Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (group 2)" Subtype="0" Variant="12" />
@@ -359,11 +365,13 @@
 	</group>
 
 	<group Name="Chapter 1 (Alt Path) Events">
-		<entitydefaults>
-			<tag>Grid</tag>
-			<tag>InEmptyRooms</tag>
-			<tag>InNonCombatRooms</tag>
-		</entitydefaults>
+		<defaults>
+			<entity>
+				<tag>Grid</tag>
+				<tag>InEmptyRooms</tag>
+				<tag>InNonCombatRooms</tag>
+			</entity>
+		</defaults>
 		<entity ID="970" Image="Entities/970.2.0 - Quest Door.png" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2"/>
 		<entity BaseHP="5" ID="33" Image="Entities/33.4.0 - White Fire Place.png" Name="White Fire Place" Variant="4" Subtype="0"/>
 	</group>
@@ -372,10 +380,12 @@
 		<group Name="Default Gapers"/>
 		<group Name="Default Gushers"/>
 		<group Name="Deep Gapers">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>DeepGapers</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>DeepGapers</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.0 - Deep Gaper (random).png" Name="Deep Gaper (random)" Variant="0" Subtype="0"/>
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.1 - Deep Gaper (subtype 1).png" Name="Deep Gaper (subtype 1)" Variant="0" Subtype="1"/>
 			<entity BaseHP="10" ID="811" Image="Entities/811.0.2 - Deep Gaper (subtype 2).png" Name="Deep Gaper (subtype 2)" Variant="0" Subtype="2"/>
@@ -418,15 +428,19 @@
 	</group>
 
 	<group Name="Dross Events" Label="Events">
-		<entitydefaults>
-			<tag>Grid</tag>
-			<tag>InEmptyRooms</tag>
-			<tag>InNonCombatRooms</tag>
-		</entitydefaults>
+		<defaults>
+			<entity>
+				<tag>Grid</tag>
+				<tag>InEmptyRooms</tag>
+				<tag>InNonCombatRooms</tag>
+			</entity>
+		</defaults>
 		<group Name="Water Flows">
-			<entitydefaults>
-				<tag>WaterFlows</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>WaterFlows</tag>
+				</entity>
+			</defaults>
 			<entity ID="970" Image="Entities/970.1.0 - Water Flow (left).png" Name="Water Flow (left)" Subtype="0" Variant="1" MirrorX="970.1.2"/>
 			<entity ID="970" Image="Entities/970.1.1 - Water Flow (up).png" Name="Water Flow (up)" Subtype="1" Variant="1" MirrorY="970.1.3"/>
 			<entity ID="970" Image="Entities/970.1.2 - Water Flow (right).png" Name="Water Flow (right)" Subtype="2" Variant="1" MirrorX="970.1.0"/>
@@ -474,11 +488,13 @@
 	</group>
 
 	<group Name="Chapter 2 (Alt Path) Events">
-		<entitydefaults>
-			<tag>Grid</tag>
-			<tag>InEmptyRooms</tag>
-			<tag>InNonCombatRooms</tag>
-		</entitydefaults>
+		<defaults>
+			<entity>
+				<tag>Grid</tag>
+				<tag>InEmptyRooms</tag>
+				<tag>InNonCombatRooms</tag>
+			</entity>
+		</defaults>
 		<entity ID="970" Image="Entities/970.0.0 - Room Darkness.png" Name="Room Darkness" Subtype="0" Variant="0"/>
 		<entity ID="970" Image="Entities/970.1.20 - Lava Disabler.png" Name="Lava Disabler" Subtype="20" Variant="1"/>
 		<entity Name="Quest Door"/>
@@ -491,9 +507,11 @@
 		<entity Name="Stone Grimace"/>
 		<group Name="Constant Stone Shooter"/>
 		<group Name="Quake Grimace">
-			<entitydefaults>
-				<tag>QuakeGrimaces</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>QuakeGrimaces</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="20" ID="804" Image="Entities/804.0.0 - Quake Grimace (left).png" Name="Quake Grimace (left)" Variant="0" Subtype="0" MirrorX="804.0.2" />
 			<entity BaseHP="20" ID="804" Image="Entities/804.0.1 - Quake Grimace (up).png" Name="Quake Grimace (up)" Variant="0" Subtype="1" MirrorY="804.0.3" />
 			<entity BaseHP="20" ID="804" Image="Entities/804.0.2 - Quake Grimace (right).png" Name="Quake Grimace (right)" Variant="0" Subtype="2" MirrorX="804.0.0" />
@@ -501,12 +519,14 @@
 		</group>
 		<entity BaseHP="20" ID="809" Image="Entities/809.0.0 - Bomb Grimace.png" Name="Bomb Grimace" Variant="0" Subtype="0" />
 		<group Label="Rails">
-			<entitydefaults>
-				<tag>Grid</tag>
-				<tag>InEmptyRooms</tag>
-				<tag>InNonCombatRooms</tag>
-				<tag>Rails</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Grid</tag>
+					<tag>InEmptyRooms</tag>
+					<tag>InNonCombatRooms</tag>
+					<tag>Rails</tag>
+				</entity>
+			</defaults>
 			<entity ID="6000" Image="Entities/6000.0.0 - Rail (left-to-right).png" Name="Rail (left-to-right)" Subtype="0" Variant="0" />
 			<entity ID="6000" Image="Entities/6000.1.0 - Rail (up-to-down).png" Name="Rail (up-to-down)" Subtype="0" Variant="1" />
 			<entity ID="6000" Image="Entities/6000.2.0 - Rail (up-to-right).png" Name="Rail (up-to-right)" Subtype="0" Variant="2" MirrorX="6000.3.0" MirrorY="6000.4.0" />
@@ -560,45 +580,55 @@
 		<entity BaseHP="10" Tags="Champion" ID="61" Image="Entities/61.3.0 - Ink.png" Name="Ink" Variant="3" Subtype="0"/>
 		<entity BaseHP="7" Tags="Champion" ID="819" Image="Entities/819.0.0 - Fly Bomb.png" Name="Fly Bomb" Variant="0" Subtype="0"/>
 		<group Name="Dragon Flies">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>DragonFlies</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>DragonFlies</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="20" ID="25" Image="Entities/25.3.0 - Dragon Fly.png" Name="Dragon Fly" Variant="3" Subtype="0"/>
 			<entity BaseHP="20" ID="25" Image="Entities/25.3.1 - Dragon Fly X.png" Name="Dragon Fly X" Variant="3" Subtype="1"/>
 			<entity BaseHP="20" ID="25" Image="Entities/25.3.100 - Dragon Fly (random).png" Name="Dragon Fly (random)" Variant="3" Subtype="100"/>
 		</group>
 		<group Name="Rock Spiders">
-			<entitydefaults>
-				<tag>RockSpiders</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>RockSpiders</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="12" ID="818" Image="Entities/818.0.0 - Rock Spider.png" Name="Rock Spider (random)" Variant="0" Subtype="0"/>
 			<entity BaseHP="12" ID="818" Image="Entities/818.0.1 - Rock Spider.png" Name="Rock Spider (subtype 1)" Variant="0" Subtype="1"/>
 			<entity BaseHP="12" ID="818" Image="Entities/818.0.2 - Rock Spider.png" Name="Rock Spider (subtype 2)" Variant="0" Subtype="2"/>
 			<entity BaseHP="12" ID="818" Image="Entities/818.0.3 - Rock Spider.png" Name="Rock Spider (subtype 3)" Variant="0" Subtype="3"/>
 		</group>
 		<group Name="Tinted Rock Spiders">
-			<entitydefaults>
-				<tag>TintedRockSpiders</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>TintedRockSpiders</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="22" ID="818" Image="Entities/818.1.0 - Tinted Rock Spider.png" Name="Tinted Rock Spider (random)" Variant="1" Subtype="0"/>
 			<entity BaseHP="22" ID="818" Image="Entities/818.1.1 - Tinted Rock Spider.png" Name="Tinted Rock Spider (subtype 1)" Variant="1" Subtype="1"/>
 			<entity BaseHP="22" ID="818" Image="Entities/818.1.2 - Tinted Rock Spider.png" Name="Tinted Rock Spider (subtype 2)" Variant="1" Subtype="2"/>
 			<entity BaseHP="22" ID="818" Image="Entities/818.1.3 - Tinted Rock Spider.png" Name="Tinted Rock Spider (subtype 3)" Variant="1" Subtype="3"/>
 		</group>
 		<group Name="Coal Spiders">
-			<entitydefaults>
-				<tag>CoalSpiders</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>CoalSpiders</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="15" ID="818" Image="Entities/818.2.0 - Coal Spider.png" Name="Coal Spider (random)" Variant="2" Subtype="0"/>
 			<entity BaseHP="15" ID="818" Image="Entities/818.2.1 - Coal Spider.png" Name="Coal Spider (subtype 1)" Variant="2" Subtype="1"/>
 			<entity BaseHP="15" ID="818" Image="Entities/818.2.2 - Coal Spider.png" Name="Coal Spider (subtype 2)" Variant="2" Subtype="2"/>
 			<entity BaseHP="15" ID="818" Image="Entities/818.2.3 - Coal Spider.png" Name="Coal Spider (subtype 3)" Variant="2" Subtype="3"/>
 		</group>
 		<group Name="Coals">
-			<entitydefaults>
-				<tag>Coals</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Coals</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="15" ID="33" Image="Entities/33.11.0 - Coal.png" Name="Coal (random)" Variant="11" Subtype="0" />
 			<entity BaseHP="15" ID="33" Image="Entities/33.11.1 - Coal.png" Name="Coal (subtype 1)" Variant="11" Subtype="1" />
 			<entity BaseHP="15" ID="33" Image="Entities/33.11.2 - Coal.png" Name="Coal (subtype 2)" Variant="11" Subtype="2" />
@@ -638,9 +668,11 @@
 		<entity BaseHP="22" Tags="Champion" ID="882" Image="Entities/882.0.0 - Dust.png" Name="Dust" Variant="0" Subtype="0" />
 		<entity BaseHP="80" ID="212" Image="Entities/212.4.0 - Redskull.png" Name="Redskull" Variant="4" Subtype="0" />
 		<group Name="Dusty Death's Head">
-			<entitydefaults>
-				<tag>DustyDeathsHeads</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>DustyDeathsHeads</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="20" ID="887" Image="Entities/887.0.0 - Dusty Death's Head (left).png" Name="Dusty Death's Head (left)" Variant="0" Subtype="0" MirrorX="887.0.1"/>
 			<entity BaseHP="20" ID="887" Image="Entities/887.0.1 - Dusty Death's Head (right).png" Name="Dusty Death's Head (right)" Variant="0" Subtype="1" MirrorX="887.0.0"/>
 		</group>
@@ -671,10 +703,12 @@
 		<entity Name="Ink"/>
 		<entity BaseHP="28" Tags="Champion" ID="34" Image="Entities/34.1.0 - Sticky Leaper.png" Name="Sticky Leaper" Variant="1" Subtype="0"/>
 		<group Name="Slog">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>Slogs</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>Slogs</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="28" ID="40" Image="Entities/40.2.0 - Slog (random).png" Name="Slog (random)" Variant="2" Subtype="0"/>
 			<entity BaseHP="28" ID="40" Image="Entities/40.2.1 - Slog (left).png" Name="Slog (left)" Variant="2" Subtype="1" MirrorX="40.2.3" />
 			<entity BaseHP="28" ID="40" Image="Entities/40.2.2 - Slog (up).png" Name="Slog (up)" Variant="2" Subtype="2" MirrorY="40.2.4" />
@@ -693,12 +727,14 @@
 		<entity Name="Triple Grimace"/>
 		<entity BaseHP="100" ID="877" Image="Entities/877.0.0 - Grudge.png" Name="Grudge" Variant="0" Subtype="0" />
 		<group Label="Teleporters">
-			<entitydefaults>
-				<tag>Grid</tag>
-				<tag>InEmptyRooms</tag>
-				<tag>InNonCombatRooms</tag>
-				<tag>Teleporters</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Grid</tag>
+					<tag>InEmptyRooms</tag>
+					<tag>InNonCombatRooms</tag>
+					<tag>Teleporters</tag>
+				</entity>
+			</defaults>
 			<entity ID="6100" Image="Entities/6100.0.0 - Teleporter(Square).png" Name="Teleporter(Square)" Subtype="0" Variant="0" />
 			<entity ID="6100" Image="Entities/6100.1.0 - Teleporter(Moon).png" Name="Teleporter(Moon)" Subtype="0" Variant="1" />
 			<entity ID="6100" Image="Entities/6100.2.0 - Teleporter(Rhombus).png" Name="Teleporter(Rhombus)" Subtype="0" Variant="2" />
@@ -775,9 +811,11 @@
 		<entity BaseHP="20" ID="212" Image="Entities/212.3.0 - Brimstone Death's Head.png" Name="Brimstone Death's Head" Variant="3" Subtype="0" />
 		<group Name="Mask II">
 			<group Name="1/2 Hearts">
-				<entitydefaults>
-					<tag>HalfHeartEnemy</tag>
-				</entitydefaults>
+				<defaults>
+					<entity>
+						<tag>HalfHeartEnemy</tag>
+					</entity>
+				</defaults>
 				<entity BaseHP="40" ID="92" Image="Entities/92.1.0 - 1_2 Heart.png" Name="1/2 Heart (Left)" Variant="1" Subtype="0" />
 				<entity BaseHP="40" ID="92" Image="Entities/92.1.1 - 1_2 Heart.png" Name="1/2 Heart (Right)" Variant="1" Subtype="1" />
 			</group>
@@ -812,9 +850,11 @@
 		<entity Name="Stone Grimace"/>
 		<entity Name="Triple Grimace"/>
 		<group Name="Spikeball">
-			<entitydefaults>
-				<tag>Spikeballs</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Spikeballs</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="100" ID="852" Image="Entities/852.0.0 - Spikeball (left).png" Name="Spikeball (left)" Subtype="0" Variant="0" MirrorX="852.0.2"/>
 			<entity BaseHP="100" ID="852" Image="Entities/852.0.1 - Spikeball (up).png" Name="Spikeball (up)" Subtype="1" Variant="0" MirrorY="852.0.3"/>
 			<entity BaseHP="100" ID="852" Image="Entities/852.0.2 - Spikeball (right).png" Name="Spikeball (right)" Subtype="2" Variant="0" MirrorX="852.0.0"/>
@@ -827,10 +867,12 @@
 		<entity BaseHP="80" Tags="Champion" ID="856" Image="Entities/856.0.0 - Gasbag.png" Name="Gasbag" Variant="0" Subtype="0" />
 		<entity BaseHP="40" Tags="Champion" ID="865" Image="Entities/865.0.0 - Evis.png" Name="Evis" Variant="0" Subtype="0" />
 		<group Name="Rotten Gapers">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>RottenGapers</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>RottenGapers</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="24" ID="10" Image="Entities/10.3.0 - Rotten Gaper (random).png" Name="Rotten Gaper (random)" Variant="3" Subtype="0"/>
 			<entity BaseHP="24" ID="10" Image="Entities/10.3.1 - Rotten Gaper (subtype 1).png" Name="Rotten Gaper (subtype 1)" Variant="3" Subtype="1"/>
 			<entity BaseHP="24" ID="10" Image="Entities/10.3.2 - Rotten Gaper (subtype 2).png" Name="Rotten Gaper (subtype 2)" Variant="3" Subtype="2"/>
@@ -847,10 +889,12 @@
 		<entity BaseHP="22" Tags="Champion" ID="831" Image="Entities/831.20.0 - Festering Guts.png" Name="Festering Guts" Variant="20" Subtype="0"/>
 		<entity BaseHP="62" Tags="Champion" ID="57" Image="Entities/57.2.0 - Dead Meat.png" Name="Dead Meat" Variant="2" Subtype="0" />
 		<group Name="Cysts">
-			<entitydefaults>
-				<tag>Champion</tag>
-				<tag>Cysts</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>Champion</tag>
+					<tag>Cysts</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="25" ID="862" Image="Entities/862.0.0 - Cyst (random).png" Name="Cyst (random)" Variant="0" Subtype="0" />
 			<entity BaseHP="25" ID="862" Image="Entities/862.0.1 - Cyst (left).png" Name="Cyst (left)" Variant="0" Subtype="1" MirrorX="862.0.3" />
 			<entity BaseHP="25" ID="862" Image="Entities/862.0.2 - Cyst (up).png" Name="Cyst (up)" Variant="0" Subtype="2" MirrorY="862.0.4" />
@@ -865,9 +909,11 @@
 		<entity Name="Maggot"/>
 		<entity Name="Charger"/>
 		<group Name="Small Maggots">
-			<entitydefaults>
-				<tag>SmallMaggots</tag>
-			</entitydefaults>
+			<defaults>
+				<entity>
+					<tag>SmallMaggots</tag>
+				</entity>
+			</defaults>
 			<entity BaseHP="10" ID="853" Image="Entities/853.0.0 - Small Maggot.png" Name="Small Maggot" Variant="0" Subtype="0" />
 			<entity BaseHP="10" ID="853" Image="Entities/853.10.3 - Small Maggot (three).png" Name="Small Maggot (three)" Variant="10" Subtype="3"/>
 			<entity BaseHP="10" ID="853" Image="Entities/853.10.5 - Small Maggot (five).png" Name="Small Maggot (five)" Variant="10" Subtype="5"/>
@@ -924,9 +970,11 @@
 	</group>
 
 	<group Name="Home Events">
-		<entitydefaults>
-			<tag>InNonCombatRooms</tag>
-		</entitydefaults>
+		<defaults>
+			<entity>
+				<tag>InNonCombatRooms</tag>
+			</entity>
+		</defaults>
 		<entity ID="6" Image="Entities/6.14.0 - Isaac (secret).png" Name="Isaac (secret)" Variant="14" Subtype="0" />
 		<entity ID="5" Image="Entities/5.380.10 - Mom's Bed.png" Name="Mom's Bed" Variant="380" Subtype="10" />
 		<entity ID="5" Image="Entities/5.390.0 - Mom's Chest.png" Name="Mom's Chest" Variant="390" Subtype="0" />
