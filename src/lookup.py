@@ -151,6 +151,9 @@ class StageLookup(Lookup):
                 print("Tried to load stage, but had missing name!", str(stage.attrib))
                 return None
 
+            if self.parent.verbose:
+                print("Loading stage:", str(stage.attrib))
+
             replacement = self.xml.find(f'stage[@Name="{name}"]')
 
             if replacement is None and (
@@ -1339,12 +1342,13 @@ class MainLookup:
                         printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
                         return
 
-    def __init__(self, version):
+    def __init__(self, version, verbose):
         self.basemod = self.ModConfig()
         self.stages = StageLookup(version, self)
         self.roomTypes = RoomTypeLookup(version, self)
         self.entities = EntityLookup(version, self)
         self.version = version
+        self.verbose = verbose
 
         self.loadXML(loadXMLFile("resources/Versions.xml"), self.basemod)
 

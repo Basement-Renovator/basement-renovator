@@ -6609,7 +6609,7 @@ if __name__ == "__main__":
 
     # XML Globals
     version = getGameVersion()
-    xmlLookups = MainLookup(version)
+    xmlLookups = MainLookup(version, settings.value("Verbose") == "1")
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",
