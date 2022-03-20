@@ -27,10 +27,5 @@
   <room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,9]">
     <Gfx StageGfx="Dark Room" />
   </room>
-  <room
-    Name="Greed Mode Descent"
-    Type="23"
-    Icon="UI/roomicons/greeddescent.png"
-    ShowInMenu="1"
-  />
+  <room Name="Greed Mode Descent" Type="23" Icon="UI/roomicons/greeddescent.png" ShowInMenu="1" />
 </data>

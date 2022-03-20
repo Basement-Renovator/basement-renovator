@@ -24,41 +24,19 @@
       whichever is loaded last will have priority
  -->
 <data>
-  <room
-    Name="Planetarium"
-    Type="23"
-    Icon="UI/roomicons/planetarium.png"
-    ShowInMenu="1"
-  >
+  <room Name="Planetarium" Type="23" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/planetarium_floor" />
     <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
   </room>
-  <room
-    Name="Teleporter"
-    Type="24"
-    StageName="Mausoleum"
-    Icon="UI/roomicons/mausbridgeentrance.png"
-    ShowInMenu="1"
-  >
+  <room Name="Teleporter" Type="24" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
     <Gfx StageGfx="Mausoleum" />
   </room>
-  <room
-    Name="Teleporter Exit"
-    Type="25"
-    StageName="Mausoleum"
-    Icon="UI/roomicons/mausbridgeexit.png"
-    ShowInMenu="1"
-  >
+  <room Name="Teleporter Exit" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/05x_mausoleumb" />
     <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
     <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
   </room>
-  <room
-    Name="Alt.path Descent"
-    Type="26"
-    Icon="UI/roomicons/altpathdescent.png"
-    ShowInMenu="1"
-  >
+  <room Name="Alt.path Descent" Type="26" Icon="UI/roomicons/altpathdescent.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/0Bx_Downpour Entrance" ID="1" />
     <!-- Downpour Entrance -->
     <Gfx RoomGfx="Secret Room" ID="2" />

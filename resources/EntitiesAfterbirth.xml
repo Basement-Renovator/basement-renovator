@@ -3,250 +3,77 @@
   <tag Label="Scarred Guts" StatisticsGroup="1">ScarredGuts</tag>
 
   <!--——— Pickups ———-->
-  <entity
-    ID="5"
-    Image="Entities/5.300.42 - Chaos Card.png"
-    Name="Chaos Card"
-    Subtype="37"
-    Variant="300"
-    Overwrite="1"
-  />
-  <entity
-    ID="5"
-    Image="Entities/5.300.43 - Credit Card.png"
-    Name="Credit Card"
-    Subtype="38"
-    Variant="300"
-    Overwrite="1"
-  />
-  <entity
-    ID="5"
-    Image="Entities/5.300.44 - Rules Card.png"
-    Name="Rules Card"
-    Subtype="39"
-    Variant="300"
-    Overwrite="1"
-  />
-  <entity
-    ID="5"
-    Image="Entities/5.300.45 - A Card Against Humanity.png"
-    Name="A Card Against Humanity"
-    Subtype="40"
-    Variant="300"
-    Overwrite="1"
-  />
-  <entity
-    ID="5"
-    Image="Entities/5.300.46 - Suicide King.png"
-    Name="Suicide King"
-    Subtype="41"
-    Variant="300"
-    Overwrite="1"
-  />
+  <entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="37" Variant="300" Overwrite="1" />
+  <entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="38" Variant="300" Overwrite="1" />
+  <entity ID="5" Image="Entities/5.300.44 - Rules Card.png" Name="Rules Card" Subtype="39" Variant="300" Overwrite="1" />
+  <entity ID="5" Image="Entities/5.300.45 - A Card Against Humanity.png" Name="A Card Against Humanity" Subtype="40" Variant="300" Overwrite="1" />
+  <entity ID="5" Image="Entities/5.300.46 - Suicide King.png" Name="Suicide King" Subtype="41" Variant="300" Overwrite="1" />
 
   <group Name="Hearts">
-    <entity
-      ID="5"
-      Image="Entities/5.10.7 - Gold Heart.png"
-      Name="Gold Heart"
-      Subtype="7"
-      Variant="10"
-    />
+    <entity ID="5" Image="Entities/5.10.7 - Gold Heart.png" Name="Gold Heart" Subtype="7" Variant="10" />
   </group>
 
   <group Name="Coins">
-    <entity
-      ID="5"
-      Image="Entities/5.20.5 - Lucky Penny.png"
-      Name="Lucky Penny"
-      Subtype="5"
-      Variant="20"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.20.6 - Sticky Nickel.png"
-      Name="Sticky Nickel"
-      Subtype="6"
-      Variant="20"
-    />
+    <entity ID="5" Image="Entities/5.20.5 - Lucky Penny.png" Name="Lucky Penny" Subtype="5" Variant="20" />
+    <entity ID="5" Image="Entities/5.20.6 - Sticky Nickel.png" Name="Sticky Nickel" Subtype="6" Variant="20" />
   </group>
 
   <group Name="Bombs">
-    <entity
-      ID="5"
-      Image="Entities/5.40.4 - Golden Bomb.png"
-      Name="Golden Bomb"
-      Subtype="4"
-      Variant="40"
-    />
+    <entity ID="5" Image="Entities/5.40.4 - Golden Bomb.png" Name="Golden Bomb" Subtype="4" Variant="40" />
   </group>
 
   <group Name="Chests">
-    <entity
-      ID="5"
-      Image="Entities/5.53.0 - Eternal Chest.png"
-      Name="Eternal Chest"
-      Subtype="0"
-      Variant="53"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.52.0 - Spiked Chest.png"
-      Name="Spiked Chest"
-      Subtype="0"
-      Variant="52"
-    />
+    <entity ID="5" Image="Entities/5.53.0 - Eternal Chest.png" Name="Eternal Chest" Subtype="0" Variant="53" />
+    <entity ID="5" Image="Entities/5.52.0 - Spiked Chest.png" Name="Spiked Chest" Subtype="0" Variant="52" />
   </group>
 
   <group Name="Pickup Containers">
     <group Name="Grab Bags">
-      <entity
-        ID="5"
-        Image="Entities/5.69.1 - Grab Bag.png"
-        Name="Grab Bag"
-        Variant="69"
-        Subtype="0"
-      />
+      <entity ID="5" Image="Entities/5.69.1 - Grab Bag.png" Name="Grab Bag" Variant="69" Subtype="0" />
     </group>
   </group>
 
   <group Name="Pill Colors">
-    <entity
-      ID="5"
-      Image="Entities/5.70.10 - White-Azure Pill.png"
-      Name="White-Azure Pill"
-      Subtype="10"
-      Variant="70"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.70.11 - Black-Yellow Pill.png"
-      Name="Black-Yellow Pill"
-      Subtype="11"
-      Variant="70"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.70.12 - White-Black Pill.png"
-      Name="White-Black Pill"
-      Subtype="12"
-      Variant="70"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.70.13 - White-Yellow Pill.png"
-      Name="White-Yellow Pill"
-      Subtype="13"
-      Variant="70"
-    />
+    <entity ID="5" Image="Entities/5.70.10 - White-Azure Pill.png" Name="White-Azure Pill" Subtype="10" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.11 - Black-Yellow Pill.png" Name="Black-Yellow Pill" Subtype="11" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.12 - White-Black Pill.png" Name="White-Black Pill" Subtype="12" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.13 - White-Yellow Pill.png" Name="White-Yellow Pill" Subtype="13" Variant="70" />
   </group>
 
   <group Name="Cards">
-    <entity
-      ID="5"
-      Image="Entities/5.300.47 - Get Out of Jail Free Card.png"
-      Name="Get Out of Jail Free Card"
-      Subtype="47"
-      Variant="300"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.300.48 - Question Card.png"
-      Name="? Card"
-      Subtype="48"
-      Variant="300"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.300.49 - Dice Shard.png"
-      Name="Dice Shard"
-      Subtype="49"
-      Variant="300"
-    />
-    <entity
-      ID="5"
-      Image="Entities/5.300.50 - Emergency Contact.png"
-      Name="Emergency Contact"
-      Subtype="50"
-      Variant="300"
-    />
+    <entity ID="5" Image="Entities/5.300.47 - Get Out of Jail Free Card.png" Name="Get Out of Jail Free Card" Subtype="47" Variant="300" />
+    <entity ID="5" Image="Entities/5.300.48 - Question Card.png" Name="? Card" Subtype="48" Variant="300" />
+    <entity ID="5" Image="Entities/5.300.49 - Dice Shard.png" Name="Dice Shard" Subtype="49" Variant="300" />
+    <entity ID="5" Image="Entities/5.300.50 - Emergency Contact.png" Name="Emergency Contact" Subtype="50" Variant="300" />
   </group>
 
   <group Name="Runes">
-    <entity
-      ID="5"
-      Image="Entities/5.300.40 - Blank Rune.png"
-      Name="Blank Rune"
-      Subtype="36"
-      Variant="300"
-    />
+    <entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" Subtype="36" Variant="300" />
   </group>
 
   <!--——— Global ———-->
   <group Name="TNT">
-    <entity
-      ID="292"
-      Image="Entities/292.0.0 - Pushable TNT.png"
-      Name="Pushable TNT"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity ID="292" Image="Entities/292.0.0 - Pushable TNT.png" Name="Pushable TNT" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Grids">
     <group Name="Pressure Plates">
-      <entity
-        ID="4500"
-        Image="Entities/4500.0.0 - Pressure Plate.png"
-        Name="Pressure Plate (room clear)"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        ID="4500"
-        Image="Entities/4500.0.1 - Reward Plate.png"
-        Name="Reward Plate"
-        Subtype="0"
-        Variant="1"
-      />
+      <entity ID="4500" Image="Entities/4500.0.0 - Pressure Plate.png" Name="Pressure Plate (room clear)" Subtype="0" Variant="0" />
+      <entity ID="4500" Image="Entities/4500.0.1 - Reward Plate.png" Name="Reward Plate" Subtype="0" Variant="1" />
     </group>
   </group>
 
   <group Name="Poops">
-    <entity
-      ID="1497"
-      Image="Entities/1497.0.0 - Black Poop.png"
-      Name="Black Poop"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity ID="1497" Image="Entities/1497.0.0 - Black Poop.png" Name="Black Poop" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Beggars">
-    <entity
-      ID="6"
-      Image="Entities/6.9.0 - Bomb Bum.png"
-      Name="Bomb Bum"
-      Subtype="0"
-      Variant="9"
-    />
+    <entity ID="6" Image="Entities/6.9.0 - Bomb Bum.png" Name="Bomb Bum" Subtype="0" Variant="9" />
   </group>
 
   <group Name="Machines">
-    <entity
-      ID="6"
-      Image="Entities/6.10.0 - Shop Restock Machine.png"
-      Name="Shop Restock Machine"
-      Subtype="0"
-      Variant="10"
-    />
-    <entity
-      ID="6"
-      Image="Entities/6.11.0 - Greed Machine.png"
-      Name="Greed Machine"
-      Subtype="0"
-      Variant="11"
-    />
+    <entity ID="6" Image="Entities/6.10.0 - Shop Restock Machine.png" Name="Shop Restock Machine" Subtype="0" Variant="10" />
+    <entity ID="6" Image="Entities/6.11.0 - Greed Machine.png" Name="Greed Machine" Subtype="0" Variant="11" />
   </group>
 
   <group Name="Miscellaneous Global Grids">
@@ -257,142 +84,32 @@
           <tag>InNonCombatRooms</tag>
         </entity>
       </defaults>
-      <entity
-        BaseHP="0"
-        ID="291"
-        Image="Entities/291.0.0 - Pitfall.png"
-        Name="Pitfall"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="0"
-        ID="291"
-        Image="Entities/291.1.0 - Suction Pitfall.png"
-        Name="Suction Pitfall"
-        Subtype="0"
-        Variant="1"
-      />
-      <entity
-        BaseHP="0"
-        ID="291"
-        Image="Entities/291.2.0 - Teleport Pitfall.png"
-        Name="Teleport Pitfall"
-        Subtype="0"
-        Variant="2"
-      />
-      <entity
-        BaseHP="0"
-        ID="291"
-        Image="Entities/291.3.0 - Blue Hush Pitfall.png"
-        Name="Blue Hush Pitfall"
-        Subtype="0"
-        Variant="3"
-      />
+      <entity BaseHP="0" ID="291" Image="Entities/291.0.0 - Pitfall.png" Name="Pitfall" Subtype="0" Variant="0" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" Subtype="0" Variant="1" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" Subtype="0" Variant="2" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.3.0 - Blue Hush Pitfall.png" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
     </group>
   </group>
 
   <group Name="Special Grids">
-    <entity
-      ID="4500"
-      Image="Entities/4500.0.2 - Greed Plate.png"
-      Name="Greed Plate"
-      Subtype="0"
-      Variant="2"
-      PlaceVisual="0,0.55"
-      DisableOffsetIndicator="1"
-    />
+    <entity ID="4500" Image="Entities/4500.0.2 - Greed Plate.png" Name="Greed Plate" Subtype="0" Variant="2" PlaceVisual="0,0.55" DisableOffsetIndicator="1" />
   </group>
 
   <group Name="Shopkeepers">
-    <entity
-      BaseHP="5"
-      ID="17"
-      Image="Entities/17.3.0 - Special Keeper.png"
-      Name="Special Keeper"
-      Subtype="0"
-      Variant="3"
-    />
-    <entity
-      BaseHP="5"
-      ID="17"
-      Image="Entities/17.4.0 - Special Hanging Keeper.png"
-      Name="Special Hanging Keeper"
-      Subtype="0"
-      Variant="4"
-    />
+    <entity BaseHP="5" ID="17" Image="Entities/17.3.0 - Special Keeper.png" Name="Special Keeper" Subtype="0" Variant="3" />
+    <entity BaseHP="5" ID="17" Image="Entities/17.4.0 - Special Hanging Keeper.png" Name="Special Hanging Keeper" Subtype="0" Variant="4" />
   </group>
 
   <group Name="Global">
     <group Label="Special Enemies">
-      <entity
-        BaseHP="30"
-        Tags="Champion"
-        ID="296"
-        Image="Entities/296.0.0 - Hush Fly.png"
-        Name="Hush Fly"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="30"
-        Tags="Champion"
-        ID="297"
-        Image="Entities/297.0.0 - Blue Gaper.png"
-        Name="Blue Gaper"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="30"
-        Tags="Champion"
-        ID="298"
-        Image="Entities/298.0.0 - Blue Boil.png"
-        Name="Blue Boil"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="60"
-        ID="257"
-        Image="Entities/257.1.0 - Blue Conjoined Fatty.png"
-        Name="Blue Conjoined Fatty"
-        Subtype="0"
-        Variant="1"
-      />
-      <entity
-        BaseHP="30"
-        ID="246"
-        Image="Entities/246.1.0 - Rag Man's Ragling.png"
-        Name="Rag Man's Ragling"
-        Subtype="0"
-        Variant="1"
-      />
-      <entity
-        BaseHP="30"
-        Tags="Champion"
-        ID="299"
-        Image="Entities/299.0.0 - Greed Gaper.png"
-        Name="Greed Gaper"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="30"
-        ID="295"
-        Image="Entities/295.0.0 - Corn Mine.png"
-        Name="Corn Mine"
-        Subtype="0"
-        Variant="0"
-      />
-      <entity
-        BaseHP="10"
-        ID="404"
-        Image="Entities/404.1.0 - Dark Ball.png"
-        Name="Dark Ball"
-        Subtype="0"
-        Variant="1"
-      />
+      <entity BaseHP="30" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0" />
+      <entity BaseHP="30" Tags="Champion" ID="297" Image="Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0" />
+      <entity BaseHP="30" Tags="Champion" ID="298" Image="Entities/298.0.0 - Blue Boil.png" Name="Blue Boil" Subtype="0" Variant="0" />
+      <entity BaseHP="60" ID="257" Image="Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1" />
+      <entity BaseHP="30" ID="246" Image="Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1" />
+      <entity BaseHP="30" Tags="Champion" ID="299" Image="Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0" />
+      <entity BaseHP="30" ID="295" Image="Entities/295.0.0 - Corn Mine.png" Name="Corn Mine" Subtype="0" Variant="0" />
+      <entity BaseHP="10" ID="404" Image="Entities/404.1.0 - Dark Ball.png" Name="Dark Ball" Subtype="0" Variant="1" />
     </group>
   </group>
 
@@ -430,271 +147,70 @@
   </group>
 
   <group Name="Chapter 1 (Main Path) Enemies">
-    <entity
-      BaseHP="10"
-      Tags="Champion"
-      ID="284"
-      Image="Entities/284.0.0 - Cyclopia.png"
-      Name="Cyclopia"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="5"
-      ID="256"
-      Image="Entities/256.0.0 - Dart Fly.png"
-      Name="Dart Fly"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="5"
-      ID="281"
-      Image="Entities/281.0.0 - Swarm.png"
-      Name="Swarm"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="10"
-      ID="289"
-      Image="Entities/289.0.0 - Ulcer.png"
-      Name="Ulcer"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="3"
-      ID="217"
-      Image="Entities/217.2.0 - Brownie Corn.png"
-      Name="Brownie Corn"
-      Subtype="0"
-      Variant="2"
-    />
-    <entity
-      BaseHP="10"
-      ID="276"
-      Image="Entities/276.0.0 - Roundy.png"
-      Name="Roundy"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="10" Tags="Champion" ID="284" Image="Entities/284.0.0 - Cyclopia.png" Name="Cyclopia" Subtype="0" Variant="0" />
+    <entity BaseHP="5" ID="256" Image="Entities/256.0.0 - Dart Fly.png" Name="Dart Fly" Subtype="0" Variant="0" />
+    <entity BaseHP="5" ID="281" Image="Entities/281.0.0 - Swarm.png" Name="Swarm" Subtype="0" Variant="0" />
+    <entity BaseHP="10" ID="289" Image="Entities/289.0.0 - Ulcer.png" Name="Ulcer" Subtype="0" Variant="0" />
+    <entity BaseHP="3" ID="217" Image="Entities/217.2.0 - Brownie Corn.png" Name="Brownie Corn" Subtype="0" Variant="2" />
+    <entity BaseHP="10" ID="276" Image="Entities/276.0.0 - Roundy.png" Name="Roundy" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Burning Basement Enemies">
-    <entity
-      BaseHP="10"
-      Tags="Champion"
-      ID="10"
-      Image="Entities/10.2.0 - Flaming Gaper.png"
-      Name="Flaming Gaper"
-      Subtype="0"
-      Variant="2"
-    />
-    <entity
-      BaseHP="18"
-      ID="208"
-      Image="Entities/208.2.0 - Flaming Fatty.png"
-      Name="Flaming Fatty"
-      Subtype="0"
-      Variant="2"
-    />
+    <entity BaseHP="10" Tags="Champion" ID="10" Image="Entities/10.2.0 - Flaming Gaper.png" Name="Flaming Gaper" Subtype="0" Variant="2" />
+    <entity BaseHP="18" ID="208" Image="Entities/208.2.0 - Flaming Fatty.png" Name="Flaming Fatty" Subtype="0" Variant="2" />
     <entity Name="Hopper" />
-    <entity
-      BaseHP="20"
-      Tags="Champion"
-      ID="54"
-      Image="Entities/54.0.0 - Flaming Hopper.png"
-      Name="Flaming Hopper"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="20" Tags="Champion" ID="54" Image="Entities/54.0.0 - Flaming Hopper.png" Name="Flaming Hopper" Subtype="0" Variant="0" />
     <entity Name="Trite" />
     <entity Name="Ticking Spider" />
     <entity Name="Psychic Horf" />
   </group>
 
   <group Name="Chapter 2 (Main Path) Enemies">
-    <entity
-      BaseHP="20"
-      ID="257"
-      Image="Entities/257.0.0 - Conjoined Fatty.png"
-      Name="Conjoined Fatty"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="25"
-      ID="288"
-      Image="Entities/288.0.0 - Dukie.png"
-      Name="Dukie"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="20" ID="257" Image="Entities/257.0.0 - Conjoined Fatty.png" Name="Conjoined Fatty" Subtype="0" Variant="0" />
+    <entity BaseHP="25" ID="288" Image="Entities/288.0.0 - Dukie.png" Name="Dukie" Subtype="0" Variant="0" />
     <entity Name="Dart Fly" />
     <entity Name="Swarm" />
     <entity Name="Ulcer" />
-    <entity
-      BaseHP="3"
-      ID="217"
-      Image="Entities/217.1.0 - Corn.png"
-      Name="Corn"
-      Subtype="0"
-      Variant="1"
-    />
-    <entity
-      BaseHP="50"
-      ID="258"
-      Image="Entities/258.0.0 - Fat Bat.png"
-      Name="Fat Bat"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="3" ID="217" Image="Entities/217.1.0 - Corn.png" Name="Corn" Subtype="0" Variant="1" />
+    <entity BaseHP="50" ID="258" Image="Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" Subtype="0" Variant="0" />
   </group>
 
   <group Label="Flooded Caves Enemies">
-    <entity
-      BaseHP="18"
-      Tags="Champion"
-      ID="22"
-      Image="Entities/22.1.0 - Drowned Hive.png"
-      Name="Drowned Hive"
-      Subtype="0"
-      Variant="1"
-    />
-    <entity
-      BaseHP="20"
-      Tags="Champion"
-      ID="25"
-      Image="Entities/25.2.0 - Drowned Boom Fly.png"
-      Name="Drowned Boom Fly"
-      Subtype="0"
-      Variant="2"
-    />
-    <entity
-      BaseHP="22"
-      Tags="Champion"
-      ID="23"
-      Image="Entities/23.1.0 - Drowned Charger.png"
-      Name="Drowned Charger"
-      Subtype="0"
-      Variant="1"
-    />
+    <entity BaseHP="18" Tags="Champion" ID="22" Image="Entities/22.1.0 - Drowned Hive.png" Name="Drowned Hive" Subtype="0" Variant="1" />
+    <entity BaseHP="20" Tags="Champion" ID="25" Image="Entities/25.2.0 - Drowned Boom Fly.png" Name="Drowned Boom Fly" Subtype="0" Variant="2" />
+    <entity BaseHP="22" Tags="Champion" ID="23" Image="Entities/23.1.0 - Drowned Charger.png" Name="Drowned Charger" Subtype="0" Variant="1" />
     <entity Name="Clotty" />
     <entity Name="Gut" />
   </group>
 
   <group Name="Chapter 3 (Main Path) Enemies">
-    <entity
-      BaseHP="8"
-      ID="277"
-      Image="Entities/277.0.0 - Black Bony.png"
-      Name="Black Bony"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="10"
-      Tags="Champion"
-      ID="280"
-      Image="Entities/280.0.0 - Black Globin's Body.png"
-      Name="Black Globin's Body"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="20"
-      ID="212"
-      Image="Entities/212.1.0 - Dank Death's Head.png"
-      Name="Dank Death's Head"
-      Subtype="0"
-      Variant="1"
-    />
+    <entity BaseHP="8" ID="277" Image="Entities/277.0.0 - Black Bony.png" Name="Black Bony" Subtype="0" Variant="0" />
+    <entity BaseHP="10" Tags="Champion" ID="280" Image="Entities/280.0.0 - Black Globin's Body.png" Name="Black Globin's Body" Subtype="0" Variant="0" />
+    <entity BaseHP="20" ID="212" Image="Entities/212.1.0 - Dank Death's Head.png" Name="Dank Death's Head" Subtype="0" Variant="1" />
     <entity Name="Dukie" />
-    <entity
-      BaseHP="20"
-      Tags="Champion"
-      ID="282"
-      Image="Entities/282.0.0 - Mega Clotty.png"
-      Name="Mega Clotty"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="20" Tags="Champion" ID="282" Image="Entities/282.0.0 - Mega Clotty.png" Name="Mega Clotty" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Necropolis Enemies">
-    <entity
-      BaseHP="20"
-      ID="287"
-      Image="Entities/287.0.0 - Mom's Dead Hand.png"
-      Name="Mom's Dead Hand"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="20" ID="287" Image="Entities/287.0.0 - Mom's Dead Hand.png" Name="Mom's Dead Hand" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Dank Depths Enemies">
-    <entity
-      BaseHP="33"
-      Tags="Champion"
-      ID="24"
-      Image="Entities/24.2.0 - Dank Globin.png"
-      Name="Dank Globin"
-      Subtype="0"
-      Variant="2"
-    />
+    <entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.2.0 - Dank Globin.png" Name="Dank Globin" Subtype="0" Variant="2" />
     <group Name="Guts (Enemy)" />
-    <entity
-      BaseHP="15"
-      ID="220"
-      Image="Entities/220.1.0 - Dank Squirt.png"
-      Name="Dank Squirt"
-      Subtype="0"
-      Variant="1"
-    />
+    <entity BaseHP="15" ID="220" Image="Entities/220.1.0 - Dank Squirt.png" Name="Dank Squirt" Subtype="0" Variant="1" />
     <entity Name="Clot" />
   </group>
 
   <group Name="Chapter 4 (Main Path) Enemies">
-    <entity
-      BaseHP="22"
-      Tags="Champion"
-      ID="39"
-      Image="Entities/39.3.0 - Scarred Double Vis.png"
-      Name="Scarred Double Vis"
-      Subtype="0"
-      Variant="3"
-    />
-    <entity
-      BaseHP="50"
-      ID="286"
-      Image="Entities/286.0.0 - Flesh Death's Head.png"
-      Name="Flesh Death's Head"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="15"
-      Tags="Champion"
-      ID="290"
-      Image="Entities/290.0.0 - Meatball.png"
-      Name="Meatball"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="22" Tags="Champion" ID="39" Image="Entities/39.3.0 - Scarred Double Vis.png" Name="Scarred Double Vis" Subtype="0" Variant="3" />
+    <entity BaseHP="50" ID="286" Image="Entities/286.0.0 - Flesh Death's Head.png" Name="Flesh Death's Head" Subtype="0" Variant="0" />
+    <entity BaseHP="15" Tags="Champion" ID="290" Image="Entities/290.0.0 - Meatball.png" Name="Meatball" Subtype="0" Variant="0" />
     <entity Name="Mega Clotty" />
   </group>
 
   <group Name="Scarred Womb Enemies">
-    <entity
-      BaseHP="35"
-      Tags="Champion"
-      ID="58"
-      Image="Entities/58.1.0 - Scarred Para-Bite.png"
-      Name="Scarred Para-Bite"
-      Subtype="0"
-      Variant="1"
-    />
+    <entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
     <group Name="Scarred Guts">
       <defaults>
         <entity>
@@ -702,103 +218,25 @@
           <tag>ScarredGuts</tag>
         </entity>
       </defaults>
-      <entity
-        BaseHP="25"
-        ID="40"
-        Image="Entities/40.1.0 - Scarred Guts.png"
-        Name="Scarred Guts (Random)"
-        Subtype="0"
-        Variant="1"
-      />
-      <entity
-        BaseHP="28"
-        ID="40"
-        Image="Entities/40.1.1 - Scarred Guts (Left).png"
-        Name="Scarred Guts (Left)"
-        Subtype="1"
-        Variant="1"
-        MirrorX="40.1.3"
-      />
-      <entity
-        BaseHP="28"
-        ID="40"
-        Image="Entities/40.1.2 - Scarred Guts (Up).png"
-        Name="Scarred Guts (Up)"
-        Subtype="2"
-        Variant="1"
-        MirrorY="40.1.4"
-      />
-      <entity
-        BaseHP="28"
-        ID="40"
-        Image="Entities/40.1.3 - Scarred Guts (Right).png"
-        Name="Scarred Guts (Right)"
-        Subtype="3"
-        Variant="1"
-        MirrorX="40.1.1"
-      />
-      <entity
-        BaseHP="28"
-        ID="40"
-        Image="Entities/40.1.4 - Scarred Guts (Down).png"
-        Name="Scarred Guts (Down)"
-        Subtype="4"
-        Variant="1"
-        MirrorY="40.1.2"
-      />
+      <entity BaseHP="25" ID="40" Image="Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
+      <entity BaseHP="28" ID="40" Image="Entities/40.1.1 - Scarred Guts (Left).png" Name="Scarred Guts (Left)" Subtype="1" Variant="1" MirrorX="40.1.3" />
+      <entity BaseHP="28" ID="40" Image="Entities/40.1.2 - Scarred Guts (Up).png" Name="Scarred Guts (Up)" Subtype="2" Variant="1" MirrorY="40.1.4" />
+      <entity BaseHP="28" ID="40" Image="Entities/40.1.3 - Scarred Guts (Right).png" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
+      <entity BaseHP="28" ID="40" Image="Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
     </group>
   </group>
 
   <group Name="Chapter 5 (Main Path) Enemies">
-    <entity
-      BaseHP="25"
-      ID="285"
-      Image="Entities/285.0.0 - Red Ghost.png"
-      Name="Red Ghost"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="25" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Sheol Enemies">
-    <entity
-      BaseHP="33"
-      Tags="Champion"
-      ID="278"
-      Image="Entities/278.0.0 - Black Globin.png"
-      Name="Black Globin"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="20"
-      Tags="Champion"
-      ID="279"
-      Image="Entities/279.0.0 - Black Globin's Head.png"
-      Name="Black Globin's Head"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="33" Tags="Champion" ID="278" Image="Entities/278.0.0 - Black Globin.png" Name="Black Globin" Subtype="0" Variant="0" />
+    <entity BaseHP="20" Tags="Champion" ID="279" Image="Entities/279.0.0 - Black Globin's Head.png" Name="Black Globin's Head" Subtype="0" Variant="0" />
     <entity Name="Black Globin's Body" />
     <entity Name="Black Bony" />
-    <entity
-      BaseHP="20"
-      Tags="Champion"
-      ID="283"
-      Image="Entities/283.0.0 - Bone Knight.png"
-      Name="Bone Knight"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      BaseHP="25"
-      Tags="Champion"
-      ID="259"
-      Image="Entities/259.0.0 - Imp.png"
-      Name="Imp"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="20" Tags="Champion" ID="283" Image="Entities/283.0.0 - Bone Knight.png" Name="Bone Knight" Subtype="0" Variant="0" />
+    <entity BaseHP="25" Tags="Champion" ID="259" Image="Entities/259.0.0 - Imp.png" Name="Imp" Subtype="0" Variant="0" />
     <entity Name="Dank Death's Head" />
   </group>
 
@@ -808,47 +246,19 @@
 
   <!--——— Bosses ———-->
   <group Name="Chapter 1 Bosses (Main Path) Shared">
-    <entity
-      BaseHP="200"
-      ID="404"
-      Image="Entities/404.0.0 - Little Horn.png"
-      Name="Little Horn"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="200" ID="404" Image="Entities/404.0.0 - Little Horn.png" Name="Little Horn" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Dingle (Boss)">
-    <entity
-      BaseHP="375"
-      ID="261"
-      Image="Entities/261.1.0 - Dangle.png"
-      Name="Dangle"
-      Subtype="0"
-      Variant="1"
-    />
+    <entity BaseHP="375" ID="261" Image="Entities/261.1.0 - Dangle.png" Name="Dangle" Subtype="0" Variant="1" />
   </group>
 
   <group Name="Gurgling (Boss)">
-    <entity
-      BaseHP="90"
-      ID="237"
-      Image="Entities/237.2.0 - Turdling.png"
-      Name="Turdling"
-      Subtype="0"
-      Variant="2"
-    />
+    <entity BaseHP="90" ID="237" Image="Entities/237.2.0 - Turdling.png" Name="Turdling" Subtype="0" Variant="2" />
   </group>
 
   <group Name="Cellar Bosses">
-    <entity
-      BaseHP="250"
-      ID="405"
-      Image="Entities/405.0.0 - Rag Man.png"
-      Name="Rag Man"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="250" ID="405" Image="Entities/405.0.0 - Rag Man.png" Name="Rag Man" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 1 Bosses (Main Path)">
@@ -864,33 +274,12 @@
   </group>
 
   <group Name="Caves Bosses">
-    <entity
-      BaseHP="400"
-      ID="401"
-      Image="Entities/401.0.0 - The Stain.png"
-      Name="The Stain"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="400" ID="401" Image="Entities/401.0.0 - The Stain.png" Name="The Stain" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Catacombs Bosses">
-    <entity
-      BaseHP="200"
-      ID="62"
-      Image="Entities/62.2.0 - The Frail.png"
-      Name="The Frail"
-      Subtype="0"
-      Variant="2"
-    />
-    <entity
-      BaseHP="220"
-      ID="403"
-      Image="Entities/403.0.0 - The Forsaken.png"
-      Name="The Forsaken"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="200" ID="62" Image="Entities/62.2.0 - The Frail.png" Name="The Frail" Subtype="0" Variant="2" />
+    <entity BaseHP="220" ID="403" Image="Entities/403.0.0 - The Forsaken.png" Name="The Forsaken" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 2 Bosses (Main Path)">
@@ -907,14 +296,7 @@
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path) Shared">
-    <entity
-      BaseHP="400"
-      ID="402"
-      Image="Entities/402.0.0 - Brownie.png"
-      Name="Brownie"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="400" ID="402" Image="Entities/402.0.0 - Brownie.png" Name="Brownie" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path)">
@@ -936,100 +318,29 @@
   </group>
 
   <group Name="Story Bosses">
-    <entity
-      BaseHP="1000"
-      ID="102"
-      Image="Entities/102.2.0 - Blue Baby (Alt).png"
-      Name="??? (Hush)"
-      Subtype="0"
-      Variant="2"
-    />
-    <entity
-      ID="407"
-      Image="Entities/407.0.0 - Hush.png"
-      Name="Hush"
-      Subtype="0"
-      Variant="0"
-    />
-    <entity
-      ID="408"
-      Image="Entities/408.0.0 - Skinless Hush.png"
-      Name="Skinless Hush"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="1000" ID="102" Image="Entities/102.2.0 - Blue Baby (Alt).png" Name="??? (Hush)" Subtype="0" Variant="2" />
+    <entity ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
+    <entity ID="408" Image="Entities/408.0.0 - Skinless Hush.png" Name="Skinless Hush" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Other Bosses">
     <group Label="Ultra Greed">
       <group Name="Ultra Greed (Boss)">
-        <entity
-          BaseHP="3500"
-          ID="406"
-          Image="Entities/406.0.0 - Ultra Greed.png"
-          Name="Ultra Greed"
-          Subtype="0"
-          Variant="0"
-        />
+        <entity BaseHP="3500" ID="406" Image="Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
       </group>
-      <entity
-        BaseHP="30"
-        ID="293"
-        Image="Entities/293.0.0 - Ultra Greed Coin (Spinner).png"
-        Name="Ultra Greed Coin (Spinner)"
-        Subtype="0"
-        Variant="0"
-        Tags=""
-      />
-      <entity
-        BaseHP="30"
-        ID="293"
-        Image="Entities/293.1.0 - Ultra Greed Coin (Key).png"
-        Name="Ultra Greed Coin (Key)"
-        Subtype="0"
-        Variant="1"
-        Tags=""
-      />
-      <entity
-        BaseHP="30"
-        ID="293"
-        Image="Entities/293.2.0 - Ultra Greed Coin (Bomb).png"
-        Name="Ultra Greed Coin (Bomb)"
-        Subtype="0"
-        Variant="2"
-        Tags=""
-      />
-      <entity
-        BaseHP="30"
-        ID="293"
-        Image="Entities/293.3.0 - Ultra Greed Coin (Heart).png"
-        Name="Ultra Greed Coin (Heart)"
-        Subtype="0"
-        Variant="3"
-        Tags=""
-      />
+      <entity BaseHP="30" ID="293" Image="Entities/293.0.0 - Ultra Greed Coin (Spinner).png" Name="Ultra Greed Coin (Spinner)" Subtype="0" Variant="0" Tags="" />
+      <entity BaseHP="30" ID="293" Image="Entities/293.1.0 - Ultra Greed Coin (Key).png" Name="Ultra Greed Coin (Key)" Subtype="0" Variant="1" Tags="" />
+      <entity BaseHP="30" ID="293" Image="Entities/293.2.0 - Ultra Greed Coin (Bomb).png" Name="Ultra Greed Coin (Bomb)" Subtype="0" Variant="2" Tags="" />
+      <entity BaseHP="30" ID="293" Image="Entities/293.3.0 - Ultra Greed Coin (Heart).png" Name="Ultra Greed Coin (Heart)" Subtype="0" Variant="3" Tags="" />
     </group>
   </group>
 
   <!--——— Unused ———-->
   <group Name="Live Bombs">
-    <entity
-      ID="4"
-      Image="Entities/4.12.0 - Glitter Bomb.png"
-      Name="Glitter Bomb"
-      Variant="12"
-      Subtype="0"
-    />
+    <entity ID="4" Image="Entities/4.12.0 - Glitter Bomb.png" Name="Glitter Bomb" Variant="12" Subtype="0" />
   </group>
 
   <group Name="Broken">
-    <entity
-      BaseHP="30"
-      ID="294"
-      Image="Entities/294.0.0 - Ultra Greed Door.png"
-      Name="Ultra Greed Door"
-      Subtype="0"
-      Variant="0"
-    />
+    <entity BaseHP="30" ID="294" Image="Entities/294.0.0 - Ultra Greed Door.png" Name="Ultra Greed Door" Subtype="0" Variant="0" />
   </group>
 </data>

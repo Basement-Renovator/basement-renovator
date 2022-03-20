@@ -8,11 +8,7 @@
   <stage Name="Burning Basement">
     <Gfx>
       <Entity ID="1009" Image="Backgrounds/rocks_burningbasement.png" />
-      <Entity
-        ID="1000"
-        SubType="1"
-        Image="Backgrounds/rocks_burningbasement.png"
-      />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_burningbasement.png" />
     </Gfx>
   </stage>
   <stage Name="Caves">
@@ -32,11 +28,7 @@
     <Gfx>
       <Entity ID="3009" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_floodedcaves.png" />
-      <Entity
-        ID="1000"
-        SubType="1"
-        Image="Backgrounds/rocks_floodedcaves.png"
-      />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_floodedcaves.png" />
     </Gfx>
   </stage>
   <stage Name="Depths">
@@ -108,13 +100,7 @@
     </Gfx>
   </stage>
 
-  <stage
-    Name="Downpour"
-    BaseGamePath="27.downpour"
-    Stage="1"
-    StageType="4"
-    Pattern="downpour"
-  >
+  <stage Name="Downpour" BaseGamePath="27.downpour" Stage="1" StageType="4" Pattern="downpour">
     <Gfx BGPrefix="Backgrounds/01x_downpour">
       <Entity ID="3000" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="3009" Image="Backgrounds/pit_downpour.png" />
@@ -123,13 +109,7 @@
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_downpour.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Dross"
-    BaseGamePath="28.dross"
-    Stage="1"
-    StageType="5"
-    Pattern="dross"
-  >
+  <stage Name="Dross" BaseGamePath="28.dross" Stage="1" StageType="5" Pattern="dross">
     <Gfx BGPrefix="Backgrounds/02x_dross">
       <Entity ID="3000" Image="Backgrounds/pit_dross.png" />
       <Entity ID="3009" Image="Backgrounds/pit_dross.png" />
@@ -138,53 +118,27 @@
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_dross.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Mines"
-    BaseGamePath="29.mines"
-    Stage="3"
-    StageType="4"
-    Pattern="mines"
-  >
+  <stage Name="Mines" BaseGamePath="29.mines" Stage="3" StageType="4" Pattern="mines">
     <Gfx BGPrefix="Backgrounds/03x_mines">
       <Entity ID="3000" Image="Backgrounds/pit_mines.png" />
       <Entity ID="3009" Image="Backgrounds/pit_mines.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_secretroom.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_secretroom.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_secretroom.png" />
-      <Entity
-        ID="970"
-        Variant="2"
-        Image="Entities/970.2.0 - Quest Door_mines.png"
-      />
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_mines.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Ashpit"
-    BaseGamePath="30.ashpit"
-    Stage="3"
-    StageType="5"
-    Pattern="ashpit"
-  >
+  <stage Name="Ashpit" BaseGamePath="30.ashpit" Stage="3" StageType="5" Pattern="ashpit">
     <Gfx BGPrefix="Backgrounds/04x_ashpit">
       <Entity ID="3000" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="3009" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_ashpit.png" />
-      <Entity
-        ID="970"
-        Variant="2"
-        Image="Entities/970.2.0 - Quest Door_mines.png"
-      />
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_mines.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Mausoleum"
-    BaseGamePath="31.mausoleum"
-    Stage="5"
-    StageType="4"
-    Pattern="mausoleum"
-  >
+  <stage Name="Mausoleum" BaseGamePath="31.mausoleum" Stage="5" StageType="4" Pattern="mausoleum">
     <Gfx BGPrefix="Backgrounds/05x_mausoleum">
       <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="3009" Image="Backgrounds/pit_mausoleum.png" />
@@ -193,13 +147,7 @@
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mausoleum.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Gehenna"
-    BaseGamePath="32.gehenna"
-    Stage="5"
-    StageType="5"
-    Pattern="gehenna"
-  >
+  <stage Name="Gehenna" BaseGamePath="32.gehenna" Stage="5" StageType="5" Pattern="gehenna">
     <Gfx BGPrefix="Backgrounds/06x_gehenna">
       <Entity ID="3000" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="3009" Image="Backgrounds/pit_gehenna.png" />
@@ -208,13 +156,7 @@
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_gehenna.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Corpse"
-    BaseGamePath="33.corpse"
-    Stage="7"
-    StageType="4"
-    Pattern="corpse"
-  >
+  <stage Name="Corpse" BaseGamePath="33.corpse" Stage="7" StageType="4" Pattern="corpse">
     <Gfx BGPrefix="Backgrounds/07x_corpse">
       <Entity ID="3000" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="3009" Image="Backgrounds/pit_corpse.png" />
@@ -230,22 +172,10 @@
 			<Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mortis.png" />
 		</Gfx>
 	</stage> -->
-  <stage
-    Name="Home"
-    BaseGamePath="35.home"
-    Stage="13"
-    StageType="0"
-    Pattern="home"
-  >
+  <stage Name="Home" BaseGamePath="35.home" Stage="13" StageType="0" Pattern="home">
     <Gfx BGPrefix="Backgrounds/0fx_hallway" />
   </stage>
-  <stage
-    Name="Ascent"
-    BaseGamePath="36.backwards"
-    Stage="1"
-    StageType="0"
-    Pattern="backwards"
-  >
+  <stage Name="Ascent" BaseGamePath="36.backwards" Stage="1" StageType="0" Pattern="backwards">
     <Gfx StageGfx="Basement" />
   </stage>
 </data>

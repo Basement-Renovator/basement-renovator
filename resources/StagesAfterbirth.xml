@@ -1,24 +1,12 @@
 <data>
-  <stage
-    Name="Burning Basement"
-    BaseGamePath="03.burning basement"
-    Stage="1"
-    StageType="2"
-    Pattern="burning"
-  >
+  <stage Name="Burning Basement" BaseGamePath="03.burning basement" Stage="1" StageType="2" Pattern="burning">
     <Gfx BGPrefix="Backgrounds/13_burningbasement">
       <Entity ID="1000" Image="Backgrounds/rocks_burningbasement.png" />
     </Gfx>
   </stage>
   <stage Name="Caves" BaseGamePath="04.caves" />
   <stage Name="Catacombs" BaseGamePath="05.catacombs" />
-  <stage
-    Name="Flooded Caves"
-    BaseGamePath="06.flooded caves"
-    Stage="3"
-    StageType="2"
-    Pattern="flooded"
-  >
+  <stage Name="Flooded Caves" BaseGamePath="06.flooded caves" Stage="3" StageType="2" Pattern="flooded">
     <Gfx BGPrefix="Backgrounds/14_floodedcaves">
       <Entity ID="3000" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_floodedcaves.png" />
@@ -26,13 +14,7 @@
   </stage>
   <stage Name="Depths" BaseGamePath="07.depths" />
   <stage Name="Necropolis" BaseGamePath="08.necropolis" />
-  <stage
-    Name="Dank Depths"
-    BaseGamePath="09.dank depths"
-    Stage="5"
-    StageType="2"
-    Pattern="dank"
-  >
+  <stage Name="Dank Depths" BaseGamePath="09.dank depths" Stage="5" StageType="2" Pattern="dank">
     <Gfx BGPrefix="Backgrounds/15_dankdepths">
       <Entity ID="3000" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_depths.png" />
@@ -40,25 +22,13 @@
   </stage>
   <stage Name="Womb" BaseGamePath="10.womb" />
   <stage Name="Utero" BaseGamePath="11.utero" />
-  <stage
-    Name="Scarred Womb"
-    BaseGamePath="12.scarred womb"
-    Stage="7"
-    StageType="2"
-    Pattern="scarred"
-  >
+  <stage Name="Scarred Womb" BaseGamePath="12.scarred womb" Stage="7" StageType="2" Pattern="scarred">
     <Gfx BGPrefix="Backgrounds/16_scarredwomb">
       <Entity ID="3000" Image="Backgrounds/pit_womb.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_scarredwomb.png" />
     </Gfx>
   </stage>
-  <stage
-    Name="Blue Womb"
-    BaseGamePath="13.blue womb"
-    Stage="9"
-    StageType="0"
-    Pattern="blue"
-  >
+  <stage Name="Blue Womb" BaseGamePath="13.blue womb" Stage="9" StageType="0" Pattern="blue">
     <Gfx BGPrefix="Backgrounds/18_bluewomb">
       <Entity ID="3000" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_bluewomb.png" />

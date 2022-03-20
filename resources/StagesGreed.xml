@@ -1,74 +1,26 @@
 <data>
-  <stage
-    Name="Special Rooms [Greed]"
-    BaseGamePath="18.greed special"
-    Stage="1"
-    StageType="3"
-    Pattern="greed special"
-  >
+  <stage Name="Special Rooms [Greed]" BaseGamePath="18.greed special" Stage="1" StageType="3" Pattern="greed special">
     <Gfx StageGfx="Basement [Greed]" />
   </stage>
-  <stage
-    Name="Basement [Greed]"
-    BaseGamePath="19.greed basement"
-    Stage="1"
-    StageType="3"
-    Pattern="greed basement"
-  >
+  <stage Name="Basement [Greed]" BaseGamePath="19.greed basement" Stage="1" StageType="3" Pattern="greed basement">
     <Gfx StageGfx="Basement" />
   </stage>
-  <stage
-    Name="Caves [Greed]"
-    BaseGamePath="20.greed caves"
-    Stage="2"
-    StageType="3"
-    Pattern="greed caves"
-  >
+  <stage Name="Caves [Greed]" BaseGamePath="20.greed caves" Stage="2" StageType="3" Pattern="greed caves">
     <Gfx StageGfx="Caves" />
   </stage>
-  <stage
-    Name="Depths [Greed]"
-    BaseGamePath="21.greed depths"
-    Stage="3"
-    StageType="3"
-    Pattern="greed depths"
-  >
+  <stage Name="Depths [Greed]" BaseGamePath="21.greed depths" Stage="3" StageType="3" Pattern="greed depths">
     <Gfx StageGfx="Depths" />
   </stage>
-  <stage
-    Name="Womb [Greed]"
-    BaseGamePath="22.greed womb"
-    Stage="4"
-    StageType="3"
-    Pattern="greed womb"
-  >
+  <stage Name="Womb [Greed]" BaseGamePath="22.greed womb" Stage="4" StageType="3" Pattern="greed womb">
     <Gfx StageGfx="Womb" />
   </stage>
-  <stage
-    Name="Sheol [Greed]"
-    BaseGamePath="23.greed sheol"
-    Stage="5"
-    StageType="3"
-    Pattern="greed sheol"
-  >
+  <stage Name="Sheol [Greed]" BaseGamePath="23.greed sheol" Stage="5" StageType="3" Pattern="greed sheol">
     <Gfx StageGfx="Sheol" />
   </stage>
-  <stage
-    Name="The Shop [Greed]"
-    BaseGamePath="24.greed the shop"
-    Stage="6"
-    StageType="3"
-    Pattern="the shop"
-  >
+  <stage Name="The Shop [Greed]" BaseGamePath="24.greed the shop" Stage="6" StageType="3" Pattern="the shop">
     <Gfx RoomGfx="Shop" />
   </stage>
-  <stage
-    Name="Ultra Greed [Greed]"
-    BaseGamePath="25.ultra greed"
-    Stage="7"
-    StageType="3"
-    Pattern="ultra greed"
-  >
+  <stage Name="Ultra Greed [Greed]" BaseGamePath="25.ultra greed" Stage="7" StageType="3" Pattern="ultra greed">
     <Gfx RoomGfx="Shop" />
   </stage>
 </data>

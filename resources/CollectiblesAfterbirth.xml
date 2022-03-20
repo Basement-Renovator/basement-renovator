@@ -1,881 +1,137 @@
 <data>
   <group Name="Active Items">
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.347 - Diplopia.png"
-      Name="Diplopia"
-      Subtype="347"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.348 - Placebo.png"
-      Name="Placebo"
-      Subtype="348"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.349 - Wooden Nickel.png"
-      Name="Wooden Nickel"
-      Subtype="349"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.351 - Mega Bean.png"
-      Name="Mega Bean"
-      Subtype="351"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.352 - Glass Cannon.png"
-      Name="Glass Cannon"
-      Subtype="352"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.357 - Box of Friends.png"
-      Name="Box of Friends"
-      Subtype="357"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.382 - Friendly Ball.png"
-      Name="Friendly Ball"
-      Subtype="382"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.383 - Tear Detonator.png"
-      Name="Tear Detonator"
-      Subtype="383"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.386 - D12.png"
-      Name="D12"
-      Subtype="386"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.396 - Ventricle Razor.png"
-      Name="Ventricle Razor"
-      Subtype="396"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.406 - D8.png"
-      Name="D8"
-      Subtype="406"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.419 - Teleport 2.0.png"
-      Name="Teleport 2.0"
-      Subtype="419"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.421 - Kidney Bean.png"
-      Name="Kidney Bean"
-      Subtype="421"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.422 - Glowing Hour Glass.png"
-      Name="Glowing Hour Glass"
-      Subtype="422"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.427 - Mine Crafter.png"
-      Name="Mine Crafter"
-      Subtype="427"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.434 - Jar of Flies.png"
-      Name="Jar of Flies"
-      Subtype="434"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.437 - D7.png"
-      Name="D7"
-      Subtype="437"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.439 - Mom's Box.png"
-      Name="Mom's Box"
-      Subtype="439"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.441 - Mega Blast.png"
-      Name="Mega Blast"
-      Subtype="441"
-      Variant="100"
-    />
+    <entity ID="5" Image="Entities/Items/5.100.347 - Diplopia.png" Name="Diplopia" Subtype="347" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.348 - Placebo.png" Name="Placebo" Subtype="348" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.349 - Wooden Nickel.png" Name="Wooden Nickel" Subtype="349" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.351 - Mega Bean.png" Name="Mega Bean" Subtype="351" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.352 - Glass Cannon.png" Name="Glass Cannon" Subtype="352" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.357 - Box of Friends.png" Name="Box of Friends" Subtype="357" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.382 - Friendly Ball.png" Name="Friendly Ball" Subtype="382" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.383 - Tear Detonator.png" Name="Tear Detonator" Subtype="383" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.386 - D12.png" Name="D12" Subtype="386" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.396 - Ventricle Razor.png" Name="Ventricle Razor" Subtype="396" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.406 - D8.png" Name="D8" Subtype="406" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.419 - Teleport 2.0.png" Name="Teleport 2.0" Subtype="419" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.421 - Kidney Bean.png" Name="Kidney Bean" Subtype="421" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.422 - Glowing Hour Glass.png" Name="Glowing Hour Glass" Subtype="422" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.427 - Mine Crafter.png" Name="Mine Crafter" Subtype="427" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.434 - Jar of Flies.png" Name="Jar of Flies" Subtype="434" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.437 - D7.png" Name="D7" Subtype="437" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.439 - Mom's Box.png" Name="Mom's Box" Subtype="439" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.441 - Mega Blast.png" Name="Mega Blast" Subtype="441" Variant="100" />
   </group>
 
   <group Name="Familiar Items">
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.360 - Incubus.png"
-      Name="Incubus"
-      Subtype="360"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.361 - Fate's reward.png"
-      Name="Fate's reward"
-      Subtype="361"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.362 - Lil Chest.png"
-      Name="Lil Chest"
-      Subtype="362"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.363 - Sworn Protector.png"
-      Name="Sworn Protector"
-      Subtype="363"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.364 - Friend Zone.png"
-      Name="Friend Zone"
-      Subtype="364"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.365 - Lost Fly.png"
-      Name="Lost Fly"
-      Subtype="365"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.372 - Charged Baby.png"
-      Name="Charged Baby"
-      Subtype="372"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.384 - Lil Gurdy.png"
-      Name="Lil Gurdy"
-      Subtype="384"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.385 - Bumbo.png"
-      Name="Bumbo"
-      Subtype="385"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.387 - Censer.png"
-      Name="Censer"
-      Subtype="387"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.388 - Key Bum.png"
-      Name="Key Bum"
-      Subtype="388"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.389 - Rune Bag.png"
-      Name="Rune Bag"
-      Subtype="389"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.390 - Seraphim.png"
-      Name="Seraphim"
-      Subtype="390"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.403 - Spider Mod.png"
-      Name="Spider Mod"
-      Subtype="403"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.404 - Farting Baby.png"
-      Name="Farting Baby"
-      Subtype="404"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.405 - GB Bug.png"
-      Name="GB Bug"
-      Subtype="405"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.417 - Succubus.png"
-      Name="Succubus"
-      Subtype="417"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.426 - Obsessed Fan.png"
-      Name="Obsessed Fan"
-      Subtype="426"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.430 - Papa Fly.png"
-      Name="Papa Fly"
-      Subtype="430"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.431 - Multidimensional Baby.png"
-      Name="Multidimensional Baby"
-      Subtype="431"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.435 - Lil Loki.png"
-      Name="Lil Loki"
-      Subtype="435"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.436 - Milk!.png"
-      Name="Milk!"
-      Subtype="436"
-      Variant="100"
-    />
+    <entity ID="5" Image="Entities/Items/5.100.360 - Incubus.png" Name="Incubus" Subtype="360" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.361 - Fate's reward.png" Name="Fate's reward" Subtype="361" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.362 - Lil Chest.png" Name="Lil Chest" Subtype="362" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.363 - Sworn Protector.png" Name="Sworn Protector" Subtype="363" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.364 - Friend Zone.png" Name="Friend Zone" Subtype="364" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.365 - Lost Fly.png" Name="Lost Fly" Subtype="365" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.372 - Charged Baby.png" Name="Charged Baby" Subtype="372" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.384 - Lil Gurdy.png" Name="Lil Gurdy" Subtype="384" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.385 - Bumbo.png" Name="Bumbo" Subtype="385" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.387 - Censer.png" Name="Censer" Subtype="387" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.388 - Key Bum.png" Name="Key Bum" Subtype="388" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.389 - Rune Bag.png" Name="Rune Bag" Subtype="389" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.390 - Seraphim.png" Name="Seraphim" Subtype="390" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.403 - Spider Mod.png" Name="Spider Mod" Subtype="403" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.404 - Farting Baby.png" Name="Farting Baby" Subtype="404" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.405 - GB Bug.png" Name="GB Bug" Subtype="405" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.417 - Succubus.png" Name="Succubus" Subtype="417" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.426 - Obsessed Fan.png" Name="Obsessed Fan" Subtype="426" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.430 - Papa Fly.png" Name="Papa Fly" Subtype="430" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.431 - Multidimensional Baby.png" Name="Multidimensional Baby" Subtype="431" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.435 - Lil Loki.png" Name="Lil Loki" Subtype="435" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.436 - Milk!.png" Name="Milk!" Subtype="436" Variant="100" />
   </group>
 
   <group Name="Passive Items">
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.350 - Toxic Shock.png"
-      Name="Toxic Shock"
-      Subtype="350"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.353 - Bomber Boy.png"
-      Name="Bomber Boy"
-      Subtype="353"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.354 - Crack Jacks.png"
-      Name="Crack Jacks"
-      Subtype="354"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.355 - Mom's Pearls.png"
-      Name="Mom's Pearls"
-      Subtype="355"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.356 - Car Battery.png"
-      Name="Car Battery"
-      Subtype="356"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.358 - The Wiz.png"
-      Name="The Wiz"
-      Subtype="358"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.359 - 8 Inch Nails.png"
-      Name="8 Inch Nails"
-      Subtype="359"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.366 - Scatter Bombs.png"
-      Name="Scatter Bombs"
-      Subtype="366"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.367 - Sticky Bombs.png"
-      Name="Sticky Bombs"
-      Subtype="367"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.368 - Epiphora.png"
-      Name="Epiphora"
-      Subtype="368"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.369 - Continuum.png"
-      Name="Continuum"
-      Subtype="369"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.370 - Mr. Dolly.png"
-      Name="Mr. Dolly"
-      Subtype="370"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.371 - Curse of the tower.png"
-      Name="Curse of the tower"
-      Subtype="371"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.373 - Dead Eye.png"
-      Name="Dead Eye"
-      Subtype="373"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.374 - Holy Light.png"
-      Name="Holy Light"
-      Subtype="374"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.375 - Host Hat.png"
-      Name="Host Hat"
-      Subtype="375"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.376 - Restock.png"
-      Name="Restock"
-      Subtype="376"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.377 - Bursting Sack.png"
-      Name="Bursting Sack"
-      Subtype="377"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.378 - No. 2.png"
-      Name="No. 2"
-      Subtype="378"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.379 - Pupula Duplex.png"
-      Name="Pupula Duplex"
-      Subtype="379"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.380 - Pay To Play.png"
-      Name="Pay To Play"
-      Subtype="380"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.381 - Eden's Blessing.png"
-      Name="Eden's Blessing"
-      Subtype="381"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.391 - Betrayal.png"
-      Name="Betrayal"
-      Subtype="391"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.392 - Zodiac.png"
-      Name="Zodiac"
-      Subtype="392"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.393 - Serpent's Kiss.png"
-      Name="Serpent's Kiss"
-      Subtype="393"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.394 - Marked.png"
-      Name="Marked"
-      Subtype="394"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.395 - Tech X.png"
-      Name="Tech X"
-      Subtype="395"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.397 - Tractor Beam.png"
-      Name="Tractor Beam"
-      Subtype="397"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.398 - God's Flesh.png"
-      Name="God's Flesh"
-      Subtype="398"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.399 - Maw Of The Void.png"
-      Name="Maw Of The Void"
-      Subtype="399"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.400 - Spear Of Destiny.png"
-      Name="Spear Of Destiny"
-      Subtype="400"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.401 - Explosivo.png"
-      Name="Explosivo"
-      Subtype="401"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.402 - Chaos.png"
-      Name="Chaos"
-      Subtype="402"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.407 - Purity.png"
-      Name="Purity"
-      Subtype="407"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.408 - Athame.png"
-      Name="Athame"
-      Subtype="408"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.409 - Empty Vessel.png"
-      Name="Empty Vessel"
-      Subtype="409"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.410 - Evil Eye.png"
-      Name="Evil Eye"
-      Subtype="410"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.411 - Lusty Blood.png"
-      Name="Lusty Blood"
-      Subtype="411"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.412 - Cambion Conception.png"
-      Name="Cambion Conception"
-      Subtype="412"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.413 - Immaculate Conception.png"
-      Name="Immaculate Conception"
-      Subtype="413"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.414 - More Options.png"
-      Name="More Options"
-      Subtype="414"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.415 - Crown Of Light.png"
-      Name="Crown Of Light"
-      Subtype="415"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.416 - Deep Pockets.png"
-      Name="Deep Pockets"
-      Subtype="416"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.418 - Fruit Cake.png"
-      Name="Fruit Cake"
-      Subtype="418"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.420 - Black Powder.png"
-      Name="Black Powder"
-      Subtype="420"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.423 - Circle of Protection.png"
-      Name="Circle of Protection"
-      Subtype="423"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.424 - Sack Head.png"
-      Name="Sack Head"
-      Subtype="424"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.425 - Night Light.png"
-      Name="Night Light"
-      Subtype="425"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.428 - PJs.png"
-      Name="PJs"
-      Subtype="428"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.429 - Head of the Keeper.png"
-      Name="Head of the Keeper"
-      Subtype="429"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.432 - Glitter Bombs.png"
-      Name="Glitter Bombs"
-      Subtype="432"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.433 - My Shadow.png"
-      Name="My Shadow"
-      Subtype="433"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.438 - Binky.png"
-      Name="Binky"
-      Subtype="438"
-      Variant="100"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Items/5.100.440 - Kidney Stone.png"
-      Name="Kidney Stone"
-      Subtype="440"
-      Variant="100"
-    />
+    <entity ID="5" Image="Entities/Items/5.100.350 - Toxic Shock.png" Name="Toxic Shock" Subtype="350" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.353 - Bomber Boy.png" Name="Bomber Boy" Subtype="353" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.354 - Crack Jacks.png" Name="Crack Jacks" Subtype="354" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.355 - Mom's Pearls.png" Name="Mom's Pearls" Subtype="355" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.356 - Car Battery.png" Name="Car Battery" Subtype="356" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.358 - The Wiz.png" Name="The Wiz" Subtype="358" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.359 - 8 Inch Nails.png" Name="8 Inch Nails" Subtype="359" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.366 - Scatter Bombs.png" Name="Scatter Bombs" Subtype="366" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.367 - Sticky Bombs.png" Name="Sticky Bombs" Subtype="367" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.368 - Epiphora.png" Name="Epiphora" Subtype="368" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.369 - Continuum.png" Name="Continuum" Subtype="369" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.370 - Mr. Dolly.png" Name="Mr. Dolly" Subtype="370" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.371 - Curse of the tower.png" Name="Curse of the tower" Subtype="371" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.373 - Dead Eye.png" Name="Dead Eye" Subtype="373" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.374 - Holy Light.png" Name="Holy Light" Subtype="374" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.375 - Host Hat.png" Name="Host Hat" Subtype="375" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.376 - Restock.png" Name="Restock" Subtype="376" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.377 - Bursting Sack.png" Name="Bursting Sack" Subtype="377" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.378 - No. 2.png" Name="No. 2" Subtype="378" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.379 - Pupula Duplex.png" Name="Pupula Duplex" Subtype="379" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.380 - Pay To Play.png" Name="Pay To Play" Subtype="380" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.381 - Eden's Blessing.png" Name="Eden's Blessing" Subtype="381" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.391 - Betrayal.png" Name="Betrayal" Subtype="391" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.392 - Zodiac.png" Name="Zodiac" Subtype="392" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.393 - Serpent's Kiss.png" Name="Serpent's Kiss" Subtype="393" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.394 - Marked.png" Name="Marked" Subtype="394" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.395 - Tech X.png" Name="Tech X" Subtype="395" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.397 - Tractor Beam.png" Name="Tractor Beam" Subtype="397" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.398 - God's Flesh.png" Name="God's Flesh" Subtype="398" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.399 - Maw Of The Void.png" Name="Maw Of The Void" Subtype="399" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.400 - Spear Of Destiny.png" Name="Spear Of Destiny" Subtype="400" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.401 - Explosivo.png" Name="Explosivo" Subtype="401" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.402 - Chaos.png" Name="Chaos" Subtype="402" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.407 - Purity.png" Name="Purity" Subtype="407" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.408 - Athame.png" Name="Athame" Subtype="408" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.409 - Empty Vessel.png" Name="Empty Vessel" Subtype="409" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.410 - Evil Eye.png" Name="Evil Eye" Subtype="410" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.411 - Lusty Blood.png" Name="Lusty Blood" Subtype="411" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.412 - Cambion Conception.png" Name="Cambion Conception" Subtype="412" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.413 - Immaculate Conception.png" Name="Immaculate Conception" Subtype="413" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.414 - More Options.png" Name="More Options" Subtype="414" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.415 - Crown Of Light.png" Name="Crown Of Light" Subtype="415" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.416 - Deep Pockets.png" Name="Deep Pockets" Subtype="416" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.418 - Fruit Cake.png" Name="Fruit Cake" Subtype="418" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.420 - Black Powder.png" Name="Black Powder" Subtype="420" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.423 - Circle of Protection.png" Name="Circle of Protection" Subtype="423" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.424 - Sack Head.png" Name="Sack Head" Subtype="424" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.425 - Night Light.png" Name="Night Light" Subtype="425" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.428 - PJs.png" Name="PJs" Subtype="428" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.429 - Head of the Keeper.png" Name="Head of the Keeper" Subtype="429" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.432 - Glitter Bombs.png" Name="Glitter Bombs" Subtype="432" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.433 - My Shadow.png" Name="My Shadow" Subtype="433" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.438 - Binky.png" Name="Binky" Subtype="438" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.440 - Kidney Stone.png" Name="Kidney Stone" Subtype="440" Variant="100" />
   </group>
 
   <group Name="Trinkets">
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.062 - Shiny Rock.png"
-      Name="Shiny Rock"
-      Subtype="62"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.063 - Safety Scissors.png"
-      Name="Safety Scissors"
-      Subtype="63"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.064 - Rainbow Worm.png"
-      Name="Rainbow Worm"
-      Subtype="64"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.065 - Tape Worm.png"
-      Name="Tape Worm"
-      Subtype="65"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.066 - Lazy Worm.png"
-      Name="Lazy Worm"
-      Subtype="66"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.067 - Cracked Dice.png"
-      Name="Cracked Dice"
-      Subtype="67"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.068 - Super Magnet.png"
-      Name="Super Magnet"
-      Subtype="68"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.069 - Faded Polaroid.png"
-      Name="Faded Polaroid"
-      Subtype="69"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.070 - Louse.png"
-      Name="Louse"
-      Subtype="70"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.071 - Bob's Bladder.png"
-      Name="Bob's Bladder"
-      Subtype="71"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.072 - Watch Battery.png"
-      Name="Watch Battery"
-      Subtype="72"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.073 - Blasting Cap.png"
-      Name="Blasting Cap"
-      Subtype="73"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.074 - Stud Finder.png"
-      Name="Stud Finder"
-      Subtype="74"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.075 - Error.png"
-      Name="Error"
-      Subtype="75"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.076 - Poker Chip.png"
-      Name="Poker Chip"
-      Subtype="76"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.077 - Blister.png"
-      Name="Blister"
-      Subtype="77"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.078 - Second Hand.png"
-      Name="Second Hand"
-      Subtype="78"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.079 - Endless Nameless.png"
-      Name="Endless Nameless"
-      Subtype="79"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.080 - Black Feather.png"
-      Name="Black Feather"
-      Subtype="80"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.081 - Blind Rage.png"
-      Name="Blind Rage"
-      Subtype="81"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.082 - Golden Horse Shoe.png"
-      Name="Golden Horse Shoe"
-      Subtype="82"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.083 - Store Key.png"
-      Name="Store Key"
-      Subtype="83"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.084 - Rib of Greed.png"
-      Name="Rib of Greed"
-      Subtype="84"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.085 - Karma.png"
-      Name="Karma"
-      Subtype="85"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.086 - Lil Larva.png"
-      Name="Lil Larva"
-      Subtype="86"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.087 - Mom's Locket.png"
-      Name="Mom's Locket"
-      Subtype="87"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.088 - NO.png"
-      Name="NO!"
-      Subtype="88"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.089 - Child Leash.png"
-      Name="Child Leash"
-      Subtype="89"
-      Variant="350"
-    />
-    <entity
-      ID="5"
-      Image="Entities/Trinkets/5.350.090 - Brown Cap.png"
-      Name="Brown Cap"
-      Subtype="90"
-      Variant="350"
-    />
+    <entity ID="5" Image="Entities/Trinkets/5.350.062 - Shiny Rock.png" Name="Shiny Rock" Subtype="62" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.063 - Safety Scissors.png" Name="Safety Scissors" Subtype="63" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.064 - Rainbow Worm.png" Name="Rainbow Worm" Subtype="64" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.065 - Tape Worm.png" Name="Tape Worm" Subtype="65" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.066 - Lazy Worm.png" Name="Lazy Worm" Subtype="66" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.067 - Cracked Dice.png" Name="Cracked Dice" Subtype="67" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.068 - Super Magnet.png" Name="Super Magnet" Subtype="68" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.069 - Faded Polaroid.png" Name="Faded Polaroid" Subtype="69" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.070 - Louse.png" Name="Louse" Subtype="70" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.071 - Bob's Bladder.png" Name="Bob's Bladder" Subtype="71" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.072 - Watch Battery.png" Name="Watch Battery" Subtype="72" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.073 - Blasting Cap.png" Name="Blasting Cap" Subtype="73" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.074 - Stud Finder.png" Name="Stud Finder" Subtype="74" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.075 - Error.png" Name="Error" Subtype="75" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.076 - Poker Chip.png" Name="Poker Chip" Subtype="76" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.077 - Blister.png" Name="Blister" Subtype="77" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.078 - Second Hand.png" Name="Second Hand" Subtype="78" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.079 - Endless Nameless.png" Name="Endless Nameless" Subtype="79" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.080 - Black Feather.png" Name="Black Feather" Subtype="80" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.081 - Blind Rage.png" Name="Blind Rage" Subtype="81" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.082 - Golden Horse Shoe.png" Name="Golden Horse Shoe" Subtype="82" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.083 - Store Key.png" Name="Store Key" Subtype="83" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.084 - Rib of Greed.png" Name="Rib of Greed" Subtype="84" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.085 - Karma.png" Name="Karma" Subtype="85" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.086 - Lil Larva.png" Name="Lil Larva" Subtype="86" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.087 - Mom's Locket.png" Name="Mom's Locket" Subtype="87" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.088 - NO.png" Name="NO!" Subtype="88" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.089 - Child Leash.png" Name="Child Leash" Subtype="89" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.090 - Brown Cap.png" Name="Brown Cap" Subtype="90" Variant="350" />
   </group>
 </data>

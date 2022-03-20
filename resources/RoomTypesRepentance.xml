@@ -46,12 +46,7 @@
   <room Name="Death Certificate" Type="1" StageName="Home" ID="(99, 126)">
     <Gfx BGPrefix="Backgrounds/special_closet" />
   </room>
-  <room
-    Name="Super Secret Room"
-    Type="8"
-    Icon="UI/roomicons/supersecret.png"
-    ShowInMenu="1"
-  >
+  <room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1">
     <Gfx StageGfx="Basement" Subtype="1" />
     <Gfx StageGfx="Cellar" Subtype="2" />
     <Gfx StageGfx="Burning Basement" Subtype="3" />
@@ -116,31 +111,14 @@
 
     <Gfx RoomGfx="Death Certificate" Subtype="60" />
   </room>
-  <room
-    Name="Planetarium"
-    Type="24"
-    Icon="UI/roomicons/planetarium.png"
-    ShowInMenu="1"
-  >
+  <room Name="Planetarium" Type="24" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/planetarium_floor" />
     <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
   </room>
-  <room
-    Name="Teleporter"
-    Type="25"
-    StageName="Mausoleum"
-    Icon="UI/roomicons/mausbridgeentrance.png"
-    ShowInMenu="1"
-  >
+  <room Name="Teleporter" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
     <Gfx StageGfx="Mausoleum" />
   </room>
-  <room
-    Name="Teleporter Exit"
-    Type="26"
-    StageName="Mausoleum"
-    Icon="UI/roomicons/mausbridgeexit.png"
-    ShowInMenu="1"
-  >
+  <room Name="Teleporter Exit" Type="26" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/05x_mausoleumb" />
     <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
     <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
@@ -154,26 +132,11 @@
   <room Name="Mausoleum Entrance" Type="27" Subtype="3">
     <Gfx BGPrefix="Backgrounds/0Dx_Mausoleum Entrance" />
   </room>
-  <room
-    Name="Secret Exit"
-    Type="27"
-    Icon="UI/roomicons/altpathdescent.png"
-    ShowInMenu="1"
-  />
-  <room
-    Name="Blue Room"
-    Type="28"
-    Icon="UI/roomicons/blueroom.png"
-    ShowInMenu="1"
-  >
+  <room Name="Secret Exit" Type="27" Icon="UI/roomicons/altpathdescent.png" ShowInMenu="1" />
+  <room Name="Blue Room" Type="28" Icon="UI/roomicons/blueroom.png" ShowInMenu="1">
     <Gfx StageGfx="Blue Womb" />
   </room>
-  <room
-    Name="Ultra Secret Room"
-    Type="29"
-    Icon="UI/roomicons/ultrasecret.png"
-    ShowInMenu="1"
-  >
+  <room Name="Ultra Secret Room" Type="29" Icon="UI/roomicons/ultrasecret.png" ShowInMenu="1">
     <Gfx StageGfx="Home" />
   </room>
 </data>
