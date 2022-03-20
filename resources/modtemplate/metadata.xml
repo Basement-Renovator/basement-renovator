@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadata>
+  <!-- mods resources are loaded in reverse ascii order, we need to be the authority -->
+  <name>basement-renovator-helper</name>
+  <directory>basement-renovator-helper</directory>
+  <description>
+    Used by Basement Renovator for mod related things.
+
+        Replaces resources stbs to load test rooms in the starting room and
+    basement
+
+        Mods can subscribe to the TestRoom callback to get notified when the
+    player enters a test room like so:
+        ```lua
+            BasementRenovator = BasementRenovator or { subscribers = {} }
+            table.insert(BasementRenovator.subscribers, {
+                name = 'TestRoom',
+                callback = function(room)
+                    --...
+                end
+            })
+        ```
+
+        BRTestData object:
+        {
+            TestType = ('InstaPreview', 'StageReplace', or 'StartingRoom'),
+            Stage = (LevelStage value),
+            StageType = (StageType value),
+            Type = (RoomDesc Data type),
+            Variant = (RoomDesc Data variant),
+            Subtype = (RoomDesc Data subtype),
+            Shape = (RoomShape value)
+        }
+
+        Callback List:
+            - TestRoom (BRTestData, RoomDesc)
+                - Executes during post new room when the room matches the BR
+    test room
+            - TestEntitySpawn (BRTestData, RoomDesc, ...PRE_ROOM_ENTITY_SPAWN
+    params)
+                - Executes during pre room entity spawn in the test room.
+    (occurs before the TestRoom callback)
+                - Can return a new entity with the same semantics as the normal
+    callback
+                - Will stop firing after any subscription returns a value
+            - TestStage (BRTestData)
+                - Executes during post curse eval when the floor matches the
+    test floor
+  </description>
+</metadata>

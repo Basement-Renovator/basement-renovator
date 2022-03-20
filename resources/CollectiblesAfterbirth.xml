@@ -1,6 +1,6 @@
 <data>
   <group Name="Active Items">
-  	<entity ID="5" Image="Entities/Items/5.100.347 - Diplopia.png" Name="Diplopia" Subtype="347" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.347 - Diplopia.png" Name="Diplopia" Subtype="347" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.348 - Placebo.png" Name="Placebo" Subtype="348" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.349 - Wooden Nickel.png" Name="Wooden Nickel" Subtype="349" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.351 - Mega Bean.png" Name="Mega Bean" Subtype="351" Variant="100" />
@@ -22,7 +22,7 @@
   </group>
 
   <group Name="Familiar Items">
-  	<entity ID="5" Image="Entities/Items/5.100.360 - Incubus.png" Name="Incubus" Subtype="360" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.360 - Incubus.png" Name="Incubus" Subtype="360" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.361 - Fate's reward.png" Name="Fate's reward" Subtype="361" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.362 - Lil Chest.png" Name="Lil Chest" Subtype="362" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.363 - Sworn Protector.png" Name="Sworn Protector" Subtype="363" Variant="100" />
@@ -47,7 +47,7 @@
   </group>
 
   <group Name="Passive Items">
-  	<entity ID="5" Image="Entities/Items/5.100.350 - Toxic Shock.png" Name="Toxic Shock" Subtype="350" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.350 - Toxic Shock.png" Name="Toxic Shock" Subtype="350" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.353 - Bomber Boy.png" Name="Bomber Boy" Subtype="353" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.354 - Crack Jacks.png" Name="Crack Jacks" Subtype="354" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.355 - Mom's Pearls.png" Name="Mom's Pearls" Subtype="355" Variant="100" />
@@ -104,7 +104,7 @@
   </group>
 
   <group Name="Trinkets">
-  	<entity ID="5" Image="Entities/Trinkets/5.350.062 - Shiny Rock.png" Name="Shiny Rock" Subtype="62" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.062 - Shiny Rock.png" Name="Shiny Rock" Subtype="62" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.063 - Safety Scissors.png" Name="Safety Scissors" Subtype="63" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.064 - Rainbow Worm.png" Name="Rainbow Worm" Subtype="64" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.065 - Tape Worm.png" Name="Tape Worm" Subtype="65" Variant="350" />

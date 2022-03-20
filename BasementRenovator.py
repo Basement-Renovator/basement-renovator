@@ -6547,12 +6547,12 @@ class MainWindow(QMainWindow):
         caption = "About the Basement Renovator"
 
         text = """
-            <big><b>Basement Renovator</b></big><br />
-            <br />
-            Basement Renovator is a room editor for the Binding of Isaac Rebirth and its DLCs and mods. You can use it to either edit existing rooms or create new ones.<br />
-            <br />
-            To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extractor. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br />
-            <br />
+            <big><b>Basement Renovator</b></big><br>
+            <br>
+            Basement Renovator is a room editor for the Binding of Isaac Rebirth and its DLCs and mods. You can use it to either edit existing rooms or create new ones.<br>
+            <br>
+            To edit the game's existing rooms, you must have unpacked the .stb files by using the game's resource extractor. (On Windows, this is located at "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Binding of Isaac Rebirth\\tools\\ResourceExtractor\\ResourceExtractor.exe".)<br>
+            <br>
             Basement Renovator was originally programmed by Tempus (u/Chronometrics). It is open source and hosted on <a href='https://github.com/Tempus/Basement-Renovator'>GitHub</a>.
         """
 

@@ -1,0 +1,5 @@
+<entities anm2root="basementrenovator/" version="5">
+  <entity anm2path="grid/fakedoor.anm2" id="1000" name="Fake Door [BR]" variant="21343" collisionRadius="0" numGridCollisionPoints="0">
+    <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+  </entity>
+</entities>

@@ -1,31 +1,28 @@
 # Basement Renovator
 
-- Basement Renovator is a 3rd-party *[Binding of Isaac: Afterbirth+](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/)* room and level editor.
+- Basement Renovator is a 3rd-party *[Binding of Isaac: Repentance](https://store.steampowered.com/app/1426300/The_Binding_of_Isaac_Repentance/)* room and level editor.
 - It makes it easy to create rooms and is even used by the game's official staff.
 - It is open-source and written in [Python 3](https://www.python.org/).
 - It was originally written by [Chronometrics](http://www.chronometry.ca/) and is now supported by [budjmt](https://github.com/budjmt).
-- It will also edit [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) (non-DLC) rooms, but some entity IDs may be incorrect. If you need to edit Rebirth rooms, use an [older version](https://github.com/Tempus/Basement-Renovator/tree/a952cd030b0bf677e07a874ea7be901242a6505c).
+- It will also edit [Afterbirth+](https://store.steampowered.com/app/570660/The_Binding_of_Isaac_Afterbirth/), [Afterbirth](https://store.steampowered.com/app/401920/The_Binding_of_Isaac_Afterbirth/), and [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) rooms, but some entity IDs may be incorrect.
 
 ### Download
 
-The latest version of Basement Renovator is always available in the [releases section](https://github.com/Basement-Renovator/Basement-Renovator/releases), but the program can be run from source if desired.
+The latest version of Basement Renovator is available in the [releases section](https://github.com/Basement-Renovator/Basement-Renovator/releases), but the program can be run from source if desired.
 
 ### Running From Source
 
-* [Simple Installation: Chocolatey](INSTALL.md#chocolatey)
-* [Minimal Installation: Python](INSTALL.md#python)
-
----
+* See [INSTALL.md](INSTALL.md#running-from-source).
 
 ### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
 - If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+ or Repentance), read on.
 - First, unpack the game's assets using the official unpacker.
-  - On Windows: <br />
-  `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br />
+  - On Windows: <br>
+  `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br>
   (this will populate the `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms` directory with .stb files)
-  - On MacOS: <br />
-  `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br />
+  - On MacOS: <br>
+  `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br>
   (this will populate the `$HOME/Documents/IsaacUnpacked/resources/rooms` directory with .stb files)
 - Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
 - After saving your work, include the modified STB file in your mod's resources directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources`) and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended.
@@ -68,8 +65,6 @@ The latest version of Basement Renovator is always available in the [releases se
         - Toggle whether to stay at the current door using `;`
         - Invalid doors for the room will be indicated by a red barred door
     - Works most like the base game when testing one room at a time
-
----
 
 ### F.A.Q.
 
