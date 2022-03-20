@@ -348,7 +348,7 @@
 
   <group Name="Cellar Enemies">
     <entity BaseHP="16" Tags="Champion" ID="869" Image="Entities/869.0.0 - Migraine.png" Name="Migraine" Variant="0" Subtype="0" />
-    <entity BaseHP="4.5" ID="884" Image="Entities/884.0.0 - Swarm Spider.png" Name="Swarm Spider" Variant="0" Subtype="0">
+    <entity BaseHP="4.5" ID="884" Image="Entities/884.0.0 - Swarm Spider.png" Name="Swarm Spider (Variable Amount)" Variant="0" Subtype="0">
       <bitfield Key="Subtype">
         <spinner Length="16" ValueOffset="1" Name="Count">
           <tooltip>
@@ -362,7 +362,7 @@
 
   <group Name="Burning Basement Enemies">
     <entity Name="Army Fly" />
-    <entity Name="Swarm Spider" />
+    <entity Name="Swarm Spider (Variable Amount)" />
     <entity BaseHP="20" Tags="Champion" ID="15" Image="Entities/15.3.0 - Grilled Clotty.png" Name="Grilled Clotty" Variant="3" Subtype="0" />
   </group>
 
@@ -484,7 +484,7 @@
 
   <group Name="Catacombs Enemies">
     <entity Name="Migraine" />
-    <entity Name="Swarm Spider" />
+    <entity Name="Swarm Spider (Variable Amount)" />
   </group>
 
   <group Name="Flooded Caves Enemies">
@@ -697,7 +697,7 @@
   <group Name="Necropolis Enemies">
     <entity BaseHP="20" Tags="Champion" ID="29" Image="Entities/29.2.0 - Eggy.png" Name="Eggy" Variant="2" Subtype="0" />
     <entity Name="Migraine" />
-    <entity Name="Swarm Spider" />
+    <entity Name="Swarm Spider (Variable Amount)" />
   </group>
 
   <group Name="Necropolis Obstacles">
