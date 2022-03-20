@@ -24,117 +24,119 @@
 			whichever is loaded last will have priority
  -->
 <data>
-	<room Name="Null Room" Type="0" Icon="resources/UI/roomicons/null.png" ShowInMenu="1" />
-	<room Name="Normal Room" Type="1" Icon="resources/UI/roomicons/default.png" ShowInMenu="1" />
-	<room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,9]">
-		<Gfx StageGfx="Dark Room" />
+	<room Name="Ascent Room" Type="1" StageName="Ascent">
+        <Gfx StageGfx="Caves" Subtype="4" />
+        <Gfx StageGfx="Depths" Subtype="7" />
+        <Gfx StageGfx="Downpour" Subtype="27" />
+        <Gfx StageGfx="Mines" Subtype="29" />
+        <Gfx StageGfx="Mausoleum" Subtype="31" />
 	</room>
-	<room Name="Home Room" Type="1" StageName="Home">
-		<Gfx BGPrefix="resources/Backgrounds/0ex_isaacs_bedroom" ID="1" />
-		<Gfx BGPrefix="resources/Backgrounds/0gx_moms_bedroom" ID="3" />
-		<Gfx BGPrefix="resources/Backgrounds/house_closet" ID="5" />
-		<Gfx BGPrefix="resources/Backgrounds/house_closet_b" ID="6" />
-		<Gfx BGPrefix="resources/Backgrounds/special_closet" ID="(99,126)" />
+	<room Name="Home Isaac's Bedroom" Type="1" StageName="Home" ID="1">
+		<Gfx BGPrefix="Backgrounds/0ex_isaacs_bedroom" />
 	</room>
-	<room Name="Shop" Type="2" Icon="resources/UI/roomicons/shop.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0b_shop" />
+	<room Name="Home Mom's Bedroom" Type="1" StageName="Home" ID="3">
+		<Gfx BGPrefix="Backgrounds/0gx_moms_bedroom" />
 	</room>
-	<room Name="Error Room" Type="3" Icon="resources/UI/roomicons/error.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/12_darkroom" />
+	<room Name="Home Closet" Type="1" StageName="Home" ID="5">
+		<Gfx BGPrefix="Backgrounds/house_closet" />
 	</room>
-	<room Name="Treasure Room" Type="4" Icon="resources/UI/roomicons/treasure.png" ShowInMenu="1" />
-	<room Name="Boss Room" Type="5" Icon="resources/UI/roomicons/boss.png" ShowInMenu="1" />
-	<room Name="Mini-Boss Room" Type="6" Icon="resources/UI/roomicons/miniboss.png" ShowInMenu="1" />
-	<room Name="Secret Room" Type="7" Icon="resources/UI/roomicons/secret.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0f_secretroom">
-			<Entity ID="1000" Image="resources/Backgrounds/rocks_secretroom.png" />
-		</Gfx>
+	<room Name="Home Closet B" Type="1" StageName="Home" ID="6">
+		<Gfx BGPrefix="Backgrounds/house_closet_b" />
 	</room>
-	<room Name="Super Secret Room" Type="8" Icon="resources/UI/roomicons/supersecret.png" ShowInMenu="1">
-		<Gfx StageGfx="Womb" ID="0,11,15" />
-		<Gfx StageGfx="Cathedral" ID="1,12,16" />
-		<Gfx StageGfx="Sheol" ID="2,13,17" />
-		<Gfx StageGfx="Necropolis" ID="3" />
-		<Gfx StageGfx="Cellar" ID="4" />
-		<Gfx StageGfx="Basement" ID="5,19" />
-		<Gfx RoomGfx="Library" ID="6" />
-		<Gfx StageGfx="Dark Room" ID="7" />
-		<Gfx StageGfx="Burning Basement" ID="8" />
-		<Gfx StageGfx="Flooded Caves" ID="9" />
-		<Gfx RoomGfx="Shop" ID="14,18" />
-		<Gfx RoomGfx="Error Room" />
+	<room Name="Death Certificate" Type="1" StageName="Home" ID="(99, 126)">
+		<Gfx BGPrefix="Backgrounds/special_closet" />
 	</room>
-	<room Name="Arcade" Type="9" Icon="resources/UI/roomicons/arcade.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0e_arcade" />
+	<room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1">
+		<Gfx StageGfx="Basement" Subtype="1"/>
+		<Gfx StageGfx="Cellar" Subtype="2" />
+		<Gfx StageGfx="Burning Basement" Subtype="3" />
+		<Gfx StageGfx="Caves" Subtype="4" />
+		<Gfx StageGfx="Catacombs" Subtype="5" />
+		<Gfx StageGfx="Flooded Caves" Subtype="6" />
+		<Gfx StageGfx="Depths" Subtype="7" />
+		<Gfx StageGfx="Necropolis" Subtype="8" />
+		<Gfx StageGfx="Dank Depths" Subtype="9" />
+		<Gfx StageGfx="Womb" Subtype="10" />
+		<Gfx StageGfx="Utero" Subtype="11" />
+		<Gfx StageGfx="Scarred Womb" Subtype="12" />
+		<Gfx StageGfx="Blue Womb" Subtype="13" />
+		<Gfx StageGfx="Sheol" Subtype="14" />
+		<Gfx StageGfx="Cathedral" Subtype="15" />
+		<Gfx StageGfx="Dark Room" Subtype="16" />
+		<Gfx StageGfx="Chest" Subtype="17" />
+
+		<Gfx RoomGfx="Library" Subtype="19" />
+		<Gfx RoomGfx="Shop" Subtype="20" />
+		<Gfx RoomGfx="Isaac's Room" Subtype="21" />
+		<Gfx RoomGfx="Barren Room" Subtype="22" />
+		<Gfx RoomGfx="Secret Room" Subtype="23" />
+		<Gfx RoomGfx="Dice Room" Subtype="24" />
+		<Gfx RoomGfx="Arcade" Subtype="25" />
+		<Gfx RoomGfx="Error Room" Subtype="26" />
+		<Gfx RoomGfx="Shop" Subtype="28" />
+		<Gfx RoomGfx="Sacrifice Room" Subtype="30" />
+
+		<Gfx StageGfx="Downpour" Subtype="31" />
+		<Gfx StageGfx="Mines" Subtype="32" />
+		<Gfx StageGfx="Mausoleum" Subtype="33" />
+		<Gfx StageGfx="Corpse" Subtype="34" />
+		<Gfx RoomGfx="Planetarium" Subtype="35" />
+		<Gfx RoomGfx="Downpour Entrance" Subtype="36"/>
+		<Gfx RoomGfx="Mines Entrance" Subtype="37"/>
+		<Gfx RoomGfx="Mausoleum Entrance" Subtype="38"/>
+
+		<!-- Backdrop Alts -->
+		<Gfx StageGfx="Mausoleum" Subtype="40" />
+		<Gfx StageGfx="Mausoleum" Subtype="41" />
+		<Gfx StageGfx="Mausoleum" Subtype="42" />
+		<Gfx StageGfx="Corpse" Subtype="43" />
+		<Gfx StageGfx="Corpse" Subtype="44" />
+
+		<Gfx StageGfx="Dross" Subtype="45" />
+		<Gfx StageGfx="Ashpit" Subtype="46" />
+		<Gfx StageGfx="Gehenna" Subtype="47" />
+
+		<!-- Mortis placeholder? -->
+		<Gfx StageGfx="Corpse" Subtype="48" />
+
+		<Gfx RoomGfx="Home Isaac's Bedroom" Subtype="49" />
+		<Gfx StageGfx="Home" Subtype="50" />
+		<Gfx RoomGfx="Home Mom's Bedroom" Subtype="51" />
+		<Gfx RoomGfx="Home Closet" Subtype="52" />
+		<Gfx RoomGfx="Home Closet B" Subtype="53" />
+
+		<!-- Escape Sequence -->
+		<Gfx StageGfx="Mines" Subtype="58" />
+		<Gfx StageGfx="Ashpit" Subtype="59" />
+
+		<Gfx RoomGfx="Death Certificate" Subtype="60" />
 	</room>
-	<room Name="Curse Room" Type="10" Icon="resources/UI/roomicons/curse.png" ShowInMenu="1">
-		<Gfx StageGfx="Sheol">
-			<Entity ID="5" Variant="50" Image="resources/Entities/5.360.0 - Red Chest.png" />
-		</Gfx>
+	<room Name="Planetarium" Type="24" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
+		<Gfx BGPrefix="Backgrounds/planetarium_floor" />
+		<Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
 	</room>
-	<room Name="Challenge Room" Type="11" Icon="resources/UI/roomicons/challenge.png" ShowInMenu="1">
-		<Gfx StageGfx="Sheol" />
-	</room>
-	<room Name="Library" Type="12" Icon="resources/UI/roomicons/library.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0a_library" />
-	</room>
-	<room Name="Sacrifice Room" Type="13" Icon="resources/UI/roomicons/sacrifice.png" ShowInMenu="1">
-		<Gfx StageGfx="Depths" />
-	</room>
-	<room Name="Devil Room" Type="14" Icon="resources/UI/roomicons/devil.png" ShowInMenu="1">
-		<Gfx StageGfx="Sheol" />
-	</room>
-	<room Name="Angel Room" Type="15" Icon="resources/UI/roomicons/angel.png" ShowInMenu="1">
-		<Gfx StageGfx="Cathedral" />
-	</room>
-	<room Name="Crawlspace" Type="16" Icon="resources/UI/roomicons/crawlspace.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/12_darkroom" InvertDepth="1">
-			<Entity ID="1900" Variant="0" Image="resources/Entities/1900.0.0 - Crawlspace Brick.png" InvertDepth="1" />
-			<Entity ID="0" Variant="10" Image="resources/Entities/0.10.0 - Ladder.png" />
-			<Entity ID="0" Variant="20" Image="resources/Entities/0.20.0 - Ladder Base.png" />
-			<Entity ID="0" Variant="30" Image="resources/Entities/0.30.0 - Ladder Through.png" />
-		</Gfx>
-	</room>
-	<room Name="Boss Rush Room" Type="17" Icon="resources/UI/roomicons/bossrush.png" ShowInMenu="1">
-		<Gfx StageGfx="Sheol" />
-	</room>
-	<room Name="Isaac's Room" Type="18" Icon="resources/UI/roomicons/bedroom.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0c_isaacsroom" />
-	</room>
-	<room Name="Barren Room" Type="19" Icon="resources/UI/roomicons/barren.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0d_barrenroom" />
-	</room>
-	<room Name="Chest Room" Type="20" Icon="resources/UI/roomicons/chest.png" ShowInMenu="1">
-		<Gfx StageGfx="Chest" />
-	</room>
-	<room Name="Dice Room" Type="21" Icon="resources/UI/roomicons/dice.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0e_diceroom" />
-	</room>
-	<room Name="Black Market" Type="22" Icon="resources/UI/roomicons/blackmarket.png" ShowInMenu="1">
-		<Gfx StageGfx="Sheol" />
-	</room>
-	<room Name="Greed Mode Descent" Type="23" Icon="resources/UI/roomicons/greeddescent.png" ShowInMenu="1" />
-	<room Name="Planetarium" Type="24" Icon="resources/UI/roomicons/planetarium.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/planetarium_floor" />
-		<Entity ID="1000" Image="resources/Backgrounds/rocks_cathedral.png" />
-	</room>
-	<room Name="Teleporter" Type="25" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
+	<room Name="Teleporter" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
 		<Gfx StageGfx="Mausoleum" />
 	</room>
-	<room Name="Teleporter Exit" Type="26" StageName="Mausoleum" Icon="resources/UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/05x_mausoleumb" />
-		<Entity ID="3000" Image="resources/Backgrounds/pit_mausoleum.png" />
-		<Entity ID="1000" Image="resources/Backgrounds/rocks_mausoleum.png" />
+	<room Name="Teleporter Exit" Type="26" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
+		<Gfx BGPrefix="Backgrounds/05x_mausoleumb" />
+		<Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
+		<Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
 	</room>
-	<room Name="Secret Exit" Type="27" Icon="resources/UI/roomicons/altpathdescent.png" ShowInMenu="1">
-		<Gfx BGPrefix="resources/Backgrounds/0Bx_Downpour Entrance" ID="1"/> <!-- Downpour Entrance -->
-		<Gfx RoomGfx="Secret Room" ID="2"/> <!-- Mines Entrance -->
-		<Gfx BGPrefix="resources/Backgrounds/0Dx_Mausoleum Entrance" ID="3"/> <!-- Mausoleum Entrance -->
+	<room Name="Downpour Entrance" Type="27" Subtype="1">
+		<Gfx BGPrefix="Backgrounds/0Bx_Downpour Entrance" />
 	</room>
-	<room Name="Blue Room" Type="28" Icon="resources/UI/roomicons/blueroom.png" ShowInMenu="1">
+	<room Name="Mines Entrance" Type="27" Subtype="2">
+		<Gfx RoomGfx="Secret Room" />
+	</room>
+	<room Name="Mausoleum Entrance" Type="27" Subtype="3">
+		<Gfx BGPrefix="Backgrounds/0Dx_Mausoleum Entrance" />
+	</room>
+	<room Name="Secret Exit" Type="27" Icon="UI/roomicons/altpathdescent.png" ShowInMenu="1"/>
+	<room Name="Blue Room" Type="28" Icon="UI/roomicons/blueroom.png" ShowInMenu="1">
 		<Gfx StageGfx="Blue Womb" />
 	</room>
-	<room Name="Ultra Secret Room" Type="29" Icon="resources/UI/roomicons/ultrasecret.png" ShowInMenu="1">
+	<room Name="Ultra Secret Room" Type="29" Icon="UI/roomicons/ultrasecret.png" ShowInMenu="1">
 		<Gfx StageGfx ="Home" />
 	</room>
 </data>
