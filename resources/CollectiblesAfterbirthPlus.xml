@@ -34,7 +34,7 @@
   </group>
 
   <group Name="Familiar Items">
-  	<entity ID="5" Image="Entities/Items/5.100.467 - Finger!.png" Name="Finger!" Subtype="467" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.467 - Finger!.png" Name="Finger!" Subtype="467" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.468 - Shade.png" Name="Shade" Subtype="468" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.469 - Depression.png" Name="Depression" Subtype="469" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.470 - Hushy.png" Name="Hushy" Subtype="470" Variant="100" />
@@ -61,7 +61,7 @@
   </group>
 
   <group Name="Passive Items">
-  	<entity ID="5" Image="Entities/Items/5.100.442 - Dark Princes Crown.png" Name="Dark Princes Crown" Subtype="442" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.442 - Dark Princes Crown.png" Name="Dark Princes Crown" Subtype="442" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.443 - Apple!.png" Name="Apple!" Subtype="443" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.444 - Lead Pencil.png" Name="Lead Pencil" Subtype="444" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.445 - Dog Tooth.png" Name="Dog Tooth" Subtype="445" Variant="100" />
@@ -120,7 +120,7 @@
   </group>
 
   <group Name="Trinkets">
-  	<entity ID="5" Image="Entities/Trinkets/5.350.091 - Meconium.png" Name="Meconium" Subtype="91" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.091 - Meconium.png" Name="Meconium" Subtype="91" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.092 - Cracked Crown.png" Name="Cracked Crown" Subtype="92" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.093 - Used Diaper.png" Name="Used Diaper" Subtype="93" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.094 - Fish Tail.png" Name="Fish Tail" Subtype="94" Variant="350" />

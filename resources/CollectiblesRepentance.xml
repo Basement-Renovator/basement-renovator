@@ -1,7 +1,7 @@
 <data>
-	<group Name="All Trinkets">
-    <group Label="Trinkets (Golden)"/>
-	</group>
+  <group Name="All Trinkets">
+    <group Label="Trinkets (Golden)" />
+  </group>
 
   <group Name="Active Items">
     <entity ID="5" Image="Entities/Items/5.100.263 - Clear Rune.png" Name="Clear Rune" Subtype="263" Variant="100" />

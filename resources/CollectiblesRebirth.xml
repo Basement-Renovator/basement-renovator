@@ -5,18 +5,18 @@
         <tag>InNonCombatRooms</tag>
       </entity>
     </defaults>
-		<group Name="(Collect) Random" Label="Random">
-			<group Name="Random Collectibles"/>
-		</group>
+    <group Name="(Collect) Random" Label="Random">
+      <group Name="Random Collectibles" />
+    </group>
     <group Name="All Items">
-      <group Label="Active Items"/>
-      <group Name="Familiar Items" Label="Familiars"/>
-      <group Label="Passive Items"/>
+      <group Label="Active Items" />
+      <group Name="Familiar Items" Label="Familiars" />
+      <group Label="Passive Items" />
     </group>
     <group Name="All Trinkets">
-      <group Label="Trinkets"/>
+      <group Label="Trinkets" />
     </group>
-	</group>
+  </group>
 
   <!-- Active Items -->
   <group Name="Active Items">
@@ -155,7 +155,7 @@
   </group>
 
   <group Name="Passive Items">
-  	<entity ID="5" Image="Entities/Items/5.100.1 - The Sad Onion.png" Name="The Sad Onion" Subtype="1" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.1 - The Sad Onion.png" Name="The Sad Onion" Subtype="1" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.2 - The Inner Eye.png" Name="The Inner Eye" Subtype="2" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.3 - Spoon Bender.png" Name="Spoon Bender" Subtype="3" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.4 - Cricket's Head.png" Name="Cricket's Head" Subtype="4" Variant="100" />
@@ -370,7 +370,7 @@
   </group>
 
   <group Name="Trinkets">
-  	<entity ID="5" Image="Entities/Trinkets/5.350.001 - Swallowed Penny.png" Name="Swallowed Penny" Subtype="1" Variant="350" />
+    <entity ID="5" Image="Entities/Trinkets/5.350.001 - Swallowed Penny.png" Name="Swallowed Penny" Subtype="1" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.002 - Petrified Poop.png" Name="Petrified Poop" Subtype="2" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.003 - AAA Battery.png" Name="AAA Battery" Subtype="3" Variant="350" />
     <entity ID="5" Image="Entities/Trinkets/5.350.004 - Broken Remote.png" Name="Broken Remote" Subtype="4" Variant="350" />
