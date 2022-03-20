@@ -36,7 +36,7 @@
 		<entities File="CollectiblesRepentance.xml"/>
 		<stages File="StagesRepentance.xml"/>
 		<roomtypes File="RoomTypesRepentance.xml"/>
-		<roomtypes Name="SecretRoomTypes" File="Empty.xml"/>
-		<stages Name="GreedStages" File="Empty.xml"/>
+		<roomtypes Name="SecretRoomTypes"/>
+		<stages Name="GreedStages"/>
 	</version>
 </data>

@@ -1,4 +1,7 @@
 <data>
+	<!--——— Sorting Tags ———-->
+	<tag Label="Scarred Guts" StatisticsGroup="1">ScarredGuts</tag>
+
 	<!--——— Pickups ———-->
 	<entity ID="5" Image="Entities/5.300.42 - Chaos Card.png" Name="Chaos Card" Subtype="37" Variant="300" Overwrite="1"/>
 	<entity ID="5" Image="Entities/5.300.43 - Credit Card.png" Name="Credit Card" Subtype="38" Variant="300" Overwrite="1"/>
@@ -208,10 +211,11 @@
 
 	<group Name="Scarred Womb Enemies">
 		<entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
-		<group Name="Scarred Guts" ShowInUI="1">
+		<group Name="Scarred Guts">
 			<defaults>
 				<entity>
 					<tag>Champion</tag>
+					<tag>ScarredGuts</tag>
 				</entity>
 			</defaults>
 			<entity BaseHP="25" ID="40" Image="Entities/40.1.0 - Scarred Guts.png" Name="Scarred Guts (Random)" Subtype="0" Variant="1" />
