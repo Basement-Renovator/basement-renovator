@@ -1,0 +1,17 @@
+{
+  "name": "basement-renovator",
+  "version": "0.0.0",
+  "description": "Basement Renovator is a 3rd-party Repentance room and level editor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Basement-Renovator/Basement-Renovator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Basement-Renovator/Basement-Renovator/issues"
+  },
+  "homepage": "https://github.com/Basement-Renovator/Basement-Renovator#readme",
+  "devDependencies": {
+    "@prettier/plugin-xml": "^1.2.0",
+    "prettier": "2.5.0"
+  }
+}
