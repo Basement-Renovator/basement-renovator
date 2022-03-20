@@ -559,6 +559,7 @@ class EntityLookup(Lookup):
             self.tags = {}
             self.uniqueid = -1
             self.tagsString = "[]"
+            self.groups = []
 
         def getTagConfig(self, tag):
             if not self.parent:
@@ -918,9 +919,11 @@ class EntityLookup(Lookup):
             if node is not None:
                 self.label = node.get("Label")
                 self.name = node.get("Name", self.label)
+                self.showinui = node.get("ShowInUI") == "1"
             else:
                 self.name = name
                 self.label = label
+                self.showinui = False
 
             self.parent = parentGroup
 
@@ -934,10 +937,21 @@ class EntityLookup(Lookup):
             self.entries = []
             self.groupentries = []
 
+            # A list of all groups above this one, including this one. Used to set which groups an entity is in when one is added to a group.
+            self.parentgroups = []
+            if self.parent is not None:
+                self.parentgroups.extend(self.parent.parentgroups)
+
+            self.parentgroups.append(self)
+
         def addEntry(self, entry):
             self.entries.append(entry)
             if isinstance(entry, EntityLookup.GroupConfig):
                 self.groupentries.append(entry)
+            elif isinstance(entry, EntityLookup.EntityConfig):
+                for group in self.parentgroups:
+                    if group not in entry.groups:
+                        entry.groups.append(group)
 
     class TabConfig(GroupConfig):
         def __init__(self, node=None, name=None):
@@ -960,7 +974,6 @@ class EntityLookup(Lookup):
             self.tag = node.text
             self.label = node.get("Label")
             self.filterable = node.get("Filterable") == "1"
-            self.statisticsgroup = node.get("StatisticsGroup") == "1"
             self.attribute = node.get("Attribute")
 
     def __init__(self, version, parent):

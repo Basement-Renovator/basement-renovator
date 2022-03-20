@@ -4401,12 +4401,12 @@ class StatisticsDialog(QDialog):
                 else:
                     self.setText(str(round(self.sortValue, 2)))
 
-        def __init__(self, parent, config: EntityLookup.EntityConfig, tag=None):
+        def __init__(self, parent, config: EntityLookup.EntityConfig, group=None):
             self.parent = parent
             self.table = self.parent.statisticsTable
             self.config = config
-            self.tag = tag
-            self.includedintag = False
+            self.group = group
+            self.includedingroup = False
 
             self.appearCount = 0
             self.appearPercent = 0
@@ -4421,8 +4421,8 @@ class StatisticsDialog(QDialog):
             self.nameWidget = QTableWidgetItem()
             self.nameWidget.setFlags(Qt.ItemIsEnabled)
 
-            if self.tag:
-                self.nameWidget.setText(self.tag.label or self.tag.tag)
+            if self.group:
+                self.nameWidget.setText(self.group.label or self.group.name)
             else:
                 self.nameWidget.setText(self.config.name)
 
@@ -4468,9 +4468,9 @@ class StatisticsDialog(QDialog):
             if filter["CombatEntitiesOnly"]:
                 hidden = hidden or self.config.matches(tags=["InNonCombatRooms"])
             if filter["GroupSimilarEntities"]:
-                hidden = hidden or self.includedintag
+                hidden = hidden or self.includedingroup
             else:
-                hidden = hidden or self.tag is not None
+                hidden = hidden or self.group is not None
 
             self.table.setRowHidden(self.nameWidget.row(), hidden)
 
@@ -4626,7 +4626,7 @@ class StatisticsDialog(QDialog):
 
         global xmlLookups
         entities = {}
-        tags = {}
+        groups = {}
         self.statsEntries = []
         for room in rooms:
             for config in room.palette.values():
@@ -4636,18 +4636,18 @@ class StatisticsDialog(QDialog):
                     )
                     self.statsEntries.append(entities[config.uniqueid])
 
-                for tag in config.tags.values():
-                    if tag.statisticsgroup:
-                        if tag.tag not in tags:
-                            tags[tag.tag] = StatisticsDialog.EntityStatisticsEntry(
-                                self, config, tag
+                for group in config.groups:
+                    if group.showinui:
+                        if group.name not in groups:
+                            groups[group.name] = StatisticsDialog.EntityStatisticsEntry(
+                                self, config, group
                             )
-                            self.statsEntries.append(tags[tag.tag])
+                            self.statsEntries.append(groups[group.name])
 
-                        if room not in tags[tag.tag].rooms:
-                            tags[tag.tag].rooms.append(room)
+                        if room not in groups[group.name].rooms:
+                            groups[group.name].rooms.append(room)
 
-                        entities[config.uniqueid].includedintag = True
+                        entities[config.uniqueid].includedingroup = True
 
                 entities[config.uniqueid].rooms.append(room)
 
