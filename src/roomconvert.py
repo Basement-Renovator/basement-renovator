@@ -178,21 +178,12 @@ def commonToXML(destPath, rooms, file=None, isPreview=False):
 
             output.append(f'\t\t<door exists="{exists}" x="{x - 1}" y="{y - 1}"/>\n')
 
-        for entityStack, x, y in room.spawns():
+        for stack, x, y in room.spawns():
             output.append(f'\t\t<spawn x="{x - 1}" y="{y - 1}">\n')
 
-            # Basement Renovator will print out the spawns in a random sort
-            # This leads to problems when diffing XML files
-            # Thus, sort the spawns so that they will always be printed in the same
-            # deterministic order
-            # We sort by entity type, variant, and then sub-type
-            entityStack.sort(key=lambda entity: entity.Type)
-            entityStack.sort(key=lambda entity: entity.Variant)
-            entityStack.sort(key=lambda entity: entity.Subtype)
-
-            for entity in entityStack:
+            for ent in stack:
                 output.append(
-                    f'\t\t\t<entity type="{entity.Type}" variant="{entity.Variant}" subtype="{entity.Subtype}" weight="{entity.weight}"{flattenXml(entity.xmlProps)}/>\n'
+                    f'\t\t\t<entity type="{ent.Type}" variant="{ent.Variant}" subtype="{ent.Subtype}" weight="{ent.weight}"{flattenXml(ent.xmlProps)}/>\n'
                 )
 
             output.append("\t\t</spawn>\n")
@@ -297,8 +288,8 @@ def commonToSTBRB(path, rooms):
         totalBytes += len(room.name)
         totalBytes += doorHeaderPacker.size + doorPacker.size * len(room.info.doors)
         totalBytes += room.getSpawnCount() * stackPacker.size
-        for entityStack, x, y in room.spawns():
-            totalBytes += len(entityStack) * entPacker.size
+        for stack, x, y in room.spawns():
+            totalBytes += len(stack) * entPacker.size
 
     out = bytearray(totalBytes)
     off = 0
@@ -325,12 +316,12 @@ def commonToSTBRB(path, rooms):
             doorPacker.pack_into(out, off, door[0] - 1, door[1] - 1, door[2])
             off += doorPacker.size
 
-        for entityStack, x, y in room.spawns():
-            numEnts = len(entityStack)
+        for stack, x, y in room.spawns():
+            numEnts = len(stack)
             stackPacker.pack_into(out, off, x - 1, y - 1, numEnts)
             off += stackPacker.size
 
-            for entity in entityStack:
+            for entity in stack:
                 entPacker.pack_into(
                     out, off, entity.Type, entity.Variant, entity.Subtype, entity.weight
                 )

@@ -374,33 +374,27 @@ class Room:
         return Room.getDesc(self.info, self.name, self.difficulty, self.weight)
 
     class _SpawnIter:
-        """
-        This is the old iterator that does not return a sorted list. It is currently
-        unused.
-        """
-
-        def __init__(self, gridSpawns, dimensions):
+        def __init__(self, gridSpawns, dims):
             self.idx = -1
             self.spawns = gridSpawns
-            self.width, self.height = dimensions
+            self.width, self.height = dims
 
         def __iter__(self):
             return self
 
         def __next__(self):
-            entityStack = None
+            stack = None
             while True:
                 self.idx += 1
                 if self.idx >= self.width * self.height or self.idx >= len(self.spawns):
                     raise StopIteration
 
-                entityStack = self.spawns[self.idx]
-                if entityStack:
+                stack = self.spawns[self.idx]
+                if stack:
                     break
-
             x = int(self.idx % self.width)
             y = int(self.idx / self.width)
-            return (entityStack, x, y)
+            return (stack, x, y)
 
     def spawns(self):
         return Room._SpawnIter(self.gridSpawns, self.info.dims)
