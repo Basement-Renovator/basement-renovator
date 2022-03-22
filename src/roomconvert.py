@@ -144,6 +144,7 @@ def commonToXML(destPath, rooms, file=None, isPreview=False):
             ("difficulty", room.difficulty),
             ("weight", room.weight),
         ]
+
         # extra props here
         if room.lastTestTime:
             attrs.append(
