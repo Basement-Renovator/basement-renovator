@@ -1,7 +1,3 @@
-import pprint
-from src.util import *
-
-
 class Entity:
     def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, xmlProps=None):
         # Supplied entity info
