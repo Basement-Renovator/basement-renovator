@@ -23,13 +23,12 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ./requirements.txt
+          pip install -r requirements.txt
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           # The default version is 14
-          # The ESLint config requires Node 16 to work properly
           node-version: '16'
 
       - name: Retrieve the cached "node_modules" directory (if present)
@@ -45,6 +44,20 @@ jobs:
 
       - name: Install xmllint (which the "lint.sh" script uses)
         run: sudo apt-get update && sudo apt-get install libxml2-utils -y
+
+      - name: First, check to see if the repository is blacked
+        run: black --check .
+
+      - name: If needed, commit black changes
+        if: failure()
+        run: |
+          black .
+          git config --global user.name 'autoblack'
+          git config --global user.email 'black@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout $GITHUB_HEAD_REF
+          git commit -a -m "fixup: Format Python code with Black"
+          git push
 
       - name: Lint
         run: bash lint.sh
