@@ -23,7 +23,8 @@ def runmain():
     cmdParser.addPositionalArgument("file", "stb files to convert")
 
     sortEntsOpt = QCommandLineOption(
-        "sortEntities", "if specified, sorts entity stacks by type, variant, subtype",
+        "sortEntities",
+        "if specified, sorts entity stacks by type, variant, subtype",
     )
     cmdParser.addOption(sortEntsOpt)
 
