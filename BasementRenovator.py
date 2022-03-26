@@ -99,7 +99,9 @@ def findInstallPath():
             if not basePath:
                 cantFindPath = True
             else:
-                installPath = os.path.join(basePath, "steamapps", "common", "The Binding of Isaac Rebirth")
+                installPath = os.path.join(
+                    basePath, "steamapps", "common", "The Binding of Isaac Rebirth"
+                )
                 if not QFile.exists(installPath):
                     cantFindPath = True
 
