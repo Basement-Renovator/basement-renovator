@@ -65,12 +65,12 @@ def runmain():
             print("Must be stb! Skipping!")
             continue
 
-        outputFilePath = path.with_suffix('.xml')
+        outputFilePath = path.with_suffix(".xml")
         roomFile = cvt.stbToCommon(path)
         cvt.commonToXML(outputFilePath, roomFile.rooms, file=roomFile)
 
     print("----")
-    print('Done!')
+    print("Done!")
 
 
 if __name__ == "__main__":

@@ -25,10 +25,7 @@ def convertRooms(configList, scriptPath, cwd, fileEdited=None):
 
         print("Current config:", config)
 
-        args = (
-            ["python", scriptPath]
-            + config["paths"]
-        )
+        args = ["python", scriptPath] + config["paths"]
 
         subprocess.run(args, cwd=cwd)
 
