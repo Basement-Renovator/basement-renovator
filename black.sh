@@ -18,8 +18,6 @@ if [ -z "$GITHUB_HEAD_REF" ]; then
   exit 1
 fi
 
-SECONDS=0
-
 cd "$DIR"
 
 # Use Black on the entire repository
@@ -39,4 +37,4 @@ git checkout $GITHUB_HEAD_REF
 git commit -a -m "fixup: Format Python code with Black"
 git push
 
-echo "Successfully linted in $SECONDS seconds."
+echo "Pushed a commit with black changes."
