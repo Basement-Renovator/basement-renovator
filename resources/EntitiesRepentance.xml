@@ -1057,6 +1057,7 @@
     <entity BaseHP="580" ID="269" Image="Entities/269.1.0 - The Pile.png" Name="The Pile" Variant="1" Subtype="0" />
     <entity BaseHP="444" ID="915" Image="Entities/915.0.0 - Singe.png" Name="Singe" Variant="0" Subtype="0" />
     <entity BaseHP="100" Tags="" ID="915" Image="Entities/915.1.0 - Singe's Ball.png" Name="Singe's Ball" Variant="1" Subtype="0" />
+    <entity BaseHP="500" ID="921" Image="Entities/921.0.0 - Clutch.png" Name="Clutch" Variant="0" Subtype="0" />
   </group>
 
   <group Name="Depths Bosses">
@@ -1141,7 +1142,6 @@
   <group Name="Special Bosses">
     <group Name="Unfinished Bosses" Label="Unfinished">
       <entity BaseHP="792" ID="919" Image="Entities/919.0.0 - Raglich.png" Name="Raglich" Variant="0" Subtype="0" />
-      <entity BaseHP="500" ID="921" Image="Entities/921.0.0 - Clutch.png" Name="Clutch" Variant="0" Subtype="0" />
     </group>
   </group>
 

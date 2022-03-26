@@ -29,12 +29,10 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from collections import OrderedDict
 from copy import deepcopy
 
 import traceback
 import sys
-import struct
 import os
 import subprocess
 import platform
@@ -47,7 +45,6 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 import xml.etree.cElementTree as ET
-from xml.dom import minidom
 import psutil
 
 import src.roomconvert as StageConvert
