@@ -3,7 +3,6 @@ Converts stb files into xml
 """
 from pathlib import Path
 
-import subprocess
 import roomconvert as cvt
 
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser, QSettings
@@ -23,6 +22,11 @@ def runmain():
 
     cmdParser.addPositionalArgument("file", "stb files to convert")
 
+    sortEntsOpt = QCommandLineOption(
+        "sortEntities", "if specified, sorts entity stacks by type, variant, subtype",
+    )
+    cmdParser.addOption(sortEntsOpt)
+
     skipOpt = QCommandLineOption(
         "roomconvert", "placeholder argument used to prevent recursive execution"
     )
@@ -38,6 +42,8 @@ def runmain():
     if not paths:
         print("Must specify at least one file to merge!")
         return
+
+    doSortEnts = cmdParser.isSet(sortEntsOpt)
 
     i = -1
     while (i + 1) < len(paths):
@@ -67,6 +73,12 @@ def runmain():
 
         outputFilePath = path.with_suffix(".xml")
         roomFile = cvt.stbToCommon(path)
+
+        if doSortEnts:
+            for room in roomFile.rooms:
+                for stack, x, y in room.spawns():
+                    stack.sort(key=lambda ent: (ent.Type, ent.Variant, ent.Subtype))
+
         cvt.commonToXML(outputFilePath, roomFile.rooms, file=roomFile)
 
     print("----")
