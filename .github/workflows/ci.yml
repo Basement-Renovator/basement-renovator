@@ -43,6 +43,7 @@ jobs:
   lint:
     name: Lint Python & XML files
     needs: [black]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
