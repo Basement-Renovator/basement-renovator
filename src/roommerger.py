@@ -11,9 +11,10 @@ from PyQt5.QtWidgets import QApplication
 
 
 def recomputeRoomIDs(roomList, startingId=None):
-    # sort rooms by type > subtype
-    # special rooms and higher subtypes are at the bottom
-    roomList.sort(key=lambda r: (r.info.type, r.info.subtype))
+    # sort rooms by type
+    # special rooms are at the bottom
+    # ignore subtype since mineshaft rooms depend on sequential pairs
+    roomList.sort(key=lambda r: r.info.type)
 
     roomsByType = {}
 
