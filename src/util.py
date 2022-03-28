@@ -6,6 +6,10 @@ def printf(*args):
     print(*args, flush=True)
 
 
+def printSectionBreak():
+    printf("-".join(["" for i in range(50)]))
+
+
 def bitFill(count):
     return (1 << count) - 1
 
@@ -45,6 +49,21 @@ def sanitizePath(node, key, path):
     if prefix is not None:
         prefixPath = linuxPathSensitivityTraining(os.path.join(path, prefix))
         node.set(key, prefixPath)
+
+
+def checkFloat(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
+def checkInt(s):
+    if checkFloat(s):
+        return int(s) == float(s)
+
+    return False
 
 
 def vectorFromAngle(angle):
