@@ -3,8 +3,12 @@ from xml.dom import minidom
 import os
 import re
 
-import src.anm2 as anm2
-from src.util import linuxPathSensitivityTraining, printf
+if not __package__:
+    import anm2 as anm2
+    from util import linuxPathSensitivityTraining, printf
+else:
+    import src.anm2 as anm2
+    from src.util import linuxPathSensitivityTraining, printf
 
 
 def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):

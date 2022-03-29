@@ -12,7 +12,7 @@ class Config:
         self.resourcePath = resourcePath
 
         if not self.path.is_file():
-            raise FileNotFoundError("Invalid anm2! " + self.path)
+            raise FileNotFoundError("Invalid anm2! " + str(self.path))
 
         self.dir, self.file = self.path.parent, self.path.name
 
