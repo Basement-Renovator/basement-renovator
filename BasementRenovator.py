@@ -55,9 +55,6 @@ from src.constants import *
 from src.util import *
 from src.settings import *
 
-########################
-#       XML Data       #
-########################
 
 ########################
 #      Scene/View      #
