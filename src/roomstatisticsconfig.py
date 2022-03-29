@@ -3,15 +3,14 @@ Generates a readout of various room file and entity usage statistics specified b
 """
 from pathlib import Path
 
+import sys
 import subprocess, json
 
-from PyQt5.QtCore import QCommandLineOption, QCommandLineParser
+from PyQt5.QtCore import QCommandLineParser
 from PyQt5.QtWidgets import QApplication
 
 
 def runmain():
-    import sys
-
     app = QApplication(sys.argv)
 
     cmdParser = QCommandLineParser()

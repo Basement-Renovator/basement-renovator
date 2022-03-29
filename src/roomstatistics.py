@@ -1,16 +1,12 @@
 """
 Generates a readout of various room file and entity usage statistics
 """
-from pathlib import Path
 
-import os
 import sys
-import inspect
-
 import roomconvert as cvt
-import xml.etree.cElementTree as ET
 
-from PyQt5.QtCore import QCommandLineOption, QCommandLineParser, QSettings
+from pathlib import Path
+from PyQt5.QtCore import QCommandLineOption, QCommandLineParser
 from PyQt5.QtWidgets import QApplication
 from lookup import MainLookup, EntityLookup
 from settings import *
