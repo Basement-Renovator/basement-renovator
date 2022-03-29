@@ -310,8 +310,8 @@ def runmain():
             entityText += f" ({foundin[2:]})\n"
 
             if mostPercent != 1:
-                entityText += f'Most in {mostName}, appearing in {most} rooms ({"{:.0%}".format(mostPercent)} of all rooms on the floor)\n'
-                entityText += f'Least in {leastName}, appearing in {least} rooms ({"{:.0%}".format(leastPercent)} of all rooms on the floor)\n\n'
+                entityText += f'Most in {mostName}, appearing in {most} rooms ({"{:.0%}".format(mostPercent)} of all rooms are in {mostName})\n'
+                entityText += f'Least in {leastName}, appearing in {least} rooms ({"{:.0%}".format(leastPercent)} of all rooms are in {leastName})\n\n'
             else:
                 entityText += "\n"
 
