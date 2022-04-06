@@ -404,6 +404,10 @@ class EntityLookup(Lookup):
                         self.dropdownkeys.append(value.text)
                         self.dropdownvalues.append(int(value.get("Value", i)))
 
+                self.gridwidth = None
+                if self.widget == "bitmap":
+                    self.gridwidth = int(node.get("Width", self.length))
+
             def getRawValue(self, number):
                 number = bitGet(number, self.offset, self.length)
 
