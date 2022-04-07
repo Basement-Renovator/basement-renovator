@@ -1662,11 +1662,37 @@ class EntityMenu(QWidget):
             widget.currentIndexChanged.connect(changeValue)
         elif bitfieldElement.widget == "checkbox":
             widget.stateChanged.connect(lambda: changeValue(widget.isChecked()))
+        elif bitfieldElement.widget == "bitmap":
+            layout = widget.layout()
+            for x in range(0, bitfieldElement.gridwidth):
+                for y in range(
+                    0, math.ceil(bitfieldElement.length / bitfieldElement.gridwidth)
+                ):
+                    checkbox = layout.itemAtPosition(y, x).widget()
+                    checkbox.stateChanged.connect(
+                        lambda: changeValue(
+                            self.readBitmapWidget(widget, bitfieldElement)
+                        )
+                    )
         else:
             widget.valueChanged.connect(changeValue)
 
         if label:
             self.updateLabel(label, bitfieldElement)
+
+    def readBitmapWidget(self, widget: QGroupBox, bitfieldElement):
+        layout = widget.layout()
+        value = 0
+        for x in range(0, bitfieldElement.gridwidth):
+            for y in range(
+                0, math.ceil(bitfieldElement.length / bitfieldElement.gridwidth)
+            ):
+                bit = y * bitfieldElement.gridwidth + x
+                checkbox = layout.itemAtPosition(y, x).widget()
+                if checkbox.isChecked():
+                    value = bitSet(value, 1, bit, 1)
+
+        return value
 
     def getWidgetValue(self, bitfieldElement):
         return bitfieldElement.getWidgetValue(
@@ -1730,6 +1756,19 @@ class EntityMenu(QWidget):
                 widget = QCheckBox()
                 widget.setText(bitfieldElement.name)
                 widget.setChecked(self.getWidgetValue(bitfieldElement))
+            elif bitfieldElement.widget == "bitmap":
+                widget = QGroupBox(bitfieldElement.name)
+                layout = QGridLayout()
+                bitmap = self.getWidgetValue(bitfieldElement)
+                for i in range(0, bitfieldElement.length):
+                    checkbox = QCheckBox()
+                    checked = bitGet(bitmap, i, 1)
+                    checkbox.setChecked(checked)
+                    x = i % bitfieldElement.gridwidth
+                    y = math.floor(i / bitfieldElement.gridwidth)
+                    layout.addWidget(checkbox, y, x)
+
+                widget.setLayout(layout)
 
             if bitfieldElement.tooltip:
                 widget.setToolTip(bitfieldElement.tooltip)
