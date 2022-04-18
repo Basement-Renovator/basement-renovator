@@ -45,10 +45,21 @@ def getRoomEntityStats(
     entityConfigToDat,
     lookup: MainLookup,
     statisticsGroups=False,
+    weightThreshold=None,
+    difficultyThreshold=None,
 ):
     totalEntities = 0
+    totalRoomsMatched = 0
     errors = ""
     for currRoom in rooms:
+        if (weightThreshold is not None and currRoom.weight < weightThreshold) or (
+            difficultyThreshold is not None
+            and currRoom.difficulty < difficultyThreshold
+        ):
+            continue
+
+        totalRoomsMatched += 1
+
         tracked = {}
         markedAsBugged = False
         for stack, x, y in currRoom.spawns():
@@ -78,15 +89,17 @@ def getRoomEntityStats(
                 if not inStatsGroup:
                     addEntityToDat(entityConfigToDat, tracked, group, entity)
 
-    return entityConfigToDat, totalEntities, errors
+    return entityConfigToDat, totalEntities, errors, totalRoomsMatched
 
 
-def recurseGetFiles(path):
+def recurseGetFiles(path, ignoreSTB, ignoreXML):
     filesList = []
     if path.is_dir():
         for path2 in path.iterdir():
             filesList.extend(recurseGetFiles(path2))
-    elif path.suffix == ".xml":
+    elif (not ignoreXML and path.suffix == ".xml") or (
+        not ignoreSTB and path.suffix == ".stb"
+    ):
         filesList.append(path)
 
     return filesList
@@ -101,7 +114,7 @@ def runmain():
     )
     cmdParser.addHelpOption()
 
-    cmdParser.addPositionalArgument("file", "xml room files to read")
+    cmdParser.addPositionalArgument("file", "room files to read")
 
     outputFileOpt = QCommandLineOption(
         "output",
@@ -124,11 +137,56 @@ def runmain():
     )
     cmdParser.addOption(roomThresholdOpt)
 
+    weightThresholdOpt = QCommandLineOption(
+        "weightThreshold",
+        "whether to ignore rooms with a weight less than 'threshold'",
+        "threshold",
+    )
+    cmdParser.addOption(weightThresholdOpt)
+
+    difficultyThresholdOpt = QCommandLineOption(
+        "difficultyThreshold",
+        "whether to ignore rooms with a difficulty less than 'threshold'",
+        "threshold",
+    )
+    cmdParser.addOption(difficultyThresholdOpt)
+
+    groupRoomThresholdOpt = QCommandLineOption(
+        "groupRoomThreshold",
+        "how many rooms an entity must appear in within a group to count as being a part of it",
+        "threshold",
+    )
+    cmdParser.addOption(groupRoomThresholdOpt)
+
     statisticsGroupOpt = QCommandLineOption(
         "statisticsGroups",
         "whether to group entities with a StatisticsGroup tag together",
     )
     cmdParser.addOption(statisticsGroupOpt)
+
+    ignoreSTBOpt = QCommandLineOption(
+        "ignoreSTB",
+        "whether to ignore stb room files, only loading xml",
+    )
+    cmdParser.addOption(ignoreSTBOpt)
+
+    ignoreXMLOpt = QCommandLineOption(
+        "ignoreXML",
+        "whether to ignore xml room files, only loading stb",
+    )
+    cmdParser.addOption(ignoreXMLOpt)
+
+    disableModsOpt = QCommandLineOption(
+        "disableMods",
+        "whether to disable modded entities",
+    )
+    cmdParser.addOption(disableModsOpt)
+
+    printGroupEntitiesOpt = QCommandLineOption(
+        "printGroupEntities",
+        "whether to print a list of all entities and their appear count for each group",
+    )
+    cmdParser.addOption(printGroupEntitiesOpt)
 
     groupFilesOpt = QCommandLineOption(
         "groupFiles",
@@ -164,7 +222,38 @@ def runmain():
             print("Room threshold must be an integer value!")
             return
 
+    weightThresholdArg = cmdParser.value(weightThresholdOpt)
+    weightThreshold = None
+    if weightThresholdArg:
+        try:
+            weightThreshold = float(weightThresholdArg)
+        except ValueError:
+            print("Weight threshold must be a decimal value!")
+            return
+
+    difficultyThresholdArg = cmdParser.value(difficultyThresholdOpt)
+    difficultyThreshold = None
+    if difficultyThresholdArg:
+        try:
+            difficultyThreshold = int(difficultyThresholdArg)
+        except ValueError:
+            print("Difficulty threshold must be an integer value!")
+            return
+
+    groupRoomThresholdArg = cmdParser.value(groupRoomThresholdOpt)
+    groupRoomThreshold = 1
+    if groupRoomThresholdArg:
+        try:
+            groupRoomThreshold = int(groupRoomThresholdArg)
+        except ValueError:
+            print("Group room threshold must be an integer value!")
+            return
+
     statisticsGroupArg = cmdParser.isSet(statisticsGroupOpt)
+    ignoreSTBArg = cmdParser.isSet(ignoreSTBOpt)
+    ignoreXMLArg = cmdParser.isSet(ignoreXMLOpt)
+    disableModsArg = cmdParser.isSet(disableModsOpt)
+    printGroupEntitiesArg = cmdParser.isSet(printGroupEntitiesOpt)
     groupFilesArg = cmdParser.isSet(groupFilesOpt)
 
     fileGroups = {}
@@ -172,7 +261,7 @@ def runmain():
     lastFilesList = None
     for arg in positionals:
         if not groupFilesArg:
-            filesList = recurseGetFiles(Path(arg))
+            filesList = recurseGetFiles(Path(arg), ignoreSTBArg, ignoreXMLArg)
             for file in filesList:
                 fileGroups[file] = [file]
                 fileToGroup[file] = file
@@ -188,7 +277,7 @@ def runmain():
 
                 lastFilesList = None
             else:
-                lastFilesList = recurseGetFiles(Path(arg))
+                lastFilesList = recurseGetFiles(Path(arg), ignoreSTBArg, ignoreXMLArg)
 
     if lastFilesList:
         print("Groups and file names do not line up!")
@@ -196,7 +285,7 @@ def runmain():
 
     version = getGameVersion()
     xmlLookups = MainLookup(version, settings.value("Verbose") == "1")
-    if settings.value("DisableMods") != "1":
+    if not disableModsArg:
         xmlLookups.loadMods(listModFolders(findInstallPath(), False), False)
 
     roomCountHeader = "Room Count:\n\n"
@@ -207,6 +296,8 @@ def runmain():
     entityConfigToDat = {}
 
     totalRoomCount, totalEntityCount = 0, 0
+
+    groupNames = []
 
     for group in fileGroups:
         print("----")
@@ -223,24 +314,40 @@ def runmain():
             if not path.exists():
                 print("Does not exist! Skipping!")
                 continue
-            if path.suffix != ".xml":
-                print("Must be xml! Skipping!")
+            if path.suffix != ".xml" and path.suffix != ".stb":
+                print("Must be xml or stb! Skipping!")
+                continue
+            elif (path.suffix == ".xml" and ignoreXMLArg) or (
+                path.suffix == ".stb" and ignoreSTBArg
+            ):
+                printf(f"Ignoring {path.suffix} file!")
                 continue
 
             print("Reading file...")
 
-            roomFile = cvt.xmlToCommon(path)
-            groupCount += len(roomFile.rooms)
+            roomFile = None
+            if path.suffix == ".xml":
+                roomFile = cvt.xmlToCommon(path)
+            else:
+                roomFile = cvt.stbToCommon(path)
 
             print("Getting entity statistics")
-            entityConfigToDat, numEntitiesInRooms, errors = getRoomEntityStats(
+            (
+                entityConfigToDat,
+                numEntitiesInRooms,
+                errors,
+                roomsMatched,
+            ) = getRoomEntityStats(
                 roomFile.rooms,
                 path,
                 group,
                 entityConfigToDat,
                 xmlLookups,
                 statisticsGroupArg,
+                weightThreshold,
+                difficultyThreshold,
             )
+            groupCount += roomsMatched
             groupEntityCount += numEntitiesInRooms
             roomErrors += errors
 
@@ -251,12 +358,16 @@ def runmain():
             f"{group}: {groupCount} rooms, containing {groupEntityCount} entities\n"
         )
 
+        if groupEntityCount > 1:
+            groupNames.append(group)
+
     print("----")
     print("All done! Preparing readout..")
 
     roomCountHeader += f"Read {totalRoomCount} total rooms, containing {totalEntityCount} total entities, from {len(fileGroups)} groups.\n\n"
     roomCount = roomCountHeader + roomCount
 
+    groupOut = {}
     entityOut = {}
     for config in entityConfigToDat.keys():
         dat = entityConfigToDat[config]
@@ -283,6 +394,12 @@ def runmain():
             for groupname in dat["totalroomspergroup"]:
                 groupcount = dat["totalroomspergroup"][groupname]
                 if groupcount != 0:
+                    if groupcount >= groupRoomThreshold:
+                        if groupname not in groupOut:
+                            groupOut[groupname] = {}
+
+                        groupOut[groupname][name] = groupcount
+
                     foundin += f", {groupname}"
                     if not most or groupcount > most:
                         most = groupcount
@@ -324,7 +441,25 @@ def runmain():
 
     print("----")
 
-    out = f"{roomCount}\n----\n\n{entityStats}"
+    groupStats = ""
+    if printGroupEntitiesArg:
+        groupStats = "Groups\n\n"
+        for name in groupNames:
+            groupStats += f"-- {name}\n\n"
+            groupEntities = groupOut[name]
+            groupEntities = {
+                k: v for k, v in sorted(groupEntities.items(), key=lambda x: x[1])
+            }
+            groupEntities = list(groupEntities.keys())
+            groupEntities.reverse()
+            for entity in groupEntities:
+                groupStats += f"{entity} ({groupOut[name][entity]} appearance{'s' if groupOut[name][entity] != 1 else ''})\n"
+
+            groupStats += "\n"
+
+        groupStats += "\n----\n\n"
+
+    out = f"{roomCount}\n----\n\n{groupStats}{entityStats}"
 
     if outputFileArg:
         with open(outputFilePath, "w") as file:

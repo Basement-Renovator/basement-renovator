@@ -26,7 +26,14 @@ def runmain():
         outputFile: txt file to store output in, if not specified prints to stdout,
         errorFile: txt file to store errors in, if not specified errors are discarded,
         useStatisticsGroups: whether to group entities with a StatisticsGroup tag together,
+        ignoreSTB: whether to ignore stb files,
+        ignoreXML: whether to ignore xml files,
+        disableMods: whether to disable modded entities,
+        printGroupEntities: whether to print a list of all entities in each group,
         roomThreshold: how many rooms an entity must appear in to be tracked,
+        groupRoomThreshold: how many rooms an entity must appear in within a group to count as being a part of it,
+        weightThreshold: minimum weight for a room to be counted,
+        difficultyThreshold: minimum difficulty for a room to be counted,
         files: [
             {
                 groupName: optional name of group that all file paths fall under,
@@ -65,8 +72,22 @@ def runmain():
             args.extend(["--errors", config["errorFile"]])
         if "roomThreshold" in config:
             args.extend(["--roomThreshold", str(config["roomThreshold"])])
+        if "weightThreshold" in config:
+            args.extend(["--weightThreshold", str(config["weightThreshold"])])
+        if "difficultyThreshold" in config:
+            args.extend(["--difficultyThreshold", str(config["difficultyThreshold"])])
+        if "groupRoomThreshold" in config:
+            args.extend(["--groupRoomThreshold", str(config["groupRoomThreshold"])])
         if "statisticsGroups" in config and config["statisticsGroups"]:
             args.extend(["--statisticsGroups"])
+        if "ignoreSTB" in config and config["ignoreSTB"]:
+            args.extend(["--ignoreSTB"])
+        if "ignoreXML" in config and config["ignoreXML"]:
+            args.extend(["--ignoreXML"])
+        if "disableMods" in config and config["disableMods"]:
+            args.extend(["--disableMods"])
+        if "printGroupEntities" in config and config["printGroupEntities"]:
+            args.extend(["--printGroupEntities"])
 
         usingGroups = None
         for configList in config["files"]:
