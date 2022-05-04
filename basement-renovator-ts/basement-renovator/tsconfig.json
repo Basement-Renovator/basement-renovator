@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "experimentalDecorators": true,
+        "checkJs": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react-native",
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "strict": true,
+        "inlineSourceMap": true,
+        "resolveJsonModule": true,
+        "pretty": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true
+    }
+}
