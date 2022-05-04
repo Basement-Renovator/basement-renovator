@@ -2,8 +2,8 @@ module.exports = {
     mainEntry: 'src-main/index.ts',
     preloadEntry: 'src-preload/index.ts',
     outDir: 'public',
-    mainTarget: 'electron16.0-main',
-    preloadTarget: 'electron16.0-preload',
+    mainTarget: 'electron18.0-main',
+    preloadTarget: 'electron18.0-preload',
     customConfig: {
         experiments: {
             topLevelAwait: true,
@@ -24,10 +24,6 @@ module.exports = {
         },
         resolve: {
             extensions: ['.tsx', '.ts', '.jsx', '.js'],
-            fallback: {
-                fs: false,
-                path: false
-            }
         },
     },
 };
