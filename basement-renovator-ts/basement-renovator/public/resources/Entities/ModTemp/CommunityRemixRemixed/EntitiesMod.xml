@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<data>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.40 - Heart (half black).png" Kind="Pickups" Name="Heart (half black)" Subtype="40" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.79 - Blended Heart (random).png" Kind="Pickups" Name="Blended Heart (random)" Subtype="79" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.80 - Blended Heart (black red).png" Kind="Pickups" Name="Blended Heart (black red)" Subtype="80" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.81 - Blended Heart (red eternal).png" Kind="Pickups" Name="Blended Heart (red eternal)" Subtype="81" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.82 - Blended Heart (eternal soul).png" Kind="Pickups" Name="Blended Heart (eternal soul)" Subtype="82" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.83 - Blended Heart (soul black).png" Kind="Pickups" Name="Blended Heart (soul black)" Subtype="83" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.84 - Heart (full eternal).png" Kind="Pickups" Name="Heart (full eternal)" Subtype="84" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.85 - Bone Heart (full).png" Kind="Pickups" Name="Bone Heart (full)" Subtype="85" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.102 - Heart (double soul).png" Kind="Pickups" Name="Heart (double soul)" Subtype="102" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.112 - Heart (double black).png" Kind="Pickups" Name="Heart (double black)" Subtype="112" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3310.122 - Heart (double eternal).png" Kind="Pickups" Name="Heart (double eternal)" Subtype="122" Variant="3310"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3922.0 - Spikier Chest.png" Kind="Pickups" Name="Spikier Chest" Subtype="0" Variant="3922"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3322.1 - Donkey's Jawbone.png" Kind="Pickups" Name="Donkey's Jawbone" Subtype="1" Variant="3322"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.1 - Red Apple.png" Kind="Pickups" Name="Red Apple" Subtype="1" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.2 - White Apple.png" Kind="Pickups" Name="White Apple" Subtype="2" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.3 - Double Apple (red).png" Kind="Pickups" Name="Double Apple (red)" Subtype="3" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.4 - Double Apple (white).png" Kind="Pickups" Name="Double Apple (white)" Subtype="4" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.5 - Double Apple (red white).png" Kind="Pickups" Name="Double Apple (red white)" Subtype="5" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.6 - Blended Apple.png" Kind="Pickups" Name="Blended Apple" Subtype="6" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3323.7 - Golden Apple.png" Kind="Pickups" Name="Golden Apple" Subtype="7" Variant="3323"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="5" Image="icons/5.3324.0 - Lost Card.png" Kind="Pickups" Name="Lost Card" Subtype="0" Variant="3324"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="6" Image="icons/6.5.115 - Devil Deal Beggar.png" Kind="Stage" Name="Devil Deal Beggar" Subtype="115" Variant="5"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="80" Image="icons/80.3341.0 - Ball of Flies t.png" Kind="Enemies" Name="Ball of Flies t" Subtype="0" Variant="3341"/>
+    <entity BaseHP="10" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="80" Image="icons/80.3342.0 - Ball of Flies x.png" Kind="Enemies" Name="Ball of Flies x" Subtype="0" Variant="3342"/>
+    <entity BaseHP="0" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="915" Image="icons/915.3341.0 - Cast.png" Kind="Enemies" Name="Cast" Subtype="0" Variant="3341"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="915" Image="icons/915.3342.0 - Exposed Cast.png" Kind="Enemies" Name="Exposed Cast" Subtype="0" Variant="3342"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="915" Image="icons/915.3343.0 - Hard Cast.png" Kind="Enemies" Name="Hard Cast" Subtype="0" Variant="3343"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="917" Image="icons/917.3341.0 - Stone-Faced.png" Kind="Enemies" Name="Stone-Faced" Subtype="0" Variant="3341"/>
+    <entity BaseHP="0" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="917" Image="icons/917.3342.0 - Stone-Faced Head.png" Kind="Enemies" Name="Stone-Faced Head" Subtype="0" Variant="3342"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="917" Image="icons/917.3343.0 - Exposed Stone-Faced.png" Kind="Enemies" Name="Exposed Stone-Faced" Subtype="0" Variant="3343"/>
+    <entity BaseHP="30" Boss="0" Champion="1" Group="(Mod) Community Remix Remixed" ID="916" Image="icons/916.3341.0 - Stray.png" Kind="Enemies" Name="Stray" Subtype="0" Variant="3341"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="999" Image="resources/Entities/questionmark.png" Kind="Effects" Name="Rib Piece" Subtype="0" Variant="3915"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="999" Image="resources/Entities/questionmark.png" Kind="Effects" Name="Putrid Bubble" Subtype="0" Variant="3916"/>
+    <entity Group="(Mod) Community Remix Remixed" ID="999" Image="icons/1000.3917.0 - Adam Controls.png" Kind="Effects" Name="Adam Controls" Subtype="0" Variant="3917"/>
+    <entity Group="(Mod) Community Remix Remixed" ID="999" Image="icons/1000.22.117 - Adam Controls Creep.png" Kind="Effects" Name="Adam Controls Creep" Subtype="117" Variant="22"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="999" Image="icons/1000.34.117 - Frozen Fart.png" Kind="Effects" Name="Frozen Fart" Subtype="117" Variant="34"/>
+    <entity BaseHP="0" Boss="0" Champion="0" Group="(Mod) Community Remix Remixed" ID="999" Image="icons/1000.3919.0 - Crack The Sky Visual Effect.png" Kind="Effects" Name="Crack The Sky Visual Effect" Subtype="0" Variant="3919"/>
+</data>

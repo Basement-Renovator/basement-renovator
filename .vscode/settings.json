@@ -4,8 +4,8 @@
   // Vanilla settings
   // ----------------
 
-  "editor.rulers": [88], // Matches the black default
-  "editor.tabSize": 2,
+  "editor.rulers": [120], // Matches the black default
+  "editor.tabSize": 4,
 
   // Linux line endings are used in this project
   "files.eol": "\n",
