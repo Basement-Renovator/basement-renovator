@@ -5,6 +5,8 @@ import path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 
+import LoadState from './load-state';
+
 async function createWindow() {
     const win = new BrowserWindow({
         width: 800,
@@ -27,6 +29,13 @@ async function createWindow() {
     ipcMain.handle('isMaximized', (event) => getWin(event)?.isMaximized);
 
     console.log('BROWSER');
+
+    try {
+        await LoadState();
+    }
+    catch (e) {
+        console.error(e);
+    }
 
     win.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
 }
