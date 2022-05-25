@@ -1,0 +1,60 @@
+import * as React from 'react';
+import {
+    Button, Tab, Tabs,
+} from '@mui/material';
+
+function MinimizeButton() {
+    return (<Button onClick={
+        (window as any).electronAPI.minimize
+    }>🗕</Button>);
+}
+
+function MaximizeRestoreButton() {
+    const [ needsRestore, setNeedsRestore ] = React.useState(false); // TODO:
+
+    (<Button onClick={
+        needsRestore ?
+            (window as any).electronAPI.restore :
+            (window as any).electronAPI.maximize
+    }>{needsRestore ? '🗗' : '🗖'}</Button>);
+}
+
+function CloseButton() {
+    return (<Button color='red' radius={100} onClick={
+        (window as any).electronAPI.close
+    }>🗙</Button>);
+}
+
+function LayerBar() {
+    const [ tabs, handlers ] = useListState(["Default", "Wave2"]);
+
+    function addTab() {
+        handlers.append(`Layer${tabs.length}`);
+    }
+
+    return (<Group>
+        <Tabs variant='outline'>{
+            tabs.map(tab => <Tab label={tab} />)
+        }</Tabs>
+        <Button onClick={addTab}>+</Button>
+    </Group>)
+}
+
+function Editor() {
+    return (<Center>
+        Insert editor here
+    </Center>);
+}
+
+export function UI() {
+    return (<Grid columns={10} grow>
+        <Grid.Col span={2}>Insert palette</Grid.Col>
+        <Grid.Col span={6}>
+            <Stack>
+                <LayerBar />
+                <Editor />
+            </Stack>
+        </Grid.Col>
+        <Grid.Col span={2}>Insert room list</Grid.Col>
+    </Grid>);
+}

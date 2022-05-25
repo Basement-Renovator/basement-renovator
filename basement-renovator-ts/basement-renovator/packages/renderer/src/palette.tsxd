@@ -1,0 +1,8 @@
+import * as React from 'react';
+
+const EntityIcon: React.FC<{
+
+}> = (props) => {
+
+}
+

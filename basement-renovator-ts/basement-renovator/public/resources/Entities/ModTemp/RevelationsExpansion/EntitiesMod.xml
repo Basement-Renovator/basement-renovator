@@ -1,5 +1,0 @@
-<?xml version="1.0" ?>
-<data>
-    <entity BaseHP="10" Boss="0" Champion="0" Group="(Mod) Revelations Expansion" ID="890" Image="icons/890.314.0 - Sickie.png" Kind="Enemies" Name="Sickie" Subtype="0" Variant="314"/>
-    <entity BaseHP="8" Boss="0" Champion="0" Group="(Mod) Revelations Expansion" ID="891" Image="icons/891.314.0 - Yellow Snowball.png" Kind="Enemies" Name="Yellow Snowball" Subtype="0" Variant="314"/>
-</data>

@@ -1,0 +1,31 @@
+<!--
+  Room Types
+    - Name = shown in menu, saved in xml if custom
+    - Type = In game room type to alias to
+    - NameRegex = only apply to rooms matching the regex
+    - Icon = Icon to use in menu, else uses default room behavior
+    - child elements = Special metadata about the room type
+  Gfx
+    - Definitions
+      - Defines how the room type should appear, by default uses the current file's stage's graphics
+      - BGPrefix = defined a prefix for the wall/floor backdrop. Different room shapes use different endings to this prefix
+      - StageGfx = defer to the provided stage name's graphics
+      - RoomGfx = defer to the provided room type name's graphics
+    - Constraints
+      - Defines when the Gfx should be applied. Applies most constrictive descending where possible
+      - ID = one or more comma separated room IDs to apply this Gfx to. Can also be a range using () or [] (inclusive) with infinity as an option
+        - used for super secret rooms and grave rooms
+      - StageName = only apply this Gfx in files for this stage
+        - used for grave rooms
+    Entity
+      - Defines an entity stub to match with (SubType/Variant default to 0 if exempted) and apply the Image override, if applicable
+        - used for crawlspaces and curse rooms
+      - NOTE entities declared in the Entities can declare a Room/StageGfx to override the current room with if they are rendered
+      whichever is loaded last will have priority
+ -->
+<data>
+  <room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,9]">
+    <Gfx StageGfx="Dark Room" />
+  </room>
+  <room Name="Greed Mode Descent" Type="23" Icon="UI/roomicons/greeddescent.png" ShowInMenu="1" />
+</data>

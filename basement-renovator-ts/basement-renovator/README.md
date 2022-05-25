@@ -8,8 +8,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - The *main/browser* process is responsible for creating and managing application windows
   - The *renderer* processes each correspond to a window and are responsible for essentially running a given web app
 - `src/index.js` - All UI and business logic running in a *renderer* process; edit this for most development purposes
-- `src-main/index.js` - All *browser* process configuration and creation of the window
-- `src-preload/index.js` - All preload code running just before the *renderer* process is split from the *main* process
+- `main/index.ts` - All *browser* process configuration and creation of the window
+- `preload/index.tsx` - All "pre-load" code running just before the *renderer* process is split from the *main* process
 
 ## Available Scripts
 
