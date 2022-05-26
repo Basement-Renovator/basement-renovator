@@ -651,7 +651,7 @@ export class Entity {
 
 export class EntityGroup {
     name: string;
-    label: string;
+    label?: string;
     parent?: EntityGroup;
 
     entityDefaults?: Entity;
@@ -662,12 +662,12 @@ export class EntityGroup {
         attrib: { Name: string; Label?: string; };
     }, name?: string, label?: string, parentGroup?: EntityGroup) {
         if (node) {
-            this.name = node.attrib.Name;
-            this.label = node.attrib.Label ?? this.name;
+            this.label = node.attrib.Label;
+            this.name = node.attrib.Name ?? this.label;
         }
         else {
             this.name = name as string;
-            this.label = label as string;
+            this.label = label;
         }
 
         this.parent = parentGroup;

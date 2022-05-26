@@ -5,48 +5,75 @@ import type { EntityLookup } from 'packages/common/lookup';
 import DockLayout, { BoxData, LayoutData, TabData } from 'rc-dock';
 import * as React from 'react';
 
+type FCC<T = {}> = React.FC<React.PropsWithChildren<T>>;
+
 const Icon: React.FC<{
     src: string;
     alt?: string;
 }> = ({ src, alt, ...rest }) => {
-    return (<img src={src} alt={alt} {...rest} />);
+    return (<img src={src} alt={alt} title={alt} {...rest} />);
 };
 
 const EntityIcon: React.FC<{
     entity: Entity;
 }> = ({ entity, ...rest }) => {
-    return (<Icon src={entity.imagePath} alt={entity.name} {...rest} />);
+    return (<div style={{
+        margin: '5px',
+    }}><Icon src={entity.imagePath} alt={entity.name} {...rest} /></div>);
 }
 
 const SectionHeader: React.FC<React.PropsWithChildren<{}>> = ({ children, ...rest }) => (<Stack style={{
     height: '50px',
+    backgroundColor: '#eee',
     justifyContent: 'center'
 }} {...rest}>
     <div><Divider><b>{children}</b></Divider></div>
 </Stack>);
 
+const LabelledGroup: FCC<{
+    label: string;
+}> = ({ children, label, ...rest }) => (<Stack style={{
+    width: '100%'
+}} {...rest}>
+    <SectionHeader>{label}</SectionHeader>
+    <Stack direction='row' flexWrap='wrap' alignItems={'end'}>{children}</Stack>
+</Stack>)
+
+const TabContent: FCC = ({ children, ...rest }) => (
+<div style={{ overflowY: 'scroll', height: '100%' }}>
+    <Stack {...rest}>{children}</Stack>
+</div>);
+
 export function layout(entities: EntityLookup): BoxData {
-    const expandEnts = (g: EntityGroup | Entity): Entity | Entity[] => {
+    const expandEnts = (g: EntityGroup | Entity, ignoreLabel?: boolean): React.ReactNode | React.ReactNode[] => {
         //if (g instanceof EntityGroup) {
         if ("groupentries" in g) {
-            return g.entries.map(expandEnts) as Entity[];
+            if (g.entries.length === 0) {
+                return [];
+            }
+
+            if (g.label && !ignoreLabel) {
+                return (<LabelledGroup key={g.name} label={g.label}>{
+                    expandEnts(g, true) as React.ReactNode[]
+                }</LabelledGroup>);
+            }
+
+            return _.flattenDeep(g.entries.sort((a, b) => {
+                const al = "groupentries" in a && a.label ? 1 : 0;
+                const bl = "groupentries" in b && b.label ? 1 : 0;
+                return al - bl;
+            }).map(e => expandEnts(e)));
         }
-        return g;
+        return <EntityIcon key={g.name} entity={g} />;
     }
 
     const tabs = entities.tabs.map<TabData>(tab => ({
         id: tab.name,
-        title: tab.label,
+        title: tab.label ?? tab.name,
         group: 'ENTITIES',
-        content: (<div style={{ overflowY: 'scroll', height: '100%' }}><Stack key={tab.name}>{
-            tab.groupentries.map(group => (<Stack key={group.name}>
-                <SectionHeader>{group.label}</SectionHeader>
-                <Stack direction='row' flexWrap='wrap'>{
-                    _.flattenDeep([ expandEnts(group) ])
-                    .map(e =>(<div key={e.name}><EntityIcon entity={e} /></div>))
-                }</Stack>
-            </Stack>))
-        }</Stack></div>)
+        content: (<TabContent key={tab.name}>{
+            tab.groupentries.map(group => expandEnts(group))
+        }</TabContent>)
     }));
 
     return {
