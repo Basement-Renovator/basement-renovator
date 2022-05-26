@@ -38,15 +38,15 @@ export function layout(entities: EntityLookup): BoxData {
         id: tab.name,
         title: tab.label,
         group: 'ENTITIES',
-        content: (<Stack key={tab.name}>{
+        content: (<div style={{ overflowY: 'scroll', height: '100%' }}><Stack key={tab.name}>{
             tab.groupentries.map(group => (<Stack key={group.name}>
                 <SectionHeader>{group.label}</SectionHeader>
-                <Stack direction='row'>{
+                <Stack direction='row' flexWrap='wrap'>{
                     _.flattenDeep([ expandEnts(group) ])
                     .map(e =>(<div key={e.name}><EntityIcon entity={e} /></div>))
                 }</Stack>
             </Stack>))
-        }</Stack>)
+        }</Stack></div>)
     }));
 
     return {
