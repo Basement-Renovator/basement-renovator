@@ -1,6 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import DockLayout, { LayoutData } from 'rc-dock';
+import "rc-dock/dist/rc-dock.css";
+
 import * as Palette from './palette';
 
 function App() {

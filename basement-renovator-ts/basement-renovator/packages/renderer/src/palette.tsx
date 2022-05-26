@@ -1,13 +1,9 @@
 import { Divider, Stack } from '@mui/material';
 import _ from 'lodash';
-//import { Entity, EntityGroup } from 'packages/common/config/br-config';
-//import { EntityLookup } from 'packages/common/lookup';
+import type { Entity, EntityGroup } from 'packages/common/config/br-config';
+import type { EntityLookup } from 'packages/common/lookup';
 import DockLayout, { BoxData, LayoutData, TabData } from 'rc-dock';
 import * as React from 'react';
-
-type EntityLookup = ReturnType<typeof window.resources>["entities"];
-type Entity = EntityLookup["entityListByType"][string];
-type EntityGroup = EntityLookup["groups"][string];
 
 const Icon: React.FC<{
     src: string;
@@ -22,11 +18,12 @@ const EntityIcon: React.FC<{
     return (<Icon src={entity.imagePath} alt={entity.name} {...rest} />);
 }
 
-const SectionHeader: React.FC<React.PropsWithChildren<{}>> = ({ children, ...rest }) => (<div style={{
-    height: '40px',
+const SectionHeader: React.FC<React.PropsWithChildren<{}>> = ({ children, ...rest }) => (<Stack style={{
+    height: '50px',
+    justifyContent: 'center'
 }} {...rest}>
-    <Divider>{children}</Divider>
-</div>);
+    <div><Divider><b>{children}</b></Divider></div>
+</Stack>);
 
 export function layout(entities: EntityLookup): BoxData {
     const expandEnts = (g: EntityGroup | Entity): Entity | Entity[] => {
