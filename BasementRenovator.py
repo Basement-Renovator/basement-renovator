@@ -6366,11 +6366,11 @@ class MainWindow(QMainWindow):
         # Trigger test hooks
         testHooks = settings.value("HooksTest")
         if testHooks:
-            tp = str(testPath)
+            tp = os.path.abspath(testPath)
             for hook in testHooks:
                 wd, script = os.path.split(hook)
                 try:
-                    subprocess.run([hook, tp, "--test"], cwd=wd, timeout=30)
+                    subprocess.run([hook, tp, "--test"], cwd=wd, timeout=60)
                 except Exception as e:
                     printf("Test hook failed! Reason:", e)
 

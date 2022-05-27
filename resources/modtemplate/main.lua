@@ -32,7 +32,7 @@ end
 
 local function fireCallback(name, ...)
     for _, sub in pairs(BasementRenovator.subscribers) do
-        callback = sub[name]
+        local callback = sub[name]
         if callback then
             local result = callback(...)
             if result ~= nil then return result end
