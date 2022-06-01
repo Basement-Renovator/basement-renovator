@@ -5,6 +5,8 @@ import { Loading } from './loading'
 import React from "react";
 import { createRoot } from 'react-dom/client';
 import _ from 'lodash';
+import { LookupProvider } from '../common/lookup';
+import LoadP from '../main/load-state';
 
 // `exposeInMainWorld` doesn't detect attributes and methods of a prototype
 function withPrototype(obj: Record<string, any>) {
@@ -43,6 +45,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 let loadingRoot: ReturnType<typeof createRoot> | undefined;
 contextBridge.exposeInMainWorld('removeLoading', () => loadingRoot?.unmount());
 
+contextBridge.exposeInMainWorld('resourceLoadP', async (): Promise<void> => { await LoadP; });
+contextBridge.exposeInMainWorld('resources', () => LookupProvider.Main);
+
 (async () => {
     await domReady();
 
@@ -50,6 +55,4 @@ contextBridge.exposeInMainWorld('removeLoading', () => loadingRoot?.unmount());
 
     loadingRoot = createRoot(document.getElementById('root')!);
     loadingRoot.render(<Loading />);
-
-    await (await import('./load-state')).default;
 })();

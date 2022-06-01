@@ -6,11 +6,48 @@ import { EntityType } from '../constants';
 import { Door } from '../core';
 import { Entities2Root, Entities2XmlNode } from '../entitiesgenerator';
 import * as fileutil from "../fileutil";
+import { ImageManager } from '../resourcemanager';
 import * as util from "../util";
 import { Choice } from '../util';
 import * as XML from "../xml";
 
 const { printf } = util;
+
+export class Mod {
+    name: string;
+    resourcePath: string;
+    imageManager: ImageManager;
+    modPath?: string;
+    autogenerateContent: boolean;
+    entities2root?: Entities2Root;
+
+    constructor(
+        modName="Basement Renovator",
+        resourcePath="resources/",
+        autogenerateContent=false,
+    ) {
+        this.name = modName;
+        this.resourcePath = resourcePath;
+        this.imageManager = new ImageManager(this.resourcePath);
+        this.autogenerateContent = autogenerateContent;
+    }
+
+    async setModPath(path: string): Promise<void> {
+        this.modPath = path;
+
+        const entities2Path = pathlib.join(this.modPath, "content/entities2.xml");
+        if ((await fileutil.stat(entities2Path)).isFile()) {
+            try {
+                const contents = await fileutil.read(entities2Path);
+                const parser = new XML.Parser<Entities2Root>([]);
+                this.entities2root = parser.decode(contents);
+            }
+            catch (e) {
+                printf(`ERROR parsing entities2 xml for mod "${this.name}": ${e}`);
+            }
+        }
+    }
+}
 
 class BitfieldElement {
     bitfield: Bitfield;
@@ -223,7 +260,7 @@ export class Bitfield {
 }
 
 export class Entity {
-    mod?: Mod;
+    mod: Mod;
     tagConfig?: EntityTag;
     tags: Record<string, TagData> = {};
     name?: string;
@@ -248,7 +285,7 @@ export class Entity {
     uniqueid = -1;
     tagsString = "[]";
 
-    constructor(mod?: Mod, tagConfig?: EntityTag) {
+    constructor(mod: Mod, tagConfig?: EntityTag) {
         this.mod = mod;
         this.tagConfig = tagConfig;
     }
@@ -290,19 +327,20 @@ export class Entity {
         return !!tagconfig && tagconfig.tag in this.tags;
     }
 
-    async validateImagePath(imagePath: string | undefined, resourcePath: string, def?: string): Promise<string | undefined> {
+    async validateImagePath(update: (path: string) => void, imagePath: string | undefined, imageManager: ImageManager, def?: string): Promise<void> {
         if (!imagePath) {
-            return def;
+            update(def ?? '');
+            return;
         }
 
-        imagePath = await fileutil.massageOSPath(pathlib.join(resourcePath, imagePath));
-
-        if (!imagePath || !(await fileutil.stat(imagePath)).isFile()) {
+        imagePath = await imageManager.register(imagePath);
+        if (!imagePath) {
             printf(`Failed loading image for Entity ${this.name} (${this.type}.${this.variant}.${this.subtype}):`, imagePath);
-            return def;
+            update(def ?? '');
+            return;
         }
 
-        return imagePath;
+        update(imagePath);
     }
 
     static COPYABLE_ATTRIBUTES = new Set<keyof Entity>([
@@ -321,7 +359,7 @@ export class Entity {
         "mirrorY",
     ]);
 
-    static DEFAULTS = new Entity();
+    static DEFAULTS = new Entity(new Mod());
 
     fillFromConfig(config: Entity) {
         for (const attribute of Entity.COPYABLE_ATTRIBUTES.keys()) {
@@ -413,23 +451,28 @@ export class Entity {
             this.subtype = node.attrib.Subtype;
 
         if (node.attrib.Image) {
-            this.imagePath = await this.validateImagePath(
+            this.validateImagePath(
+                (path) => this.imagePath = path,
                 node.attrib.Image,
-                this.mod?.resourcePath ?? '',
-                "resources/Entities/questionmark.png",
-            ) ?? '';
+                this.mod.imageManager,
+                ImageManager.DEFAULT_IMAGE,
+            );
         }
 
         if (node.attrib.EditorImage) {
-            this.editorImagePath = await this.validateImagePath(
-                node.attrib.EditorImage, this.mod?.resourcePath ?? ''
+            this.validateImagePath(
+                (path) => this.editorImagePath = path,
+                node.attrib.EditorImage,
+                this.mod.imageManager
             );
         }
 
         if (node.attrib.OverlayImage) {
-            this.overlayImagePath = await this.validateImagePath(
-                node.attrib.OverlayImage, this.mod?.resourcePath ?? ''
-            ) ?? '';
+            this.validateImagePath(
+                (path) => this.overlayImagePath = path,
+                node.attrib.OverlayImage,
+                this.mod.imageManager
+            );
         }
 
         // Tags="" attribute allows overriding default tags with nothing / different tags
@@ -847,40 +890,6 @@ export class Version {
         }
 
         return files;
-    }
-}
-
-export class Mod {
-    name: string;
-    resourcePath: string;
-    modPath?: string;
-    autogenerateContent: boolean;
-    entities2root?: Entities2Root;
-
-    constructor(
-        modName="Basement Renovator",
-        resourcePath="resources/",
-        autogenerateContent=false,
-    ) {
-        this.name = modName;
-        this.resourcePath = resourcePath;
-        this.autogenerateContent = autogenerateContent;
-    }
-
-    async setModPath(path: string): Promise<void> {
-        this.modPath = path;
-
-        const entities2Path = pathlib.join(this.modPath, "content/entities2.xml");
-        if ((await fileutil.stat(entities2Path)).isFile()) {
-            try {
-                const contents = await fileutil.read(entities2Path);
-                const parser = new XML.Parser<Entities2Root>([]);
-                this.entities2root = parser.decode(contents);
-            }
-            catch (e) {
-                printf(`ERROR parsing entities2 xml for mod "${this.name}": ${e}`);
-            }
-        }
     }
 }
 

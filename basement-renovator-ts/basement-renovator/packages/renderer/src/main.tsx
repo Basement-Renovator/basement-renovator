@@ -5,7 +5,7 @@ import './samples/electron-store';
 import './samples/preload-module';
 import './styles/index.css';
 
-console.log('MAIN');
+console.log('RENDERER');
 
 (async () => {
     await window.resourceLoadP();

@@ -3,6 +3,7 @@ import * as os from 'os';
 import pathlib from 'path';
 import './samples/electron-store';
 import './samples/npm-esm-packages';
+import './load-state';
 
 // Disable GPU Acceleration for Windows 7
 if (os.release().startsWith('6.1')) app.disableHardwareAcceleration();

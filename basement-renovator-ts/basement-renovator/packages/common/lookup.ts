@@ -10,9 +10,15 @@ import { printf, printSectionBreak } from './util';
 import { BaseShapeNode, EntityNode, EntityXml, GfxNode, GroupNode, MirrorShapeNode, PositionNode, RoomShapeNode, RoomShapeXml, RoomTypeNode, RoomTypeXml, StageNode, StageXml, TabNode, TagNode, VersionXML, WallShapeNode } from './br-xml-types';
 import { Entity, EntityGroup, Mod, EntityTab, EntityTag, Version, RoomShape } from './config/br-config';
 import { FormatEntry, FormatNode, FormatXml, parseFormatXml, tryParseBuffer } from './format';
+import { ImageManager } from './resourcemanager';
+
+type File = {
+    path: string;
+    contents: string;
+};
 
 async function sanitizePath<T extends { attrib?: A; }, A extends Record<string, unknown>>(
-    node: T, key: keyof A, path: string
+    node: T, key: keyof A, imageManager: ImageManager, checkFile = true
 ): Promise<void> {
     if (!node.attrib) {
         return;
@@ -20,23 +26,23 @@ async function sanitizePath<T extends { attrib?: A; }, A extends Record<string, 
 
     const prefix = node.attrib[key];
     if (typeof prefix === "string") {
-        const prefixPath = await fileutil.massageOSPath(pathlib.join(path, prefix));
+        const prefixPath = await imageManager.register(prefix, checkFile);
         (node.attrib[key] as string) = prefixPath ?? '';
     }
 }
 
-async function loadXMLFile<T extends XML.XmlParsed>(path: string, ...args: [a:string[]]): Promise<T | undefined> {
+async function parseXMLFile<T extends XML.XmlParsed>(file: File, ...args: [a:string[]]): Promise<T | undefined> {
+    if (!file.contents) return undefined;
+
     try {
         const parser = new XML.Parser<T[]>(...args, true);
-        const contents = await fileutil.read(path, "utf-8");
-        if (!contents) return undefined;
 
-        const p = parser.decode(contents)?.[0];
-        printf(path, p);
+        const p = parser.decode(file.contents)?.[0];
+        //printf(file.path, p);
         return p;
     }
     catch (e) {
-        printf("Error loading xml", path, ":", e);
+        printf("Error loading xml", file.path, ":", e);
         return undefined;
     }
 }
@@ -136,11 +142,11 @@ abstract class Lookup {
         this.version = version;
     }
 
-    async loadFile<T extends XML.XmlParsed>(file: string, mod: Mod, ...args: [a:string[]]) {
+    async loadFile<T extends XML.XmlParsed>(file: File, mod: Mod, ...args: [a:string[]]) {
         printSectionBreak();
         printf(`Loading ${this.prefix} from "${mod.name}" at ${file}`);
         const previous = this.count();
-        await this.loadXML(await loadXMLFile<T>(file, ...args), mod);
+        await this.loadXML(await parseXMLFile<T>(file, ...args), mod);
         printf(`Successfully loaded ${this.count() - previous} new ${this.prefix} from "${mod.name}"`);
     }
 
@@ -150,7 +156,10 @@ abstract class Lookup {
             return;
         }
 
-        this.loadFile(file, mod, ...args);
+        this.loadFile({
+            path: file,
+            contents: await fileutil.read(file, "utf-8")
+        }, mod, ...args);
     }
 
     abstract count(): number;
@@ -198,14 +207,14 @@ class StageLookup extends Lookup {
                 printf(`Stage ${stage.attrib} has missing stage/stage type; this may not load properly in testing`);
             }
 
-            sanitizePath(stage, "BGPrefix", mod.resourcePath);
+            sanitizePath(stage, "BGPrefix", mod.imageManager, false);
 
             const children = stage.stage ?? [];
             for (const gfx of children) {
-                sanitizePath(gfx, "BGPrefix", mod.resourcePath);
+                sanitizePath(gfx, "BGPrefix", mod.imageManager, false);
 
                 for (const ent of gfx.gfx ?? []) {
-                    sanitizePath(ent, "Image", mod.resourcePath);
+                    sanitizePath(ent, "Image", mod.imageManager);
                 }
             }
 
@@ -307,14 +316,14 @@ class RoomTypeLookup extends Lookup {
 
             const replacement = this.xml?.find(r => r.attrib.Name === name);
 
-            sanitizePath(roomType, "Icon", mod.resourcePath);
+            sanitizePath(roomType, "Icon", mod.imageManager);
 
             const children = roomType.room ?? [];
             for (const gfx of children) {
-                sanitizePath(gfx, "BGPrefix", mod.resourcePath);
+                sanitizePath(gfx, "BGPrefix", mod.imageManager, false);
 
                 for (const ent of gfx.gfx ?? []) {
-                    sanitizePath(ent, "Image", mod.resourcePath);
+                    sanitizePath(ent, "Image", mod.imageManager);
                 }
             }
 
@@ -772,12 +781,12 @@ export class EntityLookup extends Lookup {
         }
     }
 
-    async loadFile(path: string, mod: Mod): Promise<void> {
-        const root = await loadXMLFile<EntityXml>(path, []);
+    async loadFile(file: File, mod: Mod): Promise<void> {
+        const root = await parseXMLFile<EntityXml>(file, []);
         if (!root) return;
 
         printSectionBreak();
-        printf(`Loading Entities from "${mod.name}" at ${path}`);
+        printf(`Loading Entities from "${mod.name}" at ${file.path}`);
         const previous = this.count();
 
         if (mod.autogenerateContent && mod.entities2root) {
@@ -910,6 +919,7 @@ type GfxData = {
 
 export class MainLookup {
     basemod = new Mod();
+    mods: Mod[] = [];
     stages: StageLookup;
     roomTypes: RoomTypeLookup;
     roomShapes: RoomShapeLookup;
@@ -926,6 +936,7 @@ export class MainLookup {
         this.formats = new FormatLookup(version, this);
         this.version = version;
         this.verbose = verbose;
+        this.mods.push(this.basemod);
     }
 
     async load(path = "resources/Versions.xml", mod = this.basemod): Promise<boolean> {
@@ -933,7 +944,8 @@ export class MainLookup {
             return false;
         }
 
-        await this.loadXML(await loadXMLFile<VersionXML>(path, [
+        const contents = await fileutil.read(path, "utf-8");
+        await this.loadXML(await parseXMLFile<VersionXML>({ path, contents }, [
             "version",
             "entities",
             "stages",
@@ -947,6 +959,7 @@ export class MainLookup {
     async loadFromMod(modPath: string, brPath: string, name: string, autogenerateContent?: boolean) {
         const modConfig = new Mod(name, brPath, autogenerateContent);
         await modConfig.setModPath(modPath);
+        this.mods.push(modConfig);
 
         // try to load based off VersionsMod, else use fixed set of files
         const versionsPath = pathlib.join(brPath, "VersionsMod.xml");
@@ -970,25 +983,32 @@ export class MainLookup {
 
         const loadVersion = versions[this.version];
         if (loadVersion) {
-            const files = loadVersion.allFiles();
-            for (const file of files) {
-                if (file.path) {
-                    const path = pathlib.join(mod.resourcePath, file.path);
-                    if (file.filetype === "entities") {
-                        await this.entities.loadFile(path, mod);
-                    }
-                    else if (file.filetype === "stages") {
-                        await this.stages.loadFile(path, mod, []);
-                    }
-                    else if (file.filetype === "roomtypes") {
-                        await this.roomTypes.loadFile(path, mod, []);
-                    }
-                    else if (file.filetype === "roomshapes") {
-                        await this.roomShapes.loadFile(path, mod, []);
-                    }
-                    else if (file.filetype === "formats") {
-                        await this.formats.loadFile(path, mod, []);
-                    }
+            const fileEntries = loadVersion.allFiles().filter(file => file.path);
+
+            const files = await Promise.all(
+                fileEntries
+                .map(file => pathlib.join(mod.resourcePath, file.path))
+                .map(async path => ({
+                    path,
+                    contents: await fileutil.read(path, 'utf-8')
+                }))
+            );
+            for (const [ fileEntry, file ] of _.zip(fileEntries, files)) {
+                const { filetype } = fileEntry!;
+                if (filetype === "entities") {
+                    await this.entities.loadFile(file!, mod);
+                }
+                else if (filetype === "stages") {
+                    await this.stages.loadFile(file!, mod, []);
+                }
+                else if (filetype === "roomtypes") {
+                    await this.roomTypes.loadFile(file!, mod, []);
+                }
+                else if (filetype === "roomshapes") {
+                    await this.roomShapes.loadFile(file!, mod, []);
+                }
+                else if (filetype === "formats") {
+                    await this.formats.loadFile(file!, mod, []);
                 }
             }
         }
