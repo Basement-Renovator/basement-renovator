@@ -11,7 +11,7 @@ const Icon: React.FC<{
     src: string;
     alt?: string;
 }> = ({ src, alt, ...rest }) => {
-    return (<img src={src} alt={alt} title={alt} {...rest} />);
+    return (<img src={src} alt={alt} title={alt} draggable={false} {...rest} />);
 };
 
 const EntityIcon: React.FC<{
@@ -19,25 +19,39 @@ const EntityIcon: React.FC<{
 }> = ({ entity, ...rest }) => {
     return (<div style={{
         margin: '5px',
+        cursor: 'pointer',
     }}><Icon src={entity.imagePath} alt={entity.name} {...rest} /></div>);
 }
 
-const SectionHeader: React.FC<React.PropsWithChildren<{}>> = ({ children, ...rest }) => (<Stack style={{
+const SectionHeader: React.FC<React.PropsWithChildren<{
+    style?: React.CSSProperties;
+    onClick?: React.MouseEventHandler;
+}>> = ({ children, style = {}, onClick, ...rest }) => (<Stack style={{
     height: '50px',
     backgroundColor: '#eee',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    ...style
 }} {...rest}>
-    <div><Divider><b>{children}</b></Divider></div>
+    <div onClick={onClick}><Divider><b>{children}</b></Divider></div>
 </Stack>);
 
 const LabelledGroup: FCC<{
     label: string;
-}> = ({ children, label, ...rest }) => (<Stack style={{
-    width: '100%'
-}} {...rest}>
-    <SectionHeader>{label}</SectionHeader>
-    <Stack direction='row' flexWrap='wrap' alignItems={'end'}>{children}</Stack>
-</Stack>)
+}> = ({ children, label, ...rest }) => {
+    const [ collapsed, setCollapsed ] = React.useState<boolean>(false);
+
+    return (<Stack style={{
+        width: '100%',
+        userSelect: 'none',
+    }} {...rest}>
+        <SectionHeader onClick={() => setCollapsed(!collapsed)} style={{
+            cursor: 'pointer',
+        }}>{`${label}${collapsed ? ' ▶' : ''}`}</SectionHeader>
+        <Stack direction='row' flexWrap='wrap' alignItems={'end'} style={
+            collapsed ? { display: 'none' } : {}
+        }>{children}</Stack>
+    </Stack>);
+};
 
 const TabContent: FCC = ({ children, ...rest }) => (
 <div style={{ overflowY: 'scroll', height: '100%' }}>
