@@ -3,6 +3,8 @@ import * as os from 'os';
 import pathlib from 'path';
 import './samples/electron-store';
 import './samples/npm-esm-packages';
+
+import './menu';
 import './load-state';
 
 // Disable GPU Acceleration for Windows 7
@@ -48,12 +50,12 @@ async function createWindow() {
 
         const url = `http://${host}:${port}`;
         win.loadURL(url);
-        win.webContents.openDevTools();
     }
 
     // Test active push message to Renderer-process
     win.webContents.on('did-finish-load', () => {
         win?.webContents.send('main-process-message', new Date().toLocaleString());
+        win?.webContents.openDevTools();
     });
 
     // Make all links open with the browser, not with the application

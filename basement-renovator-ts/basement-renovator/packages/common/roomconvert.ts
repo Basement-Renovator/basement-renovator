@@ -297,7 +297,12 @@ export async function xmlToCommon(path: string, destPath?: string): Promise<Room
 
     const contents = await fileutil.read(path, 'ascii');
 
-    const parser = new XML.Parser<StbXml>([]);
+    const parser = new XML.Parser<StbXml>([
+        'room',
+        'door',
+        'spawn',
+        'entity'
+    ]);
 
     const root = parser.decode(contents);
 
