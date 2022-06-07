@@ -80,6 +80,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# vscode
+*.code-workspace
+
 # ----
 dist
 **/.tmp

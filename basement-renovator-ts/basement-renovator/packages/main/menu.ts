@@ -10,7 +10,6 @@ async function open(m: MenuItem, window?: BrowserWindow) {
     }
 
     const result = await dialog.showOpenDialog(window, {
-        defaultPath: 'D:/SteamGames/steamapps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/',
         filters: [
             { name: 'Room Files', extensions: [ 'xml' ] }
         ],
@@ -23,15 +22,10 @@ async function open(m: MenuItem, window?: BrowserWindow) {
     const path = result.filePaths[0];
     const file = await roomconvert.xmlToCommon(path);
 
-    try {
     window.webContents.send('file-open', {
         path,
         rooms: file,
     });
-    }
-    catch (e) {
-        console.log('WHIA', e);
-    }
 }
 
 const template: Array<MenuItemConstructorOptions | MenuItem> = [
