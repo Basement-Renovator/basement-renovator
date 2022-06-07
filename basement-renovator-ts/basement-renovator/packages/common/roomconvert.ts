@@ -323,7 +323,7 @@ export async function xmlToCommon(path: string, destPath?: string): Promise<Room
 
             return Object.assign({
                 door: roomNode.door.map(d => Object.assign({}, d.attrib)),
-                spawn: roomNode.spawn.map(s => Object.assign({
+                spawn: roomNode.spawn?.map(s => Object.assign({
                     entity: s.entity.map(ent => {
                         const xmlProps: Record<string, unknown> = Object.assign({}, ent.attrib);
                         delete xmlProps.type;
@@ -333,7 +333,7 @@ export async function xmlToCommon(path: string, destPath?: string): Promise<Room
 
                         return Object.assign({ xmlProps }, ent.attrib);
                     })
-                }, s.attrib)),
+                }, s.attrib)) ?? [],
                 xmlProps: roomXmlProps,
             }, roomNode.attrib);
         }),
