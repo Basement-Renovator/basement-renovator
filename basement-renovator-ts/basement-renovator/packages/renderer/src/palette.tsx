@@ -1,4 +1,4 @@
-import { Divider, Stack, Box } from '@mui/material';
+import { Divider, Stack, Box, TextField } from '@mui/material';
 import _ from 'lodash';
 import type { Entity, EntityGroup } from 'packages/common/config/br-config';
 import type { EntityLookup } from 'packages/common/lookup';
@@ -16,13 +16,17 @@ const Icon: React.FC<{
 
 const EntityIcon: React.FC<{
     entity: Entity;
-}> = ({ entity, ...rest }) => {
-    return (<Box sx={{
-        margin: '5px',
-        ':hover': {
-            backgroundColor: '#ddf'
-        }
-    }}><Icon src={entity.imagePath} alt={entity.name} {...rest} /></Box>);
+    search?: string;
+}> = ({ entity, search, ...rest }) => {
+    return (<Box 
+        sx={{
+            margin: '5px',
+            ':hover': {
+                backgroundColor: '#ddf'
+            }
+        }}
+        hidden={search && !entity.name?.toLowerCase().includes(search) ? true : false}
+    ><Icon src={entity.imagePath} alt={entity.name} {...rest} /></Box>);
 }
 
 const SectionHeader: React.FC<React.PropsWithChildren<{
@@ -60,7 +64,9 @@ const LabelledGroup: FCC<{
 export const Layout: React.FC<{
     entities: EntityLookup;
 }> = ({ entities, ...rest }) => {
-    const expandEnts = (g: EntityGroup | Entity, ignoreLabel?: boolean): React.ReactNode | React.ReactNode[] => {
+    const [search, setSearch] = React.useState<string>("");
+
+    const expandEnts = (g: EntityGroup | Entity, ignoreLabel?: boolean, searchInput?: string): React.ReactNode | React.ReactNode[] => {
         //if (g instanceof EntityGroup) {
         if ("groupentries" in g) {
             if (g.entries.length === 0) {
@@ -69,7 +75,7 @@ export const Layout: React.FC<{
 
             if (g.label && !ignoreLabel) {
                 return (<LabelledGroup key={g.name} label={g.label}>{
-                    expandEnts(g, true) as React.ReactNode[]
+                    expandEnts(g, true, searchInput) as React.ReactNode[]
                 }</LabelledGroup>);
             }
 
@@ -78,9 +84,10 @@ export const Layout: React.FC<{
                 const al = "groupentries" in a && a.label ? 1 : 0;
                 const bl = "groupentries" in b && b.label ? 1 : 0;
                 return al - bl;
-            }).map(e => expandEnts(e)));
+            }).map(e => expandEnts(e, ignoreLabel, searchInput)));
         }
-        return <EntityIcon key={g.name} entity={g} />;
+
+        return <EntityIcon key={g.name} entity={g} search={searchInput} />;
     }
 
     const tabs = entities.tabs.map(tab => (<Tab key={tab.name} label={tab.label ?? tab.name}>
@@ -89,5 +96,25 @@ export const Layout: React.FC<{
         }</Stack>
     </Tab>));
 
-    return (<TabPanel {...rest}>{tabs}</TabPanel>);
+    const searchTab = (<Tab key="entity-palette-search-tab" label="Search">
+        <Stack key="entity-palette-search-tab" direction="row" flexWrap="wrap" alignItems="end">
+            {expandEnts(entities.entityList, true, search)}
+        </Stack>
+    </Tab>)
+
+    let searchInputHandler = (event: any) => {
+        setSearch(event.target.value.toLowerCase());
+    }
+
+    return (
+        <Stack key="entity-palette">
+            <TabPanel style={{
+                display: search !== "" ? "none": ""
+            }} {...rest}>{tabs}</TabPanel>
+            <TabPanel style={{
+                display: search === "" ? "none": ""
+            }} {...rest}>{searchTab}</TabPanel>
+            <TextField id="entity-palette-search" label="Search" onChange={searchInputHandler} />
+        </Stack>
+    );
 };
