@@ -1,124 +1,43 @@
-import assert from 'assert';
-import { Box, Divider, Stack } from '@mui/material';
-import { default as SplitPane, Pane, PaneProps, SplitPaneProps } from 'react-split-pane';
+import { Box, Stack, Tab as MTab, TabProps, Tabs } from '@mui/material';
 import _ from 'lodash';
 import React from 'react';
-import { FlexboxProps as MuiFlexboxProps } from '@mui/system';
 
-type Orientation = "horizontal" | "vertical";
+type FCC<T = {}> = React.FC<React.PropsWithChildren<T>>;
 
-type FlexboxProps = Partial<{
-    grow: number;
-    shrink: number;
-    direction: Orientation;
-    wrap: MuiFlexboxProps["flexWrap"];
-    order: number;
-    justify: MuiFlexboxProps["justifyContent"];
-    justifyItems: MuiFlexboxProps["justifyItems"];
-    align: MuiFlexboxProps["alignContent"];
-    alignItems: MuiFlexboxProps["alignItems"];
-    gap: CSSNumberish;
-}>;
+export const Tab: FCC<Omit<TabProps, 'children'>> = (props) => (<div {...props} />);
 
-const FlexBox: React.FC<FlexboxProps & {
-    children?: React.ReactNode;
-} & Record<string, unknown>> = (props) => {
-    const {
-        grow: flexGrow,
-        shrink: flexShrink,
-        justify: justifyContent,
-        justifyItems,
-        align: alignContent,
-        alignItems,
-        direction: flexDirection,
-        wrap: flexWrap,
-        order,
-        gap,
-        children,
-        ...rest
-    } = props;
-
-    return (<Stack
-        flexGrow={flexGrow ?? 1}
-        flexShrink={flexShrink}
-        justifyContent={justifyContent ?? 'space-between'}
-        justifyItems={justifyItems}
-        alignContent={alignContent}
-        alignItems={alignItems ?? 'stretch'}
-        flexDirection={flexDirection === "horizontal" ? "row" : "column"}
-        flexWrap={flexWrap}
-        order={order}
-        gap={gap}
-        {...rest}
-    >{children}</Stack>);
+const MonoTabPanel: FCC<{
+    index: number;
+    value: number;
+}> = ({ children, value, index, ...rest }) => {
+    return (<div role="tabpanel" hidden={value !== index} {...rest}>{
+        children
+    }</div>);
 };
 
-export const HBox: typeof FlexBox = (props) => (<FlexBox {...props} direction='horizontal' />);
-export const VBox: typeof FlexBox = (props) => (<FlexBox {...props} direction='vertical' />);
+export const TabPanel: FCC<{
+    value?: number;
+    style?: React.CSSProperties;
+}> = ({ children, value, ...rest }) => {
+    const [val, setValue] = React.useState(value ?? 0);
 
-export const SplitPanel: React.FC<FlexboxProps & SplitPaneProps & Record<string, unknown>> = (props) => {
-    const { direction, split, ...rest } = props;
-    return (<FlexBox component={SplitPane} split={direction === "horizontal" ? "vertical" : "horizontal"} {...rest} />);
+    return (<Stack {...rest}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={val} onChange={(e, newValue) => setValue(newValue)}>{
+                React.Children.map(children, (child) => {
+                    if (!React.isValidElement(child)) {
+                        return false;
+                    }
+                    return (<MTab {..._.omit(child.props, 'children')} />);
+                })
+            }</Tabs>
+        </Box>
+        <Box flexGrow='1' style={{
+            overflowY: 'scroll'
+        }}>{
+            React.Children.map(children, (child, index) => React.isValidElement(child) &&
+                (<MonoTabPanel value={val} index={index}>{child.props.children}</MonoTabPanel>)
+            )
+        }</Box>
+    </Stack>)
 };
-
-// the current panel is always the left-most, top-most
-// panels may ONLY look like this:
-// <Panel component={RootTool}>
-//   <Splitter />
-//   ...
-// </Panel>
-// const Panel: React.FunctionComponent<{
-//     left: number;
-//     right: number;
-//     top: number;
-//     bottom: number;
-//     component?: string | React.JSXElementConstructor<any>;
-// }> = (props) => {
-//     const rect = _.pick(props, "left", "right", "top", "bottom");
-
-//     let split: {
-//         dir: Orientation;
-//         value: number;
-//     } | undefined;
-//     React.Children.forEach(props.children, (child) => {
-//         if (!React.isValidElement(child)) {
-//             return;
-//         }
-
-//         if (isInstance(child, Splitter)) {
-//             if (split) {
-//                 throw new Error("Cannot have splitters without interspersed panels");
-//             }
-//             split = {
-//                 dir: child.props.orientation === 'vertical' ? 'vertical' : 'horizontal',
-//                 value: child.props.value,
-//             };
-//         }
-//         else if (isInstance(child, Panel)) {
-//             if (!split) {
-//                 throw new Error("No current split!");
-//             }
-
-//             child.props.left = rect.left;
-//             child.props.right = rect.right;
-//             child.props.bottom = rect.bottom;
-//             child.props.top = rect.top;
-
-//             if (split.dir === 'vertical') {
-//                 rect.bottom *= split.value;
-//                 child.props.top = rect.bottom;
-//             }
-//             else {
-//                 rect.right *= split.value;
-//                 child.props.left = rect.right;
-//             }
-
-//             split = undefined;
-//         }
-//     });
-
-//     return React.createElement(props.component ?? Box, {
-//         ...props,
-//         ...rect,
-//     }, props.children);
-// }

@@ -1,9 +1,9 @@
-import { Divider, Stack } from '@mui/material';
+import { Divider, Stack, Box } from '@mui/material';
 import _ from 'lodash';
 import type { Entity, EntityGroup } from 'packages/common/config/br-config';
 import type { EntityLookup } from 'packages/common/lookup';
-import DockLayout, { BoxData, LayoutData, TabData } from 'rc-dock';
 import * as React from 'react';
+import { Tab, TabPanel } from './panel';
 
 type FCC<T = {}> = React.FC<React.PropsWithChildren<T>>;
 
@@ -17,20 +17,24 @@ const Icon: React.FC<{
 const EntityIcon: React.FC<{
     entity: Entity;
 }> = ({ entity, ...rest }) => {
-    return (<div style={{
+    return (<Box sx={{
         margin: '5px',
-        cursor: 'pointer',
-    }}><Icon src={entity.imagePath} alt={entity.name} {...rest} /></div>);
+        ':hover': {
+            backgroundColor: '#ddf'
+        }
+    }}><Icon src={entity.imagePath} alt={entity.name} {...rest} /></Box>);
 }
 
 const SectionHeader: React.FC<React.PropsWithChildren<{
     style?: React.CSSProperties;
     onClick?: React.MouseEventHandler;
-}>> = ({ children, style = {}, onClick, ...rest }) => (<Stack style={{
+}>> = ({ children, onClick, ...rest }) => (<Stack sx={{
     height: '50px',
     backgroundColor: '#eee',
     justifyContent: 'center',
-    ...style
+    ':hover': {
+        backgroundColor: '#ddf'
+    }
 }} {...rest}>
     <div onClick={onClick}><Divider><b>{children}</b></Divider></div>
 </Stack>);
@@ -53,12 +57,9 @@ const LabelledGroup: FCC<{
     </Stack>);
 };
 
-const TabContent: FCC = ({ children, ...rest }) => (
-<div style={{ overflowY: 'scroll', height: '100%' }}>
-    <Stack {...rest}>{children}</Stack>
-</div>);
-
-export function layout(entities: EntityLookup): BoxData {
+export const Layout: React.FC<{
+    entities: EntityLookup;
+}> = ({ entities, ...rest }) => {
     const expandEnts = (g: EntityGroup | Entity, ignoreLabel?: boolean): React.ReactNode | React.ReactNode[] => {
         //if (g instanceof EntityGroup) {
         if ("groupentries" in g) {
@@ -72,6 +73,7 @@ export function layout(entities: EntityLookup): BoxData {
                 }</LabelledGroup>);
             }
 
+            // Labelled groups are pushed to the back
             return _.flattenDeep(g.entries.sort((a, b) => {
                 const al = "groupentries" in a && a.label ? 1 : 0;
                 const bl = "groupentries" in b && b.label ? 1 : 0;
@@ -81,17 +83,11 @@ export function layout(entities: EntityLookup): BoxData {
         return <EntityIcon key={g.name} entity={g} />;
     }
 
-    const tabs = entities.tabs.map<TabData>(tab => ({
-        id: tab.name,
-        title: tab.label ?? tab.name,
-        group: 'ENTITIES',
-        content: (<TabContent key={tab.name}>{
+    const tabs = entities.tabs.map(tab => (<Tab key={tab.name} label={tab.label ?? tab.name}>
+        <Stack key={tab.name}>{
             tab.groupentries.map(group => expandEnts(group))
-        }</TabContent>)
-    }));
+        }</Stack>
+    </Tab>));
 
-    return {
-        mode: 'horizontal',
-        children: [ { tabs } ],
-    };
-}
+    return (<TabPanel {...rest}>{tabs}</TabPanel>);
+};
