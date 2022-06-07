@@ -1,6 +1,4 @@
-import React from 'react';
 import _ from 'lodash';
-import "rc-dock/dist/rc-dock.css";
 
 import * as Palette from './palette';
 import * as RoomList from './room-list';
