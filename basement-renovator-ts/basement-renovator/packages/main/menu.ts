@@ -4,7 +4,12 @@ import * as roomconvert from '../common/roomconvert';
 const isMac = process.platform === 'darwin';
 
 async function open(m: MenuItem, window?: BrowserWindow) {
-    const result = await dialog.showOpenDialog(window!, {
+    if (!window) {
+        // mac....
+        return;
+    }
+
+    const result = await dialog.showOpenDialog(window, {
         defaultPath: 'D:/SteamGames/steamapps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/',
         filters: [
             { name: 'Room Files', extensions: [ 'xml' ] }
@@ -15,8 +20,18 @@ async function open(m: MenuItem, window?: BrowserWindow) {
         return;
     }
 
-    const file = await roomconvert.xmlToCommon(result.filePaths[0]);
-    console.log(file)
+    const path = result.filePaths[0];
+    const file = await roomconvert.xmlToCommon(path);
+
+    try {
+    window.webContents.send('file-open', {
+        path,
+        rooms: file,
+    });
+    }
+    catch (e) {
+        console.log('WHIA', e);
+    }
 }
 
 const template: Array<MenuItemConstructorOptions | MenuItem> = [

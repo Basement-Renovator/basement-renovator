@@ -10,23 +10,23 @@ import LoadP from '../main/load-state';
 
 // `exposeInMainWorld` doesn't detect attributes and methods of a prototype
 function withPrototype(obj: Record<string, any>) {
-    return _.assignIn(obj, obj);
+    //return _.assignIn(obj, obj);
 
-    //const proto = Object.getPrototypeOf(obj);
+    const proto = Object.getPrototypeOf(obj);
 
-    //const protoOnly = _.omitBy(proto, (v, key) => Object.hasOwn(obj, key));
+    const protoOnly = _.omitBy(proto, (v, key) => Object.hasOwn(obj, key));
 
-    //for (const [key, value] of Object.entries(protoOnly)) {
-    //    if (typeof value === 'function') {
-    //        // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
-    //        obj[key] = (...args: any) => value.call(obj, ...args);
-    //    }
-    //    else {
-    //        obj[key] = value;
-    //    }
-    //}
+    for (const [key, value] of Object.entries(protoOnly)) {
+        if (typeof value === 'function') {
+            // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
+            obj[key] = (...args: any) => value.call(obj, ...args);
+        }
+        else {
+            obj[key] = value;
+        }
+    }
 
-    //return obj;
+    return obj;
 }
 
 // --------- Expose APIs to the Renderer process. ---------
