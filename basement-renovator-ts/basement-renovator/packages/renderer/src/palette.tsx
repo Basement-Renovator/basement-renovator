@@ -84,10 +84,10 @@ export const Layout: React.FC<{
                 const al = "groupentries" in a && a.label ? 1 : 0;
                 const bl = "groupentries" in b && b.label ? 1 : 0;
                 return al - bl;
-            }).map(e => expandEnts(e, ignoreLabel, searchInput)));
+            }).map(e => expandEnts(e, false, searchInput)));
         }
 
-        return <EntityIcon key={g.name} entity={g} search={searchInput} />;
+        return <EntityIcon key={g.name + g.uniqueid.toString()} entity={g} search={searchInput} />;
     }
 
     const tabs = entities.tabs.map(tab => (<Tab key={tab.name} label={tab.label ?? tab.name}>
@@ -114,7 +114,7 @@ export const Layout: React.FC<{
             <TabPanel style={{
                 display: search === "" ? "none": ""
             }} {...rest}>{searchTab}</TabPanel>
-            <TextField id="entity-palette-search" label="Search" onChange={searchInputHandler} />
+            <TextField id="entity-palette-search" label="Search" onChange={searchInputHandler} value={search} />
         </Stack>
     );
 };
