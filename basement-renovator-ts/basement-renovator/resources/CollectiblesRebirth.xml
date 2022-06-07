@@ -225,8 +225,8 @@
     <entity ID="5" Image="Entities/Items/5.100.117 - Dead Bird.png" Name="Dead Bird" Subtype="117" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.118 - Brimstone.png" Name="Brimstone" Subtype="118" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.119 - Blood Bag.png" Name="Blood Bag" Subtype="119" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.120 - Odd Mushroom.png" Name="Odd Mushroom" Subtype="120" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.121 - Odd Mushroom.png" Name="Odd Mushroom" Subtype="121" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.120 - Odd Mushroom.png" Name="Odd Mushroom (Thin)" Subtype="120" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.121 - Odd Mushroom.png" Name="Odd Mushroom (Fat)" Subtype="121" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.122 - Whore of Babylon.png" Name="Whore of Babylon" Subtype="122" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.125 - Bobby-Bomb.png" Name="Bobby-Bomb" Subtype="125" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.129 - Bucket of Lard.png" Name="Bucket of Lard" Subtype="129" Variant="100" />

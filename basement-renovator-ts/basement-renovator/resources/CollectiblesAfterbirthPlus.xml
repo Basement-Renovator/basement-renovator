@@ -27,7 +27,7 @@
     <entity ID="5" Image="Entities/Items/5.100.523 - Moving Box.png" Name="Moving Box" Subtype="523" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.527 - Mr. ME!.png" Name="Mr. ME!" Subtype="527" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.534 - Schoolbag.png" Name="Schoolbag" Subtype="534" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.536 - Sacrificial Altar.png" Name="Schoolbag" Subtype="536" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.536 - Sacrificial Altar.png" Name="Sacrificial Altar" Subtype="536" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.545 - Book of the Dead.png" Name="Book of the Dead" Subtype="545" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.550 - Broken Shovel.png" Name="Broken Shovel" Subtype="550" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.552 - Mom's Shovel.png" Name="Mom's Shovel" Subtype="552" Variant="100" />

@@ -542,25 +542,25 @@
       <entity ID="6000" Image="Entities/6000.7.0 - Rail (stop-to-right).png" Name="Rail (stop-to-right)" Subtype="0" Variant="7" MirrorX="6000.8.0" />
       <entity ID="6000" Image="Entities/6000.8.0 - Rail (left-to-stop).png" Name="Rail (left-to-stop)" Subtype="0" Variant="8" MirrorX="6000.7.0" />
       <entity ID="6000" Image="Entities/6000.9.0 - Rail (up-to-stop).png" Name="Rail (up-to-stop)" Subtype="0" Variant="9" MirrorY="6000.10.0" />
-      <entity ID="6000" Image="Entities/6000.10.0 - Rail (stop-to-down).png" Name="Rail (left-to-stop)" Subtype="0" Variant="10" MirrorY="6000.9.0" />
+      <entity ID="6000" Image="Entities/6000.10.0 - Rail (stop-to-down).png" Name="Rail (stop-to-down)" Subtype="0" Variant="10" MirrorY="6000.9.0" />
       <entity ID="6000" Image="Entities/6000.16.0 - Rail (cart-left).png" Name="Rail (cart-left)" Subtype="0" Variant="16" MirrorX="6000.32.0" />
       <entity ID="6000" Image="Entities/6000.32.0 - Rail (cart-right).png" Name="Rail (cart-right)" Subtype="0" Variant="32" MirrorX="6000.16.0" />
       <entity ID="6000" Image="Entities/6000.17.0 - Rail (cart-up).png" Name="Rail (cart-up)" Subtype="0" Variant="17" MirrorY="6000.33.0" />
       <entity ID="6000" Image="Entities/6000.33.0 - Rail (cart-down).png" Name="Rail (cart-down)" Subtype="0" Variant="33" MirrorY="6000.17.0" />
-      <entity ID="6000" Image="Entities/6000.80.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="80" />
-      <entity ID="6000" Image="Entities/6000.81.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="81" />
-      <entity ID="6000" Image="Entities/6000.82.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="82" />
-      <entity ID="6000" Image="Entities/6000.83.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="83" />
-      <entity ID="6000" Image="Entities/6000.84.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="84" />
-      <entity ID="6000" Image="Entities/6000.85.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="85" />
-      <entity ID="6000" Image="Entities/6000.96.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="96" />
-      <entity ID="6000" Image="Entities/6000.97.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="97" />
-      <entity ID="6000" Image="Entities/6000.98.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="98" />
-      <entity ID="6000" Image="Entities/6000.99.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="99" />
-      <entity ID="6000" Image="Entities/6000.100.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="100" />
-      <entity ID="6000" Image="Entities/6000.101.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="101" />
-      <entity ID="6000" Image="Entities/6000.112.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="112" />
-      <entity ID="6000" Image="Entities/6000.113.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="113" />
+      <entity ID="6000" Image="Entities/6000.80.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (left-to-right)" Subtype="0" Variant="80" />
+      <entity ID="6000" Image="Entities/6000.81.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-down)" Subtype="0" Variant="81" />
+      <entity ID="6000" Image="Entities/6000.82.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-right)" Subtype="0" Variant="82" />
+      <entity ID="6000" Image="Entities/6000.83.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-left)" Subtype="0" Variant="83" />
+      <entity ID="6000" Image="Entities/6000.84.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (left-to-up)" Subtype="0" Variant="84" />
+      <entity ID="6000" Image="Entities/6000.85.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (right-to-up)" Subtype="0" Variant="85" />
+      <entity ID="6000" Image="Entities/6000.96.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (left-to-right) (alt)" Subtype="0" Variant="96" />
+      <entity ID="6000" Image="Entities/6000.97.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-down) (alt)" Subtype="0" Variant="97" />
+      <entity ID="6000" Image="Entities/6000.98.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-right) (alt)" Subtype="0" Variant="98" />
+      <entity ID="6000" Image="Entities/6000.99.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-left) (alt)" Subtype="0" Variant="99" />
+      <entity ID="6000" Image="Entities/6000.100.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (left-to-up) (alt)" Subtype="0" Variant="100" />
+      <entity ID="6000" Image="Entities/6000.101.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (right-to-up) (alt)" Subtype="0" Variant="101" />
+      <entity ID="6000" Image="Entities/6000.112.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (left-to-stop)" Subtype="0" Variant="112" />
+      <entity ID="6000" Image="Entities/6000.113.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft) (up-to-stop)" Subtype="0" Variant="113" />
 
       <entity ID="6001" Image="Entities/6001.0.0 - Rail (Pit) (left-to-right).png" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" />
       <entity ID="6001" Image="Entities/6001.1.0 - Rail (Pit) (up-to-down).png" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="1" />
