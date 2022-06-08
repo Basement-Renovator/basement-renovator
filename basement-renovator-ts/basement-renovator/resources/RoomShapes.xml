@@ -1,383 +1,383 @@
 <data>
-    <shape ID="1" Name="1x1" Width="15" Height="9">
-        <wall y="0">
-            <point x="0" />
-            <point x="14" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="8">
-            <point x="0" />
-            <point x="14" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="8" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="14">
-            <point y="0" />
-            <point y="8" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-    </shape>
-    <shape ID="2" Name="HCloset (1x0.5)" Width="15" Height="5">
-        <!-- Base room shape the room is rendered over, along with top-left origin -->
-        <shape Name="1x1" x="0" y="2" />
-        <wall y="2">
-            <point x="0" />
-            <point x="14" />
-            <normal x="1" />
-        </wall>
-        <wall y="6">
-            <point x="0" />
-            <point x="14" />
-            <normal x="-1" />
-        </wall>
-        <wall x="0">
-            <point y="2" />
-            <point y="6" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="14">
-            <point y="2" />
-            <point y="6" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-    </shape>
-    <shape ID="3" Name="VCloset (0.5x1)" Width="7" Height="9">
-        <shape Name="1x1" x="4" y="0" />
-        <wall y="0">
-            <point x="4" />
-            <point x="10" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="8">
-            <point x="0" />
-            <point x="14" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall x="4">
-            <point y="0" />
-            <point y="8" />
-            <normal y="1" />
-        </wall>
-        <wall x="10">
-            <point y="0" />
-            <point y="8" />
-            <normal y="-1" />
-        </wall>
-    </shape>
-    <shape ID="4" Name="1x2" Width="15" Height="16">
-        <wall y="0">
-            <point x="0" />
-            <point x="14" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="15">
-            <point x="0" />
-            <point x="14" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-        <wall x="14">
-            <point y="0" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-    </shape>
-    <shape ID="5" Name="Tall Closet (0.5x2)" Width="7" Height="16">
-        <shape Name="1x2" x="4" y="0" />
-        <wall y="0">
-            <point x="4" />
-            <point x="10" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="15">
-            <point x="4" />
-            <point x="10" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall x="4">
-            <point y="0" />
-            <point y="15" />
-            <normal y="1" />
-        </wall>
-        <wall x="10">
-            <point y="0" />
-            <point y="15" />
-            <normal y="-1" />
-        </wall>
-    </shape>
-    <shape ID="6" Name="2x1" Width="28" Height="9">
-        <wall y="0">
-            <point x="0" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall y="8">
-            <point x="0" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="8" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="27">
-            <point y="0" />
-            <point y="8" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-    </shape>
-    <shape ID="7" Name="Wide Closet (2x0.5)" Width="28" Height="5">
-        <shape Name="2x1" x="0" y="2" />
-        <wall y="2">
-            <point x="0" />
-            <point x="27" />
-            <normal x="1" />
-        </wall>
-        <wall y="6">
-            <point x="0" />
-            <point x="27" />
-            <normal x="-1" />
-        </wall>
-        <wall x="0">
-            <point y="2" />
-            <point y="6" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="27">
-            <point y="2" />
-            <point y="6" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-    </shape>
-    <shape ID="8" Name="2x2" Width="28" Height="16">
-        <wall y="0">
-            <point x="0" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall y="15">
-            <point x="0" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-        <wall x="27">
-            <point y="0" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-    </shape>
-    <shape ID="9" Name="TopLeft L" Width="28" Height="16">
-        <shape Name="2x2" />
-        <mirror x="TopRight L" y="BottomLeft L" />
-        <wall y="7">
-            <point x="0" />
-            <point x="13" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="0">
-            <point x="13" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="20" />
-        </wall>
-        <wall y="15">
-            <point x="0" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall x="0">
-            <point y="7" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="11" />
-        </wall>
-        <wall x="13">
-            <point y="0" />
-            <point y="7" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="27">
-            <point y="0" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-    </shape>
-    <shape ID="10" Name="TopRight L" Width="28" Height="16">
-        <shape Name="2x2" />
-        <mirror x="TopLeft L" y="BottomRight L" />
-        <wall y="0">
-            <point x="0" />
-            <point x="14" />
-            <normal x="1" />
-            <door x="7" />
-        </wall>
-        <wall y="7">
-            <point x="14" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="20" />
-        </wall>
-        <wall y="15">
-            <point x="0" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-        <wall x="14">
-            <point y="0" />
-            <point y="7" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-        <wall x="27">
-            <point y="7" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="11" />
-        </wall>
-    </shape>
-    <shape ID="11" Name="BottomLeft L" Width="28" Height="16">
-        <shape Name="2x2" />
-        <mirror x="BottomRight L" y="TopLeft L" />
-        <wall y="0">
-            <point x="0" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall y="8">
-            <point x="0" />
-            <point x="13" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall y="15">
-            <point x="13" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="20" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="8" />
-            <normal y="1" />
-            <door y="4" />
-        </wall>
-        <wall x="13">
-            <point y="8" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="11" />
-        </wall>
-        <wall x="27">
-            <point y="0" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-    </shape>
-    <shape ID="12" Name="BottomRight L" Width="28" Height="16">
-        <shape Name="2x2" />
-        <mirror x="BottomLeft L" y="TopRight L" />
-        <wall y="0">
-            <point x="0" />
-            <point x="27" />
-            <normal x="1" />
-            <door x="7" />
-            <door x="20" />
-        </wall>
-        <wall y="8">
-            <point x="14" />
-            <point x="27" />
-            <normal x="-1" />
-            <door x="20" />
-        </wall>
-        <wall y="15">
-            <point x="0" />
-            <point x="14" />
-            <normal x="-1" />
-            <door x="7" />
-        </wall>
-        <wall x="0">
-            <point y="0" />
-            <point y="15" />
-            <normal y="1" />
-            <door y="4" />
-            <door y="11" />
-        </wall>
-        <wall x="14">
-            <point y="8" />
-            <point y="15" />
-            <normal y="-1" />
-            <door y="11" />
-        </wall>
-        <wall x="27">
-            <point y="0" />
-            <point y="8" />
-            <normal y="-1" />
-            <door y="4" />
-        </wall>
-    </shape>
+  <shape ID="1" Name="1x1" Icon="UI/roomshapes/1x1.png" Width="15" Height="9">
+    <wall y="0">
+      <point x="0" />
+      <point x="14" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="8">
+      <point x="0" />
+      <point x="14" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="8" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="14">
+      <point y="0" />
+      <point y="8" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+  </shape>
+  <shape ID="2" Name="HCloset (1x0.5)" Icon="UI/roomshapes/hcloset.png" Width="15" Height="5">
+    <!-- Base room shape the room is rendered over, along with top-left origin -->
+    <shape Name="1x1" x="0" y="2" />
+    <wall y="2">
+      <point x="0" />
+      <point x="14" />
+      <normal x="1" />
+    </wall>
+    <wall y="6">
+      <point x="0" />
+      <point x="14" />
+      <normal x="-1" />
+    </wall>
+    <wall x="0">
+      <point y="2" />
+      <point y="6" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="14">
+      <point y="2" />
+      <point y="6" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+  </shape>
+  <shape ID="3" Name="VCloset (0.5x1)" Icon="UI/roomshapes/vcloset.png" Width="7" Height="9">
+    <shape Name="1x1" x="4" y="0" />
+    <wall y="0">
+      <point x="4" />
+      <point x="10" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="8">
+      <point x="0" />
+      <point x="14" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall x="4">
+      <point y="0" />
+      <point y="8" />
+      <normal y="1" />
+    </wall>
+    <wall x="10">
+      <point y="0" />
+      <point y="8" />
+      <normal y="-1" />
+    </wall>
+  </shape>
+  <shape ID="4" Name="1x2" Icon="UI/roomshapes/1x2.png" Width="15" Height="16">
+    <wall y="0">
+      <point x="0" />
+      <point x="14" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="15">
+      <point x="0" />
+      <point x="14" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+    <wall x="14">
+      <point y="0" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+  </shape>
+  <shape ID="5" Name="Tall Closet (0.5x2)" Icon="UI/roomshapes/1x2_closet.png" Width="7" Height="16">
+    <shape Name="1x2" x="4" y="0" />
+    <wall y="0">
+      <point x="4" />
+      <point x="10" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="15">
+      <point x="4" />
+      <point x="10" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall x="4">
+      <point y="0" />
+      <point y="15" />
+      <normal y="1" />
+    </wall>
+    <wall x="10">
+      <point y="0" />
+      <point y="15" />
+      <normal y="-1" />
+    </wall>
+  </shape>
+  <shape ID="6" Name="2x1" Icon="UI/roomshapes/2x1.png" Width="28" Height="9">
+    <wall y="0">
+      <point x="0" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall y="8">
+      <point x="0" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="8" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="27">
+      <point y="0" />
+      <point y="8" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+  </shape>
+  <shape ID="7" Name="Wide Closet (2x0.5)" Icon="UI/roomshapes/2x1_closet.png" Width="28" Height="5">
+    <shape Name="2x1" x="0" y="2" />
+    <wall y="2">
+      <point x="0" />
+      <point x="27" />
+      <normal x="1" />
+    </wall>
+    <wall y="6">
+      <point x="0" />
+      <point x="27" />
+      <normal x="-1" />
+    </wall>
+    <wall x="0">
+      <point y="2" />
+      <point y="6" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="27">
+      <point y="2" />
+      <point y="6" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+  </shape>
+  <shape ID="8" Name="2x2" Icon="UI/roomshapes/2x2.png" Width="28" Height="16">
+    <wall y="0">
+      <point x="0" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall y="15">
+      <point x="0" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+    <wall x="27">
+      <point y="0" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+  </shape>
+  <shape ID="9" Name="TopLeft L" Icon="UI/roomshapes/ltl.png" Width="28" Height="16">
+    <shape Name="2x2" />
+    <mirror x="TopRight L" y="BottomLeft L" />
+    <wall y="7">
+      <point x="0" />
+      <point x="13" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="0">
+      <point x="13" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="20" />
+    </wall>
+    <wall y="15">
+      <point x="0" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall x="0">
+      <point y="7" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="11" />
+    </wall>
+    <wall x="13">
+      <point y="0" />
+      <point y="7" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="27">
+      <point y="0" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+  </shape>
+  <shape ID="10" Name="TopRight L" Icon="UI/roomshapes/ltr.png" Width="28" Height="16">
+    <shape Name="2x2" />
+    <mirror x="TopLeft L" y="BottomRight L" />
+    <wall y="0">
+      <point x="0" />
+      <point x="14" />
+      <normal x="1" />
+      <door x="7" />
+    </wall>
+    <wall y="7">
+      <point x="14" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="20" />
+    </wall>
+    <wall y="15">
+      <point x="0" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+    <wall x="14">
+      <point y="0" />
+      <point y="7" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+    <wall x="27">
+      <point y="7" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="11" />
+    </wall>
+  </shape>
+  <shape ID="11" Name="BottomLeft L" Icon="UI/roomshapes/lbl.png" Width="28" Height="16">
+    <shape Name="2x2" />
+    <mirror x="BottomRight L" y="TopLeft L" />
+    <wall y="0">
+      <point x="0" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall y="8">
+      <point x="0" />
+      <point x="13" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall y="15">
+      <point x="13" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="20" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="8" />
+      <normal y="1" />
+      <door y="4" />
+    </wall>
+    <wall x="13">
+      <point y="8" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="11" />
+    </wall>
+    <wall x="27">
+      <point y="0" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+  </shape>
+  <shape ID="12" Name="BottomRight L" Icon="UI/roomshapes/lbr.png" Width="28" Height="16">
+    <shape Name="2x2" />
+    <mirror x="BottomLeft L" y="TopRight L" />
+    <wall y="0">
+      <point x="0" />
+      <point x="27" />
+      <normal x="1" />
+      <door x="7" />
+      <door x="20" />
+    </wall>
+    <wall y="8">
+      <point x="14" />
+      <point x="27" />
+      <normal x="-1" />
+      <door x="20" />
+    </wall>
+    <wall y="15">
+      <point x="0" />
+      <point x="14" />
+      <normal x="-1" />
+      <door x="7" />
+    </wall>
+    <wall x="0">
+      <point y="0" />
+      <point y="15" />
+      <normal y="1" />
+      <door y="4" />
+      <door y="11" />
+    </wall>
+    <wall x="14">
+      <point y="8" />
+      <point y="15" />
+      <normal y="-1" />
+      <door y="11" />
+    </wall>
+    <wall x="27">
+      <point y="0" />
+      <point y="8" />
+      <normal y="-1" />
+      <door y="4" />
+    </wall>
+  </shape>
 </data>

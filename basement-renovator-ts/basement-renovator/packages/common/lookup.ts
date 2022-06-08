@@ -144,7 +144,7 @@ abstract class Lookup {
 
     async loadFile<T extends XML.XmlParsed>(file: File, mod: Mod, ...args: [a:string[]]) {
         printSectionBreak();
-        printf(`Loading ${this.prefix} from "${mod.name}" at ${file}`);
+        printf(`Loading ${this.prefix} from "${mod.name}" at ${file.path}`);
         const previous = this.count();
         await this.loadXML(await parseXMLFile<T>(file, ...args), mod);
         printf(`Successfully loaded ${this.count() - previous} new ${this.prefix} from "${mod.name}"`);
@@ -284,7 +284,7 @@ class StageLookup extends Lookup {
     }
 }
 
-class RoomTypeLookup extends Lookup {
+export class RoomTypeLookup extends Lookup {
     xml?: RoomTypeXml["data"];
     parent: MainLookup;
 
