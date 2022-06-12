@@ -100,6 +100,27 @@ export function printSectionBreak(): void {
     printf(Array.from(range(50)).map(() => "-").join(""));
 }
 
+// `exposeInMainWorld` doesn't detect attributes and methods of a prototype
+export function withPrototype(obj: Record<string, any>) {
+    //return _.assignIn(obj, obj);
+
+    const protoKeys = Object.getOwnPropertyNames(Object.getPrototypeOf(obj));
+
+    for (const key of protoKeys) {
+        if (Object.hasOwn(obj, key)) continue;
+
+        const value = obj[key];
+        if (typeof value === 'function') {
+            // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
+            obj[key] = (...args: any) => value.call(obj, ...args);
+        }
+        else {
+            obj[key] = value;
+        }
+    }
+
+    return obj;
+}
 
 export function bitFill(count: number): number {
     return (1 << count) - 1;

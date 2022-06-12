@@ -8,7 +8,7 @@ import { Entities2Root, Entities2XmlNode } from '../entitiesgenerator';
 import * as fileutil from "../fileutil";
 import { ImageManager } from '../resourcemanager';
 import * as util from "../util";
-import { Choice } from '../util';
+import { Choice, withPrototype } from '../util';
 import * as XML from "../xml";
 
 const { printf } = util;
@@ -30,6 +30,7 @@ export class Mod {
         this.resourcePath = resourcePath;
         this.imageManager = new ImageManager(this.resourcePath);
         this.autogenerateContent = autogenerateContent;
+        withPrototype(this);
     }
 
     async setModPath(path: string): Promise<void> {
@@ -98,6 +99,8 @@ class BitfieldElement {
                 this.dropdowndata[value.innerText] = value.attrib.Value ?? +i;
             }
         }
+
+        withPrototype(this);
     }
 
     getRawValue(num: number): number {
@@ -212,6 +215,8 @@ export class Bitfield {
             const element = new BitfieldElement(this, el, elementOffset, length);
             this.elements.push(element);
         }
+
+        withPrototype(this);
     }
 
     isInvalid() {
@@ -288,6 +293,7 @@ export class Entity {
     constructor(mod: Mod, tagConfig?: EntityTag) {
         this.mod = mod;
         this.tagConfig = tagConfig;
+        withPrototype(this);
     }
 
     getTagConfig(tag: string | TagData): TagData | undefined {
@@ -722,6 +728,8 @@ export class EntityGroup {
             );
             this.entityDefaults.fillFromConfig(this.parent.entityDefaults);
         }
+
+        withPrototype(this);
     }
 
     addEntry(entry: EntityGroup | Entity) {
@@ -750,6 +758,8 @@ export class EntityTab extends EntityGroup {
                 }
             }
         }
+
+        withPrototype(this);
     }
 }
 
@@ -763,6 +773,10 @@ type TagData = {
 
 export class EntityTag {
     tags: Record<string, TagData> = {};
+
+    constructor() {
+        withPrototype(this);
+    }
 
     getTag({ node, name }: Partial<{
         node: TagNode;
@@ -857,6 +871,8 @@ export class Version {
                 this.invalid = true;
             }
         }
+
+        withPrototype(this);
     }
 
     allFiles(versions: Record<string, true> = {}): DataFile[] {

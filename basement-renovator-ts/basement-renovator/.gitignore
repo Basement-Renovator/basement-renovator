@@ -84,7 +84,7 @@ typings/
 *.code-workspace
 
 # ----
-dist
+dist/
 **/.tmp
 release
 .DS_Store

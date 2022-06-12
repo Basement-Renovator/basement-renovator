@@ -6,7 +6,7 @@ import * as XML from './xml';
 import _ from 'lodash';
 import { Room } from './core';
 import { generateXMLFromEntities2 } from './entitiesgenerator';
-import { printf, printSectionBreak } from './util';
+import { printf, printSectionBreak, withPrototype } from './util';
 import { BaseShapeNode, EntityNode, EntityXml, GfxNode, GroupNode, MirrorShapeNode, PositionNode, RoomShapeNode, RoomShapeXml, RoomTypeNode, RoomTypeXml, StageNode, StageXml, TabNode, TagNode, VersionXML, WallShapeNode } from './br-xml-types';
 import { Entity, EntityGroup, Mod, EntityTab, EntityTag, Version, RoomShape } from './config/br-config';
 import { FormatEntry, FormatNode, FormatXml, parseFormatXml, tryParseBuffer } from './format';
@@ -174,6 +174,7 @@ class StageLookup extends Lookup {
     constructor(version: string, parent: MainLookup) {
         super("Stages", version);
         this.parent = parent;
+        withPrototype(this);
     }
 
     count() {
@@ -291,6 +292,7 @@ export class RoomTypeLookup extends Lookup {
     constructor(version: string, parent: MainLookup) {
         super("RoomTypes", version);
         this.parent = parent;
+        withPrototype(this);
     }
 
     count() {
@@ -434,6 +436,7 @@ export class RoomShapeLookup extends Lookup {
     constructor(version: string, parent: MainLookup) {
         super("RoomShapes", version);
         this.parent = parent;
+        withPrototype(this);
     }
 
     count() {
@@ -558,6 +561,7 @@ export class EntityLookup extends Lookup {
     constructor(version: string, parent: MainLookup) {
         super("Entities", version);
         this.parent = parent;
+        withPrototype(this);
     }
 
     count(): number {
@@ -864,6 +868,7 @@ export class FormatLookup extends Lookup {
     constructor(version: string, parent: MainLookup) {
         super("Formats", version);
         this.parent = parent;
+        withPrototype(this);
     }
 
     count() {
@@ -937,6 +942,7 @@ export class MainLookup {
         this.version = version;
         this.verbose = verbose;
         this.mods.push(this.basemod);
+        withPrototype(this);
     }
 
     async load(path = "resources/Versions.xml", mod = this.basemod): Promise<boolean> {
@@ -1038,9 +1044,7 @@ export class MainLookup {
 
     async getGfxData(node?: GfxNode): Promise<GfxData> {
         if (!node) {
-            return this.getGfxData(
-                this.stages.getGfx(this.stages.lookup({ name: "Basement" })[0])
-            );
+            node = this.stages.getGfx(this.stages.lookup({ name: "Basement" })[0]);
         }
 
         let baseGfx: GfxData | undefined;

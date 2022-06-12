@@ -7,27 +7,7 @@ import { createRoot } from 'react-dom/client';
 import _ from 'lodash';
 import { LookupProvider } from '../common/lookup';
 import LoadP from '../main/load-state';
-
-// `exposeInMainWorld` doesn't detect attributes and methods of a prototype
-function withPrototype(obj: Record<string, any>) {
-    //return _.assignIn(obj, obj);
-
-    const proto = Object.getPrototypeOf(obj);
-
-    const protoOnly = _.omitBy(proto, (v, key) => Object.hasOwn(obj, key));
-
-    for (const [key, value] of Object.entries(protoOnly)) {
-        if (typeof value === 'function') {
-            // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
-            obj[key] = (...args: any) => value.call(obj, ...args);
-        }
-        else {
-            obj[key] = value;
-        }
-    }
-
-    return obj;
-}
+import { withPrototype } from '../common/util';
 
 // --------- Expose APIs to the Renderer process. ---------
 contextBridge.exposeInMainWorld('fs', fs);

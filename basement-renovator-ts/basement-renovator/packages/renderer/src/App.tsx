@@ -6,6 +6,7 @@ import type { RoomFile } from 'packages/common/core';
 import { Stack } from '@mui/material';
 
 function App({ rooms }: { rooms?: RoomFile }) {
+    const lookups = window.resources();
     return (<Stack direction='row' style={{
         position: 'absolute',
         left: 10,
@@ -13,7 +14,7 @@ function App({ rooms }: { rooms?: RoomFile }) {
         top: 10,
         bottom: 10
     }}>
-        <Palette.Layout entities={window.resources().entities} />
+        <Palette.Layout entities={lookups.entities} />
         <RoomList.Layout rooms={rooms} style={{
             overflowY: 'scroll',
             minWidth: '200px'
