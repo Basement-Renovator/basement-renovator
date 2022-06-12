@@ -540,7 +540,7 @@ export class RoomShapeLookup extends Lookup {
 
                 return {
                     points: points.map(p => Object.assign(toPoint(p), wp)),
-                    normal: Object.assign(toPoint(normal!), wp),
+                    normal: Object.assign({ x: 0, y: 0 }, toPoint(normal!)),
                     doors: doors.map(d => ({ ...Object.assign(toPoint(d), wp), exists: true })),
                 };
             }),
