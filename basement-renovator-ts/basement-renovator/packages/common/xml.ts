@@ -51,7 +51,17 @@ export class Parser<T extends XmlParsed> {
 
         function cleanUpTags(obj: Record<string, any>) {
             for (const [ key, val ] of Object.entries(obj)) {
-                if (key === 'attrib') continue;
+                if (key === 'attrib') {
+                    for (const [ k, v ] of Object.entries(val as Record<string, any>)) {
+                        if (v === 'true') {
+                            val[k] = true;
+                        }
+                        else if (v === 'false') {
+                            val[k] = false;
+                        }
+                    }
+                    continue;
+                }
 
                 if (key === ':@') {
                     Object.assign(obj, val);
