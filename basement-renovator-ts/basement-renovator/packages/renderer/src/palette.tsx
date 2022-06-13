@@ -109,12 +109,17 @@ export const Layout: React.FC<{
     return (
         <Stack key="entity-palette">
             <TabPanel style={{
-                display: search !== "" ? "none": ""
+                display: search !== "" ? "none": "",
+                height: "96\%"
             }} {...rest}>{tabs}</TabPanel>
             <TabPanel style={{
-                display: search === "" ? "none": ""
+                display: search === "" ? "none": "",
+                height: "96\%"
             }} {...rest}>{searchTab}</TabPanel>
-            <TextField id="entity-palette-search" label="Search" onChange={searchInputHandler} value={search} />
+            <TextField style={{
+                height:"5\%",
+                marginTop: 4,
+            }} id="entity-palette-search" label="Search" onChange={searchInputHandler} value={search} fullWidth={true} variant="outlined" size="small" margin="dense" />
         </Stack>
     );
 };
