@@ -15,7 +15,7 @@ function App({ rooms }: { rooms?: RoomFile }) {
         bottom: 10
     }}>
         <Palette.Layout entities={lookups.entities} />
-        <RoomList.Layout rooms={rooms} style={{
+        <RoomList.Layout rooms={rooms} roomShapes={lookups.roomShapes} roomTypes={lookups.roomTypes} style={{
             overflowY: 'scroll',
             minWidth: '200px'
         }} />

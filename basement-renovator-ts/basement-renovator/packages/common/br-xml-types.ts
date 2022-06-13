@@ -1,3 +1,4 @@
+import { StringNullableChain } from "lodash";
 import { Choice } from "./util";
 
 export type BitfieldWidgetNode = {
@@ -193,12 +194,20 @@ export type MirrorShapeNode = {
     mirror: unknown;
 };
 
+export type WallDoorNode = PositionNode & {
+    door: unknown;
+};
+
+export type WallPointNode = PositionNode & {
+    point: unknown;
+};
+
+export type WallNormalNode = PositionNode & {
+    normal: unknown;
+};
+
 export type WallShapeNode = PositionNode & {
-    wall: Array<PositionNode & Choice<{
-        point: unknown;
-        normal: unknown;
-        door: unknown;
-    }>>;
+    wall: Array<WallPointNode | WallDoorNode | WallNormalNode>;
 };
 
 export type RoomShapeNode = {
@@ -207,6 +216,7 @@ export type RoomShapeNode = {
         Name: string;
         Width: number;
         Height: number;
+        Icon: string;
     };
     shape: Array<BaseShapeNode | MirrorShapeNode | WallShapeNode>;
 };

@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { Room } from './core';
 import { generateXMLFromEntities2 } from './entitiesgenerator';
 import { printf, printSectionBreak, withPrototype } from './util';
-import { BaseShapeNode, EntityNode, EntityXml, GfxNode, GroupNode, MirrorShapeNode, PositionNode, RoomShapeNode, RoomShapeXml, RoomTypeNode, RoomTypeXml, StageNode, StageXml, TabNode, TagNode, VersionXML, WallShapeNode } from './br-xml-types';
+import { BaseShapeNode, EntityNode, EntityXml, GfxNode, GroupNode, MirrorShapeNode, PositionNode, RoomShapeNode, RoomShapeXml, RoomTypeNode, RoomTypeXml, StageNode, StageXml, TabNode, TagNode, VersionXML, WallDoorNode, WallNormalNode, WallPointNode, WallShapeNode } from './br-xml-types';
 import { Entity, EntityGroup, Mod, EntityTab, EntityTag, Version, RoomShape } from './config/br-config';
 import { FormatEntry, FormatNode, FormatXml, parseFormatXml, tryParseBuffer } from './format';
 import { ImageManager } from './resourcemanager';
@@ -443,7 +443,7 @@ export class RoomShapeLookup extends Lookup {
         return this.xml?.length ?? 0;
     }
 
-    loadXML(root: RoomShapeXml) {
+    loadXML(root: RoomShapeXml, mod: Mod) {
         const shapeList = root.data;
         if (!shapeList || shapeList.length === 0) return;
 
@@ -463,6 +463,8 @@ export class RoomShapeLookup extends Lookup {
             if (this.parent.verbose) {
                 printf("Loading room shape:", shape.attrib);
             }
+
+            sanitizePath(shape, "Icon", mod.imageManager)
 
             const replacement = this.xml?.find(s => s.attrib.Name === name);
 
@@ -534,9 +536,9 @@ export class RoomShapeLookup extends Lookup {
             walls: walls.map(w => {
                 const wp = toPoint(w);
 
-                const points = w.wall.filter((n): n is PositionNode & { point: unknown; } => "point" in n);
-                const normal = w.wall.find((n): n is PositionNode & { normal: unknown; } => "normal" in n);
-                const doors = w.wall.filter((n): n is PositionNode & { door: unknown; } => "door" in n);
+                const points = w.wall.filter((n): n is WallPointNode => "point" in n);
+                const normal = w.wall.find((n): n is WallNormalNode => "normal" in n);
+                const doors = w.wall.filter((n): n is WallDoorNode => "door" in n);
 
                 return {
                     points: points.map(p => Object.assign(toPoint(p), wp)),
