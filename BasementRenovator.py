@@ -1254,6 +1254,9 @@ class Entity(QGraphicsItem):
         return F
 
     def setRockFrame(self, seed):
+        if settings.value("RandomizeRocks") == "0":
+            seed = 0
+
         random.seed(seed)
         self.entity.rockFrame = random.randint(0, 2)
         self.entity.placeVisual = (0, 3 / 26)
@@ -3853,11 +3856,11 @@ class ReplaceDialog(QDialog):
             layout = QFormLayout()
 
             self.type = QSpinBox()
-            self.type.setRange(1, 2**31 - 1)
+            self.type.setRange(1, 2 ** 31 - 1)
             self.variant = QSpinBox()
-            self.variant.setRange(-1, 2**31 - 1)
+            self.variant.setRange(-1, 2 ** 31 - 1)
             self.subtype = QSpinBox()
-            self.subtype.setRange(-1, 2**8 - 1)
+            self.subtype.setRange(-1, 2 ** 8 - 1)
 
             layout.addRow("&Type:", self.type)
             layout.addRow("&Variant:", self.variant)
@@ -4566,7 +4569,7 @@ class StatisticsDialog(QDialog):
         filterBoxLayout.addWidget(appearCountThresholdLabel)
 
         self.appearCountThresholdSpinner = QSpinBox()
-        self.appearCountThresholdSpinner.setRange(1, (2**31) - 1)
+        self.appearCountThresholdSpinner.setRange(1, (2 ** 31) - 1)
         self.appearCountThresholdSpinner.valueChanged.connect(self.refresh)
         filterBoxLayout.addWidget(self.appearCountThresholdSpinner)
 
@@ -5004,6 +5007,7 @@ class MainWindow(QMainWindow):
         )
 
         v = mb.addMenu("View")
+
         self.wa = v.addAction(
             "Show Grid",
             lambda: self.toggleSetting("GridEnabled", onDefault=True),
@@ -5011,22 +5015,26 @@ class MainWindow(QMainWindow):
         )
         self.wa.setCheckable(True)
         self.wa.setChecked(settings.value("GridEnabled") != "0")
+
         self.wg = v.addAction(
             "Show Out of Bounds Grid", lambda: self.toggleSetting("BoundsGridEnabled")
         )
         self.wg.setCheckable(True)
         self.wg.setChecked(settings.value("BoundsGridEnabled") == "1")
+
         self.wh = v.addAction(
             "Show Grid Indexes", lambda: self.toggleSetting("ShowGridIndex")
         )
         self.wh.setCheckable(True)
         self.wh.setChecked(settings.value("ShowGridIndex") == "1")
+
         self.wi = v.addAction(
             "Show Grid Coordinates", lambda: self.toggleSetting("ShowCoordinates")
         )
         self.wi.setCheckable(True)
         self.wi.setChecked(settings.value("ShowCoordinates") == "1")
         v.addSeparator()
+
         self.we = v.addAction(
             "Show Room Info",
             lambda: self.toggleSetting("StatusEnabled", onDefault=True),
@@ -5034,12 +5042,14 @@ class MainWindow(QMainWindow):
         )
         self.we.setCheckable(True)
         self.we.setChecked(settings.value("StatusEnabled") != "0")
+
         self.wd = v.addAction(
             "Use Bitfont Counter",
             lambda: self.toggleSetting("BitfontEnabled", onDefault=True),
         )
         self.wd.setCheckable(True)
         self.wd.setChecked(settings.value("BitfontEnabled") != "0")
+
         self.hideDuplicateEntities = v.addAction(
             "Hide Duplicate Entities",
             lambda: (
@@ -5051,6 +5061,14 @@ class MainWindow(QMainWindow):
         self.hideDuplicateEntities.setChecked(
             settings.value("HideDuplicateEntities") == "1"
         )
+
+        self.randomizeRocks = v.addAction(
+            "Randomize Rock Appearance",
+            lambda: self.toggleSetting("RandomizeRocks", onDefault=True),
+        )
+        self.randomizeRocks.setCheckable(True)
+        self.randomizeRocks.setChecked(settings.value("RandomizeRocks") != "0")
+
         v.addSeparator()
         self.wb = v.addAction(
             "Hide Entity Painter", self.showPainter, QKeySequence("Ctrl+Alt+P")
@@ -6145,7 +6163,7 @@ class MainWindow(QMainWindow):
 
                 # Set the selected rooms to have descending ids from max
                 # this should avoid any id conflicts
-                baseId = (2**31) - 1
+                baseId = (2 ** 31) - 1
                 newRooms = list(
                     Room(
                         f"{room.name} [Real ID: {room.info.variant}]",
