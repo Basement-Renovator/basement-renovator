@@ -24,7 +24,7 @@
       whichever is loaded last will have priority
  -->
 <data>
-  <room Name="Grave Room" Type="1" StageName="Special Rooms" ID="(2,9]">
+  <room Name="Grave Room" Type="1" StageName="Special Rooms" ID="[3,9]">
     <Gfx StageGfx="Dark Room" />
   </room>
   <room Name="Greed Mode Descent" Type="23" Icon="UI/roomicons/greeddescent.png" ShowInMenu="1" />
