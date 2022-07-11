@@ -46,8 +46,8 @@ jobs:
       - name: Install xmllint (which the "lint.sh" script uses)
         run: sudo apt-get update && sudo apt-get install libxml2-utils -y
 
-      - name: First, black the repository and commit, if needed
-        run: bash black.sh "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+      #- name: First, black the repository and commit, if needed
+      #  run: bash black.sh "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
 
       - name: Lint
         run: bash lint.sh
