@@ -176,6 +176,10 @@ export async function commonToXML(destPath: string, rooms: Room[], file?: RoomFi
     });
 }
 
+async function commonToSTB(destPath: string, rooms: Room[], file?: RoomFile, isPreview=false) {
+    // TODO
+}
+
 function simpleToCommon(rooms: SimpleRooms): RoomFile {
     const ret: Room[] = [];
 
@@ -341,17 +345,17 @@ export async function xmlToCommon(path: string, destPath?: string): Promise<Room
     });
 }
 
-
 export async function stbToXML(path: string, destPath?: string): Promise<void> {
     destPath ??= fileutil.with_suffix(path, '.xml');
     const roomfile = await stbToCommon(path);
     await commonToXML(destPath, roomfile.rooms, roomfile);
 }
 
-//function xmlToSTBAB(path: string, destPath?: string) {
-//    destPath ??= fileutil.with_suffix(path, '.stb');
-//    return commonToSTBAB(destPath, xmlToCommon(path))
-//}
+export async function xmlToSTB(path: string, destPath?: string) {
+    destPath ??= fileutil.with_suffix(path, '.stb');
+    const roomfile = await xmlToCommon(path);
+    await commonToSTB(destPath, roomfile.rooms, roomfile);
+}
 
 /**
  * Convert a txt file to the common format

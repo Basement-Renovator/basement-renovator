@@ -1,0 +1,1 @@
+export { xmlToSTB } from "./roomconvert";
