@@ -1,11 +1,8 @@
 {
-    "version": "0.1",
-    "language": "en",
-    "dictionaries": [
-        "en_US",
-        "companies",
-        "softwareTerms",
-        "html"
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+    "version": "0.2",
+    "files": [
+        "**"
     ],
     "words": [
         "allusersprofile",
@@ -32,6 +29,7 @@
         "noga",
         "noob",
         "noobs",
+        "noout",
         "pngs",
         "popen",
         "printf",
