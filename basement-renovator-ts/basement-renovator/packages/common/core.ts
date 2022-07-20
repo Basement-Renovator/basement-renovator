@@ -167,11 +167,11 @@ export class Room {
 
     *spawns(): IterableIterator<[ Entity[], number, number ]> {
         for (let i = 0;
-            i >= this.info.width * this.info.height ||
-            i >= this.gridSpawns.length;
+            i <= this.info.width * this.info.height ||
+            i <= this.gridSpawns.length;
         i++) {
             const stack = this.gridSpawns[i];
-            if (stack) {
+            if (stack && stack.length > 0) {
                 const x = (i % this.info.width) | 0;
                 const y = (i / this.info.width) | 0;
                 yield [ stack, x, y ];
