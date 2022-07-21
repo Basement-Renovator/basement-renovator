@@ -9,7 +9,7 @@ import { generateXMLFromEntities2 } from './entitiesgenerator';
 import { printf, printSectionBreak, withPrototype } from './util';
 import { BaseShapeNode, EntityNode, EntityXml, GfxNode, GroupNode, MirrorShapeNode, PositionNode, RoomShapeNode, RoomShapeXml, RoomTypeNode, RoomTypeXml, StageNode, StageXml, TabNode, TagNode, VersionXML, WallDoorNode, WallNormalNode, WallPointNode, WallShapeNode } from './br-xml-types';
 import { Entity, EntityGroup, Mod, EntityTab, EntityTag, Version, RoomShape } from './config/br-config';
-import { FormatEntry, FormatNode, FormatXml, parseFormatXml, tryParseBuffer } from './format';
+import { FormatEntry, FormatNode, FormatXml, parseFormatXml, tryParseBuffer, trySerializeBuffer } from './format';
 import { ImageManager } from './resourcemanager';
 
 type File = {
@@ -910,6 +910,10 @@ export class FormatLookup extends Lookup {
 
     tryParse<T>(name: string, buffer: Buffer): T | undefined {
         return tryParseBuffer<T>(this.formats[name], buffer);
+    }
+
+    trySerialize<T>(name: string, value: T): Buffer | undefined {
+        return trySerializeBuffer<T>(this.formats[name], value);
     }
 }
 

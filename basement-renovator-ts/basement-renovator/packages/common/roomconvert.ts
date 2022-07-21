@@ -57,14 +57,18 @@ type StbXml = {
     };
 };
 
+type SimpleEntities = Array<StbEntity["attrib"] & {
+    xmlProps: Record<string, unknown>;
+}>;
+
+type SimpleSpawns = Array<StbSpawn["attrib"] & {
+    entity: SimpleEntities
+}>;
+
 type SimpleRooms = {
     room: Array<StbRoom["attrib"] & {
         door: StbDoor["attrib"][];
-        spawn: Array<StbSpawn["attrib"] & {
-            entity: Array<StbEntity["attrib"] & {
-                xmlProps: Record<string, unknown>;
-            }>;
-        }>;
+        spawn: SimpleSpawns;
         xmlProps: Record<string, unknown>;
     }>;
     xmlProps: Record<string, unknown>;
@@ -176,8 +180,18 @@ export async function commonToXML(destPath: string, rooms: Room[], file?: RoomFi
     });
 }
 
-async function commonToSTB(destPath: string, rooms: Room[], file?: RoomFile, isPreview=false) {
-    // TODO
+// TODO: Make this actually work when trySerializeBuffer gets fixed :)
+async function commonToSTB(destPath: string, format: string, rooms: Room[], file?: RoomFile, isPreview=false) {
+    const simple = commonToSimple(rooms, file)
+    const buffer = LookupProvider.Main.formats.trySerialize<SimpleRooms>(format, simple);
+    if (!buffer) {
+        throw new Error(`Failed to serialize ${destPath} with format ${format}`);
+    }
+
+    await fileutil.write(destPath, buffer, {
+        encoding: 'binary',
+        truncate: true
+    })
 }
 
 function simpleToCommon(rooms: SimpleRooms): RoomFile {
@@ -269,6 +283,52 @@ function simpleToCommon(rooms: SimpleRooms): RoomFile {
     return new RoomFile(ret, rooms.xmlProps);
 }
 
+function commonToSimple(rooms: Room[], file?: RoomFile): SimpleRooms {
+    const simpleRooms = {
+        stbVersion: "STB1",
+        room: rooms.map(room => {
+            const spawns: SimpleSpawns = [];
+            for (const [stack, x, y] of room.spawns()) {
+                spawns.push({
+                    x: x - 1,
+                    y: y - 1,
+                    entity: stack.map(entity => {
+                        return {
+                            type: entity.Type!,
+                            variant: entity.Variant!,
+                            subtype: entity.Subtype!,
+                            weight: entity.weight,
+                            xmlProps: entity.xmlProps
+                        }
+                    }) as SimpleEntities,
+                })
+            }
+
+            return {
+                type: room.info.type,
+                variant: room.info.variant,
+                subtype: room.info.subtype,
+                difficulty: room.difficulty,
+                name: room.name,
+                weight: room.weight,
+                shape: room.info.shape,
+                width: room.info.width,
+                height: room.info.height,
+                xmlProps: room.xmlProps,
+
+                numDoors: room.info.doors.length,
+                numSpawns: spawns.length,
+
+                door: room.info.doors.map(door => Object.assign({}, door)),
+                spawn: spawns
+            }
+        }),
+        xmlProps: file?.xmlProps
+    }
+
+    return simpleRooms as SimpleRooms;
+}
+
 async function stbToCommon(path: string): Promise<RoomFile> {
     const buffer = await fileutil.readBinary(path);
     const contents = buffer.toString();
@@ -354,7 +414,7 @@ export async function stbToXML(path: string, destPath?: string): Promise<void> {
 export async function xmlToSTB(path: string, destPath?: string) {
     destPath ??= fileutil.with_suffix(path, '.stb');
     const roomfile = await xmlToCommon(path);
-    await commonToSTB(destPath, roomfile.rooms, roomfile);
+    await commonToSTB(destPath, "stb1", roomfile.rooms, roomfile);
 }
 
 /**
