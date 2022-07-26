@@ -68,9 +68,8 @@ The latest version of Basement Renovator is available in the [releases section](
 
 ### F.A.Q.
 
-*How do I use the 'InstaPreview' tool?*
-- Open `settings.ini` in the BR folder in a text editor. Add a line that says: `InstallFolder=(...)`. Where (...) would be the location of the install folder
- (same as the 'ModsFolder' minus the '/mods' end).
+*The 'InstaPreview' tool isn't working for me; what can I do?*
+- Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
  
 *How do I edit Repentance rooms?*
 
