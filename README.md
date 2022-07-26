@@ -68,6 +68,10 @@ The latest version of Basement Renovator is available in the [releases section](
 
 ### F.A.Q.
 
+*How do I use the 'InstaPreview' tool?*
+- Open `settings.ini` in the BR folder in a text editor. Add a line that says: `InstallFolder=(...)`. Where (...) would be the location of the install folder
+ (same as the 'ModsFolder' minus the '/mods' end).
+ 
 *How do I edit Repentance rooms?*
 
 - Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, and `Antibirth`
