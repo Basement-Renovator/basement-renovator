@@ -68,6 +68,9 @@ The latest version of Basement Renovator is available in the [releases section](
 
 ### F.A.Q.
 
+*The 'InstaPreview' tool isn't working for me; what can I do?*
+- Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
+ 
 *How do I edit Repentance rooms?*
 
 - Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, and `Antibirth`
