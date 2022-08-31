@@ -190,7 +190,7 @@ end
 local function tryGetPlayerType(name, tainted)
   if tainted == nil then
       local untainted = string.gsub(name, "([-_][bB])$", '')
-      if untainted ~= tainted then
+      if untainted ~= name then
           return tryGetPlayerType(untainted, true)
       end
   end
