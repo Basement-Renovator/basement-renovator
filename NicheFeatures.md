@@ -4,6 +4,9 @@ Some of BR's features are for power users, or aren't very discoverable in the UI
 ### Mirroring Rooms
 BR's Duplicate Room feature lets you create exact copies of existing rooms without much effort. However, it's also possible to create an exact mirrored duplicate! This is a pretty common technique for quickly padding out room counts when creating a lot of them, so BR attempts to make this a bit easier. Simply hold Alt and Duplicate will become Mirror (creates a horizontally mirrored duplicate) or Alt+Shift and it will become Mirror Y. (creates a vertically mirrored duplicate) This accounts for directional entities like Grimaces, Wall Huggers, etc. and mirrors them as needed. You can support this for your own entities via the MirrorX and MirrorY attributes. See BR's Entities xml for examples.
 
+### Play as Tainted Characters
+To play as a tainted character, in the Test Configuration Dialog enter the character's name either as 'Tainted XXX' or 'XXX-b'. Incidentally, to play as forgotten, use 'the_forgotten' as the name.
+
 ### Entity Palette Bonuses
 
 #### Replace Selected Entities

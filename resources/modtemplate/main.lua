@@ -182,15 +182,23 @@ local function GotoTestRoomIndex()
     Isaac.ExecuteCommand(gotoStr)
 end
 
-local function pt(name)
-    local char = Isaac.GetPlayerTypeByName(name)
-    return char >= 0 and char or nil
+local function pt(name, tainted)
+  local char = Isaac.GetPlayerTypeByName(name, tainted)
+  return char >= 0 and char or nil
 end
 
-local function tryGetPlayerType(name)
-    return pt(name)
-        or pt(string.gsub(string.upper(name), ".*", "#%0_NAME"))
-        or pt(string.gsub(name, "^(.)", string.upper))
+local function tryGetPlayerType(name, tainted)
+  if tainted == nil then
+      local untainted = string.gsub(name, "^([Tt]ainted ?)", '')
+      untainted = string.gsub(untainted, "([-_][bB])$", '')
+      if untainted ~= name then
+        return tryGetPlayerType(untainted, true)
+      end
+  end
+
+  return pt(name, tainted)
+      or pt(string.gsub(string.upper(name), ".*", "#%0_NAME"), tainted)
+      or pt(string.gsub(name, "^(.)", string.upper), tainted)
 end
 
 local maxFloorRetries = 150
