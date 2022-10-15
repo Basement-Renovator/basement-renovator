@@ -630,7 +630,7 @@
     <entity BaseHP="20" Tags="Champion" ID="88" Image="Entities/88.0.0 - Walking Boil.png" Name="Walking Boil" Subtype="0" Variant="0" />
     <entity BaseHP="20" Tags="Champion" ID="88" Image="Entities/88.1.0 - Walking Gut.png" Name="Walking Gut" Subtype="0" Variant="1" />
     <entity Name="Walking Sack" />
-	<entity BaseHP="20" ID="89" Image="Entities/89.0.0 - Buttlicker.png" Name="Buttlicker" Subtype="0" Variant="0" />
+    <entity BaseHP="20" ID="89" Image="Entities/89.0.0 - Buttlicker.png" Name="Buttlicker" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Catacombs Obstacles">
@@ -772,7 +772,7 @@
     <entity Name="Flesh Mobile Host" />
     <entity Name="Embryo" />
     <entity Name="Grub" />
-	<entity BaseHP="25" Tags="Champion" ID="55" Image="Entities/55.0.0 - Leech.png" Name="Leech" Subtype="0" Variant="0" />
+    <entity BaseHP="25" Tags="Champion" ID="55" Image="Entities/55.0.0 - Leech.png" Name="Leech" Subtype="0" Variant="0" />
     <entity BaseHP="38" ID="216" Image="Entities/216.0.0 - Swinger.png" Name="Swinger" Subtype="0" Variant="0" />
   </group>
 
