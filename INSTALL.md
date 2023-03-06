@@ -1,10 +1,10 @@
-# Running from Release
+# Installing Basement Renovator
+
+## Running from Release
 
 The latest official release can be found in the [releases tab](https://github.com/Tempus/Basement-Renovator/releases). Download the latest "BasementRenovator.zip" file, unzip it, and then double click on the Basement Renovator executable program.
 
-<br>
-
-# Running from Source
+## Running from Source
 
 If the latest release is not working for you or if you want to Basement Renovator from source, then follow the instructions below.
 

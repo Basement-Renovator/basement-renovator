@@ -173,7 +173,6 @@ def findModsPath(installPath=None):
 
 
 def linuxPathSensitivityTraining(path):
-
     path = path.replace("\\", "/")
 
     directory, file = os.path.split(os.path.normpath(path))

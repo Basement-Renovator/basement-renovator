@@ -25,10 +25,8 @@ categories = [
     ("familiar", "Familiars"),
 ]
 for cat in categories:
-
     r = iroot.findall(cat[0])
     for i in r:
-
         e = ET.SubElement(entityXML, "entity")
 
         e.set("Name", i.get("name"))
@@ -61,7 +59,6 @@ for cat in categories:
 # Trinkets
 r = iroot.findall("trinket")
 for i in r:
-
     e = ET.SubElement(entityXML, "entity")
 
     e.set("Name", i.get("name"))

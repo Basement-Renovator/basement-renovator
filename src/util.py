@@ -27,7 +27,6 @@ def bitSet(bits, sourceBits, startBit, count):
 
 
 def linuxPathSensitivityTraining(path):
-
     path = path.replace("\\", "/")
 
     directory, file = os.path.split(os.path.normpath(path))

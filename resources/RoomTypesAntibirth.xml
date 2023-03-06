@@ -34,8 +34,8 @@
   </room>
   <room Name="Teleporter Exit" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/05x_mausoleumb">
-        <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
-        <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
+      <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
+      <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
     </Gfx>
   </room>
   <room Name="Alt.path Descent" Type="26" Icon="UI/roomicons/altpathdescent.png" ShowInMenu="1">
