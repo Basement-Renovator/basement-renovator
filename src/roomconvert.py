@@ -367,7 +367,6 @@ def stbABToCommon(path):
     ret = []
 
     for r in range(rooms):
-
         # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, rsubtype, difficulty, nameLen = roomData
@@ -457,7 +456,6 @@ def stbAntiToCommon(path):
     ret = []
 
     for r in range(rooms):
-
         # Room Type, Room Variant, Subtype, Difficulty, Length of Room Name String
         roomData = roomBegPacker.unpack_from(stb, off)
         rtype, rvariant, rsubtype, difficulty, nameLen = roomData
@@ -546,7 +544,6 @@ def stbRBToCommon(path):
     ret = []
 
     for r in range(rooms):
-
         # Room Type, Room Variant, Difficulty, Length of Room Name String
         # No subtype for rebirth
         roomData = roomBegPacker.unpack_from(stb, off)
@@ -631,7 +628,6 @@ def xmlToCommon(path, destPath=None):
     ret = []
 
     for roomNode in rooms:
-
         roomXmlProps = dict(roomNode.attrib)
 
         rtype = int(roomNode.get("type") or "1")

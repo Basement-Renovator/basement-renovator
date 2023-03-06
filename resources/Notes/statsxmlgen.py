@@ -129,7 +129,6 @@ def openMap():
         ret = []
 
         for room in range(rooms):
-
             roomData = struct.unpack_from("<IIIBH", stb, off)
             off += 0xF
 
@@ -157,7 +156,6 @@ def openMap():
                     off += 0xA
 
     for eTmp in entities:
-
         e = {}
         e["ID"] = eTmp[0]
         e["Variant"] = eTmp[1]
@@ -171,7 +169,6 @@ def openMap():
         )
 
         if tmp is None:
-
             di = getEntity(e["ID"], e["Subtype"], e["Variant"])
 
             e.update(di)

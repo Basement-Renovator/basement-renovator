@@ -8,7 +8,6 @@ entityXML = tree.getroot()
 eList = entityXML.findall("entity")
 
 for e in eList:
-
     e.set("Group", "All")
     e.set("Kind", "Misc")
 
