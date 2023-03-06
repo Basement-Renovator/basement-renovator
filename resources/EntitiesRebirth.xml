@@ -592,7 +592,6 @@
     <entity BaseHP="10" Tags="Champion" ID="31" Image="Entities/31.0.0 - Spitty.png" Name="Spitty" Subtype="0" Variant="0" />
     <entity BaseHP="18" ID="243" Image="Entities/243.0.0 - Conjoined Spitty.png" Name="Conjoined Spitty" Subtype="0" Variant="0" />
     <entity Name="Embryo" />
-    <entity BaseHP="20" ID="89" Image="Entities/89.0.0 - Buttlicker.png" Name="Buttlicker" Subtype="0" Variant="0" />
     <entity BaseHP="10" ID="239" Image="Entities/239.0.0 - Grub.png" Name="Grub" Subtype="0" Variant="0" />
     <entity Name="Round Worm" />
     <entity Name="Night Crawler" />
@@ -631,6 +630,7 @@
     <entity BaseHP="20" Tags="Champion" ID="88" Image="Entities/88.0.0 - Walking Boil.png" Name="Walking Boil" Subtype="0" Variant="0" />
     <entity BaseHP="20" Tags="Champion" ID="88" Image="Entities/88.1.0 - Walking Gut.png" Name="Walking Gut" Subtype="0" Variant="1" />
     <entity Name="Walking Sack" />
+    <entity BaseHP="20" ID="89" Image="Entities/89.0.0 - Buttlicker.png" Name="Buttlicker" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Catacombs Obstacles">
@@ -772,6 +772,7 @@
     <entity Name="Flesh Mobile Host" />
     <entity Name="Embryo" />
     <entity Name="Grub" />
+    <entity BaseHP="25" Tags="Champion" ID="55" Image="Entities/55.0.0 - Leech.png" Name="Leech" Subtype="0" Variant="0" />
     <entity BaseHP="38" ID="216" Image="Entities/216.0.0 - Swinger.png" Name="Swinger" Subtype="0" Variant="0" />
   </group>
 
@@ -792,7 +793,6 @@
     <entity Name="Spider" />
     <entity Name="Big Spider" />
     <entity Name="Blind Creep" />
-    <entity BaseHP="25" Tags="Champion" ID="55" Image="Entities/55.0.0 - Leech.png" Name="Leech" Subtype="0" Variant="0" />
     <entity BaseHP="20" Tags="Champion" ID="60" Image="Entities/60.1.0 - Bloodshot Eye.png" Name="Bloodshot Eye" Subtype="0" Variant="1" />
     <entity Name="Mobile Host" />
   </group>
