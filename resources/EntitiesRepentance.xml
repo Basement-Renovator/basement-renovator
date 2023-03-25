@@ -662,6 +662,7 @@
   </group>
 
   <group Name="Ashpit Enemies">
+    <entity Name="Death's Head" />
     <entity BaseHP="20" Tags="Champion" ID="889" Image="Entities/889.0.0 - Clickety Clack.png" Name="Clickety Clack" Variant="0" Subtype="0" />
     <entity BaseHP="40" Tags="Champion" ID="87" Image="Entities/87.1.0 - Crackle.png" Name="Crackle" Variant="1" Subtype="0" />
     <entity BaseHP="26" Tags="Champion" ID="844" Image="Entities/844.0.0 - Bombgagger.png" Name="Bombgagger" Variant="1" Subtype="0" />
@@ -776,6 +777,8 @@
   </group>
 
   <group Label="Mausoleum Enemies">
+    <entity Name="Psychic Horf" />
+    <entity Name="Psychic Maw" />
     <entity BaseHP="20" Tags="Champion" ID="41" Image="Entities/41.2.0 - Loose Knight.png" Name="Loose Knight" Variant="2" Subtype="0" />
     <entity BaseHP="20" ID="41" Image="Entities/41.3.0 - Brainless Knight.png" Name="Brainless Knight" Variant="3" Subtype="0" />
     <entity Name="Pon" />
@@ -936,6 +939,7 @@
     <entity Name="Whipper" />
     <entity Name="Snapper" />
     <entity Name="Flagellant" />
+    <entity Name="Wrinkly Baby" />
     <entity BaseHP="80" ID="888" Image="Entities/888.0.0 - Shady.png" Name="Shady" Variant="0" Subtype="0" />
   </group>
 
@@ -944,6 +948,7 @@
     <entity BaseHP="40" Tags="Champion" ID="22" Image="Entities/22.2.0 - Holy Mulligan.png" Name="Holy Mulligan" Variant="2" Subtype="0" />
     <entity BaseHP="16" Tags="Champion" ID="38" Image="Entities/38.1.1 - Angelic Baby (small).png" Name="Angelic Baby (small)" Variant="1" Subtype="1" />
     <entity BaseHP="20" Tags="Champion" ID="60" Image="Entities/60.2.0 - Holy Eye.png" Name="Holy Eye" Variant="2" Subtype="0" />
+    <entity Name="Polty" />
     <entity Name="Candler" />
     <entity Name="Bishop" />
   </group>
