@@ -29,6 +29,12 @@
       <Entity ID="3009" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_floodedcaves.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_floodedcaves.png" />
+
+      <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_downpour.png" />
+      <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_downpour.png" />
+      <Entity ID="11" Variant="0" SubType="0" Image="Entities/11.0.0 - Gusher_downpour.png" />
+      <Entity ID="11" Variant="1" SubType="0" Image="Entities/11.1.0 - Pacer_downpour.png" />
+      <Entity ID="15" Variant="0" SubType="0" Image="Entities/15.0.0 - Clotty_downpour.png" />
     </Gfx>
   </stage>
   <stage Name="Depths">
@@ -107,6 +113,12 @@
       <Entity ID="1000" Image="Backgrounds/rocks_downpour.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_downpour.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_downpour.png" />
+
+      <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_downpour.png" />
+      <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_downpour.png" />
+      <Entity ID="11" Variant="0" SubType="0" Image="Entities/11.0.0 - Gusher_downpour.png" />
+      <Entity ID="11" Variant="1" SubType="0" Image="Entities/11.1.0 - Pacer_downpour.png" />
+      <Entity ID="15" Variant="0" SubType="0" Image="Entities/15.0.0 - Clotty_downpour.png" />
     </Gfx>
   </stage>
   <stage Name="Dross" BaseGamePath="28.dross" Stage="1" StageType="5" Pattern="dross">
@@ -116,6 +128,25 @@
       <Entity ID="1000" Image="Backgrounds/rocks_dross.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_dross.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_dross.png" />
+
+      <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_dross.png" />
+      <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_dross.png" />
+      <Entity ID="11" Variant="0" SubType="0" Image="Entities/11.0.0 - Gusher_dross.png" />
+      <Entity ID="11" Variant="1" SubType="0" Image="Entities/11.1.0 - Pacer_dross.png" />
+      <Entity ID="244" Variant="1" SubType="0" Image="Entities/244.1.0 - Tube Worm_dross.png" />
+      <Entity ID="806" Variant="0" SubType="0" Image="Entities/806.0.0 - Bubbles_dross.png" />
+      <Entity ID="807" Variant="0" SubType="0" Image="Entities/807.0.0 - Wraith_dross.png" />
+      <Entity ID="810" Variant="0" SubType="0" Image="Entities/810.0.0 - Small Leech_dross.png" />
+      <Entity ID="811" Variant="0" SubType="0" Image="Entities/811.0.0 - Deep Gaper (random)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="1" Image="Entities/811.0.1 - Deep Gaper (subtype 1)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="2" Image="Entities/811.0.2 - Deep Gaper (subtype 2)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="3" Image="Entities/811.0.3 - Deep Gaper (subtype 3)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="4" Image="Entities/811.0.4 - Deep Gaper (subtype 4)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="5" Image="Entities/811.0.5 - Deep Gaper (subtype 5)_dross.png" />
+      <Entity ID="811" Variant="0" SubType="6" Image="Entities/811.0.6 - Deep Gaper (subtype 6)_dross.png" />
+      <Entity ID="812" Variant="0" SubType="0" Image="Entities/812.0.0 - Sub Horf_dross.png" />
+      <Entity ID="813" Variant="0" SubType="0" Image="Entities/813.0.0 - Blurb_dross.png" />
+      <Entity ID="817" Variant="0" SubType="0" Image="Entities/817.0.0 - Prey_dross.png" />
     </Gfx>
   </stage>
   <stage Name="Mines" BaseGamePath="29.mines" Stage="3" StageType="4" Pattern="mines">
@@ -136,6 +167,11 @@
       <Entity ID="1009" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_mines.png" />
+
+      <Entity ID="25" Variant="3" SubType="0" Image="Entities/25.3.0 - Dragon Fly_ashpit.png" />
+      <Entity ID="25" Variant="3" SubType="1" Image="Entities/25.3.1 - Dragon Fly X_ashpit.png" />
+      <Entity ID="25" Variant="3" SubType="100" Image="Entities/25.3.100 - Dragon Fly (random)_ashpit.png" />
+      <Entity ID="821" Variant="0" SubType="0" Image="Entities/821.0.0 - Blaster_ashpit.png" />
     </Gfx>
   </stage>
   <stage Name="Mausoleum" BaseGamePath="31.mausoleum" Stage="5" StageType="4" Pattern="mausoleum">
@@ -145,6 +181,8 @@
       <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_mausoleum.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mausoleum.png" />
+
+      <Entity ID="227" Variant="0" SubType="0" Image="Entities/227.0.0 - Bony_mausoleum.png" />
     </Gfx>
   </stage>
   <stage Name="Gehenna" BaseGamePath="32.gehenna" Stage="5" StageType="5" Pattern="gehenna">
@@ -154,6 +192,11 @@
       <Entity ID="1000" Image="Backgrounds/rocks_gehenna.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_gehenna.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_gehenna.png" />
+
+      <Entity ID="203" Variant="0" SubType="0" Image="Entities/203.0.0 - Brimstone Head_gehenna.png" />
+      <Entity ID="203" Variant="0" SubType="1" Image="Entities/203.0.1 - Brimstone Head_gehenna.png" />
+      <Entity ID="203" Variant="0" SubType="2" Image="Entities/203.0.2 - Brimstone Head_gehenna.png" />
+      <Entity ID="203" Variant="0" SubType="3" Image="Entities/203.0.3 - Brimstone Head_gehenna.png" />
     </Gfx>
   </stage>
   <stage Name="Corpse" BaseGamePath="33.corpse" Stage="7" StageType="4" Pattern="corpse">
