@@ -1382,6 +1382,13 @@ class Entity(QGraphicsItem):
             return None
 
         entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
+
+        if self.entity.config.hasBitfields:
+            if self.entity.config.hasBitfieldKey("Variant"):
+                entID = f"{self.entity.Type}.0.0"
+            elif self.entity.config.hasBitfieldKey("Subtype"):
+                entID = f"{self.entity.Type}.{self.entity.Variant}.0"
+
         return gfxData["Entities"].get(entID)
 
     def getCurrentImg(self):
