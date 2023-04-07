@@ -809,6 +809,28 @@ class RoomEditorWidget(QGraphicsView):
                 int(Qt.AlignRight | Qt.AlignBottom),
                 f"Base HP : {e.entity.config.baseHP}",
             )
+            textY += 16
+
+            if e.entity.config.stageHP is not None and e.entity.config.stageHP != "0":
+                painter.drawText(
+                    r.right() - 34 - 200,
+                    textY,
+                    200,
+                    12,
+                    int(Qt.AlignRight | Qt.AlignBottom),
+                    f"Stage HP : {e.entity.config.stageHP}",
+                )
+                textY += 16
+
+            if e.entity.config.armor is not None and e.entity.config.armor != "0":
+                painter.drawText(
+                    r.right() - 34 - 200,
+                    textY,
+                    200,
+                    12,
+                    int(Qt.AlignRight | Qt.AlignBottom),
+                    f"Armor : {e.entity.config.armor}",
+                )
 
         elif len(selectedEntities) > 1:
             e = selectedEntities[0]

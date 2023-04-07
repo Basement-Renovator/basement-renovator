@@ -91,11 +91,11 @@
   </group>
 
   <group Name="Basement Enemies">
-    <entity Image="Entities/305.0.0 - Ministro.png" BaseHP="9" Tags="Champion" ID="305" Name="Ministro" Variant="0" Subtype="0" />
+    <entity Image="Entities/305.0.0 - Ministro.png" BaseHP="9" StageHP="2" Tags="Champion" ID="305" Name="Ministro" Variant="0" Subtype="0" />
   </group>
 
   <group Name="Burning Basement Enemies">
-    <entity BaseHP="12" ID="226" Image="Entities/226.2.0 - Crispy.png" Name="Crispy" Subtype="0" Variant="2" />
+    <entity BaseHP="12" StageHP="4" ID="226" Image="Entities/226.2.0 - Crispy.png" Name="Crispy" Subtype="0" Variant="2" />
     <entity Name="Ministro" />
   </group>
 
@@ -105,7 +105,7 @@
   </group>
 
   <group Name="Catacombs Enemies">
-    <entity BaseHP="54" Tags="Champion" Image="Entities/303.0.0 - Blister.png" ID="303" Name="Blister" Variant="0" Subtype="0" />
+    <entity BaseHP="16" StageHP="8" Tags="Champion" Image="Entities/303.0.0 - Blister.png" ID="303" Name="Blister" Variant="0" Subtype="0" />
     <entity BaseHP="15" ID="304" Image="Entities/304.0.0 - TheThing.png" PlaceVisual="WallSnap" Name="The Thing" Variant="0" Subtype="0" Tags="Champion" />
   </group>
 
@@ -177,7 +177,7 @@
     <entity BaseHP="45" Tags="Champion" ID="310" Image="Entities/310.0.1 - Leper (stage 2).png" Name="Leper (stage 2)" Subtype="1" Variant="0" />
     <entity BaseHP="30" Tags="Champion" ID="310" Image="Entities/310.0.2 - Leper (stage 3).png" Name="Leper (stage 3)" Subtype="2" Variant="0" />
     <entity BaseHP="15" Tags="Champion" ID="310" Image="Entities/310.0.3 - Leper (stage 4).png" Name="Leper (stage 4)" Subtype="3" Variant="0" />
-    <entity BaseHP="5" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" Subtype="0" Variant="1" />
+    <entity BaseHP="5" StageHP="1.5" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" Subtype="0" Variant="1" />
   </group>
 
   <group Name="Chapter 5 (Main Path) Enemies">
@@ -201,7 +201,7 @@
   </group>
 
   <group Name="Void Enemies">
-    <entity Image="Entities/306.0.0 - Portal.png" BaseHP="10" ID="306" Name="Portal" Variant="0" Subtype="0" />
+    <entity Image="Entities/306.0.0 - Portal.png" BaseHP="9" StageHP="5" ID="306" Name="Portal" Variant="0" Subtype="0" />
   </group>
 
   <!--——— Bosses ———-->
