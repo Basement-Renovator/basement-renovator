@@ -474,6 +474,7 @@
     <entity Name="Swarm" />
     <entity Name="Army Fly" />
     <entity Name="Boom Fly" />
+    <entity Name="Dukie" />
     <entity BaseHP="80" ID="837" Image="Entities/837.0.0 - Henry.png" Name="Henry" Variant="0" Subtype="0" />
   </group>
 
