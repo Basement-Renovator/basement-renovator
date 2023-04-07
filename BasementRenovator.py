@@ -5851,7 +5851,7 @@ class MainWindow(QMainWindow):
         ScreenshotImage = QImage(
             int(self.scene.sceneRect().width()),
             int(self.scene.sceneRect().height()),
-            QImage.Format_ARGB32
+            QImage.Format_ARGB32,
         )
         ScreenshotImage.fill(Qt.transparent)
 
