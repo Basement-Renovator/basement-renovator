@@ -193,10 +193,17 @@
       <Entity ID="1009" Image="Backgrounds/rocks_gehenna.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_gehenna.png" />
 
+      <Entity ID="24" Variant="3" SubType="0" Image="Entities/24.3.0 - Cursed Globin_gehenna.png" />
       <Entity ID="203" Variant="0" SubType="0" Image="Entities/203.0.0 - Brimstone Head_gehenna.png" />
       <Entity ID="203" Variant="0" SubType="1" Image="Entities/203.0.1 - Brimstone Head_gehenna.png" />
       <Entity ID="203" Variant="0" SubType="2" Image="Entities/203.0.2 - Brimstone Head_gehenna.png" />
       <Entity ID="203" Variant="0" SubType="3" Image="Entities/203.0.3 - Brimstone Head_gehenna.png" />
+      <Entity ID="834" Variant="0" SubType="0" Image="Entities/834.0.0 - Whipper_gehenna.png" />
+      <Entity ID="834" Variant="1" SubType="0" Image="Entities/834.1.0 - Snapper_gehenna.png" />
+      <Entity ID="836" Variant="0" SubType="0" Image="Entities/836.0.0 - Vis Versa_gehenna.png" />
+      <Entity ID="841" Variant="0" SubType="0" Image="Entities/841.0.0 - Revenant_gehenna.png" />
+      <Entity ID="841" Variant="1" SubType="0" Image="Entities/841.1.0 - Quad Revenant_gehenna.png" />
+      <Entity ID="877" Variant="0" SubType="0" Image="Entities/877.0.0 - Grudge_gehenna.png" />
     </Gfx>
   </stage>
   <stage Name="Corpse" BaseGamePath="33.corpse" Stage="7" StageType="4" Pattern="corpse">
