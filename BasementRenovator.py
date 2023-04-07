@@ -1381,18 +1381,14 @@ class Entity(QGraphicsItem):
         if gfxData is None:
             return None
 
-        entID = f"{self.entity.Type}.{self.entity.Variant}.{self.entity.Subtype}"
-
+        variant, subtype = self.entity.Variant, self.entity.Subtype
         if self.entity.config.hasBitfields:
-            hasVariantBitfield = self.entity.config.hasBitfieldKey("Variant")
-            hasSubtypeBitfield = self.entity.config.hasBitfieldKey("Subtype")
-
-            if hasVariantBitfield and hasSubtypeBitfield:
-                entID = f"{self.entity.Type}.0.0"
-            elif hasVariantBitfield:
-                entID = f"{self.entity.Type}.0.{self.entity.Subtype}"
-            elif hasSubtypeBitfield:
-                entID = f"{self.entity.Type}.{self.entity.Variant}.0"
+            if self.entity.config.hasBitfieldKey("Variant"):
+                variant = 0
+            if self.entity.config.hasBitfieldKey("Subtype"):
+                subtype = 0
+        
+        entID = f"{self.entity.Type}.{variant}.{subtype}"
 
         return gfxData["Entities"].get(entID)
 
