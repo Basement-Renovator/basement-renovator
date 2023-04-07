@@ -133,6 +133,7 @@
       <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_dross.png" />
       <Entity ID="11" Variant="0" SubType="0" Image="Entities/11.0.0 - Gusher_dross.png" />
       <Entity ID="11" Variant="1" SubType="0" Image="Entities/11.1.0 - Pacer_dross.png" />
+      <Entity ID="62" Variant="3" SubType="0" Image="Entities/62.3.0 - Wormwood_dross.png" />
       <Entity ID="244" Variant="1" SubType="0" Image="Entities/244.1.0 - Tube Worm_dross.png" />
       <Entity ID="806" Variant="0" SubType="0" Image="Entities/806.0.0 - Bubbles_dross.png" />
       <Entity ID="807" Variant="0" SubType="0" Image="Entities/807.0.0 - Wraith_dross.png" />
@@ -147,6 +148,7 @@
       <Entity ID="812" Variant="0" SubType="0" Image="Entities/812.0.0 - Sub Horf_dross.png" />
       <Entity ID="813" Variant="0" SubType="0" Image="Entities/813.0.0 - Blurb_dross.png" />
       <Entity ID="817" Variant="0" SubType="0" Image="Entities/817.0.0 - Prey_dross.png" />
+      <Entity ID="901" Variant="0" SubType="0" Image="Entities/901.0.0 - Lil Blub_dross.png" />
     </Gfx>
   </stage>
   <stage Name="Mines" BaseGamePath="29.mines" Stage="3" StageType="4" Pattern="mines">
@@ -213,6 +215,14 @@
       <Entity ID="1000" Image="Backgrounds/rocks_corpse.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_corpse.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_corpse.png" />
+
+      <Entity ID="62" Variant="3" SubType="0" Image="Entities/62.3.0 - Wormwood_corpse.png" />
+      <Entity ID="71" Variant="0" SubType="0" Image="Entities/71.0.0 - Fistula Big_corpse.png" />
+      <Entity ID="71" Variant="1" SubType="0" Image="Entities/71.1.0 - Teratoma Big_corpse.png" />
+      <Entity ID="72" Variant="0" SubType="0" Image="Entities/72.0.0 - Fistula Medium_corpse.png" />
+      <Entity ID="72" Variant="1" SubType="0" Image="Entities/72.1.0 - Teratoma Medium_corpse.png" />
+      <Entity ID="73" Variant="0" SubType="0" Image="Entities/73.0.0 - Fistula Small_corpse.png" />
+      <Entity ID="73" Variant="1" SubType="0" Image="Entities/73.1.0 - Teratoma Small_corpse.png" />
     </Gfx>
   </stage>
   <!-- <stage Name="Mortis" BaseGamePath="34.mortis" Stage="7" StageType="5" Pattern="mortis">
