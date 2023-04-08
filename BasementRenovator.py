@@ -720,6 +720,13 @@ class RoomEditorWidget(QGraphicsView):
         else:
             self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
 
+    def calculateTotalHP(self, baseHP, stageHP, stageNum):
+        totalHP = round(baseHP + ((min(4, stageNum) + (0.8 * max(0, min(stageNum - 5, 5)))) * stageHP), 2)
+        if totalHP.is_integer():
+            return int(totalHP)
+        else:
+            return totalHP
+
     def paintEvent(self, event):
         # Purely handles the status overlay text
         QGraphicsView.paintEvent(self, event)
@@ -820,6 +827,19 @@ class RoomEditorWidget(QGraphicsView):
                     int(Qt.AlignRight | Qt.AlignBottom),
                     f"Stage HP : {e.entity.config.stageHP}",
                 )
+                textY += 16
+
+                stageHPNum = mainWindow.floorInfo.get("StageHPNum") or mainWindow.floorInfo.get("Stage")
+                totalHP = self.calculateTotalHP(float(e.entity.config.baseHP), float(e.entity.config.stageHP), float(stageHPNum))
+
+                painter.drawText(
+                        r.right() - 34 - 200,
+                        textY,
+                        200,
+                        12,
+                        int(Qt.AlignRight | Qt.AlignBottom),
+                        f"Total HP : {totalHP}",
+                    )
                 textY += 16
 
             if e.entity.config.armor is not None and e.entity.config.armor != "0":
@@ -5496,6 +5516,12 @@ class MainWindow(QMainWindow):
                     return
 
         self.path = path
+
+        global xmlLookups
+        self.floorInfo = (
+            xmlLookups.stages.lookup(path=self.path)
+            or xmlLookups.stages.lookup(name="Basement")
+        )[-1]
 
         roomFile = None
         try:
