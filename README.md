@@ -109,6 +109,7 @@ The latest version of Basement Renovator is available in the [releases section](
 - `BGPrefix` is the path to the backdrop files relative to the `basementrenovator` folder, minus the -.png and -Inner.png for L rooms. If left out, the fallback will be the first stage with the same Stage and StageType with a valid backdrop.
 - `Pattern` is the pattern used to match a filename against to determine it's for that stage; if the file contains that prefix it will be set to that stage. The last stage loaded has prefix matching priority, so mods will always have priority over base game stages.
 - `Stage` and `StageType` correspond to the in-game enum values for the stage, for modded stages this should point to the stage being replaced.
+- `StageHPNum` is an optional value used when calculating the total HP of enemies which use Stage HP. If this is not specified, then `Stage` is used instead.
 - Lastly, `Name` is the display name shown in BR, and also passed to room tests to allow for properly replacing the base game stage as needed.
 
 *How do I get some rooms to display different backdrops?*
