@@ -549,6 +549,8 @@ class EntityLookup(Lookup):
             self.editorImagePath = None
             self.overlayImagePath = None
             self.baseHP = None
+            self.stageHP = None
+            self.armor = None
             self.placeVisual = None
             self.disableOffsetIndicator = False
             self.renderPit = False
@@ -762,6 +764,16 @@ class EntityLookup(Lookup):
                 self.baseHP = node.get("BaseHP")
             elif self.baseHP is None and entities2Node is not None:
                 self.baseHP = entities2Node.get("baseHP")
+
+            if node.get("StageHP"):
+                self.stageHP = node.get("StageHP")
+            elif self.stageHP is None and entities2Node is not None:
+                self.stageHP = entities2Node.get("stageHP")
+
+            if node.get("Armor"):
+                self.armor = node.get("Armor")
+            elif self.armor is None and entities2Node is not None:
+                self.armor = entities2Node.get("shieldStrength")
 
             if node.get("Boss") == "1" or (
                 entities2Node is not None and entities2Node.get("boss") == "1"

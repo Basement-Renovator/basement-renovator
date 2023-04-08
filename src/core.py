@@ -21,6 +21,8 @@ class Entity:
         self.name = None
         self.isGridEnt = False
         self.baseHP = None
+        self.stageHP = None
+        self.armor = None
         self.boss = None
         self.champion = None
         self.pixmap = None

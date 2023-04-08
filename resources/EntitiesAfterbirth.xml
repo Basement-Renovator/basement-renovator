@@ -103,7 +103,7 @@
   <group Name="Global">
     <group Label="Special Enemies">
       <entity BaseHP="30" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0" />
-      <entity BaseHP="30" Tags="Champion" ID="297" Image="Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0" />
+      <entity BaseHP="16" StageHP="2" Tags="Champion" ID="297" Image="Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0" />
       <entity BaseHP="30" Tags="Champion" ID="298" Image="Entities/298.0.0 - Blue Boil.png" Name="Blue Boil" Subtype="0" Variant="0" />
       <entity BaseHP="60" ID="257" Image="Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1" />
       <entity BaseHP="30" ID="246" Image="Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1" />
@@ -177,14 +177,14 @@
 
   <group Label="Flooded Caves Enemies">
     <entity BaseHP="18" Tags="Champion" ID="22" Image="Entities/22.1.0 - Drowned Hive.png" Name="Drowned Hive" Subtype="0" Variant="1" />
-    <entity BaseHP="20" Tags="Champion" ID="25" Image="Entities/25.2.0 - Drowned Boom Fly.png" Name="Drowned Boom Fly" Subtype="0" Variant="2" />
+    <entity BaseHP="8" StageHP="3" Tags="Champion" ID="25" Image="Entities/25.2.0 - Drowned Boom Fly.png" Name="Drowned Boom Fly" Subtype="0" Variant="2" />
     <entity BaseHP="22" Tags="Champion" ID="23" Image="Entities/23.1.0 - Drowned Charger.png" Name="Drowned Charger" Subtype="0" Variant="1" />
     <entity Name="Clotty" />
     <entity Name="Gut" />
   </group>
 
   <group Name="Chapter 3 (Main Path) Enemies">
-    <entity BaseHP="8" ID="277" Image="Entities/277.0.0 - Black Bony.png" Name="Black Bony" Subtype="0" Variant="0" />
+    <entity BaseHP="8" StageHP="2" ID="277" Image="Entities/277.0.0 - Black Bony.png" Name="Black Bony" Subtype="0" Variant="0" />
     <entity BaseHP="10" Tags="Champion" ID="280" Image="Entities/280.0.0 - Black Globin's Body.png" Name="Black Globin's Body" Subtype="0" Variant="0" />
     <entity BaseHP="20" ID="212" Image="Entities/212.1.0 - Dank Death's Head.png" Name="Dank Death's Head" Subtype="0" Variant="1" />
     <entity Name="Dukie" />
@@ -198,7 +198,7 @@
   <group Name="Dank Depths Enemies">
     <entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.2.0 - Dank Globin.png" Name="Dank Globin" Subtype="0" Variant="2" />
     <group Name="Guts (Enemy)" />
-    <entity BaseHP="15" ID="220" Image="Entities/220.1.0 - Dank Squirt.png" Name="Dank Squirt" Subtype="0" Variant="1" />
+    <entity BaseHP="15" StageHP="6" ID="220" Image="Entities/220.1.0 - Dank Squirt.png" Name="Dank Squirt" Subtype="0" Variant="1" />
     <entity Name="Clot" />
   </group>
 
@@ -227,7 +227,7 @@
   </group>
 
   <group Name="Chapter 5 (Main Path) Enemies">
-    <entity BaseHP="25" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
+    <entity BaseHP="20" StageHP="4" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Sheol Enemies">
@@ -318,8 +318,8 @@
   </group>
 
   <group Name="Story Bosses">
-    <entity BaseHP="1000" ID="102" Image="Entities/102.2.0 - Blue Baby (Alt).png" Name="??? (Hush)" Subtype="0" Variant="2" />
-    <entity ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
+    <entity BaseHP="1000" Armor="20" ID="102" Image="Entities/102.2.0 - Blue Baby (Alt).png" Name="??? (Hush)" Subtype="0" Variant="2" />
+    <entity BaseHP="6666" Armor="140" ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
     <entity ID="408" Image="Entities/408.0.0 - Skinless Hush.png" Name="Skinless Hush" Subtype="0" Variant="0" />
   </group>
 
