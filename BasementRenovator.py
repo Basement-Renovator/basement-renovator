@@ -721,7 +721,11 @@ class RoomEditorWidget(QGraphicsView):
             self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
 
     def calculateTotalHP(self, baseHP, stageHP, stageNum):
-        totalHP = round(baseHP + ((min(4, stageNum) + (0.8 * max(0, min(stageNum - 5, 5)))) * stageHP), 2)
+        totalHP = round(
+            baseHP
+            + ((min(4, stageNum) + (0.8 * max(0, min(stageNum - 5, 5)))) * stageHP),
+            2,
+        )
         if totalHP.is_integer():
             return int(totalHP)
         else:
@@ -829,17 +833,23 @@ class RoomEditorWidget(QGraphicsView):
                 )
                 textY += 16
 
-                stageHPNum = mainWindow.floorInfo.get("StageHPNum") or mainWindow.floorInfo.get("Stage")
-                totalHP = self.calculateTotalHP(float(e.entity.config.baseHP), float(e.entity.config.stageHP), float(stageHPNum))
+                stageHPNum = mainWindow.floorInfo.get(
+                    "StageHPNum"
+                ) or mainWindow.floorInfo.get("Stage")
+                totalHP = self.calculateTotalHP(
+                    float(e.entity.config.baseHP),
+                    float(e.entity.config.stageHP),
+                    float(stageHPNum),
+                )
 
                 painter.drawText(
-                        r.right() - 34 - 200,
-                        textY,
-                        200,
-                        12,
-                        int(Qt.AlignRight | Qt.AlignBottom),
-                        f"Total HP : {totalHP}",
-                    )
+                    r.right() - 34 - 200,
+                    textY,
+                    200,
+                    12,
+                    int(Qt.AlignRight | Qt.AlignBottom),
+                    f"Total HP : {totalHP}",
+                )
                 textY += 16
 
             if e.entity.config.armor is not None and e.entity.config.armor != "0":
@@ -6361,13 +6371,8 @@ class MainWindow(QMainWindow):
         settings = QSettings("settings.ini", QSettings.IniFormat)
         version = getGameVersion()
 
-        # Floor type
-        # TODO cache this when loading a file
         global xmlLookups
-        floorInfo = (
-            xmlLookups.stages.lookup(path=mainWindow.path)
-            or xmlLookups.stages.lookup(name="Basement")
-        )[-1]
+        floorInfo = mainWindow.floorInfo
 
         forceCleanModFolder = settings.value("HelperModDev") == "1"
         modPath, roomPath = self.makeTestMod(forceCleanModFolder)
