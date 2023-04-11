@@ -5918,8 +5918,8 @@ class MainWindow(QMainWindow):
         settings.setValue("GridEnabled", "0")
 
         ScreenshotImage = QImage(
-            self.scene.sceneRect().width(),
-            self.scene.sceneRect().height(),
+            int(self.scene.sceneRect().width()),
+            int(self.scene.sceneRect().height()),
             QImage.Format_ARGB32,
         )
         ScreenshotImage.fill(Qt.transparent)
