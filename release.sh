@@ -17,6 +17,6 @@ if [ ! -z "$GIT_STATUS_OUPUT" ]; then
   exit 1
 fi
 
-git commit --allow-empty -m "release"
+git commit --allow-empty -m "chore: release"
 git push
 echo "Pushed an empty commit to inform CI to create a new release."
