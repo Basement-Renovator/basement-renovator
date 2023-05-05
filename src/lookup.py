@@ -5,14 +5,22 @@ import re
 
 from itertools import zip_longest
 
-from src.constants import *
-from src.util import *
-from src.entitiesgenerator import generateXMLFromEntities2
+if not __package__:
+    from constants import *
+    from util import *
+    from entitiesgenerator import generateXMLFromEntities2
+    from settings import ModPath, getBasementRenovatorPath
+else:
+    from src.constants import *
+    from src.util import *
+    from src.entitiesgenerator import generateXMLFromEntities2
+    from src.settings import ModPath, getBasementRenovatorPath
 
 
 def loadXMLFile(path):
     root = None
     if not os.path.isfile(path):
+        printf("Path", path, "does not exist")
         return None
 
     try:
@@ -1339,12 +1347,19 @@ class MainLookup:
         def __init__(
             self,
             modName="Basement Renovator",
-            resourcePath="resources/",
+            resourcePath=None,
             modPath=None,
             autogenerateContent=False,
         ):
             self.name = modName
-            self.resourcePath = resourcePath
+
+            if resourcePath is None:
+                self.resourcePath = os.path.join(
+                    getBasementRenovatorPath(), "resources"
+                )
+            else:
+                self.resourcePath = resourcePath
+
             self.modPath = modPath
             self.autogenerateContent = autogenerateContent
 
@@ -1366,17 +1381,33 @@ class MainLookup:
         self.version = version
         self.verbose = verbose
 
-        self.loadXML(loadXMLFile("resources/Versions.xml"), self.basemod)
+        self.loadXML(
+            loadXMLFile(os.path.join(self.basemod.resourcePath, "Versions.xml")),
+            self.basemod,
+        )
 
-    def loadFromMod(self, modPath, brPath, name, autogenerateContent):
-        modConfig = self.ModConfig(name, brPath, modPath, autogenerateContent)
-        versionsPath = os.path.join(brPath, "VersionsMod.xml")
+    def loadFromMod(self, modPath: ModPath, autogenerateContent):
+        modConfig = self.ModConfig(
+            modPath.name, modPath.brPath, modPath.path, autogenerateContent
+        )
+        versionsPath = os.path.join(modPath.brPath, "VersionsMod.xml")
         if os.path.exists(versionsPath):
             self.loadXML(loadXMLFile(versionsPath), modConfig)
         else:
             self.stages.loadFromMod(modConfig)
             self.roomTypes.loadFromMod(modConfig)
             self.entities.loadFromMod(modConfig)
+
+    def loadMods(self, modPathList, autogenerateContent):
+        autogenPath = os.path.join(self.basemod.resourcePath, "Entities/ModTemp")
+
+        if autogenerateContent and not os.path.exists(autogenPath):
+            os.mkdir(autogenPath)
+
+        printSectionBreak()
+        printf("LOADING MOD CONTENT")
+        for modPath in modPathList:
+            self.loadFromMod(modPath, autogenerateContent)
 
     def loadXML(self, root=None, mod=None):
         if root is None:

@@ -15,6 +15,7 @@
   <tag Label="Gapers" StatisticsGroup="1">DefaultGaper</tag>
   <tag Label="Pacers and Gushers" StatisticsGroup="1">DefaultGusher</tag>
   <tag Label="Constant Stone Shooters" StatisticsGroup="1">ConstantStoneShooters</tag>
+  <tag Label="Brimstone Heads" StatisticsGroup="1">BrimstoneHeads</tag>
   <tag Label="Guts" StatisticsGroup="1">GutsEnemy</tag>
 
   <!--——— Tabs ———-->
@@ -176,6 +177,7 @@
             <entity ID="1000" Image="Entities/1000.0.0 - Rock.png" Name="Rock" Subtype="0" Variant="0" EditorImage="Backgrounds/rocks_generic.png" UseRockTiling="1" />
           </group>
           <entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock.png" Name="Bomb Rock" Subtype="0" Variant="0" />
+          <entity ID="1003" Image="Entities/1003.0.0 - Tinted Rock.png" Name="Tinted Rock" Subtype="0" Variant="0" />
         </group>
         <group Name="Alt Rocks">
           <entity ID="1002" Image="Entities/1002.0.0 - Pot.png" Name="Pot" Subtype="0" Variant="0" />
@@ -835,10 +837,17 @@
   <group Name="Sheol Obstacles">
     <entity Name="Gaping Maw" />
     <entity Name="Stone Eye" />
-    <entity BaseHP="1" ID="203" Image="Entities/203.0.0 - Brimstone Head.png" Name="Brimstone Head (Left)" Subtype="0" Variant="0" MirrorX="203.0.2" />
-    <entity BaseHP="1" ID="203" Image="Entities/203.0.1 - Brimstone Head.png" Name="Brimstone Head (Up)" Subtype="1" Variant="0" MirrorY="203.0.3" />
-    <entity BaseHP="1" ID="203" Image="Entities/203.0.2 - Brimstone Head.png" Name="Brimstone Head (Right)" Subtype="2" Variant="0" MirrorX="203.0.0" />
-    <entity BaseHP="1" ID="203" Image="Entities/203.0.3 - Brimstone Head.png" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
+    <group Name="Brimstone Head">
+      <defaults>
+        <entity>
+          <tag>BrimstoneHeads</tag>
+        </entity>
+      </defaults>
+      <entity BaseHP="1" ID="203" Image="Entities/203.0.0 - Brimstone Head.png" Name="Brimstone Head (Left)" Subtype="0" Variant="0" MirrorX="203.0.2" />
+      <entity BaseHP="1" ID="203" Image="Entities/203.0.1 - Brimstone Head.png" Name="Brimstone Head (Up)" Subtype="1" Variant="0" MirrorY="203.0.3" />
+      <entity BaseHP="1" ID="203" Image="Entities/203.0.2 - Brimstone Head.png" Name="Brimstone Head (Right)" Subtype="2" Variant="0" MirrorX="203.0.0" />
+      <entity BaseHP="1" ID="203" Image="Entities/203.0.3 - Brimstone Head.png" Name="Brimstone Head (Down)" Subtype="3" Variant="0" MirrorY="203.0.1" />
+    </group>
   </group>
 
   <group Name="Cathedral Enemies">
