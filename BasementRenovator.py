@@ -110,7 +110,7 @@ def findInstallPath():
                     )
                     if os.path.isfile(libconfig):
                         libLines = list(open(libconfig, "r"))
-                        matcher = re.compile(r'"\d+"\s*"(.*?)"')
+                        matcher = re.compile(r'"path"\s*"(.*?)"')
                         installDirs = map(
                             lambda res: os.path.normpath(res.group(1)),
                             filter(
