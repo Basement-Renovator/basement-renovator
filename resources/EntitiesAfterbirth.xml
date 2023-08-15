@@ -172,7 +172,7 @@
     <entity Name="Swarm" />
     <entity Name="Ulcer" />
     <entity BaseHP="3" ID="217" Image="Entities/217.1.0 - Corn.png" Name="Corn" Subtype="0" Variant="1" />
-    <entity BaseHP="50" ID="258" Image="Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" Subtype="0" Variant="0" />
+    <entity BaseHP="35" ID="258" Image="Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" Subtype="0" Variant="0" />
   </group>
 
   <group Label="Flooded Caves Enemies">
