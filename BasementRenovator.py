@@ -2622,7 +2622,9 @@ class RoomDelegate(QStyledItemDelegate):
         room = mainWindow.roomList.list.item(index.row())
         editor.setText(room.name)
 
-    def setModelData(self, editor: QWidget, model: QAbstractItemModel, index: QModelIndex) -> None:
+    def setModelData(
+        self, editor: QWidget, model: QAbstractItemModel, index: QModelIndex
+    ) -> None:
         room = mainWindow.roomList.list.item(index.row())
         room.name = editor.text()
         mainWindow.dirt()
@@ -2874,7 +2876,9 @@ class RoomSelector(QWidget):
         model = self.list.model()
         model.rowsInserted.connect(self.handleRoomListDisplayChanged)
         model.rowsRemoved.connect(self.handleRoomListDisplayChanged)
-        model.modelReset.connect(self.handleRoomListDisplayChanged) # fired when cleared
+        model.modelReset.connect(
+            self.handleRoomListDisplayChanged
+        )  # fired when cleared
 
     def setupToolbar(self):
         self.toolbar = QToolBar()
