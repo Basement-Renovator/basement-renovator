@@ -5370,6 +5370,7 @@ class MainWindow(QMainWindow):
         self.roomList.list.clear()
         self.scene.clear()
         self.path = ""
+        self.floorInfo = xmlLookups.stages.lookup(name="Basement")[-1]
 
         self.dirt()
         self.roomList.changeFilter()
