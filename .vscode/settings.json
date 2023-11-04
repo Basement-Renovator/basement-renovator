@@ -4,29 +4,23 @@
   // Vanilla settings
   // ----------------
 
-  "editor.rulers": [88], // Matches the black default
+  "editor.rulers": [88], // Matches the black default.
   "editor.tabSize": 2,
 
-  // Linux line endings are used in this project
+  // We want to always use "lf" to be consistent with all platforms.
   "files.eol": "\n",
 
-  // Automatically removing all trailing whitespace when saving a file
+  // Automatically remove trailing whitespace when saving a file.
   "files.trimTrailingWhitespace": true,
 
   // ------
   // Python
   // ------
 
-  // Use "black" to automatically format Python files
-  // https://github.com/psf/black
-  "python.formatting.provider": "black",
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-
-  // Automatically run the formatter when particular files are saved
+  // Automatically run the formatter when particular files are saved.
   "[python]": {
-    // Disabled until BasementRenovator.py is refactored, as it is too laggy
-    // "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    // "editor.formatOnSave": true, // Disabled until BasementRenovator.py is refactored, as it is too laggy.
     "editor.tabSize": 4,
   },
   "[xml]": {
