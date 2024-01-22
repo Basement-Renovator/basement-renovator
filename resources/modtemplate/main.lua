@@ -346,25 +346,27 @@ function BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
     end
 
     -- render invalid door slots as effects
-    for _, slot in pairs(doorSlots) do
-        local doorDir = DoorToDirection[slot]
+    if BasementRenovator.TestRoomData.DisableUI ~= 1 then
+        for _, slot in pairs(doorSlots) do
+            local doorDir = DoorToDirection[slot]
 
-        local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
-        local sprite = door:GetSprite()
-        sprite.Rotation = DirectionToDegrees(doorDir)
-        sprite.Offset = DoorOffsetsByDirection[doorDir]
+            local door = Isaac.Spawn(1000, FakeDoorVariant, 0, room:GetDoorSlotPosition(slot), veczero, nil)
+            local sprite = door:GetSprite()
+            sprite.Rotation = DirectionToDegrees(doorDir)
+            sprite.Offset = DoorOffsetsByDirection[doorDir]
 
-        if not room:IsDoorSlotAllowed(slot) then
-            sprite:ReplaceSpritesheet(0, 'basementrenovator/grid/invaliddoor.png')
-            sprite:ReplaceSpritesheet(1, 'basementrenovator/grid/invaliddoor.png')
-            sprite:ReplaceSpritesheet(2, 'basementrenovator/grid/invaliddoor.png')
-            sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/invaliddoor.png')
-            sprite:LoadGraphics()
-            sprite:Play('Closed', true)
-            door:AddEntityFlags(EntityFlag.FLAG_RENDER_WALL)
-        elseif slot == enterSlot then
-            sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/entrydoor.png')
-            sprite:LoadGraphics()
+            if not room:IsDoorSlotAllowed(slot) then
+                sprite:ReplaceSpritesheet(0, 'basementrenovator/grid/invaliddoor.png')
+                sprite:ReplaceSpritesheet(1, 'basementrenovator/grid/invaliddoor.png')
+                sprite:ReplaceSpritesheet(2, 'basementrenovator/grid/invaliddoor.png')
+                sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/invaliddoor.png')
+                sprite:LoadGraphics()
+                sprite:Play('Closed', true)
+                door:AddEntityFlags(EntityFlag.FLAG_RENDER_WALL)
+            elseif slot == enterSlot then
+                sprite:ReplaceSpritesheet(3, 'basementrenovator/grid/entrydoor.png')
+                sprite:LoadGraphics()
+            end
         end
     end
 end
@@ -483,13 +485,17 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
 
     local topLeft = game:GetRoom():GetRenderSurfaceTopLeft()
     local pos = Vector(20, topLeft.Y * 2 + 286) --Vector(442,286)
-    Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ", Difficulty: " .. roomDesc.Data.Difficulty .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
-    Isaac.RenderScaledText("Test Type: " .. test.TestType ..  " --- In Test Room: " .. (room.Invalid and 'NO' or ('YES' .. (BasementRenovator.LockDoorSlot and ' [DOOR SLOT LOCKED]' or ''))), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+    if BasementRenovator.TestRoomData.DisableUI ~= 1 then
+        Isaac.RenderScaledText("BASEMENT RENOVATOR TEST: " .. room.Name .. " (" .. room.Variant .. ", Difficulty: " .. roomDesc.Data.Difficulty .. ") [" .. filename .. ']', pos.X, pos.Y - 28, 0.5, 0.5, 255, 255, 0, 0.75)
+        Isaac.RenderScaledText("Test Type: " .. test.TestType ..  " --- In Test Room: " .. (room.Invalid and 'NO' or ('YES' .. (BasementRenovator.LockDoorSlot and ' [DOOR SLOT LOCKED]' or ''))), pos.X, pos.Y - 20, 0.5, 0.5, 255, 255, 0, 0.75)
+    end
 
     local enableCycling = false
     if #test.Rooms > 1 and test.TestType == 'InstaPreview' then
         enableCycling = true
-        Isaac.RenderScaledText("Press . (period) to cycle forward and , (comma) to go back. Current: " .. (test.CurrentIndex + 1) .. '/' .. #test.Rooms, pos.X, pos.Y - 36, 0.5, 0.5, 0, 255, 255, 0.75)
+        if not BasementRenovator.TestRoomData.DisableUI ~= 1 then
+            Isaac.RenderScaledText("Press . (period) to cycle forward and , (comma) to go back. Current: " .. (test.CurrentIndex + 1) .. '/' .. #test.Rooms, pos.X, pos.Y - 36, 0.5, 0.5, 0, 255, 255, 0.75)
+        end
     end
 
     local frame = game:GetFrameCount()
