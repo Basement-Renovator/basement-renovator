@@ -493,7 +493,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     local enableCycling = false
     if #test.Rooms > 1 and test.TestType == 'InstaPreview' then
         enableCycling = true
-        if not BasementRenovator.TestRoomData.DisableUI ~= 1 then
+        if BasementRenovator.TestRoomData.DisableUI ~= 1 then
             Isaac.RenderScaledText("Press . (period) to cycle forward and , (comma) to go back. Current: " .. (test.CurrentIndex + 1) .. '/' .. #test.Rooms, pos.X, pos.Y - 36, 0.5, 0.5, 0, 255, 255, 0.75)
         end
     end
