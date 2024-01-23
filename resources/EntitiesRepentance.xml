@@ -581,6 +581,7 @@
     <entity Name="Bony" />
     <entity Name="Gurgle" />
     <entity Name="Splasher" />
+    <entity Name="Migraine" />
     <entity BaseHP="20" Tags="Champion" ID="821" Image="Entities/821.0.0 - Blaster.png" Name="Blaster" Variant="0" Subtype="0" />
     <entity BaseHP="40" Tags="Champion" ID="820" Image="Entities/820.1.0 - Coal Boy.png" Name="Coal Boy" Variant="1" Subtype="0" />
     <entity BaseHP="10" Tags="Champion" ID="61" Image="Entities/61.3.0 - Ink.png" Name="Ink" Variant="3" Subtype="0" />
