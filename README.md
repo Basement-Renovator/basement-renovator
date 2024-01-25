@@ -65,12 +65,15 @@ The latest version of Basement Renovator is available in the [releases section](
         - Toggle whether to stay at the current door using `;`
         - Invalid doors for the room will be indicated by a red barred door
     - Works most like the base game when testing one room at a time
+  - The in-game info text and colored doors can be hidden by enabling the "Disable In-Game UI" setting
+    - This setting can also be toggled in-game using `'`
+
 
 ### F.A.Q.
 
 *The 'InstaPreview' tool isn't working for me; what can I do?*
 - Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
- 
+
 *How do I edit Repentance rooms?*
 
 - Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, and `Antibirth`
