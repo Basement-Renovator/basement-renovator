@@ -515,7 +515,7 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
             BasementRenovator.LockDoorSlot = not BasementRenovator.LockDoorSlot
         end
 
-        if SafeKeyboardTriggered(Keyboard.KEY_APOSTROPHE, ci) then
+        if SafeKeyboardTriggered(Keyboard.KEY_U, ci) then
             BasementRenovator.DisableUI = not BasementRenovator.DisableUI
         end
 

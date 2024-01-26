@@ -66,7 +66,7 @@ The latest version of Basement Renovator is available in the [releases section](
         - Invalid doors for the room will be indicated by a red barred door
     - Works most like the base game when testing one room at a time
   - The in-game info text and colored doors can be hidden by enabling the "Disable In-Game UI" setting
-    - This setting can also be toggled in-game using `'`
+    - This setting can also be toggled in-game using `u`
 
 
 ### F.A.Q.
