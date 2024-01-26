@@ -5161,6 +5161,11 @@ class MainWindow(QMainWindow):
         )
         self.rd.setCheckable(True)
         self.rd.setChecked(settings.value("DisableTestDialog") != "1")
+        self.rg = r.addAction(
+            "Disable In-Game UI", lambda: self.toggleSetting("DisableInGameUI")
+        )
+        self.rg.setCheckable(True)
+        self.rg.setChecked(settings.value("DisableInGameUI") == "1")
 
         h = mb.addMenu("Help")
         self.ha = h.addAction("About Basement Renovator", self.aboutDialog)
@@ -6030,9 +6035,10 @@ class MainWindow(QMainWindow):
     StageType = {floorInfo.get('StageType')},
     StageName = {strFix(floorInfo.get('Name'))},
     IsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
+    DisableUI = {settings.value("DisableInGameUI") == "1" and 'true' or 'false'},
     RoomFile = {strFix(str(Path(self.path)) or 'N/A')},
     Rooms = {{
-    {roomsStr}
+        {roomsStr}
     }}
 }}
 """
