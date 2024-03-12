@@ -373,7 +373,7 @@ function BasementRenovator.RenderDoorSlots(room, doorSlots, enterSlot)
     end
 end
 
-BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
+BasementRenovator.mod:AddPriorityCallback(ModCallbacks.MC_POST_NEW_ROOM, CallbackPriority.IMPORTANT, function()
     local test = BasementRenovator.TestRoomData
     local testRoom = BasementRenovator:InTestRoom()
     if testRoom then
