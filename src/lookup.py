@@ -64,29 +64,63 @@ def parseCriteria(txt):
 
 
 def applyGfxReplacement(replacement, gfxchildren):
-    for origgfx, newgfx in zip_longest(replacement.findall("Gfx"), gfxchildren):
-        if newgfx is None:
-            continue
-        elif origgfx is None:
+    alloriggfx = replacement.findall("Gfx")
+
+    for newgfx in gfxchildren:
+        found = False
+
+        for origgfx in alloriggfx:
+            newSubtype = newgfx.get("Subtype", "0")
+            origSubtype = origgfx.get("Subtype", "0")
+
+            if newSubtype == origSubtype:
+                found = True
+
+                for key, val in newgfx.attrib.items():
+                    origgfx.set(key, val)
+
+                for ent in newgfx.findall("Entity"):
+                    origent = None
+                    for orig in origgfx.findall(f'Entity[@ID="{ent.get("ID")}"]'):
+                        if orig.get("Variant", "0") == ent.get("Variant", "0") and orig.get(
+                            "SubType", "0"
+                        ) == ent.get("SubType", "0"):
+                            origent = orig
+                            break
+                    if origent is not None:
+                        for key, val in ent.attrib.items():
+                            origent.set(key, val)
+                    else:
+                        origgfx.append(ent)
+
+                break
+
+        if not found:
             replacement.append(newgfx)
-            continue
 
-        for key, val in newgfx.attrib.items():
-            origgfx.set(key, val)
+    # for origgfx, newgfx in zip_longest(replacement.findall("Gfx"), gfxchildren):
+    #     if newgfx is None:
+    #         continue
+    #     elif origgfx is None:
+    #         replacement.append(newgfx)
+    #         continue
 
-        for ent in newgfx.findall("Entity"):
-            origent = None
-            for orig in origgfx.findall(f'Entity[@ID="{ent.get("ID")}"]'):
-                if orig.get("Variant", "0") == ent.get("Variant", "0") and orig.get(
-                    "SubType", "0"
-                ) == ent.get("SubType", "0"):
-                    origent = orig
-                    break
-            if origent is not None:
-                for key, val in ent.attrib.items():
-                    origent.set(key, val)
-            else:
-                origgfx.append(ent)
+    #     for key, val in newgfx.attrib.items():
+    #         origgfx.set(key, val)
+
+    #     for ent in newgfx.findall("Entity"):
+    #         origent = None
+    #         for orig in origgfx.findall(f'Entity[@ID="{ent.get("ID")}"]'):
+    #             if orig.get("Variant", "0") == ent.get("Variant", "0") and orig.get(
+    #                 "SubType", "0"
+    #             ) == ent.get("SubType", "0"):
+    #                 origent = orig
+    #                 break
+    #         if origent is not None:
+    #             for key, val in ent.attrib.items():
+    #                 origent.set(key, val)
+    #         else:
+    #             origgfx.append(ent)
 
 
 class Lookup(metaclass=abc.ABCMeta):
