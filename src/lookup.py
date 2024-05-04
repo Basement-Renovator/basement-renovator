@@ -98,30 +98,6 @@ def applyGfxReplacement(replacement, gfxchildren):
         if not found:
             replacement.append(newgfx)
 
-    # for origgfx, newgfx in zip_longest(replacement.findall("Gfx"), gfxchildren):
-    #     if newgfx is None:
-    #         continue
-    #     elif origgfx is None:
-    #         replacement.append(newgfx)
-    #         continue
-
-    #     for key, val in newgfx.attrib.items():
-    #         origgfx.set(key, val)
-
-    #     for ent in newgfx.findall("Entity"):
-    #         origent = None
-    #         for orig in origgfx.findall(f'Entity[@ID="{ent.get("ID")}"]'):
-    #             if orig.get("Variant", "0") == ent.get("Variant", "0") and orig.get(
-    #                 "SubType", "0"
-    #             ) == ent.get("SubType", "0"):
-    #                 origent = orig
-    #                 break
-    #         if origent is not None:
-    #             for key, val in ent.attrib.items():
-    #                 origent.set(key, val)
-    #         else:
-    #             origgfx.append(ent)
-
 
 class Lookup(metaclass=abc.ABCMeta):
     def __init__(self, prefix, version):
