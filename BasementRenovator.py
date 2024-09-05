@@ -1199,12 +1199,13 @@ class Entity(QGraphicsItem):
     RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
     RockAnm2.setAnimation()
 
-    def getPitFrame(self, pitImg, rendered):
+    def getPitFrame(self, pitImg, rendered, extraConnections: 'list|None'):
         def matchInStack(stack):
             for ent in stack:
                 img = ent.getCurrentImg()
 
-                if img == pitImg:
+                # printf(f"DEBUG: extraConnections is {extraConnections}, {extraConnections and img in extraConnections}")
+                if img == pitImg or (extraConnections and img in extraConnections):
                     return True
 
             return False
@@ -1551,7 +1552,7 @@ class Entity(QGraphicsItem):
                 painter.drawLine(26, 26, 26, 22)
 
             if self.entity.config.renderPit:
-                Entity.PitAnm2.frame = self.getPitFrame(imgPath, rendered)
+                Entity.PitAnm2.frame = self.getPitFrame(imgPath, rendered, self.entity.config.renderPitExtraConnections)
                 Entity.PitAnm2.spritesheets[0] = rendered
                 rendered = self.scene().getFrame(imgPath + " - pit", Entity.PitAnm2)
                 renderFunc = painter.drawImage

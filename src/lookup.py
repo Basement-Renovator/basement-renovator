@@ -554,6 +554,7 @@ class EntityLookup(Lookup):
             self.placeVisual = None
             self.disableOffsetIndicator = False
             self.renderPit = False
+            self.renderPitExtraConnections: 'list|None' = None
             self.renderRock = False
             self.invalid = False
             self.gfx = None
@@ -624,6 +625,7 @@ class EntityLookup(Lookup):
             "placeVisual",
             "disableOffsetIndicator",
             "renderPit",
+            "renderPitExtraConnections",
             "renderRock",
             "mirrorX",
             "mirrorY",
@@ -748,6 +750,20 @@ class EntityLookup(Lookup):
 
             if node.get("UsePitTiling"):
                 self.renderPit = node.get("UsePitTiling") == "1"
+
+            pitextras = node.findall("pitextra")
+            if len(pitextras) != 0:
+                self.renderPitExtraConnections = []
+                for pitextraNode in pitextras:
+                    if "Image" in pitextraNode.attrib:
+                        self.renderPitExtraConnections.append(self.validateImagePath(
+                            pitextraNode.get("Image"),
+                            self.mod.resourcePath,
+                        ))
+                    else:
+                        printf(
+                            f"Entity {node.attrib} Has pitextra with no Image attribute: {pitextraNode}"
+                        )
 
             if node.get("UseRockTiling"):
                 self.renderRock = node.get("UseRockTiling") == "1"
