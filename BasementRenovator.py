@@ -3338,6 +3338,8 @@ class RoomSelector(QWidget):
     def changeSubtype(self, var):
         for r in self.selectedRooms():
             r.info.subtype = var
+            r.setRoomBG()
+
             r.setToolTip()
         mainWindow.dirt()
         mainWindow.scene.update()
