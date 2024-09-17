@@ -60,3 +60,19 @@ There is some subset of users who have found that the normal test launch method 
 
 ### Test Antibirth
 Anitbirth is capable of Instapreview testing for goofing around. In the absence of a true compatibility mode, you can quickly test rooms for poking its behavior. To test rooms in Anti, go to `settings.ini` and set `AntibirthPath` to the folder you have Antibirth installed in (formatted like `InstallPath`) and set `CompatibilityMode` to `Antibirth`. This only supports Instapreview. For Antibirth enemies, check out `resources/EntitiesAntibirth.xml`. Icon PRs welcome!
+
+### Tiling Pit Grids with other grids
+
+In case you have two grid entities that use pit tiling and need to tile with each other/other tiles other than themselves, you can use the `pitextra` sub-node for entities.
+
+An example:
+
+```xml
+<entity Image="..." EditorImage="mypit.png" UsePitTiling="1" [other attributes]>
+    <pitextra Image="otherpit.png"></pitextra>
+    <pitextra Image="arbitraryGrid.png"></pitextra>
+</entity>
+```
+
+In this example, the mypit.png pits will connect to tiles with the specified spritesheets (even if they do not use pit tiling themselves).
+Make sure if there is a different `EditorImage` in the specified entities to use the path to that spritesheet instead of Image.
