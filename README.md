@@ -1,3 +1,4 @@
+<span>[ English | <a href="README_zh.md">中文</a> ]</span>
 # Basement Renovator
 
 - Basement Renovator is a 3rd-party *[Binding of Isaac: Repentance](https://store.steampowered.com/app/1426300/The_Binding_of_Isaac_Repentance/)* room and level editor.
