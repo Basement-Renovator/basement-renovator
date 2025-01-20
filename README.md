@@ -21,7 +21,7 @@ The latest version of Basement Renovator is available in the [releases section](
 - First, unpack the game's assets using the official unpacker.
   - On Windows: <br>
   `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br>
-  (this will populate the `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms` directory with .stb files)
+  (this will populate the `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms` directory with .stb files) (for Repentance+ it is `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\extracted_resources\resources\rooms`)
   - On MacOS: <br>
   `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br>
   (this will populate the `$HOME/Documents/IsaacUnpacked/resources/rooms` directory with .stb files)
