@@ -2643,7 +2643,6 @@ class RoomDelegate(QStyledItemDelegate):
         if item is not None and item.isCurrent:
             painter.drawPixmap(option.rect.right() - 19, option.rect.top(), self.pixmap)
 
-
 class FilterMenu(QMenu):
     def __init__(self):
         QMenu.__init__(self)
@@ -2666,6 +2665,19 @@ class FilterMenu(QMenu):
                 int(rect.right() / 2 - 12), rect.top() - 2, act.icon().pixmap(24, 24)
             )
 
+# Fixes this bug in Qt5: https://forum.qt.io/topic/150150/drag-dropping-last-index-item-of-a-qlistwidget-removes-its-contents/3?_=1738105058219&lang=en-US
+class RoomSelectorList(QListWidget):
+    def __init__(self):
+        QListWidget.__init__(self)
+
+    def dragMoveEvent(self, e):
+        if (
+            (self.row(self.itemAt(e.pos())) == self.currentRow() + 1)
+            or (self.currentRow() == self.count() - 1 and self.row(self.itemAt(e.pos())) == -1)
+        ):
+            e.ignore()
+        else:
+            super().dragMoveEvent(e)
 
 class RoomSelector(QWidget):
     def __init__(self):
@@ -2855,7 +2867,7 @@ class RoomSelector(QWidget):
         self.filter.addWidget(self.clearExtra, 1, 5)
 
     def setupList(self):
-        self.list = QListWidget()
+        self.list = RoomSelectorList()
         self.list.setViewMode(self.list.ListMode)
         self.list.setSelectionMode(self.list.ExtendedSelection)
         self.list.setResizeMode(self.list.Adjust)
