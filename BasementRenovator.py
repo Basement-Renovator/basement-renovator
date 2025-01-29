@@ -3441,7 +3441,7 @@ class RoomSelector(QWidget):
             usedRoomName = room.name
             if extra in room.name and extra != "":
                 extraCount = room.name.count(extra)
-                regSearch = QRegularExpression(" \((\d*)\)")
+                regSearch = QRegularExpression(r" \((\d*)\)")
                 counterMatches = regSearch.match(room.name)
                 if counterMatches.hasMatch():
                     counter = counterMatches.captured(
