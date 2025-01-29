@@ -1,0 +1,5 @@
+<data>
+  <group Name="Machines">
+    <entity ID="6" Image="Entities/6.19.0 - Revive Machine.png" Name="Revive Machine" Variant="19" Subtype="0" />
+  </group>
+</data>
