@@ -24,7 +24,7 @@
       whichever is loaded last will have priority
  -->
 <data>
-  <room Name="Deathmatch" Type="30" ShowInMenu="0">
+  <room Name="Deathmatch" Type="30" Icon="UI/roomicons/deathmatch.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/special_deathmatch" />
   </room>
   <room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1">
