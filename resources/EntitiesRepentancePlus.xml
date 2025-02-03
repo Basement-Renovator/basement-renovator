@@ -1,0 +1,8 @@
+<data>
+  <group Name="Machines">
+    <entity ID="6" Image="Entities/6.19.0 - Revive Machine.png" Name="Revive Machine" Variant="19" Subtype="0" />
+  </group>
+  <group Name="Unused Miscellaneous">
+    <entity ID="970" Image="Entities/970.4.0 - Deathmatch Player Spawn.png" Name="Deathmatch Player Spawn" Subtype="0" Variant="4" />
+  </group>
+</data>

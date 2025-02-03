@@ -1,0 +1,99 @@
+<!--
+  Room Types
+    - Name = shown in menu, saved in xml if custom
+    - Type = In game room type to alias to
+    - NameRegex = only apply to rooms matching the regex
+    - Icon = Icon to use in menu, else uses default room behavior
+    - child elements = Special metadata about the room type
+  Gfx
+    - Definitions
+      - Defines how the room type should appear, by default uses the current file's stage's graphics
+      - BGPrefix = defined a prefix for the wall/floor backdrop. Different room shapes use different endings to this prefix
+      - StageGfx = defer to the provided stage name's graphics
+      - RoomGfx = defer to the provided room type name's graphics
+    - Constraints
+      - Defines when the Gfx should be applied. Applies most constrictive descending where possible
+      - ID = one or more comma separated room IDs to apply this Gfx to. Can also be a range using () or [] (inclusive) with infinity as an option
+        - used for super secret rooms and grave rooms
+      - StageName = only apply this Gfx in files for this stage
+        - used for grave rooms
+    Entity
+      - Defines an entity stub to match with (SubType/Variant default to 0 if exempted) and apply the Image override, if applicable
+        - used for crawlspaces and curse rooms
+      - NOTE entities declared in the Entities can declare a Room/StageGfx to override the current room with if they are rendered
+      whichever is loaded last will have priority
+ -->
+<data>
+  <room Name="Deathmatch" Type="30" Icon="UI/roomicons/deathmatch.png" ShowInMenu="1">
+    <Gfx BGPrefix="Backgrounds/special_deathmatch" />
+  </room>
+  <room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1">
+    <Gfx StageGfx="Basement" Subtype="1" />
+    <Gfx StageGfx="Cellar" Subtype="2" />
+    <Gfx StageGfx="Burning Basement" Subtype="3" />
+    <Gfx StageGfx="Caves" Subtype="4" />
+    <Gfx StageGfx="Catacombs" Subtype="5" />
+    <Gfx StageGfx="Flooded Caves" Subtype="6" />
+    <Gfx StageGfx="Depths" Subtype="7" />
+    <Gfx StageGfx="Necropolis" Subtype="8" />
+    <Gfx StageGfx="Dank Depths" Subtype="9" />
+    <Gfx StageGfx="Womb" Subtype="10" />
+    <Gfx StageGfx="Utero" Subtype="11" />
+    <Gfx StageGfx="Scarred Womb" Subtype="12" />
+    <Gfx StageGfx="Blue Womb" Subtype="13" />
+    <Gfx StageGfx="Sheol" Subtype="14" />
+    <Gfx StageGfx="Cathedral" Subtype="15" />
+    <Gfx StageGfx="Dark Room" Subtype="16" />
+    <Gfx StageGfx="Chest" Subtype="17" />
+
+    <Gfx RoomGfx="Library" Subtype="19" />
+    <Gfx RoomGfx="Shop" Subtype="20" />
+    <Gfx RoomGfx="Isaac's Room" Subtype="21" />
+    <Gfx RoomGfx="Barren Room" Subtype="22" />
+    <Gfx RoomGfx="Secret Room" Subtype="23" />
+    <Gfx RoomGfx="Dice Room" Subtype="24" />
+    <Gfx RoomGfx="Arcade" Subtype="25" />
+    <Gfx RoomGfx="Error Room" Subtype="26" />
+    <Gfx RoomGfx="Shop" Subtype="28" />
+    <Gfx RoomGfx="Sacrifice Room" Subtype="30" />
+
+    <Gfx StageGfx="Downpour" Subtype="31" />
+    <Gfx StageGfx="Mines" Subtype="32" />
+    <Gfx StageGfx="Mausoleum" Subtype="33" />
+    <Gfx StageGfx="Corpse" Subtype="34" />
+    <Gfx RoomGfx="Planetarium" Subtype="35" />
+    <Gfx RoomGfx="Downpour Entrance" Subtype="36" />
+    <Gfx RoomGfx="Mines Entrance" Subtype="37" />
+    <Gfx RoomGfx="Mausoleum Entrance" Subtype="38" />
+
+    <!-- Backdrop Alts -->
+    <Gfx StageGfx="Mausoleum" Subtype="40" />
+    <Gfx StageGfx="Mausoleum" Subtype="41" />
+    <Gfx StageGfx="Mausoleum" Subtype="42" />
+    <Gfx StageGfx="Corpse" Subtype="43" />
+    <Gfx StageGfx="Corpse" Subtype="44" />
+
+    <Gfx StageGfx="Dross" Subtype="45" />
+    <Gfx StageGfx="Ashpit" Subtype="46" />
+    <Gfx StageGfx="Gehenna" Subtype="47" />
+
+    <!-- Mortis placeholder? -->
+    <Gfx StageGfx="Corpse" Subtype="48" />
+
+    <Gfx RoomGfx="Home Isaac's Bedroom" Subtype="49" />
+    <Gfx StageGfx="Home" Subtype="50" />
+    <Gfx RoomGfx="Home Mom's Bedroom" Subtype="51" />
+    <Gfx RoomGfx="Home Closet" Subtype="52" />
+    <Gfx RoomGfx="Home Closet B" Subtype="53" />
+
+    <!-- Escape Sequence -->
+    <Gfx StageGfx="Mines" Subtype="58" />
+    <Gfx StageGfx="Ashpit" Subtype="59" />
+
+    <Gfx RoomGfx="Death Certificate" Subtype="60" />
+
+    <!-- Repentance+ -->
+    <Gfx RoomGfx="Deathmatch" Subtype="61" />
+    <Gfx BGPrefix="Backgrounds/special_lil_portal" Subtype="62" />
+  </room>
+</data>

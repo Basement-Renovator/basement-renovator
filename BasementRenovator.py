@@ -64,7 +64,7 @@ def getGameVersion():
     Returns the current compatibility mode, and the sub version if it exists
     """
     # default mode if not set
-    mode = settings.value("CompatibilityMode", "Repentance")
+    mode = settings.value("CompatibilityMode", "Repentance+")
 
     return mode
 
@@ -186,7 +186,7 @@ def findModsPath(installPath=None):
 
     version = getGameVersion()
 
-    if version not in ["Afterbirth+", "Repentance"]:
+    if version not in ["Afterbirth+", "Repentance", "Repentance+"]:
         printf(f"INFO: {version} does not support mod folders")
         return ""
 
@@ -4185,7 +4185,7 @@ class TestConfigDialog(QDialog):
         characterLayout.addWidget(self.characterEntry)
         characterWidget = QWidget()
         characterWidget.setLayout(characterLayout)
-        if version not in ["Repentance"]:
+        if version not in ["Repentance", "Repentance+"]:
             characterWidget.setEnabled(False)
         self.layout.addWidget(characterWidget)
 
@@ -6047,7 +6047,7 @@ class MainWindow(QMainWindow):
             testData.write(
                 f"""return {{
     TestType = {strFix(testType)},
-    Character = {char or 'nil'}, -- only used in Repentance
+    Character = {char or 'nil'}, -- only used in Repentance and Repentance+
     Commands = {{ {', '.join(map(strFix, commands))} }},
     Stage = {floorInfo.get('Stage')},
     StageType = {floorInfo.get('StageType')},
@@ -6073,7 +6073,7 @@ class MainWindow(QMainWindow):
     # Test by replacing the rooms in the relevant floor
     def testMap(self):
         def setup(modPath, roomsPath, floorInfo, rooms, version):
-            if version not in ["Afterbirth+", "Repentance"]:
+            if version not in ["Afterbirth+", "Repentance", "Repentance+"]:
                 QMessageBox.warning(
                     self, "Error", f"Stage Replacement not supported for {version}!"
                 )
@@ -6154,7 +6154,7 @@ class MainWindow(QMainWindow):
                 raise
             testRoom = testRoom[0]
 
-            if version not in ["Afterbirth+", "Repentance"]:
+            if version not in ["Afterbirth+", "Repentance", "Repentance+"]:
                 QMessageBox.warning(
                     self,
                     "Error",

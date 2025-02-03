@@ -17,7 +17,7 @@ The latest version of Basement Renovator is available in the [releases section](
 
 ### How to Create a Mod that Modifies Rooms in the Vanilla Game
 
-- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+ or Repentance), read on.
+- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+, Repentance, or Repentance+), read on.
 - First, unpack the game's assets using the official unpacker.
   - On Windows: <br>
   `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br>
@@ -75,10 +75,16 @@ The latest version of Basement Renovator is available in the [releases section](
 *The 'InstaPreview' tool isn't working for me; what can I do?*
 - Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
 
-*How do I edit Repentance rooms?*
-
-- Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, and `Antibirth`
-- The room files have the same format as AB and AB+
+*How do I create or edit rooms for a specific DLC, or Antibirth?*
+- Open `settings.ini` in the BR folder in a text editor. Add a new line starting with `CompatibilityMode=` followed by:
+    - `Rebirth`
+    - `Afterbirth`
+    - `Afterbirth+`
+    - `Repentance`
+    - `Repentance+` (default)
+    - `Antibirth`
+- This limits/adjusts content available in the editor to what is available in that DLC (updates welcome if there are inaccuracies!)
+- Rebirth and Antibirth have specialized `stb` formats. Every other version uses the same binary format, beginning with Afterbirth.
 
 *I found a bug!*
 

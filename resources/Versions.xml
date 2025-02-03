@@ -39,4 +39,10 @@
     <roomtypes Name="SecretRoomTypes" File="Empty.xml" />
     <stages Name="GreedStages" File="Empty.xml" />
   </version>
+
+  <version Name="Repentance+">
+    <version Name="Repentance" />
+    <entities File="EntitiesRepentancePlus.xml" />
+    <roomtypes File="RoomTypesRepentancePlus.xml" />
+  </version>
 </data>
