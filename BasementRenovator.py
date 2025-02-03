@@ -2353,7 +2353,8 @@ class Room(QListWidgetItem):
     @difficulty.setter
     def difficulty(self, d):
         self._difficulty = d
-        if d == 20:
+        version = getGameVersion()
+        if version in ["Repentance", "Repentance+"] and d == 20:
             self.setForeground(QColor(190, 0, 255))
         else:
             self.setForeground(QColor.fromHsvF(1, 1, min(max(d / 15, 0), 1), 1))
