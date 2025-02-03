@@ -75,10 +75,16 @@ The latest version of Basement Renovator is available in the [releases section](
 *The 'InstaPreview' tool isn't working for me; what can I do?*
 - Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
 
-*How do I edit Repentance rooms?*
-
-- Open `settings.ini` in the BR folder in a text editor. Add a line that says: `CompatibilityMode=Repentance+`. Other valid values are `Rebirth`, `Afterbirth`, `Afterbirth+`, `Repentance`, and `Antibirth`. Setting `CompatibiltyMode` to `Repentance` excludes the Repentance+ Super Secret room backdrops and Revive Machine.
-- The room files have the same format as AB and AB+
+*How do I create or edit rooms for a specific DLC, or Antibirth?*
+- Open `settings.ini` in the BR folder in a text editor. Add a new line starting with `CompatibilityMode=` followed by:
+    - `Rebirth`
+    - `Afterbirth`
+    - `Afterbirth+`
+    - `Repentance`
+    - `Repentance+` (default)
+    - `Antibirth`
+- This limits/adjusts content available in the editor to what is available in that DLC (updates welcome if there are inaccuracies!)
+- Rebirth and Antibirth have specialized `stb` formats. Every other version uses the same binary format, beginning with Afterbirth.
 
 *I found a bug!*
 
