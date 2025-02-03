@@ -158,4 +158,4 @@ BR includes an Icon Generator script under resources to allow for more fine-grai
     - Stage API uses this to convert STBs to Lua files every time you save them
   - Test Hook: when a room is tested, it is output to an XML file. This XML file is passed to a script like so: `script.exe "path to file" --test`
     - Stage API uses this to set up a test room file when testing rooms
-- You can add hooks in File > Set Hooks
+- You can add hooks in `File > Set Hooks`
