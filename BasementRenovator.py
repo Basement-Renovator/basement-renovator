@@ -2630,6 +2630,8 @@ class RoomDelegate(QStyledItemDelegate):
     ) -> None:
         room = mainWindow.roomList.list.item(index.row())
         room.name = editor.text()
+        room.setRoomBG()
+        mainWindow.scene.update()
         mainWindow.dirt()
 
     def paint(self, painter, option, index):
@@ -3345,17 +3347,19 @@ class RoomSelector(QWidget):
     def changeVariant(self, var):
         for r in self.selectedRooms():
             r.info.variant = var
+            r.setRoomBG()
             r.setToolTip()
-        mainWindow.dirt()
         mainWindow.scene.update()
+        mainWindow.dirt()
 
     # @pyqtSlot(int)
     def changeSubtype(self, var):
         for r in self.selectedRooms():
             r.info.subtype = var
+            r.setRoomBG()
             r.setToolTip()
-        mainWindow.dirt()
         mainWindow.scene.update()
+        mainWindow.dirt()
 
     # @pyqtSlot(QAction)
     def changeDifficulty(self, var):
