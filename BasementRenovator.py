@@ -991,28 +991,21 @@ class Entity(QGraphicsItem):
 
             self.getEntityInfo(t, v, s)
 
-        def getEntityInfo(self, entitytype, variant, subtype):
-            self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
-            if self.config is None:
-                printf(
-                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
-                )
+        def updateIcon(self):
+            hasAlt = False
+            if self.config.hasAltImages:
+                for alt in self.config.altImages:
+                    if alt.subtype == str(self.Subtype):
+                        hasAlt = True
+                        self.imgPath = alt.image
+                        break
 
-                self.pixmap = QPixmap("resources/Entities/questionmark.png")
-                self.iconpixmap = self.pixmap
-                self.config = xmlLookups.entities.EntityConfig()
-                return
-
-            if self.config.hasBitfields:
-                for bitfield in self.config.bitfields:
-                    self.validateBitfield(bitfield)
-
-            self.rockFrame = None
-            self.imgPath = self.config.editorImagePath or self.config.imagePath
+            if not hasAlt:
+                self.imgPath = self.config.editorImagePath or self.config.imagePath
 
             if (
-                entitytype == EntityType["PICKUP"]
-                and variant == PickupVariant["COLLECTIBLE"]
+                self.Type == EntityType["PICKUP"]
+                and self.Variant == PickupVariant["COLLECTIBLE"]
             ):
                 i = QImage()
                 i.load("resources/Entities/5.100.0 - Collectible.png")
@@ -1030,10 +1023,30 @@ class Entity(QGraphicsItem):
             else:
                 self.pixmap = QPixmap(self.imgPath)
 
-            if self.imgPath != self.config.imagePath:
+            if self.imgPath != self.config.imagePath and not hasAlt:
                 self.iconpixmap = QPixmap(self.config.imagePath)
             else:
                 self.iconpixmap = self.pixmap
+
+        def getEntityInfo(self, entitytype, variant, subtype):
+            self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
+            if self.config is None:
+                printf(
+                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
+                )
+
+                self.pixmap = QPixmap("resources/Entities/questionmark.png")
+                self.iconpixmap = self.pixmap
+                self.config = xmlLookups.entities.EntityConfig()
+                return
+
+            if self.config.hasBitfields:
+                for bitfield in self.config.bitfields:
+                    self.validateBitfield(bitfield)
+
+            self.rockFrame = None
+
+            self.updateIcon()
 
             if self.config.placeVisual:
                 parts = list(
@@ -1703,6 +1716,8 @@ class EntityMenu(QWidget):
 
     def changeProperty(self, bitfieldElement, value):
         self.entity.setBitfieldElementValue(bitfieldElement, value)
+
+        self.entity.updateIcon()
 
         mainWindow.dirt()
         mainWindow.scene.update()

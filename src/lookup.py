@@ -478,6 +478,11 @@ class EntityLookup(Lookup):
 
                 return number
 
+        class AltIcon:
+            def __init__(self, subtype, image):
+                self.subtype = subtype
+                self.image = image
+
         class Bitfield:
             def __init__(self, node: ET.Element):
                 self.key = node.get("Key", "Subtype")
@@ -563,6 +568,8 @@ class EntityLookup(Lookup):
             self.hasBitfields = False
             self.invalidBitfield = False
             self.bitfields = []
+            self.hasAltImages = False
+            self.altImages = []
             self.tags = {}
             self.uniqueid = -1
             self.tagsString = "[]"
@@ -842,6 +849,17 @@ class EntityLookup(Lookup):
                         break
                     else:
                         self.bitfields.append(bitfield)
+
+            altImages = node.findall("altimage")
+            if len(altImages) != 0:
+                self.hasAltImages = True
+                for altImageNode in altImages:
+                    subtype = altImageNode.get("Subtype")
+                    imagePath = self.validateImagePath(
+                        altImageNode.get("Image"), self.mod.resourcePath
+                    )
+                    altIcon = self.AltIcon(subtype, imagePath)
+                    self.altImages.append(altIcon)
 
             rangeWarnings = self.getOutOfRangeWarnings()
             if rangeWarnings != "":
