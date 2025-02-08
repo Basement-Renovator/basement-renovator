@@ -994,11 +994,31 @@ class Entity(QGraphicsItem):
         def updateIcon(self):
             hasAlt = False
             if self.config.hasAltImages:
+                # Check subtype alt images.
+                # Subtype images should take priority.
                 for alt in self.config.altImages:
-                    if alt.subtype == str(self.Subtype):
+                    if alt.subtype == self.Subtype:
                         hasAlt = True
                         self.imgPath = alt.image
                         break
+
+                if not hasAlt:
+                    for element in self.config.getBitfieldElements():
+                        if element.hasAltImages:
+                            for alt in element.altImages:
+                                displayValue = int(
+                                    element.getDisplayValue(
+                                        self.getBitfieldValue(element.bitfield)
+                                    )
+                                )
+
+                                if (
+                                    alt.valueMin <= displayValue
+                                    and alt.valueMax >= displayValue
+                                ):
+                                    hasAlt = True
+                                    self.imgPath = alt.image
+                                    break
 
             if not hasAlt:
                 self.imgPath = self.config.editorImagePath or self.config.imagePath
@@ -1084,6 +1104,8 @@ class Entity(QGraphicsItem):
                     self.getBitfieldValue(bitfieldElement.bitfield), int(value)
                 ),
             )
+
+            self.updateIcon()
 
     def __init__(self, x, y, myType, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
@@ -1510,6 +1532,8 @@ class Entity(QGraphicsItem):
             customPlaceVisuals = {"WallSnap": WallSnap}
 
             recenter = self.entity.placeVisual
+
+            self.entity.updateIcon()
 
             imgPath = self.entity.imgPath
 
