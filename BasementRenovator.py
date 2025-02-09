@@ -1012,8 +1012,13 @@ class Entity(QGraphicsItem):
                                     )
                                 )
 
-                                valueMin = alt.valueMin if alt.valueMin is not None else displayValue
-                                valueMax = alt.valueMax if alt.valueMax is not None else displayValue
+                                valueMin = displayValue
+                                if alt.valueMin is not None:
+                                    valueMin = alt.valueMin
+
+                                valueMax = displayValue
+                                if alt.valueMax is not None:
+                                    valueMax = alt.valueMax
 
                                 if (
                                     valueMin <= displayValue
