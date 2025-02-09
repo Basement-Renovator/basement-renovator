@@ -1012,9 +1012,12 @@ class Entity(QGraphicsItem):
                                     )
                                 )
 
+                                valueMin = alt.valueMin if alt.valueMin is not None else displayValue
+                                valueMax = alt.valueMax if alt.valueMax is not None else displayValue
+
                                 if (
-                                    alt.valueMin <= displayValue
-                                    and alt.valueMax >= displayValue
+                                    valueMin <= displayValue
+                                    and valueMax >= displayValue
                                 ):
                                     hasAlt = True
                                     self.imgPath = alt.image

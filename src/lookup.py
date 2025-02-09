@@ -497,11 +497,9 @@ class EntityLookup(Lookup):
                 valueMin = node.get("ValueMinimum")
                 valueMax = node.get("ValueMaximum")
 
-                if valueMin is None:
-                    valueMin = valueMax if valueMax is not None else value
-
-                if valueMax is None:
-                    valueMax = valueMin if valueMin is not None else value
+                if valueMin is None and valueMax is None:
+                    valueMin = value
+                    valueMax = value
 
                 self.subtype = int(subtype)
                 self.valueMin = int(valueMin) if valueMin is not None else None
