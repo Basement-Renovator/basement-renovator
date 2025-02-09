@@ -415,7 +415,9 @@ class EntityLookup(Lookup):
                     self.hasAltImages = True
                     for altImageNode in altImages:
                         altIcon = EntityLookup.EntityConfig.AltImage(altImageNode)
-                        altIcon.image = self.bitfield.config.validateAltImagePath(altIcon.image)
+                        altIcon.image = self.bitfield.config.validateAltImagePath(
+                            altIcon.image
+                        )
                         self.altImages.append(altIcon)
 
             def getRawValue(self, number):
@@ -633,7 +635,9 @@ class EntityLookup(Lookup):
             return tag and tag.tag in self.tags
 
         def validateAltImagePath(self, imagePath):
-            return self.validateImagePath(imagePath, self.mod.resourcePath, "resources/Entities/questionmark.png")
+            return self.validateImagePath(
+                imagePath, self.mod.resourcePath, "resources/Entities/questionmark.png"
+            )
 
         def validateImagePath(self, imagePath, resourcePath, default=None):
             if imagePath is None:
