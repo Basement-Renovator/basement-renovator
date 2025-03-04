@@ -563,17 +563,17 @@
       <entity ID="6000" Image="Entities/6000.112.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="112" />
       <entity ID="6000" Image="Entities/6000.113.0 - Rail (Mineshaft).png" Name="Rail (Mineshaft)" Subtype="0" Variant="113" />
 
-      <entity ID="6001" Image="Entities/6001.0.0 - Rail (Pit) (left-to-right).png" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" />
-      <entity ID="6001" Image="Entities/6001.1.0 - Rail (Pit) (up-to-down).png" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="1" />
-      <entity ID="6001" Image="Entities/6001.2.0 - Rail (Pit) (up-to-right).png" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="2" MirrorX="6001.3.0" MirrorY="6001.4.0" />
-      <entity ID="6001" Image="Entities/6001.3.0 - Rail (Pit) (up-to-left).png" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="3" MirrorX="6001.2.0" MirrorY="6001.5.0" />
-      <entity ID="6001" Image="Entities/6001.4.0 - Rail (Pit) (left-to-up).png" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="4" MirrorX="6001.5.0" MirrorY="6001.2.0" />
-      <entity ID="6001" Image="Entities/6001.5.0 - Rail (Pit) (right-to-up).png" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="5" MirrorX="6001.4.0" MirrorY="6001.3.0" />
-      <entity ID="6001" Image="Entities/6001.6.0 - Rail (Pit) (crossroad).png" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="6" />
-      <entity ID="6001" Image="Entities/6001.16.0 - Rail (Pit) (cart-left).png" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="16" MirrorX="6001.32.0" />
-      <entity ID="6001" Image="Entities/6001.32.0 - Rail (Pit) (cart-right).png" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="32" MirrorX="6000.16.0" />
-      <entity ID="6001" Image="Entities/6001.17.0 - Rail (Pit) (cart-up).png" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="17" MirrorY="6001.33.0" />
-      <entity ID="6001" Image="Entities/6001.33.0 - Rail (Pit) (cart-down).png" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="33" MirrorY="6001.17.0" />
+      <entity ID="6001" Image="Entities/6001.0.0 - Rail (Pit) (left-to-right).png" Name="Rail (Pit) (left-to-right)" Subtype="0" Variant="0" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.0.0 - Rail (Pit) (left-to-right).png" />
+      <entity ID="6001" Image="Entities/6001.1.0 - Rail (Pit) (up-to-down).png" Name="Rail (Pit) (up-to-down)" Subtype="0" Variant="1" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.1.0 - Rail (Pit) (up-to-down).png" />
+      <entity ID="6001" Image="Entities/6001.2.0 - Rail (Pit) (up-to-right).png" Name="Rail (Pit) (up-to-right)" Subtype="0" Variant="2" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.2.0 - Rail (Pit) (up-to-right).png" MirrorX="6001.3.0" MirrorY="6001.4.0" />
+      <entity ID="6001" Image="Entities/6001.3.0 - Rail (Pit) (up-to-left).png" Name="Rail (Pit) (up-to-left)" Subtype="0" Variant="3" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.3.0 - Rail (Pit) (up-to-left).png" MirrorX="6001.2.0" MirrorY="6001.5.0" />
+      <entity ID="6001" Image="Entities/6001.4.0 - Rail (Pit) (left-to-up).png" Name="Rail (Pit) (left-to-up)" Subtype="0" Variant="4" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.4.0 - Rail (Pit) (left-to-up).png" MirrorX="6001.5.0" MirrorY="6001.2.0" />
+      <entity ID="6001" Image="Entities/6001.5.0 - Rail (Pit) (right-to-up).png" Name="Rail (Pit) (right-to-up)" Subtype="0" Variant="5" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.5.0 - Rail (Pit) (right-to-up).png" MirrorX="6001.4.0" MirrorY="6001.3.0" />
+      <entity ID="6001" Image="Entities/6001.6.0 - Rail (Pit) (crossroad).png" Name="Rail (Pit) (crossroad)" Subtype="0" Variant="6" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.6.0 - Rail (Pit) (crossroad).png" />
+      <entity ID="6001" Image="Entities/6001.16.0 - Rail (Pit) (cart-left).png" Name="Rail (Pit) (cart-left)" Subtype="0" Variant="16" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.16.0 - Rail (Pit) (cart-left).png" MirrorX="6001.32.0" />
+      <entity ID="6001" Image="Entities/6001.32.0 - Rail (Pit) (cart-right).png" Name="Rail (Pit) (cart-right)" Subtype="0" Variant="32" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.32.0 - Rail (Pit) (cart-right).png" MirrorX="6000.16.0" />
+      <entity ID="6001" Image="Entities/6001.17.0 - Rail (Pit) (cart-up).png" Name="Rail (Pit) (cart-up)" Subtype="0" Variant="17" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.17.0 - Rail (Pit) (cart-up).png" MirrorY="6001.33.0" />
+      <entity ID="6001" Image="Entities/6001.33.0 - Rail (Pit) (cart-down).png" Name="Rail (Pit) (cart-down)" Subtype="0" Variant="33" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/6001.33.0 - Rail (Pit) (cart-down).png" MirrorY="6001.17.0" />
     </group>
   </group>
 
