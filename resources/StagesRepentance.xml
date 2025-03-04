@@ -19,7 +19,7 @@
   </stage>
   <stage Name="Catacombs">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_catacombs.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_catacombs.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_catacombs.png" />
@@ -31,7 +31,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_catacombs.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_catacombs.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_catacombs.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_catacombs.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_catacombs.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_catacombs.png" />
@@ -39,7 +39,7 @@
   </stage>
   <stage Name="Flooded Caves">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_floodedcaves.png" />
@@ -51,7 +51,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_floodedcaves.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_floodedcaves.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_floodedcaves.png" />
@@ -65,7 +65,7 @@
   </stage>
   <stage Name="Depths">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_depths.png" />
@@ -77,7 +77,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_depths.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_depths.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_depths.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_depths.png" />
@@ -85,7 +85,7 @@
   </stage>
   <stage Name="Necropolis">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_necropolis.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_necropolis.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_necropolis.png" />
@@ -97,7 +97,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_necropolis.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_necropolis.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_necropolis.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_necropolis.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_depths.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_depths.png" />
@@ -105,7 +105,7 @@
   </stage>
   <stage Name="Dank Depths">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_dankdepths.png" />
@@ -117,7 +117,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_dankdepths.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_depths.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_depths.png" />
@@ -125,7 +125,7 @@
   </stage>
   <stage Name="Womb">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_womb.png" />
@@ -137,7 +137,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_womb.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_womb.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_womb.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_womb.png" />
@@ -145,7 +145,7 @@
   </stage>
   <stage Name="Utero">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_utero.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_utero.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_utero.png" />
@@ -157,7 +157,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_utero.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_utero.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_utero.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_utero.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_womb.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_womb.png" />
@@ -165,7 +165,7 @@
   </stage>
   <stage Name="Scarred Womb">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_womb.png" />
@@ -177,7 +177,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_womb.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_womb.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_scarredwomb.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_scarredwomb.png" />
@@ -185,7 +185,7 @@
   </stage>
   <stage Name="Blue Womb">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_bluewomb.png" />
@@ -197,7 +197,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_bluewomb.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_bluewomb.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_bluewomb.png" />
@@ -205,7 +205,7 @@
   </stage>
   <stage Name="Sheol">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_depths.png" />
@@ -217,7 +217,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_depths.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_depths.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_depths.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_sheol.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_sheol.png" />
@@ -225,7 +225,7 @@
   </stage>
   <stage Name="Cathedral">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_cathedral.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_cathedral.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_cathedral.png" />
@@ -237,7 +237,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_cathedral.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_cathedral.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_cathedral.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_cathedral.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_cathedral.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_cathedral.png" />
@@ -245,7 +245,7 @@
   </stage>
   <stage Name="Dark Room">
     <Gfx>
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_darkroom.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_darkroom.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_darkroom.png" />
@@ -257,14 +257,14 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_darkroom.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_darkroom.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_darkroom.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_darkroom.png" />
     </Gfx>
   </stage>
 
   <stage Name="Downpour" BaseGamePath="27.downpour" Stage="1" StageType="4" Pattern="downpour">
     <Gfx BGPrefix="Backgrounds/01x_downpour">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_downpour.png" />
@@ -276,7 +276,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_downpour.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="3009" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_downpour.png" />
@@ -292,7 +292,7 @@
   </stage>
   <stage Name="Dross" BaseGamePath="28.dross" Stage="1" StageType="5" Pattern="dross">
     <Gfx BGPrefix="Backgrounds/02x_dross">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_dross.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_dross.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_dross.png" />
@@ -304,7 +304,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_dross.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_dross.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_dross.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_dross.png" />
       <Entity ID="3009" Image="Backgrounds/pit_dross.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_dross.png" />
@@ -335,7 +335,7 @@
   </stage>
   <stage Name="Mines" BaseGamePath="29.mines" Stage="3" StageType="4" Pattern="mines">
     <Gfx BGPrefix="Backgrounds/03x_mines">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_mines.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_mines.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_mines.png" />
@@ -347,7 +347,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_mines.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_mines.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_mines.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_mines.png" />
       <Entity ID="3009" Image="Backgrounds/pit_mines.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_secretroom.png" />
@@ -358,7 +358,7 @@
   </stage>
   <stage Name="Ashpit" BaseGamePath="30.ashpit" Stage="3" StageType="5" Pattern="ashpit">
     <Gfx BGPrefix="Backgrounds/04x_ashpit">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_ashpit.png" />
@@ -370,7 +370,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_ashpit.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="3009" Image="Backgrounds/pit_ashpit.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_ashpit.png" />
@@ -386,7 +386,7 @@
   </stage>
   <stage Name="Mausoleum" BaseGamePath="31.mausoleum" Stage="5" StageType="4" Pattern="mausoleum">
     <Gfx BGPrefix="Backgrounds/05x_mausoleum">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_mausoleum.png" />
@@ -398,7 +398,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_mausoleum.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="3009" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
@@ -410,7 +410,7 @@
   </stage>
   <stage Name="Gehenna" BaseGamePath="32.gehenna" Stage="5" StageType="5" Pattern="gehenna">
     <Gfx BGPrefix="Backgrounds/06x_gehenna">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_gehenna.png" />
@@ -422,7 +422,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_gehenna.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="3009" Image="Backgrounds/pit_gehenna.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_gehenna.png" />
@@ -444,7 +444,7 @@
   </stage>
   <stage Name="Corpse" BaseGamePath="33.corpse" Stage="7" StageType="4" Pattern="corpse">
     <Gfx BGPrefix="Backgrounds/07x_corpse">
-    <!-- Start Rails Group -->
+      <!-- Start Rails Group -->
       <Entity ID="6001" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="6001" Variant="1" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="6001" Variant="2" Image="Backgrounds/pit_corpse.png" />
@@ -456,7 +456,7 @@
       <Entity ID="6001" Variant="17" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_corpse.png" />
-    <!-- End Rails Group -->
+      <!-- End Rails Group -->
       <Entity ID="3000" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="3009" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_corpse.png" />
