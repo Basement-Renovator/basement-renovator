@@ -444,9 +444,6 @@ class RoomScene(QGraphicsScene):
 
         gs = 26
 
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-
         white = QColor.fromRgb(255, 255, 255, 100)
         bad = QColor.fromRgb(100, 255, 255, 100)
 
@@ -742,8 +739,6 @@ class RoomEditorWidget(QGraphicsView):
         painter = QPainter()
         painter.begin(self.viewport())
 
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
         painter.setPen(QPen(Qt.white, 1, Qt.SolidLine))
 
         room = mainWindow.roomList.selectedRoom()
@@ -904,9 +899,6 @@ class RoomEditorWidget(QGraphicsView):
 
     def drawForeground(self, painter, rect):
         QGraphicsView.drawForeground(self, painter, rect)
-
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
         # Display the number of entities on a given tile, in bitFont or regular font
         tiles = [
@@ -1453,9 +1445,6 @@ class Entity(QGraphicsItem):
         return self.entity.imgPath if override is None else override.get("Image")
 
     def paint(self, painter, option, widget):
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-
         painter.setBrush(Qt.Dense5Pattern)
         painter.setPen(QPen(Qt.white))
 
@@ -1909,8 +1898,6 @@ class EntityStack(QGraphicsItem):
             self.items[idx].entity.weight = self.spinners[idx].widget().value()
 
     def paint(self, painter, option, widget):
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
 
         brush = QBrush(QColor(0, 0, 0, 80))
         painter.setPen(QPen(Qt.transparent))
@@ -2017,9 +2004,6 @@ class Door(QGraphicsItem):
         self.doorItem[2] = val
 
     def paint(self, painter, option, widget):
-        painter.setRenderHint(QPainter.Antialiasing, True)
-        painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-
         if self.exists:
             painter.drawImage(0, 0, self.image)
         else:
