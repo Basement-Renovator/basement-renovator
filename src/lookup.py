@@ -408,6 +408,18 @@ class EntityLookup(Lookup):
                 if self.widget == "bitmap":
                     self.gridwidth = int(node.get("Width", self.length))
 
+                self.hasAltImages = False
+                self.altImages = []
+                altImages = node.findall("altimage")
+                if len(altImages) != 0:
+                    self.hasAltImages = True
+                    for altImageNode in altImages:
+                        altIcon = EntityLookup.EntityConfig.AltImage(altImageNode)
+                        altIcon.image = self.bitfield.config.validateAltImagePath(
+                            altIcon.image
+                        )
+                        self.altImages.append(altIcon)
+
             def getRawValue(self, number):
                 number = bitGet(number, self.offset, self.length)
 
@@ -478,9 +490,27 @@ class EntityLookup(Lookup):
 
                 return number
 
-        class Bitfield:
+        class AltImage:
             def __init__(self, node: ET.Element):
+                subtype = node.get("Subtype", 0)
+                value = node.get("Value", 0)
+                valueMin = node.get("ValueMinimum")
+                valueMax = node.get("ValueMaximum")
+
+                if valueMin is None and valueMax is None:
+                    valueMin = value
+                    valueMax = value
+
+                self.subtype = int(subtype)
+                self.valueMin = int(valueMin) if valueMin is not None else None
+                self.valueMax = int(valueMax) if valueMax is not None else None
+                self.image = node.get("Image")
+
+        class Bitfield:
+            def __init__(self, node: ET.Element, parentConfig):
+                self.config = parentConfig
                 self.key = node.get("Key", "Subtype")
+                self.hasAltImages = False
                 self.elements = []
                 offset = 0
                 for elementNode in node:
@@ -495,6 +525,9 @@ class EntityLookup(Lookup):
                     element = EntityLookup.EntityConfig.BitfieldElement(
                         self, elementNode, elementOffset, length
                     )
+
+                    if element.hasAltImages:
+                        self.hasAltImages = True
 
                     self.elements.append(element)
 
@@ -563,6 +596,8 @@ class EntityLookup(Lookup):
             self.hasBitfields = False
             self.invalidBitfield = False
             self.bitfields = []
+            self.hasAltImages = False
+            self.altImages = []
             self.tags = {}
             self.uniqueid = -1
             self.tagsString = "[]"
@@ -596,6 +631,11 @@ class EntityLookup(Lookup):
         def hasTag(self, tag):
             tag = self.getTagConfig(tag)
             return tag and tag.tag in self.tags
+
+        def validateAltImagePath(self, imagePath):
+            return self.validateImagePath(
+                imagePath, self.mod.resourcePath, "resources/Entities/questionmark.png"
+            )
 
         def validateImagePath(self, imagePath, resourcePath, default=None):
             if imagePath is None:
@@ -833,7 +873,7 @@ class EntityLookup(Lookup):
             if len(bitfields) != 0:
                 self.hasBitfields = True
                 for bitfieldNode in bitfields:
-                    bitfield = self.Bitfield(bitfieldNode)
+                    bitfield = self.Bitfield(bitfieldNode, self)
                     if bitfield.isInvalid():
                         self.invalidBitfield = True
                         warnings += (
@@ -842,6 +882,17 @@ class EntityLookup(Lookup):
                         break
                     else:
                         self.bitfields.append(bitfield)
+
+                        if bitfield.hasAltImages:
+                            self.hasAltImages = True
+
+            altImages = node.findall("altimage")
+            if len(altImages) != 0:
+                self.hasAltImages = True
+                for altImageNode in altImages:
+                    altIcon = self.AltImage(altImageNode)
+                    altIcon.image = self.validateAltImagePath(altIcon.image)
+                    self.altImages.append(altIcon)
 
             rangeWarnings = self.getOutOfRangeWarnings()
             if rangeWarnings != "":
@@ -1468,9 +1519,9 @@ class MainLookup:
         if prefix:
             paths = {
                 "OuterBG": prefix + ".png",
-                "BigOuterBG": prefix + "_big.png"
-                if node.get("HasBigBG") == "1"
-                else "",
+                "BigOuterBG": (
+                    prefix + "_big.png" if node.get("HasBigBG") == "1" else ""
+                ),
                 "InnerBG": prefix + "Inner.png",
                 "NFloor": prefix + "_nfloor.png",
                 "LFloor": prefix + "_lfloor.png",
