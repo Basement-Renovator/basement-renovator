@@ -215,7 +215,7 @@ class StageLookup(Lookup):
                 hasBasePath = lambda s: s.get("BaseGamePath") == baseGamePath
             stages = list(filter(hasBasePath, stages))
 
-        return stages
+        return stages[::-1]
 
     def getGfx(self, node):
         gfx = node.find("Gfx")
