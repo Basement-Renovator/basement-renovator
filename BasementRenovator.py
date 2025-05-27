@@ -6302,8 +6302,10 @@ class MainWindow(QMainWindow):
 
             # Prefix the file path with the root that Proton uses
             # Only necessary for Repentance and Repentance+ as they don't have native Linux support.
-            isLinux = "Linux" in platform.system()
-            if version in ["Repentance", "Repentance+"] and isLinux:
+            if (
+                version in ["Repentance", "Repentance+"]
+                and "Linux" in platform.system()
+            ):
                 modPath = "Z:\\" + modPath
 
             return (
