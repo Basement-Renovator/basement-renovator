@@ -6306,7 +6306,7 @@ class MainWindow(QMainWindow):
                 version in ["Repentance", "Repentance+"]
                 and "Linux" in platform.system()
             ):
-                modPath = "Z:\\" + modPath
+                modPath = "Z:/" + modPath
 
             return (
                 [
