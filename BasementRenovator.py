@@ -43,7 +43,7 @@ import datetime
 import random
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import xml.etree.cElementTree as ET
 import psutil
 
@@ -6300,9 +6300,17 @@ class MainWindow(QMainWindow):
                     "",
                 )
 
+            # Prefix the file path with the root that Proton uses
+            # Only necessary for Repentance and Repentance+ as they don't have native Linux support.
+            if (
+                version in ["Repentance", "Repentance+"]
+                and "Linux" in platform.system()
+            ):
+                modPath = "Z:/" + modPath
+
             return (
                 [
-                    f"--load-room={path}",
+                    f"--load-room={PureWindowsPath(modPath) / testfile}",
                     f"--set-stage={floorInfo.get('Stage')}",
                     f"--set-stage-type={floorInfo.get('StageType')}",
                 ],
