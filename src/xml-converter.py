@@ -1,6 +1,7 @@
 """
 Converts an xml file to an stb file
 """
+
 from pathlib import Path
 
 import roomconvert as cvt

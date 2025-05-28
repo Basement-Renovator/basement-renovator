@@ -1,6 +1,7 @@
 """
 Merges room files into one specified by a config file
 """
+
 from pathlib import Path
 
 import subprocess, json

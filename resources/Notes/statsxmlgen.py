@@ -180,10 +180,10 @@ def openMap():
                         **e
                     )
                 )
-                e[
-                    "pixmap"
-                ] = "resources/Entities/{ID}.{Variant}.{Subtype} - {Name}.png".format(
-                    **e
+                e["pixmap"] = (
+                    "resources/Entities/{ID}.{Variant}.{Subtype} - {Name}.png".format(
+                        **e
+                    )
                 )
                 EntityOutput.add(
                     (

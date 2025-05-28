@@ -1,6 +1,7 @@
 """
 Generates icons for BR from an anm2 file
 """
+
 import os, platform, re
 
 import anm2

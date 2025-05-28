@@ -1468,9 +1468,9 @@ class MainLookup:
         if prefix:
             paths = {
                 "OuterBG": prefix + ".png",
-                "BigOuterBG": prefix + "_big.png"
-                if node.get("HasBigBG") == "1"
-                else "",
+                "BigOuterBG": (
+                    prefix + "_big.png" if node.get("HasBigBG") == "1" else ""
+                ),
                 "InnerBG": prefix + "Inner.png",
                 "NFloor": prefix + "_nfloor.png",
                 "LFloor": prefix + "_lfloor.png",

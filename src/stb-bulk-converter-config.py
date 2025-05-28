@@ -1,6 +1,7 @@
 """
 Converts stb files into xml as specified by a config file
 """
+
 from pathlib import Path
 
 import subprocess, json

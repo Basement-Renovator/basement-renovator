@@ -1,6 +1,7 @@
 """
 Merges room files into one
 """
+
 from pathlib import Path
 
 import subprocess

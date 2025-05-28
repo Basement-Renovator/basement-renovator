@@ -1,6 +1,7 @@
 """
 Bulk replaces entities across room files
 """
+
 import json
 from pathlib import Path
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser
