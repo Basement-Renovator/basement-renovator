@@ -1476,6 +1476,12 @@ class MainLookup:
                 "LFloor": prefix + "_lfloor.png",
             }
 
+            if node.get("HasFloorAnim") == "1":
+                paths["FloorAnim"] = prefix + "_FloorBackdrop.anm2"
+
+            if node.get("HasWallAnim") == "1":
+                paths["WallAnim"] = prefix + "_WallBackdrop.anm2"
+
         if paths is None:
             raise ValueError("Invalid gfx node!", node.tag, node.attrib)
 

@@ -112,7 +112,7 @@
     <Gfx RoomGfx="Death Certificate" Subtype="60" />
   </room>
   <room Name="Planetarium" Type="24" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
-    <Gfx BGPrefix="Backgrounds/planetarium" />
+    <Gfx BGPrefix="Backgrounds/planetarium" HasFloorAnim="1" />
     <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
   </room>
   <room Name="Teleporter" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">

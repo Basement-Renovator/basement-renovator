@@ -332,14 +332,24 @@ class RoomScene(QGraphicsScene):
         self.bgState = []
         self.framecache = {}
 
-        self.floorAnim = anm2.Config(
-            "resources/Backgrounds/FloorBackdrop.anm2", "resources"
-        )
+        self.floorAnim = None
+        self.wallAnim = None
+        self.loadAnims()
+
         self.floorImg = None
-        self.wallAnim = anm2.Config(
-            "resources/Backgrounds/WallBackdrop.anm2", "resources"
-        )
         self.wallImg = None
+
+    def loadAnims(self):
+        gfx = self.getBGGfxData()
+        gfx = gfx and gfx.get("Paths")
+
+        floorAnim = gfx["FloorAnim"] if gfx and "FloorAnim" in gfx else "resources/Backgrounds/FloorBackdrop.anm2"
+        if not (self.floorAnim and self.floorAnim.path == Path(floorAnim).resolve()):
+            self.floorAnim = anm2.Config(floorAnim, "resources")
+
+        wallAnim = gfx["WallAnim"] if gfx and "WallAnim" in gfx else "resources/Backgrounds/WallBackdrop.anm2"
+        if not (self.wallAnim and self.wallAnim.path == Path(wallAnim).resolve()):
+            self.wallAnim = anm2.Config(wallAnim, "resources")
 
     def newRoomSize(self, shape):
         self.roomInfo = Room.Info(shape=shape)
@@ -501,6 +511,8 @@ class RoomScene(QGraphicsScene):
 
         gfxData = xmlLookups.getGfxData(roomBG)
         self.bgState.append(gfxData)
+
+        self.loadAnims()
 
         roomBG = gfxData["Paths"]
 
