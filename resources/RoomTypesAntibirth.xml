@@ -25,7 +25,7 @@
  -->
 <data>
   <room Name="Planetarium" Type="23" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
-    <Gfx BGPrefix="Backgrounds/planetarium_floor">
+    <Gfx BGPrefix="Backgrounds/planetarium">
       <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
     </Gfx>
   </room>
