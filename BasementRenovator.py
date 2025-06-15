@@ -343,11 +343,19 @@ class RoomScene(QGraphicsScene):
         gfx = self.getBGGfxData()
         gfx = gfx and gfx.get("Paths")
 
-        floorAnim = gfx["FloorAnim"] if gfx and "FloorAnim" in gfx else "resources/Backgrounds/FloorBackdrop.anm2"
+        floorAnim = (
+            gfx["FloorAnim"]
+            if gfx and "FloorAnim" in gfx
+            else "resources/Backgrounds/FloorBackdrop.anm2"
+        )
         if not (self.floorAnim and self.floorAnim.path == Path(floorAnim).resolve()):
             self.floorAnim = anm2.Config(floorAnim, "resources")
 
-        wallAnim = gfx["WallAnim"] if gfx and "WallAnim" in gfx else "resources/Backgrounds/WallBackdrop.anm2"
+        wallAnim = (
+            gfx["WallAnim"]
+            if gfx and "WallAnim" in gfx
+            else "resources/Backgrounds/WallBackdrop.anm2"
+        )
         if not (self.wallAnim and self.wallAnim.path == Path(wallAnim).resolve()):
             self.wallAnim = anm2.Config(wallAnim, "resources")
 
