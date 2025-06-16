@@ -31,7 +31,7 @@
     <Gfx BGPrefix="Backgrounds/0a_library" />
   </room>
   <room Name="Sacrifice Room" Type="13" Icon="UI/roomicons/sacrifice.png" ShowInMenu="1">
-    <Gfx BGPrefix="Backgrounds/0g_sacrificeroom" />
+    <Gfx StageGfx="Depths" />
   </room>
   <room Name="Devil Room" Type="14" Icon="UI/roomicons/devil.png" ShowInMenu="1">
     <Gfx StageGfx="Sheol" />
