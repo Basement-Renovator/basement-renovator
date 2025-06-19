@@ -111,6 +111,9 @@
 
     <Gfx RoomGfx="Death Certificate" Subtype="60" />
   </room>
+  <room Name="Sacrifice Room" Type="13" Icon="UI/roomicons/sacrifice.png" ShowInMenu="1">
+    <Gfx BGPrefix="Backgrounds/0g_sacrificeroom" />
+  </room>
   <room Name="Planetarium" Type="24" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/planetarium" HasFloorAnim="1" />
     <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
