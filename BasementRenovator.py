@@ -4031,212 +4031,212 @@ class ReplaceDialog(QDialog):
 
 
 class PathsDialog(QDialog):
-	"""Dialog for modifying path settings (InstallFolder, ResourceFolder, etc)."""
+    """Dialog for modifying path settings (InstallFolder, ResourceFolder, etc)."""
 
-	class PathSetting():
-		"""Representation of (and widgets for) a specific path setting (InstallFolder, ResourceFolder, etc) within the PathsDialog."""
+    class PathSetting():
+        """Representation of (and widgets for) a specific path setting (InstallFolder, ResourceFolder, etc) within the PathsDialog."""
 
-		def __init__(self, dialog, labelText, settingKey, isFile=False, tooltipText="", getCurrentPathLambda=None, getDefaultPathLambda=None, disableLambda=None):
-			self.dialog = dialog
-			self.settingKey = settingKey
-			self.isFile = isFile
-			self.getCurrentPathLambda = getCurrentPathLambda
-			self.getDefaultPathLambda = getDefaultPathLambda
-			self.disableLambda = disableLambda
+        def __init__(self, dialog, labelText, settingKey, isFile=False, tooltipText="", getCurrentPathLambda=None, getDefaultPathLambda=None, disableLambda=None):
+            self.dialog = dialog
+            self.settingKey = settingKey
+            self.isFile = isFile
+            self.getCurrentPathLambda = getCurrentPathLambda
+            self.getDefaultPathLambda = getDefaultPathLambda
+            self.disableLambda = disableLambda
 
-			# InstallFolder has special treatment for a few things.
-			self.isInstallFolder = self.settingKey == "InstallFolder"
+            # InstallFolder has special treatment for a few things.
+            self.isInstallFolder = self.settingKey == "InstallFolder"
 
-			self.labelText = labelText
-			self.label = QLabel(self.labelText)
-			self.label.setToolTip(tooltipText)
+            self.labelText = labelText
+            self.label = QLabel(self.labelText)
+            self.label.setToolTip(tooltipText)
 
-			self.textBox = QLineEdit()
-			self.textBox.setReadOnly(True)
-			self.textBox.setToolTip(tooltipText)
+            self.textBox = QLineEdit()
+            self.textBox.setReadOnly(True)
+            self.textBox.setToolTip(tooltipText)
 
-			self.selectButton = QPushButton()
-			self.selectButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_DirIcon))
-			self.selectButton.setToolTip("Select " + ("file" if self.isFile else "folder"))
-			self.selectButton.clicked.connect(
-				lambda: self.selectNewPath()
-			)
+            self.selectButton = QPushButton()
+            self.selectButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_DirIcon))
+            self.selectButton.setToolTip("Select " + ("file" if self.isFile else "folder"))
+            self.selectButton.clicked.connect(
+                lambda: self.selectNewPath()
+            )
 
-			if not self.isInstallFolder:
-				self.resetButton = QPushButton()
-				self.resetButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-				self.resetButton.setToolTip("Reset to default")
-				self.resetButton.clicked.connect(
-					lambda: self.setPath(None)
-				)
-			else:
-				self.resetButton = None
+            if not self.isInstallFolder:
+                self.resetButton = QPushButton()
+                self.resetButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_TitleBarCloseButton))
+                self.resetButton.setToolTip("Reset to default")
+                self.resetButton.clicked.connect(
+                    lambda: self.setPath(None)
+                )
+            else:
+                self.resetButton = None
 
-			self.refresh()
+            self.refresh()
 
-		def addToGridLayout(self, gridLayout, rowNum):
-			"""Add widgets to the given row in the provided QGridLayout."""
-			gridLayout.addWidget(self.label, rowNum, 0)
-			gridLayout.addWidget(self.textBox, rowNum, 1)
-			gridLayout.addWidget(self.selectButton, rowNum, 2)
-			if self.resetButton:
-				gridLayout.addWidget(self.resetButton, rowNum, 3)
+        def addToGridLayout(self, gridLayout, rowNum):
+            """Add widgets to the given row in the provided QGridLayout."""
+            gridLayout.addWidget(self.label, rowNum, 0)
+            gridLayout.addWidget(self.textBox, rowNum, 1)
+            gridLayout.addWidget(self.selectButton, rowNum, 2)
+            if self.resetButton:
+                gridLayout.addWidget(self.resetButton, rowNum, 3)
 
-		def selectNewPath(self):
-			"""Prompts the user to select a new folder/file."""
-			# Start the file dialog in the location of the current setting, or the install folder.
-			startDir = settings.value("InstallFolder")
-			if settings.value(self.settingKey):
-				startDir = settings.value(self.settingKey)
+        def selectNewPath(self):
+            """Prompts the user to select a new folder/file."""
+            # Start the file dialog in the location of the current setting, or the install folder.
+            startDir = settings.value("InstallFolder")
+            if settings.value(self.settingKey):
+                startDir = settings.value(self.settingKey)
 
-			path = ""
-			if self.isFile:
-				path, _ = QFileDialog.getOpenFileName(self.dialog, "Select " + self.labelText, startDir, "Executable files (*.exe)")
-				print(path)
-			else:
-				path = QFileDialog.getExistingDirectory(self.dialog, "Select " + self.labelText, startDir)
+            path = ""
+            if self.isFile:
+                path, _ = QFileDialog.getOpenFileName(self.dialog, "Select " + self.labelText, startDir, "Executable files (*.exe)")
+                print(path)
+            else:
+                path = QFileDialog.getExistingDirectory(self.dialog, "Select " + self.labelText, startDir)
 
-			if path:
-				self.setPath(path)
+            if path:
+                self.setPath(path)
 
-		def getCurrentPath(self):
-			"""Returns the current value for this path.
-			Doesn't just read from the setting in order to trigger the usual auto-detection.
-			"""
-			if self.getCurrentPathLambda:
-				return os.path.normpath(self.getCurrentPathLambda())
-			return ""
+        def getCurrentPath(self):
+            """Returns the current value for this path.
+            Doesn't just read from the setting in order to trigger the usual auto-detection.
+            """
+            if self.getCurrentPathLambda:
+                return os.path.normpath(self.getCurrentPathLambda())
+            return ""
 
-		def getDefaultPath(self):
-			"""Returns the "default" value for this path, relative to the current InstallPath."""
-			if self.getDefaultPathLambda:
-				return os.path.normpath(self.getDefaultPathLambda())
-			return ""
+        def getDefaultPath(self):
+            """Returns the "default" value for this path, relative to the current InstallPath."""
+            if self.getDefaultPathLambda:
+                return os.path.normpath(self.getDefaultPathLambda())
+            return ""
 
-		def hasCustomizedPath(self):
-			"""Returns true if this path setting has been customized (IE, is set to something besides the default)."""
-			return QFile.exists(settings.value(self.settingKey)) and os.path.realpath(self.getCurrentPath()) != os.path.realpath(self.getDefaultPath())
+        def hasCustomizedPath(self):
+            """Returns true if this path setting has been customized (IE, is set to something besides the default)."""
+            return QFile.exists(settings.value(self.settingKey)) and os.path.realpath(self.getCurrentPath()) != os.path.realpath(self.getDefaultPath())
 
-		def refresh(self):
-			"""Refreshes widget contents to accurately represent the current state."""
-			currentPath = self.getCurrentPath()
+        def refresh(self):
+            """Refreshes widget contents to accurately represent the current state."""
+            currentPath = self.getCurrentPath()
 
-			if self.isInstallFolder or self.hasCustomizedPath():
-				# For customized paths and the InstallFolder, display the path normally.
-				self.textBox.setPlaceholderText("")
-				self.textBox.setText(currentPath)
-			else:
-				# For non-customized, non-InstallFolder path settings, display as greyed out placeholder text.
-				self.textBox.clear()
-				self.textBox.setPlaceholderText(currentPath)
+            if self.isInstallFolder or self.hasCustomizedPath():
+                # For customized paths and the InstallFolder, display the path normally.
+                self.textBox.setPlaceholderText("")
+                self.textBox.setText(currentPath)
+            else:
+                # For non-customized, non-InstallFolder path settings, display as greyed out placeholder text.
+                self.textBox.clear()
+                self.textBox.setPlaceholderText(currentPath)
 
-			if self.disableLambda:
-				# Disable row contents if lambda returns true.
-				disable = self.disableLambda()
-				self.label.setEnabled(not disable)
-				self.textBox.setEnabled(not disable)
-				self.selectButton.setEnabled(not disable)
-				if self.resetButton:
-					self.resetButton.setEnabled(not disable and self.hasCustomizedPath())
-			elif self.resetButton:
-				self.resetButton.setEnabled(self.hasCustomizedPath())
+            if self.disableLambda:
+                # Disable row contents if lambda returns true.
+                disable = self.disableLambda()
+                self.label.setEnabled(not disable)
+                self.textBox.setEnabled(not disable)
+                self.selectButton.setEnabled(not disable)
+                if self.resetButton:
+                    self.resetButton.setEnabled(not disable and self.hasCustomizedPath())
+            elif self.resetButton:
+                self.resetButton.setEnabled(self.hasCustomizedPath())
 
-		def setPath(self, path):
-			"""Update the settings value and refresh widgets.
-			Setting to None will effectively revert it to the default value.
-			"""
-			if self.isInstallFolder:
-				# If the InstallFolder is reset, also reset all other non-customized paths.
-				for pathSetting in self.dialog.pathSettings:
-					if not self.isInstallFolder and not pathSetting.hasCustomizedPath():
-						settings.remove(pathSetting.settingKey)
+        def setPath(self, path):
+            """Update the settings value and refresh widgets.
+            Setting to None will effectively revert it to the default value.
+            """
+            if self.isInstallFolder:
+                # If the InstallFolder is reset, also reset all other non-customized paths.
+                for pathSetting in self.dialog.pathSettings:
+                    if not self.isInstallFolder and not pathSetting.hasCustomizedPath():
+                        settings.remove(pathSetting.settingKey)
 
-			if not path:
-				settings.remove(self.settingKey)
-			else:
-				settings.setValue(self.settingKey, path)
+            if not path:
+                settings.remove(self.settingKey)
+            else:
+                settings.setValue(self.settingKey, path)
 
-			if self.isInstallFolder:
-				# If the InstallFolder is reset, refresh everything.
-				for pathSetting in self.dialog.pathSettings:
-					pathSetting.refresh()
-			else:
-				self.refresh()
+            if self.isInstallFolder:
+                # If the InstallFolder is reset, refresh everything.
+                for pathSetting in self.dialog.pathSettings:
+                    pathSetting.refresh()
+            else:
+                self.refresh()
 
-	def updateUrlLaunchCheckbox(self):
-		"""Update the ForceUrlLaunch setting according to the checkbox, and refresh the widgets for the CustomExePath setting."""
-		if self.urlLaunchCheckbox:
-			settings.setValue("ForceUrlLaunch", "1" if self.urlLaunchCheckbox.isChecked() else "0")
-			if self.urlLaunchCheckbox.exePathSetting:
-				self.urlLaunchCheckbox.exePathSetting.refresh()
+    def updateUrlLaunchCheckbox(self):
+        """Update the ForceUrlLaunch setting according to the checkbox, and refresh the widgets for the CustomExePath setting."""
+        if self.urlLaunchCheckbox:
+            settings.setValue("ForceUrlLaunch", "1" if self.urlLaunchCheckbox.isChecked() else "0")
+            if self.urlLaunchCheckbox.exePathSetting:
+                self.urlLaunchCheckbox.exePathSetting.refresh()
 
-	def __init__(self, parent):
-		super(QDialog, self).__init__(parent)
-		self.setWindowTitle("Set Paths")
+    def __init__(self, parent):
+        super(QDialog, self).__init__(parent)
+        self.setWindowTitle("Set Paths")
 
-		# Remove the funny little question mark next to the close button.
-		self.setWindowFlags(self.windowFlags() & ~Qt.WindowType.WindowContextHelpButtonHint)
+        # Remove the funny little question mark next to the close button.
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowType.WindowContextHelpButtonHint)
 
-		# Checkbox for the ForceUrlLaunch setting.
-		self.urlLaunchCheckbox = QCheckBox("Launch via Steam URL")
-		self.urlLaunchCheckbox.setChecked(settings.value("ForceUrlLaunch") == "1")
-		self.urlLaunchCheckbox.toggled.connect(
-			lambda: self.updateUrlLaunchCheckbox()
-		)
+        # Checkbox for the ForceUrlLaunch setting.
+        self.urlLaunchCheckbox = QCheckBox("Launch via Steam URL")
+        self.urlLaunchCheckbox.setChecked(settings.value("ForceUrlLaunch") == "1")
+        self.urlLaunchCheckbox.toggled.connect(
+            lambda: self.updateUrlLaunchCheckbox()
+        )
 
-		# Create the widgets/logic for each path setting, in the order they're displayed.
-		self.pathSettings = [
-			PathsDialog.PathSetting(
-				dialog = self,
-				labelText = "Install Folder",
-				settingKey = "InstallFolder",
-				tooltipText = "Directory in which The Binding of Isaac: Rebirth is installed.",
-				getCurrentPathLambda = lambda: findInstallPath(),
-			),
-			PathsDialog.PathSetting(
-				dialog = self,
-				labelText = "Resources Folder",
-				settingKey = "ResourceFolder",
-				tooltipText = "Folder containing vanilla game resources.",
-				getCurrentPathLambda = lambda: mainWindow.findResourcePath(),
-				getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "resources"),
-			),
-			PathsDialog.PathSetting(
-				dialog = self,
-				labelText = "Mods Folder",
-				settingKey = "ModsFolder",
-				tooltipText = "Folder containing installed mods.",
-				getCurrentPathLambda = lambda: findModsPath(),
-				getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "mods"),
-			),
-			PathsDialog.PathSetting(
-				dialog = self,
-				labelText = ".exe Path",
-				settingKey = "CustomExePath",
-				isFile = True,
-				tooltipText = "Path to the executable file to launch the game when testing rooms.",
-				getCurrentPathLambda = lambda: mainWindow.findExecutablePath(),
-				getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "isaac-ng.exe"),
-				disableLambda = lambda: self.urlLaunchCheckbox.isChecked(),
-			),
-		]
+        # Create the widgets/logic for each path setting, in the order they're displayed.
+        self.pathSettings = [
+            PathsDialog.PathSetting(
+                dialog = self,
+                labelText = "Install Folder",
+                settingKey = "InstallFolder",
+                tooltipText = "Directory in which The Binding of Isaac: Rebirth is installed.",
+                getCurrentPathLambda = lambda: findInstallPath(),
+            ),
+            PathsDialog.PathSetting(
+                dialog = self,
+                labelText = "Resources Folder",
+                settingKey = "ResourceFolder",
+                tooltipText = "Folder containing vanilla game resources.",
+                getCurrentPathLambda = lambda: mainWindow.findResourcePath(),
+                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "resources"),
+            ),
+            PathsDialog.PathSetting(
+                dialog = self,
+                labelText = "Mods Folder",
+                settingKey = "ModsFolder",
+                tooltipText = "Folder containing installed mods.",
+                getCurrentPathLambda = lambda: findModsPath(),
+                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "mods"),
+            ),
+            PathsDialog.PathSetting(
+                dialog = self,
+                labelText = ".exe Path",
+                settingKey = "CustomExePath",
+                isFile = True,
+                tooltipText = "Path to the executable file to launch the game when testing rooms.",
+                getCurrentPathLambda = lambda: mainWindow.findExecutablePath(),
+                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "isaac-ng.exe"),
+                disableLambda = lambda: self.urlLaunchCheckbox.isChecked(),
+            ),
+        ]
 
-		# Create & populate the window layout.
-		gridLayout = QGridLayout()
+        # Create & populate the window layout.
+        gridLayout = QGridLayout()
 
-		row = 0
-		for pathSetting in self.pathSettings:
-			pathSetting.addToGridLayout(gridLayout, row)
-			row += 1
-			if pathSetting.settingKey == "CustomExePath":
-				# Place the ForceUrlLaunch checkbox underneath the CustomExePath settings.
-				self.urlLaunchCheckbox.exePathSetting = pathSetting
-				gridLayout.addWidget(self.urlLaunchCheckbox, row, 1)
-				row += 1
+        row = 0
+        for pathSetting in self.pathSettings:
+            pathSetting.addToGridLayout(gridLayout, row)
+            row += 1
+            if pathSetting.settingKey == "CustomExePath":
+                # Place the ForceUrlLaunch checkbox underneath the CustomExePath settings.
+                self.urlLaunchCheckbox.exePathSetting = pathSetting
+                gridLayout.addWidget(self.urlLaunchCheckbox, row, 1)
+                row += 1
 
-		self.setLayout(gridLayout)
-		self.adjustSize()
-		self.resize(int(self.width() * 2), int(self.height()))  # Make the window wider
+        self.setLayout(gridLayout)
+        self.adjustSize()
+        self.resize(int(self.width() * 2), int(self.height()))  # Make the window wider
 
 
 class HooksDialog(QDialog):
