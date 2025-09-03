@@ -4092,7 +4092,6 @@ class PathsDialog(QDialog):
             path = ""
             if self.isFile:
                 path, _ = QFileDialog.getOpenFileName(self.dialog, "Select " + self.labelText, startDir, "Executable files (*.exe)")
-                print(path)
             else:
                 path = QFileDialog.getExistingDirectory(self.dialog, "Select " + self.labelText, startDir)
 
@@ -4100,7 +4099,8 @@ class PathsDialog(QDialog):
                 self.setPath(path)
 
         def getCurrentPath(self):
-            """Returns the current value for this path.
+            """
+            Returns the current value for this path.
             Doesn't just read from the setting in order to trigger the usual auto-detection.
             """
             if self.getCurrentPathLambda:
@@ -4142,9 +4142,11 @@ class PathsDialog(QDialog):
                 self.resetButton.setEnabled(self.hasCustomizedPath())
 
         def setPath(self, path):
-            """Update the settings value and refresh widgets.
+            """
+            Update the settings value and refresh widgets.
             Setting to None will effectively revert it to the default value.
             """
+            print("setting", self.settingKey, "to", path)
             if self.isInstallFolder:
                 # If the InstallFolder is reset, also reset all other non-customized paths.
                 for pathSetting in self.dialog.pathSettings:
@@ -6715,8 +6717,11 @@ class MainWindow(QMainWindow):
             customExePath = settings.value("CustomExePath")
             useCustomExe = not forceUrlLaunch and QFile.exists(customExePath)
 
-            steamPath = getSteamPath()
-            useSteamExe = not forceUrlLaunch and not useCustomExe and steamPath and version != "Antibirth" and settings.value("ForceExeLaunch") != "1"
+            useSteamExe = False
+            steamPath = Nil
+            if not forceUrlLaunch and not useCustomExe and version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
+                steamPath = getSteamPath()
+                useSteamExe = steamPath is not Nil
 
             exePath = None
 
