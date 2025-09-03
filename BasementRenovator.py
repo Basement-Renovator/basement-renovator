@@ -4086,8 +4086,9 @@ class PathsDialog(QDialog):
             """Prompts the user to select a new folder/file."""
             # Start the file dialog in the location of the current setting, or the install folder.
             startDir = settings.value("InstallFolder")
-            if settings.value(self.settingKey):
-                startDir = settings.value(self.settingKey)
+            currentPath = self.getCurrentPath()
+            if QFile.exists(currentPath):
+                startDir = currentPath
 
             path = ""
             if self.isFile:
@@ -4108,7 +4109,11 @@ class PathsDialog(QDialog):
             return ""
 
         def getDefaultPath(self):
-            """Returns the "default" value for this path, relative to the current InstallPath."""
+            """
+            Returns the "default" value for this path, relative to the current InstallPath.
+            Note: This value is never written to the settings. It is only used to determine if
+            the current setting is "customized" or not.
+            """
             if self.getDefaultPathLambda:
                 return os.path.normpath(self.getDefaultPathLambda())
             return ""
@@ -4187,6 +4192,8 @@ class PathsDialog(QDialog):
         )
 
         # Create the widgets/logic for each path setting, in the order they're displayed.
+        # Note: The "default" values provided by the lambdas here are not used to populate
+        # the setting, they are used to determine if the current setting is customized.
         self.pathSettings = [
             PathsDialog.PathSetting(
                 dialog = self,
