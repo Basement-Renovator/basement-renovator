@@ -6718,10 +6718,10 @@ class MainWindow(QMainWindow):
             useCustomExe = not forceUrlLaunch and QFile.exists(customExePath)
 
             useSteamExe = False
-            steamPath = Nil
+            steamPath = None
             if not forceUrlLaunch and not useCustomExe and version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
                 steamPath = getSteamPath()
-                useSteamExe = steamPath is not Nil
+                useSteamExe = steamPath is not None
 
             exePath = None
 
