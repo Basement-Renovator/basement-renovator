@@ -4033,10 +4033,20 @@ class ReplaceDialog(QDialog):
 class PathsDialog(QDialog):
     """Dialog for modifying path settings (InstallFolder, ResourceFolder, etc)."""
 
-    class PathSetting():
+    class PathSetting:
         """Representation of (and widgets for) a specific path setting (InstallFolder, ResourceFolder, etc) within the PathsDialog."""
 
-        def __init__(self, dialog, labelText, settingKey, isFile=False, tooltipText="", getCurrentPathLambda=None, getDefaultPathLambda=None, disableLambda=None):
+        def __init__(
+            self,
+            dialog,
+            labelText,
+            settingKey,
+            isFile=False,
+            tooltipText="",
+            getCurrentPathLambda=None,
+            getDefaultPathLambda=None,
+            disableLambda=None,
+        ):
             self.dialog = dialog
             self.settingKey = settingKey
             self.isFile = isFile
@@ -4056,19 +4066,21 @@ class PathsDialog(QDialog):
             self.textBox.setToolTip(tooltipText)
 
             self.selectButton = QPushButton()
-            self.selectButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_DirIcon))
-            self.selectButton.setToolTip("Select " + ("file" if self.isFile else "folder"))
-            self.selectButton.clicked.connect(
-                lambda: self.selectNewPath()
+            self.selectButton.setIcon(
+                self.dialog.style().standardIcon(QStyle.SP_DirIcon)
             )
+            self.selectButton.setToolTip(
+                "Select " + ("file" if self.isFile else "folder")
+            )
+            self.selectButton.clicked.connect(lambda: self.selectNewPath())
 
             if not self.isInstallFolder:
                 self.resetButton = QPushButton()
-                self.resetButton.setIcon(self.dialog.style().standardIcon(QStyle.SP_TitleBarCloseButton))
-                self.resetButton.setToolTip("Reset to default")
-                self.resetButton.clicked.connect(
-                    lambda: self.setPath(None)
+                self.resetButton.setIcon(
+                    self.dialog.style().standardIcon(QStyle.SP_TitleBarCloseButton)
                 )
+                self.resetButton.setToolTip("Reset to default")
+                self.resetButton.clicked.connect(lambda: self.setPath(None))
             else:
                 self.resetButton = None
 
@@ -4092,9 +4104,16 @@ class PathsDialog(QDialog):
 
             path = ""
             if self.isFile:
-                path, _ = QFileDialog.getOpenFileName(self.dialog, "Select " + self.labelText, startDir, "Executable files (*.exe)")
+                path, _ = QFileDialog.getOpenFileName(
+                    self.dialog,
+                    "Select " + self.labelText,
+                    startDir,
+                    "Executable files (*.exe)",
+                )
             else:
-                path = QFileDialog.getExistingDirectory(self.dialog, "Select " + self.labelText, startDir)
+                path = QFileDialog.getExistingDirectory(
+                    self.dialog, "Select " + self.labelText, startDir
+                )
 
             if path:
                 self.setPath(path)
@@ -4120,7 +4139,9 @@ class PathsDialog(QDialog):
 
         def hasCustomizedPath(self):
             """Returns true if this path setting has been customized (IE, is set to something besides the default)."""
-            return QFile.exists(settings.value(self.settingKey)) and os.path.realpath(self.getCurrentPath()) != os.path.realpath(self.getDefaultPath())
+            return QFile.exists(settings.value(self.settingKey)) and os.path.realpath(
+                self.getCurrentPath()
+            ) != os.path.realpath(self.getDefaultPath())
 
         def refresh(self):
             """Refreshes widget contents to accurately represent the current state."""
@@ -4142,7 +4163,9 @@ class PathsDialog(QDialog):
                 self.textBox.setEnabled(not disable)
                 self.selectButton.setEnabled(not disable)
                 if self.resetButton:
-                    self.resetButton.setEnabled(not disable and self.hasCustomizedPath())
+                    self.resetButton.setEnabled(
+                        not disable and self.hasCustomizedPath()
+                    )
             elif self.resetButton:
                 self.resetButton.setEnabled(self.hasCustomizedPath())
 
@@ -4173,7 +4196,9 @@ class PathsDialog(QDialog):
     def updateUrlLaunchCheckbox(self):
         """Update the ForceUrlLaunch setting according to the checkbox, and refresh the widgets for the CustomExePath setting."""
         if self.urlLaunchCheckbox:
-            settings.setValue("ForceUrlLaunch", "1" if self.urlLaunchCheckbox.isChecked() else "0")
+            settings.setValue(
+                "ForceUrlLaunch", "1" if self.urlLaunchCheckbox.isChecked() else "0"
+            )
             if self.urlLaunchCheckbox.exePathSetting:
                 self.urlLaunchCheckbox.exePathSetting.refresh()
 
@@ -4182,51 +4207,55 @@ class PathsDialog(QDialog):
         self.setWindowTitle("Set Paths")
 
         # Remove the funny little question mark next to the close button.
-        self.setWindowFlags(self.windowFlags() & ~Qt.WindowType.WindowContextHelpButtonHint)
+        self.setWindowFlags(
+            self.windowFlags() & ~Qt.WindowType.WindowContextHelpButtonHint
+        )
 
         # Checkbox for the ForceUrlLaunch setting.
         self.urlLaunchCheckbox = QCheckBox("Launch via Steam URL")
         self.urlLaunchCheckbox.setChecked(settings.value("ForceUrlLaunch") == "1")
-        self.urlLaunchCheckbox.toggled.connect(
-            lambda: self.updateUrlLaunchCheckbox()
-        )
+        self.urlLaunchCheckbox.toggled.connect(lambda: self.updateUrlLaunchCheckbox())
 
         # Create the widgets/logic for each path setting, in the order they're displayed.
         # Note: The "default" values provided by the lambdas here are not used to populate
         # the setting, they are used to determine if the current setting is customized.
         self.pathSettings = [
             PathsDialog.PathSetting(
-                dialog = self,
-                labelText = "Install Folder",
-                settingKey = "InstallFolder",
-                tooltipText = "Directory in which The Binding of Isaac: Rebirth is installed.",
-                getCurrentPathLambda = lambda: findInstallPath(),
+                dialog=self,
+                labelText="Install Folder",
+                settingKey="InstallFolder",
+                tooltipText="Directory in which The Binding of Isaac: Rebirth is installed.",
+                getCurrentPathLambda=lambda: findInstallPath(),
             ),
             PathsDialog.PathSetting(
-                dialog = self,
-                labelText = "Resources Folder",
-                settingKey = "ResourceFolder",
-                tooltipText = "Folder containing vanilla game resources.",
-                getCurrentPathLambda = lambda: mainWindow.findResourcePath(),
-                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "resources"),
+                dialog=self,
+                labelText="Resources Folder",
+                settingKey="ResourceFolder",
+                tooltipText="Folder containing vanilla game resources.",
+                getCurrentPathLambda=lambda: mainWindow.findResourcePath(),
+                getDefaultPathLambda=lambda: os.path.join(
+                    findInstallPath(), "resources"
+                ),
             ),
             PathsDialog.PathSetting(
-                dialog = self,
-                labelText = "Mods Folder",
-                settingKey = "ModsFolder",
-                tooltipText = "Folder containing installed mods.",
-                getCurrentPathLambda = lambda: findModsPath(),
-                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "mods"),
+                dialog=self,
+                labelText="Mods Folder",
+                settingKey="ModsFolder",
+                tooltipText="Folder containing installed mods.",
+                getCurrentPathLambda=lambda: findModsPath(),
+                getDefaultPathLambda=lambda: os.path.join(findInstallPath(), "mods"),
             ),
             PathsDialog.PathSetting(
-                dialog = self,
-                labelText = ".exe Path",
-                settingKey = "CustomExePath",
-                isFile = True,
-                tooltipText = "Path to the executable file to launch the game when testing rooms.",
-                getCurrentPathLambda = lambda: mainWindow.findExecutablePath(),
-                getDefaultPathLambda = lambda: os.path.join(findInstallPath(), "isaac-ng.exe"),
-                disableLambda = lambda: self.urlLaunchCheckbox.isChecked(),
+                dialog=self,
+                labelText=".exe Path",
+                settingKey="CustomExePath",
+                isFile=True,
+                tooltipText="Path to the executable file to launch the game when testing rooms.",
+                getCurrentPathLambda=lambda: mainWindow.findExecutablePath(),
+                getDefaultPathLambda=lambda: os.path.join(
+                    findInstallPath(), "isaac-ng.exe"
+                ),
+                disableLambda=lambda: self.urlLaunchCheckbox.isChecked(),
             ),
         ]
 
@@ -6726,7 +6755,12 @@ class MainWindow(QMainWindow):
 
             useSteamExe = False
             steamPath = None
-            if not forceUrlLaunch and not useCustomExe and version != "Antibirth" and settings.value("ForceExeLaunch") != "1":
+            if (
+                not forceUrlLaunch
+                and not useCustomExe
+                and version != "Antibirth"
+                and settings.value("ForceExeLaunch") != "1"
+            ):
                 steamPath = getSteamPath()
                 useSteamExe = steamPath is not None
 
@@ -6739,11 +6773,7 @@ class MainWindow(QMainWindow):
             else:
                 exePath = self.findExecutablePath()
 
-            if (
-                exePath
-                and QFile.exists(exePath)
-                and not forceUrlLaunch
-            ):
+            if exePath and QFile.exists(exePath) and not forceUrlLaunch:
                 wd = installPath
 
                 if useCustomExe:
