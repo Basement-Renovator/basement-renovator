@@ -4058,7 +4058,7 @@ class PathsDialog(QDialog):
             self.disableLambda = disableLambda
 
             # InstallFolder has special treatment for a few things.
-            self.isInstallFolder = self.settingKey == "InstallFolder"
+            self.isInstallFolder = self.settingKey in ["InstallFolder", "AntibirthPath"]
 
             self.labelText = labelText
             self.label = QLabel(self.labelText)
@@ -4106,7 +4106,7 @@ class PathsDialog(QDialog):
         def selectNewPath(self):
             """Prompts the user to select a new folder/file."""
             # Start the file dialog in the location of the current setting, or the install folder.
-            startDir = settings.value("InstallFolder")
+            startDir = findInstallPath()
             currentPath = self.getCurrentPath()
             if QFile.exists(currentPath):
                 startDir = currentPath
@@ -4187,7 +4187,10 @@ class PathsDialog(QDialog):
             if self.isInstallFolder:
                 # If the InstallFolder is reset, also reset all other non-customized paths.
                 for pathSetting in self.dialog.pathSettings:
-                    if not self.isInstallFolder and not pathSetting.hasCustomizedPath():
+                    if (
+                        not pathSetting.isInstallFolder
+                        and not pathSetting.hasCustomizedPath()
+                    ):
                         settings.remove(pathSetting.settingKey)
 
             if not path:
@@ -4213,6 +4216,9 @@ class PathsDialog(QDialog):
 
     def __init__(self, parent):
         super(QDialog, self).__init__(parent)
+
+        version = getGameVersion()
+
         self.setWindowTitle("Set Paths")
 
         # Remove the funny little question mark next to the close button.
@@ -4232,8 +4238,10 @@ class PathsDialog(QDialog):
             PathsDialog.PathSetting(
                 dialog=self,
                 labelText="Install Folder",
-                settingKey="InstallFolder",
-                tooltipText="Directory in which The Binding of Isaac: Rebirth is installed.",
+                settingKey=(
+                    "InstallFolder" if version != "Antibirth" else "AntibirthPath"
+                ),
+                tooltipText=f"Directory in which The Binding of Isaac: {version} is installed.",
                 getCurrentPathLambda=lambda: findInstallPath(),
             ),
             PathsDialog.PathSetting(
@@ -4272,8 +4280,14 @@ class PathsDialog(QDialog):
         layout = QVBoxLayout()
 
         for pathSetting in self.pathSettings:
+            if pathSetting.settingKey == "ModsFolder" and version not in [
+                "Afterbirth+",
+                "Repentance",
+                "Repentance+",
+            ]:
+                continue
             layout.addLayout(pathSetting.layout)
-            if pathSetting.settingKey == "CustomExePath":
+            if pathSetting.settingKey == "CustomExePath" and version != "Antibirth":
                 # Place the ForceUrlLaunch checkbox underneath the CustomExePath settings.
                 self.urlLaunchCheckbox.exePathSetting = pathSetting
                 forceUrlLaunchLayout = QHBoxLayout()
