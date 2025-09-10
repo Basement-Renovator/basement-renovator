@@ -4033,6 +4033,9 @@ class ReplaceDialog(QDialog):
 class PathsDialog(QDialog):
     """Dialog for modifying path settings (InstallFolder, ResourceFolder, etc)."""
 
+    LABEL_MAX_WIDTH = 85
+    BUTTON_WIDTH = 25
+
     class PathSetting:
         """Representation of (and widgets for) a specific path setting (InstallFolder, ResourceFolder, etc) within the PathsDialog."""
 
@@ -4060,6 +4063,7 @@ class PathsDialog(QDialog):
             self.labelText = labelText
             self.label = QLabel(self.labelText)
             self.label.setToolTip(tooltipText)
+            self.label.setMaximumWidth(PathsDialog.LABEL_MAX_WIDTH)
 
             self.textBox = QLineEdit()
             self.textBox.setReadOnly(True)
@@ -4073,6 +4077,8 @@ class PathsDialog(QDialog):
                 "Select " + ("file" if self.isFile else "folder")
             )
             self.selectButton.clicked.connect(lambda: self.selectNewPath())
+            self.selectButton.setMinimumWidth(PathsDialog.BUTTON_WIDTH)
+            self.selectButton.setMaximumWidth(PathsDialog.BUTTON_WIDTH)
 
             if not self.isInstallFolder:
                 self.resetButton = QPushButton()
@@ -4081,18 +4087,21 @@ class PathsDialog(QDialog):
                 )
                 self.resetButton.setToolTip("Reset to default")
                 self.resetButton.clicked.connect(lambda: self.setPath(None))
+                self.resetButton.setMinimumWidth(PathsDialog.BUTTON_WIDTH)
+                self.resetButton.setMaximumWidth(PathsDialog.BUTTON_WIDTH)
             else:
                 self.resetButton = None
 
-            self.refresh()
-
-        def addToGridLayout(self, gridLayout, rowNum):
-            """Add widgets to the given row in the provided QGridLayout."""
-            gridLayout.addWidget(self.label, rowNum, 0)
-            gridLayout.addWidget(self.textBox, rowNum, 1)
-            gridLayout.addWidget(self.selectButton, rowNum, 2)
+            self.layout = QHBoxLayout()
+            self.layout.addWidget(self.label, 1)
+            self.layout.addWidget(self.textBox, 1)
+            self.layout.addWidget(self.selectButton)
             if self.resetButton:
-                gridLayout.addWidget(self.resetButton, rowNum, 3)
+                self.layout.addWidget(self.resetButton)
+            else:
+                self.layout.addSpacing(PathsDialog.BUTTON_WIDTH + 6)
+
+            self.refresh()
 
         def selectNewPath(self):
             """Prompts the user to select a new folder/file."""
@@ -4260,21 +4269,22 @@ class PathsDialog(QDialog):
         ]
 
         # Create & populate the window layout.
-        gridLayout = QGridLayout()
+        layout = QVBoxLayout()
 
-        row = 0
         for pathSetting in self.pathSettings:
-            pathSetting.addToGridLayout(gridLayout, row)
-            row += 1
+            layout.addLayout(pathSetting.layout)
             if pathSetting.settingKey == "CustomExePath":
                 # Place the ForceUrlLaunch checkbox underneath the CustomExePath settings.
                 self.urlLaunchCheckbox.exePathSetting = pathSetting
-                gridLayout.addWidget(self.urlLaunchCheckbox, row, 1)
-                row += 1
+                forceUrlLaunchLayout = QHBoxLayout()
+                forceUrlLaunchLayout.addSpacing(PathsDialog.LABEL_MAX_WIDTH + 6)
+                forceUrlLaunchLayout.addWidget(self.urlLaunchCheckbox)
+                layout.addLayout(forceUrlLaunchLayout)
 
-        self.setLayout(gridLayout)
+        self.setLayout(layout)
         self.adjustSize()
-        self.resize(int(self.width() * 2), int(self.height()))  # Make the window wider
+        # Make the window wider
+        self.resize(int(self.width() * 2.5), int(self.height()))
 
 
 class HooksDialog(QDialog):
