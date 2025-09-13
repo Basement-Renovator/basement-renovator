@@ -4077,8 +4077,7 @@ class PathsDialog(QDialog):
                 "Select " + ("file" if self.isFile else "folder")
             )
             self.selectButton.clicked.connect(lambda: self.selectNewPath())
-            self.selectButton.setMinimumWidth(PathsDialog.BUTTON_WIDTH)
-            self.selectButton.setMaximumWidth(PathsDialog.BUTTON_WIDTH)
+            self.selectButton.setFixedWidth(PathsDialog.BUTTON_WIDTH)
 
             if not self.isInstallFolder:
                 self.resetButton = QPushButton()
@@ -4087,8 +4086,7 @@ class PathsDialog(QDialog):
                 )
                 self.resetButton.setToolTip("Reset to default")
                 self.resetButton.clicked.connect(lambda: self.setPath(None))
-                self.resetButton.setMinimumWidth(PathsDialog.BUTTON_WIDTH)
-                self.resetButton.setMaximumWidth(PathsDialog.BUTTON_WIDTH)
+                self.resetButton.setFixedWidth(PathsDialog.BUTTON_WIDTH)
             else:
                 self.resetButton = None
 
