@@ -4,6 +4,7 @@ import abc
 import re
 
 from itertools import zip_longest
+from pathlib import PurePath
 
 from src.constants import *
 from src.util import *
@@ -199,11 +200,6 @@ class StageLookup(Lookup):
             st = str(stageType)
             stages = list(filter(lambda s: s.get("StageType") == st, stages))
 
-        if path is not None:
-            stages = list(
-                filter(lambda s: s.get("Pattern").lower() in path.lower(), stages)
-            )
-
         if name:
             stages = list(filter(lambda s: s.get("Name") == name, stages))
 
@@ -215,7 +211,29 @@ class StageLookup(Lookup):
                 hasBasePath = lambda s: s.get("BaseGamePath") == baseGamePath
             stages = list(filter(hasBasePath, stages))
 
-        return stages[::-1]
+        if path is not None:
+            stages = list(
+                filter(lambda s: s.get("Pattern").lower() in path.lower(), stages)
+            )
+            # Sort the stages by the index of the last part of the path that they matched with:
+            # "/home/test/basement.xml" -> [home, basement]
+            # "/basement/home/room.xml" -> [basement, home]
+            # "/home/basement/home.xml" -> [basement, home]
+            # Python sorts are stable, so stages that match to the same part will maintain their original (xml) order:
+            # "/home/burning basement.xml" -> [home, basement, burning]
+            pathParts = PurePath(path.lower()).parts
+            stages.sort(
+                key=lambda s: next(
+                    (
+                        index
+                        for index, part in reversed(list(enumerate(pathParts)))
+                        if s.get("Pattern").lower() in part
+                    ),
+                    -1,
+                )
+            )
+
+        return stages
 
     def getGfx(self, node):
         gfx = node.find("Gfx")
@@ -287,19 +305,10 @@ class RoomTypeLookup(Lookup):
 
         stage = node.get("StageName")
         # TODO replace with check against room file stage
-        if (
-            stage
-            and path
-            and not next(
-                (
-                    st
-                    for st in self.parent.stages.lookup(path=path)
-                    if st.get("Name") == stage
-                ),
-                [],
-            )
-        ):
-            return False
+        if stage and path:
+            stages = self.parent.stages.lookup(path=path)
+            if not stages or stages[-1].get("Name") != stage:
+                return False
 
         idCriteria = parseCriteria(node.get("ID"))
         if idCriteria and not idCriteria(room.info.variant):

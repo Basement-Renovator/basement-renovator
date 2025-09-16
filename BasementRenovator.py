@@ -2497,9 +2497,8 @@ class Room(QListWidgetItem):
             self.roomBG = val
             return
 
-        matchPath = mainWindow.path and os.path.split(mainWindow.path)[1]
         self.roomBG = xmlLookups.getRoomGfx(
-            room=self, roomfile=mainWindow.roomList.file, path=matchPath
+            room=self, roomfile=mainWindow.roomList.file, path=mainWindow.path
         )
 
     def mirrorX(self):
