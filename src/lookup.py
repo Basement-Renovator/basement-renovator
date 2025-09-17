@@ -4,6 +4,7 @@ import abc
 import re
 
 from itertools import zip_longest
+from pathlib import PurePath
 
 from src.constants import *
 from src.util import *
@@ -199,11 +200,6 @@ class StageLookup(Lookup):
             st = str(stageType)
             stages = list(filter(lambda s: s.get("StageType") == st, stages))
 
-        if path is not None:
-            stages = list(
-                filter(lambda s: s.get("Pattern").lower() in path.lower(), stages)
-            )
-
         if name:
             stages = list(filter(lambda s: s.get("Name") == name, stages))
 
@@ -215,7 +211,45 @@ class StageLookup(Lookup):
                 hasBasePath = lambda s: s.get("BaseGamePath") == baseGamePath
             stages = list(filter(hasBasePath, stages))
 
-        return stages[::-1]
+        if path is not None:
+            stages = list(
+                filter(lambda s: s.get("Pattern").lower() in path.lower(), stages)
+            )
+            # Sort the stages by the index of the last part of the path that they matched with:
+            # "/home/test/basement.xml" -> [home, basement]
+            # "/basement/home/room.xml" -> [basement, home]
+            # "/home/basement/home.xml" -> [basement, home]
+            # Python sorts are stable, so stages that match to the same part will maintain their original (xml) order:
+            # "/home/burning basement.xml" -> [home, basement, burning]
+            pathParts = PurePath(path.lower()).parts
+            stages.sort(
+                key=lambda s: next(
+                    (
+                        index
+                        for index, part in reversed(list(enumerate(pathParts)))
+                        if s.get("Pattern").lower() in part
+                    ),
+                    -1,
+                )
+            )
+
+        return stages
+
+    def lookupOne(
+        self, path=None, name=None, stage=None, stageType=None, baseGamePath=None
+    ):
+        stages = self.lookup(
+            path=path,
+            name=name,
+            stage=stage,
+            stageType=stageType,
+            baseGamePath=baseGamePath,
+        )
+
+        if stages:
+            return stages[-1]
+
+        return None
 
     def getGfx(self, node):
         gfx = node.find("Gfx")
@@ -285,21 +319,12 @@ class RoomTypeLookup(Lookup):
         if nameRegex and not re.match(nameRegex, room.name):
             return False
 
-        stage = node.get("StageName")
+        stageName = node.get("StageName")
         # TODO replace with check against room file stage
-        if (
-            stage
-            and path
-            and not next(
-                (
-                    st
-                    for st in self.parent.stages.lookup(path=path)
-                    if st.get("Name") == stage
-                ),
-                [],
-            )
-        ):
-            return False
+        if stageName and path:
+            stage = self.parent.stages.lookupOne(path=path)
+            if not stage or stage.get("Name") != stageName:
+                return False
 
         idCriteria = parseCriteria(node.get("ID"))
         if idCriteria and not idCriteria(room.info.variant):
@@ -1430,16 +1455,14 @@ class MainLookup:
             if ret is not None:
                 return ret
 
-        node = self.stages.lookup(path=path)
-        if not node:
-            node = self.stages.lookup(name="Basement")
-
-        return self.stages.getGfx(node[-1])
+        return self.stages.getGfx(
+            self.stages.lookupOne(path=path) or self.stages.lookupOne(name="Basement")
+        )
 
     def getGfxData(self, node=None):
         if node is None:
             return self.getGfxData(
-                self.stages.getGfx(self.stages.lookup(name="Basement")[0])
+                self.stages.getGfx(self.stages.lookupOne(name="Basement"))
             )
 
         baseGfx = None

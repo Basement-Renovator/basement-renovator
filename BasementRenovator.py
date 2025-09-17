@@ -2497,9 +2497,8 @@ class Room(QListWidgetItem):
             self.roomBG = val
             return
 
-        matchPath = mainWindow.path and os.path.split(mainWindow.path)[1]
         self.roomBG = xmlLookups.getRoomGfx(
-            room=self, roomfile=mainWindow.roomList.file, path=matchPath
+            room=self, roomfile=mainWindow.roomList.file, path=mainWindow.path
         )
 
     def mirrorX(self):
@@ -5673,7 +5672,7 @@ class MainWindow(QMainWindow):
         self.roomList.list.clear()
         self.scene.clear()
         self.path = ""
-        self.floorInfo = xmlLookups.stages.lookup(name="Basement")[-1]
+        self.floorInfo = xmlLookups.stages.lookupOne(name="Basement")
 
         self.dirt()
         self.roomList.changeFilter()
@@ -5847,10 +5846,9 @@ class MainWindow(QMainWindow):
         self.path = path
 
         global xmlLookups
-        self.floorInfo = (
-            xmlLookups.stages.lookup(path=self.path)
-            or xmlLookups.stages.lookup(name="Basement")
-        )[-1]
+        self.floorInfo = xmlLookups.stages.lookupOne(
+            path=self.path
+        ) or xmlLookups.stages.lookupOne(name="Basement")
 
         roomFile = None
         try:
@@ -6513,12 +6511,12 @@ class MainWindow(QMainWindow):
                     raise
 
                 baseSpecialPath = "00.special rooms"
-                extraInfo = xmlLookups.stages.lookup(
+                extraInfo = xmlLookups.stages.lookupOne(
                     stage=floorInfo.get("Stage"),
                     stageType=floorInfo.get("StageType"),
                     baseGamePath=True,
                 )
-                basePath = floorInfo.get("BaseGamePath") or extraInfo[-1].get(
+                basePath = floorInfo.get("BaseGamePath") or extraInfo.get(
                     "BaseGamePath"
                 )
 
