@@ -1003,28 +1003,49 @@ class Entity(QGraphicsItem):
 
             self.getEntityInfo(t, v, s)
 
-        def getEntityInfo(self, entitytype, variant, subtype):
-            self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
-            if self.config is None:
-                printf(
-                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
-                )
+        def updateIcon(self):
+            hasAlt = False
+            if self.config.hasAltImages:
+                # Check subtype alt images.
+                # Subtype images should take priority.
+                for alt in self.config.altImages:
+                    if alt.subtype == self.Subtype:
+                        hasAlt = True
+                        self.imgPath = alt.image
+                        break
 
-                self.pixmap = QPixmap("resources/Entities/questionmark.png")
-                self.iconpixmap = self.pixmap
-                self.config = xmlLookups.entities.EntityConfig()
-                return
+                if not hasAlt:
+                    for element in self.config.getBitfieldElements():
+                        if element.hasAltImages:
+                            for alt in element.altImages:
+                                displayValue = int(
+                                    element.getDisplayValue(
+                                        self.getBitfieldValue(element.bitfield)
+                                    )
+                                )
 
-            if self.config.hasBitfields:
-                for bitfield in self.config.bitfields:
-                    self.validateBitfield(bitfield)
+                                valueMin = displayValue
+                                if alt.valueMin is not None:
+                                    valueMin = alt.valueMin
 
-            self.rockFrame = None
-            self.imgPath = self.config.editorImagePath or self.config.imagePath
+                                valueMax = displayValue
+                                if alt.valueMax is not None:
+                                    valueMax = alt.valueMax
+
+                                if (
+                                    valueMin <= displayValue
+                                    and valueMax >= displayValue
+                                ):
+                                    hasAlt = True
+                                    self.imgPath = alt.image
+                                    break
+
+            if not hasAlt:
+                self.imgPath = self.config.editorImagePath or self.config.imagePath
 
             if (
-                entitytype == EntityType["PICKUP"]
-                and variant == PickupVariant["COLLECTIBLE"]
+                self.Type == EntityType["PICKUP"]
+                and self.Variant == PickupVariant["COLLECTIBLE"]
             ):
                 i = QImage()
                 i.load("resources/Entities/5.100.0 - Collectible.png")
@@ -1042,10 +1063,30 @@ class Entity(QGraphicsItem):
             else:
                 self.pixmap = QPixmap(self.imgPath)
 
-            if self.imgPath != self.config.imagePath:
+            if self.imgPath != self.config.imagePath and not hasAlt:
                 self.iconpixmap = QPixmap(self.config.imagePath)
             else:
                 self.iconpixmap = self.pixmap
+
+        def getEntityInfo(self, entitytype, variant, subtype):
+            self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
+            if self.config is None:
+                printf(
+                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
+                )
+
+                self.pixmap = QPixmap("resources/Entities/questionmark.png")
+                self.iconpixmap = self.pixmap
+                self.config = xmlLookups.entities.EntityConfig()
+                return
+
+            if self.config.hasBitfields:
+                for bitfield in self.config.bitfields:
+                    self.validateBitfield(bitfield)
+
+            self.rockFrame = None
+
+            self.updateIcon()
 
             if self.config.placeVisual:
                 parts = list(
@@ -1083,6 +1124,8 @@ class Entity(QGraphicsItem):
                     self.getBitfieldValue(bitfieldElement.bitfield), int(value)
                 ),
             )
+
+            self.updateIcon()
 
     def __init__(self, x, y, myType, variant, subtype, weight, respawning=False):
         super(QGraphicsItem, self).__init__()
@@ -1507,6 +1550,8 @@ class Entity(QGraphicsItem):
 
             recenter = self.entity.placeVisual
 
+            self.entity.updateIcon()
+
             imgPath = self.entity.imgPath
 
             rendered = self.entity.pixmap
@@ -1712,6 +1757,8 @@ class EntityMenu(QWidget):
 
     def changeProperty(self, bitfieldElement, value):
         self.entity.setBitfieldElementValue(bitfieldElement, value)
+
+        self.entity.updateIcon()
 
         mainWindow.dirt()
         mainWindow.scene.update()
