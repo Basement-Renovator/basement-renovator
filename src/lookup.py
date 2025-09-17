@@ -235,6 +235,22 @@ class StageLookup(Lookup):
 
         return stages
 
+    def lookupOne(
+        self, path=None, name=None, stage=None, stageType=None, baseGamePath=None
+    ):
+        stages = self.lookup(
+            path=path,
+            name=name,
+            stage=stage,
+            stageType=stageType,
+            baseGamePath=baseGamePath,
+        )
+
+        if stages:
+            return stages[-1]
+
+        return None
+
     def getGfx(self, node):
         gfx = node.find("Gfx")
         return node if gfx is None else gfx
@@ -303,11 +319,11 @@ class RoomTypeLookup(Lookup):
         if nameRegex and not re.match(nameRegex, room.name):
             return False
 
-        stage = node.get("StageName")
+        stageName = node.get("StageName")
         # TODO replace with check against room file stage
-        if stage and path:
-            stages = self.parent.stages.lookup(path=path)
-            if not stages or stages[-1].get("Name") != stage:
+        if stageName and path:
+            stage = self.parent.stages.lookupOne(path=path)
+            if not stage or stage.get("Name") != stageName:
                 return False
 
         idCriteria = parseCriteria(node.get("ID"))
@@ -1439,16 +1455,14 @@ class MainLookup:
             if ret is not None:
                 return ret
 
-        node = self.stages.lookup(path=path)
-        if not node:
-            node = self.stages.lookup(name="Basement")
-
-        return self.stages.getGfx(node[-1])
+        return self.stages.getGfx(
+            self.stages.lookupOne(path=path) or self.stages.lookupOne(name="Basement")
+        )
 
     def getGfxData(self, node=None):
         if node is None:
             return self.getGfxData(
-                self.stages.getGfx(self.stages.lookup(name="Basement")[0])
+                self.stages.getGfx(self.stages.lookupOne(name="Basement"))
             )
 
         baseGfx = None
