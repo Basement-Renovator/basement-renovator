@@ -5180,10 +5180,11 @@ class MainWindow(QMainWindow):
 
     FIXUP_PNGS = (
         "resources/UI/",
-        "resources/Entities/5.100.0 - Collectible.png",
-        "resources/Backgrounds/Door.png",
-        "resources/Backgrounds/DisabledDoor.png",
-        "resources/Entities/questionmark.png",
+        "resources/Backgrounds/",
+        "resources/Entities/",
+        "resources/Overlays/",
+        "resources/modtemplate/resources/",
+        "resources/none.png",
     )
 
     def fixupLookups(self):
@@ -5196,25 +5197,20 @@ class MainWindow(QMainWindow):
         savedPaths = {}
 
         def fixImage(path):
+            path = str(path)
             if path not in savedPaths:
                 savedPaths[path] = True
-                formatFix = QImage(path)
-                formatFix.save(path)
+                subprocess.run(["magick", "mogrify", "-strip", path])
+
+        def fixPath(path: Path):
+            if path.is_dir():
+                for child in path.iterdir():
+                    fixPath(child)
+            elif path.is_file() and path.suffix == ".png":
+                fixImage(path)
 
         for fixupPath in MainWindow.FIXUP_PNGS:
-            dirPath = Path(fixupPath)
-            if dirPath.is_dir():
-                for dirPath, dirNames, filenames in os.walk(dirPath):
-                    for filename in filenames:
-                        path = os.path.join(dirPath, filename)
-                        fixPath = Path(path)
-                        if fixPath.is_file() and fixPath.suffix == ".png":
-                            fixImage(path)
-
-            elif dirPath.is_file() and dirPath.suffix == ".png":
-                fixImage(fixupPath)
-            else:
-                printf(f"{fixupPath} is not a valid directory or png file")
+            fixPath(Path(fixupPath))
 
         entities = xmlLookups.entities.lookup()
         for config in entities:
@@ -5224,13 +5220,26 @@ class MainWindow(QMainWindow):
             if config.editorImagePath:
                 fixImage(config.editorImagePath)
 
+            if config.overlayImagePath:
+                fixImage(config.overlayImagePath)
+
+            if config.renderPitExtraConnections:
+                for pitPath in config.renderPitExtraConnections:
+                    fixImage(pitPath)
+
+        roomTypes = xmlLookups.roomTypes.lookup()
+        for roomType in roomTypes:
+            if roomType.get("Icon") is not None:
+                fixImage(roomType.get("Icon"))
+
+
         nodes = xmlLookups.stages.lookup()
         nodes.extend(xmlLookups.roomTypes.lookup())
 
         for node in nodes:
             gfxs = node.findall("Gfx")
             if node.get("BGPrefix") is not None:
-                gfx.append(node)
+                gfxs.append(node)
 
             for gfx in gfxs:
                 for key, imgPath in xmlLookups.getGfxData(gfx)["Paths"].items():
