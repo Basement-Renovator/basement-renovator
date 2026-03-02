@@ -5232,7 +5232,6 @@ class MainWindow(QMainWindow):
             if roomType.get("Icon") is not None:
                 fixImage(roomType.get("Icon"))
 
-
         nodes = xmlLookups.stages.lookup()
         nodes.extend(xmlLookups.roomTypes.lookup())
 
@@ -6323,8 +6322,7 @@ class MainWindow(QMainWindow):
                 )
             )
 
-            testData.write(
-                f"""return {{
+            testData.write(f"""return {{
     TestType = {strFix(testType)},
     Character = {char or 'nil'}, -- only used in Repentance and Repentance+
     Commands = {{ {', '.join(map(strFix, commands))} }},
@@ -6338,8 +6336,7 @@ class MainWindow(QMainWindow):
         {roomsStr}
     }}
 }}
-"""
-            )
+""")
 
     def disableTestMod(self, modPath=None):
         modPath = modPath or self.getTestModPath()
