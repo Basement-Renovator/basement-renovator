@@ -1,7 +1,6 @@
 import struct, os
 import xml.etree.ElementTree as ET
 
-
 tree = ET.ElementTree(file="resources/Entities.xml")
 entityXML = tree.getroot()
 
