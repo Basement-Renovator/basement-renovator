@@ -316,8 +316,7 @@ class RoomScene(QGraphicsScene):
         self.newRoomSize(1)
 
         # Make the bitfont
-        q = QImage()
-        q.load("resources/UI/Bitfont.png")
+        q = anm2.loadImage("resources/UI/Bitfont.png")
 
         self.bitfont = [
             QPixmap.fromImage(q.copy(i * 12, j * 12, 12, 12))
@@ -1026,12 +1025,10 @@ class Entity(QGraphicsItem):
                 entitytype == EntityType["PICKUP"]
                 and variant == PickupVariant["COLLECTIBLE"]
             ):
-                i = QImage()
-                i.load("resources/Entities/5.100.0 - Collectible.png")
+                i = anm2.loadImage("resources/Entities/5.100.0 - Collectible.png")
                 i = i.convertToFormat(QImage.Format_ARGB32)
 
-                d = QImage()
-                d.load(self.imgPath)
+                d = anm2.loadImage(self.imgPath)
 
                 p = QPainter(i)
                 p.drawImage(0, 0, d)
@@ -2009,8 +2006,10 @@ class Door(QGraphicsItem):
             self.moveBy(0, -13)
 
         if not Door.Image:
-            Door.Image = QImage("resources/Backgrounds/Door.png")
-            Door.DisabledImage = QImage("resources/Backgrounds/DisabledDoor.png")
+            Door.Image = anm2.loadImage("resources/Backgrounds/Door.png")
+            Door.DisabledImage = anm2.loadImage(
+                "resources/Backgrounds/DisabledDoor.png"
+            )
 
         self.image = Door.Image.transformed(tr)
         self.disabledImage = Door.DisabledImage.transformed(tr)
@@ -2461,7 +2460,7 @@ class Room(QListWidgetItem):
             )
             return
 
-        i = QIcon(roomTypes[0].get("Icon"))
+        i = anm2.loadIcon(roomTypes[0].get("Icon"))
         self.setIcon(i)
 
     class _SpawnIter:
@@ -2716,8 +2715,7 @@ class RoomSelector(QWidget):
         self.filter = QGridLayout()
         self.filter.setSpacing(4)
 
-        fq = QImage()
-        fq.load("resources/UI/FilterIcons.png")
+        fq = anm2.loadImage("resources/UI/FilterIcons.png")
 
         # Set the custom data
         self.filter.typeData = -1
@@ -2767,7 +2765,7 @@ class RoomSelector(QWidget):
         self.typeToggle.setDefaultAction(act)
 
         for iconType in xmlLookups.roomTypes.lookup(showInMenu=True):
-            act = typeMenu.addAction(QIcon(iconType.get("Icon")), "")
+            act = typeMenu.addAction(anm2.loadIcon(iconType.get("Icon")), "")
             act.setData(int(iconType.get("Type")))
 
         self.typeToggle.triggered.connect(self.setTypeFilter)
@@ -2803,8 +2801,7 @@ class RoomSelector(QWidget):
 
         sizeMenu = FilterMenu()
 
-        q = QImage()
-        q.load("resources/UI/ShapeIcons.png")
+        q = anm2.loadImage("resources/UI/ShapeIcons.png")
 
         self.sizeToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(3 * 24, 0, 24, 24))))
         act = sizeMenu.addAction(
@@ -2963,7 +2960,7 @@ class RoomSelector(QWidget):
         )
 
         for i, t in enumerate(types):
-            c.addItem(QIcon(t.get("Icon")), t.get("Name"))
+            c.addItem(anm2.loadIcon(t.get("Icon")), t.get("Name"))
             if t in matchingTypes:
                 c.setCurrentIndex(i)
 
@@ -3026,8 +3023,7 @@ class RoomSelector(QWidget):
         Shape = QWidgetAction(menu)
         c = QComboBox()
 
-        q = QImage()
-        q.load("resources/UI/ShapeIcons.png")
+        q = anm2.loadImage("resources/UI/ShapeIcons.png")
 
         for shapeName in range(1, 13):
             c.addItem(
@@ -3688,7 +3684,7 @@ class EntityItem(QStandardItem):
         self.ID = config.type
         self.variant = config.variant
         self.subtype = config.subtype
-        self.icon = QIcon(config.imagePath)
+        self.icon = anm2.loadIcon(config.imagePath)
         self.config = config
 
         self.setToolTip(self.name)
@@ -5502,8 +5498,7 @@ class MainWindow(QMainWindow):
             },
         ]
 
-        q = QImage()
-        q.load("resources/UI/uiIcons.png")
+        q = anm2.loadImage("resources/UI/uiIcons.png")
         for infoObj in tooltipElements:
             for subicon in infoObj["icons"]:
                 iconObj = QLabel()
@@ -5559,11 +5554,13 @@ class MainWindow(QMainWindow):
         return True
 
     def dirt(self):
-        self.setWindowIcon(QIcon("resources/UI/BasementRenovator-SmallDirty.png"))
+        self.setWindowIcon(
+            anm2.loadIcon("resources/UI/BasementRenovator-SmallDirty.png")
+        )
         self.dirty = True
 
     def clean(self):
-        self.setWindowIcon(QIcon("resources/UI/BasementRenovator-Small.png"))
+        self.setWindowIcon(anm2.loadIcon("resources/UI/BasementRenovator-Small.png"))
         self.dirty = False
 
     def storeEntityList(self, room=None):
@@ -7023,7 +7020,7 @@ if __name__ == "__main__":
 
     # Application
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("resources/UI/BasementRenovator.png"))
+    app.setWindowIcon(anm2.loadIcon("resources/UI/BasementRenovator.png"))
 
     cmdParser = QCommandLineParser()
     cmdParser.setApplicationDescription(

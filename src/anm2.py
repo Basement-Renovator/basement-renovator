@@ -3,7 +3,19 @@ import xml.etree.cElementTree as ET
 from pathlib import Path
 
 from PyQt5.QtCore import QRect, QPoint
-from PyQt5.QtGui import QTransform, QImage, QPainter
+from PyQt5.QtGui import QIcon, QTransform, QImage, QPainter
+
+
+def loadImage(path: str, fmt: QImage.Format | None = None) -> QImage:
+    img = QImage(path, fmt)
+    # print("Loaded image:", path)
+    return img
+
+
+def loadIcon(path: str) -> QIcon:
+    icon = QIcon(path)
+    # print("Loaded icon:", path)
+    return icon
 
 
 class Config:
@@ -167,11 +179,11 @@ class Config:
             if isinstance(image, str):
                 qimg = imgCache.get(image)
                 if qimg is None:
-                    qimg = QImage(image)
+                    qimg = loadImage(image)
                     imgCache[image] = qimg
                     # qimg.save(image)
             else:
-                qimg = QImage(image)
+                qimg = loadImage(image)
 
             sourceImage = qimg.copy(cropRect).transformed(mat)
             img.append(sourceImage)
