@@ -189,7 +189,7 @@ class StageLookup(Lookup):
 
     def lookup(
         self, path=None, name=None, stage=None, stageType=None, baseGamePath=None
-    ):
+    ) -> list[ET.Element]:
         stages = list(self.xml.findall("stage"))
 
         if stage:
@@ -237,7 +237,7 @@ class StageLookup(Lookup):
 
     def lookupOne(
         self, path=None, name=None, stage=None, stageType=None, baseGamePath=None
-    ):
+    ) -> ET.Element | None:
         stages = self.lookup(
             path=path,
             name=name,
@@ -251,14 +251,14 @@ class StageLookup(Lookup):
 
         return None
 
-    def getGfx(self, node):
+    def getGfx(self, node: ET.Element) -> ET.Element:
         gfx = node.find("Gfx")
         return node if gfx is None else gfx
 
 
 class RoomTypeLookup(Lookup):
     def __init__(self, version, parent):
-        self.xml = None
+        self.xml: ET.Element | None = None
         super().__init__("RoomTypes", version)
         self.parent = parent
 
@@ -268,7 +268,7 @@ class RoomTypeLookup(Lookup):
         else:
             return 0
 
-    def loadXML(self, root, mod):
+    def loadXML(self, root: ET.Element, mod):
         roomTypeList = root.findall("room")
         if not roomTypeList:
             return
@@ -336,7 +336,9 @@ class RoomTypeLookup(Lookup):
 
         return True
 
-    def lookup(self, room=None, name=None, roomfile=None, path=None, showInMenu=None):
+    def lookup(
+        self, room=None, name=None, roomfile=None, path=None, showInMenu=None
+    ) -> list[ET.Element]:
         rooms = list(self.xml.findall("room"))
 
         if name:
@@ -375,7 +377,9 @@ class RoomTypeLookup(Lookup):
 
         return candidates[0]
 
-    def getGfx(self, node, room=None, roomfile=None, path=None):
+    def getGfx(
+        self, node: ET.Element, room=None, roomfile=None, path=None
+    ) -> ET.Element | None:
         possibleGfx = node.findall("Gfx")
         possibleGfx = sorted(possibleGfx, key=lambda g: -len(g.attrib))
 
@@ -579,7 +583,7 @@ class EntityLookup(Lookup):
             self.placeVisual = None
             self.disableOffsetIndicator = False
             self.renderPit = False
-            self.renderPitExtraConnections: "list|None" = None
+            self.renderPitExtraConnections: list[str] | None = None
             self.renderRock = False
             self.invalid = False
             self.gfx = None
@@ -993,7 +997,7 @@ class EntityLookup(Lookup):
             self.entries = []
             self.groupentries = []
 
-        def addEntry(self, entry):
+        def addEntry(self, entry):  # EntityConfig | GroupConfig
             self.entries.append(entry)
             if isinstance(entry, EntityLookup.GroupConfig):
                 self.groupentries.append(entry)
@@ -1045,7 +1049,9 @@ class EntityLookup(Lookup):
 
         self.entityListByType[entity.type].append(entity)
 
-    def loadEntityNode(self, node: ET.Element, mod, parentGroup=None):
+    def loadEntityNode(
+        self, node: ET.Element, mod, parentGroup: GroupConfig | None = None
+    ) -> EntityConfig | None:
         entityType = node.get("ID")
         variant = node.get("Variant")
         subtype = node.get("Subtype")
@@ -1150,7 +1156,13 @@ class EntityLookup(Lookup):
 
         return entityConfig
 
-    def getGroup(self, node=None, name=None, label=None, parentGroup=None):
+    def getGroup(
+        self,
+        node=None,
+        name=None,
+        label: str | None = None,
+        parentGroup: GroupConfig | None = None,
+    ) -> GroupConfig | None:
         if name is None:
             name = node.get("Name", node.get("Label"))
             if name is None:
@@ -1165,7 +1177,7 @@ class EntityLookup(Lookup):
 
         return self.groups[name]
 
-    def getTab(self, node=None, name=None):
+    def getTab(self, node=None, name=None) -> TabConfig | None:
         if name is None:
             name = node.get("Name")
             if name is None:
@@ -1270,7 +1282,7 @@ class EntityLookup(Lookup):
         tags=None,
         matchAnyTag=False,
         entities=None,
-    ):
+    ) -> list[EntityConfig]:
         if entities is None:
             if entitytype is not None:
                 if entitytype in self.entityListByType:
@@ -1300,7 +1312,7 @@ class EntityLookup(Lookup):
         tags=None,
         matchAnyTag=False,
         entities=None,
-    ):
+    ) -> EntityConfig | None:
         entities = self.lookup(
             entitytype, variant, subtype, name, tags, matchAnyTag, entities
         )

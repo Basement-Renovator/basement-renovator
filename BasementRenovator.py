@@ -240,7 +240,7 @@ def findModsPath(installPath=None):
                     "Couldn't locate Mods folder and no folder was selected.",
                 )
                 return
-            if not QDir(modsPath).exists:
+            if not QDir(modsPath).exists():
                 QMessageBox.warning(
                     None, "Error", "Selected folder does not exist or is not a folder."
                 )
@@ -419,16 +419,16 @@ class RoomScene(QGraphicsScene):
 
         return res
 
-    def getFrame(self, key, anm2):
+    def getFrame(self, key: str, anim: anm2.Config) -> QPixmap:
         cache = self.framecache.get(key)
         if not cache:
             cache = {}
             self.framecache[key] = cache
 
-        frame = cache.get(anm2.frame)
+        frame = cache.get(anim.frame)
         if frame is None:
-            frame = anm2.render()
-            cache[anm2.frame] = frame
+            frame = anim.render()
+            cache[anim.frame] = frame
 
         return frame
 
@@ -5851,9 +5851,9 @@ class MainWindow(QMainWindow):
         self.path = path
 
         global xmlLookups
-        self.floorInfo = xmlLookups.stages.lookupOne(
-            path=self.path
-        ) or xmlLookups.stages.lookupOne(name="Basement")
+        self.floorInfo = xmlLookups.stages.lookupOne(path=self.path)
+        if self.floorInfo is None:
+            self.floorInfo = xmlLookups.stages.lookupOne(name="Basement")
 
         roomFile = None
         try:
