@@ -9,9 +9,11 @@ import subprocess, json
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser
 from PyQt5.QtWidgets import QApplication
 
+from util import printf
+
 
 def mergeRooms(configList, scriptPath, cwd, fileEdited=None):
-    print("Script path:", scriptPath)
+    printf("Script path:", scriptPath)
     for config in configList:
         if fileEdited:
             skipConfig = True
@@ -24,7 +26,7 @@ def mergeRooms(configList, scriptPath, cwd, fileEdited=None):
             if skipConfig:
                 continue
 
-        print("Current config:", config)
+        printf("Current config:", config)
 
         args = (
             ["python", scriptPath, "--output", config["outputFile"]]
@@ -81,7 +83,7 @@ def runmain():
     configArg = cmdParser.positionalArguments()[0]
     configPath = Path(configArg).absolute().resolve()
     if not configArg or not configPath.is_file():
-        print("Invalid config path!")
+        printf("Invalid config path!")
         return
 
     fileEditedArg = cmdParser.value(fileEditedOpt)
@@ -89,7 +91,7 @@ def runmain():
     if fileEditedArg:
         fileEditedPath = Path(fileEditedArg).absolute().resolve()
         if not fileEditedPath.is_file():
-            print("Invalid edited file path!")
+            printf("Invalid edited file path!")
             return
 
     scriptPath = Path(__file__ + "/../roommerger.py").absolute().resolve()
@@ -104,7 +106,7 @@ def runmain():
             fileEdited=fileEditedPath,
         )
 
-    print("Success! Merged all.")
+    printf("Success! Merged all.")
 
 
 if __name__ == "__main__":

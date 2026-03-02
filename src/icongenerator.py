@@ -9,6 +9,8 @@ import anm2
 from PyQt5.QtCore import QSettings, QFile, QDir, QCommandLineOption, QCommandLineParser
 from PyQt5.QtWidgets import QMessageBox, QApplication, QFileDialog
 
+from util import printf
+
 
 def findInstallPath():
     installPath = ""
@@ -68,7 +70,7 @@ def findInstallPath():
 
         # Looks like nothing was selected
         if cantFindPath or installPath == "" or not os.path.isdir(installPath):
-            print(
+            printf(
                 f"Could not find The Binding of Isaac: Afterbirth+ install folder ({installPath})"
             )
             return ""
@@ -271,9 +273,9 @@ if __name__ == "__main__":
     settings = QSettings("../settings.ini", QSettings.IniFormat)
 
     resources = settings.value("ResourceFolder", "")
-    print("Resource Path:", resources)
+    printf("Resource Path:", resources)
 
     createIcon(
         fileArg, animArg, frameArg, overlayArg, overlayFrameArg, noScaleArg, resources
     )
-    print("Success!")
+    printf("Success!")

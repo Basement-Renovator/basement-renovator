@@ -10,6 +10,8 @@ import roomconvert as cvt
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser, QSettings
 from PyQt5.QtWidgets import QApplication
 
+from util import printf
+
 
 def recomputeRoomIDs(roomList, startingId=None):
     # sort rooms by type
@@ -68,18 +70,18 @@ def runmain():
     cmdParser.process(app)
 
     if cmdParser.isSet(skipOpt):
-        print("Recursive execution from save hook, skipping")
+        printf("Recursive execution from save hook, skipping")
         return
 
     paths = cmdParser.positionalArguments()
     if not paths:
-        print("Must specify at least one file to merge!")
+        printf("Must specify at least one file to merge!")
         return
 
     outputFileArg = cmdParser.value(outputFileOpt)
     outputFilePath = Path(outputFileArg).absolute().resolve()
     if not outputFileArg or outputFilePath.suffix != ".xml":
-        print("Must specify xml output file!")
+        printf("Must specify xml output file!")
         return
 
     lastModified = None
@@ -101,7 +103,7 @@ def runmain():
         path = Path(file)
         if path.is_dir():
             files = list(filter(lambda f: f.suffix == ".xml", path.iterdir()))
-            print("Adding xml files to queue from: ", path)
+            printf("Adding xml files to queue from: ", path)
             del paths[i]
             i -= 1
             paths.extend(files)
@@ -114,21 +116,21 @@ def runmain():
             is not None
         )
         if not anyModified:
-            print("----")
-            print(
+            printf("----")
+            printf(
                 "Skipping since no xmls in folder have been modified since last update"
             )
             return
 
     for file in paths:
-        print("----")
-        print("Path:", file)
+        printf("----")
+        printf("Path:", file)
 
         path = Path(file)
 
-        print("Merging file...")
+        printf("Merging file...")
         if path.suffix != ".xml":
-            print("Must be xml! Skipping!")
+            printf("Must be xml! Skipping!")
             continue
 
         roomFile = cvt.xmlToCommon(path)
@@ -137,10 +139,10 @@ def runmain():
         else:
             mergeRoomFile.rooms.extend(roomFile.rooms)
 
-    print("----")
+    printf("----")
 
     if not mergeRoomFile:
-        print("No rooms files to merge")
+        printf("No rooms files to merge")
         return
 
     if not noRecompIdsArg:
@@ -163,9 +165,9 @@ def runmain():
                     timeout=60,
                 )
             except Exception as e:
-                print("Save hook failed! Reason:", e)
+                printf("Save hook failed! Reason:", e)
 
-    print("Success! Merged to", outputFileArg)
+    printf("Success! Merged to", outputFileArg)
 
 
 if __name__ == "__main__":

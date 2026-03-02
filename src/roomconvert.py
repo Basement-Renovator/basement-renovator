@@ -10,10 +10,13 @@ import re, datetime
 
 import cProfile
 
+
 if not __package__:
     from core import Room, Entity, File
+    from util import printf
 else:
     from src.core import Room, Entity, File
+    from src.util import printf
 
 
 def _xmlStrFix(x):
@@ -387,7 +390,7 @@ def stbABToCommon(path):
         width += 2
         height += 2
         if shape == 0:
-            print(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
+            printf(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
             shape = 1
 
         doors = []
@@ -414,7 +417,7 @@ def stbABToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(
+                printf(
                     f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
                 )
                 off += entPacker.size * stackedEnts
@@ -476,7 +479,7 @@ def stbAntiToCommon(path):
         width += 2
         height += 2
         if shape == 0:
-            print(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
+            printf(f"Bad room shape! {rvariant}, {roomName}, {width}, {height}")
             shape = 1
 
         doors = []
@@ -493,7 +496,7 @@ def stbAntiToCommon(path):
         ret.append(room)
 
         if extraData != b"\x00\x00\x00\x00\x00\x00\x00\x00\x00":
-            print(f"Room {room.getPrefix()} uses the extra bytes:", extraData)
+            printf(f"Room {room.getPrefix()} uses the extra bytes:", extraData)
 
         realWidth = room.info.dims[0]
         gridLen = room.info.gridLen()
@@ -506,7 +509,7 @@ def stbAntiToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(
+                printf(
                     f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
                 )
                 off += entPacker.size * stackedEnts
@@ -597,7 +600,7 @@ def stbRBToCommon(path):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(
+                printf(
                     f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
                 )
                 off += entPacker.size * stackedEnts
@@ -666,7 +669,7 @@ def xmlToCommon(path, destPath=None):
                 lastTestTime = datetime.datetime.fromisoformat(lastTestTime)
                 del roomXmlProps["lastTestTime"]
             except:
-                print("Invalid test time string found", lastTestTime)
+                printf("Invalid test time string found", lastTestTime)
                 traceback.print_exception(*sys.exc_info())
                 lastTestTime = None
 
@@ -699,7 +702,7 @@ def xmlToCommon(path, destPath=None):
 
             grindex = Room.Info.gridIndex(ex, ey, realWidth)
             if grindex >= gridLen:
-                print(
+                printf(
                     f"Discarding the current entity stack due to invalid position! {room.getPrefix()}: {ex-1},{ey-1}"
                 )
                 continue
@@ -770,7 +773,7 @@ def txtToCommon(path, entityLookup):
         char, t, v, s = re.findall(r"(.)=(\d+).(\d+).(\d+)", line)[0]
 
         if char in ["-", "|"]:
-            print("Can't use - or | for entities!")
+            printf("Can't use - or | for entities!")
             continue
 
         t = int(t)
@@ -779,7 +782,7 @@ def txtToCommon(path, entityLookup):
 
         en = entityLookup.lookupOne(t, v, s)
         if en is None or en.invalid:
-            print(
+            printf(
                 f"Invalid entity for character '{char}': '{en is None and 'UNKNOWN' or en.name}'! ({t}.{v}.{s})"
             )
             continue
@@ -848,7 +851,7 @@ def txtToCommon(path, entityLookup):
         i = skipWS(i + 2)
         for j in range(i, i + height):
             if j == numLines:
-                print("Could not finish room!")
+                printf("Could not finish room!")
                 break
 
             y = j - i
@@ -871,7 +874,7 @@ def txtToCommon(path, entityLookup):
                         Entity(x, y, ent[0], ent[1], ent[2], 0)
                     )
                 else:
-                    print(f"Unknown entity! '{char}'")
+                    printf(f"Unknown entity! '{char}'")
 
         r.gridSpawns = r.gridSpawns
         ret.append(r)
@@ -881,7 +884,7 @@ def txtToCommon(path, entityLookup):
             break
 
         if not text[i].strip().startswith("---"):
-            print("Could not find separator after room!")
+            printf("Could not find separator after room!")
             break
 
         roomBegin = i + 1

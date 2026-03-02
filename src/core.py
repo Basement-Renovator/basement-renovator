@@ -1,3 +1,9 @@
+if not __package__:
+    from util import printf
+else:
+    from src.util import printf
+
+
 class Entity:
     def __init__(self, x=0, y=0, t=0, v=0, s=0, weight=0, xmlProps=None):
         # Supplied entity info
@@ -319,12 +325,12 @@ class Room:
         self.info = Room.Info(mytype, variant, subtype, shape)
         if doors:
             if len(self.info.doors) != len(doors):
-                print(f"{name} ({variant}): Invalid doors!", doors)
+                printf(f"{name} ({variant}): Invalid doors!", doors)
             self.info.doors = doors
 
         self.gridSpawns = spawns or [[] for x in range(self.info.gridLen())]
         if self.info.gridLen() != len(self.gridSpawns):
-            print(f"{name} ({variant}): Invalid grid spawns!")
+            printf(f"{name} ({variant}): Invalid grid spawns!")
 
         self.difficulty = difficulty
         self.weight = weight

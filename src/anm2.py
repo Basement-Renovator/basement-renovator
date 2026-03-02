@@ -5,16 +5,21 @@ from pathlib import Path
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtGui import QIcon, QTransform, QImage, QPainter
 
+if not __package__:
+    from util import printf
+else:
+    from src.util import printf
+
 
 def loadImage(path: str, fmt: QImage.Format | None = None) -> QImage:
     img = QImage(path, fmt)
-    # print("Loaded image:", path)
+    # printf("Loaded image:", path)
     return img
 
 
 def loadIcon(path: str) -> QIcon:
     icon = QIcon(path)
-    # print("Loaded icon:", path)
+    # printf("Loaded icon:", path)
     return icon
 
 
@@ -138,10 +143,10 @@ class Config:
 
                 imgs.append([image, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
-                print("Bad image! ", sheetPath, image)
+                printf("Bad image! ", sheetPath, image)
 
         if not imgs:
-            print(
+            printf(
                 f'Frame could not be generated from animation due to {ignoreCount > 0 and "visibility" or "missing files"}'
             )
 

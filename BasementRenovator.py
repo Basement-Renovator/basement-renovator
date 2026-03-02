@@ -4272,7 +4272,7 @@ class PathsDialog(QDialog):
             Update the settings value and refresh widgets.
             Setting to None will effectively revert it to the default value.
             """
-            print("setting", self.settingKey, "to", path)
+            printf("setting", self.settingKey, "to", path)
             if self.isInstallFolder:
                 # If the InstallFolder is reset, also reset all other non-customized paths.
                 for pathSetting in self.dialog.pathSettings:

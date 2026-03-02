@@ -20,7 +20,7 @@ def loadXMLFile(path):
         tree = ET.parse(path)
         root = tree.getroot()
     except Exception as e:
-        print("Error loading BR xml:", e)
+        printf("Error loading BR xml:", e)
         return
 
     return root
@@ -149,11 +149,11 @@ class StageLookup(Lookup):
         def mapStage(stage):
             name = stage.get("Name")
             if name is None:
-                print("Tried to load stage, but had missing name!", str(stage.attrib))
+                printf("Tried to load stage, but had missing name!", str(stage.attrib))
                 return None
 
             if self.parent.verbose:
-                print("Loading stage:", str(stage.attrib))
+                printf("Loading stage:", str(stage.attrib))
 
             replacement = self.xml.find(f'stage[@Name="{name}"]')
 
@@ -281,7 +281,7 @@ class RoomTypeLookup(Lookup):
         def mapRoomType(roomType):
             name = roomType.get("Name")
             if name is None:
-                print(
+                printf(
                     "Tried to load room type, but had missing name!",
                     str(roomType.attrib),
                 )
@@ -542,7 +542,7 @@ class EntityLookup(Lookup):
                                 and (element.offset + element.length) > element2.offset
                             ):
                                 printf(
-                                    f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
+                                    f"Element '{element.name}' (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
                                 )
                                 invalid = True
 

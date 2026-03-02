@@ -103,7 +103,7 @@ if __name__ == "__main__":
     configArg = args[0]
     configPath = Path(configArg).absolute().resolve()
     if not (configArg and configPath.is_file()):
-        print("Invalid config path!")
+        printf("Invalid config path!")
         sys.exit()
 
     workingDirectory = configPath.parent

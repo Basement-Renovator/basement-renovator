@@ -9,6 +9,8 @@ import roomconvert as cvt
 from PyQt5.QtCore import QCommandLineOption, QCommandLineParser, QSettings
 from PyQt5.QtWidgets import QApplication
 
+from util import printf
+
 
 def main():
     import sys
@@ -37,12 +39,12 @@ def main():
     cmdParser.process(app)
 
     if cmdParser.isSet(skipOpt):
-        print("Recursive execution from save hook, skipping")
+        printf("Recursive execution from save hook, skipping")
         return
 
     paths = cmdParser.positionalArguments()
     if not paths:
-        print("Must specify at least one file to convert!")
+        printf("Must specify at least one file to convert!")
         return
 
     doSortEnts = cmdParser.isSet(sortEntsOpt)
@@ -56,7 +58,7 @@ def main():
         path = Path(file)
         if path.is_dir():
             files = list(filter(lambda f: f.suffix == ".xml", path.iterdir()))
-            print("Adding xml files to queue from: ", path)
+            printf("Adding xml files to queue from: ", path)
             del paths[i]
             i -= 1
             paths.extend(files)
@@ -64,13 +66,13 @@ def main():
     paths = list(filter(lambda f: Path(f).exists(), paths))
 
     for file in paths:
-        print("----")
-        print("Converting path:", file)
+        printf("----")
+        printf("Converting path:", file)
 
         path = Path(file)
 
         if path.suffix != ".xml":
-            print("Must be xml! Skipping!")
+            printf("Must be xml! Skipping!")
             continue
 
         outputFilePath = path.with_suffix(".stb")
@@ -83,8 +85,8 @@ def main():
 
         cvt.commonToSTBAB(outputFilePath, roomFile.rooms)
 
-    print("----")
-    print("Done!")
+    printf("----")
+    printf("Done!")
 
 
 if __name__ == "__main__":
