@@ -26,9 +26,95 @@
 # 		Bosscolours for the alternate boss entities
 #
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import (
+    QAbstractItemModel,
+    QAbstractListModel,
+    QCommandLineParser,
+    QDir,
+    QFile,
+    QItemSelectionModel,
+    QModelIndex,
+    QRect,
+    QRectF,
+    QRegularExpression,
+    QSettings,
+    QSize,
+    QTimer,
+    QUrl,
+    Qt,
+    pyqtSignal,
+)
+from PyQt5.QtGui import (
+    QBrush,
+    QClipboard,
+    QColor,
+    QColorConstants,
+    QCursor,
+    QDesktopServices,
+    QFont,
+    QGuiApplication,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QPainter,
+    QPainterPath,
+    QPalette,
+    QPen,
+    QPixmap,
+    QResizeEvent,
+    QStandardItem,
+    QTransform,
+)
+from PyQt5.QtWidgets import (
+    QAbstractScrollArea,
+    QAbstractSpinBox,
+    QApplication,
+    QButtonGroup,
+    QCheckBox,
+    QComboBox,
+    QDateTimeEdit,
+    QDial,
+    QDialog,
+    QDialogButtonBox,
+    QDockWidget,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QGraphicsItem,
+    QGraphicsProxyWidget,
+    QGraphicsScene,
+    QGraphicsView,
+    QGraphicsWidget,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QInputDialog,
+    QLabel,
+    QLineEdit,
+    QListView,
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QRadioButton,
+    QSizePolicy,
+    QSlider,
+    QSpinBox,
+    QStatusBar,
+    QStyle,
+    QStyledItemDelegate,
+    QTabWidget,
+    QTableWidget,
+    QTableWidgetItem,
+    QToolBar,
+    QToolButton,
+    QToolTip,
+    QVBoxLayout,
+    QWidget,
+    QWidgetAction,
+)
 from copy import deepcopy
 
 import traceback
@@ -450,7 +536,7 @@ class RoomScene(QGraphicsScene):
         # Grey out the screen to show it's inactive if there are no rooms selected
         if mainWindow.roomList.selectedRoom() is None:
             b = QBrush(QColor(255, 255, 255, 100))
-            painter.setPen(Qt.white)
+            painter.setPen(QColorConstants.White)
             painter.setBrush(b)
 
             painter.fillRect(rect, b)
@@ -470,11 +556,11 @@ class RoomScene(QGraphicsScene):
         for y in range(self.roomHeight):
             for x in range(self.roomWidth):
                 if self.roomInfo.isInBounds(x, y):
-                    painter.setPen(QPen(white, 1, Qt.DashLine))
+                    painter.setPen(QPen(white, 1, Qt.PenStyle.DashLine))
                 else:
                     if not showOutOfBounds:
                         continue
-                    painter.setPen(QPen(bad, 1, Qt.DashLine))
+                    painter.setPen(QPen(bad, 1, Qt.PenStyle.DashLine))
 
                 painter.drawLine(x * gs, y * gs, (x + 1) * gs, y * gs)
                 painter.drawLine(x * gs, (y + 1) * gs, (x + 1) * gs, (y + 1) * gs)
@@ -491,7 +577,7 @@ class RoomScene(QGraphicsScene):
                     painter.drawText(x * gs + 2, y * gs + 24, f"{x - 1},{y - 1}")
 
         # Draw Walls (Debug)
-        # painter.setPen(QPen(Qt.green, 5, Qt.SolidLine))
+        # painter.setPen(QPen(QColorConstants.Green, 5, Qt.PenStyle.SolidLine))
         # h = gs / 2
         # walls = self.roomInfo.shapeData['Walls']
         # for wMin, wMax, wLvl, wDir in walls['X']:
@@ -590,7 +676,7 @@ class RoomEditorWidget(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         self.setDragMode(QGraphicsView.RubberBandDrag)
         self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
-        self.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setAcceptDrops(True)
 
         self.assignNewScene(scene)
@@ -675,7 +761,7 @@ class RoomEditorWidget(QGraphicsView):
         mainWindow.dirt()
 
     def mousePressEvent(self, event):
-        if event.buttons() == Qt.RightButton:
+        if event.buttons() == Qt.MouseButton.RightButton:
             if mainWindow.roomList.selectedRoom() is not None:
                 self.lastTile = set()
                 self.tryToPaint(event)
@@ -697,7 +783,7 @@ class RoomEditorWidget(QGraphicsView):
         QGraphicsView.mouseReleaseEvent(self, event)
 
     def keyPressEvent(self, event):
-        if self.canDelete and (event.key() == Qt.Key_Delete):
+        if self.canDelete and (event.key() == Qt.Key.Key_Delete):
             scene = self.scene()
             selection = scene.selectedItems()
 
@@ -732,9 +818,11 @@ class RoomEditorWidget(QGraphicsView):
         self.setTransform(tr)
 
         if newScale == yScale:
-            self.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+            self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         else:
-            self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+            self.setAlignment(
+                Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft
+            )
 
     def calculateTotalHP(self, baseHP, stageHP, stageNum):
         totalHP = round(
@@ -758,7 +846,7 @@ class RoomEditorWidget(QGraphicsView):
         painter = QPainter()
         painter.begin(self.viewport())
 
-        painter.setPen(QPen(Qt.white, 1, Qt.SolidLine))
+        painter.setPen(QPen(QColorConstants.White, 1, Qt.PenStyle.SolidLine))
 
         room = mainWindow.roomList.selectedRoom()
         if room:
@@ -805,7 +893,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 400,
                 16,
-                int(Qt.AlignRight | Qt.AlignBottom),
+                int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                 f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.config.name}",
             )
 
@@ -821,7 +909,7 @@ class RoomEditorWidget(QGraphicsView):
                     textY,
                     400,
                     12,
-                    int(Qt.AlignRight | Qt.AlignBottom),
+                    int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                     "Tags: " + tags,
                 )
                 textY += 16
@@ -831,7 +919,7 @@ class RoomEditorWidget(QGraphicsView):
                 textY,
                 200,
                 12,
-                int(Qt.AlignRight | Qt.AlignBottom),
+                int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                 f"Base HP : {e.entity.config.baseHP}",
             )
             textY += 16
@@ -842,7 +930,7 @@ class RoomEditorWidget(QGraphicsView):
                     textY,
                     200,
                     12,
-                    int(Qt.AlignRight | Qt.AlignBottom),
+                    int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                     f"Stage HP : {e.entity.config.stageHP}",
                 )
                 textY += 16
@@ -861,7 +949,7 @@ class RoomEditorWidget(QGraphicsView):
                     textY,
                     200,
                     12,
-                    int(Qt.AlignRight | Qt.AlignBottom),
+                    int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                     f"Total HP : {totalHP}",
                 )
                 textY += 16
@@ -872,7 +960,7 @@ class RoomEditorWidget(QGraphicsView):
                     textY,
                     200,
                     12,
-                    int(Qt.AlignRight | Qt.AlignBottom),
+                    int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                     f"Armor : {e.entity.config.armor}",
                 )
 
@@ -893,7 +981,7 @@ class RoomEditorWidget(QGraphicsView):
                 2,
                 200,
                 16,
-                int(Qt.AlignRight | Qt.AlignBottom),
+                int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                 f"{len(selectedEntities)} Entities Selected",
             )
 
@@ -906,7 +994,7 @@ class RoomEditorWidget(QGraphicsView):
                 20,
                 200,
                 12,
-                int(Qt.AlignRight | Qt.AlignBottom),
+                int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
                 ", ".join(
                     set([x.entity.config.name or "INVALID" for x in selectedEntities])
                 ),
@@ -931,7 +1019,7 @@ class RoomEditorWidget(QGraphicsView):
         useAliased = settings.value("BitfontEnabled") == "0"
 
         if useAliased:
-            painter.setPen(Qt.white)
+            painter.setPen(QColorConstants.White)
             painter.font().setPixelSize(5)
 
         for y, row in enumerate(tiles):
@@ -957,19 +1045,19 @@ class RoomEditorWidget(QGraphicsView):
                         )
                 else:
                     if count == EntityStack.MAX_STACK_DEPTH:
-                        painter.setPen(Qt.red)
+                        painter.setPen(QColorConstants.Red)
 
                     painter.drawText(
                         x * 26,
                         y * 26,
                         26,
                         26,
-                        int(Qt.AlignBottom | Qt.AlignRight),
+                        int(Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight),
                         str(count),
                     )
 
                     if count == EntityStack.MAX_STACK_DEPTH:
-                        painter.setPen(Qt.white)
+                        painter.setPen(QColorConstants.White)
 
 
 class Entity(QGraphicsItem):
@@ -1103,8 +1191,10 @@ class Entity(QGraphicsItem):
         self.updatePosition()
 
         if not hasattr(Entity, "SELECTION_PEN"):
-            Entity.SELECTION_PEN = QPen(Qt.green, 1, Qt.DashLine)
-            Entity.OFFSET_SELECTION_PEN = QPen(Qt.red, 1, Qt.DashLine)
+            Entity.SELECTION_PEN = QPen(QColorConstants.Green, 1, Qt.PenStyle.DashLine)
+            Entity.OFFSET_SELECTION_PEN = QPen(
+                QColorConstants.Red, 1, Qt.PenStyle.DashLine
+            )
             Entity.INVALID_ERROR_IMG = QPixmap("resources/UI/ent-error.png")
             Entity.OUT_OF_RANGE_WARNING_IMG = QPixmap("resources/UI/ent-warning.png")
 
@@ -1462,8 +1552,8 @@ class Entity(QGraphicsItem):
         return self.entity.imgPath if override is None else override.get("Image")
 
     def paint(self, painter, option, widget):
-        painter.setBrush(Qt.Dense5Pattern)
-        painter.setPen(QPen(Qt.white))
+        painter.setBrush(Qt.BrushStyle.Dense5Pattern)
+        painter.setPen(QPen(QColorConstants.White))
 
         if self.entity.pixmap:
             xc, yc = 0, 0
@@ -1585,20 +1675,24 @@ class Entity(QGraphicsItem):
                 abs(1 - yc) > 0.5 or abs(1 - xc) > 0.5
             ):
                 painter.setPen(self.OFFSET_SELECTION_PEN)
-                painter.setBrush(Qt.NoBrush)
+                painter.setBrush(Qt.BrushStyle.NoBrush)
                 painter.drawLine(13, 13, int(x + width / 2), y + height - 13)
                 drawGridBorders()
                 painter.fillRect(
-                    int(x + width / 2 - 3), y + height - 13 - 3, 6, 6, Qt.red
+                    int(x + width / 2 - 3),
+                    y + height - 13 - 3,
+                    6,
+                    6,
+                    QColorConstants.Red,
                 )
 
             if self.isSelected():
                 painter.setPen(self.SELECTION_PEN)
-                painter.setBrush(Qt.NoBrush)
+                painter.setBrush(Qt.BrushStyle.NoBrush)
                 painter.drawRect(x, y, width, height)
 
                 # Grid space boundary
-                painter.setPen(Qt.green)
+                painter.setPen(QColorConstants.Green)
                 drawGridBorders()
 
             if self.entity.overlaypixmap:
@@ -1632,7 +1726,7 @@ class Entity(QGraphicsItem):
     def mouseReleaseEvent(self, event):
         e = self.entity
         if (
-            event.button() == Qt.MiddleButton
+            event.button() == Qt.MouseButton.MiddleButton
             and e.config.hasBitfields
             and not e.config.invalidBitfield
         ):
@@ -1648,7 +1742,7 @@ class Entity(QGraphicsItem):
 
     def getStack(self):
         # Get the stack
-        stack = self.collidingItems(Qt.IntersectsItemBoundingRect)
+        stack = self.collidingItems(Qt.ItemSelectionMode.IntersectsItemBoundingRect)
         stack.append(self)
 
         # Make sure there are no doors or popups involved
@@ -1702,7 +1796,7 @@ class EntityMenu(QWidget):
         self.list.setViewMode(self.list.ListMode)
         self.list.setSelectionMode(self.list.ExtendedSelection)
         self.list.setResizeMode(self.list.Adjust)
-        self.list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
 
         cursor = QCursor()
         self.customContextMenu(cursor.pos())
@@ -1809,7 +1903,7 @@ class EntityMenu(QWidget):
                     widget.addItem(item)
                 widget.setCurrentIndex(self.getWidgetValue(bitfieldElement))
             elif bitfieldElement.widget == "slider":
-                widget = QSlider(Qt.Horizontal)
+                widget = QSlider(Qt.Orientation.Horizontal)
                 minimum, maximum = bitfieldElement.getWidgetRange()
                 widget.setRange(minimum, maximum)
                 widget.setValue(self.getWidgetValue(bitfieldElement))
@@ -1860,14 +1954,14 @@ class EntityStack(QGraphicsItem):
             self.setDecimals(2)
             self.setSingleStep(0.1)
             self.setFrame(False)
-            self.setAlignment(Qt.AlignHCenter)
+            self.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
             self.setFont(QFont("Arial", 10))
 
             palette = self.palette()
-            palette.setColor(QPalette.Base, Qt.transparent)
-            palette.setColor(QPalette.Text, Qt.white)
-            palette.setColor(QPalette.Window, Qt.transparent)
+            palette.setColor(QPalette.Base, QColorConstants.Transparent)
+            palette.setColor(QPalette.Text, QColorConstants.White)
+            palette.setColor(QPalette.Window, QColorConstants.Transparent)
 
             self.setPalette(palette)
             self.setButtonSymbols(QAbstractSpinBox.NoButtons)
@@ -1917,7 +2011,7 @@ class EntityStack(QGraphicsItem):
     def paint(self, painter, option, widget):
 
         brush = QBrush(QColor(0, 0, 0, 80))
-        painter.setPen(QPen(Qt.transparent))
+        painter.setPen(QPen(QColorConstants.Transparent))
         painter.setBrush(brush)
 
         r = self.boundingRect().adjusted(0, 0, 0, -16)
@@ -1929,7 +2023,7 @@ class EntityStack(QGraphicsItem):
         path.lineTo(r.center().x(), r.bottom() + 12)
         painter.drawPath(path)
 
-        painter.setPen(QPen(Qt.white))
+        painter.setPen(QPen(QColorConstants.White))
         painter.setFont(QFont("Arial", 8))
 
         w = 0
@@ -1939,7 +2033,7 @@ class EntityStack(QGraphicsItem):
             w += 4
             painter.drawPixmap(int(w), int(r.bottom() - 20 - pix.height()), pix)
 
-            # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignCenter, "{:.1f}".format(item.entity.weight))
+            # painter.drawText(w, r.bottom()-16, pix.width(), 8, Qt.AlignmentFlag.AlignCenter, "{:.1f}".format(item.entity.weight))
             w += pix.width()
 
     def boundingRect(self):
@@ -2344,7 +2438,7 @@ class Room(QListWidgetItem):
         self.xmlProps = {}
         self._lastTestTime = None
 
-        self.setFlags(self.flags() | Qt.ItemIsEditable)
+        self.setFlags(self.flags() | Qt.ItemFlag.ItemIsEditable)
         self.setToolTip()
 
         self.renderDisplayIcon()
@@ -2364,21 +2458,21 @@ class Room(QListWidgetItem):
 
     @property
     def name(self):
-        return self.data(Qt.UserRole)
+        return self.data(Qt.ItemDataRole.UserRole)
 
     @name.setter
     def name(self, n):
-        self.setData(Qt.UserRole, n)
+        self.setData(Qt.ItemDataRole.UserRole, n)
         self.setText(f"{self.info.variant} - {n}")
         self.seed = hash(n)
 
     @property
     def isCurrent(self):
-        return self.data(Qt.UserRole + 100)
+        return self.data(Qt.ItemDataRole.UserRole + 100)
 
     @isCurrent.setter
     def isCurrent(self, s):
-        self.setData(Qt.UserRole + 100, s)
+        self.setData(Qt.ItemDataRole.UserRole + 100, s)
 
     @property
     def gridSpawns(self):
@@ -2639,7 +2733,11 @@ class RoomDelegate(QStyledItemDelegate):
 
     def paint(self, painter, option, index):
         painter.fillRect(
-            option.rect.right() - 19, option.rect.top(), 17, 16, QBrush(Qt.white)
+            option.rect.right() - 19,
+            option.rect.top(),
+            17,
+            16,
+            QBrush(QColorConstants.White),
         )
 
         QStyledItemDelegate.paint(self, painter, option, index)
@@ -2665,7 +2763,7 @@ class FilterMenu(QMenu):
                 rect.top() - 2,
                 24,
                 24,
-                QBrush(Qt.transparent),
+                QBrush(QColorConstants.Transparent),
             )
             painter.drawPixmap(
                 int(rect.right() / 2 - 12), rect.top() - 2, act.icon().pixmap(24, 24)
@@ -2779,7 +2877,7 @@ class RoomSelector(QWidget):
             rightClicked = pyqtSignal()
 
             def mousePressEvent(self, e):
-                if e.buttons() == Qt.RightButton:
+                if e.buttons() == Qt.MouseButton.RightButton:
                     self.rightClicked.emit()
                 else:
                     self.clicked.emit()
@@ -2877,7 +2975,7 @@ class RoomSelector(QWidget):
         self.list.setViewMode(self.list.ListMode)
         self.list.setSelectionMode(self.list.ExtendedSelection)
         self.list.setResizeMode(self.list.Adjust)
-        self.list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.list.setAutoScroll(True)
         self.list.setDragEnabled(True)
@@ -3381,7 +3479,7 @@ class RoomSelector(QWidget):
     def keyPressEvent(self, event):
         self.list.keyPressEvent(event)
 
-        if event.key() == Qt.Key_Delete or event.key() == Qt.Key_Backspace:
+        if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
             self.removeRoom()
 
     def addRoom(self):
@@ -3615,7 +3713,7 @@ class EntityGroupItem(QStandardItem):
 
         self.endIndex = endIndex
 
-        self.alignment = Qt.AlignCenter
+        self.alignment = Qt.AlignmentFlag.AlignCenter
 
         self.collapsed = False
 
@@ -3710,14 +3808,14 @@ class EntityGroupModel(QAbstractListModel):
         item = self.getItem(index.row())
 
         if isinstance(item, EntityGroupItem):
-            return Qt.ItemIsEnabled
+            return Qt.ItemFlag.ItemIsEnabled
         else:
-            return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+            return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable
 
     def getItem(self, index):
         return self.group.getItem(index)
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         # Should return the contents of a row when asked for the index
         #
         # Can be optimized by only dealing with the roles we need prior
@@ -3726,11 +3824,11 @@ class EntityGroupModel(QAbstractListModel):
         if (role > 1) and (role < 6):
             return None
 
-        elif role == Qt.ForegroundRole:
+        elif role == Qt.ItemDataRole.ForegroundRole:
             return QBrush(Qt.black)
 
-        elif role == Qt.TextAlignmentRole:
-            return Qt.AlignCenter
+        elif role == Qt.ItemDataRole.TextAlignmentRole:
+            return Qt.AlignmentFlag.AlignCenter
 
         if not index.isValid():
             return None
@@ -3743,38 +3841,36 @@ class EntityGroupModel(QAbstractListModel):
 
         item = self.getItem(n)
 
-        if role == Qt.DecorationRole:
+        if role == Qt.ItemDataRole.DecorationRole:
             if isinstance(item, EntityItem):
                 return item.icon
 
         if (
-            role == Qt.ToolTipRole
-            or role == Qt.StatusTipRole
-            or role == Qt.WhatsThisRole
+            role == Qt.ItemDataRole.ToolTipRole
+            or role == Qt.ItemDataRole.StatusTipRole
+            or role == Qt.ItemDataRole.WhatsThisRole
         ):
             if isinstance(item, EntityItem):
                 return "{0}".format(item.name)
 
-        elif role == Qt.DisplayRole:
+        elif role == Qt.ItemDataRole.DisplayRole:
             if isinstance(item, EntityGroupItem):
                 return item.name + (" ▶" if item.collapsed else "")
 
-        elif role == Qt.SizeHintRole:
+        elif role == Qt.ItemDataRole.SizeHintRole:
             if isinstance(item, EntityGroupItem):
                 return QSize(self.view.viewport().width(), 24)
 
-        elif role == Qt.BackgroundRole:
+        elif role == Qt.ItemDataRole.BackgroundRole:
             if isinstance(item, EntityGroupItem):
                 colour = 165
-
-                if colour > 255:
-                    colour = 255
-
-                brush = QBrush(QColor(colour, colour, colour), Qt.Dense4Pattern)
+                brush = QBrush(
+                    QColor(colour, colour, colour), Qt.BrushStyle.Dense4Pattern
+                )
 
                 return brush
 
-        elif role == Qt.FontRole:
+        elif role == Qt.ItemDataRole.FontRole:
             font = QFont()
             font.setPixelSize(16)
             font.setBold(True)
@@ -3874,12 +3970,12 @@ class EntityPalette(QWidget):
         # holding ctrl skips the filter change step
         kb = int(QGuiApplication.keyboardModifiers())
 
-        holdCtrl = kb & Qt.ControlModifier != 0
+        holdCtrl = kb & Qt.KeyboardModifier.ControlModifier != 0
         pinEntityFilter = settings.value("PinEntityFilter") == "1"
         self.objChanged.emit(current, holdCtrl == pinEntityFilter)
 
         # Throws a signal when the selected object is used as a replacement
-        if kb & Qt.AltModifier != 0:
+        if kb & Qt.KeyboardModifier.AltModifier != 0:
             self.objReplaced.emit(current)
 
     # @pyqtSlot()
@@ -4534,11 +4630,11 @@ class TestConfigDialog(QDialog):
         self.commandList.addItems(self.commandConfig.val)
         for i in range(self.commandList.count()):
             item = self.commandList.item(i)
-            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
 
     def addCommand(self):
         item = QListWidgetItem("combo 2")
-        item.setFlags(item.flags() | Qt.ItemIsEditable)
+        item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
         self.commandList.addItem(item)
 
     def deleteCommand(self):
@@ -4662,8 +4758,8 @@ class FilterDialog(QDialog):
             for tag in xmlLookups.entities.tags.values():
                 if tag.filterable:
                     tagItem = FilterDialog.TagFilterEntry.TagFilterListItem(tag)
-                    tagItem.setFlags(tagItem.flags() | Qt.ItemIsUserCheckable)
-                    tagItem.setCheckState(Qt.Unchecked)
+                    tagItem.setFlags(tagItem.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+                    tagItem.setCheckState(Qt.CheckState.Unchecked)
                     self.tagsList.addItem(tagItem)
 
             self.setVals()
@@ -4687,9 +4783,9 @@ class FilterDialog(QDialog):
             for row in range(self.tagsList.count()):
                 item = self.tagsList.item(row)
                 item.setCheckState(
-                    Qt.Checked
+                    Qt.CheckState.Checked
                     if item.config.tag in filterData["tags"]
-                    else Qt.Unchecked
+                    else Qt.CheckState.Unchecked
                 )
 
         def updateVals(self):
@@ -4705,7 +4801,7 @@ class FilterDialog(QDialog):
             checkedTags = []
             for row in range(self.tagsList.count()):
                 item = self.tagsList.item(row)
-                if item.checkState() == Qt.Checked:
+                if item.checkState() == Qt.CheckState.Checked:
                     checkedTags.append(item.config.tag)
 
             filterData["tags"] = checkedTags
@@ -4765,7 +4861,7 @@ class StatisticsDialog(QDialog):
                 self.property = property
                 self.sortValue = getattr(self.entry, self.property)
                 self.formatAsPercent = formatAsPercent
-                self.setFlags(Qt.ItemIsEnabled)
+                self.setFlags(Qt.ItemFlag.ItemIsEnabled)
 
             def __lt__(self, otherItem):
                 if (
@@ -4804,7 +4900,7 @@ class StatisticsDialog(QDialog):
 
             self.table.insertRow(0)
             self.nameWidget = QTableWidgetItem()
-            self.nameWidget.setFlags(Qt.ItemIsEnabled)
+            self.nameWidget.setFlags(Qt.ItemFlag.ItemIsEnabled)
 
             if self.tag:
                 self.nameWidget.setText(self.tag.label or self.tag.tag)
@@ -5039,7 +5135,7 @@ class StatisticsDialog(QDialog):
         self.refresh()
 
         self.statisticsTable.setSortingEnabled(True)
-        self.statisticsTable.sortItems(1, Qt.DescendingOrder)
+        self.statisticsTable.sortItems(1, Qt.SortOrder.DescendingOrder)
         self.statisticsTable.verticalHeader().hide()
         self.statisticsTable.resizeColumnsToContents()
 
@@ -5102,16 +5198,16 @@ class StatisticsDialog(QDialog):
 class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         QMainWindow.keyPressEvent(self, event)
-        if event.key() == Qt.Key_Alt:
+        if event.key() == Qt.Key.Key_Alt:
             self.roomList.mirrorButtonOn()
-        if event.key() == Qt.Key_Shift:
+        if event.key() == Qt.Key.Key_Shift:
             self.roomList.mirrorYButtonOn()
 
     def keyReleaseEvent(self, event):
         QMainWindow.keyReleaseEvent(self, event)
-        if event.key() == Qt.Key_Alt:
+        if event.key() == Qt.Key.Key_Alt:
             self.roomList.mirrorButtonOff()
-        if event.key() == Qt.Key_Shift:
+        if event.key() == Qt.Key.Key_Shift:
             self.roomList.mirrorYButtonOff()
 
     def __init__(self):
@@ -5470,7 +5566,7 @@ class MainWindow(QMainWindow):
 
         self.roomList.list.currentItemChanged.connect(self.handleSelectedRoomChanged)
 
-        self.addDockWidget(Qt.RightDockWidgetArea, self.roomListDock)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.roomListDock)
 
         self.EntityPalette = EntityPalette()
         self.EntityPaletteDock = QDockWidget("Entity Palette")
@@ -5481,7 +5577,7 @@ class MainWindow(QMainWindow):
         self.EntityPalette.objChanged.connect(self.handleObjectChanged)
         self.EntityPalette.objReplaced.connect(self.handleObjectReplaced)
 
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.EntityPaletteDock)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.EntityPaletteDock)
 
     def setupStatusBar(self):
         self.statusBar = QStatusBar()
@@ -5510,7 +5606,7 @@ class MainWindow(QMainWindow):
             label = QLabel(infoObj["label"])
             label.setContentsMargins(0, 0, 20, 0)
             label.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-            label.setAlignment(Qt.AlignTop)
+            label.setAlignment(Qt.AlignmentFlag.AlignTop)
             self.statusBar.addWidget(label)
 
         self.setStatusBar(self.statusBar)
@@ -6233,7 +6329,7 @@ class MainWindow(QMainWindow):
             int(self.scene.sceneRect().height()),
             QImage.Format_ARGB32,
         )
-        ScreenshotImage.fill(Qt.transparent)
+        ScreenshotImage.fill(QColorConstants.Transparent)
 
         RenderPainter = QPainter(ScreenshotImage)
         self.scene.render(
