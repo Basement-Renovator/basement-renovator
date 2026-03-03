@@ -6402,32 +6402,32 @@ class MainWindow(QMainWindow):
 
                 commands = settings.value("TestCommands", [])
 
-            roomsStr = ",\n\t".join(
+            roomsStr = ",\n\t\t".join(
                 map(
                     lambda testRoom: f"""{{
-        Name = {strFix(testRoom.name)},
-        Type = {testRoom.info.type},
-        Variant = {testRoom.info.variant},
-        Subtype = {testRoom.info.subtype},
-        Shape = {testRoom.info.shape}
-    }}""",
+\t\t\tName = {strFix(testRoom.name)},
+\t\t\tType = {testRoom.info.type},
+\t\t\tVariant = {testRoom.info.variant},
+\t\t\tSubtype = {testRoom.info.subtype},
+\t\t\tShape = {testRoom.info.shape}
+\t\t}}""",
                     testRooms,
                 )
             )
 
             testData.write(
                 f"""return {{
-    TestType = {strFix(testType)},
-    Character = {char or 'nil'}, -- only used in Repentance and Repentance+
-    Commands = {{ {', '.join(map(strFix, commands))} }},
-    Stage = {floorInfo.get('Stage')},
-    StageType = {floorInfo.get('StageType')},
-    StageName = {strFix(floorInfo.get('Name'))},
-    IsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
-    DisableUI = {settings.value("DisableInGameUI") == "1" and 'true' or 'false'},
-    RoomFile = {strFix(str(Path(self.path)) or 'N/A')},
-    Rooms = {{
-        {roomsStr}
+\tTestType = {strFix(testType)},
+\tCharacter = {char or 'nil'}, -- only used in Repentance and Repentance+
+\tCommands = {{ {', '.join(map(strFix, commands))} }},
+\tStage = {floorInfo.get('Stage')},
+\tStageType = {floorInfo.get('StageType')},
+\tStageName = {strFix(floorInfo.get('Name'))},
+\tIsModStage = {floorInfo.get('BaseGamePath') is None and 'true' or 'false'},
+\tDisableUI = {settings.value("DisableInGameUI") == "1" and 'true' or 'false'},
+\tRoomFile = {strFix(str(Path(self.path)) or 'N/A')},
+\tRooms = {{
+\t\t{roomsStr}
     }}
 }}
 """
