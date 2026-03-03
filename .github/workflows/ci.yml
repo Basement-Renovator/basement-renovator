@@ -90,7 +90,7 @@ jobs:
          uv run win_build.py
 
       - name: Determine next build number
-        uses: MCKanpolat/auto-semver-action@1.0.5
+        uses: MCKanpolat/auto-semver-action@1.0.11
         id: versioning
         with:
           releaseType: patch
