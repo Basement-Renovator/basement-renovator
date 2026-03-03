@@ -1,4 +1,5 @@
 python --version
-python -m pip install -r ./requirements.txt
-python -u ./BasementRenovator.py
+uv --version
+uv sync
+uv run python -u ./BasementRenovator.py
 pause

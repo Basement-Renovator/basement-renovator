@@ -17,6 +17,8 @@ def exe(
     addtlFiles=[],
 ):
     args = [
+        "uv",
+        "run",
         "python",
         "-u",
         "-m",

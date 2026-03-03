@@ -11,7 +11,7 @@ SECONDS=0
 cd "$DIR"
 
 # Use Black to check Python formatting.
-black --check "$DIR"
+uv run black --check "$DIR"
 
 # Use Prettier to check XML formatting.
 npx prettier --check "resources/**/*.xml"

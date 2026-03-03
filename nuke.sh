@@ -14,5 +14,12 @@ NODE_MODULES="$DIR/node_modules"
 rm -rf "$NODE_MODULES"
 echo "Successfully deleted: $NODE_MODULES"
 
+VENV="$DIR/.venv"
+rm -rf "$VENV"
+echo "Successfully deleted: $VENV"
+
 npm install
 echo "Successfully reinstalled Node depedencies."
+
+uv sync
+echo "Successfully reinstalled Python dependencies."

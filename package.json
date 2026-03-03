@@ -1,7 +1,7 @@
 {
   "name": "basement-renovator",
   "version": "0.0.0",
-  "description": "Basement Renovator is a 3rd-party Repentance room and level editor",
+  "description": "Basement Renovator is a 3rd-party TBoI room and level editor",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Basement-Renovator/Basement-Renovator.git"
