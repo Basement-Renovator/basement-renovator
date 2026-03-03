@@ -5292,7 +5292,8 @@ class MainWindow(QMainWindow):
             path = str(path)
             if path not in savedPaths:
                 savedPaths[path] = True
-                subprocess.run(["magick", "mogrify", "-strip", path])
+                subprocess.run(["magick", "mogrify", "-strip", "-channel", "RGBA", "-define", "png:color-type=6", path])
+                print("Fixed", path)
 
         def fixPath(path: Path):
             if path.is_dir():

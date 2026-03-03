@@ -188,7 +188,7 @@ class Config:
                     imgCache[image] = qimg
                     # qimg.save(image)
             else:
-                qimg = loadImage(image)
+                qimg = QImage(image)
 
             sourceImage = qimg.copy(cropRect).transformed(mat)
             img.append(sourceImage)
