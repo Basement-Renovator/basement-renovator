@@ -1094,7 +1094,7 @@ class Entity(QGraphicsItem):
             self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
             if self.config is None:
                 printf(
-                    f"'Could not find Entity {Entity.toString(entitytype, variant, subtype)} for in-editor, using ?"
+                    f"'Could not find Entity {EntityData.toString(entitytype, variant, subtype)} for in-editor, using ?"
                 )
 
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
@@ -1549,7 +1549,7 @@ class Entity(QGraphicsItem):
             if self.entity.config.hasBitfieldKey("Variant"):
                 variant = 0
 
-        entID = Entity.toString(self.entity.Type, variant, subtype)
+        entID = EntityData.toString(self.entity.Type, variant, subtype)
 
         return gfxData["Entities"].get(entID)
 
@@ -6050,7 +6050,7 @@ class MainWindow(QMainWindow):
 
                         if config is None or config.invalid:
                             printf(
-                                f"Room {room.getPrefix()} has invalid entity '{config is None and 'UNKNOWN' or config.name}'! ({Entity.toString(eType, eVariant, eSubtype)})"
+                                f"Room {room.getPrefix()} has invalid entity '{config is None and 'UNKNOWN' or config.name}'! ({EntityData.toString(eType, eVariant, eSubtype)})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
                             config is None or config.invalid

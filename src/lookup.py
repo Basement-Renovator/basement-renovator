@@ -528,8 +528,8 @@ class EntityLookup(Lookup):
 
                     self.elements.append(element)
 
-            def isInvalid(self):
-                invalid = False
+            def getWarnings(self):
+                warnings = ""
                 startsAtZero = False
                 for element in self.elements:
                     hasAdjacent = len(self.elements) == 1 and element.offset == 0
@@ -542,10 +542,7 @@ class EntityLookup(Lookup):
                                 element.offset <= element2.offset
                                 and (element.offset + element.length) > element2.offset
                             ):
-                                printf(
-                                    f"Element '{element.name}' (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
-                                )
-                                invalid = True
+                                warnings += f"\n\tElement '{element.name}' (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
 
                             if (element.offset + element.length) == element2.offset or (
                                 element2.offset + element2.length
@@ -553,14 +550,12 @@ class EntityLookup(Lookup):
                                 hasAdjacent = True
 
                     if not hasAdjacent:
-                        printf(
-                            f"Element {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
-                        )
+                        warnings += f"\n\tElement {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
 
                 if not startsAtZero:
-                    printf("Bitfield does not have an element with an offset of 0.")
+                    warnings += f"\n\tBitfield does not have an element with an offset of 0."
 
-                return invalid
+                return warnings
 
             def clampValues(self, number):
                 for element in self.elements:
@@ -640,7 +635,7 @@ class EntityLookup(Lookup):
 
             if not os.path.exists(imagePath):
                 printf(
-                    f"Failed loading image for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}):",
+                    f"\nFailed loading image for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}):",
                     imagePath,
                 )
                 return default
@@ -805,11 +800,11 @@ class EntityLookup(Lookup):
 
             entities2Node, invalid, mismatchedName = self.getEntities2Node()
             if invalid:
-                warnings += "\nHas no entry in entities2.xml!"
+                warnings += "\n\tHas no entry in entities2.xml!"
                 self.invalid = True
 
             if mismatchedName:
-                warnings += f"\nFound name mismatch! In entities2: {mismatchedName}; In BR: {self.name}"
+                warnings += f"\n\tFound name mismatch! In entities2: {mismatchedName}; In BR: {self.name}"
 
             if node.get("BaseHP"):
                 self.baseHP = node.get("BaseHP")
@@ -867,10 +862,11 @@ class EntityLookup(Lookup):
                 self.hasBitfields = True
                 for bitfieldNode in bitfields:
                     bitfield = self.Bitfield(bitfieldNode)
-                    if bitfield.isInvalid():
+                    bitfieldWarnings = bitfield.getWarnings()
+                    if bitfieldWarnings != "":
                         self.invalidBitfield = True
                         warnings += (
-                            "\nHas invalid bitfield elements and cannot be configured"
+                            "\n\tHas invalid bitfield elements and cannot be configured" + bitfieldWarnings
                         )
                         break
                     else:
@@ -878,7 +874,7 @@ class EntityLookup(Lookup):
 
             rangeWarnings = self.getOutOfRangeWarnings()
             if rangeWarnings != "":
-                warnings += "\nOut of range:" + rangeWarnings
+                warnings += "\n\tOut of range:" + rangeWarnings
 
             if warnings != "":
                 warnings = (
@@ -905,12 +901,12 @@ class EntityLookup(Lookup):
         def getOutOfRangeWarnings(self):
             warnings = ""
             if (self.type >= 1000 or self.type < 0) and not self.hasTag("Grid"):
-                warnings += f"\nType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
+                warnings += f"\n\tType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
             if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
                 "Variant"
             ):
                 warnings += (
-                    f"\nVariant {self.variant} is outside the valid range of 0 - 4095!"
+                    f"\n\tVariant {self.variant} is outside the valid range of 0 - 4095!"
                 )
             if (
                 (self.subtype >= 4096 or self.subtype < 0)
@@ -918,7 +914,7 @@ class EntityLookup(Lookup):
                 and not self.hasBitfieldKey("Subtype")
             ):
                 warnings += (
-                    f"\nSubtype {self.subtype} is outside the valid range of 0 - 4095!"
+                    f"\n\tSubtype {self.subtype} is outside the valid range of 0 - 4095!"
                 )
 
             return warnings
@@ -929,12 +925,12 @@ class EntityLookup(Lookup):
         def getEditorWarnings(self):
             warnings = self.getOutOfRangeWarnings()
             if self.invalid:
-                warnings += "\nMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
+                warnings += "\n\tMissing entities2.xml entry! Trying to spawn this WILL CRASH THE GAME!!"
 
             if self.invalidBitfield:
-                warnings += "\nHas incorrectly defined bitfield properties, cannot be configured"
+                warnings += "\n\tHas incorrectly defined bitfield properties, cannot be configured"
             elif self.hasBitfields:
-                warnings += "\nMiddle-click to configure entity properties"
+                warnings += "\n\tMiddle-click to configure entity properties"
 
             return warnings
 
@@ -1089,7 +1085,7 @@ class EntityLookup(Lookup):
                     return entityConfig
                 else:
                     printf(
-                        f"Entity {node.attrib} looks like a ref, but was not previously defined!"
+                        f"\nEntity {node.attrib} looks like a ref, but was not previously defined!"
                     )
 
         entityType = int(entityType or -1)
@@ -1107,14 +1103,14 @@ class EntityLookup(Lookup):
 
             if entityConfig is None:
                 printf(
-                    f'Entity "{name}" from {mod.name} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
+                    f'\nEntity "{name}" from {mod.name} ({entityType}.{variant}.{subtype}) has the Overwrite attribute, but is not overwriting anything!'
                 )
         else:
             entityConfig = self.lookupOne(entityType, variant, subtype)
             if entityConfig:
                 overwrite = True
                 printf(
-                    f'Entity "{name}" from "{mod.name}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod.name}"!'
+                    f'\nEntity "{name}" from "{mod.name}" ({entityType}.{variant}.{subtype}) is overriding "{entityConfig.name}" from "{entityConfig.mod.name}"!'
                 )
             else:
                 entityConfig = self.EntityConfig(mod, self)
@@ -1274,7 +1270,7 @@ class EntityLookup(Lookup):
         self.loadXML(root, mod)
 
         printf(
-            f"Successfully loaded {self.count() - previous} new Entities from {mod.name}"
+            f"\nSuccessfully loaded {self.count() - previous} new Entities from {mod.name}"
         )
 
     def lookup(
