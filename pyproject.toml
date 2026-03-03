@@ -1,0 +1,21 @@
+[project]
+name = "basement-renovator"
+version = "0.1.0"
+description = "Basement Renovator is a 3rd-party TBoI room and level editor"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "psutil>=7.2.2",
+    "pyqt5>=5.15.11",
+    "pyqt5-qt5>=5.15.2",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+]
+
+[tool.uv]
+required-environments = [
+    "sys_platform == 'win32'",
+]

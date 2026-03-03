@@ -15,7 +15,7 @@ fi
 cd "$DIR"
 
 # Use Black on the entire repository
-black .
+uv run black .
 
 # Don't proceed if the repo is clean
 GIT_STATUS_OUPUT=$(git status --porcelain)
