@@ -553,7 +553,9 @@ class EntityLookup(Lookup):
                         warnings += f"\n\tElement {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
 
                 if not startsAtZero:
-                    warnings += f"\n\tBitfield does not have an element with an offset of 0."
+                    warnings += (
+                        f"\n\tBitfield does not have an element with an offset of 0."
+                    )
 
                 return warnings
 
@@ -866,7 +868,8 @@ class EntityLookup(Lookup):
                     if bitfieldWarnings != "":
                         self.invalidBitfield = True
                         warnings += (
-                            "\n\tHas invalid bitfield elements and cannot be configured" + bitfieldWarnings
+                            "\n\tHas invalid bitfield elements and cannot be configured"
+                            + bitfieldWarnings
                         )
                         break
                     else:
@@ -905,17 +908,13 @@ class EntityLookup(Lookup):
             if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
                 "Variant"
             ):
-                warnings += (
-                    f"\n\tVariant {self.variant} is outside the valid range of 0 - 4095!"
-                )
+                warnings += f"\n\tVariant {self.variant} is outside the valid range of 0 - 4095!"
             if (
                 (self.subtype >= 4096 or self.subtype < 0)
                 and (self.type != EntityType["PICKUP"])
                 and not self.hasBitfieldKey("Subtype")
             ):
-                warnings += (
-                    f"\n\tSubtype {self.subtype} is outside the valid range of 0 - 4095!"
-                )
+                warnings += f"\n\tSubtype {self.subtype} is outside the valid range of 0 - 4095!"
 
             return warnings
 
