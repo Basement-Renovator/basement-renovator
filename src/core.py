@@ -40,6 +40,16 @@ class Entity:
         self.mirrorX = None
         self.mirrorY = None
 
+    @staticmethod
+    def toString(t: int, v: int, s: int, n: str | None = None):
+        if n is None:
+            return f"{t}.{v}.{s}"
+
+        return f"{n} ({t}.{v}.{s})"
+
+    def __str__(self):
+        return Entity.toString(self.Type, self.Variant, self.Subtype, self.name)
+
 
 class Room:
     """
@@ -375,8 +385,20 @@ class Room:
         self.gridSpawns = newGridSpawns
 
     @staticmethod
+    def toString(t: int, v: int, s: int, n: str | None = None):
+        if n is None:
+            return f"{t}.{v}.{s}"
+
+        return f"{n} ({t}.{v}.{s})"
+
+    def __str__(self):
+        return Room.toString(
+            self.info.type, self.info.variant, self.info.subtype, self.name
+        )
+
+    @staticmethod
     def getDesc(info, name, difficulty, weight):
-        return f"{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}"
+        return f"{Room.toString(info.type, info.variant, info.subtype, name)} ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}"
 
     def getPrefix(self):
         return Room.getDesc(self.info, self.name, self.difficulty, self.weight)

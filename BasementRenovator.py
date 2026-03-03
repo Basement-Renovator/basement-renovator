@@ -894,7 +894,7 @@ class RoomEditorWidget(QGraphicsView):
                 400,
                 16,
                 int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
-                f"{e.entity.Type}.{e.entity.Variant}.{e.entity.Subtype} - {e.entity.config.name}",
+                str(e.entity),
             )
 
             # Bottom Text
@@ -1094,7 +1094,7 @@ class Entity(QGraphicsItem):
             self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
             if self.config is None:
                 printf(
-                    f"'Could not find Entity {entitytype}.{variant}.{subtype} for in-editor, using ?"
+                    f"'Could not find Entity {Entity.toString(entitytype, variant, subtype)} for in-editor, using ?"
                 )
 
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
@@ -1150,7 +1150,7 @@ class Entity(QGraphicsItem):
             value = self.getBitfieldValue(bitfield)
             if not isinstance(value, int):
                 printf(
-                    f"Entity {self.config.name} ({self.config.type}.{self.config.variant}.{self.config.subtype}) has an invalid bitfield Key {bitfield.key}"
+                    f"Entity {self.config} has an invalid bitfield Key {bitfield.key}"
                 )
                 self.config.invalidBitfield = True
             else:
@@ -1202,6 +1202,14 @@ class Entity(QGraphicsItem):
 
         self.respawning = False
 
+    def __str__(self):
+        return EntityData.toString(
+            self.entity.Type,
+            self.entity.Variant,
+            self.entity.Subtype,
+            self.entity.config.name if self.entity.config else None,
+        )
+
     def setData(self, t, v, s):
         self.entity.changeTo(t, v, s)
         self.updateTooltip()
@@ -1210,12 +1218,10 @@ class Entity(QGraphicsItem):
         e = self.entity
         tooltipStr = ""
         if e.known:
-            tooltipStr = f"{e.config.name} @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}; HP: {e.config.baseHP}"
+            tooltipStr = f"{e.config} @ {e.x-1} x {e.y-1}; HP: {e.config.baseHP}"
             tooltipStr += e.config.getEditorWarnings()
         else:
-            tooltipStr = (
-                f"Missing @ {e.x-1} x {e.y-1} - {e.Type}.{e.Variant}.{e.Subtype}"
-            )
+            tooltipStr = f"Missing @ {e.x-1} x {e.y-1} - {e}"
             tooltipStr += (
                 "\nMissing BR entry! Trying to spawn this entity might CRASH THE GAME!!"
             )
@@ -1543,7 +1549,7 @@ class Entity(QGraphicsItem):
             if self.entity.config.hasBitfieldKey("Variant"):
                 variant = 0
 
-        entID = f"{self.entity.Type}.{variant}.{subtype}"
+        entID = Entity.toString(self.entity.Type, variant, subtype)
 
         return gfxData["Entities"].get(entID)
 
@@ -2525,11 +2531,7 @@ class Room(QListWidgetItem):
         self.gridSpawns = newGridSpawns
 
     def getDesc(self):
-        name = self.name
-        difficulty = self.difficulty
-        weight = self.weight
-        info = self.info
-        return f"{name} ({info.type}.{info.variant}.{info.subtype}) ({info.width-2}x{info.height-2}) - Difficulty: {difficulty}, Weight: {weight}, Shape: {info.shape}"
+        return RoomData.getDesc(self.info, self.name, self.difficulty, self.weight)
 
     def setToolTip(self):
         self.setText(f"{self.info.variant} - {self.name}")
@@ -5292,7 +5294,18 @@ class MainWindow(QMainWindow):
             path = str(path)
             if path not in savedPaths:
                 savedPaths[path] = True
-                subprocess.run(["magick", "mogrify", "-strip", "-channel", "RGBA", "-define", "png:color-type=6", path])
+                subprocess.run(
+                    [
+                        "magick",
+                        "mogrify",
+                        "-strip",
+                        "-channel",
+                        "RGBA",
+                        "-define",
+                        "png:color-type=6",
+                        path,
+                    ]
+                )
                 print("Fixed", path)
 
         def fixPath(path: Path):
@@ -6037,7 +6050,7 @@ class MainWindow(QMainWindow):
 
                         if config is None or config.invalid:
                             printf(
-                                f"Room {room.getPrefix()} has invalid entity '{config is None and 'UNKNOWN' or config.name}'! ({eType}.{eVariant}.{eSubtype})"
+                                f"Room {room.getPrefix()} has invalid entity '{config is None and 'UNKNOWN' or config.name}'! ({Entity.toString(eType, eVariant, eSubtype)})"
                             )
                         seenSpawns[(eType, eSubtype, eVariant)] = (
                             config is None or config.invalid
@@ -6416,8 +6429,7 @@ class MainWindow(QMainWindow):
                 )
             )
 
-            testData.write(
-                f"""return {{
+            testData.write(f"""return {{
 \tTestType = {strFix(testType)},
 \tCharacter = {char or 'nil'}, -- only used in Repentance and Repentance+
 \tCommands = {{ {', '.join(map(strFix, commands))} }},
@@ -6430,9 +6442,7 @@ class MainWindow(QMainWindow):
 \tRooms = {{
 \t\t{roomsStr}
     }}
-}}
-"""
-            )
+}}""")
 
     def disableTestMod(self, modPath=None):
         modPath = modPath or self.getTestModPath()

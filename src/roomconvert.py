@@ -10,7 +10,6 @@ import re, datetime
 
 import cProfile
 
-
 if not __package__:
     from core import Room, Entity, File
     from util import printf

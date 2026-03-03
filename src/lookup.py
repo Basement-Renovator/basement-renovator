@@ -7,8 +7,9 @@ from itertools import zip_longest
 from pathlib import PurePath
 
 from src.constants import *
-from src.util import *
+from src.core import Entity
 from src.entitiesgenerator import generateXMLFromEntities2
+from src.util import *
 
 
 def loadXMLFile(path):
@@ -595,6 +596,9 @@ class EntityLookup(Lookup):
             self.tags = {}
             self.uniqueid = -1
             self.tagsString = "[]"
+
+        def __str__(self):
+            return Entity.toString(self.type, self.variant, self.subtype, self.name)
 
         def getTagConfig(self, tag):
             if not self.parent:
