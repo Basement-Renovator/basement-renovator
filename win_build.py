@@ -1,9 +1,8 @@
+from pathlib import Path
 import sys, subprocess, shutil, os
 
 if os.path.exists("dist"):
     shutil.rmtree("dist")
-
-pydir = os.path.split(sys.executable)[0]
 
 
 def exe(
@@ -14,7 +13,7 @@ def exe(
     ico="",
     noconsole=False,
     versionFile="",
-    addtlFiles=[],
+    addtlFiles: list[tuple[str, Path, str]] = [],
 ):
     args = [
         "uv",
@@ -42,13 +41,16 @@ def exe(
         args.extend(
             (
                 ty == "binary" and "--add-binary" or "--add-data",
-                f"{os.path.normpath(src)};{os.path.normpath(dst)}",
+                f"{os.path.normpath(str(src))};{os.path.normpath(dst)}",
             )
         )
 
     print(args)
     subprocess.check_output(args)
 
+# When running from uv, the exec path is under .venv/Scripts, but we want .venv itself
+venvdir = Path(sys.executable).parent.parent
+qt5dir = venvdir / "Lib/site-packages/PyQt5/Qt5"
 
 # TODO once log files are added, disable the console
 exe(
@@ -60,14 +62,12 @@ exe(
     addtlFiles=[
         (
             "binary",
-            os.path.join(
-                pydir, "Lib/site-packages/PyQt5/Qt5/plugins/platforms/qwindows.dll"
-            ),
+            qt5dir / "plugins/platforms/qwindows.dll",
             "./platforms",
         ),
         (
             "binary",
-            os.path.join(pydir, "Lib/site-packages/PyQt5/Qt5/bin/libEGL.dll"),
+            qt5dir / "bin/libEGL.dll",
             ".",
         ),
     ],
