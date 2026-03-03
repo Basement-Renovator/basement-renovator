@@ -80,6 +80,9 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
       - name: Install Python dependencies
         run: |
           uv sync
