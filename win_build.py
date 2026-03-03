@@ -48,6 +48,7 @@ def exe(
     print(args)
     subprocess.check_output(args)
 
+
 # When running from uv, the exec path is under .venv/Scripts, but we want .venv itself
 venvdir = Path(sys.executable).parent.parent
 qt5dir = venvdir / "Lib/site-packages/PyQt5/Qt5"
