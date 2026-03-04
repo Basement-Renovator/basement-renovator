@@ -462,14 +462,26 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
 end)
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_PRE_ROOM_ENTITY_SPAWN, function(_, ...)
-    local room = BasementRenovator:InTestRoom()
-    if room then
-        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.TestRoomData, room, ...)
+    local testRoom = BasementRenovator:InTestRoom()
+    if testRoom then
+        local replacement = fireCallback('TestRoomEntitySpawn', BasementRenovator.TestRoomData, testRoom, ...)
         if replacement then
             return replacement
         end
     end
 end)
+
+if REPENTOGON then
+    BasementRenovator.mod:AddCallback(ModCallbacks.MC_PRE_ROOM_EXIT, function(player, isNewLevel)
+        local testRoom, roomDesc = BasementRenovator:InTestRoom()
+        if testRoom then
+            -- same bug as pressure plates, but
+            -- pitch black is applied before even pre_room_entity_spawn
+            -- so we need the RGON callback
+            roomDesc.Flags = roomDesc.Flags & ~RoomDescriptor.FLAG_PITCH_BLACK
+        end
+    end)
+end
 
 local function SafeKeyboardTriggered(key, controllerIndex)
     return Input.IsButtonTriggered(key, controllerIndex) and not Input.IsButtonTriggered(key % 32, controllerIndex)
