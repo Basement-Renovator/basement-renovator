@@ -375,11 +375,15 @@ end
 
 BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, function()
     local test = BasementRenovator.TestRoomData
-    local testRoom = BasementRenovator:InTestRoom()
+    local testRoom, roomDesc = BasementRenovator:InTestRoom()
     if testRoom then
         if test.TestType == 'InstaPreview' then
             local room = game:GetRoom()
             local player = Isaac.GetPlayer(0)
+
+            if room:IsFirstVisit() then
+                roomDesc.Flags = roomDesc.Flags & ~RoomDescriptor.FLAG_PRESSURE_PLATES_TRIGGERED
+            end
 
             local playerPos
             if room:GetType() ~= RoomType.ROOM_DUNGEON then
