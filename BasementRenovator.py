@@ -894,7 +894,7 @@ class RoomEditorWidget(QGraphicsView):
                 400,
                 16,
                 int(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom),
-                str(e.entity),
+                str(e),
             )
 
             # Bottom Text
@@ -1090,6 +1090,14 @@ class Entity(QGraphicsItem):
 
             self.getEntityInfo(t, v, s)
 
+        def __str__(self):
+            return EntityData.toString(
+                self.Type,
+                self.Variant,
+                self.Subtype,
+                self.config.name if self.config else None,
+            )
+
         def getEntityInfo(self, entitytype, variant, subtype):
             self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
             if self.config is None:
@@ -1203,12 +1211,7 @@ class Entity(QGraphicsItem):
         self.respawning = False
 
     def __str__(self):
-        return EntityData.toString(
-            self.entity.Type,
-            self.entity.Variant,
-            self.entity.Subtype,
-            self.entity.config.name if self.entity.config else None,
-        )
+        return str(self.entity)
 
     def setData(self, t, v, s):
         self.entity.changeTo(t, v, s)

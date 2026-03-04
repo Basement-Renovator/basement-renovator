@@ -637,7 +637,7 @@ class EntityLookup(Lookup):
 
             if not os.path.exists(imagePath):
                 printf(
-                    f"\nFailed loading image for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}):",
+                    f"\nFailed loading image for Entity {self}:",
                     imagePath,
                 )
                 return default
