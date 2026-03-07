@@ -154,12 +154,15 @@ def getGameVersion():
 
     return mode
 
-def hasREPENTOGON():
+def willLaunchREPENTOGON():
+    exePath: str | None = settings.value("CustomExePath")
+    return exePath and exePath.lower().endswith("repentogonlauncher.exe")
+
+def canUseREPENTOGON():
     if getGameVersion() != "Repentance+":
         return False
 
-    exePath: str | None = settings.value("CustomExePath")
-    return exePath and exePath.lower().endswith("repentogonlauncher.exe")
+    return willLaunchREPENTOGON()
 
 
 STEAM_PATH = None
@@ -4583,7 +4586,7 @@ class TestConfigDialog(QDialog):
         hardModeLayout.addWidget(self.hardModeCheck)
         hardModeWidget = QWidget()
         hardModeWidget.setLayout(hardModeLayout)
-        if not hasREPENTOGON():
+        if not canUseREPENTOGON():
             hardModeWidget.setEnabled(False)
         self.layout.addWidget(hardModeWidget)
 
@@ -6748,7 +6751,8 @@ class MainWindow(QMainWindow):
 
     def findExecutablePath(self):
         if QFile.exists(settings.value("CustomExePath")):
-            return settings.value("CustomExePath")
+            if willLaunchREPENTOGON() == canUseREPENTOGON():
+                return settings.value("CustomExePath")
 
         if "Windows" in platform.system():
             installPath = findInstallPath()
