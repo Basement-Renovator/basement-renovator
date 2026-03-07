@@ -4552,7 +4552,7 @@ class TestConfigDialog(QDialog):
         self.characterConfig = TestConfigDialog.ConfigItem(
             "Character",
             "TestCharacter",
-            "Character to switch to when testing. (Isaac, Magdalene, etc.) If omitted, use the game's default",
+            "Character to switch to when testing. (Isaac, Magdalene, etc.) If omitted, use the game's default.",
         )
         self.characterEntry = QLineEdit()
         characterLayout.addWidget(self.characterConfig)
@@ -4563,12 +4563,29 @@ class TestConfigDialog(QDialog):
             characterWidget.setEnabled(False)
         self.layout.addWidget(characterWidget)
 
+
+        hardModeLayout = QHBoxLayout()
+        self.hardModeConfig = TestConfigDialog.ConfigItem(
+            "Hard Mode",
+            "TestHardMode",
+            "Whether to enable hard mode when testing. If omitted, run in normal mode.",
+        )
+        self.hardModeCheck = QCheckBox()
+        self.hardModeCheck.setToolTip(self.hardModeConfig.toolTip())
+        hardModeLayout.addWidget(self.hardModeConfig)
+        hardModeLayout.addWidget(self.hardModeCheck)
+        hardModeWidget = QWidget()
+        hardModeWidget.setLayout(hardModeLayout)
+        if version not in ["Repentance+"]:
+            hardModeWidget.setEnabled(False)
+        self.layout.addWidget(hardModeWidget)
+
         # commands
         commandLayout = QVBoxLayout()
         self.commandConfig = TestConfigDialog.ConfigItem(
             "Debug Commands",
             "TestCommands",
-            "Debug Console Commands that will get run one at a time after other BR initialization has finished",
+            "Debug Console Commands that will get run one at a time after other BR initialization has finished.",
             [],
         )
         pane = QVBoxLayout()
@@ -4580,7 +4597,6 @@ class TestConfigDialog(QDialog):
         pane.addWidget(self.commandList)
 
         addButton = QPushButton("Add")
-        editButton = QPushButton("Edit")
         deleteButton = QPushButton("Delete")
 
         buttons = QHBoxLayout()
@@ -4598,13 +4614,13 @@ class TestConfigDialog(QDialog):
 
         # enable/disable
         enableLayout = QHBoxLayout()
-        self.enableConfig = TestConfigDialog.ConfigItem(
+        self.disableConfig = TestConfigDialog.ConfigItem(
             "Enabled",
             "TestConfigDisabled",
             "Enable/disable the test config bonus settings",
         )
         self.enableCheck = QCheckBox("Enabled")
-        self.enableCheck.setToolTip(self.enableConfig.toolTip())
+        self.enableCheck.setToolTip(self.disableConfig.toolTip())
         enableLayout.addWidget(self.enableCheck)
         enableWidget = QWidget()
         enableWidget.setLayout(enableLayout)
@@ -4618,10 +4634,13 @@ class TestConfigDialog(QDialog):
         self.setLayout(self.layout)
 
     def enabled(self):
-        return None if self.enableCheck.isChecked() else "1"
+        return self.enableCheck.isChecked()
 
     def character(self):
         return self.characterEntry.text() or None
+
+    def isHardMode(self):
+        return self.hardModeCheck.isChecked()
 
     def commands(self):
         return [
@@ -4629,8 +4648,9 @@ class TestConfigDialog(QDialog):
         ] or None
 
     def setValues(self):
-        self.enableCheck.setChecked(self.enableConfig.val != "1")
+        self.enableCheck.setChecked(self.disableConfig.val != "1")
         self.characterEntry.setText(self.characterConfig.val)
+        self.hardModeCheck.setChecked(self.hardModeConfig.val == "1")
         self.commandList.clear()
         self.commandList.addItems(self.commandConfig.val)
         for i in range(self.commandList.count()):
@@ -4647,8 +4667,9 @@ class TestConfigDialog(QDialog):
             self.commandList.takeItem(self.commandList.currentRow())
 
     def closeEvent(self, evt):
-        self.enableConfig.val = self.enabled()
+        self.disableConfig.val = "1" if not self.enabled() else None
         self.characterConfig.val = self.character()
+        self.hardModeConfig.val = "1" if self.isHardMode() else None
         self.commandConfig.val = self.commands()
         QWidget.closeEvent(self, evt)
 
@@ -6411,12 +6432,13 @@ class MainWindow(QMainWindow):
             strFix = lambda x: f'''"{x.replace(bs, bs + bs).replace('"', quot)}"'''
 
             char = None
+            isHardMode = False
             commands = []
             if settings.value("TestConfigDisabled") != "1":
                 char = settings.value("TestCharacter")
                 if char:
                     char = strFix(char)
-
+                isHardMode = settings.value("TestHardMode") == "1"
                 commands = settings.value("TestCommands", [])
 
             roomsStr = ",\n\t\t".join(
@@ -6435,6 +6457,7 @@ class MainWindow(QMainWindow):
             testData.write(f"""return {{
 \tTestType = {strFix(testType)},
 \tCharacter = {char or 'nil'}, -- only used in Repentance and Repentance+
+\tIsHardMode = {isHardMode and 'true' or 'false'}, -- only used in Repentance+
 \tCommands = {{ {', '.join(map(strFix, commands))} }},
 \tStage = {floorInfo.get('Stage')},
 \tStageType = {floorInfo.get('StageType')},
