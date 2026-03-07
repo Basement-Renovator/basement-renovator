@@ -270,9 +270,11 @@ BasementRenovator.mod:AddCallback(ModCallbacks.MC_POST_CURSE_EVAL, function()
     -- This may be patched in Rep, so fix this then so the callback doesn't happen twice
     -- Use CURSE_EVAL because otherwise it'll usually happen after other level detection code
 
-    local difficulty = test.IsHardMode and Difficulty.DIFFICULTY_HARD or Difficulty.DIFFICULTY_NORMAL
-    if game.Difficulty ~= difficulty then
-        game.Difficulty = difficulty
+    if REPENTOGON then
+        local difficulty = test.IsHardMode and Difficulty.DIFFICULTY_HARD or Difficulty.DIFFICULTY_NORMAL
+        if game.Difficulty ~= difficulty then
+            game.Difficulty = difficulty
+        end
     end
 
     if test.TestType ~= 'InstaPreview' then

@@ -154,6 +154,13 @@ def getGameVersion():
 
     return mode
 
+def hasREPENTOGON():
+    if getGameVersion() != "Repentance+":
+        return False
+
+    exePath: str | None = settings.value("CustomExePath")
+    return exePath and exePath.lower().endswith("repentogonlauncher.exe")
+
 
 STEAM_PATH = None
 
@@ -4568,7 +4575,7 @@ class TestConfigDialog(QDialog):
         self.hardModeConfig = TestConfigDialog.ConfigItem(
             "Hard Mode",
             "TestHardMode",
-            "Whether to enable hard mode when testing. If omitted, run in normal mode.",
+            "Whether to enable hard mode when testing. If omitted, run in normal mode. (requires REPENTOGON)",
         )
         self.hardModeCheck = QCheckBox()
         self.hardModeCheck.setToolTip(self.hardModeConfig.toolTip())
@@ -4576,7 +4583,7 @@ class TestConfigDialog(QDialog):
         hardModeLayout.addWidget(self.hardModeCheck)
         hardModeWidget = QWidget()
         hardModeWidget.setLayout(hardModeLayout)
-        if version not in ["Repentance+"]:
+        if not hasREPENTOGON():
             hardModeWidget.setEnabled(False)
         self.layout.addWidget(hardModeWidget)
 
@@ -6457,7 +6464,7 @@ class MainWindow(QMainWindow):
             testData.write(f"""return {{
 \tTestType = {strFix(testType)},
 \tCharacter = {char or 'nil'}, -- only used in Repentance and Repentance+
-\tIsHardMode = {isHardMode and 'true' or 'false'}, -- only used in Repentance+
+\tIsHardMode = {isHardMode and 'true' or 'false'}, -- only used in Repentance+ with REPENTOGON
 \tCommands = {{ {', '.join(map(strFix, commands))} }},
 \tStage = {floorInfo.get('Stage')},
 \tStageType = {floorInfo.get('StageType')},
