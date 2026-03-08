@@ -154,9 +154,11 @@ def getGameVersion():
 
     return mode
 
+
 def willLaunchREPENTOGON():
     exePath: str | None = settings.value("CustomExePath")
     return exePath and exePath.lower().endswith("repentogonlauncher.exe")
+
 
 def canUseREPENTOGON():
     if getGameVersion() != "Repentance+":
@@ -4572,7 +4574,6 @@ class TestConfigDialog(QDialog):
         if version not in ["Repentance", "Repentance+"]:
             characterWidget.setEnabled(False)
         self.layout.addWidget(characterWidget)
-
 
         hardModeLayout = QHBoxLayout()
         self.hardModeConfig = TestConfigDialog.ConfigItem(
