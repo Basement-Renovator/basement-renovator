@@ -851,9 +851,9 @@ class RoomEditorWidget(QGraphicsView):
         room = mainWindow.roomList.selectedRoom()
         if room:
             # Room Type Icon
-            roomTypes = xmlLookups.roomTypes.lookup(room=room, showInMenu=True)
-            if len(roomTypes) > 0:
-                q = QPixmap(roomTypes[0].get("Icon"))
+            roomType = xmlLookups.roomTypes.lookupOne(room=room, showInMenu=True)
+            if roomType is not None:
+                q = QPixmap(roomType.get("Icon"))
                 painter.drawPixmap(2, 3, q)
             else:
                 printf("Warning: Unknown room type during paintEvent:", room.getDesc())
@@ -2552,14 +2552,14 @@ class Room(QListWidgetItem):
     def renderDisplayIcon(self):
         """Renders the mini-icon for display."""
 
-        roomTypes = xmlLookups.roomTypes.lookup(room=self, showInMenu=True)
-        if len(roomTypes) == 0:
+        roomType = xmlLookups.roomTypes.lookupOne(room=self, showInMenu=True)
+        if roomType is None:
             printf(
                 "Warning: Unknown room type during renderDisplayIcon:", self.getDesc()
             )
             return
 
-        i = anm2.loadIcon(roomTypes[0].get("Icon"))
+        i = anm2.loadIcon(roomType.get("Icon"))
         self.setIcon(i)
 
     class _SpawnIter:
@@ -2852,27 +2852,27 @@ class RoomSelector(QWidget):
         self.entityToggle.setIcon(QIcon(QPixmap.fromImage(fq.copy(0, 0, 24, 24))))
 
         # Type Toggle Button
-        self.typeToggle = QToolButton()
-        self.typeToggle.setIconSize(QSize(24, 24))
-        self.typeToggle.setPopupMode(QToolButton.InstantPopup)
+        self.roomTypeToggle = QToolButton()
+        self.roomTypeToggle.setIconSize(QSize(24, 24))
+        self.roomTypeToggle.setPopupMode(QToolButton.InstantPopup)
 
-        typeMenu = QMenu()
+        roomTypeMenu = QMenu()
 
-        self.typeToggle.setIcon(
+        self.roomTypeToggle.setIcon(
             QIcon(QPixmap.fromImage(fq.copy(1 * 24 + 4, 4, 16, 16)))
         )
-        act = typeMenu.addAction(
+        act = roomTypeMenu.addAction(
             QIcon(QPixmap.fromImage(fq.copy(1 * 24 + 4, 4, 16, 16))), ""
         )
         act.setData(-1)
-        self.typeToggle.setDefaultAction(act)
+        self.roomTypeToggle.setDefaultAction(act)
 
-        for iconType in xmlLookups.roomTypes.lookup(showInMenu=True):
-            act = typeMenu.addAction(anm2.loadIcon(iconType.get("Icon")), "")
-            act.setData(int(iconType.get("Type")))
+        for roomType in xmlLookups.roomTypes.lookup(showInMenu=True):
+            act = roomTypeMenu.addAction(anm2.loadIcon(roomType.get("Icon")), "")
+            act.setData(roomType)
 
-        self.typeToggle.triggered.connect(self.setTypeFilter)
-        self.typeToggle.setMenu(typeMenu)
+        self.roomTypeToggle.triggered.connect(self.setRoomTypeFilter)
+        self.roomTypeToggle.setMenu(roomTypeMenu)
 
         # Weight Toggle Button
         class ExtraFilterToggle(QToolButton):
@@ -2928,7 +2928,7 @@ class RoomSelector(QWidget):
         self.filter.addWidget(QLabel("Filter by:"), 0, 0)
         self.filter.addWidget(self.IDFilter, 0, 1)
         self.filter.addWidget(self.entityToggle, 0, 2)
-        self.filter.addWidget(self.typeToggle, 0, 3)
+        self.filter.addWidget(self.roomTypeToggle, 0, 3)
         self.filter.addWidget(self.sizeToggle, 0, 4)
         self.filter.addWidget(self.extraToggle, 0, 5)
         self.filter.setContentsMargins(4, 0, 0, 4)
@@ -3053,23 +3053,25 @@ class RoomSelector(QWidget):
         menu = QMenu(self.list)
 
         # Type
-        Type = QWidgetAction(menu)
+        roomType = QWidgetAction(menu)
         c = QComboBox()
 
         global xmlLookups
-        types = xmlLookups.roomTypes.lookup(showInMenu=True)
-        matchingTypes = xmlLookups.roomTypes.lookup(
+        roomTypes = xmlLookups.roomTypes.lookup(showInMenu=True)
+        matchingRoomTypes = xmlLookups.roomTypes.lookup(
             room=self.selectedRoom(), showInMenu=True
         )
 
-        for i, t in enumerate(types):
-            c.addItem(anm2.loadIcon(t.get("Icon")), t.get("Name"))
-            if t in matchingTypes:
+        for i, rt in enumerate(roomTypes):
+            c.addItem(anm2.loadIcon(rt.get("Icon")), rt.get("Name"))
+            if rt in matchingRoomTypes:
                 c.setCurrentIndex(i)
 
-        c.currentIndexChanged.connect(self.changeType)
-        Type.setDefaultWidget(c)
-        menu.addAction(Type)
+        c.currentIndexChanged.connect(
+            lambda index: self.changeRoomType(roomTypes[index])
+        )
+        roomType.setDefaultWidget(c)
+        menu.addAction(roomType)
 
         # Variant
         Variant = QWidgetAction(menu)
@@ -3146,7 +3148,7 @@ class RoomSelector(QWidget):
         self.IDFilter.clear()
         self.entityToggle.setChecked(False)
         self.filter.typeData = -1
-        self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
+        self.roomTypeToggle.setIcon(self.roomTypeToggle.defaultAction().icon())
         self.filter.sizeData = -1
         self.sizeToggle.setIcon(self.sizeToggle.defaultAction().icon())
 
@@ -3164,7 +3166,7 @@ class RoomSelector(QWidget):
 
     def clearTypeFilter(self):
         self.filter.typeData = -1
-        self.typeToggle.setIcon(self.typeToggle.defaultAction().icon())
+        self.roomTypeToggle.setIcon(self.roomTypeToggle.defaultAction().icon())
         self.changeFilter()
 
     def clearExtraFilter(self):
@@ -3181,9 +3183,21 @@ class RoomSelector(QWidget):
         self.entityToggle.checked = checked
 
     # @pyqtSlot(QAction)
-    def setTypeFilter(self, action):
-        self.filter.typeData = action.data()
-        self.typeToggle.setIcon(action.icon())
+    def setRoomTypeFilter(self, action):
+        room = action.data()
+        Type = room.get("Type")
+        if Type is not None:
+            self.filter.typeData = int(Type)
+        # ID = room.get("ID")
+        # if ID is not None:
+        #     self.filter.typeData = int(ID)
+        Subtype = room.get("Subtype")
+        if Subtype is not None:
+            self.filter.extraData["subtype"]["enabled"] = True
+            self.filter.extraData["subtype"]["min"] = int(Subtype)
+            self.filter.extraData["enabled"] = True
+
+        self.roomTypeToggle.setIcon(action.icon())
         self.changeFilter()
 
     # @pyqtSlot(QAction)
@@ -3434,9 +3448,25 @@ class RoomSelector(QWidget):
         mainWindow.dirt()
 
     # @pyqtSlot(int)
-    def changeType(self, index):
+    def changeRoomType(self, roomType):
+        Type = roomType.get("Type")
+        if Type is not None:
+            Type = int(Type)
+        # ignore ID for now
+        # ID = roomType.get("ID")
+        # if ID is not None:
+        #     ID = int(ID)
+        Subtype = roomType.get("Subtype")
+        if Subtype is not None:
+            Subtype = int(Subtype)
         for r in self.selectedRooms():
-            r.info.type = index
+            if Type is not None:
+                r.info.type = Type
+            # if ID is not None:
+            #     r.info.variant = ID
+            if Subtype is not None:
+                r.info.subtype = Subtype
+
             r.renderDisplayIcon()
             r.setRoomBG()
 

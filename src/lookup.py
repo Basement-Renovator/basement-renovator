@@ -359,6 +359,17 @@ class RoomTypeLookup(Lookup):
 
         return rooms
 
+    def lookupOne(
+        self, room=None, name=None, roomfile=None, path=None, showInMenu=None
+    ):
+        rooms = self.lookup(
+            room=room, name=name, roomfile=roomfile, path=path, showInMenu=showInMenu
+        )
+        if rooms:
+            return rooms[-1]
+        else:
+            return None
+
     def getMainType(self, room=None, roomfile=None, path=None):
         candidates = self.lookup(room=room, path=path)
         if not candidates:
@@ -372,7 +383,8 @@ class RoomTypeLookup(Lookup):
                 getCritWeight(r, "Type", 1)
                 + getCritWeight(r, "NameRegex", 10)
                 + getCritWeight(r, "StageName", 10)
-                + getCritWeight(r, "ID", 10)
+                # + getCritWeight(r, "ID", 10)
+                + getCritWeight(r, "Subtype", 10)
             ),
         )
 
