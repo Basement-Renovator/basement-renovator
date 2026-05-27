@@ -540,7 +540,8 @@ class EntityLookup(Lookup):
 
                     self.elements.append(element)
 
-            def getWarnings(self):
+            def isInvalid(self):
+                invalid = False
                 warnings = ""
                 startsAtZero = False
                 for element in self.elements:
@@ -554,7 +555,8 @@ class EntityLookup(Lookup):
                                 element.offset <= element2.offset
                                 and (element.offset + element.length) > element2.offset
                             ):
-                                warnings += f"\n\tElement '{element.name}' (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
+                                warnings += f"\n\tBitfield Element '{element.name}' (Length: {element.length}, Offset: {element.offset}) conflicts with {element2.name} (Length: {element.length}, Offset: {element.offset})"
+                                invalid = True
 
                             if (element.offset + element.length) == element2.offset or (
                                 element2.offset + element2.length
@@ -562,14 +564,14 @@ class EntityLookup(Lookup):
                                 hasAdjacent = True
 
                     if not hasAdjacent:
-                        warnings += f"\n\tElement {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
+                        warnings += f"\n\tBitfield Element {element.name} (Length: {element.length}, Offset: {element.offset}) is not adjacent to any other elements"
 
                 if not startsAtZero:
                     warnings += (
                         f"\n\tBitfield does not have an element with an offset of 0."
                     )
 
-                return warnings
+                return invalid, warnings
 
             def clampValues(self, number):
                 for element in self.elements:
@@ -876,8 +878,8 @@ class EntityLookup(Lookup):
                 self.hasBitfields = True
                 for bitfieldNode in bitfields:
                     bitfield = self.Bitfield(bitfieldNode)
-                    bitfieldWarnings = bitfield.getWarnings()
-                    if bitfieldWarnings != "":
+                    isInvalid, bitfieldWarnings = bitfield.isInvalid()
+                    if isInvalid:
                         self.invalidBitfield = True
                         warnings += (
                             "\n\tHas invalid bitfield elements and cannot be configured"
@@ -885,6 +887,9 @@ class EntityLookup(Lookup):
                         )
                         break
                     else:
+                        if bitfieldWarnings != "":
+                            warnings += bitfieldWarnings
+
                         self.bitfields.append(bitfield)
 
             rangeWarnings = self.getOutOfRangeWarnings()
@@ -893,8 +898,7 @@ class EntityLookup(Lookup):
 
             if warnings != "":
                 warnings = (
-                    f"\nWarning for Entity {self.name} ({self.type}.{self.variant}.{self.subtype}) from {self.mod.name}:"
-                    + warnings
+                    f"\nWarning for Entity {self} from {self.mod.name}:" + warnings
                 )
 
             return warnings
@@ -917,10 +921,12 @@ class EntityLookup(Lookup):
             warnings = ""
             if (self.type >= 1000 or self.type < 0) and not self.hasTag("Grid"):
                 warnings += f"\n\tType {self.type} is outside the valid range of 0 - 999! This will not load properly in-game!"
+
             if (self.variant >= 4096 or self.variant < 0) and not self.hasBitfieldKey(
                 "Variant"
             ):
                 warnings += f"\n\tVariant {self.variant} is outside the valid range of 0 - 4095!"
+
             if (
                 (self.subtype >= 4096 or self.subtype < 0)
                 and (self.type != EntityType["PICKUP"])
