@@ -2876,7 +2876,7 @@ class RoomSelector(QWidget):
         act = roomTypeMenu.addAction(
             QIcon(QPixmap.fromImage(fq.copy(1 * 24 + 4, 4, 16, 16))), ""
         )
-        act.setData(-1)
+        act.setData(None)
         self.roomTypeToggle.setDefaultAction(act)
 
         for roomType in xmlLookups.roomTypes.lookup(showInMenu=True):
@@ -3197,17 +3197,21 @@ class RoomSelector(QWidget):
     # @pyqtSlot(QAction)
     def setRoomTypeFilter(self, action):
         room = action.data()
-        Type = room.get("Type")
-        if Type is not None:
-            self.filter.typeData = int(Type)
-        # ID = room.get("ID")
-        # if ID is not None:
-        #     self.filter.typeData = int(ID)
-        Subtype = room.get("Subtype")
-        if Subtype is not None:
-            self.filter.extraData["subtype"]["enabled"] = True
-            self.filter.extraData["subtype"]["min"] = int(Subtype)
-            self.filter.extraData["enabled"] = True
+
+        if room is None:
+            self.filter.typeData = -1
+        else:
+            Type = room.get("Type")
+            if Type is not None:
+                self.filter.typeData = int(Type)
+            # ID = room.get("ID")
+            # if ID is not None:
+            #     self.filter.typeData = int(ID)
+            Subtype = room.get("Subtype")
+            if Subtype is not None:
+                self.filter.extraData["subtype"]["enabled"] = True
+                self.filter.extraData["subtype"]["min"] = int(Subtype)
+                self.filter.extraData["enabled"] = True
 
         self.roomTypeToggle.setIcon(action.icon())
         self.changeFilter()
