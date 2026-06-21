@@ -10,7 +10,7 @@ Room Entry:
 	u8		Difficulty, observed values: 1, 5, 10, 15, 20
 	u16		Length of room name string
 	str		Room name
-	u8		Difficulty, observed values: 1, 5, 10, 15, 20
+	float		Weight (Room)
 
 	u8		Room Width: 13 or 26
 	u8		Room Height: 7 or 14
@@ -48,7 +48,7 @@ Entity Entries:
 		u16		Entity type
 		u16		Entity variant
 		u16		Subtype 
-		float	Weight of the Entity, observed values: 1.0
+		float	Weight (Entity), only relevant when stacked
 
 
 
