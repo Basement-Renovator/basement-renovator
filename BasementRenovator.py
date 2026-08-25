@@ -4373,7 +4373,7 @@ class PathsDialog(QDialog):
                 labelText="Resources Folder",
                 settingKey="ResourceFolder",
                 tooltipText="Folder containing vanilla game resources.",
-                getCurrentPathLambda=lambda: mainWindow.findResourcePath(),
+                getCurrentPathLambda=lambda: mainWindow.findResourcesFolder(),
                 getDefaultPathLambda=lambda: os.path.join(
                     findInstallPath(), "resources"
                 ),
@@ -5852,7 +5852,7 @@ class MainWindow(QMainWindow):
     def setDefaultResourcesPath(self):
         settings = QSettings("settings.ini", QSettings.IniFormat)
         if not settings.contains("ResourceFolder"):
-            settings.setValue("ResourceFolder", self.findResourcePath())
+            settings.setValue("ResourceFolder", self.findResourcesFolder())
         resPath = settings.value("ResourceFolder")
         resPathDialog = QFileDialog()
         resPathDialog.setFilter(QDir.Hidden)
@@ -5864,7 +5864,7 @@ class MainWindow(QMainWindow):
     def resetResourcesPath(self):
         settings = QSettings("settings.ini", QSettings.IniFormat)
         settings.remove("ResourceFolder")
-        settings.setValue("ResourceFolder", self.findResourcePath())
+        settings.setValue("ResourceFolder", self.findResourcesFolder())
 
     def showHooksMenu(self):
         hooks = HooksDialog(self)
@@ -5897,13 +5897,13 @@ class MainWindow(QMainWindow):
 
         mapFileName = selectMaps[selectedMap] + ".stb"
         roomPath = os.path.join(
-            os.path.expanduser(self.findResourcePath()), "rooms", mapFileName
+            os.path.expanduser(self.findResourcesFolder()), "rooms", mapFileName
         )
 
         if not QFile.exists(roomPath):
             self.setDefaultResourcesPath()
             roomPath = os.path.join(
-                os.path.expanduser(self.findResourcePath()), "rooms", mapFileName
+                os.path.expanduser(self.findResourcesFolder()), "rooms", mapFileName
             )
             if not QFile.exists(roomPath):
                 QMessageBox.warning(
@@ -6608,8 +6608,8 @@ class MainWindow(QMainWindow):
                 )
                 raise
 
-            resourcePath = self.findResourcePath()
-            if resourcePath == "":
+            resourcesFolder = self.findResourcesFolder()
+            if resourcesFolder == "":
                 QMessageBox.warning(
                     self,
                     "Error",
@@ -6617,7 +6617,7 @@ class MainWindow(QMainWindow):
                 )
                 raise
 
-            roomPath = os.path.join(resourcePath, "rooms", "00.special rooms.stb")
+            roomPath = os.path.join(resourcesFolder, "rooms", "00.special rooms.stb")
 
             # Parse the special rooms, replace the spawns
             if not QFile.exists(roomPath):
@@ -6783,7 +6783,7 @@ class MainWindow(QMainWindow):
 
         return ""
 
-    def findResourcePath(self):
+    def findResourcesFolder(self):
         resourcesPath = ""
 
         if QFile.exists(settings.value("ResourceFolder")):
