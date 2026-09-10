@@ -905,94 +905,351 @@
   </group>
 
   <group Name="Chapter 1 Bosses (Main Path) Shared">
-    <entity BaseHP="110" ID="67" Image="Entities/67.0.0 - The Duke of Flies.png" Name="The Duke of Flies" Subtype="0" Variant="0" />
-    <entity BaseHP="240" ID="63" Image="Entities/63.0.0 - Famine.png" Name="Famine" Subtype="0" Variant="0" />
+    <entity BaseHP="110" ID="67" Image="Entities/67.0.0 - The Duke of Flies.png" Name="The Duke of Flies" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Green 👑</choice>
+                <choice>Orange 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="240" ID="63" Image="Entities/63.0.0 - Famine.png" Name="Famine" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Blue 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Basement Bosses">
-    <entity BaseHP="250" ID="20" Image="Entities/20.0.0 - Monstro.png" Name="Monstro" Subtype="0" Variant="0" />
+    <entity BaseHP="250" ID="20" Image="Entities/20.0.0 - Monstro.png" Name="Monstro" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Red 👑</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <group Name="Gemini (Boss)">
       <entity BaseHP="140" ID="79" Image="Entities/79.0.0 - Gemini.png" Name="Gemini" Subtype="0" Variant="0" />
-      <entity BaseHP="140" ID="79" Image="Entities/79.10.0 - Gemini Baby.png" Name="Suture (Gemini Baby)" Subtype="0" Variant="10" />
+      <entity BaseHP="140" ID="79" Image="Entities/79.10.0 - Gemini Baby.png" Name="Suture (Gemini Baby)" Subtype="0" Variant="10">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Green 👑</choice>
+				<choice>Blue 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
     </group>
     <group Name="Steven (Boss)">
       <entity BaseHP="140" ID="79" Image="Entities/79.1.0 - Steven.png" Name="Steven" Subtype="0" Variant="1" />
       <entity BaseHP="140" ID="79" Image="Entities/79.11.0 - Steven Baby.png" Name="Steven Baby" Subtype="0" Variant="11" />
     </group>
-    <entity BaseHP="22" ID="19" Image="Entities/19.0.0 - Larry Jr.png" Name="Larry Jr." Subtype="0" Variant="0" />
+    <entity BaseHP="22" ID="19" Image="Entities/19.0.0 - Larry Jr.png" Name="Larry Jr." Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Green 👑</choice>
+                <choice>Blue 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <group Name="Dingle (Boss)">
-      <entity BaseHP="300" ID="261" Image="Entities/261.0.0 - Dingle.png" Name="Dingle" Subtype="0" Variant="0" />
+      <entity BaseHP="300" ID="261" Image="Entities/261.0.0 - Dingle.png" Name="Dingle" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
     </group>
     <group Name="Gurgling (Boss)">
-      <entity BaseHP="90" ID="237" Image="Entities/237.1.0 - Gurgling (boss).png" Name="Gurgling (boss)" Subtype="0" Variant="1" />
+      <entity BaseHP="90" ID="237" Image="Entities/237.1.0 - Gurgling (boss).png" Name="Gurgling (boss)" Subtype="0" Variant="1">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Yellow 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
     </group>
   </group>
 
   <group Name="Cellar Bosses">
     <entity BaseHP="140" ID="79" Image="Entities/79.2.0 - The Blighted Ovum.png" Name="The Blighted Ovum" Subtype="0" Variant="2" />
-    <entity BaseHP="130" ID="100" Image="Entities/100.0.0 - Widow.png" Name="Widow" Subtype="0" Variant="0" />
+    <entity BaseHP="130" ID="100" Image="Entities/100.0.0 - Widow.png" Name="Widow" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Black 👑</choice>
+				<choice>Pink 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="180" ID="62" Image="Entities/62.0.0 - Pin.png" Name="Pin" Subtype="0" Variant="0" />
-    <entity BaseHP="200" ID="260" Image="Entities/260.0.0 - Haunt.png" Name="Haunt" Subtype="0" Variant="0" />
+    <entity BaseHP="200" ID="260" Image="Entities/260.0.0 - Haunt.png" Name="Haunt" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Black 👑</choice>
+				<choice>Pink 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Chapter 2 Bosses (Main Path) Shared">
-    <entity BaseHP="450" ID="68" Image="Entities/68.0.0 - Peep.png" Name="Peep" Subtype="0" Variant="0" />
-    <entity BaseHP="250" ID="99" Image="Entities/99.0.0 - Gurdy Jr.png" Name="Gurdy Jr." Subtype="0" Variant="0" />
-    <entity BaseHP="280" ID="64" Image="Entities/64.0.0 - Pestilence.png" Name="Pestilence" Subtype="0" Variant="0" />
+    <entity BaseHP="450" ID="68" Image="Entities/68.0.0 - Peep.png" Name="Peep" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Yellow 👑</choice>
+                <choice>Cyan 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="250" ID="99" Image="Entities/99.0.0 - Gurdy Jr.png" Name="Gurdy Jr." Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Blue 👑</choice>
+				<choice>Yellow 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="280" ID="64" Image="Entities/64.0.0 - Pestilence.png" Name="Pestilence" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Caves Bosses">
     <group Name="Chub (Boss)">
-      <entity BaseHP="350" ID="28" Image="Entities/28.0.0 - Chub.png" Name="Chub" Subtype="0" Variant="0" />
+      <entity BaseHP="350" ID="28" Image="Entities/28.0.0 - Chub.png" Name="Chub" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Blue 👑</choice>
+                <choice>Orange 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
       <entity BaseHP="350" ID="28" Image="Entities/28.1.0 - C.H.A.D..png" Name="C.H.A.D." Subtype="0" Variant="1" />
     </group>
-    <entity BaseHP="595" ID="36" Image="Entities/36.0.0 - Gurdy.png" PlaceVisual="0,1" Name="Gurdy" Subtype="0" Variant="0" />
+    <entity BaseHP="595" ID="36" Image="Entities/36.0.0 - Gurdy.png" PlaceVisual="0,1" Name="Gurdy" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Green 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <group Name="Fistula (Boss)">
-      <entity BaseHP="8" ID="73" Image="Entities/73.0.0 - Fistula Small.png" Name="Fistula Small" Subtype="0" Variant="0" />
-      <entity BaseHP="15" ID="72" Image="Entities/72.0.0 - Fistula Medium.png" Name="Fistula Medium" Subtype="0" Variant="0" />
-      <entity BaseHP="60" ID="71" Image="Entities/71.0.0 - Fistula Big.png" Name="Fistula Big" Subtype="0" Variant="0" />
+      <entity BaseHP="8" ID="73" Image="Entities/73.0.0 - Fistula Small.png" Name="Fistula Small" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
+      <entity BaseHP="15" ID="72" Image="Entities/72.0.0 - Fistula Medium.png" Name="Fistula Medium" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
+      <entity BaseHP="60" ID="71" Image="Entities/71.0.0 - Fistula Big.png" Name="Fistula Big" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
     </group>
-    <entity BaseHP="350" ID="262" Image="Entities/262.0.0 - Mega Maw.png" PlaceVisual="0,-2" Name="Mega Maw" Subtype="0" Variant="0" />
-    <entity BaseHP="600" ID="264" Image="Entities/264.0.0 - Mega Fatty.png" Name="Mega Fatty" Subtype="0" Variant="0" />
+    <entity BaseHP="350" ID="262" Image="Entities/262.0.0 - Mega Maw.png" PlaceVisual="0,-2" Name="Mega Maw" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="600" ID="264" Image="Entities/264.0.0 - Mega Fatty.png" Name="Mega Fatty" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Brown 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Catacombs Bosses">
-    <entity BaseHP="350" ID="28" Image="Entities/28.2.0 - The Carrion Queen.png" Name="The Carrion Queen" Subtype="0" Variant="2" />
-    <entity BaseHP="22" ID="19" Image="Entities/19.1.0 - The Hollow.png" Name="The Hollow" Subtype="0" Variant="1" />
-    <entity BaseHP="150" ID="67" Image="Entities/67.1.0 - The Husk.png" Name="The Husk" Subtype="0" Variant="1" />
+    <entity BaseHP="350" ID="28" Image="Entities/28.2.0 - The Carrion Queen.png" Name="The Carrion Queen" Subtype="0" Variant="2">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Pink 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="22" ID="19" Image="Entities/19.1.0 - The Hollow.png" Name="The Hollow" Subtype="0" Variant="1">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Green 👑</choice>
+				<choice>Black 👑</choice>
+				<choice>Yellow 👑</choice>
+			</dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="150" ID="67" Image="Entities/67.1.0 - The Husk.png" Name="The Husk" Subtype="0" Variant="1">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+                <choice>Red 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="215" ID="100" Image="Entities/100.1.0 - The Wretched.png" Name="The Wretched" Subtype="0" Variant="1" />
-    <entity BaseHP="200" ID="269" Image="Entities/269.0.0 - Polycephalus.png" Name="Polycephalus" Subtype="0" Variant="0" />
+    <entity BaseHP="200" ID="269" Image="Entities/269.0.0 - Polycephalus.png" Name="Polycephalus" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Pink 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="400" ID="267" Image="Entities/267.0.0 - Dark One.png" Name="Dark One" Subtype="0" Variant="0" />
     >
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path) Shared">
     <entity BaseHP="350" ID="69" Image="Entities/69.0.0 - Loki.png" Name="Loki" Subtype="0" Variant="0" />
-    <entity BaseHP="500" ID="65" Image="Entities/65.0.0 - War.png" Name="War" Subtype="0" Variant="0" />
-    <entity BaseHP="500" ID="65" Image="Entities/65.10.0 - War without Horse.png" Name="War without Horse" Subtype="0" Variant="10" />
+    <entity BaseHP="500" ID="65" Image="Entities/65.0.0 - War.png" Name="War" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="500" ID="65" Image="Entities/65.10.0 - War without Horse.png" Name="War without Horse" Subtype="0" Variant="10">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Depths Bosses">
     <group Name="Monstro II (Boss)">
-      <entity BaseHP="632.5" ID="43" Image="Entities/43.0.0 - Monstro II.png" Name="Monstro II" Subtype="0" Variant="0" />
+      <entity BaseHP="632.5" ID="43" Image="Entities/43.0.0 - Monstro II.png" Name="Monstro II" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Red 👑</choice>
+            </dropdown>
+        </bitfield>
+      </entity>
       <entity BaseHP="632.5" ID="43" Image="Entities/43.1.0 - Gish.png" Name="Gish" Subtype="0" Variant="1" />
     </group>
-    <entity BaseHP="800" ID="265" Image="Entities/265.0.0 - The Cage.png" Name="The Cage" Subtype="0" Variant="0" />
-    <entity BaseHP="500" ID="263" Image="Entities/263.0.0 - The Gate.png" PlaceVisual="0,-1" Name="The Gate" Subtype="0" Variant="0" />
+    <entity BaseHP="800" ID="265" Image="Entities/265.0.0 - The Cage.png" Name="The Cage" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Green 👑</choice>
+				<choice>Pink 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="500" ID="263" Image="Entities/263.0.0 - The Gate.png" PlaceVisual="0,-1" Name="The Gate" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Necropolis Bosses">
-    <entity BaseHP="450" ID="68" Image="Entities/68.1.0 - The Bloat.png" Name="The Bloat" Subtype="0" Variant="1" />
-    <entity BaseHP="150" ID="97" Image="Entities/97.0.0 - Mask of Infamy.png" Name="Mask of Infamy" Subtype="0" Variant="0" />
-    <entity BaseHP="200" ID="98" Image="Entities/98.0.0 - Heart of Infamy.png" Name="Heart of Infamy" Subtype="0" Variant="0" />
+    <entity BaseHP="450" ID="68" Image="Entities/68.1.0 - The Bloat.png" Name="The Bloat" Subtype="0" Variant="1">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Green</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="150" ID="97" Image="Entities/97.0.0 - Mask of Infamy.png" Name="Mask of Infamy" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="200" ID="98" Image="Entities/98.0.0 - Heart of Infamy.png" Name="Heart of Infamy" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="520" ID="268" Image="Entities/268.0.0 - The Adversary.png" Name="The Adversary" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 4 Bosses (Main Path) Shared">
     <entity BaseHP="350" ID="69" Image="Entities/69.1.0 - Lokii.png" Name="Lokii" Subtype="0" Variant="1" />
-    <entity BaseHP="450" ID="66" Image="Entities/66.0.0 - Death.png" Name="Death" Subtype="0" Variant="0" />
-    <entity BaseHP="150" ID="66" Image="Entities/66.20.0 - Death Horse.png" Name="Death Horse" Subtype="0" Variant="20" />
-    <entity BaseHP="300" ID="66" Image="Entities/66.30.0 - Death without Horse.png" Name="Death without Horse" Subtype="0" Variant="30" />
+    <entity BaseHP="450" ID="66" Image="Entities/66.0.0 - Death.png" Name="Death" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="150" ID="66" Image="Entities/66.20.0 - Death Horse.png" Name="Death Horse" Subtype="0" Variant="20">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
+    <entity BaseHP="300" ID="66" Image="Entities/66.30.0 - Death without Horse.png" Name="Death without Horse" Subtype="0" Variant="30">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+                <choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="500" ID="65" Image="Entities/65.1.0 - Conquest.png" Name="Conquest" Subtype="0" Variant="1" />
   </group>
 
@@ -1055,7 +1312,15 @@
   </group>
 
   <group Name="Story Bosses">
-    <entity BaseHP="645" ID="45" Image="Entities/45.0.0 - Mom.png" Name="Mom" Subtype="0" Variant="0" />
+    <entity BaseHP="645" ID="45" Image="Entities/45.0.0 - Mom.png" Name="Mom" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+                <choice>Blue 👑</choice>
+                <choice>Red 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
     <entity BaseHP="950" ID="78" Image="Entities/78.0.0 - Mom's Heart.png" Name="Mom's Heart" Subtype="0" Variant="0" />
     <entity BaseHP="950" ID="78" Image="Entities/78.1.0 - It Lives.png" Name="It Lives" Subtype="0" Variant="1" />
     <entity BaseHP="2000" ID="102" Image="Entities/102.0.0 - Isaac (final boss).png" Name="Isaac (boss)" Subtype="0" Variant="0" />
