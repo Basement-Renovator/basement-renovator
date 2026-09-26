@@ -53,7 +53,7 @@
 
   <!--——— Global ———-->
   <group Name="TNT">
-    <entity ID="292" Image="Entities/292.0.0 - Pushable TNT.png" PlaceVisual="0,0.05" Name="Pushable TNT" Subtype="0" Variant="0" />
+    <entity BaseHP="4" ID="292" Image="Entities/292.0.0 - Pushable TNT.png" PlaceVisual="0,0.05" Name="Pushable TNT" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Grids">
@@ -102,13 +102,13 @@
 
   <group Name="Global">
     <group Label="Special Enemies">
-      <entity BaseHP="30" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0" />
+      <entity BaseHP="10" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0" />
       <entity BaseHP="16" StageHP="2" Tags="Champion" ID="297" Image="Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0" />
-      <entity BaseHP="30" Tags="Champion" ID="298" Image="Entities/298.0.0 - Blue Boil.png" Name="Blue Boil" Subtype="0" Variant="0" />
+      <entity BaseHP="20" Tags="Champion" ID="298" Image="Entities/298.0.0 - Blue Boil.png" Name="Blue Boil" Subtype="0" Variant="0" />
       <entity BaseHP="60" ID="257" Image="Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1" />
       <entity BaseHP="30" ID="246" Image="Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1" />
-      <entity BaseHP="30" Tags="Champion" ID="299" Image="Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0" />
-      <entity BaseHP="30" ID="295" Image="Entities/295.0.0 - Corn Mine.png" Name="Corn Mine" Subtype="0" Variant="0" />
+      <entity BaseHP="8" Tags="Champion" ID="299" Image="Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0" />
+      <entity BaseHP="8" ID="295" Image="Entities/295.0.0 - Corn Mine.png" Name="Corn Mine" Subtype="0" Variant="0" />
       <entity BaseHP="10" ID="404" Image="Entities/404.1.0 - Dark Ball.png" Name="Dark Ball" Subtype="0" Variant="1" />
     </group>
   </group>
@@ -156,7 +156,7 @@
   </group>
 
   <group Name="Burning Basement Enemies">
-    <entity BaseHP="10" Tags="Champion" ID="10" Image="Entities/10.2.0 - Flaming Gaper.png" Name="Flaming Gaper" Subtype="0" Variant="2" />
+    <entity BaseHP="9" Tags="Champion" ID="10" Image="Entities/10.2.0 - Flaming Gaper.png" Name="Flaming Gaper" Subtype="0" Variant="2" />
     <entity BaseHP="18" ID="208" Image="Entities/208.2.0 - Flaming Fatty.png" Name="Flaming Fatty" Subtype="0" Variant="2" />
     <entity Name="Hopper" />
     <entity BaseHP="20" Tags="Champion" ID="54" Image="Entities/54.0.0 - Flaming Hopper.png" PlaceVisual="0,0.33" Name="Flaming Hopper" Subtype="0" Variant="0" />
@@ -229,7 +229,7 @@
   </group>
 
   <group Name="Chapter 5 (Main Path) Enemies">
-    <entity BaseHP="20" StageHP="4" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
+    <entity BaseHP="20" StageHP="3" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Sheol Enemies">
@@ -256,25 +256,22 @@
   </group>
 
   <group Name="Gurgling (Boss)">
-    <entity BaseHP="90" ID="237" Image="Entities/237.2.0 - Turdling.png" Name="Turdling" Subtype="0" Variant="2" />
+    <entity BaseHP="50" ID="237" Image="Entities/237.2.0 - Turdling.png" Name="Turdling" Subtype="0" Variant="2" />
   </group>
 
   <group Name="Cellar Bosses">
-    <group Name="Rag Man (Boss)">
-      <entity BaseHP="250" ID="405" Image="Entities/405.0.0 - Rag Man.png" Name="Rag Man" Subtype="0" Variant="0" />
-      <entity BaseHP="25" ID="405" Image="Entities/405.1.0 - Rag Man's Head.png" Name="Rag Man's Head" Variant="1" Subtype="0" />
-    </group>
+      <entity BaseHP="200" ID="405" Image="Entities/405.0.0 - Rag Man.png" Name="Rag Man" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 1 Bosses (Main Path)">
     <group Name="Burning Basement Bosses" Label="Burning Basement">
       <entity Name="Monstro" />
-      <group Name="Gemini (Boss)" />
-      <group Name="Steven (Boss)" />
+      <group Name="Gemini" />
+      <group Name="Steven" />
       <entity Name="Larry Jr." />
       <group Name="Dingle (Boss)" />
       <group Name="Gurgling (Boss)" />
-      <group Name="Rag Man (Boss)" />
+      <group Name="Rag Man" />
     </group>
   </group>
 
@@ -326,23 +323,23 @@
 
   <group Name="Story Bosses">
     <entity BaseHP="1000" Armor="20" ID="102" Image="Entities/102.2.0 - Blue Baby (Alt).png" Name="??? (Hush)" Subtype="0" Variant="2" />
-    <entity BaseHP="6666" Armor="140" ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
-    <entity ID="408" Image="Entities/408.0.0 - Skinless Hush.png" Name="Skinless Hush" Subtype="0" Variant="0" />
+    <entity BaseHP="3500" ID="406" Image="Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
   </group>
 
-  <group Name="Other Bosses">
-    <group Label="Ultra Greed">
-      <group Name="Ultra Greed (Boss)">
-        <entity BaseHP="3500" ID="406" Image="Entities/406.0.0 - Ultra Greed.png" Name="Ultra Greed" Subtype="0" Variant="0" />
-      </group>
-      <entity BaseHP="30" ID="293" Image="Entities/293.0.0 - Ultra Greed Coin (Spinner).png" Name="Ultra Greed Coin (Spinner)" Subtype="0" Variant="0" Tags="" />
-      <entity BaseHP="30" ID="293" Image="Entities/293.1.0 - Ultra Greed Coin (Key).png" Name="Ultra Greed Coin (Key)" Subtype="0" Variant="1" Tags="" />
-      <entity BaseHP="30" ID="293" Image="Entities/293.2.0 - Ultra Greed Coin (Bomb).png" Name="Ultra Greed Coin (Bomb)" Subtype="0" Variant="2" Tags="" />
-      <entity BaseHP="30" ID="293" Image="Entities/293.3.0 - Ultra Greed Coin (Heart).png" Name="Ultra Greed Coin (Heart)" Subtype="0" Variant="3" Tags="" />
-    </group>
+  <group Name="Unused Bosses">
+    <entity BaseHP="6666" Armor="140" ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
+    <entity BaseHP="500" ID="408" Image="Entities/408.0.0 - Skinless Hush.png" Name="Skinless Hush" Subtype="0" Variant="0" />
   </group>
 
   <!--——— Unused ———-->
+  <group Name="Unused Enemies">
+    <entity BaseHP="50" ID="293" Image="Entities/293.0.0 - Ultra Greed Coin (Spinner).png" Name="Ultra Greed Coin (Spinner)" Subtype="0" Variant="0" Tags="" />
+    <entity BaseHP="60" ID="293" Image="Entities/293.1.0 - Ultra Greed Coin (Key).png" Name="Ultra Greed Coin (Key)" Subtype="0" Variant="1" Tags="" />
+    <entity BaseHP="50" ID="293" Image="Entities/293.2.0 - Ultra Greed Coin (Bomb).png" Name="Ultra Greed Coin (Bomb)" Subtype="0" Variant="2" Tags="" />
+    <entity BaseHP="40" ID="293" Image="Entities/293.3.0 - Ultra Greed Coin (Heart).png" Name="Ultra Greed Coin (Heart)" Subtype="0" Variant="3" Tags="" />
+    <entity BaseHP="25" ID="405" Image="Entities/405.1.0 - Rag Man's Head.png" Name="Rag Man's Head" Variant="1" Subtype="0" />
+  </group>
+
   <group Name="Live Bombs">
     <entity ID="4" Image="Entities/4.12.0 - Glitter Bomb.png" Name="Glitter Bomb" Variant="12" Subtype="0" />
   </group>

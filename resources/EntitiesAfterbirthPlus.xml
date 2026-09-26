@@ -129,10 +129,10 @@
           <tag>CrossStoneShooters</tag>
         </entity>
       </defaults>
-      <entity Image="Entities/202.10.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
-      <entity Image="Entities/202.10.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
-      <entity Image="Entities/202.11.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
-      <entity Image="Entities/202.11.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
+      <entity BaseHP="1" Image="Entities/202.10.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter" Variant="10" Subtype="0" />
+      <entity BaseHP="1" Image="Entities/202.10.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×)" Variant="10" Subtype="1" />
+      <entity BaseHP="1" Image="Entities/202.11.0 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (Always On)" Variant="11" Subtype="0" />
+      <entity BaseHP="1" Image="Entities/202.11.1 - Cross Stone Shooter.png" ID="202" Name="Cross Stone Shooter (×) (Always On)" Variant="11" Subtype="1" />
     </group>
   </group>
 
@@ -213,12 +213,12 @@
 
   <!--——— Bosses ———-->
   <group Name="Chapter 2 Bosses (Main Path) Shared">
-    <entity BaseHP="110" ID="409" Image="Entities/409.0.0 - RagMega.png" Name="Rag Mega" Variant="0" Subtype="0" />
-    <entity BaseHP="600" ID="411" Image="Entities/411.0.0 - BigHorn.png" Name="Big Horn" Variant="0" Subtype="0" />
+    <entity BaseHP="120" ID="409" Image="Entities/409.0.0 - RagMega.png" Name="Rag Mega" Variant="0" Subtype="0" />
+    <entity BaseHP="480" ID="411" Image="Entities/411.0.0 - BigHorn.png" Name="Big Horn" Variant="0" Subtype="0" />
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path) Shared">
-    <entity BaseHP="800" ID="410" Image="Entities/410.0.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
+    <entity BaseHP="350" ID="410" Image="Entities/410.0.0 - SistersVis.png" Name="Sisters Vis" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Scarred Womb Bosses">
@@ -229,7 +229,7 @@
     <entity ID="412" Variant="0" Subtype="0" Name="Delirium" BaseHP="10000" Image="Entities/412.0.0 - Delirium.png" />
   </group>
 
-  <group Name="Ultra Greed (Boss)">
+  <group Name="Unused Bosses">
     <entity ID="406" Variant="1" Subtype="0" Name="Ultra Greedier" BaseHP="2500" Image="Entities/406.1.0 - UltraGreedier.png" />
   </group>
 
