@@ -290,6 +290,7 @@
       <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_downpour.png"/>
       <Entity ID="1900" Image="Entities/1900.0.0 - Block_floodedcaves.png"/>
       <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_floodedcaves.png"/>
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_downpour.png" />
 
       <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_downpour.png" />
       <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_downpour.png" />
@@ -324,6 +325,7 @@
       <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_dross.png"/>
       <Entity ID="1900" Image="Entities/1900.0.0 - Block_dross.png"/>
       <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_dross.png"/>
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_downpour.png" />
 
       <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_dross.png" />
       <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_dross.png" />

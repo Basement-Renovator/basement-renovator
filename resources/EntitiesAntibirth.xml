@@ -404,7 +404,7 @@
 
   <group Name="Chapter 1 Bosses">
     <group Name="Chapter 1 Bosses (Alt Path)" Label="Chapter 1 (Alt Path)">
-      <group Name="Downpour Bosses" Label="Downpour">
+      <group Name="Downpour Bosses" Label="- Downpour -">
         <entity BaseHP="200" Boss="1" Champion="0" ID="62" Image="Entities/62.3.0 - Wormwood.png" PlaceVisual="0,0.3" Name="Wormwood" Subtype="0" Variant="100">
           <tag>NoBlockDoors</tag>
         </entity>
@@ -417,7 +417,7 @@
 
   <group Name="Chapter 2 Bosses">
     <group Name="Chapter 2 Bosses (Alt Path)" Label="Chapter 2 (Alt Path)">
-      <group Name="Mines Bosses" Label="Mines">
+      <group Name="Mines Bosses" Label="- Mines -">
         <entity BaseHP="35" Boss="1" Champion="0" ID="19" Image="Entities/19.2.0 - Tuff Twin.png" Name="Tuff Twin" Subtype="0" Variant="100" />
         <entity Name="Reap Creep" />
         <entity BaseHP="350" Boss="1" Champion="0" ID="906" Image="Entities/906.0.0 - Hornfel.png" Name="Hornfel" Subtype="0" Variant="0" />
@@ -428,7 +428,7 @@
 
   <group Name="Chapter 3 Bosses">
     <group Name="Chapter 3 Bosses (Alt Path)" Label="Chapter 3 (Alt Path)">
-      <group Name="Mausoleum Bosses" Label="Mausoleum">
+      <group Name="Mausoleum Bosses" Label="- Mausoleum -">
         <entity Name="The Pile" />
         <entity BaseHP="620" Boss="1" Champion="0" ID="903" Image="Entities/903.0.0 - Visage Heart.png" Name="The Visage" Subtype="0" Variant="0" />
         <entity BaseHP="100" Boss="1" Champion="0" ID="903" Image="Entities/903.1.0 - Visage Mask.png" Name="Visage Mask" Subtype="0" Variant="1" />
@@ -440,7 +440,7 @@
 
   <group Name="Chapter 4 Bosses">
     <group Name="Chapter 4 Bosses (Alt Path)" Label="Chapter 4 (Alt Path)">
-      <group Name="Corpse Bosses" Label="Corpse">
+      <group Name="Corpse Bosses" Label="- Corpse -">
         <entity BaseHP="950" Boss="1" Champion="0" ID="909" Image="Entities/909.0.0 - The Scourge.png" Name="The Scourge" Subtype="0" Variant="0" />
         <entity BaseHP="1050" Boss="1" Champion="0" ID="910" Image="Entities/910.0.0 - Chimera.png" Name="Chimera" Subtype="0" Variant="0" />
         <entity BaseHP="1050" Boss="1" Champion="0" ID="910" Image="Entities/910.1.0 - Chimera (body).png" Name="Chimera (Body)" Subtype="0" Variant="1" />

@@ -34,10 +34,10 @@
   </group>
 
   <group Name="Pill Colors">
-    <entity ID="5" Image="Entities/5.70.10 - White-Azure Pill.png" Name="White-Azure Pill" Subtype="10" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.10 - White-Azure Pill.png" Name="White-Azure Pill" PlaceVisual="0,-3/26" Subtype="10" Variant="70" />
     <entity ID="5" Image="Entities/5.70.11 - Black-Yellow Pill.png" Name="Black-Yellow Pill" Subtype="11" Variant="70" />
-    <entity ID="5" Image="Entities/5.70.12 - White-Black Pill.png" Name="White-Black Pill" Subtype="12" Variant="70" />
-    <entity ID="5" Image="Entities/5.70.13 - White-Yellow Pill.png" Name="White-Yellow Pill" Subtype="13" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.12 - White-Black Pill.png" Name="White-Black Pill" PlaceVisual="0,-0.03" Subtype="12" Variant="70" />
+    <entity ID="5" Image="Entities/5.70.13 - White-Yellow Pill.png" Name="White-Yellow Pill" PlaceVisual="0,-3/26" Subtype="13" Variant="70" />
   </group>
 
   <group Name="Cards">
@@ -48,23 +48,23 @@
   </group>
 
   <group Name="Runes">
-    <entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" Subtype="36" Variant="300" />
+    <entity ID="5" Image="Entities/5.300.40 - Blank Rune.png" Name="Blank Rune" PlaceVisual="-2/26,0" Subtype="36" Variant="300" />
   </group>
 
   <!--——— Global ———-->
   <group Name="TNT">
-    <entity BaseHP="4" ID="292" Image="Entities/292.0.0 - Pushable TNT.png" PlaceVisual="0,0.05" Name="Pushable TNT" Subtype="0" Variant="0" />
+    <entity BaseHP="4" ID="292" Image="Entities/292.0.0 - Pushable TNT.png" Name="Pushable TNT" PlaceVisual="0,-0.03" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Grids">
     <group Name="Pressure Plates">
-      <entity ID="4500" Image="Entities/4500.0.0 - Pressure Plate.png" Name="Pressure Plate (Room clear)" Subtype="0" Variant="0" />
-      <entity ID="4500" Image="Entities/4500.0.1 - Reward Plate.png" Name="Reward Plate" Subtype="0" Variant="1" />
+      <entity ID="4500" Image="Entities/4500.0.0 - Pressure Plate.png" Name="Pressure Plate (Room clear)" PlaceVisual="0,-2/26" Subtype="0" Variant="0" />
+      <entity ID="4500" Image="Entities/4500.0.1 - Reward Plate.png" Name="Reward Plate" PlaceVisual="0,-2/26" Subtype="0" Variant="1" />
     </group>
   </group>
 
   <group Name="Poops">
-    <entity ID="1497" Image="Entities/1497.0.0 - Black Poop.png" PlaceVisual="0,0.03" Name="Black Poop" Subtype="0" Variant="0" />
+    <entity ID="1497" Image="Entities/1497.0.0 - Black Poop.png" Name="Black Poop" PlaceVisual="0,-0.03" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Beggars">
@@ -84,10 +84,10 @@
           <tag>InNonCombatRooms</tag>
         </entity>
       </defaults>
-      <entity BaseHP="0" ID="291" Image="Entities/291.0.0 - Pitfall.png" Name="Pitfall" Subtype="0" Variant="0" />
-      <entity BaseHP="0" ID="291" Image="Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" Subtype="0" Variant="1" />
-      <entity BaseHP="0" ID="291" Image="Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" Subtype="0" Variant="2" />
-      <entity BaseHP="0" ID="291" Image="Entities/291.3.0 - Blue Hush Pitfall.png" Name="Blue Hush Pitfall" Subtype="0" Variant="3" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.0.0 - Pitfall.png" Name="Pitfall" PlaceVisual="0,-2/26" Subtype="0" Variant="0" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.1.0 - Suction Pitfall.png" Name="Suction Pitfall" PlaceVisual="0,-2/26" Subtype="0" Variant="1" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.2.0 - Teleport Pitfall.png" Name="Teleport Pitfall" PlaceVisual="0,-2/26" Subtype="0" Variant="2" />
+      <entity BaseHP="0" ID="291" Image="Entities/291.3.0 - Blue Hush Pitfall.png" Name="Blue Hush Pitfall" PlaceVisual="0,-2/26" Subtype="0" Variant="3" />
     </group>
   </group>
 
@@ -97,19 +97,19 @@
 
   <group Name="Shopkeepers">
     <entity BaseHP="5" ID="17" Image="Entities/17.3.0 - Special Keeper.png" Name="Special Keeper" Subtype="0" Variant="3" />
-    <entity BaseHP="5" ID="17" Image="Entities/17.4.0 - Special Hanging Keeper.png" Name="Special Hanging Keeper" Subtype="0" Variant="4" />
+    <entity BaseHP="5" ID="17" Image="Entities/17.4.0 - Special Hanging Keeper.png" Name="Special Hanging Keeper" PlaceVisual="0,-13/26" Subtype="0" Variant="4" />
   </group>
 
   <group Name="Global">
     <group Label="Special Enemies">
-      <entity BaseHP="10" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" Subtype="0" Variant="0" />
+      <entity BaseHP="10" Tags="Champion" ID="296" Image="Entities/296.0.0 - Hush Fly.png" Name="Hush Fly" PlaceVisual="0,-13/26" Subtype="0" Variant="0" />
       <entity BaseHP="16" StageHP="2" Tags="Champion" ID="297" Image="Entities/297.0.0 - Blue Gaper.png" Name="Blue Gaper" Subtype="0" Variant="0" />
       <entity BaseHP="20" Tags="Champion" ID="298" Image="Entities/298.0.0 - Blue Boil.png" Name="Blue Boil" Subtype="0" Variant="0" />
-      <entity BaseHP="60" ID="257" Image="Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" Subtype="0" Variant="1" />
+      <entity BaseHP="60" ID="257" Image="Entities/257.1.0 - Blue Conjoined Fatty.png" Name="Blue Conjoined Fatty" PlaceVisual="-0.03,0" Subtype="0" Variant="1" />
       <entity BaseHP="30" ID="246" Image="Entities/246.1.0 - Rag Man's Ragling.png" Name="Rag Man's Ragling" Subtype="0" Variant="1" />
       <entity BaseHP="8" Tags="Champion" ID="299" Image="Entities/299.0.0 - Greed Gaper.png" Name="Greed Gaper" Subtype="0" Variant="0" />
-      <entity BaseHP="8" ID="295" Image="Entities/295.0.0 - Corn Mine.png" Name="Corn Mine" Subtype="0" Variant="0" />
-      <entity BaseHP="10" ID="404" Image="Entities/404.1.0 - Dark Ball.png" Name="Dark Ball" Subtype="0" Variant="1" />
+      <entity BaseHP="8" ID="295" Image="Entities/295.0.0 - Corn Mine.png" Name="Corn Mine" PlaceVisual="0,-4/26" Subtype="0" Variant="0" />
+      <entity BaseHP="10" ID="404" Image="Entities/404.1.0 - Dark Ball.png" Name="Dark Ball" PlaceVisual="0,-12/26" Subtype="0" Variant="1" />
     </group>
   </group>
 
@@ -148,50 +148,110 @@
 
   <group Name="Chapter 1 (Main Path) Enemies">
     <entity BaseHP="10" Tags="Champion" ID="284" Image="Entities/284.0.0 - Cyclopia.png" Name="Cyclopia" Subtype="0" Variant="0" />
-    <entity BaseHP="5" ID="256" Image="Entities/256.0.0 - Dart Fly.png" Name="Dart Fly" Subtype="0" Variant="0" />
-    <entity BaseHP="5" ID="281" Image="Entities/281.0.0 - Swarm.png" Name="Swarm" Subtype="0" Variant="0" />
-    <entity BaseHP="10" ID="289" Image="Entities/289.0.0 - Ulcer.png" Name="Ulcer" Subtype="0" Variant="0" />
-    <entity BaseHP="3" ID="217" Image="Entities/217.2.0 - Brownie Corn.png" Name="Brownie Corn" Subtype="0" Variant="2" />
-    <entity BaseHP="10" ID="276" Image="Entities/276.0.0 - Roundy.png" Name="Roundy" Subtype="0" Variant="0" />
+    <entity BaseHP="3" ID="217" Image="Entities/217.2.0 - Brownie Corn.png" Name="Brownie Corn" PlaceVisual="-0.03,0" Subtype="0" Variant="2" />
+    <entity BaseHP="10" ID="276" Image="Entities/276.0.0 - Roundy.png" Name="Roundy" PlaceVisual="0,2/26" Subtype="0" Variant="0" />
+    <entity BaseHP="20" ID="257" Image="Entities/257.0.0 - Conjoined Fatty.png" Name="Conjoined Fatty" PlaceVisual="-2/26,0" Subtype="0" Variant="0" />
+  </group>
+
+  <group Name="Basement Enemies">
+    <entity BaseHP="10" ID="289" Image="Entities/289.0.0 - Ulcer.png" Name="Ulcer" PlaceVisual="0,2/26" Subtype="0" Variant="0" />
+    <entity BaseHP="5" ID="256" Image="Entities/256.0.0 - Dart Fly.png" Name="Dart Fly" PlaceVisual="0,-10/26" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Burning Basement Enemies">
     <entity BaseHP="9" Tags="Champion" ID="10" Image="Entities/10.2.0 - Flaming Gaper.png" Name="Flaming Gaper" Subtype="0" Variant="2" />
     <entity BaseHP="18" ID="208" Image="Entities/208.2.0 - Flaming Fatty.png" Name="Flaming Fatty" Subtype="0" Variant="2" />
+    <entity Name="Mulliboom" />
+    <entity Name="Fly" />
+    <entity Name="Attack Fly" />
+    <entity Name="Moter" />
+    <entity Name="Ring Fly" />
+    <entity Name="Ulcer" />
+    <entity Name="Dart Fly" />
+    <entity BaseHP="5" ID="281" Image="Entities/281.0.0 - Swarm.png" Name="Swarm" PlaceVisual="0,-2/26" Subtype="0" Variant="0" />
+    <entity Name="Level 2 Fly" />
+    <entity Name="Full Fly" />
+    <entity Name="Sucker" />
+    <entity Name="Spit" />
+    <entity Name="Pooter" />
+    <entity Name="Super Pooter" />
     <entity Name="Hopper" />
-    <entity BaseHP="20" Tags="Champion" ID="54" Image="Entities/54.0.0 - Flaming Hopper.png" PlaceVisual="0,0.33" Name="Flaming Hopper" Subtype="0" Variant="0" />
+    <entity BaseHP="20" Tags="Champion" ID="54" Image="Entities/54.0.0 - Flaming Hopper.png" Name="Flaming Hopper" PlaceVisual="-0.03,0" Subtype="0" Variant="0" />
     <entity Name="Trite" />
+    <entity Name="Spider" />
+    <entity Name="Level 2 Spider" />
     <entity Name="Ticking Spider" />
+    <entity Name="Baby Long Legs" />
+    <entity Name="Crazy Long Legs" />
+    <entity Name="Wall Creep" />
     <entity Name="Psychic Horf" />
   </group>
 
   <group Name="Chapter 2 (Main Path) Enemies">
-    <entity BaseHP="20" ID="257" Image="Entities/257.0.0 - Conjoined Fatty.png" Name="Conjoined Fatty" Subtype="0" Variant="0" />
-    <entity BaseHP="25" ID="288" Image="Entities/288.0.0 - Dukie.png" Name="Dukie" Subtype="0" Variant="0" />
+    <entity Name="Conjoined Fatty" />
+    <entity BaseHP="3" ID="217" Image="Entities/217.1.0 - Corn.png" Name="Corn" PlaceVisual="-0.03,0" Subtype="0" Variant="1" />
+    <entity BaseHP="15" StageHP="6" ID="220" Image="Entities/220.1.0 - Dank Squirt.png" Name="Dank Squirt" Subtype="0" Variant="1" />
     <entity Name="Dart Fly" />
-    <entity Name="Swarm" />
     <entity Name="Ulcer" />
-    <entity BaseHP="3" ID="217" Image="Entities/217.1.0 - Corn.png" Name="Corn" Subtype="0" Variant="1" />
-    <entity BaseHP="35" ID="258" Image="Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" Subtype="0" Variant="0" />
   </group>
 
-  <group Label="Flooded Caves Enemies">
+  <group Name="Caves Enemies">
+    <entity BaseHP="25" ID="288" Image="Entities/288.0.0 - Dukie.png" Name="Dukie" Subtype="0" PlaceVisual="0,-3/26" Variant="0" />
+    <entity BaseHP="35" ID="258" Image="Entities/258.0.0 - Fat Bat.png" Name="Fat Bat" PlaceVisual="0,-5/26" Subtype="0" Variant="0" />
+  </group>
+
+  <group Name="Flooded Caves Enemies">
     <entity BaseHP="18" Tags="Champion" ID="22" Image="Entities/22.1.0 - Drowned Hive.png" Name="Drowned Hive" Subtype="0" Variant="1" />
-    <entity BaseHP="8" StageHP="3" Tags="Champion" ID="25" Image="Entities/25.2.0 - Drowned Boom Fly.png" PlaceVisual="0,-0.15" Name="Drowned Boom Fly" Subtype="0" Variant="2" />
+    <entity BaseHP="8" StageHP="3" Tags="Champion" ID="25" Image="Entities/25.2.0 - Drowned Boom Fly.png" Name="Drowned Boom Fly" PlaceVisual="0,-9/26" Subtype="0" Variant="2" />
     <entity BaseHP="22" Tags="Champion" ID="23" Image="Entities/23.1.0 - Drowned Charger.png" Name="Drowned Charger" Subtype="0" Variant="1" />
+    <entity Name="Hive" />
+    <entity Name="Nest" />
+    <entity Name="Swarmer" />
+    <entity Name="Attack Fly" />
+    <entity Name="Moter" />
+    <entity Name="Ring Fly" />
+    <entity Name="Swarm" />
+    <entity Name="Sucker" />
+    <entity Name="Pooter" />
     <entity Name="Clotty" />
+    <entity Name="Hopper" />
+    <entity Name="Psychic Horf" />
+    <entity Name="Psychic Maw" />
+    <entity Name="Splasher" />
+    <entity Name="Spider" />
+    <entity Name="Big Spider" />
+    <entity Name="Ticking Spider" />
+    <entity Name="Small Baby Long Legs" />
+    <entity Name="Baby Long Legs" />
+    <entity Name="Small Crazy Long Legs" />
+    <entity Name="Crazy Long Legs" />
+    <entity Name="Wall Creep" />
+    <entity Name="Blind Creep" />
+    <entity Name="Pale Fatty" />
+    <entity Name="Blubber" />
+    <entity Name="Half Sack" />
     <entity Name="Gut" />
+    <entity Name="Mobile Host" />
+    <entity Name="Flesh Mobile Host" />
+    <entity Name="Spitty" />
+    <entity Name="Conjoined Spitty" />
+    <entity Name="Dukie" />
+    <entity Name="Fat Bat" />
   </group>
 
   <group Name="Chapter 3 (Main Path) Enemies">
-    <entity BaseHP="8" StageHP="2" ID="277" Image="Entities/277.0.0 - Black Bony.png" Name="Black Bony" Subtype="0" Variant="0" />
-    <entity BaseHP="10" Tags="Champion" ID="280" Image="Entities/280.0.0 - Black Globin's Body.png" Name="Black Globin's Body" Subtype="0" Variant="0" />
-    <entity BaseHP="20" ID="212" Image="Entities/212.1.0 - Dank Death's Head.png" Name="Dank Death's Head" Subtype="0" Variant="1" />
+    <entity BaseHP="20" Tags="Champion" ID="279" Image="Entities/279.0.0 - Black Globin's Head.png" Name="Black Globin's Head" Subtype="0" Variant="0" />
+    <entity BaseHP="20" ID="212" Image="Entities/212.1.0 - Dank Death's Head.png" Name="Dank Death's Head" PlaceVisual="0,-2/26" Subtype="0" Variant="1" />
+  </group>
+
+  <group Name="Depths Enemies">
     <entity Name="Dukie" />
+    <entity Name="Fat Bat" />
     <entity BaseHP="20" Tags="Champion" ID="282" Image="Entities/282.0.0 - Mega Clotty.png" Name="Mega Clotty" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Necropolis Enemies">
+    <entity BaseHP="10" Tags="Champion" ID="280" Image="Entities/280.0.0 - Black Globin's Body.png" Name="Black Globin's Body" PlaceVisual="2/26,0" Subtype="0" Variant="0" />
     <entity BaseHP="20" ID="287" Image="Entities/287.0.0 - Mom's Dead Hand.png" Name="Mom's Dead Hand" Subtype="0" Variant="0">
       <tag>NoBlockDoors</tag>
     </entity>
@@ -199,20 +259,58 @@
 
   <group Name="Dank Depths Enemies">
     <entity BaseHP="33" Tags="Champion" ID="24" Image="Entities/24.2.0 - Dank Globin.png" Name="Dank Globin" Subtype="0" Variant="2" />
-    <group Name="Guts (Enemy)" />
-    <entity BaseHP="15" StageHP="6" ID="220" Image="Entities/220.1.0 - Dank Squirt.png" Name="Dank Squirt" Subtype="0" Variant="1" />
+    <entity Name="Dank Squirt" />
+    <entity BaseHP="8" StageHP="2" ID="277" Image="Entities/277.0.0 - Black Bony.png" Name="Black Bony" Subtype="0" Variant="0" />
+    <entity Name="Black Globin's Body" />
     <entity Name="Clot" />
+    <entity Name="Gazing Globin" />
+    <entity Name="Red Maw" />
+    <entity Name="Hive" />
+    <entity Name="Attack Fly" />
+    <entity Name="Moter" />
+    <entity Name="Pooter" />
+    <entity Name="Boom Fly" />
+    <group Name="Guts (Enemy)" />
+    <entity Name="Boil" />
+    <entity Name="Leech" />
+    <entity Name="Fat Sack" />
+    <entity Name="Blubber" />
+    <entity Name="Spider" />
+    <entity Name="Wall Creep" />
+    <entity Name="Blind Creep" />
+    <entity Name="Rage Creep" />
+    <entity Name="Psychic Horf" />
+    <entity Name="Keeper" ID="86" />
+    <entity Name="Wizoob" />
+    <entity Name="Floating Knight" />
+    <entity Name="Mobile Host" />
+    <entity Name="Grub" />
+    <entity Name="Dukie" />
+    <entity Name="Fat Bat" />
+    <entity Name="Mega Clotty" />
+    <entity Name="Mom's Dead Hand" />
   </group>
 
   <group Name="Chapter 4 (Main Path) Enemies">
-    <entity BaseHP="22" Tags="Champion" ID="39" Image="Entities/39.3.0 - Scarred Double Vis.png" Name="Scarred Double Vis" Subtype="0" Variant="3" />
-    <entity BaseHP="50" ID="286" Image="Entities/286.0.0 - Flesh Death's Head.png" Name="Flesh Death's Head" Subtype="0" Variant="0" />
-    <entity BaseHP="15" Tags="Champion" ID="290" Image="Entities/290.0.0 - Meatball.png" Name="Meatball" Subtype="0" Variant="0" />
+  </group>
+
+  <group Name="Womb Enemies">
     <entity Name="Mega Clotty" />
+    <entity BaseHP="50" ID="286" Image="Entities/286.0.0 - Flesh Death's Head.png" Name="Flesh Death's Head" PlaceVisual="0,-3/26" Subtype="0" Variant="0" />
+  </group>
+
+  <group Name="Utero Enemies">
+    <entity BaseHP="22" Tags="Champion" ID="39" Image="Entities/39.3.0 - Scarred Double Vis.png" Name="Scarred Double Vis" Subtype="0" Variant="3" />
+    <entity Name="Mom's Dead Hand" />
+    <entity BaseHP="20" StageHP="3" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" PlaceVisual="0,0.03" Subtype="0" Variant="0" />
+    <entity BaseHP="15" Tags="Champion" ID="290" Image="Entities/290.0.0 - Meatball.png" Name="Meatball" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Scarred Womb Enemies">
-    <entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" Subtype="0" Variant="1" />
+    <entity Name="Chubber" />
+    <entity Name="Double Vis" />
+    <entity Name="Scarred Double Vis" />
+    <entity BaseHP="35" Tags="Champion" ID="58" Image="Entities/58.1.0 - Scarred Para-Bite.png" Name="Scarred Para-Bite" PlaceVisual="0,2/26" Subtype="0" Variant="1" />
     <group Name="Scarred Guts">
       <defaults>
         <entity>
@@ -226,29 +324,63 @@
       <entity BaseHP="28" ID="40" Image="Entities/40.1.3 - Scarred Guts (Right).png" Name="Scarred Guts (Right)" Subtype="3" Variant="1" MirrorX="40.1.1" />
       <entity BaseHP="28" ID="40" Image="Entities/40.1.4 - Scarred Guts (Down).png" Name="Scarred Guts (Down)" Subtype="4" Variant="1" MirrorY="40.1.2" />
     </group>
+    <entity Name="Spider" />
+    <entity Name="Big Spider" />
+    <entity Name="Blind Creep" />
+    <entity Name="Rage Creep" />
+    <entity Name="Host" />
+    <entity Name="Death's Head" />
+    <entity Name="Flesh Death's Head" />
+    <entity Name="Cod Worm" />
+    <entity Name="Oob" />
+    <entity Name="Gurgling" />
+    <entity Name="Mama Guts" />
+    <entity Name="Walking Boil" />
+    <entity Name="Flesh Mobile Host" />
+    <entity Name="Mega Clotty" />
+    <entity Name="Meatball" />
+  </group>
+
+  <group Name="Scarred Womb Obstacles">
+    <entity Name="Gaping Maw" />
   </group>
 
   <group Name="Chapter 5 (Main Path) Enemies">
-    <entity BaseHP="20" StageHP="3" ID="285" Image="Entities/285.0.0 - Red Ghost.png" Name="Red Ghost" Subtype="0" Variant="0" />
+    <entity Name="Red Ghost" />
   </group>
 
   <group Name="Sheol Enemies">
+    <entity Name="Mom's Dead Hand" />
     <entity BaseHP="33" Tags="Champion" ID="278" Image="Entities/278.0.0 - Black Globin.png" Name="Black Globin" Subtype="0" Variant="0" />
-    <entity BaseHP="20" Tags="Champion" ID="279" Image="Entities/279.0.0 - Black Globin's Head.png" Name="Black Globin's Head" Subtype="0" Variant="0" />
+    <entity Name="Black Globin's Head" />
     <entity Name="Black Globin's Body" />
     <entity Name="Black Bony" />
+    <entity Name="Fat Bat" />
     <entity BaseHP="20" Tags="Champion" ID="283" Image="Entities/283.0.0 - Bone Knight.png" Name="Bone Knight" Subtype="0" Variant="0" />
-    <entity BaseHP="25" Tags="Champion" ID="259" Image="Entities/259.0.0 - Imp.png" Name="Imp" Subtype="0" Variant="0" />
+    <entity BaseHP="25" Tags="Champion" ID="259" Image="Entities/259.0.0 - Imp.png" Name="Imp" PlaceVisual="0,-8/26" Subtype="0" Variant="0" />
+    <entity Name="Dank Globin" />
     <entity Name="Dank Death's Head" />
+    <entity Name="Dank Squirt" />
+  </group>
+
+  <group Name="Dark Room Enemies">
+    <entity Name="Black Globin" />
+    <entity Name="Black Bony" />
+    <entity Name="Bone Knight" />
+    <entity Name="Imp" />
+    <entity Name="Dank Death's Head" />
+    <entity Name="Flesh Death's Head" />
+    <entity Name="Red Ghost" />
   </group>
 
   <group Name="Chest Enemies">
     <entity Name="Blue Conjoined Fatty" />
+    <entity Name="Rag Man's Ragling" />
   </group>
 
   <!--——— Bosses ———-->
   <group Name="Chapter 1 Bosses (Main Path) Shared">
-    <entity BaseHP="200" ID="404" Image="Entities/404.0.0 - Little Horn.png" Name="Little Horn" Subtype="0" Variant="0" />
+    <entity BaseHP="200" ID="404" Image="Entities/404.0.0 - Little Horn.png" Name="Little Horn" PlaceVisual="0,-4/26" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Dingle (Boss)">
@@ -264,14 +396,14 @@
   </group>
 
   <group Name="Chapter 1 Bosses (Main Path)">
-    <group Name="Burning Basement Bosses" Label="Burning Basement">
+    <group Name="Burning Basement Bosses" Label="- Burning Basement -">
       <entity Name="Monstro" />
-      <group Name="Gemini" />
-      <group Name="Steven" />
+      <entity Name="Gemini" />
+      <entity Name="Steven" />
       <entity Name="Larry Jr." />
       <group Name="Dingle (Boss)" />
       <group Name="Gurgling (Boss)" />
-      <group Name="Rag Man" />
+      <entity Name="Rag Man" />
     </group>
   </group>
 
@@ -280,14 +412,14 @@
   </group>
 
   <group Name="Catacombs Bosses">
-    <entity BaseHP="200" ID="62" Image="Entities/62.2.0 - The Frail.png" Name="The Frail" Subtype="0" Variant="2">
+    <entity BaseHP="200" ID="62" Image="Entities/62.2.0 - The Frail.png" Name="The Frail" PlaceVisual="0,4/26" Subtype="0" Variant="2">
       <tag>NoBlockDoors</tag>
     </entity>
-    <entity BaseHP="220" ID="403" Image="Entities/403.0.0 - The Forsaken.png" Name="The Forsaken" Subtype="0" Variant="0" />
+    <entity BaseHP="220" ID="403" Image="Entities/403.0.0 - The Forsaken.png" Name="The Forsaken" PlaceVisual="0,-4/26" Subtype="0" Variant="0" />
   </group>
 
   <group Name="Chapter 2 Bosses (Main Path)">
-    <group Name="Flooded Caves Bosses" Label="Flooded Caves">
+    <group Name="Flooded Caves Bosses" Label="- Flooded Caves -">
       <group Name="Chub (Boss)" />
       <entity Name="Gurdy" />
       <group Name="Fistula (Boss)" />
@@ -304,7 +436,7 @@
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path)">
-    <group Name="Dank Depths Bosses" Label="Dank Depths">
+    <group Name="Dank Depths Bosses" Label="- Dank Depths -">
       <group Name="Monstro II (Boss)" />
       <entity Name="The Cage" />
       <entity Name="The Gate" />
@@ -312,7 +444,7 @@
   </group>
 
   <group Name="Chapter 4 Bosses (Main Path)">
-    <group Name="Scarred Womb Bosses" Label="Scarred Womb">
+    <group Name="Scarred Womb Bosses" Label="- Scarred Womb -">
       <entity Name="Scolex" />
       <group Name="Blastocyst (Boss)" />
       <entity Name="Mama Gurdy" />
@@ -329,6 +461,63 @@
   <group Name="Unused Bosses">
     <entity BaseHP="6666" Armor="140" ID="407" Image="Entities/407.0.0 - Hush.png" Name="Hush" Subtype="0" Variant="0" />
     <entity BaseHP="500" ID="408" Image="Entities/408.0.0 - Skinless Hush.png" Name="Skinless Hush" Subtype="0" Variant="0" />
+  </group>
+
+  <!--——— Degraded Bosses ———-->
+  <group Name="Chapter 1 Degraded Bosses (Main Path)">
+    <group Name="Burning Basement Degraded Bosses" Label="- Burning Basement -" />
+  </group>
+  <group Name="Chapter 2 Degraded Bosses (Main Path)">
+    <group Name="Flooded Caves Degraded Bosses" Label="- Flooded Caves -" />
+  </group>
+  <group Name="Chapter 3 Degraded Bosses (Main Path)">
+    <group Name="Dank Depths Degraded Bosses" Label="- Dank Depths -" />
+  </group>
+  <group Name="Chapter 4 Degraded Bosses (Main Path)">
+    <group Name="Scarred Womb Degraded Bosses" Label="- Scarred Womb -" />
+  </group>
+
+  <group Name="Flooded Caves Degraded Bosses">
+    <entity Name="Larry Jr." />
+    <entity Name="Fistula Medium" />
+    <entity Name="Fistula Small" />
+  </group>
+
+  <group Name="Dank Depths Degraded Bosses">
+    <entity Name="Larry Jr." />
+    <entity Name="Fistula Medium" />
+    <entity Name="Fistula Small" />
+  </group>
+
+  <group Name="Scarred Womb Degraded Bosses">
+    <entity Name="Larry Jr." />
+    <entity Name="The Duke of Flies" />
+    <entity Name="Peep" />
+    <group Name="Fistula (Boss)" />
+    <entity Name="Widow" />
+    <entity Name="The Wretched" />
+    <entity Name="Gurgling (Boss)" />
+  </group>
+
+  <group Name="Chapter 5 Degraded Bosses (Main Path) Shared">
+    <entity Name="Rag Man" />
+  </group>
+
+  <group Name="Sheol Degraded Bosses">
+    <entity Name="The Stain" />
+    <entity Name="Little Horn" />
+  </group>
+
+  <group Name="Chapter 6 Degraded Bosses (Main Path) Shared ">
+    <entity Name="The Stain" />
+    <entity Name="The Forsaken" />
+    <entity Name="Little Horn" />
+    <entity Name="Rag Man" />
+  </group>
+
+  <group Name="Chest Degraded Bosses">
+    <entity Name="The Frail" />
+    <entity Name="Brownie" />
   </group>
 
   <!--——— Unused ———-->
