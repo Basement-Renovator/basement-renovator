@@ -4095,7 +4095,7 @@ class ReplaceDialog(QDialog):
             layout = QFormLayout()
 
             self.type = QSpinBox()
-            self.type.setRange(1, 2**31 - 1)
+            self.type.setRange(0, 2**31 - 1)
             self.variant = QSpinBox()
             self.variant.setRange(-1, 2**31 - 1)
             self.subtype = QSpinBox()
