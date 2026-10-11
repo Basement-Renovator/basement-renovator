@@ -2,6 +2,11 @@
   <stage Name="Burning Basement" BaseGamePath="03.burning basement" Stage="1" StageType="2" Pattern="burning">
     <Gfx BGPrefix="Backgrounds/13_burningbasement">
       <Entity ID="1000" Image="Backgrounds/rocks_burningbasement.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_burningbasement.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_burningbasement.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_burningbasement.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_burningbasement.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_burningbasement.png"/>
     </Gfx>
   </stage>
   <stage Name="Caves" BaseGamePath="04.caves" />
@@ -10,6 +15,12 @@
     <Gfx BGPrefix="Backgrounds/14_floodedcaves">
       <Entity ID="3000" Image="Backgrounds/pit_floodedcaves.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_floodedcaves.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_floodedcaves.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_floodedcaves.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_floodedcaves.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_floodedcaves.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_floodedcaves.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_floodedcaves.png"/>
     </Gfx>
   </stage>
   <stage Name="Depths" BaseGamePath="07.depths" />
@@ -18,20 +29,32 @@
     <Gfx BGPrefix="Backgrounds/15_dankdepths">
       <Entity ID="3000" Image="Backgrounds/pit_dankdepths.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_depths.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_depths.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_depths.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_depths.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_depths.png"/>
     </Gfx>
   </stage>
   <stage Name="Womb" BaseGamePath="10.womb" />
   <stage Name="Utero" BaseGamePath="11.utero" />
   <stage Name="Scarred Womb" BaseGamePath="12.scarred womb" Stage="7" StageType="2" Pattern="scarred">
     <Gfx BGPrefix="Backgrounds/16_scarredwomb">
-      <Entity ID="3000" Image="Backgrounds/pit_womb.png" />
+      <Entity ID="3000" Image="Backgrounds/pit_scarredwomb.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_scarredwomb.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_scarredwomb.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_scarredwomb.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_scarredwomb.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_scarredwomb.png"/>
     </Gfx>
   </stage>
   <stage Name="Blue Womb" BaseGamePath="13.blue womb" Stage="9" StageType="0" Pattern="blue">
     <Gfx BGPrefix="Backgrounds/18_bluewomb">
       <Entity ID="3000" Image="Backgrounds/pit_bluewomb.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_bluewomb.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_bluewomb.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_bluewomb.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_bluewomb.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_bluewomb.png"/>
     </Gfx>
   </stage>
   <stage Name="Sheol" BaseGamePath="14.sheol" />

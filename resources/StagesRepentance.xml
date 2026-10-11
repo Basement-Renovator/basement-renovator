@@ -159,8 +159,8 @@
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_utero.png" />
       <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_utero.png" />
-      <Entity ID="1009" Image="Backgrounds/rocks_womb.png" />
-      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_womb.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_utero.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_utero.png" />
     </Gfx>
   </stage>
   <stage Name="Scarred Womb">
@@ -178,7 +178,7 @@
       <Entity ID="6001" Variant="32" Image="Backgrounds/pit_womb.png" />
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_womb.png" />
       <!-- End Rails Group -->
-      <Entity ID="3009" Image="Backgrounds/pit_womb.png" />
+      <Entity ID="3009" Image="Backgrounds/pit_scarredwomb.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_scarredwomb.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_scarredwomb.png" />
     </Gfx>
@@ -259,6 +259,8 @@
       <Entity ID="6001" Variant="33" Image="Backgrounds/pit_darkroom.png" />
       <!-- End Rails Group -->
       <Entity ID="3009" Image="Backgrounds/pit_darkroom.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_sheol.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_sheol.png" />
     </Gfx>
   </stage>
 
@@ -282,6 +284,13 @@
       <Entity ID="1000" Image="Backgrounds/rocks_downpour.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_downpour.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_downpour.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_downpour.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_downpour.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_downpour.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_downpour.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_floodedcaves.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_floodedcaves.png"/>
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_downpour.png" />
 
       <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_downpour.png" />
       <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_downpour.png" />
@@ -310,6 +319,13 @@
       <Entity ID="1000" Image="Backgrounds/rocks_dross.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_dross.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_dross.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_dross.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_dross.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_dross.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_dross.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_dross.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_dross.png"/>
+      <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_downpour.png" />
 
       <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_dross.png" />
       <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_dross.png" />
@@ -353,6 +369,12 @@
       <Entity ID="1000" Image="Backgrounds/rocks_secretroom.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_secretroom.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_secretroom.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_secretroom.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_secretroom.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_secretroom.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_secretroom.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_secretroom.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_secretroom.png"/>
       <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_mines.png" />
     </Gfx>
   </stage>
@@ -377,6 +399,10 @@
       <Entity ID="1009" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_ashpit.png" />
       <Entity ID="970" Variant="2" Image="Entities/970.2.0 - Quest Door_mines.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_ashpit.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_ashpit.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_ashpit.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_ashpit.png"/>
 
       <Entity ID="25" Variant="3" SubType="0" Image="Entities/25.3.0 - Dragon Fly_ashpit.png" />
       <Entity ID="25" Variant="3" SubType="1" Image="Entities/25.3.1 - Dragon Fly X_ashpit.png" />
@@ -404,6 +430,12 @@
       <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_mausoleum.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mausoleum.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_mausoleum.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_depths.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_mausoleum.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_mausoleum.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_sheol.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_mausoleum.png"/>
 
       <Entity ID="227" Variant="0" SubType="0" Image="Entities/227.0.0 - Bony_mausoleum.png" />
     </Gfx>
@@ -428,6 +460,12 @@
       <Entity ID="1000" Image="Backgrounds/rocks_gehenna.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_gehenna.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_gehenna.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_gehenna.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_depths.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_gehenna.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_gehenna.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_gehenna.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_gehenna.png"/>
 
       <Entity ID="24" Variant="3" SubType="0" Image="Entities/24.3.0 - Cursed Globin_gehenna.png" />
       <Entity ID="203" Variant="0" SubType="0" Image="Entities/203.0.0 - Brimstone Head_gehenna.png" />
@@ -462,6 +500,12 @@
       <Entity ID="1000" Image="Backgrounds/rocks_corpse.png" />
       <Entity ID="1009" Image="Backgrounds/rocks_corpse.png" />
       <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_corpse.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_corpse.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_corpse.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_corpse.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_corpse.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_corpse.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_corpse.png"/>
 
       <Entity ID="62" Variant="3" SubType="0" Image="Entities/62.3.0 - Wormwood_corpse.png" />
       <Entity ID="71" Variant="0" SubType="0" Image="Entities/71.0.0 - Fistula Big_corpse.png" />

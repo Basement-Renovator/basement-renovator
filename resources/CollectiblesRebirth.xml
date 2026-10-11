@@ -234,7 +234,7 @@
     <entity ID="5" Image="Entities/Items/5.100.134 - Guppy's Tail.png" Name="Guppy's Tail" Subtype="134" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.138 - Stigmata.png" Name="Stigmata" Subtype="138" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.139 - Mom's Purse.png" Name="Mom's Purse" Subtype="139" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.140 - Bobs Curse.png" Name="Bob's Curse" Subtype="140" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.140 - Bob's Curse.png" Name="Bob's Curse" Subtype="140" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.141 - Pageant Boy.png" Name="Pageant Boy" Subtype="141" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.142 - Scapular.png" Name="Scapular" Subtype="142" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.143 - Speed Ball.png" Name="Speed Ball" Subtype="143" Variant="100" />

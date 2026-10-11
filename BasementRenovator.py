@@ -141,6 +141,15 @@ from src.constants import *
 from src.util import *
 from src.version import *
 
+from fractions import Fraction
+
+# Lets PlaceVisual values be fractions (This code desperately needs a better location, but I'm not a programmer) - Buttercarsen
+def parsePlaceVisualNumber(value):
+    try:
+        return float(Fraction(value.strip()))
+    except (ValueError, ZeroDivisionError):
+        return None
+
 ########################
 #       XML Data       #
 ########################
@@ -1049,7 +1058,6 @@ class RoomEditorWidget(QGraphicsView):
                     if count == EntityStack.MAX_STACK_DEPTH:
                         painter.setPen(QColorConstants.White)
 
-
 class Entity(QGraphicsItem):
     GRID_SIZE = 26
 
@@ -1110,6 +1118,7 @@ class Entity(QGraphicsItem):
             if (
                 entitytype == EntityType["PICKUP"]
                 and variant == PickupVariant["COLLECTIBLE"]
+                and subtype != 0
             ):
                 i = anm2.loadImage("resources/Entities/5.100.0 - Collectible.png")
                 i = i.convertToFormat(QImage.Format_ARGB32)
@@ -1134,8 +1143,15 @@ class Entity(QGraphicsItem):
                 parts = list(
                     map(lambda x: x.strip(), self.config.placeVisual.split(","))
                 )
-                if len(parts) == 2 and checkFloat(parts[0]) and checkFloat(parts[1]):
-                    self.placeVisual = (float(parts[0]), float(parts[1]))
+
+                if len(parts) == 2:
+                    x = parsePlaceVisualNumber(parts[0])
+                    y = parsePlaceVisualNumber(parts[1])
+
+                    if x is not None and y is not None:
+                        self.placeVisual = (x, y)
+                    else:
+                        self.placeVisual = parts[0]
                 else:
                     self.placeVisual = parts[0]
 
@@ -1409,7 +1425,12 @@ class Entity(QGraphicsItem):
 
         random.seed(seed)
         self.entity.rockFrame = random.randint(0, 2)
-        self.entity.placeVisual = (0, 3 / 26)
+        if self.entity.rockFrame == 0:
+            self.entity.placeVisual = (0, 2 / 26)
+        elif self.entity.rockFrame == 1:
+            self.entity.placeVisual = (0, 0)
+        elif self.entity.rockFrame == 2:
+            self.entity.placeVisual = (0, -1 / 26)
 
         if seed & 3 != 0:
             return
@@ -1454,9 +1475,9 @@ class Entity(QGraphicsItem):
         choice = random.choice(candidates)
         if choice == "2x1":
             self.entity.rockFrame = 3
-            self.entity.placeVisual = (nh, 0)
+            self.entity.placeVisual = (nh, 0.1)
             R.entity.rockFrame = 4
-            R.entity.placeVisual = (h, 0)
+            R.entity.placeVisual = (h, 0.1)
         elif choice == "1x2":
             self.entity.rockFrame = 5
             self.entity.placeVisual = (0, 0)
@@ -1609,14 +1630,18 @@ class Entity(QGraphicsItem):
                     placeVisual = override.get("PlaceVisual")
                     if placeVisual is not None:
                         parts = list(map(lambda x: x.strip(), placeVisual.split(",")))
-                        if (
-                            len(parts) == 2
-                            and checkFloat(parts[0])
-                            and checkFloat(parts[1])
-                        ):
-                            placeVisual = (float(parts[0]), float(parts[1]))
+
+                        if len(parts) == 2:
+                            x = parsePlaceVisualNumber(parts[0])
+                            y = parsePlaceVisualNumber(parts[1])
+
+                            if x is not None and y is not None:
+                                placeVisual = (x, y)
+                            else:
+                                placeVisual = parts[0]
                         else:
                             placeVisual = parts[0]
+
                         recenter = placeVisual
 
                 if override.get("InvertDepth") == "1":
@@ -4041,7 +4066,7 @@ class EntityList(QListView):
         self.setMovement(QListView.Static)
         self.setResizeMode(QListView.Adjust)
         self.setWrapping(True)
-        self.setIconSize(QSize(26, 26))
+        self.setIconSize(QSize(32, 32))
 
         self.setMouseTracking(True)
 
@@ -4070,7 +4095,7 @@ class ReplaceDialog(QDialog):
             layout = QFormLayout()
 
             self.type = QSpinBox()
-            self.type.setRange(1, 2**31 - 1)
+            self.type.setRange(0, 2**31 - 1)
             self.variant = QSpinBox()
             self.variant.setRange(-1, 2**31 - 1)
             self.subtype = QSpinBox()

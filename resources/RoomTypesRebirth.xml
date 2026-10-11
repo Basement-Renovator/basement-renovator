@@ -13,6 +13,14 @@
   <room Name="Secret Room" Type="7" Icon="UI/roomicons/secret.png" ShowInMenu="1">
     <Gfx BGPrefix="Backgrounds/0f_secretroom">
       <Entity ID="1000" Image="Backgrounds/rocks_secretroom.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_secretroom.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_secretroom.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_secretroom.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_secretroom.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_secretroom.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_secretroom.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_secretroom.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_secretroom.png"/>
     </Gfx>
   </room>
   <room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1" />
