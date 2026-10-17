@@ -233,7 +233,7 @@
   </group>
 
   <group Name="Troll Bombs">
-    <entity ID="5" Image="Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb" Variant="40" Subtype="6" />
+    <entity ID="5" Image="Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb" PlaceVisual="-2/26,0" Variant="40" Subtype="6" />
   </group>
 
   <group Name="Beggars">
@@ -386,7 +386,7 @@
     <entity ID="970" Image="Entities/970.2.0 - Quest Door.png" Name="Quest Door" PlaceVisual="WallSnap" Subtype="0" Variant="2">
       <tag>NoBlockDoors</tag>
     </entity>
-    <entity BaseHP="5" ID="33" Image="Entities/33.4.0 - White Fire Place.png" Name="White Fire Place" PlaceVisual="0,-2/26" Variant="4" Subtype="0" />
+    <entity BaseHP="5" ID="33" Image="Entities/33.4.0 - White Fire Place.png" Name="White Fire Place" PlaceVisual="1/26,-2/26" Variant="4" Subtype="0" />
   </group>
 
   <group Name="Chapter 1 (Alt Path) Enemies">
@@ -621,7 +621,7 @@
     <entity BaseHP="12" ID="818" Image="Entities/818.0.0 - Rock Spider.png" Name="Rock Spider (Random)" Variant="0" Subtype="0">
       <tag>RockSpiders</tag>
     </entity>
-    <entity BaseHP="15" ID="818" Image="Entities/818.2.0 - Coal Spider.png" Name="Coal Spider (Random)" Variant="2" Subtype="0">
+    <entity BaseHP="15" ID="818" Image="Entities/818.2.0 - Coal Spider.png" Name="Coal Spider (Random)" PlaceVisual="1/26,2/26" Variant="2" Subtype="0">
       <tag>CoalSpiders</tag>
     </entity>
     <entity BaseHP="42" StageHP="6" Tags="Champion" ID="826" Image="Entities/826.0.0 - Hardy.png" Name="Hardy" Variant="0" Subtype="0" />
@@ -1252,9 +1252,9 @@
           <tag>CoalSpiders</tag>
         </entity>
       </defaults>
-      <entity BaseHP="15" ID="818" Image="Entities/818.2.1 - Coal Spider.png" Name="Coal Spider (Subtype 1)" Variant="2" Subtype="1" />
-      <entity BaseHP="15" ID="818" Image="Entities/818.2.2 - Coal Spider.png" Name="Coal Spider (Subtype 2)" Variant="2" Subtype="2" />
-      <entity BaseHP="15" ID="818" Image="Entities/818.2.3 - Coal Spider.png" Name="Coal Spider (Subtype 3)" Variant="2" Subtype="3" />
+      <entity BaseHP="15" ID="818" Image="Entities/818.2.1 - Coal Spider.png" Name="Coal Spider (Subtype 1)" PlaceVisual="1/26,2/26" Variant="2" Subtype="1" />
+      <entity BaseHP="15" ID="818" Image="Entities/818.2.2 - Coal Spider.png" Name="Coal Spider (Subtype 2)" PlaceVisual="1/26,2/26" Variant="2" Subtype="2" />
+      <entity BaseHP="15" ID="818" Image="Entities/818.2.3 - Coal Spider.png" Name="Coal Spider (Subtype 3)" PlaceVisual="1/26,2/26" Variant="2" Subtype="3" />
     </group>
     <group Name="Tinted Rock Spiders">
       <defaults>
@@ -1273,10 +1273,10 @@
           <tag>Coals</tag>
         </entity>
       </defaults>
-      <entity BaseHP="15" ID="33" Image="Entities/33.11.0 - Coal.png" Name="Coal (Random)" Variant="11" Subtype="0" />
-      <entity BaseHP="15" ID="33" Image="Entities/33.11.1 - Coal.png" Name="Coal (Subtype 1)" Variant="11" Subtype="1" />
-      <entity BaseHP="15" ID="33" Image="Entities/33.11.2 - Coal.png" Name="Coal (Subtype 2)" Variant="11" Subtype="2" />
-      <entity BaseHP="15" ID="33" Image="Entities/33.11.3 - Coal.png" Name="Coal (Subtype 3)" Variant="11" Subtype="3" />
+      <entity BaseHP="15" ID="33" Image="Entities/33.11.0 - Coal.png" Name="Coal (Random)" PlaceVisual="1/26,2/26" Variant="11" Subtype="0" />
+      <entity BaseHP="15" ID="33" Image="Entities/33.11.1 - Coal.png" Name="Coal (Subtype 1)" PlaceVisual="1/26,2/26" Variant="11" Subtype="1" />
+      <entity BaseHP="15" ID="33" Image="Entities/33.11.2 - Coal.png" Name="Coal (Subtype 2)" PlaceVisual="1/26,2/26" Variant="11" Subtype="2" />
+      <entity BaseHP="15" ID="33" Image="Entities/33.11.3 - Coal.png" Name="Coal (Subtype 3)" PlaceVisual="1/26,2/26" Variant="11" Subtype="3" />
     </group>
     <entity BaseHP="80" ID="831" Image="Entities/831.10.0 - Gutted Fatty Eye.png" Name="Gutted Fatty Eye" PlaceVisual="0,-3/26" Variant="10" Subtype="0" />
     <entity BaseHP="22" Tags="Champion" ID="831" Image="Entities/831.20.0 - Festering Guts.png" Name="Festering Guts" Variant="20" Subtype="0" />
@@ -1301,12 +1301,12 @@
   </group>
 
   <group Name="Live Bombs">
-    <entity ID="4" Image="Entities/5.41.0 - Throwable Bomb.png" Name="Throwable Bomb" Variant="13" Subtype="0" />
+    <entity ID="4" Image="Entities/4.13.0 - Throwable Bomb.png" Name="Throwable Bomb" Variant="13" Subtype="0" />
     <entity ID="4" Image="Entities/4.14.0 - Small Bomb.png" Name="Small Bomb" Variant="14" Subtype="0" />
     <entity ID="4" Image="Entities/4.15.0 - Brimstone Bomb.png" Name="Brimstone Bomb" Variant="15" Subtype="0" />
     <entity ID="4" Image="Entities/4.16.0 - Bloody Sad Bomb.png" Name="Bloody Sad Bomb" Variant="16" Subtype="0" />
-    <entity ID="4" Image="Entities/5.40.7 - Giga Bomb.png" Name="Giga Bomb" Variant="17" Subtype="0" />
-    <entity ID="4" Image="Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb (Player)" Variant="18" Subtype="0" />
+    <entity ID="4" Image="Entities/4.17.0 - Giga Bomb.png" Name="Giga Bomb" Variant="17" Subtype="0" />
+    <entity ID="4" Image="Entities/5.40.6 - Golden Troll Bomb.png" Name="Golden Troll Bomb (Player)" PlaceVisual="-2/26,0" Variant="18" Subtype="0" />
     <entity ID="4" Image="Entities/4.19.0 - Rocket.png" Name="Rocket" Variant="19" Subtype="0" />
     <entity ID="4" Image="Entities/4.20.0 - Giga Rocket.png" Name="Giga Rocket" Variant="20" Subtype="0" />
   </group>

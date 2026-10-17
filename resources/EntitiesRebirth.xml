@@ -222,11 +222,11 @@
             <tag>InNonCombatRooms</tag>
           </entity>
         </defaults>
-        <entity BaseHP="5" ID="1400" Image="Entities/1400.0.0 - Fire Place.png" Name="Fire Place" PlaceVisual="0,-2/26" Subtype="0" Variant="0" />
-        <entity BaseHP="5" ID="33" Image="Entities/33.0.0 - Fire Place (non-replaceable) Icon.png" Name="Fire Place (Non-replaceable)" PlaceVisual="0,-2/26" Subtype="0" Variant="0" EditorImage="Entities/33.0.0 - Fire Place (non-replaceable).png" />
-        <entity BaseHP="5" ID="33" Image="Entities/33.1.0 - Red Fire Place.png" Name="Red Fire Place" PlaceVisual="0,-2/26" Subtype="0" Variant="1" />
-        <entity BaseHP="5" ID="33" Image="Entities/33.2.0 - Blue Fire Place.png" Name="Blue Fire Place" PlaceVisual="0,-2/26" Subtype="0" Variant="2" />
-        <entity BaseHP="5" ID="33" Image="Entities/33.3.0 - Purple Fire Place.png" Name="Purple Fire Place" PlaceVisual="0,-2/26" Subtype="0" Variant="3" />
+        <entity BaseHP="5" ID="1400" Image="Entities/1400.0.0 - Fire Place.png" Name="Fire Place" PlaceVisual="1/26,-2/26" Subtype="0" Variant="0" />
+        <entity BaseHP="5" ID="33" Image="Entities/33.0.0 - Fire Place (non-replaceable) Icon.png" Name="Fire Place (Non-replaceable)" PlaceVisual="1/26,-2/26" Subtype="0" Variant="0" EditorImage="Entities/33.0.0 - Fire Place (non-replaceable).png" />
+        <entity BaseHP="5" ID="33" Image="Entities/33.1.0 - Red Fire Place.png" Name="Red Fire Place" PlaceVisual="1/26,-2/26" Subtype="0" Variant="1" />
+        <entity BaseHP="5" ID="33" Image="Entities/33.2.0 - Blue Fire Place.png" Name="Blue Fire Place" PlaceVisual="1/26,-2/26" Subtype="0" Variant="2" />
+        <entity BaseHP="5" ID="33" Image="Entities/33.3.0 - Purple Fire Place.png" Name="Purple Fire Place" PlaceVisual="1/26,-2/26" Subtype="0" Variant="3" />
       </group>
       <group Label="Spikes">
         <defaults>
@@ -264,8 +264,8 @@
             <tag>InNonCombatRooms</tag>
           </entity>
         </defaults>
-        <entity ID="5" Image="Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" Subtype="3" Variant="40" />
-        <entity ID="5" Image="Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb" Subtype="5" Variant="40" />
+        <entity ID="5" Image="Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb" PlaceVisual="-2/26,0" Subtype="3" Variant="40" />
+        <entity ID="5" Image="Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb" PlaceVisual="-3/26,0" Subtype="5" Variant="40" />
       </group>
       <group Label="Bums">
         <defaults>
@@ -1422,8 +1422,8 @@
       <entity ID="4" Image="Entities/4.0.0 - Bomb.png" Name="Active Bomb" Subtype="0" Variant="0" />
       <entity ID="4" Image="Entities/4.0.1 - Big Bomb.png" Name="Big Bomb" Subtype="0" Variant="1" />
       <entity ID="4" Image="Entities/4.0.2 - Decoy Bomb.png" Name="Decoy Bomb" Subtype="0" Variant="2" />
-      <entity ID="4" Image="Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb (Player)" Subtype="0" Variant="3" />
-      <entity ID="4" Image="Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb (Player)" Subtype="0" Variant="4" />
+      <entity ID="4" Image="Entities/5.40.3 - Troll Bomb.png" Name="Troll Bomb (Player)" PlaceVisual="-2/26,0" Subtype="0" Variant="3" />
+      <entity ID="4" Image="Entities/5.40.5 - Megatroll Bomb.png" Name="Megatroll Bomb (Player)" PlaceVisual="-3/26,0" Subtype="0" Variant="4" />
       <entity ID="4" Image="Entities/4.0.5 - Poison Bomb.png" Name="Poison Bomb" Subtype="0" Variant="5" />
       <entity ID="4" Image="Entities/4.0.6 - Big Poison Bomb.png" Name="Big Poison Bomb" Subtype="0" Variant="6" />
       <entity ID="4" Image="Entities/4.0.7 - Sad Bomb.png" Name="Sad Bomb" Subtype="0" Variant="7" />
