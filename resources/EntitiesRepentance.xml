@@ -158,7 +158,7 @@
   </group>
 
   <group Name="Pressure Plates">
-    <entity ID="4500" Image="Entities/4500.0.9 - Kill Plate.png" Name="Kill Plate" Subtype="0" Variant="9" />
+    <entity ID="4500" Image="Entities/4500.0.9 - Kill Plate.png" Name="Kill Plate" PlaceVisual="0,-2/26" Subtype="0" Variant="9" />
   </group>
 
   <group Name="Top Grids">
@@ -193,10 +193,10 @@
             <tag>EventPlates</tag>
           </entity>
         </defaults>
-        <entity ID="4500" Image="Entities/4500.10.0 - Event Plate (group 0).png" Name="Event Plate (Group 0)" PlaceVisual="0.03,-5/26" Subtype="0" Variant="10" />
-        <entity ID="4500" Image="Entities/4500.11.0 - Event Plate (group 1).png" Name="Event Plate (Group 1)" PlaceVisual="0.03,-5/26" Subtype="0" Variant="11" />
-        <entity ID="4500" Image="Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (Group 2)" PlaceVisual="0.03,-5/26" Subtype="0" Variant="12" />
-        <entity ID="4500" Image="Entities/4500.13.0 - Event Plate (group 3).png" Name="Event Plate (Group 3)" PlaceVisual="0.03,-5/26" Subtype="0" Variant="13" />
+        <entity ID="4500" Image="Entities/4500.10.0 - Event Plate (group 0).png" Name="Event Plate (Group 0)" PlaceVisual="0.03,1/26" Subtype="0" Variant="10" />
+        <entity ID="4500" Image="Entities/4500.11.0 - Event Plate (group 1).png" Name="Event Plate (Group 1)" PlaceVisual="0.03,1/26" Subtype="0" Variant="11" />
+        <entity ID="4500" Image="Entities/4500.12.0 - Event Plate (group 2).png" Name="Event Plate (Group 2)" PlaceVisual="0.03,1/26" Subtype="0" Variant="12" />
+        <entity ID="4500" Image="Entities/4500.13.0 - Event Plate (group 3).png" Name="Event Plate (Group 3)" PlaceVisual="0.03,1/26" Subtype="0" Variant="13" />
       </group>
       <entity ID="970" Image="Entities/970.1.11 - Force Water.png" Name="Force Water" PlaceVisual="2/26,-2/26" Subtype="11" Variant="1">
         <tag>NoBlockDoors</tag>
@@ -415,7 +415,7 @@
     <entity BaseHP="20" ID="838" Image="Entities/838.0.0 - Level 2 Willo.png" Name="Level 2 Willo" PlaceVisual="0,-9/26" Variant="0" Subtype="0" />
     <entity BaseHP="6.5" ID="814" Image="Entities/814.0.0 - Strider.png" Name="Strider" Variant="0" Subtype="0" />
     <entity BaseHP="14" StageHP="2.5" Tags="Champion" ID="816" Image="Entities/816.0.0 - Polty.png" Name="Polty" PlaceVisual="0,-3/26" Variant="0" Subtype="0" />
-    <entity BaseHP="100" ID="3001" Image="Entities/3001.0.0 - Fissure Spawner.png" Name="Fissure Spawner" Variant="0" Subtype="0" Tags="Grid">
+    <entity BaseHP="100" ID="3001" Image="Entities/3001.0.0 - Fissure Spawner.png" Name="Fissure Spawner" Variant="0" Subtype="0" EditorImage="Backgrounds/pit_generic.png" UsePitTiling="1" OverlayImage="Entities/3001.0.0 - Fissure Spawner.png" Tags="Grid">
       <bitfield Key="Subtype">
         <slider Length="4" Offset="8" Name="Frequency" Unit="Seconds" ValueOffset="1" ScalarRange="5">
           <tooltip>Seconds between each spawned Fissure</tooltip>

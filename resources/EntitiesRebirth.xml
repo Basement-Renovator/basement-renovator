@@ -61,7 +61,7 @@
       <group Name="Red Hearts">
         <entity ID="5" Image="Entities/5.10.1 - Heart.png" Name="Heart" Subtype="1" Variant="10" />
         <entity ID="5" Image="Entities/5.10.2 - Heart (half).png" Name="Heart (Half)" Subtype="2" Variant="10" />
-        <entity ID="5" Image="Entities/5.10.5 - Heart (double).png" Name="Heart (Double)" Subtype="5" Variant="10" />
+        <entity ID="5" Image="Entities/5.10.5 - Heart (double).png" Name="Heart (Double)" PlaceVisual="2/26,0" Subtype="5" Variant="10" />
       </group>
       <group Name="Soul Hearts">
         <entity ID="5" Image="Entities/5.10.3 - Heart (soul).png" Name="Heart (Soul)" Subtype="3" Variant="10" />
@@ -79,13 +79,13 @@
     <group Label="Keys">
       <entity Name="Random Key" />
       <entity ID="5" Image="Entities/5.30.1 - Key.png" Name="Key" Subtype="1" Variant="30" />
-      <entity ID="5" Image="Entities/5.30.3 - Key Ring.png" Name="Key Ring" Subtype="3" Variant="30" />
+      <entity ID="5" Image="Entities/5.30.3 - Key Ring.png" Name="Key Ring" PlaceVisual="-0.03,0" Subtype="3" Variant="30" />
       <entity ID="5" Image="Entities/5.30.2 - Golden Key.png" Name="Golden Key" Subtype="2" Variant="30" />
     </group>
     <group Label="Bombs">
       <entity Name="Random Bomb" />
       <entity ID="5" Image="Entities/5.40.1 - Bomb.png" Name="Bomb" Subtype="1" Variant="40" />
-      <entity ID="5" Image="Entities/5.40.2 - Double Bomb.png" Name="Double Bomb" Subtype="2" Variant="40" />
+      <entity ID="5" Image="Entities/5.40.2 - Double Bomb.png" Name="Double Bomb" PlaceVisual="0,0.03" Subtype="2" Variant="40" />
     </group>
     <group Label="Batteries" />
     <group Name="Pickup Containers" Label="Chests">

@@ -145,7 +145,7 @@
 
   <group Name="Chapter 4 (Main Path) Enemies">
     <entity Name="Fissure" />
-    <entity BaseHP="20" Boss="0" Champion="1" ID="859" Image="Entities/859.0.0 - Floating Host.png" Name="Floating Host" Subtype="0" Variant="0" />
+    <entity BaseHP="20" Boss="0" Champion="1" ID="859" Image="Entities/859.0.0 - Floast.png" Name="Floating Host" Subtype="0" Variant="0" />
     <entity BaseHP="10" Boss="0" Champion="0" ID="802" Image="Entities/Antibirth/802.0.0 - Stillborn.png" Name="Stillborn" Subtype="0" Variant="0" />
     <entity BaseHP="125" Boss="0" Champion="1" ID="857" Image="Entities/857.0.0 - Cohort.png" Name="Cohort" Subtype="0" Variant="0" />
   </group>
@@ -431,7 +431,6 @@
       <group Name="Mausoleum Bosses" Label="- Mausoleum -">
         <entity Name="The Pile" />
         <entity BaseHP="620" Boss="1" Champion="0" ID="903" Image="Entities/903.0.0 - Visage Heart.png" Name="The Visage" Subtype="0" Variant="0" />
-        <entity BaseHP="100" Boss="1" Champion="0" ID="903" Image="Entities/903.1.0 - Visage Mask.png" Name="Visage Mask" Subtype="0" Variant="1" />
         <entity BaseHP="666" Boss="1" Champion="0" ID="904" Image="Entities/904.0.0 - Siren.png" Name="The Siren" Subtype="0" Variant="0" />
         <entity BaseHP="789" Boss="1" Champion="0" ID="905" Image="Entities/905.0.0 - The Heretic.png" Name="The Heretic" Subtype="0" Variant="0" />
       </group>
@@ -455,6 +454,10 @@
   <group Name="Story Bosses">
     <entity BaseHP="2500" Boss="1" Champion="0" ID="912" Image="Entities/912.0.0 - Mother.png" Name="The Witness" Subtype="0" Variant="0" />
     <entity BaseHP="2500" Boss="1" Champion="0" ID="912" Image="Entities/912.10.0 - Mother 2.png" Name="The Witness 2" Subtype="0" Variant="10" />
+  </group>
+
+  <group Name="Unused Bosses">
+    <entity BaseHP="100" Boss="1" Champion="0" ID="903" Image="Entities/903.1.0 - Visage Mask.png" Name="Visage Mask" Subtype="0" Variant="1" />
   </group>
 
   <!--——— Unused ———-->

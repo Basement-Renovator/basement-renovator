@@ -34,6 +34,7 @@ from PyQt5.QtCore import (
     QFile,
     QItemSelectionModel,
     QModelIndex,
+    QPoint,
     QRect,
     QRectF,
     QRegularExpression,
@@ -105,6 +106,7 @@ from PyQt5.QtWidgets import (
     QStatusBar,
     QStyle,
     QStyledItemDelegate,
+    QStyleOptionViewItem,
     QTabWidget,
     QTableWidget,
     QTableWidgetItem,
@@ -4057,6 +4059,55 @@ class EntityPalette(QWidget):
     objReplaced = pyqtSignal(EntityItem)
 
 
+class PaletteBottomDelegate(QStyledItemDelegate):
+    """Bottom-align icons in the Palette"""
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self._rowBottoms = {}
+
+    def _rowBottom(self, top):
+        """Find the bottom of a Qt layout row using only its visible cells
+
+        Hidden palette entries can be numerous (particularly in search results),
+        so inspect the viewport rather than walking the underlying model
+        Results are cached after the paint event until it is next cleared
+        """
+        if top in self._rowBottoms:
+            return self._rowBottoms[top]
+
+        view = self.parent()
+        x = 0
+        y = max(0, top)  # A row may begin above the viewport when scrolled
+        bottom = top
+        width = view.viewport().width()
+        while x < width:
+            # Call Qt's original hit test, not EntityList.indexAt(), which
+            # also consults row bottoms to find visually shifted icons
+            index = QListView.indexAt(view, QPoint(x, y))
+            if index.isValid():
+                rect = view.visualRect(index)
+                if rect.top() == top:
+                    bottom = max(bottom, rect.bottom())
+                    # Skip over the rest of this item, including wide icons
+                    x = max(x + 1, rect.right() + 1)
+                    continue
+            x += 1
+
+        self._rowBottoms[top] = bottom
+        return bottom
+
+    def paint(self, painter, option, index):
+        # Keep the original geometry for layout, but move the entire painted
+        # item (including its selection/hover background) with the icon
+        if index.data(Qt.ItemDataRole.DecorationRole) is not None:
+            shift = self._rowBottom(option.rect.top()) - option.rect.bottom()
+            if shift > 0:
+                option = QStyleOptionViewItem(option)
+                option.rect.translate(0, shift)
+        super().paint(painter, option, index)
+
+
 class EntityList(QListView):
     def __init__(self):
         QListView.__init__(self)
@@ -4067,13 +4118,83 @@ class EntityList(QListView):
         self.setResizeMode(QListView.Adjust)
         self.setWrapping(True)
         self.setIconSize(QSize(32, 32))
+        self.setItemDelegate(PaletteBottomDelegate(self))
 
         self.setMouseTracking(True)
 
         self.filter = ""
+        self._hoveredIndex = QModelIndex()
+
+    def indexAt(self, point):
+        """Hit-test the displayed icon positions, not Qt's top-aligned cells
+
+        Qt still lays out and wraps the *original* item rectangles, preserving
+        the Palette's density. A shorter icon is painted lower inside its
+        visual row, so mouse hit-testing must follow the same offset
+        """
+        original = super().indexAt(point)
+        delegate = self.itemDelegate()
+        if not isinstance(delegate, PaletteBottomDelegate):
+            return original
+
+        if original.isValid():
+            # Headers never move, so their ordinary hit boxes still apply
+            if original.data(Qt.ItemDataRole.DecorationRole) is None:
+                return original
+            rect = super().visualRect(original)
+            shift = max(0, delegate._rowBottom(rect.top()) - rect.bottom())
+            if rect.translated(0, shift).contains(point):
+                return original
+            return QModelIndex()
+
+        # The mouse may be below a short item's original rectangle, but
+        # inside its painted rectangle. Search upward only within one icon
+        # height; no model scan is needed, even for heavily filtered tabs
+        for y in range(point.y() - 1, point.y() - self.iconSize().height() - 1, -1):
+            candidate = super().indexAt(QPoint(point.x(), y))
+            if not candidate.isValid():
+                continue
+            if candidate.data(Qt.ItemDataRole.DecorationRole) is not None:
+                rect = super().visualRect(candidate)
+                shift = max(0, delegate._rowBottom(rect.top()) - rect.bottom())
+                if rect.translated(0, shift).contains(point):
+                    return candidate
+            break
+
+        return QModelIndex()
+
+    def setSelection(self, rect, command):
+        # Qt's built-in rectangle selection still uses the unshifted cells
+        # For a mouse click, translate its hit to the original cell so Qt's
+        # existing selection rules (including single selection) remain intact
+        if rect.size() == QSize(1, 1):
+            index = self.indexAt(rect.topLeft())
+            if index.isValid() and index.data(Qt.ItemDataRole.DecorationRole) is not None:
+                rect = QRect(super().visualRect(index).center(), QSize(1, 1))
+        super().setSelection(rect, command)
+
+    def paintEvent(self, event):
+        # Row positions change when the view scrolls, resizes, or is filtered
+        # Recalculate only the rows painted in this event
+        delegate = self.itemDelegate()
+        if isinstance(delegate, PaletteBottomDelegate):
+            delegate._rowBottoms.clear()
+        super().paintEvent(event)
+
+    def selectionChanged(self, selected, deselected):
+        super().selectionChanged(selected, deselected)
+        # A short icon can paint below its original item rectangle. Repaint
+        # the viewport so its selected/normal appearance updates completely
+        self.viewport().update()
 
     def mouseMoveEvent(self, event):
-        index = self.indexAt(event.pos()).row()
+        hovered = self.indexAt(event.pos())
+        if hovered != self._hoveredIndex:
+            self._hoveredIndex = hovered
+            # Qt tracks repaints using the original rectangles; a shifted
+            # hover highlight may extend outside them
+            self.viewport().update()
+        index = hovered.row()
 
         if index != -1:
             item = self.model().getItem(index)
