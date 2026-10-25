@@ -1508,15 +1508,15 @@ class MainLookup:
 
         stage = node.get("StageGfx")
         if stage:
-            stage = self.stages.lookup(name=stage)
+            stage = self.stages.lookupOne(name=stage)
             if stage:
-                baseGfx = self.getGfxData(self.stages.getGfx(stage[0]))
+                baseGfx = self.getGfxData(self.stages.getGfx(stage))
 
         roomType = node.get("RoomGfx")
         if roomType:
-            roomType = self.roomTypes.lookup(name=roomType)
+            roomType = self.roomTypes.lookupOne(name=roomType)
             if roomType:
-                baseGfx = self.getGfxData(self.roomTypes.getGfx(roomType[0]))
+                baseGfx = self.getGfxData(self.roomTypes.getGfx(roomType))
 
         prefix = node.get("BGPrefix")
 
