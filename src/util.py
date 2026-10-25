@@ -36,7 +36,10 @@ def linuxPathSensitivityTraining(path):
     directory, file = os.path.split(os.path.normpath(path))
 
     if not os.path.isdir(directory):
-        return None
+        if os.path.isdir(directory.lower()):
+            directory = directory.lower()
+        else:
+            return None
 
     contents = os.listdir(directory)
 
