@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import xml.etree.cElementTree as ET
 import os
 import abc
@@ -27,8 +28,12 @@ def loadXMLFile(path):
 
     return root
 
-
-def parseCriteria(txt):
+def parseRangeCriteria(txt: str) -> Callable[[int], bool] | None:
+    '''
+    ranges can be defined as value[, value, ...] or
+    [ [ / ( ] min,max [ ] / ) ], where min and max can be numbers or "infinity",
+    square brackets are inclusive, and parentheses are exclusive
+    '''
     if not txt:
         return None
 
@@ -328,11 +333,11 @@ class RoomTypeLookup(Lookup):
             if not stage or stage.get("Name") != stageName:
                 return False
 
-        idCriteria = parseCriteria(node.get("ID"))
+        idCriteria = parseRangeCriteria(node.get("ID"))
         if idCriteria and not idCriteria(room.info.variant):
             return False
 
-        subtypeCriteria = parseCriteria(node.get("Subtype"))
+        subtypeCriteria = parseRangeCriteria(node.get("Subtype"))
         if subtypeCriteria and not subtypeCriteria(room.info.subtype):
             return False
 
