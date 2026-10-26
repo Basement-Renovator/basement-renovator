@@ -306,7 +306,7 @@ def findModsPath(installPath=None):
                     "Error",
                     "Couldn't locate Mods folder and no folder was selected.",
                 )
-                return
+                return ""
             else:
                 modsPath = modsPathOut
             if modsPath == "":
@@ -315,12 +315,12 @@ def findModsPath(installPath=None):
                     "Error",
                     "Couldn't locate Mods folder and no folder was selected.",
                 )
-                return
+                return ""
             if not QDir(modsPath).exists():
                 QMessageBox.warning(
                     None, "Error", "Selected folder does not exist or is not a folder."
                 )
-                return
+                return ""
 
         # Looks like nothing was selected
         if modsPath == "" or not os.path.isdir(modsPath):
