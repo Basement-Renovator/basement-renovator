@@ -2,9 +2,11 @@ import os
 import math
 from typing import NamedTuple
 
+
 class vec2[T](NamedTuple):
     x: T
     y: T
+
 
 def printf(*args):
     print(*args, flush=True)
