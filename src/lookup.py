@@ -28,12 +28,13 @@ def loadXMLFile(path):
 
     return root
 
+
 def parseRangeCriteria(txt: str) -> Callable[[int], bool] | None:
-    '''
+    """
     ranges can be defined as value[, value, ...] or
     [ [ / ( ] min,max [ ] / ) ], where min and max can be numbers or "infinity",
     square brackets are inclusive, and parentheses are exclusive
-    '''
+    """
     if not txt:
         return None
 
