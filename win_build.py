@@ -57,7 +57,9 @@ qt5dir = venvdir / "Lib/site-packages/PyQt5/Qt5"
 with open("winversion-template.txt", "r") as f:
     template = Template(f.read())
 
-parser = argparse.ArgumentParser(description="Build the Basement Renovator Windows executable")
+parser = argparse.ArgumentParser(
+    description="Build the Basement Renovator Windows executable"
+)
 parser.add_argument(
     "--version",
     default="3.0.0",
@@ -67,7 +69,9 @@ args = parser.parse_args()
 
 version = re.sub(r"^\D+", "", args.version).split(".")
 if len(version) != 3 or not all(v.isdigit() for v in version):
-    parser.error(f"Invalid --version specified! Must be format [Major].[Minor].[Patch], got {args.version}")
+    parser.error(
+        f"Invalid --version specified! Must be format [Major].[Minor].[Patch], got {args.version}"
+    )
 
 with open("winversion.txt", "w") as f:
     f.write(
