@@ -151,6 +151,8 @@ from src.version import *
 #       XML Data       #
 ########################
 
+APPID = "tboi.basementrenovator"
+
 STEAM_PATH = None
 
 
