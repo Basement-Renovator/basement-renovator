@@ -88,16 +88,16 @@ jobs:
           uv sync
           uv add pyinstaller
 
-      - name: Build a Windows executable
-        run: |
-         uv run win_build.py
-
       - name: Determine next build number
         uses: MCKanpolat/auto-semver-action@1.0.12
         id: versioning
         with:
           releaseType: patch
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build a Windows executable
+        run: |
+          uv run win_build.py --version ${{ steps.versioning.outputs.version }}
 
       - name: Create a release archive
         run: |
