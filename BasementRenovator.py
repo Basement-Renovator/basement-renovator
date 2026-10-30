@@ -119,6 +119,7 @@ from copy import deepcopy
 
 try:
     from ctypes import windll
+
     HAS_WINDLL = True
 except ImportError:
     HAS_WINDLL = False
