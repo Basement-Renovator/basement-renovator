@@ -117,6 +117,12 @@ from PyQt5.QtWidgets import (
 )
 from copy import deepcopy
 
+try:
+    from ctypes import windll
+    HAS_WINDLL = True
+except ImportError:
+    HAS_WINDLL = False
+
 import traceback
 import sys
 import os
@@ -7182,6 +7188,10 @@ if __name__ == "__main__":
         raise NotImplementedError(
             f"Basement Renovator requires minimum Python {min_version[0]}.{min_version[1]}, your version: {sys.version_info[0]}.{sys.version_info[0]}"
         )
+
+    if HAS_WINDLL:
+        # ensure that when running locally the taskbar icon is applied
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID(APPID)
 
     # Application
     app = QApplication(sys.argv)
