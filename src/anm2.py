@@ -203,6 +203,9 @@ class Config:
         pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
         pixmapImg.fill(0)
 
+        if pixmapImg.isNull():
+            return pixmapImg
+
         # Paint all the layers to it
         renderPainter = QPainter(pixmapImg)
         for (
