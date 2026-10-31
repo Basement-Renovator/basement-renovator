@@ -1,5 +1,6 @@
 <data>
   <group Name="Active Items">
+    <entity ID="5" Image="Entities/Items/5.100.474 - Broken Glass Cannon.png" Name="Broken Glass Cannon" Subtype="474" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.475 - Plan C.png" Name="Plan C" Subtype="475" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.476 - D1.png" Name="D1" Subtype="476" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.477 - Void.png" Name="Void" Subtype="477" Variant="100" />
@@ -41,7 +42,6 @@
     <entity ID="5" Image="Entities/Items/5.100.471 - Lil Monstro.png" Name="Lil Monstro" Subtype="471" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.472 - King Baby.png" Name="King Baby" Subtype="472" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.473 - Big Chubby.png" Name="Big Chubby" Subtype="473" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.474 - Tonsil.png" Name="Tonsil" Subtype="474" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.491 - Acid Baby.png" Name="Acid Baby" Subtype="491" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.492 - YO LISTEN!.png" Name="YO LISTEN!" Subtype="492" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.500 - Sack of Sacks.png" Name="Sack of Sacks" Subtype="500" Variant="100" />
