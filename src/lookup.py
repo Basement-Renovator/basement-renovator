@@ -1,22 +1,38 @@
 from collections.abc import Callable
+from typing import Self
 import xml.etree.cElementTree as ET
 import os
 import abc
 import re
 
-from itertools import zip_longest
-from pathlib import PurePath
+from itertools import chain, zip_longest
+from pathlib import Path, PurePath
 
-from src.constants import *
-from src.core import Entity
-from src.entitiesgenerator import generateXMLFromEntities2
-from src.util import *
-from src.version import *
+if not __package__:
+    from constants import *
+    from core import Entity
+    from entitiesgenerator import generateXMLFromEntities2
+    from util import *
+    from version import *
+else:
+    from src.constants import *
+    from src.core import Entity
+    from src.entitiesgenerator import generateXMLFromEntities2
+    from src.util import *
+    from src.version import *
 
 
-def loadXMLFile(path):
+def sanitizePath(node: ET.Element, key: str, mod: MainLookup.ModConfig, isPrefix=False):
+    prefix = node.get(key)
+    if prefix is not None:
+        resolvedPath = mod.resolveResource(prefix, isPrefix)
+        node.set(key, resolvedPath)
+
+
+def loadXMLFile(path: Path | str):
     root = None
-    if not os.path.isfile(path):
+    path = Path(path)
+    if not path.is_file():
         return None
 
     try:
@@ -99,21 +115,26 @@ def applyGfxReplacement(replacement, gfxchildren):
 
 
 class Lookup(metaclass=abc.ABCMeta):
-    def __init__(self, prefix, version):
+    def __init__(self, prefix: str, version):
         self.prefix = prefix
         self.version = version
 
-    def loadFile(self, file, mod, *args):
+    def loadFile(self, file, mod: MainLookup.ModConfig, *args):
         printSectionBreak()
         printf(f'Loading {self.prefix} from "{mod.name}" at {file}')
+
+        root = loadXMLFile(file)
+        if root is None:
+            return
+
         previous = self.count()
-        self.loadXML(loadXMLFile(file), mod, *args)
+        self.loadXML(root, mod, *args)
         printf(
             f'Successfully loaded {self.count() - previous} new {self.prefix} from "{mod.name}"'
         )
 
-    def loadFromMod(self, mod, *args):
-        file = os.path.join(mod.resourcePath, self.prefix + "Mod.xml")
+    def loadFromMod(self, mod: MainLookup.ModConfig, *args):
+        file = mod.resolveResource(self.prefix + "Mod.xml")
         if not os.path.isfile(file):
             return
 
@@ -144,7 +165,7 @@ class StageLookup(Lookup):
         else:
             return 0
 
-    def loadXML(self, root, mod):
+    def loadXML(self, root: ET.Element, mod: MainLookup.ModConfig):
         stageList = root.findall("stage")
         if not stageList:
             return
@@ -172,14 +193,14 @@ class StageLookup(Lookup):
                     f"Stage {stage.attrib} has missing stage/stage type; this may not load properly in testing"
                 )
 
-            sanitizePath(stage, "BGPrefix", mod.resourcePath)
+            sanitizePath(stage, "BGPrefix", mod, isPrefix=True)
 
             children = stage.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", mod.resourcePath)
+                sanitizePath(gfx, "BGPrefix", mod, isPrefix=True)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", mod.resourcePath)
+                    sanitizePath(ent, "Image", mod)
 
             if replacement is not None:
                 for key in stage.attrib.keys():
@@ -276,7 +297,7 @@ class RoomTypeLookup(Lookup):
         else:
             return 0
 
-    def loadXML(self, root: ET.Element, mod):
+    def loadXML(self, root: ET.Element, mod: MainLookup.ModConfig):
         roomTypeList = root.findall("room")
         if not roomTypeList:
             return
@@ -297,14 +318,14 @@ class RoomTypeLookup(Lookup):
 
             replacement = self.xml.find(f'room[@Name="{name}"]')
 
-            sanitizePath(roomType, "Icon", mod.resourcePath)
+            sanitizePath(roomType, "Icon", mod)
 
             children = roomType.findall("Gfx")
             for gfx in children:
-                sanitizePath(gfx, "BGPrefix", mod.resourcePath)
+                sanitizePath(gfx, "BGPrefix", mod, isPrefix=True)
 
                 for ent in gfx.findall("Entity"):
-                    sanitizePath(ent, "Image", mod.resourcePath)
+                    sanitizePath(ent, "Image", mod)
 
             if replacement is not None:
                 applyGfxReplacement(replacement, children)
@@ -648,20 +669,18 @@ class EntityLookup(Lookup):
             tag = self.getTagConfig(tag)
             return tag and tag.tag in self.tags
 
-        def validateImagePath(self, imagePath, resourcePath, default=None):
+        def validateImagePath(self, imagePath, defaultPath=None):
             if imagePath is None:
-                return default
+                return defaultPath
 
-            imagePath = linuxPathSensitivityTraining(
-                os.path.join(resourcePath, imagePath)
-            )
+            imagePath = self.mod.resolveResource(imagePath)
 
             if not os.path.exists(imagePath):
                 printf(
                     f"\nFailed loading image for Entity {self}:",
                     imagePath,
                 )
-                return default
+                return defaultPath
 
             return imagePath
 
@@ -762,19 +781,14 @@ class EntityLookup(Lookup):
             if node.get("Image"):
                 self.imagePath = self.validateImagePath(
                     node.get("Image"),
-                    self.mod.resourcePath,
                     "resources/Entities/questionmark.png",
                 )
 
             if node.get("EditorImage"):
-                self.editorImagePath = self.validateImagePath(
-                    node.get("EditorImage"), self.mod.resourcePath
-                )
+                self.editorImagePath = self.validateImagePath(node.get("EditorImage"))
 
             if node.get("OverlayImage"):
-                self.overlayImagePath = self.validateImagePath(
-                    node.get("OverlayImage"), self.mod.resourcePath
-                )
+                self.overlayImagePath = self.validateImagePath(node.get("OverlayImage"))
 
             # Tags="" attribute allows overriding default tags with nothing / different tags
             tagsString = node.get("Tags")
@@ -808,10 +822,7 @@ class EntityLookup(Lookup):
                 for pitextraNode in pitextras:
                     if "Image" in pitextraNode.attrib:
                         self.renderPitExtraConnections.append(
-                            self.validateImagePath(
-                                pitextraNode.get("Image"),
-                                self.mod.resourcePath,
-                            )
+                            self.validateImagePath(pitextraNode.get("Image")),
                         )
                     else:
                         printf(
@@ -865,10 +876,7 @@ class EntityLookup(Lookup):
                 bgPrefix = self.gfx.get("BGPrefix")
                 if bgPrefix:
                     self.gfx.set(
-                        "BGPrefix",
-                        linuxPathSensitivityTraining(
-                            os.path.join(self.mod.resourcePath, bgPrefix)
-                        ),
+                        "BGPrefix", self.mod.resolveResource(bgPrefix, isPrefix=True)
                     )
 
             def getMirrorEntity(s):
@@ -1262,8 +1270,8 @@ class EntityLookup(Lookup):
 
         return group
 
-    def loadXML(self, root: ET.Element, mod):
-        if not root:
+    def loadXML(self, root: ET.Element, mod: MainLookup.ModConfig):
+        if root is None:
             return
 
         for subNode in root:
@@ -1285,9 +1293,7 @@ class EntityLookup(Lookup):
 
         if mod.autogenerateContent and mod.entities2root is not None:
             self.loadXML(
-                generateXMLFromEntities2(
-                    mod.modPath, mod.name, mod.entities2root, mod.resourcePath
-                ),
+                generateXMLFromEntities2(mod, mod.entities2root),
                 mod,
             )
 
@@ -1418,55 +1424,166 @@ class MainLookup:
         def __init__(
             self,
             modName="Basement Renovator",
-            resourcePath="resources/",
-            modPath=None,
-            autogenerateContent=False,
+            editorResourcePath=Path("./resources/").resolve(),
+            modPath: Path | None = None,
+            autogenerateContent: bool = False,
+            gameResourcePath: Path | None = None,
+            basemod: Self | None = None,
         ):
             self.name = modName
-            self.resourcePath = resourcePath
             self.modPath = modPath
+            self.editorResourcePath = editorResourcePath
+            self.gameResourcePath = gameResourcePath
+            self.contentPath = None
+
             self.autogenerateContent = autogenerateContent
+            self.basemod = basemod
 
             self.entities2root = None
-            if self.modPath:
-                entities2Path = os.path.join(modPath, "content/entities2.xml")
-                if os.path.exists(entities2Path):
-                    try:
-                        self.entities2root = ET.parse(entities2Path).getroot()
-                    except ET.ParseError as e:
-                        printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
-                        return
-                elif canUseREPENTOGON():
-                    entities2Path = os.path.join(
-                        modPath, "content-repentogon/entities2.xml"
-                    )
+            if modPath:
+                if not self.gameResourcePath:
+                    self.gameResourcePath = modPath / "resources"
+
+                self.contentPath = modPath / "content"
+
+                entities2Path = self.resolveResource("content/entities2.xml")
+                if entities2Path and os.path.exists(entities2Path):
                     try:
                         self.entities2root = ET.parse(entities2Path).getroot()
                     except ET.ParseError as e:
                         printf(f'ERROR parsing entities2 xml for mod "{modName}": {e}')
                         return
 
-    def __init__(self, version, verbose):
-        self.basemod = self.ModConfig()
+        def __str__(self):
+            return f"ModConfig(name={self.name}, modPath={self.modPath})"
+
+        def resolveResource(self, path: str, isPrefix=False) -> str | None:
+            if not path or os.path.isabs(path):
+                return path
+
+            resourceFile = None
+
+            isContent = self.contentPath and path.startswith("content/")
+            if isContent:
+                resourceFile = re.sub(r"^content/", "", path)
+            elif path.startswith("resources/"):
+                resourceFile = re.sub(r"^resources/", "", path)
+
+            # files prefixed by resources/ or content/ are *generally* found in game assets
+            # (except for BR's own resources/ folder)
+            # for other files, first check current mod's editor resources and then check basemod as a fallback.
+            # for paths within the special-cased resources/content folders,
+            # augment the path with the additional compatibility suffixes for repentogon and repentance
+
+            if not resourceFile:
+                resourceFile = path
+                resolvedPath = self.editorResourcePath / resourceFile
+                if resolvedPath.exists():
+                    return str(resolvedPath)
+                if self.basemod:
+                    resolvedPath = self.basemod.resolveResource(resourceFile, isPrefix)
+                    if os.path.exists(resolvedPath):
+                        return resolvedPath
+            else:
+
+                def getCompatPaths(base: Path):
+                    if canUseREPENTOGON():
+                        yield Path(str(base) + "-repentogon")
+                    if getGameVersion() in ("Repentance", "Repentance+"):
+                        yield Path(str(base) + "-dlc3")
+                    yield base
+
+                # assume for a prefix, all relevant files will exist if any one is replaced in a compat dir
+                filePattern = resourceFile + "*" if isPrefix else resourceFile
+
+                for resourceFolder in chain(
+                    getCompatPaths(
+                        self.contentPath if isContent else self.gameResourcePath
+                    ),
+                    # content paths only apply to mods, not basegame
+                    (
+                        []
+                        if not self.basemod or isContent
+                        else getCompatPaths(self.basemod.gameResourcePath)
+                    ),
+                    # fallback, this comes from editor resources
+                    [] if isContent else [self.editorResourcePath],
+                    (
+                        []
+                        if not self.basemod or isContent
+                        else [self.basemod.editorResourcePath]
+                    ),
+                ):
+                    if not resourceFolder.exists():
+                        resourceFolder = Path(str(resourceFolder).lower())
+                        if not resourceFolder.exists():
+                            continue
+
+                    resolvedPath = next(
+                        resourceFolder.glob(filePattern, case_sensitive=False), None
+                    )
+                    if resolvedPath and resolvedPath.exists():
+                        if isPrefix:
+                            # for a prefix, return the resolved path up to where the glob matched to maintain casing
+                            return str(
+                                resourceFolder / resolvedPath.name[: len(resourceFile)]
+                            )
+                        else:
+                            return str(resolvedPath)
+
+            # fallback: this is an editor resource
+            resolvedPath = self.editorResourcePath / resourceFile
+
+            return str(resolvedPath)
+
+    def __init__(
+        self,
+        version: str,
+        editorResourcesFolder: str,
+        gameResourcesFolder: str,
+        verbose: bool,
+    ):
+        editorResourcesFolder = Path(editorResourcesFolder).resolve()
+        gameResourcesFolder = Path(gameResourcesFolder).resolve()
+
+        self.basemod = self.ModConfig(
+            gameResourcePath=gameResourcesFolder,
+            editorResourcePath=editorResourcesFolder,
+        )
         self.stages = StageLookup(version, self)
         self.roomTypes = RoomTypeLookup(version, self)
         self.entities = EntityLookup(version, self)
         self.version = version
         self.verbose = verbose
 
-        self.loadXML(loadXMLFile("resources/Versions.xml"), self.basemod)
+        self.loadXML(editorResourcesFolder / "Versions.xml", self.basemod)
 
-    def loadFromMod(self, modPath, brPath, name, autogenerateContent):
-        modConfig = self.ModConfig(name, brPath, modPath, autogenerateContent)
-        versionsPath = os.path.join(brPath, "VersionsMod.xml")
-        if os.path.exists(versionsPath):
-            self.loadXML(loadXMLFile(versionsPath), modConfig)
+    def loadFromMod(
+        self, modPath: Path, brPath: Path, name: str, autogenerateContent: bool
+    ):
+        modConfig = self.ModConfig(
+            modName=name,
+            editorResourcePath=brPath,
+            modPath=modPath,
+            autogenerateContent=autogenerateContent,
+            basemod=self.basemod,
+        )
+        versionsPath = brPath / "VersionsMod.xml"
+        if versionsPath.exists():
+            self.loadXML(versionsPath, modConfig)
         else:
             self.stages.loadFromMod(modConfig)
             self.roomTypes.loadFromMod(modConfig)
             self.entities.loadFromMod(modConfig)
 
-    def loadXML(self, root=None, mod=None):
+        return modConfig
+
+    def loadXML(
+        self, root: ET.Element | Path | None = None, mod: MainLookup.ModConfig = None
+    ):
+        if isinstance(root, Path):
+            root = loadXMLFile(root)
+
         if root is None:
             return
 
@@ -1483,7 +1600,7 @@ class MainLookup:
             files = loadVersion.allFiles()
             for file in files:
                 if file.path:
-                    path = os.path.join(mod.resourcePath, file.path)
+                    path = mod.resolveResource(file.path)
                     if file.filetype == "entities":
                         self.entities.loadFile(path, mod)
                     elif file.filetype == "stages":

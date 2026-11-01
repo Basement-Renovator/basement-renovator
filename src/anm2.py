@@ -10,6 +10,11 @@ if not __package__:
 else:
     from src.util import printf
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.lookup import MainLookup
+
 
 def loadImage(path: str, fmt: QImage.Format | None = None) -> QImage:
     img = QImage(path, fmt)
@@ -24,9 +29,9 @@ def loadIcon(path: str) -> QIcon:
 
 
 class Config:
-    def __init__(self, anmPath, resourcePath):
+    def __init__(self, anmPath: str, modConfig: MainLookup.ModConfig):
         self.path = Path(anmPath).resolve()
-        self.resourcePath = resourcePath
+        self.mod = modConfig
 
         if not self.path.is_file():
             raise FileNotFoundError("Invalid anm2! " + self.path)
@@ -65,6 +70,9 @@ class Config:
 
         self.useScaling = True
 
+    def __str__(self):
+        return f"anm2.Config(file={self.file}, dir={self.dir}, mod={self.mod})"
+
     def getAnim(self, name):
         if not name:
             return None
@@ -72,7 +80,7 @@ class Config:
 
     def setAnimation(self, animName=None):
         self.anim = self.getAnim(animName or self.defaultAnim)
-        if not self.anim:
+        if self.anim is None:
             raise ValueError(f"Invalid animation! {animName or '[Default]'}")
         self.rootFrames = self.anim.findall(".//RootAnimation/Frame")
         self.frameLayers = self.anim.findall(".//LayerAnimation[Frame]")
@@ -81,7 +89,7 @@ class Config:
 
     def setOverlay(self, animName):
         self.overlayAnim = self.getAnim(animName)
-        if not self.overlayAnim:
+        if self.overlayAnim is None:
             raise ValueError(f"Invalid animation! {animName}")
         # not supported for now
         # self.overlayRootFrames = self.anim.findall(".//RootAnimation/Frame")
@@ -117,14 +125,14 @@ class Config:
             image = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ""
 
             imgPath = None
-            sheetPath = None
+            sheetPath = '<unknown>'
             if isinstance(image, str):
                 sheetPath = image
-                image = os.path.abspath(os.path.join(self.dir, image))
-                imgPath = Path(image)
-                if not (imgPath and imgPath.exists()):
-                    image = re.sub(r".*resources", self.resourcePath, image)
-                    imgPath = Path(image)
+                imgPath = Path(os.path.abspath(os.path.join(self.dir, image)))
+                if imgPath and imgPath.exists():
+                    image = str(imgPath)
+                else:
+                    imgPath = Path(self.mod.resolveResource(image))
                     image = str(imgPath) if imgPath.exists() else None
 
             if image is not None:
@@ -143,7 +151,7 @@ class Config:
 
                 imgs.append([image, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
-                printf("Bad image! ", sheetPath, image)
+                printf(self, "Bad image! ", sheetPath, image)
 
         if not imgs:
             printf(

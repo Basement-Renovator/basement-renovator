@@ -26,6 +26,8 @@
 # 		Bosscolours for the alternate boss entities
 #
 
+from typing import Any, cast
+
 from PyQt5.QtCore import (
     QAbstractItemModel,
     QAbstractListModel,
@@ -154,10 +156,10 @@ from src.version import *
 
 APPID = "tboi.basementrenovator"
 
-STEAM_PATH = None
+STEAM_PATH: str | None = None
 
 
-def getSteamPath():
+def getSteamPath() -> str | None:
     global STEAM_PATH
     if not STEAM_PATH:
         STEAM_PATH = QSettings(
@@ -166,7 +168,7 @@ def getSteamPath():
     return STEAM_PATH
 
 
-def findInstallPath():
+def findInstallPath() -> str:
     version = getGameVersion()
     if version == "Antibirth" and settings.value("AntibirthPath"):
         return settings.value("AntibirthPath")
@@ -175,7 +177,7 @@ def findInstallPath():
     cantFindPath = False
 
     if QFile.exists(settings.value("InstallFolder")):
-        installPath = settings.value("InstallFolder")
+        installPath = cast(str, settings.value("InstallFolder"))
 
     else:
         # Windows path things
@@ -244,7 +246,7 @@ def findInstallPath():
     return installPath
 
 
-def findModsPath(installPath=None):
+def findModsPath(installPath=None) -> str:
     modsPath = ""
     cantFindPath = False
 
@@ -345,16 +347,16 @@ def findModsPath(installPath=None):
     return modsPath
 
 
-def loadMods(autogenerate, installPath, resourcePath):
+def loadMods(autogenerate: bool, installPath: str | None) -> None:
     global xmlLookups
 
     # Each mod in the mod folder is a Group
-    modsPath = findModsPath(installPath)
-    if not os.path.isdir(modsPath):
+    modsPath = Path(findModsPath(installPath))
+    if not modsPath.is_dir():
         printf("Could not find Mods Folder! Skipping mod content!")
         return
 
-    modsInstalled = os.listdir(modsPath)
+    modsInstalled = modsPath.iterdir()
 
     autogenPath = "resources/Entities/ModTemp"
     if autogenerate and not os.path.exists(autogenPath):
@@ -363,23 +365,21 @@ def loadMods(autogenerate, installPath, resourcePath):
     printSectionBreak()
     printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
-        modPath = os.path.join(modsPath, mod)
-        brPath = os.path.join(modPath, "basementrenovator")
+        modPath = modsPath / mod
+        brPath = modPath / "basementrenovator"
 
         # Make sure we're a mod
-        if not os.path.isdir(modPath) or os.path.isfile(
-            os.path.join(modPath, "disable.it")
-        ):
+        if not modPath.is_dir() or (modPath / "disable.it").is_file():
             continue
 
         # simple workaround for now
-        if not (autogenerate or os.path.exists(brPath)):
+        if not (autogenerate or brPath.exists()):
             continue
 
         # Get the mod name
         modName = mod
         try:
-            tree = ET.parse(os.path.join(modPath, "metadata.xml"))
+            tree = ET.parse(modPath / "metadata.xml")
             root = tree.getroot()
             modName = root.find("name").text
         except ET.ParseError:
@@ -396,6 +396,15 @@ def loadMods(autogenerate, installPath, resourcePath):
 
 
 class RoomScene(QGraphicsScene):
+
+    roomDoorRoot = None
+    bgState: tuple[ET.Element, int, dict[str, Any]] = []
+    framecache: dict[str, dict[int, QImage | None]] = {}
+    floorAnim: anm2.Config | None = None
+    floorImg: QImage | None = None
+    wallAnim: anm2.Config | None = None
+    wallImg: QImage | None = None
+
     def __init__(self, parent):
         QGraphicsScene.__init__(self, 0, 0, 0, 0)
         self.newRoomSize(1)
@@ -410,18 +419,9 @@ class RoomScene(QGraphicsScene):
         ]
         self.bitText = True
 
-        self.roomDoorRoot = None
         self.clearDoors()
 
-        self.bgState = []
-        self.framecache = {}
-
-        self.floorAnim = None
-        self.wallAnim = None
         self.loadAnims()
-
-        self.floorImg = None
-        self.wallImg = None
 
     def loadAnims(self):
         gfx = self.getBGGfxData()
@@ -433,7 +433,8 @@ class RoomScene(QGraphicsScene):
             else "resources/Backgrounds/FloorBackdrop.anm2"
         )
         if not (self.floorAnim and self.floorAnim.path == Path(floorAnim).resolve()):
-            self.floorAnim = anm2.Config(floorAnim, "resources")
+            # TODO: proper mod attribution
+            self.floorAnim = anm2.Config(floorAnim, xmlLookups.basemod)
 
         wallAnim = (
             gfx["WallAnim"]
@@ -441,7 +442,7 @@ class RoomScene(QGraphicsScene):
             else "resources/Backgrounds/WallBackdrop.anm2"
         )
         if not (self.wallAnim and self.wallAnim.path == Path(wallAnim).resolve()):
-            self.wallAnim = anm2.Config(wallAnim, "resources")
+            self.wallAnim = anm2.Config(wallAnim, xmlLookups.basemod)
 
     def newRoomSize(self, shape):
         self.roomInfo = Room.Info(shape=shape)
@@ -1101,7 +1102,7 @@ class Entity(QGraphicsItem):
             self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
             if self.config is None:
                 printf(
-                    f"'Could not find Entity {EntityData.toString(entitytype, variant, subtype)} for in-editor, using ?"
+                    f"Could not find Entity {EntityData.toString(entitytype, variant, subtype)} to display in-editor, using ?"
                 )
 
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
@@ -1300,11 +1301,20 @@ class Entity(QGraphicsItem):
                             door.exists = door.blockingCount == 0
                         break
 
-    PitAnm2 = anm2.Config("resources/Backgrounds/PitGrid.anm2", "resources")
-    PitAnm2.setAnimation()
+    PitAnm2: anm2.Config = None
+    RockAnm2: anm2.Config = None
 
-    RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
-    RockAnm2.setAnimation()
+    @staticmethod
+    def loadAnims():
+        Entity.PitAnm2 = anm2.Config(
+            "resources/Backgrounds/PitGrid.anm2", xmlLookups.basemod
+        )
+        Entity.PitAnm2.setAnimation()
+
+        Entity.RockAnm2 = anm2.Config(
+            "resources/Backgrounds/RockGrid.anm2", xmlLookups.basemod
+        )
+        Entity.RockAnm2.setAnimation()
 
     def getPitFrame(self, pitImg, rendered, extraConnections: "list|None"):
         def matchInStack(stack):
@@ -2779,6 +2789,18 @@ class RoomSelectorList(QListWidget):
     def __init__(self):
         QListWidget.__init__(self)
 
+    def item(self, row: int) -> Room | None:
+        return cast(Room | None, super().item(row))
+
+    def itemFromIndex(self, index: QModelIndex) -> Room | None:
+        return cast(Room | None, super().itemFromIndex(index))
+
+    def currentItem(self) -> Room | None:
+        return cast(Room | None, super().currentItem())
+
+    def selectedItems(self) -> list[Room]:
+        return cast(list[Room], super().selectedItems())
+
     def dragMoveEvent(self, e):
         if (self.row(self.itemAt(e.pos())) == self.currentRow() + 1) or (
             self.currentRow() == self.count() - 1
@@ -3704,10 +3726,10 @@ class RoomSelector(QWidget):
             self.list.selectionModel().selectedIndexes(),
             key=lambda x: (x.column(), x.row()),
         )
-        return [self.list.itemFromIndex(i) for i in sortedIndexes]
+        return [cast(Room, self.list.itemFromIndex(i)) for i in sortedIndexes]
 
     def getRooms(self):
-        return [self.list.item(i) for i in range(self.list.count())]
+        return [cast(Room, self.list.item(i)) for i in range(self.list.count())]
 
 
 # Entity Palette
@@ -7206,12 +7228,21 @@ if __name__ == "__main__":
 
     # XML Globals
     version = getGameVersion()
-    xmlLookups = MainLookup(version, settings.value("Verbose") == "1")
+    resourcesFolder = settings.value("ResourceFolder")
+    if not resourcesFolder:
+        printf(
+            "WARNING: Resource folder not set, please restart after setting to ensure all resource loading works"
+        )
+    xmlLookups = MainLookup(
+        version, "resources/", resourcesFolder or "", settings.value("Verbose") == "1"
+    )
+
+    Entity.loadAnims()
+
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",
             findInstallPath(),
-            settings.value("ResourceFolder", ""),
         )
 
     printf("-".join(["" for i in range(50)]))

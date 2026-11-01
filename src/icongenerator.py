@@ -3,13 +3,22 @@ Generates icons for BR from an anm2 file
 """
 
 import os, platform, re
-
-import anm2
+import xml.etree.cElementTree as ET
+from pathlib import Path
 
 from PyQt5.QtCore import QSettings, QFile, QDir, QCommandLineOption, QCommandLineParser
 from PyQt5.QtWidgets import QMessageBox, QApplication, QFileDialog
 
-from util import printf
+if not __package__:
+    import anm2 as anm2
+    from util import *
+    from lookup import MainLookup
+    from version import getGameVersion
+else:
+    import src.anm2 as anm2
+    from src.util import *
+    from src.lookup import MainLookup
+    from src.version import getGameVersion
 
 
 def findInstallPath():
@@ -175,27 +184,37 @@ def findModsPath(installPath=None):
     return modsPath
 
 
-def linuxPathSensitivityTraining(path):
-    path = path.replace("\\", "/")
+def findModPath(file: Path):
+    """
+    Returns the root folder of the mod containing file, if it's within the mods folder, otherwise None
+    """
+    modPath = next(
+        (
+            parent
+            for parent in file.resolve().parents
+            if (parent / "metadata.xml").is_file()
+        ),
+        None,
+    )
 
-    directory, file = os.path.split(os.path.normpath(path))
-
-    if not os.path.isdir(directory):
-        return None
-
-    contents = os.listdir(directory)
-
-    for item in contents:
-        if item.lower() == file.lower():
-            return os.path.normpath(os.path.join(directory, item))
-
-    return os.path.normpath(path)
+    return modPath
 
 
-def createIcon(
-    file, animName, frame, overlayName, overlayFrame, noScale, resourcesPath
-):
-    anim = anm2.Config(file, resourcesPath)
+def getModName(modPath):
+    try:
+        name = ET.parse(modPath / "metadata.xml").getroot().find("name")
+        if name is not None and name.text:
+            return name.text
+    except ET.ParseError:
+        printf(
+            f'Failed to parse mod metadata "{modPath.name}", falling back on default name'
+        )
+
+    return modPath.name
+
+
+def createIcon(file, animName, frame, overlayName, overlayFrame, noScale, mod):
+    anim = anm2.Config(file, mod)
 
     anim.setAnimation(animName)
     if frame:
@@ -208,10 +227,12 @@ def createIcon(
 
     img = anim.render(noScale=noScale)
 
-    filename = "resources/Entities/questionmark.png"
-    if img:
+    if img and not img.isNull():
         filename = f"{os.path.splitext(anim.file)[0]}.png"
-    img.save(filename, "PNG")
+        img.save(filename, "PNG")
+        printf(f"Saved icon to {filename}")
+    else:
+        raise ValueError("Failed to render image from animation")
 
 
 if __name__ == "__main__":
@@ -226,6 +247,9 @@ if __name__ == "__main__":
     cmdParser.addHelpOption()
 
     cmdParser.addPositionalArgument("file", "anm2 file to generate the icon from")
+
+    verboseOpt = QCommandLineOption("verbose", "Enable verbose output")
+    cmdParser.addOption(verboseOpt)
 
     frameOpt = QCommandLineOption(
         ["f", "frame"], "frame in the anm2 to use, defaults to 0", "f", "0"
@@ -260,7 +284,7 @@ if __name__ == "__main__":
     cmdParser.process(app)
 
     args = cmdParser.positionalArguments()
-    fileArg = args[0]
+    fileArg = Path(args[0]).resolve()
 
     frameArg = int(cmdParser.value(frameOpt))
     animArg = cmdParser.value(animOpt)
@@ -270,12 +294,29 @@ if __name__ == "__main__":
 
     noScaleArg = cmdParser.isSet(noScaleOpt)
 
-    settings = QSettings("../settings.ini", QSettings.IniFormat)
+    settings = QSettings(str(BR_ROOT / "settings.ini"), QSettings.IniFormat)
 
     resources = settings.value("ResourceFolder", "")
     printf("Resource Path:", resources)
 
-    createIcon(
-        fileArg, animArg, frameArg, overlayArg, overlayFrameArg, noScaleArg, resources
+    xmlLookups = MainLookup(
+        getGameVersion(), BR_ROOT / "resources/", resources, cmdParser.isSet(verboseOpt)
     )
+
+    mod = xmlLookups.basemod
+
+    # if the file is inside the mod folder (and not inside BR),
+    # and recursively within a mod dir, load that mod
+    if not fileArg.is_relative_to(BR_ROOT):
+        modsFolder = findModsPath()
+        if modsFolder and fileArg.is_relative_to(modsFolder):
+            modPath = findModPath(fileArg)
+            if modPath:
+                modName = getModName(modPath)
+                printf(f'Loading mod "{modName}" from {modPath}')
+                mod = xmlLookups.loadFromMod(
+                    modPath, modPath / "basementrenovator", modName, False
+                )
+
+    createIcon(fileArg, animArg, frameArg, overlayArg, overlayFrameArg, noScaleArg, mod)
     printf("Success!")

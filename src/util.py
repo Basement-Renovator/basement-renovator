@@ -1,6 +1,10 @@
-import os
 import math
+import os
+from pathlib import Path
 from typing import Any, NamedTuple
+
+# BR's modules and data files are all relative to the repo root
+BR_ROOT = Path(__file__).resolve().parent.parent
 
 
 class vec2[T](NamedTuple):
@@ -30,33 +34,6 @@ def bitSet(bits: int, sourceBits: int, startBit: int, count: int) -> int:
     sourceBits = bitGet(sourceBits, 0, count) << startBit
     bits &= ~(bitFill(count) << startBit)
     return bits | sourceBits
-
-
-def linuxPathSensitivityTraining(path: str) -> str | None:
-    path = path.replace("\\", "/")
-
-    directory, file = os.path.split(os.path.normpath(path))
-
-    if not os.path.isdir(directory):
-        if os.path.isdir(directory.lower()):
-            directory = directory.lower()
-        else:
-            return None
-
-    contents = os.listdir(directory)
-
-    for item in contents:
-        if item.lower() == file.lower():
-            return os.path.normpath(os.path.join(directory, item))
-
-    return os.path.normpath(path)
-
-
-def sanitizePath(node, key, path):
-    prefix = node.get(key)
-    if prefix is not None:
-        prefixPath = linuxPathSensitivityTraining(os.path.join(path, prefix))
-        node.set(key, prefixPath)
 
 
 def checkFloat(s: Any) -> bool:
