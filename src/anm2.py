@@ -54,6 +54,10 @@ class Config:
 
         self.animations = self.tree.findall("./Animations/Animation")
         self.defaultAnim = self.tree.find("Animations").get("DefaultAnimation")
+        if not self.defaultAnim or self.getAnim(self.defaultAnim) is None:
+            self.defaultAnim = (
+                self.animations[0].get("Name") if self.animations else None
+            )
 
         self.anim = None
         self.animLen = 0
@@ -81,7 +85,9 @@ class Config:
     def setAnimation(self, animName=None):
         self.anim = self.getAnim(animName or self.defaultAnim)
         if self.anim is None:
-            raise ValueError(f"Invalid animation! {animName or '[Default]'}")
+            raise ValueError(
+                f"Invalid animation! {animName or f'{self.defaultAnim} [Default]'}"
+            )
         self.rootFrames = self.anim.findall(".//RootAnimation/Frame")
         self.frameLayers = self.anim.findall(".//LayerAnimation[Frame]")
         self.animLen = int(self.anim.get("FrameNum"))
@@ -99,6 +105,9 @@ class Config:
 
     @staticmethod
     def getFrameNode(frames, frameNumber):
+        if not frames:
+            return None
+
         currFrame = 0
         for frame in frames:
             duration = int(frame.get("Delay"))
@@ -122,10 +131,12 @@ class Config:
                 ignoreCount += 1
                 continue
 
-            image = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ""
+            layer = self.layers[int(layer.get("LayerId"))]
+            image = self.spritesheets[layer] if layer < len(self.spritesheets) else None
+            image = image or ""
 
             imgPath = None
-            sheetPath = '<unknown>'
+            sheetPath = "<unknown>"
             if isinstance(image, str):
                 sheetPath = image
                 imgPath = Path(os.path.abspath(os.path.join(self.dir, image)))
@@ -137,17 +148,17 @@ class Config:
 
             if image is not None:
                 # Here's the anm specs
-                xp = -int(frame.get("XPivot"))  # applied before rotation
-                yp = -int(frame.get("YPivot"))
-                r = int(frame.get("Rotation"))
-                x = int(frame.get("XPosition"))  # applied after rotation
-                y = int(frame.get("YPosition"))
+                xp = -int(float(frame.get("XPivot")))  # applied before rotation
+                yp = -int(float(frame.get("YPivot")))
+                r = float(frame.get("Rotation"))
+                x = int(float(frame.get("XPosition")))  # applied after rotation
+                y = int(float(frame.get("YPosition")))
                 xc = int(frame.get("XCrop"))
                 yc = int(frame.get("YCrop"))
                 xs = self.useScaling and float(frame.get("XScale")) / 100 or 1
                 ys = self.useScaling and float(frame.get("YScale")) / 100 or 1
-                w = int(frame.get("Width"))
-                h = int(frame.get("Height"))
+                w = int(float(frame.get("Width")))
+                h = int(float(frame.get("Height")))
 
                 imgs.append([image, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
