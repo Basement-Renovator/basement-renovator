@@ -246,7 +246,15 @@
 
   <!--——— Bosses ———-->
   <group Name="Chapter 1 Bosses (Main Path) Shared">
-    <entity BaseHP="200" ID="404" Image="Entities/404.0.0 - Little Horn.png" Name="Little Horn" Subtype="0" Variant="0" />
+    <entity BaseHP="200" ID="404" Image="Entities/404.0.0 - Little Horn.png" Name="Little Horn" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Orange 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Dingle (Boss)">
@@ -258,7 +266,15 @@
   </group>
 
   <group Name="Cellar Bosses">
-    <entity BaseHP="250" ID="405" Image="Entities/405.0.0 - Rag Man.png" Name="Rag Man" Subtype="0" Variant="0" />
+    <entity BaseHP="250" ID="405" Image="Entities/405.0.0 - Rag Man.png" Name="Rag Man" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="2">
+                <choice>Normal</choice>
+				<choice>Red 👑</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Chapter 1 Bosses (Main Path)">
@@ -274,12 +290,26 @@
   </group>
 
   <group Name="Caves Bosses">
-    <entity BaseHP="400" ID="401" Image="Entities/401.0.0 - The Stain.png" Name="The Stain" Subtype="0" Variant="0" />
+    <entity BaseHP="400" ID="401" Image="Entities/401.0.0 - The Stain.png" Name="The Stain" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+				<choice>Grey 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Catacombs Bosses">
     <entity BaseHP="200" ID="62" Image="Entities/62.2.0 - The Frail.png" Name="The Frail" Subtype="0" Variant="2" />
-    <entity BaseHP="220" ID="403" Image="Entities/403.0.0 - The Forsaken.png" Name="The Forsaken" Subtype="0" Variant="0" />
+    <entity BaseHP="220" ID="403" Image="Entities/403.0.0 - The Forsaken.png" Name="The Forsaken" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Chapter 2 Bosses (Main Path)">
@@ -296,7 +326,14 @@
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path) Shared">
-    <entity BaseHP="400" ID="402" Image="Entities/402.0.0 - Brownie.png" Name="Brownie" Subtype="0" Variant="0" />
+    <entity BaseHP="400" ID="402" Image="Entities/402.0.0 - Brownie.png" Name="Brownie" Subtype="0" Variant="0">
+        <bitfield Key="Subtype">
+            <dropdown Length="1">
+                <choice>Normal</choice>
+				<choice>Black 👑</choice>
+            </dropdown>
+        </bitfield>
+    </entity>
   </group>
 
   <group Name="Chapter 3 Bosses (Main Path)">
