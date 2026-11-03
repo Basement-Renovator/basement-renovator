@@ -4117,7 +4117,7 @@ class EntityList(QListView):
         self.setMovement(QListView.Static)
         self.setResizeMode(QListView.Adjust)
         self.setWrapping(True)
-        self.setIconSize(QSize(32, 32))
+        self.setIconSize(QSize(34, 34))
         self.setItemDelegate(PaletteBottomDelegate(self))
 
         self.setMouseTracking(True)

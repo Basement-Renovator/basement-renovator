@@ -153,7 +153,7 @@
   </group>
 
   <group Name="Necropolis Enemies">
-    <entity Image="Entities/301.0.0 - PoisonMind.png" BaseHP="20" Tags="Champion" ID="301" Name="Poison Mind" PlaceVisual="0,-5/26" Variant="0" Subtype="0" />
+    <entity Image="Entities/301.0.0 - PoisonMind.png" BaseHP="20" Tags="Champion" ID="301" Name="Poison Mind" Variant="0" Subtype="0" />
     <entity Name="Blister" ID="303" />
     <entity Name="The Thing" />
   </group>
@@ -184,12 +184,12 @@
   </group>
 
   <group Name="Scarred Womb Enemies">
-    <entity Image="Entities/308.0.0 - Fistuloid.png" BaseHP="30" Tags="Champion" ID="308" Name="Fistuloid" PlaceVisual="0,-4/26" Variant="0" Subtype="0" />
+    <entity Image="Entities/308.0.0 - Fistuloid.png" BaseHP="30" Tags="Champion" ID="308" Name="Fistuloid" Variant="0" Subtype="0" />
     <entity BaseHP="60" Tags="Champion" ID="310" Image="Entities/310.0.0 - Leper.png" Name="Leper" PlaceVisual="-2/26,0" Subtype="0" Variant="0" />
     <entity BaseHP="45" Tags="Champion" ID="310" Image="Entities/310.0.1 - Leper (stage 2).png" Name="Leper (Stage 2)" PlaceVisual="-2/26,0" Subtype="1" Variant="0" />
     <entity BaseHP="30" Tags="Champion" ID="310" Image="Entities/310.0.2 - Leper (stage 3).png" Name="Leper (Stage 3)" PlaceVisual="-2/26,0" Subtype="2" Variant="0" />
     <entity BaseHP="15" Tags="Champion" ID="310" Image="Entities/310.0.3 - Leper (stage 4).png" Name="Leper (Stage 4)" Subtype="3" Variant="0" />
-    <entity BaseHP="5" StageHP="1.5" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" PlaceVisual="0,-8/26" Subtype="0" Variant="1" />
+    <entity BaseHP="5" StageHP="1.5" ID="310" Image="Entities/311.1.0 - Leper Flesh.png" Name="Leper Flesh" Subtype="0" Variant="1" />
     <entity Name="Nerve Ending 2" />
     <entity Name="Ministro" />
   </group>
@@ -203,7 +203,7 @@
   </group>
 
   <group Name="Sheol Enemies">
-    <entity BaseHP="18" Tags="Champion" Image="Entities/61.2.0 - Soul Sucker.png" ID="61" Name="Soul Sucker" PlaceVisual="-0.03,-4/26" Variant="2" Subtype="0" />
+    <entity BaseHP="18" Tags="Champion" Image="Entities/61.2.0 - Soul Sucker.png" ID="61" Name="Soul Sucker" PlaceVisual="-0.03,0" Variant="2" Subtype="0" />
     <entity Name="Crispy" />
   </group>
 
