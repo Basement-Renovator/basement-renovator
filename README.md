@@ -2,10 +2,10 @@
 # Basement Renovator
 
 - Basement Renovator is a 3rd-party *[Binding of Isaac: Repentance](https://store.steampowered.com/app/1426300/The_Binding_of_Isaac_Repentance/)* room and level editor.
+  - It will also edit [Afterbirth+](https://store.steampowered.com/app/570660/The_Binding_of_Isaac_Afterbirth/), [Afterbirth](https://store.steampowered.com/app/401920/The_Binding_of_Isaac_Afterbirth/), and [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) rooms.
 - It makes it easy to create rooms and is even used by the game's official staff.
 - It is open-source and written in [Python 3](https://www.python.org/).
 - It was originally written by [Chronometrics](http://www.chronometry.ca/) and is now supported by [budjmt](https://github.com/budjmt).
-- It will also edit [Afterbirth+](https://store.steampowered.com/app/570660/The_Binding_of_Isaac_Afterbirth/), [Afterbirth](https://store.steampowered.com/app/401920/The_Binding_of_Isaac_Afterbirth/), and [Rebirth](https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/) rooms, but some entity IDs may be incorrect.
 
 ### Download
 
@@ -15,27 +15,35 @@ The latest version of Basement Renovator is available in the [releases section](
 
 * See [INSTALL.md](INSTALL.md#running-from-source).
 
-### How to Create a Mod that Modifies Rooms in the Vanilla Game
+### How to View Rooms from the Vanilla Game
 
-- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with the latest version of the game (Afterbirth+, Repentance, or Repentance+), read on.
+- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with later versions of the game (Afterbirth+, Repentance, or Repentance+), read on.
 - First, unpack the game's assets using the official unpacker.
   - On Windows: <br>
-  `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\tools\ResourceExtractor\ResourceExtractor.exe` <br>
-  (this will populate the `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\resources\rooms` directory with .stb files) (for Repentance+ it is `C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth\extracted_resources\resources\rooms`)
+  `[TBOI Install Folder]\tools\ResourceExtractor\ResourceExtractor.exe` <br>
+  (this will populate the `[TBOI Install Folder]\resources\rooms` directory with .stb files) (for Repentance+ it is `[TBOI Install Folder]\extracted_resources\resources\rooms`)
+    - As of Repentance+, copy the exe and filelist.txt to the Install Folder before double clicking.
   - On MacOS: <br>
   `"$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/tools/ResourceExtractor/ResourceExtractor" "$HOME/Library/Application Support/Steam/SteamApps/common/The Binding of Isaac Rebirth/The Binding of Isaac Rebirth.app/Contents/Resources" "$HOME/Documents/IsaacUnpacked"` <br>
   (this will populate the `$HOME/Documents/IsaacUnpacked/resources/rooms` directory with .stb files)
-- Now, you can open a floor's STB file using Basement Renovator and change it to your heart's content.
-- After saving your work, include the modified STB file in your mod's resources directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\resources`) and it will overwrite the vanilla version of the floor. Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended.
+- Now, you can open a floor's STB file using Basement Renovator and browse it to your heart's content.
 
-### How to Create a Mod that Include Extra Rooms
+### How to Add/Edit Rooms
 
-- Use Basement Renovator to create a brand new STB file with only the extra rooms that you want to add. Then, name it with the exact same filename as the vanilla floor STB. (Refer to the previous section if you do not know what the filename is.)
-- After saving your work, include the new STB file in your mod's content directory (e.g. `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]\content\rooms`) and it will add the rooms to the floor.
+- Each floor has a unique filename preceded by a number. For special rooms found across the run, use `00.special rooms`.
+  - As of Repentance, specific floors can add special rooms to their files to only use them for that floor.
+
+- In Rebirth/Afterbirth, you can save over extracted files located in `[TBOI Install Folder]/resources/rooms` to override the rooms loaded by the game.
+
+- For Afterbirth+ and later, save your modified STB file in your mod's folder (e.g. `[TBOI Install Folder]/mods/[YourModName]` or `C:\Users\[YourUsername]\Documents\My Games\Binding of Isaac Afterbirth+ Mods\[YourModName]`):
+  - Saving in `[YourModName]/resources/rooms/` will overwrite the vanilla version of the floor.
+    - Note that your mod will be **incompatible** with all other mods that use this technique to replace floors, so this is not recommended.
+  - Saving in `[YourModName]/content/rooms/` will add your rooms to the overall pool the file is used for.
+    - You **must** match the filename used in the base resources folder or your rooms will not be loaded properly.
 
 ### How to Use the Interface
 
-- You'll first want to use Basement Renovator to open a vanilla floor STB file in order to look around and get a feel for how it works. Follow the instructions in the "How to Create a Mod that Modifies Rooms in the Vanilla Game" section above. Basement Renovator can read and save them directly, no need to convert to XML.
+- You'll first want to use Basement Renovator to open a vanilla floor STB file in order to look around and get a feel for how it works. Follow the instructions in the sections above about viewing, adding and editing rooms. Basement Renovator can read and save them directly, no need to convert to XML.
 
 - **The Editor**: Smack in the middle is the main editor. You can drag any entity in this editor by clicking it, or select multiple entities by dragging a box around them. You can move entities wherever you'd like in the room. You can cut or paste entities, using the menu or keyboard shortcuts, and you can delete them by selecting them and hitting backspace or delete. Alt-click an entity to replace it with the chosen entity in your palette. You can choose whether doors are active or inactive by double clicking them.
 
@@ -47,7 +55,7 @@ The latest version of Basement Renovator is available in the [releases section](
   - When adding, moving, or removing entities, doors will automatically be enabled or disabled based on if entities are in front of them. To override the normal setting, double click the door to toggle its enablement
     - To prevent an entity from blocking doors, give it the `NoBlockDoors` attribute
 
-- **Other Things**: You can show or hide the grid in the edit menu, or by pressing Cmd-G (Ctrl-G on win). You can pick up any of the docks, and move them to new areas, have them as floating windows, or stack them as tabs. There are a few other options in the View menu to give you some choices.
+- **Other Things**: You can show or hide the grid in the edit menu, or by pressing Ctrl-G (Cmd-G on mac). You can pick up any of the docks, and move them to new areas, have them as floating windows, or stack them as tabs. There are a few other options in the View menu to give you some choices.
 
 - **Test Menu**: To quickly test your rooms, you can load them from BR directly. You can select multiple rooms to test at a time, or just one. You will be teleported to the right floor for the current file. Here's a summary of the different test methods:
   - Replace Stage
@@ -84,14 +92,19 @@ The latest version of Basement Renovator is available in the [releases section](
     - `Repentance+` (default)
     - `Antibirth`
 - This limits/adjusts content available in the editor to what is available in that DLC (updates welcome if there are inaccuracies!)
+  - Following the [REPENTOGON setup instructions](https://repentogon.com/install.html#how-do-i-use-basement-renovator-with-repentogon) will enable a few extra features in Repentance+ mode.
 - Rebirth and Antibirth have specialized `stb` formats. Every other version uses the same binary format, beginning with Afterbirth.
 
 *I found a bug!*
 
 - Please [open an issue on github](https://github.com/Tempus/Basement-Renovator/issues).
-- If you need immediate help, many people in the modding community hang out in the **#modding** channel of the [BoI Discord server.](https://discord.gg/isaac)
+- If you need immediate help, you can try:
+  - [TBoI Discord server](https://discord.gg/isaac)
+    - **#isaac-mod-dev** channel
+  - [Modding of Isaac Discord server](https://discord.com/invite/modding-of-isaac-962027940131008653)
+    - **#modding** channel
 
-*When is the next update?*
+*When is the next release?*
 
 - There's no formal release schedule. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
 
@@ -101,20 +114,20 @@ The latest version of Basement Renovator is available in the [releases section](
 
 *How do I add custom entities?*
 
-- This will only work for Afterbirth+ mods. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirthPlus.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
-- If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesAfterbirthPlus` for some examples. It can either be `X,Y` in +/- grid squares of offset or pre-coded dynamic behaviors like `WallSnap`.
+- This will only work for mods starting with Afterbirth+. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirthPlus.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
+- If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesRebirth` for some examples. It can either be `X,Y` in +/- grid squares of offset or pre-coded dynamic behaviors like `WallSnap`.
   - If you're using this property to add additional visual indicators to your icon or the sprite is asymmetric, you can use `DisableOffsetIndicator` to disable the visual indicator for this offset (only needed if offset is > half a grid)
 - When newly placed, grid entities will be placed underneath any regular entities in their stack. To give entities this property, add the `IsGrid` attribute.
 - If you have an entity that does not exist in your `entities2.xml` for some reason, you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows BR to load entities it normally wouldn't. (This is mostly relevant to pre-room-spawn helper entities, like those used with [Stage API](https://github.com/Meowlala/BOIStageAPI15))
 - If for some reason this is too much hassle, or you want to quickly create rooms with entities from large mods that don't have support, you can toggle the *Autogenerate mod content* setting. This will crawl mods' `content/entities2.xml` instead of the `basementrenovator` folder and work automagically without any additional work. HOWEVER this comes with a number of downsides:
-  - It has to generate BR images for every entity in the mod each time the program starts up. This makes it slightly slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
+  - It has to generate BR images for every entity in the mod each time the program starts up. This makes it slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
   - Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
-  - Every entity (with a few exceptions like projectiles) the mod adds will show up in BR. All of them. Even the ones that make no sense.
+  - Every entity the mod adds (with a few exceptions like projectiles and familiars) will show up in BR. All of them. Even the ones that make no sense.
   - The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
 
 *How do I add custom stages?*
 
-- This is very similar to adding custom entities. Create a `basementrenovator` folder and add a file called `StagesMod.xml`. This should use the same format as `resources/StagesAfterbirthPlus.xml` and have the same conventions.
+- This is very similar to adding custom entities. Create a `basementrenovator` folder and add a file called `StagesMod.xml`. This should use the same format as `resources/StagesRebirth.xml` and have the same conventions.
 - `BaseGamePath` is an extension-less version of the game's STB file name for that stage. (which most likely does not apply to your modded stage) If not present, a stage will be assumed to be from a mod.
 - `BGPrefix` is the path to the backdrop files relative to the `basementrenovator` folder, minus the -.png and -Inner.png for L rooms. If left out, the fallback will be the first stage with the same Stage and StageType with a valid backdrop.
 - `Pattern` is the pattern used to match a filename against to determine it's for that stage; if the file contains that prefix it will be set to that stage. The last stage loaded has prefix matching priority, so mods will always have priority over base game stages.
@@ -122,12 +135,13 @@ The latest version of Basement Renovator is available in the [releases section](
 - `StageHPNum` is an optional value used when calculating the total HP of enemies which use Stage HP. If this is not specified, then `Stage` is used instead.
 - Lastly, `Name` is the display name shown in BR, and also passed to room tests to allow for properly replacing the base game stage as needed.
 
-*How do I get some rooms to display different backdrops?*
+*How do I get some rooms to display different backdrops, or add new room types?*
 
-- Some mods like Revelations add specialized room types, e.g. Chill rooms, where it's helpful to have some kind of visual indicator.
+- Some mods like Revelations add specialized room types, e.g. Chill rooms, where it's helpful to have some kind of visual indicator that the room is distinct from regular rooms for the stage.
 - Create a `basementrenovator` folder and add a file called `RoomTypesMod.xml`. This should use the same format as `resources/RoomTypesAfterbirthPlus.xml` and have the same conventions.
 - Entities can also have a child Gfx element following the same format as the RoomTypes file. When this entity is in a room, the backdrop will be overridden to that Gfx
   - If multiple are in the same room, the one with the largest x+y will take priority
+- Room types can specify an additional `Subtype` to apply to the room when created or searching. To ensure this room type is present in the UI, add an `Icon` path to the definition. Room icons should be 16x16 to avoid blur.
 
 *Is there a fast way to set up BR compatibility?*
 
@@ -152,7 +166,7 @@ BR includes an Icon Generator script under resources to allow for more fine-grai
 
 *What is a hook?*
 
-- Certain work patterns in Basement Renovator require repeatedly taking an outputted file and performing a manual process on it. The most prominent example of this is the AB+ mod [Stage API](https://github.com/Meowlala/BOIStageAPI15) which requires STBs to be converted to Lua files in order for it to properly use them.
+- Certain workflows in Basement Renovator require repeatedly taking an outputted file and performing a manual process on it. The most prominent example of this is the AB+ mod [Stage API](https://github.com/Meowlala/BOIStageAPI15) which requires STBs to be converted to Lua files in order for it to properly use them.
 - As such a process is error prone and tedious, BR allows users to set up lists of scripts that will be executed on relevant files at various points before it finishes processing them.
   - Save Hook: when a room file is saved, all of these scripts are run with the resulting STB like so: `script.exe "path to file" --save" The bonus --save argument can be used if it's desirable to reuse a single script file.
     - Stage API uses this to convert STBs to Lua files every time you save them
