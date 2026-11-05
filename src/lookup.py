@@ -44,6 +44,7 @@ def loadXMLFile(path: Path | str):
 
     return root
 
+
 class RangeCriteria(NamedTuple):
     class Bound(NamedTuple):
         value: int
@@ -86,8 +87,7 @@ class RangeCriteria(NamedTuple):
             mini, maxi = tokens[0], tokens[1]
 
             return cls(
-                min=cls.Bound.from_text(mini, start),
-                max=cls.Bound.from_text(maxi, end)
+                min=cls.Bound.from_text(mini, start), max=cls.Bound.from_text(maxi, end)
             )
 
         tokens = set(map(int, tokens))
@@ -97,8 +97,12 @@ class RangeCriteria(NamedTuple):
         if self.values:
             return min(self.values), max(self.values)
 
-        min_val = self.min.value + (0 if self.min.inclusive else 1) if self.min else -math.inf
-        max_val = self.max.value + (0 if self.max.inclusive else -1) if self.max else math.inf
+        min_val = (
+            self.min.value + (0 if self.min.inclusive else 1) if self.min else -math.inf
+        )
+        max_val = (
+            self.max.value + (0 if self.max.inclusive else -1) if self.max else math.inf
+        )
         return min_val, max_val
 
     def test(self, val: int | float) -> bool:
@@ -107,15 +111,19 @@ class RangeCriteria(NamedTuple):
 
         if self.min is not None:
             if self.min.inclusive:
-                if val < self.min.value: return False
+                if val < self.min.value:
+                    return False
             else:
-                if val <= self.min.value: return False
+                if val <= self.min.value:
+                    return False
 
         if self.max is not None:
             if self.max.inclusive:
-                if val > self.max.value: return False
+                if val > self.max.value:
+                    return False
             else:
-                if val >= self.max.value: return False
+                if val >= self.max.value:
+                    return False
 
         return True
 

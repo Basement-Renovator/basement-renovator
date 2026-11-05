@@ -2849,7 +2849,13 @@ class RoomSelector(QWidget):
             "linked": False,
             "weight": {"min": 0, "max": 100000, "useRange": False, "enabled": False},
             "difficulty": {"min": 1, "max": 20, "useRange": False, "enabled": False},
-            "subtype": {"min": 0, "max": 10, "useRange": False, "enabled": False, "linked": False},
+            "subtype": {
+                "min": 0,
+                "max": 10,
+                "useRange": False,
+                "enabled": False,
+                "linked": False,
+            },
             "lastTestTime": {
                 "min": None,
                 "max": None,
@@ -2890,7 +2896,9 @@ class RoomSelector(QWidget):
         self.roomTypeToggle.setDefaultAction(act)
 
         for roomType in xmlLookups.roomTypes.lookup(showInMenu=True):
-            act = roomTypeMenu.addAction(anm2.loadIcon(roomType.get("Icon")), roomType.get("Name"))
+            act = roomTypeMenu.addAction(
+                anm2.loadIcon(roomType.get("Icon")), roomType.get("Name")
+            )
             act.setData(roomType)
 
         self.roomTypeToggle.triggered.connect(self.setRoomTypeFilter)
@@ -3231,7 +3239,10 @@ class RoomSelector(QWidget):
                 criteria = RangeCriteria.from_text(Subtype)
                 self.filter.extraData["subtype"]["linked"] = True
                 self.filter.extraData["subtype"]["enabled"] = True
-                self.filter.extraData["linked"] = self.filter.extraData["linked"] or not self.filter.extraData["enabled"]
+                self.filter.extraData["linked"] = (
+                    self.filter.extraData["linked"]
+                    or not self.filter.extraData["enabled"]
+                )
                 self.filter.extraData["enabled"] = True
                 self.filter.extraData["subtype"]["useRange"] = False
                 if criteria is None:
@@ -3249,7 +3260,6 @@ class RoomSelector(QWidget):
                     if self.filter.extraData["linked"]:
                         self.filter.extraData["linked"] = False
                         self.filter.extraData["enabled"] = False
-
 
         self.roomTypeToggle.setIcon(action.icon())
         self.changeFilter()
