@@ -44,48 +44,80 @@ def loadXMLFile(path: Path | str):
 
     return root
 
+class RangeCriteria(NamedTuple):
+    class Bound(NamedTuple):
+        value: int
+        inclusive: bool
 
-def parseRangeCriteria(txt: str) -> Callable[[int], bool] | None:
-    """
-    ranges can be defined as value[, value, ...] or
-    [ [ / ( ] min,max [ ] / ) ], where min and max can be numbers or "infinity",
-    square brackets are inclusive, and parentheses are exclusive
-    """
-    if not txt:
-        return None
+        @classmethod
+        def from_text(cls, value: str, inclusive: str) -> Self | None:
+            if not value or value == "infinity":
+                return None
 
-    tokens = list(filter(bool, re.split(r"[\[\(\)\],]", txt)))
+            if inclusive not in ["[", "]", "(", ")"]:
+                raise ValueError(f"Invalid boundary: {inclusive}")
 
-    if txt[0] in ["[", "("]:
-        start, end = txt[0], txt[-1]
-        mini, maxi = tokens[0], tokens[1]
+            value = int(value)
+            inclusive = inclusive in ["[", "]"]
+            return cls(value=value, inclusive=inclusive)
 
-        if mini == "infinity":
-            mini = lambda v: True
-        else:
-            miniv = int(mini)
-            if start == "[":
-                mini = lambda v: v >= miniv
-            elif start == "(":
-                mini = lambda v: v > miniv
+    min: Bound | None = None
+    max: Bound | None = None
+    values: set[int] | None = None
+
+    @staticmethod
+    def is_range(txt: str) -> bool:
+        return txt[0] in ["[", "("] and txt[-1] in ["]", ")"]
+
+    @classmethod
+    def from_text(cls, txt: str) -> Self | None:
+        """
+        ranges can be defined as value[, value, ...] or
+        [ [ / ( ] min,max [ ] / ) ], where min and max can be numbers or "infinity",
+        square brackets are inclusive, and parentheses are exclusive
+        """
+        if not txt:
+            return None
+
+        tokens = list(filter(bool, re.split(r"[\[\(\)\],]", txt)))
+
+        if cls.is_range(txt):
+            start, end = txt[0], txt[-1]
+            mini, maxi = tokens[0], tokens[1]
+
+            return cls(
+                min=cls.Bound.from_text(mini, start),
+                max=cls.Bound.from_text(maxi, end)
+            )
+
+        tokens = set(map(int, tokens))
+        return cls(values=tokens)
+
+    def get_range_inc(self) -> tuple[float, float]:
+        if self.values:
+            return min(self.values), max(self.values)
+
+        min_val = self.min.value + (0 if self.min.inclusive else 1) if self.min else -math.inf
+        max_val = self.max.value + (0 if self.max.inclusive else -1) if self.max else math.inf
+        return min_val, max_val
+
+    def test(self, val: int | float) -> bool:
+        if self.values is not None:
+            return val in self.values
+
+        if self.min is not None:
+            if self.min.inclusive:
+                if val < self.min.value: return False
             else:
-                raise ValueError(f"Invalid range in text: {txt}")
+                if val <= self.min.value: return False
 
-        if maxi == "infinity":
-            maxi = lambda v: True
-        else:
-            maxiv = int(maxi)
-            if end == "]":
-                maxi = lambda v: v <= maxiv
-            elif end == ")":
-                maxi = lambda v: v < maxiv
+        if self.max is not None:
+            if self.max.inclusive:
+                if val > self.max.value: return False
             else:
-                raise ValueError(f"Invalid range in text: {txt}")
+                if val >= self.max.value: return False
 
-        return lambda v: mini(v) and maxi(v)
-
-    tokens = list(map(int, tokens))
-    return lambda v: v in tokens
+        return True
 
 
 def applyGfxReplacement(replacement, gfxchildren):
@@ -355,12 +387,12 @@ class RoomTypeLookup(Lookup):
             if not stage or stage.get("Name") != stageName:
                 return False
 
-        idCriteria = parseRangeCriteria(node.get("ID"))
-        if idCriteria and not idCriteria(room.info.variant):
+        idCriteria = RangeCriteria.from_text(node.get("ID"))
+        if idCriteria and not idCriteria.test(room.info.variant):
             return False
 
-        subtypeCriteria = parseRangeCriteria(node.get("Subtype"))
-        if subtypeCriteria and not subtypeCriteria(room.info.subtype):
+        subtypeCriteria = RangeCriteria.from_text(node.get("Subtype"))
+        if subtypeCriteria and not subtypeCriteria.test(room.info.subtype):
             return False
 
         return True

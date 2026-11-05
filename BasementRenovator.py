@@ -144,7 +144,7 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
-from src.lookup import EntityLookup, MainLookup
+from src.lookup import EntityLookup, MainLookup, RangeCriteria
 import src.anm2 as anm2
 from src.constants import *
 from src.util import *
@@ -2846,9 +2846,10 @@ class RoomSelector(QWidget):
         self.filter.sizeData = -1
         self.filter.extraData = {
             "enabled": False,
+            "linked": False,
             "weight": {"min": 0, "max": 100000, "useRange": False, "enabled": False},
             "difficulty": {"min": 1, "max": 20, "useRange": False, "enabled": False},
-            "subtype": {"min": 0, "max": 10, "useRange": False, "enabled": False},
+            "subtype": {"min": 0, "max": 10, "useRange": False, "enabled": False, "linked": False},
             "lastTestTime": {
                 "min": None,
                 "max": None,
@@ -2889,7 +2890,7 @@ class RoomSelector(QWidget):
         self.roomTypeToggle.setDefaultAction(act)
 
         for roomType in xmlLookups.roomTypes.lookup(showInMenu=True):
-            act = roomTypeMenu.addAction(anm2.loadIcon(roomType.get("Icon")), "")
+            act = roomTypeMenu.addAction(anm2.loadIcon(roomType.get("Icon")), roomType.get("Name"))
             act.setData(roomType)
 
         self.roomTypeToggle.triggered.connect(self.setRoomTypeFilter)
@@ -3198,6 +3199,7 @@ class RoomSelector(QWidget):
 
     def clearExtraFilter(self):
         self.filter.extraData["enabled"] = False
+        self.filter.extraData["subtype"]["linked"] = False
         self.changeFilter()
 
     def clearSizeFilter(self):
@@ -3217,16 +3219,37 @@ class RoomSelector(QWidget):
             self.filter.typeData = -1
         else:
             Type = room.get("Type")
-            if Type is not None:
-                self.filter.typeData = int(Type)
+            if Type is None:
+                raise ValueError(f"Type is None for {room.get("Name")}")
+            self.filter.typeData = int(Type)
+
             # ID = room.get("ID")
             # if ID is not None:
             #     self.filter.typeData = int(ID)
             Subtype = room.get("Subtype")
             if Subtype is not None:
+                criteria = RangeCriteria.from_text(Subtype)
+                self.filter.extraData["subtype"]["linked"] = True
                 self.filter.extraData["subtype"]["enabled"] = True
-                self.filter.extraData["subtype"]["min"] = int(Subtype)
+                self.filter.extraData["linked"] = self.filter.extraData["linked"] or not self.filter.extraData["enabled"]
                 self.filter.extraData["enabled"] = True
+                self.filter.extraData["subtype"]["useRange"] = False
+                if criteria is None:
+                    self.filter.extraData["subtype"]["min"] = int(Subtype)
+                else:
+                    min_val, max_val = criteria.get_range_inc()
+                    self.filter.extraData["subtype"]["min"] = min_val
+                    if min_val != max_val:
+                        self.filter.extraData["subtype"]["useRange"] = True
+                        self.filter.extraData["subtype"]["max"] = max_val
+            else:
+                if self.filter.extraData["subtype"]["linked"]:
+                    self.filter.extraData["subtype"]["linked"] = False
+                    self.filter.extraData["subtype"]["enabled"] = False
+                    if self.filter.extraData["linked"]:
+                        self.filter.extraData["linked"] = False
+                        self.filter.extraData["enabled"] = False
+
 
         self.roomTypeToggle.setIcon(action.icon())
         self.changeFilter()
@@ -3489,7 +3512,14 @@ class RoomSelector(QWidget):
         #     ID = int(ID)
         Subtype = roomType.get("Subtype")
         if Subtype is not None:
-            Subtype = int(Subtype)
+            criteria = RangeCriteria.from_text(Subtype)
+            if not criteria:
+                Subtype = int(Subtype)
+            elif criteria.values or criteria.min:
+                Subtype = criteria.get_range_inc()[0]
+            else:
+                Subtype = None
+
         for r in self.selectedRooms():
             if Type is not None:
                 r.info.type = Type
