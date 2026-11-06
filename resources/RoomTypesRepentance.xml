@@ -44,7 +44,17 @@
     <Gfx BGPrefix="Backgrounds/house_closet_b" />
   </room>
   <room Name="Death Certificate" Type="1" StageName="Home" ID="(99, 126)">
-    <Gfx BGPrefix="Backgrounds/special_closet" />
+    <Gfx BGPrefix="Backgrounds/special_closet">
+      <Entity ID="3000" Image="Backgrounds/pit_depths.png" />
+      <Entity ID="3009" Image="Backgrounds/pit_depths.png" />
+      <Entity ID="1000" Image="Backgrounds/rocks_depths.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_depths.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_depths.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_depths.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_depths.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_depths.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_depths.png"/>
+    </Gfx>
   </room>
   <room Name="Super Secret Room" Type="8" Icon="UI/roomicons/supersecret.png" ShowInMenu="1">
     <Gfx StageGfx="Basement" Subtype="1" />
@@ -115,25 +125,59 @@
     <Gfx BGPrefix="Backgrounds/0g_sacrificeroom" />
   </room>
   <room Name="Planetarium" Type="24" Icon="UI/roomicons/planetarium.png" ShowInMenu="1">
-    <Gfx BGPrefix="Backgrounds/planetarium" HasFloorAnim="1" />
-    <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
+    <Gfx BGPrefix="Backgrounds/planetarium" HasFloorAnim="1">
+      <Entity ID="1000" Image="Backgrounds/rocks_cathedral.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_cathedral.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_cathedral.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_cathedral.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_cathedral.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_cathedral.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_cathedral.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_cathedral.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_cathedral.png"/>
+    </Gfx>
   </room>
   <room Name="Teleporter" Type="25" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeentrance.png" ShowInMenu="1">
     <Gfx StageGfx="Mausoleum" />
   </room>
   <room Name="Teleporter Exit" Type="26" StageName="Mausoleum" Icon="UI/roomicons/mausbridgeexit.png" ShowInMenu="1">
-    <Gfx BGPrefix="Backgrounds/05x_mausoleumb" />
+    <Gfx BGPrefix="Backgrounds/05x_mausoleumb">
     <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
     <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
+    </Gfx>
   </room>
   <room Name="Downpour Entrance" Type="27" Subtype="1">
-    <Gfx BGPrefix="Backgrounds/0Bx_Downpour Entrance" />
+    <Gfx BGPrefix="Backgrounds/0Bx_Downpour Entrance">
+      <Entity ID="3000" Image="Backgrounds/pit_downpour.png" />
+      <Entity ID="3009" Image="Backgrounds/pit_downpour.png" />
+      <Entity ID="1000" Image="Backgrounds/rocks_downpour.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_downpour.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_downpour.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_downpour.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_downpour.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_downpour.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_downpour.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_floodedcaves.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_floodedcaves.png"/>
+    </Gfx>
   </room>
   <room Name="Mines Entrance" Type="27" Subtype="2">
     <Gfx RoomGfx="Secret Room" />
   </room>
   <room Name="Mausoleum Entrance" Type="27" Subtype="3">
-    <Gfx BGPrefix="Backgrounds/0Dx_Mausoleum Entrance" />
+    <Gfx BGPrefix="Backgrounds/0Dx_Mausoleum Entrance">
+      <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
+      <Entity ID="3009" Image="Backgrounds/pit_mausoleum.png" />
+      <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
+      <Entity ID="1009" Image="Backgrounds/rocks_mausoleum.png" />
+      <Entity ID="1000" SubType="1" Image="Backgrounds/rocks_mausoleum.png" />
+      <Entity ID="1001" Image="Entities/1001.0.0 - Bomb Rock_mausoleum.png"/>
+      <Entity ID="1002" Image="Entities/1002.0.0 - Pot_depths.png"/>
+      <Entity ID="1010" Image="Entities/1010.0.0 - Spike Rock_mausoleum.png"/>
+      <Entity ID="1011" Image="Entities/1011.0.0 - Fool's Gold Rock_mausoleum.png"/>
+      <Entity ID="1900" Image="Entities/1900.0.0 - Block_sheol.png"/>
+      <Entity ID="1901" Image="Entities/1901.0.0 - Tall Block_mausoleum.png"/>
+    </Gfx>
   </room>
   <room Name="Secret Exit" Type="27" Icon="UI/roomicons/altpathdescent.png" ShowInMenu="1" />
   <room Name="Blue Room" Type="28" Icon="UI/roomicons/blueroom.png" ShowInMenu="1">

@@ -11,7 +11,7 @@
     <entity ID="5" Image="Entities/Items/5.100.582 - Wavy Cap.png" Name="Black Mushroom" Subtype="1029" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.584 - Book of Virtues.png" Name="Book of Virtues" Subtype="1031" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.585 - Alabaster Box.png" Name="Alabaster Box" Subtype="1032" Variant="100" />
-    <entity ID="5" Image="Entities/Items/5.100.604 - Moms Bracelet.png" Name="Mom's Bracelet" Subtype="1051" Variant="100" />
+    <entity ID="5" Image="Entities/Items/5.100.604 - Mom's Bracelet.png" Name="Mom's Bracelet" Subtype="1051" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.605 - The Scooper.png" Name="The Scooper" Subtype="1052" Variant="100" />
     <entity ID="5" Image="Entities/Items/5.100.609 - Florians D6.png" Name="Eternal D6" Subtype="1056" Variant="100" />
     <entity ID="5" Image="Entities/Antibirth/Items/5.100.1067 - Voodoo Pin.png" Name="Voodoo Pin" Subtype="1067" Variant="100" />
