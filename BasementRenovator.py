@@ -26,6 +26,8 @@
 # 		Bosscolours for the alternate boss entities
 #
 
+from typing import Any, cast
+
 from PyQt5.QtCore import (
     QAbstractItemModel,
     QAbstractListModel,
@@ -119,6 +121,13 @@ from PyQt5.QtWidgets import (
 )
 from copy import deepcopy
 
+try:
+    from ctypes import windll
+
+    HAS_WINDLL = True
+except ImportError:
+    HAS_WINDLL = False
+
 import traceback
 import sys
 import os
@@ -137,7 +146,7 @@ import psutil
 
 import src.roomconvert as StageConvert
 from src.core import Room as RoomData, Entity as EntityData
-from src.lookup import EntityLookup, MainLookup
+from src.lookup import EntityLookup, MainLookup, RangeCriteria
 import src.anm2 as anm2
 from src.constants import *
 from src.util import *
@@ -156,10 +165,12 @@ def parsePlaceVisualNumber(value):
 #       XML Data       #
 ########################
 
-STEAM_PATH = None
+APPID = "tboi.basementrenovator"
+
+STEAM_PATH: str | None = None
 
 
-def getSteamPath():
+def getSteamPath() -> str | None:
     global STEAM_PATH
     if not STEAM_PATH:
         STEAM_PATH = QSettings(
@@ -168,7 +179,7 @@ def getSteamPath():
     return STEAM_PATH
 
 
-def findInstallPath():
+def findInstallPath() -> str:
     version = getGameVersion()
     if version == "Antibirth" and settings.value("AntibirthPath"):
         return settings.value("AntibirthPath")
@@ -177,7 +188,7 @@ def findInstallPath():
     cantFindPath = False
 
     if QFile.exists(settings.value("InstallFolder")):
-        installPath = settings.value("InstallFolder")
+        installPath = cast(str, settings.value("InstallFolder"))
 
     else:
         # Windows path things
@@ -246,7 +257,7 @@ def findInstallPath():
     return installPath
 
 
-def findModsPath(installPath=None):
+def findModsPath(installPath=None) -> str:
     modsPath = ""
     cantFindPath = False
 
@@ -317,7 +328,7 @@ def findModsPath(installPath=None):
                     "Error",
                     "Couldn't locate Mods folder and no folder was selected.",
                 )
-                return
+                return ""
             else:
                 modsPath = modsPathOut
             if modsPath == "":
@@ -326,12 +337,12 @@ def findModsPath(installPath=None):
                     "Error",
                     "Couldn't locate Mods folder and no folder was selected.",
                 )
-                return
+                return ""
             if not QDir(modsPath).exists():
                 QMessageBox.warning(
                     None, "Error", "Selected folder does not exist or is not a folder."
                 )
-                return
+                return ""
 
         # Looks like nothing was selected
         if modsPath == "" or not os.path.isdir(modsPath):
@@ -347,16 +358,16 @@ def findModsPath(installPath=None):
     return modsPath
 
 
-def loadMods(autogenerate, installPath, resourcePath):
+def loadMods(autogenerate: bool, installPath: str | None) -> None:
     global xmlLookups
 
     # Each mod in the mod folder is a Group
-    modsPath = findModsPath(installPath)
-    if not os.path.isdir(modsPath):
+    modsPath = Path(findModsPath(installPath))
+    if not modsPath.is_dir():
         printf("Could not find Mods Folder! Skipping mod content!")
         return
 
-    modsInstalled = os.listdir(modsPath)
+    modsInstalled = modsPath.iterdir()
 
     autogenPath = "resources/Entities/ModTemp"
     if autogenerate and not os.path.exists(autogenPath):
@@ -365,23 +376,21 @@ def loadMods(autogenerate, installPath, resourcePath):
     printSectionBreak()
     printf("LOADING MOD CONTENT")
     for mod in modsInstalled:
-        modPath = os.path.join(modsPath, mod)
-        brPath = os.path.join(modPath, "basementrenovator")
+        modPath = modsPath / mod
+        brPath = modPath / "basementrenovator"
 
         # Make sure we're a mod
-        if not os.path.isdir(modPath) or os.path.isfile(
-            os.path.join(modPath, "disable.it")
-        ):
+        if not modPath.is_dir() or (modPath / "disable.it").is_file():
             continue
 
         # simple workaround for now
-        if not (autogenerate or os.path.exists(brPath)):
+        if not (autogenerate or brPath.exists()):
             continue
 
         # Get the mod name
         modName = mod
         try:
-            tree = ET.parse(os.path.join(modPath, "metadata.xml"))
+            tree = ET.parse(modPath / "metadata.xml")
             root = tree.getroot()
             modName = root.find("name").text
         except ET.ParseError:
@@ -398,6 +407,15 @@ def loadMods(autogenerate, installPath, resourcePath):
 
 
 class RoomScene(QGraphicsScene):
+
+    roomDoorRoot = None
+    bgState: tuple[ET.Element, int, dict[str, Any]] = []
+    framecache: dict[str, dict[int, QImage | None]] = {}
+    floorAnim: anm2.Config | None = None
+    floorImg: QImage | None = None
+    wallAnim: anm2.Config | None = None
+    wallImg: QImage | None = None
+
     def __init__(self, parent):
         QGraphicsScene.__init__(self, 0, 0, 0, 0)
         self.newRoomSize(1)
@@ -412,18 +430,9 @@ class RoomScene(QGraphicsScene):
         ]
         self.bitText = True
 
-        self.roomDoorRoot = None
         self.clearDoors()
 
-        self.bgState = []
-        self.framecache = {}
-
-        self.floorAnim = None
-        self.wallAnim = None
         self.loadAnims()
-
-        self.floorImg = None
-        self.wallImg = None
 
     def loadAnims(self):
         gfx = self.getBGGfxData()
@@ -435,7 +444,8 @@ class RoomScene(QGraphicsScene):
             else "resources/Backgrounds/FloorBackdrop.anm2"
         )
         if not (self.floorAnim and self.floorAnim.path == Path(floorAnim).resolve()):
-            self.floorAnim = anm2.Config(floorAnim, "resources")
+            # TODO: proper mod attribution
+            self.floorAnim = anm2.Config(floorAnim, xmlLookups.basemod)
 
         wallAnim = (
             gfx["WallAnim"]
@@ -443,7 +453,7 @@ class RoomScene(QGraphicsScene):
             else "resources/Backgrounds/WallBackdrop.anm2"
         )
         if not (self.wallAnim and self.wallAnim.path == Path(wallAnim).resolve()):
-            self.wallAnim = anm2.Config(wallAnim, "resources")
+            self.wallAnim = anm2.Config(wallAnim, xmlLookups.basemod)
 
     def newRoomSize(self, shape):
         self.roomInfo = Room.Info(shape=shape)
@@ -1102,7 +1112,7 @@ class Entity(QGraphicsItem):
             self.config = xmlLookups.entities.lookupOne(entitytype, variant, subtype)
             if self.config is None:
                 printf(
-                    f"'Could not find Entity {EntityData.toString(entitytype, variant, subtype)} for in-editor, using ?"
+                    f"Could not find Entity {EntityData.toString(entitytype, variant, subtype)} to display in-editor, using ?"
                 )
 
                 self.pixmap = QPixmap("resources/Entities/questionmark.png")
@@ -1309,11 +1319,20 @@ class Entity(QGraphicsItem):
                             door.exists = door.blockingCount == 0
                         break
 
-    PitAnm2 = anm2.Config("resources/Backgrounds/PitGrid.anm2", "resources")
-    PitAnm2.setAnimation()
+    PitAnm2: anm2.Config = None
+    RockAnm2: anm2.Config = None
 
-    RockAnm2 = anm2.Config("resources/Backgrounds/RockGrid.anm2", "resources")
-    RockAnm2.setAnimation()
+    @staticmethod
+    def loadAnims():
+        Entity.PitAnm2 = anm2.Config(
+            "resources/Backgrounds/PitGrid.anm2", xmlLookups.basemod
+        )
+        Entity.PitAnm2.setAnimation()
+
+        Entity.RockAnm2 = anm2.Config(
+            "resources/Backgrounds/RockGrid.anm2", xmlLookups.basemod
+        )
+        Entity.RockAnm2.setAnimation()
 
     def getPitFrame(self, pitImg, rendered, extraConnections: "list|None"):
         def matchInStack(stack):
@@ -2797,6 +2816,18 @@ class RoomSelectorList(QListWidget):
     def __init__(self):
         QListWidget.__init__(self)
 
+    def item(self, row: int) -> Room | None:
+        return cast(Room | None, super().item(row))
+
+    def itemFromIndex(self, index: QModelIndex) -> Room | None:
+        return cast(Room | None, super().itemFromIndex(index))
+
+    def currentItem(self) -> Room | None:
+        return cast(Room | None, super().currentItem())
+
+    def selectedItems(self) -> list[Room]:
+        return cast(list[Room], super().selectedItems())
+
     def dragMoveEvent(self, e):
         if (self.row(self.itemAt(e.pos())) == self.currentRow() + 1) or (
             self.currentRow() == self.count() - 1
@@ -2842,9 +2873,16 @@ class RoomSelector(QWidget):
         self.filter.sizeData = -1
         self.filter.extraData = {
             "enabled": False,
+            "linked": False,
             "weight": {"min": 0, "max": 100000, "useRange": False, "enabled": False},
             "difficulty": {"min": 1, "max": 20, "useRange": False, "enabled": False},
-            "subtype": {"min": 0, "max": 10, "useRange": False, "enabled": False},
+            "subtype": {
+                "min": 0,
+                "max": 10,
+                "useRange": False,
+                "enabled": False,
+                "linked": False,
+            },
             "lastTestTime": {
                 "min": None,
                 "max": None,
@@ -2885,7 +2923,9 @@ class RoomSelector(QWidget):
         self.roomTypeToggle.setDefaultAction(act)
 
         for roomType in xmlLookups.roomTypes.lookup(showInMenu=True):
-            act = roomTypeMenu.addAction(anm2.loadIcon(roomType.get("Icon")), "")
+            act = roomTypeMenu.addAction(
+                anm2.loadIcon(roomType.get("Icon")), roomType.get("Name")
+            )
             act.setData(roomType)
 
         self.roomTypeToggle.triggered.connect(self.setRoomTypeFilter)
@@ -3194,6 +3234,7 @@ class RoomSelector(QWidget):
 
     def clearExtraFilter(self):
         self.filter.extraData["enabled"] = False
+        self.filter.extraData["subtype"]["linked"] = False
         self.changeFilter()
 
     def clearSizeFilter(self):
@@ -3213,16 +3254,39 @@ class RoomSelector(QWidget):
             self.filter.typeData = -1
         else:
             Type = room.get("Type")
-            if Type is not None:
-                self.filter.typeData = int(Type)
+            if Type is None:
+                raise ValueError(f"Type is None for {room.get("Name")}")
+            self.filter.typeData = int(Type)
+
             # ID = room.get("ID")
             # if ID is not None:
             #     self.filter.typeData = int(ID)
             Subtype = room.get("Subtype")
             if Subtype is not None:
+                criteria = RangeCriteria.from_text(Subtype)
+                self.filter.extraData["subtype"]["linked"] = True
                 self.filter.extraData["subtype"]["enabled"] = True
-                self.filter.extraData["subtype"]["min"] = int(Subtype)
+                self.filter.extraData["linked"] = (
+                    self.filter.extraData["linked"]
+                    or not self.filter.extraData["enabled"]
+                )
                 self.filter.extraData["enabled"] = True
+                self.filter.extraData["subtype"]["useRange"] = False
+                if criteria is None:
+                    self.filter.extraData["subtype"]["min"] = int(Subtype)
+                else:
+                    min_val, max_val = criteria.get_range_inc()
+                    self.filter.extraData["subtype"]["min"] = min_val
+                    if min_val != max_val:
+                        self.filter.extraData["subtype"]["useRange"] = True
+                        self.filter.extraData["subtype"]["max"] = max_val
+            else:
+                if self.filter.extraData["subtype"]["linked"]:
+                    self.filter.extraData["subtype"]["linked"] = False
+                    self.filter.extraData["subtype"]["enabled"] = False
+                    if self.filter.extraData["linked"]:
+                        self.filter.extraData["linked"] = False
+                        self.filter.extraData["enabled"] = False
 
         self.roomTypeToggle.setIcon(action.icon())
         self.changeFilter()
@@ -3485,7 +3549,14 @@ class RoomSelector(QWidget):
         #     ID = int(ID)
         Subtype = roomType.get("Subtype")
         if Subtype is not None:
-            Subtype = int(Subtype)
+            criteria = RangeCriteria.from_text(Subtype)
+            if not criteria:
+                Subtype = int(Subtype)
+            elif criteria.values or criteria.min:
+                Subtype = criteria.get_range_inc()[0]
+            else:
+                Subtype = None
+
         for r in self.selectedRooms():
             if Type is not None:
                 r.info.type = Type
@@ -3722,10 +3793,10 @@ class RoomSelector(QWidget):
             self.list.selectionModel().selectedIndexes(),
             key=lambda x: (x.column(), x.row()),
         )
-        return [self.list.itemFromIndex(i) for i in sortedIndexes]
+        return [cast(Room, self.list.itemFromIndex(i)) for i in sortedIndexes]
 
     def getRooms(self):
-        return [self.list.item(i) for i in range(self.list.count())]
+        return [cast(Room, self.list.item(i)) for i in range(self.list.count())]
 
 
 # Entity Palette
@@ -4519,7 +4590,7 @@ class PathsDialog(QDialog):
                 labelText="Resources Folder",
                 settingKey="ResourceFolder",
                 tooltipText="Folder containing vanilla game resources.",
-                getCurrentPathLambda=lambda: mainWindow.findResourcePath(),
+                getCurrentPathLambda=lambda: mainWindow.findResourcesFolder(),
                 getDefaultPathLambda=lambda: os.path.join(
                     findInstallPath(), "resources"
                 ),
@@ -5998,7 +6069,7 @@ class MainWindow(QMainWindow):
     def setDefaultResourcesPath(self):
         settings = QSettings("settings.ini", QSettings.IniFormat)
         if not settings.contains("ResourceFolder"):
-            settings.setValue("ResourceFolder", self.findResourcePath())
+            settings.setValue("ResourceFolder", self.findResourcesFolder())
         resPath = settings.value("ResourceFolder")
         resPathDialog = QFileDialog()
         resPathDialog.setFilter(QDir.Hidden)
@@ -6010,7 +6081,7 @@ class MainWindow(QMainWindow):
     def resetResourcesPath(self):
         settings = QSettings("settings.ini", QSettings.IniFormat)
         settings.remove("ResourceFolder")
-        settings.setValue("ResourceFolder", self.findResourcePath())
+        settings.setValue("ResourceFolder", self.findResourcesFolder())
 
     def showHooksMenu(self):
         hooks = HooksDialog(self)
@@ -6043,13 +6114,13 @@ class MainWindow(QMainWindow):
 
         mapFileName = selectMaps[selectedMap] + ".stb"
         roomPath = os.path.join(
-            os.path.expanduser(self.findResourcePath()), "rooms", mapFileName
+            os.path.expanduser(self.findResourcesFolder()), "rooms", mapFileName
         )
 
         if not QFile.exists(roomPath):
             self.setDefaultResourcesPath()
             roomPath = os.path.join(
-                os.path.expanduser(self.findResourcePath()), "rooms", mapFileName
+                os.path.expanduser(self.findResourcesFolder()), "rooms", mapFileName
             )
             if not QFile.exists(roomPath):
                 QMessageBox.warning(
@@ -6754,8 +6825,8 @@ class MainWindow(QMainWindow):
                 )
                 raise
 
-            resourcePath = self.findResourcePath()
-            if resourcePath == "":
+            resourcesFolder = self.findResourcesFolder()
+            if resourcesFolder == "":
                 QMessageBox.warning(
                     self,
                     "Error",
@@ -6763,7 +6834,7 @@ class MainWindow(QMainWindow):
                 )
                 raise
 
-            roomPath = os.path.join(resourcePath, "rooms", "00.special rooms.stb")
+            roomPath = os.path.join(resourcesFolder, "rooms", "00.special rooms.stb")
 
             # Parse the special rooms, replace the spawns
             if not QFile.exists(roomPath):
@@ -6929,7 +7000,7 @@ class MainWindow(QMainWindow):
 
         return ""
 
-    def findResourcePath(self):
+    def findResourcesFolder(self):
         resourcesPath = ""
 
         if QFile.exists(settings.value("ResourceFolder")):
@@ -7317,17 +7388,9 @@ def applyDefaultSettings(settings, defaults):
 if __name__ == "__main__":
     import sys
 
-    min_version = [3, 7]
-    if not (
-        sys.version_info[0] > min_version[0]
-        or (
-            sys.version_info[0] == min_version[0]
-            and sys.version_info[1] >= min_version[1]
-        )
-    ):
-        raise NotImplementedError(
-            f"Basement Renovator requires minimum Python {min_version[0]}.{min_version[1]}, your version: {sys.version_info[0]}.{sys.version_info[0]}"
-        )
+    if HAS_WINDLL:
+        # ensure that when running locally the taskbar icon is applied
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID(APPID)
 
     # Application
     app = QApplication(sys.argv)
@@ -7351,12 +7414,21 @@ if __name__ == "__main__":
 
     # XML Globals
     version = getGameVersion()
-    xmlLookups = MainLookup(version, settings.value("Verbose") == "1")
+    resourcesFolder = settings.value("ResourceFolder")
+    if not resourcesFolder:
+        printf(
+            "WARNING: Resource folder not set, please restart after setting to ensure all resource loading works"
+        )
+    xmlLookups = MainLookup(
+        version, "resources/", resourcesFolder or "", settings.value("Verbose") == "1"
+    )
+
+    Entity.loadAnims()
+
     if settings.value("DisableMods") != "1":
         loadMods(
             settings.value("ModAutogen") == "1",
             findInstallPath(),
-            settings.value("ResourceFolder", ""),
         )
 
     printf("-".join(["" for i in range(50)]))

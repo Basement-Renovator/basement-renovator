@@ -1,19 +1,33 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 import os
 import re
 
-import src.anm2 as anm2
-from src.util import linuxPathSensitivityTraining, printf
+if not __package__:
+    import anm2 as anm2
+    from util import printf
+else:
+    import src.anm2 as anm2
+    from src.util import printf
 
 
-def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
+if TYPE_CHECKING:
+    from src.lookup import MainLookup
+
+
+def generateXMLFromEntities2(
+    modConfig: MainLookup.ModConfig, entities2Root: ET.Element
+):
     cleanUp = re.compile(r"[^\w\d]")
-    outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', modName)}"
+    outputDir = f"resources/Entities/ModTemp/{cleanUp.sub('', modConfig.name)}"
     if not os.path.isdir(outputDir):
         os.mkdir(outputDir)
 
-    anm2root = entities2Root.get("anm2root")
+    # assume by merit of coming from resources/entities2 that the anm2root is relative to the resources folder
+    anm2root = "resources/" + entities2Root.get("anm2root")
 
     # Iterate through all the entities
     enList = entities2Root.findall("entity")
@@ -22,7 +36,7 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
     if len(enList) == 0:
         return
 
-    printf(f'-----------------------\nLoading entities from "{modName}"')
+    printf(f'-----------------------\nLoading entities from "{modConfig.name}"')
 
     def mapEn(en):
         # Fix some shit
@@ -34,31 +48,23 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
         s = en.get("subtype") or "0"
 
         if i >= 1000 or i in (0, 1, 3, 7, 8, 9):
-            printf("Skipping: Invalid entity type %d: %s" % (i, en.get("name")))
+            printf(f"Skipping: Invalid entity type {i}:", en.get("name"))
+            return None
+
+        anm2Path = en.get("anm2path")
+        if not anm2Path:
+            printf("Skipping: No anm2 path for entity", en.get("name"))
             return None
 
         # Grab the anm location
-        anmPath = (
-            linuxPathSensitivityTraining(
-                os.path.join(modPath, "resources", anm2root, en.get("anm2path"))
-            )
-            or ""
-        )
-        printf("LOADING:", anmPath)
-        if not os.path.isfile(anmPath):
-            anmPath = (
-                linuxPathSensitivityTraining(
-                    os.path.join(resourcePath, anm2root, en.get("anm2path"))
-                )
-                or ""
-            )
+        anm2Path = os.path.join(anm2root, anm2Path)
+        resolvedPath = modConfig.resolveResource(anm2Path)
+        printf("LOADING:", resolvedPath)
+        if not os.path.isfile(resolvedPath):
+            printf("Skipping: Invalid anm2!", anm2Path)
+            return None
 
-            printf("REDIRECT LOADING:", anmPath)
-            if not os.path.isfile(anmPath):
-                printf("Skipping: Invalid anm2!")
-                return None
-
-        anim = anm2.Config(anmPath, resourcePath)
+        anim = anm2.Config(resolvedPath, modConfig)
         anim.setAnimation()
         anim.frame = anim.animLen - 1
         img = anim.render()
@@ -74,7 +80,10 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
             )
             img.save(filename, "PNG")
         else:
-            printf(f"Could not render icon for entity {i}.{v}.{s}, anm2 path:", anmPath)
+            printf(
+                f"Could not render icon for entity {i}.{v}.{s}, anm2 path:",
+                resolvedPath,
+            )
 
         # Write the modded entity to the entityXML temporarily for runtime
         entityTemp = ET.Element("entity")
@@ -94,7 +103,7 @@ def generateXMLFromEntities2(modPath, modName, entities2Root, resourcePath):
         condSet("Champion", "champion")
 
         i = int(i)
-        entityTemp.set("Group", "(Mod) %s" % modName)
+        entityTemp.set("Group", f"(Mod) {modConfig.name}")
         entityTemp.set("Kind", "Mods")
         if i == 5:  # pickups
             if v == 100:  # collectible

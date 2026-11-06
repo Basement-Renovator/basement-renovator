@@ -10,6 +10,11 @@ if not __package__:
 else:
     from src.util import printf
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.lookup import MainLookup
+
 
 def loadImage(path: str, fmt: QImage.Format | None = None) -> QImage:
     img = QImage(path, fmt)
@@ -24,9 +29,9 @@ def loadIcon(path: str) -> QIcon:
 
 
 class Config:
-    def __init__(self, anmPath, resourcePath):
+    def __init__(self, anmPath: str, modConfig: MainLookup.ModConfig):
         self.path = Path(anmPath).resolve()
-        self.resourcePath = resourcePath
+        self.mod = modConfig
 
         if not self.path.is_file():
             raise FileNotFoundError("Invalid anm2! " + self.path)
@@ -49,6 +54,10 @@ class Config:
 
         self.animations = self.tree.findall("./Animations/Animation")
         self.defaultAnim = self.tree.find("Animations").get("DefaultAnimation")
+        if not self.defaultAnim or self.getAnim(self.defaultAnim) is None:
+            self.defaultAnim = (
+                self.animations[0].get("Name") if self.animations else None
+            )
 
         self.anim = None
         self.animLen = 0
@@ -65,6 +74,9 @@ class Config:
 
         self.useScaling = True
 
+    def __str__(self):
+        return f"anm2.Config(file={self.file}, dir={self.dir}, mod={self.mod})"
+
     def getAnim(self, name):
         if not name:
             return None
@@ -72,8 +84,10 @@ class Config:
 
     def setAnimation(self, animName=None):
         self.anim = self.getAnim(animName or self.defaultAnim)
-        if not self.anim:
-            raise ValueError(f"Invalid animation! {animName or '[Default]'}")
+        if self.anim is None:
+            raise ValueError(
+                f"Invalid animation! {animName or f'{self.defaultAnim} [Default]'}"
+            )
         self.rootFrames = self.anim.findall(".//RootAnimation/Frame")
         self.frameLayers = self.anim.findall(".//LayerAnimation[Frame]")
         self.animLen = int(self.anim.get("FrameNum"))
@@ -81,7 +95,7 @@ class Config:
 
     def setOverlay(self, animName):
         self.overlayAnim = self.getAnim(animName)
-        if not self.overlayAnim:
+        if self.overlayAnim is None:
             raise ValueError(f"Invalid animation! {animName}")
         # not supported for now
         # self.overlayRootFrames = self.anim.findall(".//RootAnimation/Frame")
@@ -91,6 +105,9 @@ class Config:
 
     @staticmethod
     def getFrameNode(frames, frameNumber):
+        if not frames:
+            return None
+
         currFrame = 0
         for frame in frames:
             duration = int(frame.get("Delay"))
@@ -114,36 +131,38 @@ class Config:
                 ignoreCount += 1
                 continue
 
-            image = self.spritesheets[self.layers[int(layer.get("LayerId"))]] or ""
+            layer = self.layers[int(layer.get("LayerId"))]
+            image = self.spritesheets[layer] if layer < len(self.spritesheets) else None
+            image = image or ""
 
             imgPath = None
-            sheetPath = None
+            sheetPath = "<unknown>"
             if isinstance(image, str):
                 sheetPath = image
-                image = os.path.abspath(os.path.join(self.dir, image))
-                imgPath = Path(image)
-                if not (imgPath and imgPath.exists()):
-                    image = re.sub(r".*resources", self.resourcePath, image)
-                    imgPath = Path(image)
+                imgPath = Path(os.path.abspath(os.path.join(self.dir, image)))
+                if imgPath and imgPath.exists():
+                    image = str(imgPath)
+                else:
+                    imgPath = Path(self.mod.resolveResource(image))
                     image = str(imgPath) if imgPath.exists() else None
 
             if image is not None:
                 # Here's the anm specs
-                xp = -int(frame.get("XPivot"))  # applied before rotation
-                yp = -int(frame.get("YPivot"))
-                r = int(frame.get("Rotation"))
-                x = int(frame.get("XPosition"))  # applied after rotation
-                y = int(frame.get("YPosition"))
+                xp = -int(float(frame.get("XPivot")))  # applied before rotation
+                yp = -int(float(frame.get("YPivot")))
+                r = float(frame.get("Rotation"))
+                x = int(float(frame.get("XPosition")))  # applied after rotation
+                y = int(float(frame.get("YPosition")))
                 xc = int(frame.get("XCrop"))
                 yc = int(frame.get("YCrop"))
                 xs = self.useScaling and float(frame.get("XScale")) / 100 or 1
                 ys = self.useScaling and float(frame.get("YScale")) / 100 or 1
-                w = int(frame.get("Width"))
-                h = int(frame.get("Height"))
+                w = int(float(frame.get("Width")))
+                h = int(float(frame.get("Height")))
 
                 imgs.append([image, x, y, xc, yc, w, h, xs, ys, r, xp, yp])
             else:
-                printf("Bad image! ", sheetPath, image)
+                printf(self, "Bad image! ", sheetPath, image)
 
         if not imgs:
             printf(
@@ -202,6 +221,9 @@ class Config:
         # Create the destination
         pixmapImg = QImage(finalRect.width(), finalRect.height(), QImage.Format_ARGB32)
         pixmapImg.fill(0)
+
+        if pixmapImg.isNull():
+            return pixmapImg
 
         # Paint all the layers to it
         renderPainter = QPainter(pixmapImg)

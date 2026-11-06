@@ -7,7 +7,7 @@ VSVersionInfo(
     # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)
     # Set not needed items to zero 0.
     filevers=(1, 0, 0, 0),
-    prodvers=(2, 9, 0, 0),
+    prodvers=($major, $minor, $patch, 0),
     # Contains a bitmask that specifies the valid bits 'flags'r
     mask=0x3f,
     # Contains a bitmask that specifies the Boolean attributes of the file.
@@ -21,7 +21,7 @@ VSVersionInfo(
     # The function of the file.
     # 0x0 - the function is not defined for this fileType
     subtype=0x0,
-    # Creation date and time stamp.
+    # Creation date and time stamp, not specified by most applications.
     date=(0, 0)
     ),
   kids=[
@@ -35,8 +35,8 @@ VSVersionInfo(
         StringStruct(u'FileVersion', u'1.0.0'),
         StringStruct(u'LegalCopyright', u''),
         StringStruct(u'ProductName', u'Basement Renovator'),
-        StringStruct(u'ProductVersion', u'2.9.0')])
-      ]), 
+        StringStruct(u'ProductVersion', u'$major.$minor.$patch')])
+      ]),
     VarFileInfo([VarStruct(u'Translation', [0, 1200])])
   ]
 )
