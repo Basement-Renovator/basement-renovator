@@ -17,7 +17,7 @@ The latest version of Basement Renovator is available in the [releases section](
 
 ### How to View Rooms from the Vanilla Game
 
-- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with later versions of the game (Afterbirth+, Repentance, or Repentance+), read on.
+- If you're working with Rebirth or Afterbirth, you must use [Rick's Unpacker](http://svn.gib.me/builds/rebirth/) to get STB files. If you are working with Afterbirth+, Repentance, or Repentance+, read on.
 - First, unpack the game's assets using the official unpacker.
   - On Windows: <br>
   `[TBOI Install Folder]\tools\ResourceExtractor\ResourceExtractor.exe` <br>
@@ -57,7 +57,7 @@ The latest version of Basement Renovator is available in the [releases section](
 
 - **Other Things**: You can show or hide the grid in the edit menu, or by pressing Ctrl-G (Cmd-G on mac). You can pick up any of the docks, and move them to new areas, have them as floating windows, or stack them as tabs. There are a few other options in the View menu to give you some choices.
 
-- **Test Menu**: To quickly test your rooms, you can load them from BR directly. You can select multiple rooms to test at a time, or just one. You will be teleported to the right floor for the current file. Here's a summary of the different test methods:
+- **Test Menu**: To quickly test your rooms, you can load them from Basement Renovator directly. You can select multiple rooms to test at a time, or just one. You will be teleported to the right floor for the current file. Here's a summary of the different test methods:
   - Replace Stage
     - Replaces the stage for the current file's rooms with the selected rooms
     - Adds some helpful items and debug commands for each run
@@ -81,10 +81,10 @@ The latest version of Basement Renovator is available in the [releases section](
 ### F.A.Q.
 
 *The 'InstaPreview' tool isn't working for me; what can I do?*
-- Open `settings.ini` in the BR folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
+- Open `settings.ini` in the Basement Renovator folder in a text editor. Ensure there is a line that says: `InstallFolder=(...)` where (...) is the location of the TBOI install folder containing an executable
 
 *How do I create or edit rooms for a specific DLC, or Antibirth?*
-- Open `settings.ini` in the BR folder in a text editor. Add a new line starting with `CompatibilityMode=` followed by:
+- Open `settings.ini` in the Basement Renovator folder in a text editor. Add a new line starting with `CompatibilityMode=` followed by:
     - `Rebirth`
     - `Afterbirth`
     - `Afterbirth+`
@@ -106,7 +106,7 @@ The latest version of Basement Renovator is available in the [releases section](
 
 *When is the next release?*
 
-- There's no formal release schedule. If you want to run BR, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
+- There's no formal release schedule. If you want to run Basement Renovator, it's recommended you follow the steps above to run the mod directly from source. Resources are updated soon after the game updates, so be sure to grab the latest version when that happens!
 
 *Why can't I edit door position? Why can't I make a custom room size?*
 
@@ -114,15 +114,15 @@ The latest version of Basement Renovator is available in the [releases section](
 
 *How do I add custom entities?*
 
-- This will only work for mods starting with Afterbirth+. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirthPlus.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, BR will only load *enabled* mods to reduce noise and startup time.
+- This will only work for mods starting with Afterbirth+. Create a folder named `basementrenovator` in your mod's root folder. (It must be within your overall mods folder to be detected.) Inside that folder, create an `EntitiesMod.xml` file. This should use the same format as `resources/EntitiesAfterbirthPlus.xml` and have the same conventions. If `Group` is left out, it will default to `(Mod) Your Mod Name`. The `Image` path is relative to the `basementrenovator` folder within your mod. Finally, Basement Renovator will only load *enabled* mods to reduce noise and startup time.
 - If your entity has some offset from its actual grid location in-game, you can use the `PlaceVisual` attribute. Check `resources/EntitiesRebirth` for some examples. It can either be `X,Y` in +/- grid squares of offset or pre-coded dynamic behaviors like `WallSnap`.
   - If you're using this property to add additional visual indicators to your icon or the sprite is asymmetric, you can use `DisableOffsetIndicator` to disable the visual indicator for this offset (only needed if offset is > half a grid)
 - When newly placed, grid entities will be placed underneath any regular entities in their stack. To give entities this property, add the `IsGrid` attribute.
-- If you have an entity that does not exist in your `entities2.xml` for some reason, you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows BR to load entities it normally wouldn't. (This is mostly relevant to pre-room-spawn helper entities, like those used with [Stage API](https://github.com/Meowlala/BOIStageAPI15))
+- If you have an entity that does not exist in your `entities2.xml` for some reason, you can add `Metadata="1"` to your entity. Be sure you know what you're doing! This suppresses useful error messages and allows Basement Renovator to load entities it normally wouldn't. (This is mostly relevant to pre-room-spawn helper entities, like those used with [Stage API](https://github.com/Meowlala/BOIStageAPI15))
 - If for some reason this is too much hassle, or you want to quickly create rooms with entities from large mods that don't have support, you can toggle the *Autogenerate mod content* setting. This will crawl mods' `content/entities2.xml` instead of the `basementrenovator` folder and work automagically without any additional work. HOWEVER this comes with a number of downsides:
-  - It has to generate BR images for every entity in the mod each time the program starts up. This makes it slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
+  - It has to generate Basement Renovator images for every entity in the mod each time the program starts up. This makes it slower, but worse than that is the way the image is selected. For lack of a better technique, the first available frame of the default animation is used. This works fine for many things, but for entities like gapers which have a default body animation with the head as an overlay, the image is very poor compared to a curated one.
   - Entities are classified by Kind automatically, so if you need to specially classify something this won't be smart enough to detect it.
-  - Every entity the mod adds (with a few exceptions like projectiles and familiars) will show up in BR. All of them. Even the ones that make no sense.
+  - Every entity the mod adds (with a few exceptions like projectiles and familiars) will show up in Basement Renovator. All of them. Even the ones that make no sense.
   - The techniques don't mix, and so you'll lose out on the pluses of the other option. For these reasons this setting is not recommended. It's much cleaner to use the `basementrenovator` directory.
 
 *How do I add custom stages?*
@@ -133,7 +133,7 @@ The latest version of Basement Renovator is available in the [releases section](
 - `Pattern` is the pattern used to match a filename against to determine it's for that stage; if the file contains that prefix it will be set to that stage. The last stage loaded has prefix matching priority, so mods will always have priority over base game stages.
 - `Stage` and `StageType` correspond to the in-game enum values for the stage, for modded stages this should point to the stage being replaced.
 - `StageHPNum` is an optional value used when calculating the total HP of enemies which use Stage HP. If this is not specified, then `Stage` is used instead.
-- Lastly, `Name` is the display name shown in BR, and also passed to room tests to allow for properly replacing the base game stage as needed.
+- Lastly, `Name` is the display name shown in Basement Renovator, and also passed to room tests to allow for properly replacing the base game stage as needed.
 
 *How do I get some rooms to display different backdrops, or add new room types?*
 
@@ -143,20 +143,20 @@ The latest version of Basement Renovator is available in the [releases section](
   - If multiple are in the same room, the one with the largest x+y will take priority
 - Room types can specify an additional `Subtype` to apply to the room when created or searching. To ensure this room type is present in the UI, add an `Icon` path to the definition. Room icons should be 16x16 to avoid blur.
 
-*Is there a fast way to set up BR compatibility?*
+*Is there a fast way to set up Basement Renovator compatibility?*
 
-- You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In BR's resource folder under Entities/ModTemp, there will be a folder with your mod's name.
+- You can get a quick and dirty drop-in for your mod's basementrenovator folder by starting up with Autogenerate Mod Content enabled. In Basement Renovator's resource folder under Entities/ModTemp, there will be a folder with your mod's name.
 It will contain an icons folder and an EntitiesMod.xml file. However, this will generate entries for many things you may not want to have entries for, so you'll need to clean it up.
 - Some icons may not be what you want out of the box. For example, gapers will be missing their heads because they're overlays, or the first frame might not be a good representative.
-BR includes an Icon Generator script under resources to allow for more fine-grained icon generation from any frame in an anm2. Run it with --help or -h for more details.
+Basement Renovator includes an Icon Generator script under resources to allow for more fine-grained icon generation from any frame in an anm2. Run it with --help or -h for more details.
 - This method will not generate custom stages as it's indeterminate how a mod generates them. You'll need to do that step yourself.
 
 *Why does my custom entity appear with a yellow hazard sign on it?*
 
 - While Basement Renovator can save a wide range of values identifying entities, not all of them play nicely in game. Some are fine in game, but are still invalid.
-  - Variants are represented in game as 12 bits, which range from 0 - 4095. BR saves them as 32 bit values, and the game can read your modded entity like this, but it will always be reduced into that range. You can be 100% certain of your variant if it falls within that range
+  - Variants are represented in game as 12 bits, which range from 0 - 4095. Basement Renovator saves them as 32 bit values, and the game can read your modded entity like this, but it will always be reduced into that range. You can be 100% certain of your variant if it falls within that range
   - Ids/Types have the same representation as variants, with an additional twist. Entities of type 1000 or higher are read from rooms as *grid entities* like rocks or spikes. That means your entity will not get spawned in the room at all if its id is that high!
-  - Subtypes are represented using 8 bits, or the range 0 - 255. This is the same both in BR and in game. Follows the same rules as variant otherwise.
+  - Subtypes are represented using 8 bits, or the range 0 - 255. This is the same both in Basement Renovator and in game. Follows the same rules as variant otherwise.
 
   If you see this warning, please change your values to fit in the proper range. This will prevent a lot of difficult to debug issues in your mods. You can see exactly where an entity is out of range in the logs or in the tooltip if you hover over it in the room.
 
@@ -167,8 +167,8 @@ BR includes an Icon Generator script under resources to allow for more fine-grai
 *What is a hook?*
 
 - Certain workflows in Basement Renovator require repeatedly taking an outputted file and performing a manual process on it. The most prominent example of this is the AB+ mod [Stage API](https://github.com/Meowlala/BOIStageAPI15) which requires STBs to be converted to Lua files in order for it to properly use them.
-- As such a process is error prone and tedious, BR allows users to set up lists of scripts that will be executed on relevant files at various points before it finishes processing them.
-  - Save Hook: when a room file is saved, all of these scripts are run with the resulting STB like so: `script.exe "path to file" --save" The bonus --save argument can be used if it's desirable to reuse a single script file.
+- As such a process is error prone and tedious, Basement Renovator allows users to set up lists of scripts that will be executed on relevant files at various points before it finishes processing them.
+  - Save Hook: when a room file is saved, all of these scripts are run with the resulting STB like so: `script.exe "path to file" --save` The bonus --save argument can be used if it's desirable to reuse a single script file.
     - Stage API uses this to convert STBs to Lua files every time you save them
   - Test Hook: when a room is tested, it is output to an XML file. This XML file is passed to a script like so: `script.exe "path to file" --test`
     - Stage API uses this to set up a test room file when testing rooms
