@@ -34,6 +34,7 @@ from PyQt5.QtCore import (
     QCommandLineParser,
     QDir,
     QFile,
+    QIODevice,
     QItemSelectionModel,
     QModelIndex,
     QPoint,
@@ -5656,7 +5657,7 @@ class MainWindow(QMainWindow):
             QKeySequence("F10"),
         )
         self.fg = f.addAction(
-            "Save Screenshot to File...",
+            "Save Screenshot(s) to File...",
             lambda: self.screenshot("file"),
             QKeySequence("Ctrl+F10"),
         )
@@ -6594,39 +6595,164 @@ class MainWindow(QMainWindow):
         self.dirt()
         self.scene.update()
 
-    # @pyqtSlot()
-    def screenshot(self, mode):
-        filename = None
-        if mode == "file":
-            filename = QFileDialog.getSaveFileName(
-                self,
-                "Choose a new filename",
-                "untitled.png",
-                "Portable Network Graphics (*.png)",
-            )[0]
-            if filename == "":
-                return
+    @staticmethod
+    def screenshotFilename(room):
+        """Use the room list's ID - Name format, safe for Windows filenames."""
+        if room is None:
+            return "untitled.png"
 
-        g = settings.value("GridEnabled")
-        settings.setValue("GridEnabled", "0")
+        # Windows forbids these characters (and control characters) in filenames.
+        # Trim trailing dots/spaces and cap long room names to leave room for suffixes.
+        name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", str(room.name or ""))
+        name = name.strip(" .")[:180].rstrip(" .")
+        stem = str(room.info.variant)
+        return f"{stem} - {name}.png" if name else f"{stem}.png"
 
+    def renderScreenshot(self):
+        """Render the currently displayed room at the original 1x resolution."""
         screenshotImg = QImage(
             int(self.scene.sceneRect().width()),
             int(self.scene.sceneRect().height()),
             QImage.Format_ARGB32,
         )
+        if screenshotImg.isNull():
+            raise RuntimeError("Unable to allocate screenshot image")
         screenshotImg.fill(QColorConstants.Transparent)
 
         painter = QPainter(screenshotImg)
-        self.scene.render(painter)
-        painter.end()
+        try:
+            if not painter.isActive():
+                raise RuntimeError("Unable to start screenshot painter")
+            self.scene.render(painter)
+        finally:
+            painter.end()
+        return screenshotImg
 
+    @staticmethod
+    def saveScreenshotImage(image, filename):
+        """Save a PNG using an exclusive file create, never replacing existing files."""
+        stem, extension = os.path.splitext(filename)
+        suffix = 0
+        while True:
+            path = filename if suffix == 0 else f"{stem} ({suffix}){extension}"
+            output = QFile(path)
+            if output.open(QIODevice.WriteOnly | QIODevice.NewOnly):
+                try:
+                    if not image.save(output, "PNG", 50):
+                        raise OSError(
+                            f"PNG encoder or file write failed: {output.errorString()}"
+                        )
+                    if not output.flush():
+                        raise OSError(f"Could not flush PNG: {output.errorString()}")
+                except Exception:
+                    output.close()
+                    if not output.remove():
+                        printf(
+                            f"Warning: Could not remove incomplete screenshot {path}"
+                        )
+                    raise
+                output.close()
+                return path
+
+            # NewOnly prevents overwriting even if another process creates a
+            # similarly named file while we are exporting screenshots.
+            if not QFile.exists(path):
+                raise OSError(
+                    f"Cannot create screenshot {path}: {output.errorString()}"
+                )
+            suffix += 1
+
+    # @pyqtSlot()
+    def screenshot(self, mode):
+        if mode not in ("file", "clipboard"):
+            return
+
+        rooms = self.roomList.orderedSelectedRooms() if mode == "file" else []
+        bulk = len(rooms) > 1
+        filename = None
+        folder = None
         if mode == "file":
-            screenshotImg.save(filename, "PNG", 50)
-        elif mode == "clipboard":
-            QApplication.clipboard().setImage(screenshotImg, QClipboard.Clipboard)
+            if bulk:
+                folder = QFileDialog.getExistingDirectory(
+                    self, "Choose a folder for room screenshots"
+                )
+                if not folder:
+                    return
+            else:
+                room = rooms[0] if rooms else self.roomList.selectedRoom()
+                filename = QFileDialog.getSaveFileName(
+                    self,
+                    "Choose a new filename",
+                    self.screenshotFilename(room),
+                    "Portable Network Graphics (*.png)",
+                    "",
+                    QFileDialog.DontConfirmOverwrite,
+                )[0]
+                if not filename:
+                    return
+                if not filename.lower().endswith(".png"):
+                    filename += ".png"
+                rooms = [room]
 
-        settings.setValue("GridEnabled", g)
+        roomList = self.roomList.list
+        originalRoom = roomList.currentItem() if mode == "file" else None
+        grid = settings.value("GridEnabled")
+        saved = 0
+        errors = []
+        try:
+            settings.setValue("GridEnabled", "0")
+            if mode == "clipboard":
+                QApplication.clipboard().setImage(
+                    self.renderScreenshot(), QClipboard.Clipboard
+                )
+                return
+
+            for room in rooms:
+                target = (
+                    os.path.join(folder, self.screenshotFilename(room))
+                    if bulk
+                    else filename
+                )
+                try:
+                    if room is not None and roomList.currentItem() is not room:
+                        # Change the displayed room WITHOUT changing the selection.
+                        # The currentItemChanged handler saves pending edits and
+                        # rebuilds the scene for the new room.
+                        roomList.setCurrentItem(room, QItemSelectionModel.NoUpdate)
+                    image = self.renderScreenshot()
+                    self.saveScreenshotImage(image, target)
+                    saved += 1
+                except Exception as exc:
+                    errors.append(f"{os.path.basename(target)}: {exc}")
+                    printf(f"Error saving room screenshot to {target}: {exc}")
+                    traceback.print_exc()
+        finally:
+            try:
+                if mode == "file" and roomList.currentItem() is not originalRoom:
+                    roomList.setCurrentItem(originalRoom, QItemSelectionModel.NoUpdate)
+            except Exception as exc:
+                printf(f"Error restoring the original room after screenshots: {exc}")
+                traceback.print_exc()
+            settings.setValue("GridEnabled", grid)
+
+        if bulk:
+            summary = f"Saved {saved} of {len(rooms)} room screenshots to:\n{folder}"
+            if errors:
+                QMessageBox.warning(
+                    self,
+                    "Screenshot export incomplete",
+                    f"{summary}\n\n{len(errors)} failed.\n"
+                    f"First error: {errors[0]}\nSee the console for details.",
+                )
+            else:
+                QMessageBox.information(self, "Screenshots saved", summary)
+        elif errors:
+            QMessageBox.warning(
+                self,
+                "Screenshot save failed",
+                f"Could not save the screenshot.\n{errors[0]}\n"
+                "See the console for details.",
+            )
 
     def getTestModPath(self):
         modFolder = findModsPath()
