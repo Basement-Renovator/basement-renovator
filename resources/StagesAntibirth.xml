@@ -3,6 +3,12 @@
     <Gfx BGPrefix="Backgrounds/01x_downpour">
       <Entity ID="3000" Image="Backgrounds/pit_downpour.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_downpour.png" />
+
+      <Entity ID="10" Variant="0" SubType="0" Image="Entities/10.0.0 - Frowning Gaper_downpour.png" />
+      <Entity ID="10" Variant="1" SubType="0" Image="Entities/10.1.0 - Gaper_downpour.png" />
+      <Entity ID="11" Variant="0" SubType="0" Image="Entities/11.0.0 - Gusher_downpour.png" />
+      <Entity ID="11" Variant="1" SubType="0" Image="Entities/11.1.0 - Pacer_downpour.png" />
+      <Entity ID="15" Variant="0" SubType="0" Image="Entities/15.0.0 - Clotty_downpour.png" />
     </Gfx>
   </stage>
   <stage Name="Mines" BaseGamePath="02x.mines" Stage="3" StageType="2" Pattern="mines">
@@ -15,12 +21,18 @@
     <Gfx BGPrefix="Backgrounds/05x_mausoleum">
       <Entity ID="3000" Image="Backgrounds/pit_mausoleum.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_mausoleum.png" />
+
+      <Entity ID="227" Variant="0" SubType="0" Image="Entities/227.0.0 - Bony_mausoleum.png" />
     </Gfx>
   </stage>
   <stage Name="Corpse" BaseGamePath="04x.corpse" Stage="7" StageType="2" Pattern="corpse">
     <Gfx BGPrefix="Backgrounds/07x_corpse">
       <Entity ID="3000" Image="Backgrounds/pit_corpse.png" />
       <Entity ID="1000" Image="Backgrounds/rocks_corpse.png" />
+
+      <Entity ID="56" Variant="0" SubType="0" Image="Entities/Antibirth/56.0.0 - Lump_corpse.png" />
+      <Entity ID="62" Variant="100" SubType="0" Image="Entities/62.3.0 - Wormwood_corpse.png" />
+      <Entity ID="802" Variant="0" SubType="0" Image="Entities/Antibirth/802.0.0 - Stillborn_corpse.png" />
     </Gfx>
   </stage>
 </data>
